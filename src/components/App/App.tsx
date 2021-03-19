@@ -236,7 +236,7 @@ class LocalizedApp extends Component<Props> {
 
     // if (isIE) return <IEMessage />;
 
-    if (window.screen.width <= TABLET_WIDTH && window.screen.width > GENERAL_MOBILE_WIDTH) {
+    /*if (window.screen.width <= TABLET_WIDTH && window.screen.width > GENERAL_MOBILE_WIDTH) {
       window.addEventListener('orientationchange', (event) => {
         if (window.orientation === 0) {
           Notification.create({
@@ -245,7 +245,7 @@ class LocalizedApp extends Component<Props> {
           });
         }
       });
-    }
+    }*/
 
     return (
       <BrowserRouter>

@@ -19,7 +19,7 @@
     ],
     "promise-function-async": true,
     "typedef": true,
-    "await-promise": true,
+    "await-promise": [true, "Thenable"],
     "curly": [
       true,
       "ignore-same-line"

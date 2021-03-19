@@ -204,7 +204,6 @@ class HeaderWrapper extends Component<Props> {
   private renderDistributeButton = () => {
     const { newAssignmentStore, location } = this.props;
     const userType = newAssignmentStore!.getCurrentUser()!.type;
-    
     if (userType !== UserType.ContentManager && !(location.state && location.state.fromTeachingPath)) {
       return (
         <CreateButton

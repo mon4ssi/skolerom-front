@@ -34,7 +34,7 @@ class AnswersList extends Component<AssignmentAnswerListProps & RouteComponentPr
     const { store } = this.props;
 
     const page = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.PAGE, 1);
-    await store!.getAnswersByPage(page!, Number(this.props.match.params.entityId));
+    store!.getAnswersByPage(page!, Number(this.props.match.params.entityId));
     await store!.getCurrentEntity(Number(this.props.match.params.entityId));
     const answerId = QueryStringHelper.getNumber(this.props.history, ANSWER);
 
