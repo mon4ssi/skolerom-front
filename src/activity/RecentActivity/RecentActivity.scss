@@ -1,0 +1,107 @@
+@import 'style/index.scss';
+
+.RecentActivity__container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 8px;
+}
+
+.RecentActivity__header {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 19px 15px;
+  border-bottom: 1px solid $color-dark-gray;
+
+  p {
+    margin: 0;
+  }
+  
+  img {
+    cursor: pointer;
+  }
+}
+
+.RecentActivity__list {
+  padding: 20px 29px 28px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.RecentActivity__collapseWrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.RecentActivity__collapse {
+  font-weight: 300;
+  text-decoration: underline;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.RecentActivity__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+
+  &:last-child {
+    margin: 0;
+  }
+}
+
+.RecentActivity__block {
+  display: flex;
+  align-items: center;
+  font-weight: 300;
+  font-size: 15px;
+  min-width: 0;
+  flex-shrink: 10;
+}
+
+.RecentActivity__image {
+  width: 36px;
+  margin-right: 19px;
+}
+
+.RecentActivity__text {
+  flex-shrink: 10;
+}
+
+.RecentActivity__link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.RecentActivity__date {
+  padding: 5px 10px 4px 11px;
+  border-radius: 11px;
+  background: $color-light-gray;
+  font-weight: 300;
+  font-size: 13px;
+  margin-left: 20px;
+  flex-shrink: 0;
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .RecentActivity__list {
+    padding: 20px 20px 20px 20px;
+  }
+
+  .RecentActivity__item {
+    flex-direction: column;
+  }
+
+  .RecentActivity__date {
+    @include flex-center;
+    margin-top: 10px;
+    margin-left: 0;
+    width: 100%;
+  }
+}

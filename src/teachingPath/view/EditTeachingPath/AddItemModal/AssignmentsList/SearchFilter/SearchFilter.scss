@@ -1,0 +1,27 @@
+.SearchFilter {
+  display: flex;
+  box-shadow: 0 0 7px -2px rgba(186,186,186,1);
+  padding: 15px;
+  height: 60px;
+  min-height: 60px;
+  margin: 20px 0;
+
+  .selector {
+    border: 1px solid #D3D9DE;
+    height: auto;
+  }
+
+  .search {
+    display: block;
+    padding: 0 20px 0 20px;
+    background: url(../../../../../../assets/images/search.svg) no-repeat right center;
+    border: none;
+    border-left: 1px solid;
+    width: 230px;
+    height: 30px;
+
+    &::placeholder {
+      color: #939FA7;
+    }
+  }
+}

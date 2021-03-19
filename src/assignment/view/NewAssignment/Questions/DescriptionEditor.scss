@@ -1,0 +1,34 @@
+.DescriptionEditor {
+  border: none;
+  margin-bottom: 20px;
+  width: calc(100% - 110px);
+  font-weight: 300;
+
+  .ql-tooltip {
+    border-radius: 5px;
+  }
+
+  .ql-editor {
+    padding: 0;
+    font-size: 17px;
+  }
+
+  .ql-blank {
+    padding: 0;
+
+    &::before {
+      font-style: normal;
+      font-size: 17px;
+      color: #6c6d7e;
+    }
+  }
+
+  .ql-tooltip {
+    top: -60px !important;
+  }
+
+  .ql-tooltip-arrow {
+    top: 40px !important;
+    transform: rotate(180deg);
+  }
+}

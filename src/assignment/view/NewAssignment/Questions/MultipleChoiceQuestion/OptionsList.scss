@@ -1,0 +1,77 @@
+@import "style";
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid $color-blue-gray;
+  border-radius: 8px;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  background: $color-dark-gray;
+  z-index: 7;
+  cursor: move;
+  height: 45px;
+
+  input {
+    border: none;
+    background: none;
+    font-size: 17px;
+    width: calc(100% - 100px);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: 500;
+
+    &::placeholder {
+      color: $color-blue-gray;
+    }
+  }
+
+  .statusBox {
+    display: flex;
+
+    img {
+      cursor: pointer;
+    }
+
+    .checkStatus {
+      margin-right: 20px;
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  &.isRight {
+    border: 1px solid $color-green;
+  }
+
+  &.hasErrorOption {
+    border: 1px solid $color-purple;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.evaluationOption {
+  padding: 7px 20px !important;
+
+  .evaluationStatus {
+    img {
+      margin-right: 0 !important;
+    }
+  }
+
+  .inputRight {
+    color: $color-green;
+  }
+
+  .inputWrong {
+    color: $color-purple;
+  }
+}
+
+.isWrong {
+  border: 1px solid $color-purple !important;
+}

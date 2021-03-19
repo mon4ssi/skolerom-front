@@ -1,0 +1,83 @@
+@import "../../../../style/index";
+
+$image-container-width: 189px;
+$image-container-height: 186px;
+
+.ImageChoiceQuestionPreview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, $image-container-width);
+  grid-gap: 16px;
+  justify-content: center;
+}
+
+.ImageOption {
+  @include animate-many(background, border-color);
+  position: relative;
+  border: 1px solid $color-dark-gray;
+  border-radius: 4px;
+  margin-bottom: 50px;
+
+  .light {
+    background: #D3D9DE;
+  }
+}
+
+.ImageOption_cursorDefault {
+  cursor: default !important;
+
+  .ImageOption__shape:hover {
+      opacity: 0;
+    }
+}
+
+.ImageOption__image {
+  width: 100%;
+  height: $image-container-height;
+  object-fit: contain;
+}
+
+.ImageOption__shape {
+  @include animate-many(opacity);
+  @include flex-center;
+  width: $image-container-width - 2px;   // border width
+  height: $image-container-height;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding-bottom: 1px;
+  cursor: zoom-in;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  background: rgba($color-text-primary, 0.2);
+  opacity: 0;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.ImageOption__title {
+  margin: 13px 10px 10px 10px;
+  line-height: 17px;
+  word-break: break-all;
+}
+
+.ImageOption__button {
+  @include absolute-center-x;
+  @include circle(31px);
+  @include flex-center;
+  @include animate-many(background, border-color);
+  padding: 0;
+  border: 1px solid $color-blue-gray;
+  background: $color-white;
+  bottom: -51px;
+}
+
+.ImageOption_selected {
+  background: $color-dark-gray;
+}
+
+.ImageOption__button_selected {
+  border-color: $color-text-primary;
+  background: $color-text-primary;
+}

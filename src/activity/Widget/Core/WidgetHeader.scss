@@ -1,0 +1,63 @@
+@import "../../../style";
+
+.WidgetHeader {
+  position: relative;
+  padding: 16px 18px;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.WidgetHeader__title {
+  @include text-shrink;
+  font-size: 17px;
+}
+
+.WidgetHeader__image {
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+}
+
+.WidgetHeader__tooltip {
+  z-index: 2;
+  right: 5px;
+  position: absolute;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.129753);
+  margin-top: 20px;
+  top: 34px;
+  width: max-content;
+  border-radius: 4px;
+  border: 1px solid #596A75;
+  padding: 20px;
+  cursor: default;
+  background: #fff;
+
+  ul li {
+    cursor: pointer;
+  }
+
+  i {
+    position: absolute;
+    top: -6px;
+    right: 20px;
+    margin-top: -12px;
+    width: 12px;
+    height: 24px;
+    transform: rotate(-90deg);
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      left: 0;
+      top: 50%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      background-color: #fff;
+      border-right: 1px solid #596A75;
+      border-bottom: 1px solid #596A75;
+    }
+  }
+}

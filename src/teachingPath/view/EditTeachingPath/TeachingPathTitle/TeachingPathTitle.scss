@@ -1,0 +1,76 @@
+@import "style";
+
+.TeachingPathTitle {
+  margin-top: 20px;
+  width: 100%;
+  min-height: 202px;
+
+  .titleWrapper {
+    width: 50%;
+    padding: 20px;
+    align-items: center;
+
+    span {
+      text-transform: uppercase;
+      color: #e2017b;
+      font-size: 16px;
+    }
+
+    .titleInput {
+      width: 100%;
+      text-align: center;
+      padding: 0;
+      margin-top: 10px;
+      background-color: #E7ECEF;
+      font-size: 36px;
+      border: none;
+      resize: none;
+      outline: none;
+      overflow: hidden;
+      min-height: 47px;
+
+      &::placeholder {
+        color: #939FA7;
+      }
+    }
+
+    .descriptionInput {
+      position: relative;
+      width: 100%;
+      text-align: center;
+      margin-top: 20px;
+      background-color: #E7ECEF;
+      border: none;
+      resize: none;
+      outline: none;
+      overflow: hidden;
+      font-size: 17px;
+      font-weight: 300;
+      padding: 1px;
+      min-height: 24px;
+
+      &::placeholder {
+        color: #939FA7;
+      }
+
+    }
+  }
+
+  .horizontalLine {
+    width: 135px;
+    margin-top: 40px;
+    border-bottom: 1px solid #d3d9de;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-desktop) {
+  .TeachingPathTitle {
+    min-height: fit-content;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .TeachingPathTitle .titleWrapper {
+    width: auto;
+  }
+}

@@ -1,0 +1,135 @@
+@import "../../../../../style";
+
+.StudentAssignments {
+  height: 100%;
+}
+
+.StudentAssignments__search {
+  width: 100%;
+  display: block;
+  padding: 20px;
+  background: url(../../../../../assets/images/search.svg) #ffffff no-repeat right 20px center;
+  border: 1px solid #596A75;
+  border-radius: 7px;
+  font-size: 15px;
+
+  &::placeholder {
+    color: #939FA7;
+  }
+}
+
+.StudentAssignments__filterPanel {
+
+}
+
+.StudentAssignments__selectBlock {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+
+  select:focus > option:checked {
+    font-weight: bold !important;
+  }
+}
+
+.StudentAssignments__select {
+  flex: 1;
+  position: relative;
+  padding-right: 28px;
+  height: 33px;
+  border-radius: 5px;
+  background: url(../../../../../assets/images/arrow-down.svg) #ffffff no-repeat right 10px center;
+  border: 1px solid #596A75;
+  color: #0B2541;
+  font-size: 15px;
+  font-weight: 300;
+  margin-right: 20px;
+
+  option {
+    background: #e8edef;
+    color: #0B2541;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.StudentAssignments__list {
+  margin-top: 19px;
+  height: calc(100% - 197px);
+  overflow: auto;
+}
+
+.StudentAssignments__skeletonList {
+  @extend .StudentAssignments__list;
+  height: calc(100% - 180px);
+}
+
+.StudentAssignments__item {
+  margin-bottom: 10px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .StudentAssignments__filterPanel {
+    border-radius: 5px;
+    background-color: $color-white;
+    padding: 15px 15px 25px 15px;
+    box-shadow: 0 2px 2px 0 rgba($color-black, 0.07);
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .StudentAssignments__selectBlock {
+    flex-direction: column;
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+
+  .StudentAssignments__select {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    margin-right: 0;
+    margin-bottom: 15px;
+    border: 1px solid $color-regent-gray;
+    background-color: $color-light-gray;
+    font-weight: 300;
+    color: $color-text-primary;
+  }
+
+  .StudentAssignments__header {
+    display: none;
+  }
+
+  .StudentAssignments__search {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    font-size: 15px;
+    font-weight: 300;
+    background-position-x: right;
+
+    &::placeholder {
+      font-weight: 300;
+      color: $color-pale-sky;
+    }
+  }
+
+  .StudentAssignments__item {
+    margin-bottom: 19px;
+
+    &:last-child {
+      margin-top: 0;
+    }
+  }
+}
+
+@media screen and (device-width: 810px) and (device-height: 1080px) and (orientation:landscape) {
+  .StudentAssignments__select {
+    width: 20px;
+  }
+}

@@ -1,0 +1,173 @@
+@import "style";
+
+.AssignmentsList {
+  position: relative;
+  height: calc(100% - 60px);
+  background: #E7ECEF;
+
+  .SearchFilter {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+  }
+
+  .assignmentsListHeader {
+    width: 100%;
+    height: 60px;
+    min-height: 60px;
+    padding: 0 20px 0 20px;
+    border-bottom: 1px solid #e4e9ed;
+    background: #FFF;
+
+    img {
+      cursor: pointer;
+    }
+
+    .assignmentsListType {
+      height: 100%;
+      display: flex;
+
+      div {
+        margin: 20px 20px 0 0;
+        font-weight: 500;
+        text-transform: uppercase;
+        color: #596A75;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      .selectedTab {
+        border-bottom: 3px solid #e2017b;
+
+        color: #0B2541;
+      }
+    }
+  }
+
+  .assignmentsListContainer {
+    margin-top: 20px;
+    // height: 676px;
+    padding: 0 20px 0 20px;
+    overflow: auto;
+
+    .skeletonAssignmentItem {
+      height: 60px;
+      min-height: 60px;
+      align-items: center;
+      padding-right: 20px;
+      margin: 0 0 20px 0;
+      border-radius: 5px;
+      font-size: 17px;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.13);
+    }
+
+    .assignmentItem {
+      @extend .skeletonAssignmentItem;
+      background: #FFF;
+
+      .itemImg {
+        width: 90px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 5px 0 0 5px;
+      }
+
+      .itemLikes {
+        height: 34px;
+        width: 60px;
+        padding: 10px;
+        margin: 10px 0 10px 20px;
+        background: #E7ECEF;
+        border-radius: 5px;
+        font-size: 12px;
+
+        img {
+          margin-right: 10px;
+        }
+      }
+
+      .itemTitle {
+        margin-left: 20px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .itemSubject {
+        margin-left: 20px;
+        background: #E7ECEF;
+        border: 1px solid #D3D9DE;
+        border-radius: 25px;
+        padding: 10px 15px;
+        font-size: 15px;
+        font-weight: 300;
+      }
+
+      .itemNumberOfQuestions {
+        margin-left: 20px;
+        color: #E2017B;
+        font-size: 15px;
+        width: max-content;
+      }
+
+      .itemIsSelected {
+        margin-left: 20px;
+
+        img {
+          height: 30px;
+          width: 30px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .noResults {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    font-weight: 300;
+    margin-top: 20%;
+    font-size: 24px;
+  }
+
+  .MyListPagination {
+    margin-bottom: 10px;
+  }
+
+  .assignmentsListFooter {
+    position: fixed;
+    bottom: 0;
+    width: 50%;
+    height: 64px;
+    padding: 15px 20px;
+    background: #FFF;
+    font-weight: 300;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .assignmentCounter {
+      height: 30px;
+      padding: 10px;
+      font-size: 15px;
+      background: #FFFFFF;
+      border: 1px solid #D3D9DE;
+      border-radius: 5px;
+    }
+  }
+}
+
+@media screen and (max-width: $screen-dimension-desktop) {
+  .AssignmentsList .assignmentsListFooter {
+    width: 70%;
+  }
+}
+
+
+@media screen and (device-width: 810px) and (device-height: 1080px) {
+  .AssignmentsList .assignmentsListFooter {
+      width: 70%;
+    }
+}

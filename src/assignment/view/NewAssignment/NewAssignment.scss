@@ -1,0 +1,43 @@
+@import '../../../style';
+
+.NewAssignment {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+
+  .main {
+    margin-top: 80px;
+    height: calc(100% - 80px);
+  }
+
+  .addAssignmentFlow {
+    overflow: auto;
+    height: 100%;
+  }
+
+  .backdrop {
+    background: #0B2541;
+    position: absolute;
+    height: 100%;
+    width: 50%;
+    opacity: 0.35;
+  }
+}
+
+.loading {
+  display: flex;
+  position: absolute;
+  width: 100%;
+  //width: calc(100vw - 211px);
+  height: calc(100vh - 78px);
+  z-index: 10;
+  background: $color-light-gray;
+  top: $header-height;
+  left: 0;
+  //left: $sidebar-width;
+  justify-content: center;
+  align-items: center;
+}

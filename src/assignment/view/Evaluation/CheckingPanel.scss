@@ -1,0 +1,264 @@
+@import "style";
+
+.checking {
+  display: flex;
+  background: white;
+  margin-top: -5px;
+  cursor: default;
+  flex-direction: column;
+  border-top: 1px solid #D3D9DE;
+  box-shadow: inset 0 1px 1px -1px #D3D9DE;
+
+  .mainContainer {
+
+    .answerWrapper {
+      display: flex;
+      flex-direction: column;
+      overflow: scroll;
+      height: auto;
+      flex: 2;
+      border-right: 1px solid #D3D9DE;
+
+      .readArticlesContainer {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+
+        .readArticlesContainer__header {
+          margin: 0 0 20px 0;
+        }
+      }
+
+      .answers {
+        display: flex;
+        flex: 2;
+        padding: 20px;
+        flex-direction: column;
+        max-height: 528px;
+      }
+
+    }
+
+    .loader {
+      height: auto;
+      flex: 2;
+      border-right: 1px solid #D3D9DE;
+    }
+
+    .teachingPathAnswersWrapper {
+      display: flex;
+      flex-direction: column;
+      overflow: scroll;
+      height: auto;
+      flex: 2;
+      border-right: 1px solid #D3D9DE;
+      max-height: 528px;
+
+      .teachingPathContainer {
+        padding: 20px;
+        flex-direction: column;
+        width: 100%;
+        display: flex;
+        flex: 2;
+        min-height: fit-content;
+
+        .stepCounterWrapper {
+          margin-bottom: 16px;
+          display: flex;
+
+          .stepCounter {
+            display: flex;
+            color: $color-white;
+            justify-content: center;
+            align-items: center;
+            width: 31px;
+            height: 31px;
+            background: $color-purple;
+            border-radius: 100%;
+          }
+
+          .stepCounterTitle {
+            margin-left: 13px;
+          }
+        }
+
+        .teachingPathNodeQuestions {
+          display: flex;
+          flex: 2;
+          padding: 20px 0;
+          flex-direction: column;
+        }
+      }
+
+    }
+
+    .comments {
+      display: flex;
+      flex-direction: column;
+      min-width: 451px;
+      flex: 1;
+
+      .comment {
+        display: flex;
+        border-bottom: 1px solid #D3D9DE;
+        width: 100%;
+        flex: 2;
+        padding: 20px;
+        flex-direction: column;
+        min-height: 217px;
+
+        .text {
+          resize: none;
+          width: 100%;
+          border: none;
+          font-weight: 300;
+          background: white;
+          overflow: hidden;
+        }
+      }
+
+      .evaluation {
+        display: flex;
+        flex: 1;
+        padding: 20px;
+        flex-direction: column;
+        min-height: 170px;
+
+        .mark {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+        }
+      }
+
+      .headline {
+        color: #0B2541;
+        font-size: 17px;
+        margin-bottom: 21px;
+      }
+
+      .markItem {
+        background: #E7ECEF;
+        border: 1px solid #939FA7;
+        border-radius: 5px;
+        height: 32px;
+        min-width: 32px;
+        padding: 0 12px;
+        width: fit-content;
+        margin-right: 10px;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        font-size: 15px;
+        margin-bottom: 10px;
+        cursor: pointer;
+      }
+
+      .activeMark {
+        background: #0A7B24;
+        border: 1px solid #065F1B;
+        color: white;
+      }
+
+      .failed {
+        background: #E2017B;
+        border: 1px solid #E2017B;
+      }
+    }
+  }
+
+  .controlPanel {
+    display: flex;
+    background: white;
+    padding: 20px 10px;
+    border-top: 1px solid #D3D9DE;
+    box-shadow: 0 2px 5px 0 #d3d9de;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 8px;
+    align-items: center;
+    justify-content: space-between;
+
+    .save {
+      cursor: pointer;
+      background: #E2017B;
+      height: 40px;
+      border-radius: 40px;
+      color: #E7ECEF;
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: $screen-dimension-desktop-l) {
+  .checking .mainContainer {
+    flex-direction: column;
+    .comments {
+      .markItem {
+        padding: 5px 10px !important;
+        margin-right: 7px  !important;
+        background: #E7ECEF;
+      }
+      .activeMark {
+        background: #0A7B24;
+        border: 1px solid #065F1B;
+        color: white;
+      }
+      .failed {
+        background: #E2017B;
+        border: 1px solid #E2017B;
+      }
+    }
+    .answerWrapper {
+      background: #fff;
+      border-radius: 0;
+    }
+  }
+}
+
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .checking {
+    .controlPanel {
+      flex-direction: column-reverse;
+      align-items: stretch;
+      padding: 15px 15px 20.5px;
+    }
+
+    .mainContainer {
+      .comments .evaluation {
+        .mark {
+          flex-direction: column;
+        }
+
+        .markItem {
+          width: auto;
+          flex: 1;
+        }
+      }
+    }
+
+    .saved {
+      align-self: center;
+      margin-bottom: 15px;
+    }
+
+    .mainContainer {
+      .comments {
+        min-width: auto;
+      }
+
+
+      .answerWrapper {
+        border-right: 0;
+
+        .answers {
+          max-height: auto;
+        }
+      }
+    }
+  }
+}
+

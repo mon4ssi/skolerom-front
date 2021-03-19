@@ -1,0 +1,116 @@
+@import "../../../../style/index";
+
+.ArrowControls {
+  display: flex;
+  flex-direction: column;
+
+  background: $color-dark-gray;
+  padding: 20px 19px 20px 19px;
+}
+
+.ArrowControls__button {
+  margin-bottom: 8px;
+  background: transparent;
+  position: relative;
+  padding-bottom: 7px;
+  padding-left: 40px;
+  padding-top: 6px;
+  text-align: left;
+  font-size: 15px;
+
+  &:disabled {
+    background: transparent;
+    cursor: default;
+  }
+}
+
+.ArrowControls__buttonsBlock {
+  margin-bottom: 11px;
+}
+
+.ArrowControls__button_exit {
+  color: $color-purple;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.ArrowControls__image_previous {
+  transform: rotateZ(180deg);
+  margin-right: 2px;
+}
+
+.ArrowControls__image_next {
+  margin-left: 1px;
+}
+
+.ArrowControls__imageContainer {
+  @include flex-center;
+  @include circle(30px);
+  @include absolute-center-y(46%);
+  left: 0;
+  border: 2px solid $color-text-primary;
+}
+
+.ArrowControls__imageContainer_exit {
+  border: 2px solid $color-purple;
+}
+
+.ArrowControls__tooltip {
+  background: $color-white;
+  min-width: 260px;
+  display: none;
+  opacity: 0;
+  position: absolute;
+  bottom: 38px;
+  left: 1px;
+  box-shadow: 0px 2px 2px rgba($color-white, 0.13);
+  border: 1px solid $color-blue-gray;
+  border-radius: 4px;
+  padding: 17px 15px 18px 15px;
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    border-right: 1px solid $color-blue-gray;
+    border-bottom: 1px solid $color-blue-gray;
+    background: $color-white;
+    left: 75px;
+    top: 51px;
+    width: 7px;
+    height: 7px;
+    transform: rotateZ(45deg);
+  }
+}
+
+.ArrowControls__tooltipImage {
+  @include absolute-center-y();
+  left: 17px;
+}
+
+.ArrowControls__tooltipText {
+  white-space: nowrap;
+}
+
+.ArrowControls__button:hover .ArrowControls__tooltip {
+  display: block;
+  opacity: 1;
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .ArrowControls__button {
+    display: none;
+  }
+
+  .ArrowControls__button_exit {
+    display: block;
+  }
+}
+
+@media screen and (device-width: 810px) and (device-height: 1080px) and (orientation:landscape) {
+  .ArrowControls {
+    position: fixed;
+    bottom: 0;
+    width: 230px;
+  }
+}

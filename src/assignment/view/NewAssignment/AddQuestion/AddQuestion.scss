@@ -1,0 +1,158 @@
+.NewAssignment {
+  .AddQuestion {
+    background: #E7ECEF !important;
+    padding: 40px 20px !important;
+
+    .addQuestionPhase {
+      margin-bottom: 20px;
+    }
+
+    .questionTypeBox {
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      border: 1px solid #596A75 !important;
+      height: 100px;
+      width: 49%;
+      cursor: pointer;
+      box-shadow: 0 2px 4px 0 #d3d9de;
+
+      &:first-child {
+        margin-bottom: 20px;
+      }
+
+      img {
+        margin-right: 20px;
+        width: 30px;
+        height: 30px;
+      }
+
+      .questionWrapper {
+
+        .questionType {
+          margin-bottom: 5px;
+        }
+
+        &:last-child {
+          font-weight: 300;
+        }
+
+        .questionTypeDescription {
+          font-size: 15px;
+        }
+      }
+
+    }
+  }
+
+  .questionTitle {
+    & * {
+      color: #939fa7;
+    }
+
+    .questionIcon {
+      margin-right: 10px;
+    }
+  }
+
+  .newTextQuestionInput {
+    border: none;
+    resize: none;
+    outline: none;
+    font-size: 22px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 0 20px;
+    font-weight: 500;
+
+    &::placeholder {
+      color: #939FA7;
+    }
+
+    .questionControlPanel {
+      padding: 0 20px;
+      margin-top: 15px;
+    }
+  }
+
+  .textExtra {
+    align-items: flex-start;
+    margin-bottom: 20px;
+
+    textarea {
+      resize: none;
+      border: none;
+      width: 100%;
+      margin-left: 20px;
+    }
+  }
+}
+
+.NewTextQuestion {
+  cursor: move;
+  background: #fff;
+  padding: 20px;
+  border-bottom: 1px solid #d3d9de;
+
+  .newTextQuestionInput {
+    border: none;
+    font-size: 22px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    &::placeholder {
+      color: #939FA7;
+    }
+  }
+
+  .extra {
+    img {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+  }
+}
+
+.NewMultipleChoiceQuestion {
+  cursor: move;
+  background: #fff;
+  padding: 20px 0;
+  border-bottom: 1px solid #d3d9de;
+
+  .newTextQuestionInput {
+    border: none;
+    font-size: 22px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    &::placeholder {
+      color: #939FA7;
+    }
+  }
+
+  .options {
+    margin-top: 20px;
+    padding: 0 20px;
+  }
+
+  .extra {
+    img {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+  }
+}
+
+.attached-files {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+
+  img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    padding: 2px;
+  }
+}

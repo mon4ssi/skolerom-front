@@ -1,0 +1,123 @@
+.TagInput {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  font-weight: lighter;
+  cursor: text;
+
+  .tagWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: inherit;
+
+    .tag {
+      position: relative;
+      display: flex;
+      height: 34px;
+      align-items: center;
+      padding: 7px 8px 8px 12px;
+      margin-right: 13px;
+      margin-bottom: 4px;
+      background: #FFF;
+      border-radius: 20px;
+      cursor: default;
+      width: max-content;
+      border: 1px solid #596A75;
+
+      .title {
+        margin-right: 13px;
+        color: #0B2541;
+        margin-bottom: 1px;
+        font-size: 15px;
+        font-weight: 300;
+      }
+
+      img {
+        cursor: pointer;
+        width: 18px;
+        height: 18px;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+
+  .unselected {
+    transition: 0.3s;
+    font-size: 15px;
+    padding: 0 5px;
+    cursor: pointer;
+    height: max-content;
+    background: #e8edef;
+    color: #0B2541;
+    font-weight: 300;
+
+    &:hover {
+      font-weight: bold;
+    }
+  }
+
+  .selected {
+    color: #0B2541;
+    transition: 0.3s;
+    font-size: 15px;
+    padding: 0 5px;
+    height: max-content;
+    background: #e8edef;
+  }
+
+  .shoosen {
+    background: #a3cefc;
+    cursor: default;
+
+    &:hover {
+      background: #a3cefc;
+    }
+  }
+
+  input {
+    border: none;
+    font-size: 16px;
+    margin-bottom: 4px;
+    background: none;
+  }
+
+  .TagsWindow {
+    z-index: 1;
+    display: flex;
+    width: calc(100% + 2px);
+    max-height: 135px;
+    overflow-y: scroll;
+    position: absolute;
+    top: calc(100% - 5px);
+    left: -1px;
+    background: #fff;
+    padding: 13px 70px 11px 13px;
+    border: 1px solid #596A75;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+  }
+
+  .listTags {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    background: #e8edef;
+  }
+}
+
+.hideInput {
+  input {
+    display: none !important;
+  }
+}
+
+.searchInput {
+  padding-bottom: 10px !important;
+
+  input {
+    height: 32px;
+  }
+}

@@ -1,0 +1,22 @@
+.Images {
+  .imagesWrapper {
+    justify-content: normal;
+    margin-bottom: 10px;
+    width: 100%;
+    overflow: scroll;
+    height: 200px;
+
+    img {
+      margin-right: 15px;
+      margin-bottom: 10px;
+      width: calc(33.333% - 10px);
+      height: 170px;
+      object-fit: cover;
+      cursor: zoom-in;
+    }
+  }
+
+  .centered {
+    justify-content: center;
+  }
+}

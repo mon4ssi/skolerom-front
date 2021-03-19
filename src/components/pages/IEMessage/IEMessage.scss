@@ -1,0 +1,156 @@
+@import "style";
+
+.IEMessage_container {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  min-height: 100vh;
+  background: #E7ECEF;
+  padding-top: 20px;
+  animation: 5s linear browser-message;
+}
+
+.IEMessage_window {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #FFECEA;
+  margin-bottom: auto;
+  border-radius: 7px;
+  border: 2px solid #F7BDBA;
+}
+
+.IEMessage_header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  background: #FEE5E3;
+  padding: 15px;
+  border-radius: 7px 7px 0 0;
+  border-bottom: 2px solid #F7BDBA;
+  font-weight: 700;
+
+  img {
+    width: 25px;
+    margin-right: 10px;
+  }
+}
+
+.IEMessage_body {
+  padding: 40px 60px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.IEMessage_body__part1 {
+  font-weight: 500;
+  font-size: 17px;
+  margin: 0 0 10px 0;
+}
+
+.IEMessage_body__part2 {
+  font-size: 17px;
+  margin-top: 10px;
+}
+
+.IEMessage_browsers {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.IEMessage_browser {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 40px;
+  cursor: pointer;
+
+  img {
+    height: 80px;
+  }
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.IEMessage_browser__name {
+  font-size: 17px;
+  color: $color-purple;
+  margin-top: 20px;
+}
+
+.IEMessage_browser__founder {
+  font-size: 15px;
+  margin-top: 15px;
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .IEMessage_container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .IEMessage_window {
+    margin-bottom: 20px;
+  }
+
+  .IEMessage_body {
+    padding: 20px 20px 20px;
+  }
+
+  .IEMessage_browsers {
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .IEMessage_browser {
+    flex: 1 0 calc(50% - 1em);
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+
+  .IEMessage_body__part1 {
+    text-align: center;
+  }
+
+  .IEMessage_body__part2 {
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-mobile-425) {
+  .IEMessage_browser {
+    flex: 1 0 100%;
+  }
+}
+
+@keyframes browser-message {
+  0% {
+    opacity: 0;
+  }
+
+  99% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,132 @@
+@import "style";
+
+.passageTeachingPath {
+  display: flex;
+  position: absolute;
+  background: white;
+  height: 100vh;
+  width: 100vw;
+  flex-direction: column;
+  z-index: 20;
+
+  .teachingPathNavigate {
+    display: flex;
+    flex-direction: column;
+    background: #E7ECEF;
+    width: 230px;
+    min-width: 230px;
+    justify-content: space-between;
+
+    .stepOverview {
+      display: flex;
+      padding: 20px;
+      flex-direction: column;
+
+      .overview {
+        font-size: 15px;
+        color: #E2017B;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+
+        span {
+          word-break: break-word;
+        }
+      }
+
+      .titleTeachingPath {
+        word-break: break-word;
+      }
+
+      .questionWrapper {
+        display: flex;
+        padding: 10px 0 0;
+        align-items: center;
+
+        .questionNumber {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 12px;
+          border: 2px solid #0B2541;
+          border-radius: 50%;
+          min-width: 20px;
+          min-height: 20px;
+          margin-right: 10px;
+        }
+
+        .questionName {
+          font-size: 15px;
+        }
+
+        .selectedItem-circle {
+          color: #0A7B24;
+          border: 2px solid #0A7B24;
+        }
+
+        .selectedItem {
+          color: #0A7B24;
+        }
+      }
+    }
+
+    .arrowControlsTeachingPath {
+      display: flex;
+      background: #D3D9DE;
+      padding: 20px;
+      flex-direction: column;
+
+      .navigationButton {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        cursor: pointer;
+
+        span {
+          margin-left: 10px;
+          font-size: 15px;
+        }
+      }
+
+      .navigationExitButton {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+        cursor: pointer;
+
+        span {
+          margin-left: 10px;
+          font-size: 15px;
+          color: #E2017B;
+        }
+      }
+    }
+  }
+
+  .teachingPathWrapper {
+    display: flex;
+    height: calc(100% - #{$header-height});
+
+    .wrapperTeachingPath{
+      width: calc(100% - 230px);
+
+      .contentTeachingPath {
+        display: flex;
+        height: calc(100% - 70px);
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media screen and (device-width: 810px) and (device-height: 1080px) and (orientation:landscape) {
+  //.passageTeachingPath .teachingPathWrapper .wrapperTeachingPath .contentTeachingPath{
+  //  height: calc(100% - 100px);
+  //}
+  .passageTeachingPath .teachingPathNavigate .arrowControlsTeachingPath{
+    position: fixed;
+    bottom: 0;
+    width: 230px;
+  }
+}

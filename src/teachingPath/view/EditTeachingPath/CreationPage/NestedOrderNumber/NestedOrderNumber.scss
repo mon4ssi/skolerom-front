@@ -1,0 +1,31 @@
+.numberAndActions {
+  width: 100px;
+  cursor: default;
+  margin-bottom: -3px;
+  z-index: 3;
+  min-height: 31px;
+
+  &.firstNumber {
+    margin-bottom: 20px;
+  }
+
+  .nestedOrderNumber {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 31px;
+    height: 31px;
+    min-height: 31px;
+    background: #E2017B;
+    border-radius: 50%;
+    color: #ffffff;
+    font-size: 17px;
+    margin: 0 10px;
+  }
+
+  img {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+  }
+}

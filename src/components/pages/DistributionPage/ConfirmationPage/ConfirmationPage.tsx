@@ -1,0 +1,73 @@
+import React, { Component, MouseEvent } from 'react';
+import { RouteComponentProps, withRouter, Redirect } from 'react-router-dom';
+import { Location } from 'history';
+import intl from 'react-intl-universal';
+
+import { CreateButton } from '../../../common/CreateButton/CreateButton';
+
+import thumbImg from 'assets/images/thumbs-up-pink.svg';
+import arrowLeftImg from 'assets/images/arrow-left-rounded-white.svg';
+
+import './ConfirmationPage.scss';
+
+type LocationState = Location<{
+  entityType: string;
+  editPath: string;
+  exitPath: string;
+}>;
+
+interface Props extends RouteComponentProps {
+  location: LocationState;
+}
+
+class ConfirmationPageComponent extends Component<Props> {
+
+  private handleEditClick = (e: MouseEvent<HTMLSpanElement>) => {
+    const { history, location: { state } } = this.props;
+    e.preventDefault();
+
+    history.push(state.editPath);
+  }
+
+  private handleGoBackClick = () => {
+    const { history, location: { state } } = this.props;
+    history.push(state.exitPath);
+  }
+
+  public render() {
+    const { state } = this.props.location;
+
+    return state ? (
+      <div className="ConfirmationPage_container">
+        <img
+          src={thumbImg}
+          alt="thumb"
+          className="ConfirmationPage_thumb"
+        />
+
+        <div className="ConfirmationPage_title">
+          {intl.get('distribution_page.after_distribution.title', { entity: intl.get(state.entityType) })}
+        </div>
+
+        <div className="ConfirmationPage_body">
+          {intl.get('distribution_page.after_distribution.body_part_1')} {' '}
+          <span
+            className="ConfirmationPage_edit"
+            onClick={this.handleEditClick}
+          >
+            {intl.get('distribution_page.after_distribution.body_part_2', { entity: intl.get(state.entityType) })}
+          </span>
+        </div>
+
+        <CreateButton className={'backButton'} onClick={this.handleGoBackClick}>
+          <div>
+            <img src={arrowLeftImg} alt="exit"/>
+            <span>{intl.get('distribution_page.after_distribution.go_to_my_account')}</span>
+          </div>
+        </CreateButton>
+      </div>
+    ) : <Redirect to="/activity" />;
+  }
+}
+
+export const ConfirmationPage = withRouter(ConfirmationPageComponent);

@@ -1,0 +1,296 @@
+@import "style";
+
+.LoginFormContainer {
+  width: 50%;
+
+  .formTitle {
+    color: #0B2541;
+    font-size: 36px;
+    margin-bottom: 64px;
+  }
+
+  .formWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+  }
+
+  .formSubtitle {
+    color: #0B2541;
+    font-size: 22px;
+  }
+
+  .formTitle {
+    color: #0B2541;
+    font-size: 36px;
+    margin-bottom: 64px;
+  }
+
+  .loginButton {
+    border-radius: 25px;
+    background-color: #E2017B;
+    width: 171px;
+    height: 50px;
+    font-size: 21px;
+
+
+    span {
+      color: #fff;
+      padding-left: 5px;
+    }
+  }
+
+  .rightClickMenu {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    list-style: none;
+    background: #FFF;
+    border-radius: 5px;
+    display: none;
+    box-shadow: 0 4px 4px 0 #d3d9de;
+    width: 120px;
+
+    li {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      cursor: pointer;
+      font-size: 17px;
+    }
+
+    li:hover {
+      background: #939FA7;
+      border-radius: 5px;
+    }
+  }
+
+  .rightClickMenu.active {
+    display: block;
+  }
+
+
+  .or {
+    margin: 80px 0;
+    font-size: 22px;
+    color: #596A75;
+    text-transform: uppercase;
+  }
+
+  .logInForm {
+    width: 100%;
+
+    .title {
+      margin: 0;
+      font-size: 22px;
+      text-transform: uppercase;
+    }
+
+    .inputs {
+      width: calc(100% - 200px);
+      justify-content: space-between;
+      margin: 30px 0 35px;
+
+      input {
+        // width: 240px;
+        width: calc((100% - 40px) / 2);
+        height: 40px;
+        padding-bottom: 11px;
+        border: 0;
+        border-bottom: 2px solid #0B2541;
+        text-align: center;
+        font-size: 22px;
+        font-weight: 500;
+
+        &::placeholder {
+          color: #596A75;
+        }
+
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover,
+        &:-webkit-autofill:focus,
+        &:-webkit-autofill:active {
+          box-shadow: 0 0 0 30px white inset;
+        }
+      }
+    }
+
+    .logInSubmit {
+      width: 240px;
+      height: 50px;
+      background: #0B2541;
+      border-radius: 25px;
+      color: #fff
+    }
+
+    .forgotPassword {
+      margin: 10px 0 0;
+      font-size: 17px;
+      font-weight: 300;
+      color: #596A75;
+    }
+  }
+}
+
+@media screen and (max-width: $screen-dimension-tablet-xl) {
+  .LoginPage {
+    padding-bottom: 20px;
+
+    .FormLogin {
+      width: 100%;
+    }
+  }
+
+  .LoginFormContainer {
+    width: 100%;
+
+    .formTitle {
+      display: none;
+    }
+
+    .formSubtitle {
+      text-transform: uppercase;
+      text-align: center;
+      font-size: 18px;
+      margin-top: 52px;
+    }
+
+    .formWrapper {
+      width: 100%;
+    }
+
+    .or {
+      margin: 0 0 25px;
+      font-size: 18px;
+    }
+
+    .logInForm {
+
+      .title {
+        font-size: 18px;
+      }
+
+      .inputs {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+
+        input {
+          margin-bottom: 10px;
+          width: 80%;
+          box-shadow: 0 0 0 30px #E7ECEF inset;
+
+          &:-webkit-autofill,
+          &:-webkit-autofill:hover,
+          &:-webkit-autofill:focus,
+          &:-webkit-autofill:active {
+            box-shadow: 0 0 0 30px #E7ECEF inset;
+          }
+        }
+      }
+    }
+
+    .loginButton {
+      border-radius: 25px;
+      background-color: #E2017B;
+      width: 90%;
+      height: 50px;
+      margin-bottom: 25px;
+    }
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .LoginPage .FormLogin {
+    width: 100%;
+  }
+  .formTitle {
+    display: none;
+  }
+  .formSubtitle {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 18px;
+  }
+  .mobileFormTitle {
+    display: block;
+    text-align: center;
+    font-size: 24px;
+    padding-top: 25px;
+    padding-bottom: 15px;
+  }
+
+  .formWrapper {
+    width: 100%;
+  }
+
+  .loginButton {
+    width: 90%;
+    height: 50px;
+    margin-bottom: 25px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+  }
+}
+
+@media screen and (device-width: 810px) and (device-height: 1080px) and (orientation:portrait) {
+  .loginButton {
+    align-items: center;
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+    padding: 20px;
+    font-size: 18px;
+  }
+
+  .formSubtitle {
+    margin: 0 0 10px 0 !important;
+    font-size: 15px;
+  }
+
+  .or {
+    margin: 0 0 5px 0 !important;
+    font-size: 15px;
+  }
+
+  .logInForm {
+
+    .title {
+      font-size: 15px;
+    }
+    .inputs {
+      margin: 10px 10px 30px 0 !important;
+      width: calc(100% - 100px);
+      input {
+        padding-bottom: 11px;
+        padding-top: 5px;
+        margin: 5px;
+        border-bottom: 3px solid #0B2541 !important;
+        width: 25% !important;
+        height: 30px;
+        font-size: 16px;
+        font-weight: 500;
+        -webkit-appearance: none;
+        box-shadow: 0 0 0 30px #E7ECEF inset;
+      }
+    }
+  }
+
+  .logInSubmit {
+    width: 130px !important;
+    background: #0B2541;
+    border-radius: 25px;
+    color: #fff;
+    padding-top: 10px;
+    padding-bottom: 35px;
+    margin-top: 80px;
+  }
+}
+
+@media screen and (device-width: 810px) and (device-height: 1080px) and (orientation:landscape) {
+  .formTitle {
+    margin: 60px 0 0 0 !important;
+  }
+}

@@ -1,0 +1,42 @@
+.content {
+  padding: 40px 20px;
+  border-bottom: 1px solid #d3d9de;
+  background: #E7ECEF;
+
+  .settingsWrapper {
+    display: flex;
+    flex-direction: column;
+
+    .settingsImage {
+      display: flex;
+      align-items: center;
+
+      img {
+        height: 28px;
+        width: 28px;
+      }
+
+      span {
+        padding: 0 10px;
+        color: #0B2541;
+      }
+    }
+
+    .specify {
+      font-size: 15px;
+      font-weight: 300;
+      margin: 10px 0 20px;
+    }
+  }
+
+  .articlesWrapper {
+
+    .relatedArticleContent {
+      padding: 0 0 16px 0;
+    }
+
+    button{
+      font-size: 17px;
+    }
+  }
+}

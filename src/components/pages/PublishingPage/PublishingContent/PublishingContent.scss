@@ -1,0 +1,11 @@
+.PublishingContent {
+  position: relative;
+  margin-left: 50%;
+  width: 50%;
+  height: 100%;
+  background: #ffffff;
+
+  .teachingPathContent {
+    height: calc(100% - 311px);
+  }
+}

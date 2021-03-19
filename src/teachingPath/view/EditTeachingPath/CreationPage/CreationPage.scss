@@ -1,0 +1,333 @@
+.main {
+  position: absolute;
+  min-width: 100%;
+
+  .teachingPathItemsContainer {
+    position: relative;
+    min-width: 100%;
+    min-height: fit-content;
+    // overflow-x: auto;
+
+    &.rootContainer {
+      padding-bottom: 50px;
+      padding-top: 17px;
+
+      &::before {
+        content: none;
+      }
+    }
+
+    &::before {
+      content: "";
+      width: 100%;
+      height: 2px;
+      background: #D3D9DE;
+      position: absolute;
+      top: -35px;
+    }
+
+    &.first::before {
+      width: 50%;
+      transform: translateX(50%);
+    }
+
+    &.last::before {
+      width: 50%;
+      transform: translateX(-50%);
+    }
+
+    &.solo::before {
+      width: 50%;
+      // transform: translateX(0);
+    }
+
+    &.contentNone::before {
+      content: none;
+    }
+
+    &.mergeLineBeforeButton::after {
+      content: "";
+      width: 50%;
+      border-top: 2px dashed #D3D9DE;
+      position: absolute;
+      top: 377px;
+      transform: translateX(50%);
+    }
+
+    &.mergeLineFullWidth::after {
+      content: "";
+      width: 100%;
+      border-top: 2px dashed #D3D9DE;
+      position: absolute;
+      top: 377px;
+      transform: translateX(0);
+    }
+
+    &.mergeLineAfterButton::after {
+      content: "";
+      width: 50%;
+      border-top: 2px dashed #D3D9DE;
+      position: absolute;
+      top: 377px;
+      transform: translateX(-50%);
+    }
+
+    .teachingPathItemsTitle {
+      margin: 0 0 17px 0;
+      min-height: 34px;
+      text-align: center;
+      background-color: #ffffff;
+      font-size: 23px;
+      border: none;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.0724978);
+      border-radius: 4px;
+      resize: none;
+      outline: none;
+      z-index: 2;
+      padding: 2px 0;
+
+      &::placeholder {
+        font-weight: 300;
+      }
+    }
+
+    .unmergeImg {
+      margin-top: 15px;
+      width: 40px;
+      height: 40px;
+      z-index: 2;
+      cursor: pointer;
+      background: url(../../../../assets/images/unmerge.svg);
+      background-size: cover;
+
+      &:hover {
+        background: url(../../../../assets/images/unmerged-hovered.svg);
+        background-size: cover;
+      }
+    }
+
+    .nestedOrderNumberContainer {
+      position: relative;
+      min-height: fit-content;
+
+      &.withoutUnmergeButton {
+        margin-top: 55px;
+      }
+
+      .topVerticalLine {
+        height: 25px;
+        min-height: 25px;
+        left: 49px;
+        top: -22px;
+        z-index: 1;
+      }
+    }
+
+    .infoCardsContainer {
+      flex-direction: row;
+      position: relative;
+      min-height: fit-content;
+
+      .infoCardContainer {
+        position: relative;
+
+        &::before {
+          width: 100%;
+          content: "";
+          height: 2px;
+          background: #D3D9DE;
+          position: absolute;
+          top: -35px;
+        }
+
+        &.first::before {
+          width: 50%;
+          transform: translateX(100%);
+        }
+
+        &.last::before {
+          width: 50%;
+          transform: translateX(0);
+        }
+
+        &.solo::before {
+          width: 0%;
+        }
+      }
+    }
+
+    .teachingPathItems {
+      margin-top: 40px;
+    }
+
+    .teachingPathButtons {
+      position: relative;
+
+      &.withUnmergeButton {
+        margin-top: 15px;
+      }
+
+      &.withPadding {
+        margin-top: 70px;
+      }
+
+      &.withoutPadding {
+        margin-top: 15px !important;
+      }
+    }
+
+    .InfoCard {
+      margin: 0 20px;
+    }
+
+    .childrenContainer {
+      position: relative;
+      flex-direction: row;
+    }
+
+    .mergePanel {
+      display: flex;
+
+      .mergeTooltip {
+        display: none;
+        background: #596A75;
+        padding: 8px 20px;
+        position: absolute;
+        top: 311px;
+        color: white;
+        border-radius: 5px;
+        align-items: center;
+        justify-content: center;
+        z-index: 5;
+
+        &.enLocale {
+          left: -63px;
+        }
+
+        &.nbLocale {
+          left: -88px;
+        }
+
+        &.nnLocale {
+          left: -81px;
+        }
+      }
+
+      .unmergeTooltip {
+        @extend .mergeTooltip;
+
+        &.enLocale {
+          left: inherit;
+          margin-left: -48px;
+        }
+
+        &.nbLocale {
+          left: inherit;
+          margin-left: -41px;
+        }
+
+        &.nnLocale {
+          left: inherit;
+          margin-left: -41px;
+        }
+      }
+
+      .mergeButton {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: 358px;
+        left: -20px;
+        cursor: pointer;
+        z-index: 3;
+        background: url(../../../../assets/images/merge.svg);
+        background-size: cover;
+      }
+
+      &:hover {
+        .mergeButton {
+          background: url(../../../../assets/images/merge-hovered.svg);
+          background-size: cover;
+        }
+
+        .mergeTooltip {
+          display: flex;
+
+          &:after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            left: 50%;
+            bottom: -12px;
+            transform: translate(-50%, -50%) rotate(45deg);
+            background-color: #596A75;
+          }
+        }
+
+        .unmergeTooltip {
+          display: flex;
+
+          &:after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            left: 50%;
+            bottom: -12px;
+            transform: translate(-50%, -50%) rotate(45deg);
+            background-color: #596A75;
+          }
+        }
+      }
+    }
+
+
+  }
+
+  .topVerticalLine {
+    border-left: 2px solid #D3D9DE;
+    height: 35px;
+    min-height: 35px;
+    position: absolute;
+    top: -35px;
+    z-index: 1;
+  }
+
+  .bottomVerticalLine {
+    border-left: 2px solid #D3D9DE;
+    height: 35px;
+    position: absolute;
+    bottom: -35px;
+    z-index: 1;
+  }
+
+  .bottomHorizontalLine {
+    border-bottom: 2px solid #D3D9DE;
+    left: 160px;
+    position: absolute;
+    z-index: 1;
+    bottom: -35px;
+  }
+
+  .exitButton {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+
+    .exitTeachingPath {
+      padding: 20px;
+      background: #E7ECEF;
+      border-radius: 4px;
+
+      span {
+        margin-left: 10px;
+        color: #E2017B;
+      }
+    }
+  }
+}
+

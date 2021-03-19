@@ -1,0 +1,103 @@
+@import "../../../style";
+
+$header-padding-mobile: 65px;
+
+.ReadingArticle {
+  position: fixed;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  background: $color-white;
+  width: 100%;
+  height: 100%;
+}
+
+.ReadingArticle__header {
+  box-sizing: border-box;
+  width: 100%;
+  background-color: $color-white;
+  height: $header-height;
+  border-top: 10px solid $color-purple;
+  padding: 0 20px;
+  border-bottom: 1px solid $color-gray;
+  display: flex;
+  justify-content: space-between;
+  z-index: 20;
+}
+
+.ReadingArticle__backButton {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background: transparent;
+}
+
+.ReadingArticle__backButtonText {
+  margin: 0 7px;
+  font-weight: bold;
+}
+
+.ReadingArticle__levels {
+  display: flex;
+  align-items: center;
+}
+
+.ReadingArticle__level {
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  margin: 0 7px;
+  background: #0b2541;
+  color: #fff;
+}
+
+.ReadingArticle__level_active {
+  background: #E2007C;
+}
+
+.ReadingArticle__finishButton {
+  display: flex;
+  align-items: center;
+}
+
+.ReadingArticle__finishButton button {
+  min-height: 40px;
+}
+
+.ReadingArticle__content {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .ReadingArticle {
+    top: $header-padding-mobile;
+  }
+
+  .ReadingArticle__headerWrapper {
+    background: $color-white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .ReadingArticle__backButtonText {
+    display: none;
+  }
+
+  .ReadingArticle__finishButton {
+    @include absolute-center-x();
+    bottom: 12px;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-mobile-425) {
+  .ReadingArticle__level {
+    width: 30px;
+    height: 30px;
+    margin: 0 4px;
+  }
+}

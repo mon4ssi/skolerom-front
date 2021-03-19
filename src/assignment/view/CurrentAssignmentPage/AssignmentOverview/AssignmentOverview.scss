@@ -1,0 +1,55 @@
+@import "../../../../style/index";
+
+.AssignmentOverview {
+  padding: 20px 24px 20px 20px;
+  overflow-y: auto;
+}
+
+.AssignmentOverview__header {
+  font-weight: 500;
+  font-size: 17px;
+}
+
+.AssignmentOverview__questions {
+  margin-top: 21px;
+}
+
+.AssignmentOverview__questionLink_disabled {
+  cursor: default;
+}
+
+.AssignmentOverview__question {
+  margin-bottom: 10px;
+  @include animate-many(color);
+  font-size: 15px;
+  cursor: pointer;
+  position: relative;
+  padding-left: 30px;
+  padding-bottom: 1px;
+  line-break: anywhere;
+}
+
+.AssignmentOverview__question_disabled {
+  cursor: default;
+}
+
+.AssignmentOverview__text {
+  @include text-shrink;
+}
+
+.AssignmentOverview__order {
+  @include circle(20px);
+  @include absolute-center-y(10px);
+  @include flex-center;
+  @include animate-many(border-color, color);
+  left: 0;
+  font-size: 12px;
+  margin-right: 10px;
+  border: 2px solid $color-text-primary;
+  padding-bottom: 1px;
+}
+
+.AssignmentOverview__question_answered {
+  color: $color-green;
+  border-color: $color-green;
+}

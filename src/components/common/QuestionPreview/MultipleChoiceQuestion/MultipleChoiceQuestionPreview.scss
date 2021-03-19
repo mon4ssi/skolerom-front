@@ -1,0 +1,80 @@
+@import "../../../../style/index";
+
+.Options {
+
+}
+
+.Option {
+  @include animate-many(background, border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid $color-blue-gray;
+  border-radius: 5px;
+  background: $color-light-gray;
+  padding: 6.5px 19px 6.5px 19px;
+  margin-bottom: 10px;
+}
+
+.Option__text {
+  word-break: break-all;
+  hyphens: auto;
+  flex-shrink: 1;
+  border: 0;
+  background: transparent;
+  padding-left: 0;
+  min-width: 0;
+  padding-right: 10px;
+  width: 100%;
+}
+
+.Option__status {
+  @include circle(30px);
+  @include flex-center;
+  @include animate-many(background, border-color);
+  border: 1px solid $color-blue-gray;
+  background: $color-white;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.Option__defaultCursor {
+  cursor: default;
+}
+
+.Option {
+  &.studentViewIsRight {
+    background: #D3D9DE;
+    border: 1px solid #0B2541;
+  }
+
+  &.hasError {
+    border: 1px solid #E2017B;
+  }
+}
+
+.Option__image {
+  margin-top: 1px;
+}
+
+.Option_selected {
+  background: $color-dark-gray;
+  border-color: $color-text-primary;
+}
+
+.light {
+  background: #E7ECEF;
+}
+
+.Option__status_selected {
+  background: $color-text-primary;
+  border-color: $color-text-primary;
+}
+
+.Option__input_right {
+  color: $color-green;
+}
+
+.Option__input_wrong {
+  color: #E2017B;
+}

@@ -1,0 +1,220 @@
+@import "../../../style/index";
+
+.AppHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 11px solid $color-purple;
+  padding: 13px 15px 12px 20px;
+  border-bottom: 1px solid $color-gray;
+  background: $color-white;
+  position: relative;
+  z-index: 16;
+}
+
+.AppHeader__block {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.AppHeader__block_mobile {
+  display: none;
+}
+
+.AppHeader__logo {
+  margin-bottom: 7px;
+}
+
+.AppHeader__role {
+  margin-left: 17px;
+  font-family: 'Roboto Slab', serif;
+  color: $color-text-secondary;
+  font-size: 17px;
+  font-weight: 400;
+}
+
+.AppHeader__navigation {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.AppHeader__navigationItem {
+  @include text-shrink;
+  display: flex;
+  align-items: center;
+  margin-left: 19px;
+  cursor: pointer;
+  min-width: 0;
+
+  &:first-child {
+    margin: 0;
+  }
+}
+
+.AppHeader__navigationItemImage {
+  width: 25px;
+  height: 25px;
+}
+
+.AppHeader__navigationItemText {
+  @include text-shrink;
+  min-width: 0;
+}
+
+.AppHeader__navigationItemText:hover .AppHeader__submenuWrapper {
+  display: block;
+}
+
+.AppHeader__navigationItemText:hover {
+  text-decoration: underline;
+}
+
+.AppHeader__submenuWrapper {
+  display: none;
+  padding-top: 21px;
+  position: absolute;
+}
+
+.AppHeader__submenu {
+  min-width: 220px;
+  background: #FFF;
+  border: 1px solid #D3D9DE;
+  border-top: 0;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0 2px 4px 0 rgba(255, 255, 255, 0.11);
+}
+
+.AppHeader__dropdown {
+  align-items: center;
+  display: flex;
+}
+
+.AppHeader__dropdown::after {
+  filter: brightness(0);
+  display: inline-block;
+  content: '';
+  width: 16px;
+  height: 16px;
+  margin-left: 10px;
+  background-image: url(../../../assets/images/arrow-down.svg);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.AppHeader__dropdown:hover {
+  text-decoration: underline;
+}
+
+.AppHeader__dropdownItem {
+  text-decoration: none;
+  font-weight: 300;
+  transition: background-color .315s ease-in-out, color .315s ease-in-out;
+  padding: 10px 15px;
+}
+
+.AppHeader__dropdownItem:hover {
+  background: #E7ECEF;
+}
+
+.AppHeader__userLogo {
+  @include circle(37px);
+  margin-left: 10px;
+  margin-top: 2px;
+  cursor: pointer;
+}
+
+.AppHeader__headerOverlay {
+  display: none;
+}
+
+.AppHeader__button {
+  width: 22px;
+  height: 19px;
+  padding: 0;
+  background: transparent;
+  //justify-content: flex-end;
+}
+
+.AppHeader__userMenuButton {
+  padding-left: 12px;
+}
+
+.AppHeader__navigation_tablet {
+  display: none;
+}
+
+.AppHeader__modal_animated-enter,
+.AppHeader__modal_animated-enter-active,
+.AppHeader__modal_animated-exit,
+.AppHeader__modal_animated-exit-active
+{
+  transition: transform 200ms ease-in-out, opacity 200ms ease-in-out; // TODO rewrite animate-many and use here
+}
+
+
+.AppHeader__modal_animated-enter {
+  transform: scale(0.8) translateY(-20px);
+  opacity: 0;
+}
+
+.AppHeader__modal_animated-enter-active {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.AppHeader__modal_animated-exit {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.AppHeader__modal_animated-exit-active {
+  transform: scale(0.8) translateY(-20px);
+  opacity: 0;
+}
+
+
+@media screen and (max-width: $screen-dimension-desktop) {
+  .AppHeader {
+    padding-top: 18px;
+    padding-bottom: 7px;
+    padding-right: 29px;
+  }
+
+  .AppHeader__navigation {
+    display: none;
+  }
+
+  .AppHeader__navigation_tablet {
+    display: flex;
+  }
+
+  .AppHeader__userLogo {
+    margin-top: 0;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .AppHeader {
+    padding-top: 24px;
+    padding-bottom: 22px;
+    padding-right: 16px;
+    padding-left: 15px;
+  }
+
+  .AppHeader__block {
+    display: none;
+  }
+
+  .AppHeader__block_mobile {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .AppHeader__navigation_tablet {
+    display: none;
+  }
+}

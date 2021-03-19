@@ -1,0 +1,89 @@
+@import "../../../style";
+
+.TabNavigation {
+  height: 61px;
+  min-height: 61px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 0 20px;
+  box-shadow: 0 2px 5px 0 #D3D9DE;
+  border: 1px solid #D3D9DE;
+  margin-bottom: 20px;
+
+  ul {
+    height: 60px;
+
+    li {
+      margin-right: 40px;
+      height: 100%;
+
+      .sidebarLink {
+        position: relative;
+        height: 100%;
+        text-align: center;
+      }
+    }
+  }
+
+  .activeRoute {
+    &::after {
+      position: absolute;
+      content: "";
+      border-bottom: 4px solid #E2017B;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+    }
+  }
+}
+
+
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  header {
+    min-height: auto;
+  }
+
+  .TabNavigation {
+    background: none;
+    box-shadow: none;
+    flex-direction: column;
+    margin-bottom: 80px;
+    padding: 0;
+
+    .Link {
+      white-space: nowrap;
+      font-size: 15px;
+    }
+  }
+
+  .menu-list {
+    width: calc(100% + 40px);
+    display: flex;
+    justify-content: center;
+    background: white;
+    border-top: 1px solid #E4E9ED;
+    min-height: 61px;
+  }
+
+  .nav-tabs {
+    display: inline-flex;
+    overflow: auto;
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
+  }
+  .nav-tabs li:last-child{
+    margin-right: 0;
+  }
+  .nav-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .examnav-tabsple {
+    -ms-overflow-style: none;
+  }
+
+  .TabNavigation_noMargin {
+    margin-bottom: 20px;
+  }
+}

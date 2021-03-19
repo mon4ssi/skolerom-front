@@ -1,0 +1,119 @@
+{
+  "extends": [
+    "tslint-config-airbnb",
+    "tslint-react"
+  ],
+  "rules": {
+    "ban-ts-ignore": "true",
+    "no-any": true,
+    "no-empty-interface": true,
+    "no-import-side-effect": [true, { "ignore-module": "(\\.scss)$" }],
+    "member-access": [
+      true,
+      "check-accessor"
+    ],
+    "no-magic-numbers": true,
+    "only-arrow-functions": [
+      true,
+      "allow-named-functions"
+    ],
+    "promise-function-async": true,
+    "typedef": true,
+    "await-promise": true,
+    "curly": [
+      true,
+      "ignore-same-line"
+    ],
+    "function-constructor": true,
+    "no-conditional-assignment": true,
+    "no-debugger": true,
+    "no-console": [true, "log", "debug"],
+    "no-dynamic-delete": true,
+    "no-empty": true,
+    "no-inferred-empty-object-type": true,
+    "no-invalid-template-strings": true,
+    "no-misused-new": true,
+    "no-return-await": true,
+    "no-sparse-arrays": true,
+    "no-string-literal": true,
+    "no-string-throw": true,
+    "no-unused-expression": true,
+    "prefer-array-literal": false,
+    "prefer-conditional-expression": [
+      true,
+      "check-else-if"
+    ],
+    "prefer-object-spread": true,
+    "restrict-plus-operands": true,
+    "switch-default": true,
+    "triple-equals": true,
+    "unnecessary-constructor": true,
+    "deprecation": true,
+    "eofline": true,
+    "indent": [
+      true,
+      "spaces",
+      2
+    ],
+    "no-default-export": true,
+    "no-duplicate-imports": true,
+    "trailing-comma": true,
+    "array-type": [
+      true,
+      "generic"
+    ],
+    "arrow-return-shorthand": [
+      true,
+      "multiline"
+    ],
+    "no-implicit-dependencies": [
+      true,
+      [
+        "src",
+        "assets",
+        "components",
+        "assignment",
+        "teachingPath",
+        "Injector",
+        "utils",
+        "locales",
+        "user",
+        "Router",
+        "distribution",
+        "student",
+        "activity",
+        "evaluation"
+      ]
+    ],
+    "import-name": [
+      false
+    ],
+    "variable-name": [
+      true,
+      "allow-pascal-case",
+      "allow-leading-underscore"
+    ],
+    "max-line-length": [
+      true,
+      150
+    ],
+    "object-literal-sort-keys": false,
+    "member-ordering": [
+      true,
+      {
+        "order": [
+          "private-static-field",
+          "public-static-field",
+          "private-instance-field",
+          "public-instance-field",
+          "private-constructor",
+          "public-constructor",
+          "protected-instance-method",
+          "private-instance-method",
+          "public-instance-method"
+        ]
+      }
+    ],
+    "jsx-boolean-value": false
+  }
+}

@@ -1,0 +1,57 @@
+@import '../../style';
+
+$image-size: 74px;
+$image-padding-left: 18px;
+
+.ListWidget {
+
+}
+
+.ListWidget__content {
+  border-top: 1px solid $color-dark-gray;
+}
+
+.ListWidget__loader {
+  @include flex-center;
+  min-height: $image-size * 2;
+  flex-direction: column;
+
+  .collapseTitle {
+    margin-top: 20px;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.ListWidget__list {
+  @include reset-list;
+  padding: 21px 18px 7px 19px;
+}
+
+.ListWidget__item {
+  position: relative;
+  height: $image-size;
+  min-height: $image-size;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.ListWidget__text {
+  @include text-shrink-multiline(4);
+  @include absolute-center-y();
+  right: $image-size + $image-padding-left;
+  width: calc(100% - #{$image-size + $image-padding-left});
+  font-size: 15px;
+}
+
+.ListWidget__image {
+  @include absolute-center-y();
+  right: 0;
+  display: flex;
+  width: $image-size;
+  height: 100%;
+  min-height: 100%;
+  max-height: $image-size;
+  border-radius: 8px;
+  object-fit: cover;
+}

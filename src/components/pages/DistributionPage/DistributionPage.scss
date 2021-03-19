@@ -1,0 +1,13 @@
+.DistributionPage {
+  margin-top: 80px;
+  width: 100%;
+  background: #ffffff;
+  height: calc(100% - 80px);
+  
+  .distributionInfo {
+    background: #E7ECEF;
+    padding: 0;
+    overflow: auto;
+    height: 100%;
+  }
+}

@@ -1,0 +1,359 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
+@import '../../../node_modules/react-datepicker/dist/react-datepicker.css';
+@import "../../style";
+
+.test {
+  border: 1px solid red;
+}
+
+* {
+  outline: none;
+  box-sizing: border-box;
+  font-family: 'IBM Plex Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #0b2541;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+}
+
+img {
+  display: block;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  outline: none;
+}
+
+button {
+  border: none;
+  font-size: 16px;
+  outline: none;
+  cursor: pointer;
+}
+
+.z10 {
+  z-index: 10;
+}
+
+select {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  padding: 0 10px;
+  appearance: none;
+
+  & option {
+    width: 100%;
+  }
+}
+
+textarea {
+  outline: none;
+  font-size: inherit;
+
+  &::placeholder {
+    color: #939FA7;
+  }
+}
+
+input, select, option {
+  outline: none;
+}
+
+.flexBox {
+  display: flex;
+}
+
+.spaceBetween {
+  justify-content: space-between;
+}
+
+.justifyCenter {
+  justify-content: center;
+}
+
+.justifyStart {
+  justify-content: flex-start;
+}
+
+.justifyEnd {
+  justify-content: flex-end;
+}
+
+.alignCenter {
+  align-items: center;
+}
+
+.dirColumn {
+  flex-direction: column;
+}
+
+.dirRow {
+  flex-direction: row;
+}
+
+.flexWrap {
+  flex-wrap: wrap;
+}
+
+.h100 {
+  height: 100%;
+}
+
+.w50 {
+  width: 50%;
+}
+
+.w100 {
+  width: 100%;
+}
+
+.roboto {
+  font-family: 'Roboto Slab', serif;
+}
+
+.tc1 {
+  color: $color-text-primary;
+}
+
+.tc2 {
+  color: $color-text-secondary;
+}
+
+.fw300 {
+  font-weight: 300;
+}
+
+.fw400 {
+  font-weight: 500;
+}
+
+.fw500 {
+  font-weight: 500;
+}
+
+.fw500 {
+  font-weight: 500;
+}
+
+.fs12 {
+  font-size: 12px;
+}
+
+.fs15 {
+  font-size: 15px;
+}
+
+.fs17 {
+  font-size: 17px;
+}
+
+.fs22 {
+  font-size: 22px;
+}
+
+.fs36 {
+  font-size: 36px;
+}
+
+.mr20 {
+  margin-right: 20px;
+}
+
+.mb20 {
+  margin-bottom: 20px;
+}
+
+.ffRoboto400 {
+  font-family: 'Roboto Slab', serif;
+  font-weight: 400;
+}
+
+.relative {
+  position: relative;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+.w100 {
+  width: 100%;
+}
+.upp {
+  text-transform: uppercase;
+}
+
+.lightItem {
+  background-color: white !important;
+}
+
+.fs13 {
+  font-size: 13px;
+}
+
+#root {
+  height: 100%;
+}
+
+.App {
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  font-size: 17px;
+}
+
+.App__sidebar {
+  flex-shrink: 0;
+}
+
+.App__view {
+  height: calc(100% - #{$header-height});
+  display: flex;
+}
+
+.App__content {
+  padding: 19px;
+  background: #E7ECEF;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  font-weight: 500;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb {
+  background: #d3d9de;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #adb9c2;
+}
+
+pre {
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+
+.App__notifications {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  position: fixed;
+  width: auto;
+  top: 90px;
+  right: 20px;
+  z-index: 100;
+}
+
+@media screen and (max-width: $screen-dimension-desktop) {
+  ::-webkit-scrollbar {
+    width: 0;
+  }
+
+  .App__content {
+    background: #E7ECEF;
+    transition: margin-left 200ms ease-in-out, margin-right 200ms ease-in-out;
+  }
+
+  .App__content_shifted {
+    margin-left: $sidebar-width;
+    margin-right: $sidebar-width * -1;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-desktop) and (min-width: $screen-dimension-tablet + 1px) {
+  .App__content {
+    margin-left: $sidebar-width-tablet;
+  }
+
+  .App__content_shifted {
+    margin-left: $sidebar-width;
+    margin-right: $sidebar-width * -1;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .App__content {
+    padding-top: 0;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-mobile-425) {
+  .App__notifications {
+    left: 20px;
+  }
+}
+
+.fw300 {
+  font-weight: 300;
+}
+
+.fw500 {
+  font-weight: 500;
+}
+
+.fw500 {
+  font-weight: 500;
+}
+
+.fs15 {
+  font-size: 15px;
+}
+
+.fs17 {
+  font-size: 17px;
+}
+
+.fs24 {
+  font-size: 24px;
+}
+
+.fs30 {
+  font-size: 30px;
+}
+
+.fs36 {
+  font-size: 36px;
+}
+
+.fs60 {
+  font-size: 60px;
+}
+
+.disabledArea {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.overHidden {
+  overflow: hidden;
+}

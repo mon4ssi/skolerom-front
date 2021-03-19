@@ -1,0 +1,44 @@
+
+.PublishingTitle {
+  border-bottom: 1px solid #d3d9de;
+  background-color: #ffffff;
+
+  .entityTitleWrapper {
+    padding: 20px;
+    span {
+      text-transform: uppercase;
+      color: #e2017b;
+    }
+
+    .entityTitleInput {
+      padding: 10px 0 0 0;
+      font-size: 36px;
+      border: none;
+      resize: none;
+      outline: none;
+      height: 57px;
+
+      &::placeholder {
+        color: #939FA7;
+      }
+    }
+
+    .entityDescriptionInput {
+      margin-top: 20px;
+      border: none;
+      resize: none;
+      outline: none;
+      font-size: 16px;
+      padding: 0;
+
+      &::placeholder {
+        color: #939FA7;
+      }
+    }
+
+    .entityIsNotUnique {
+      color: #FF0000;
+      text-transform: none;
+    }
+  }
+}

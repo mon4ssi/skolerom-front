@@ -1,0 +1,272 @@
+@import "../../../style";
+
+$image-width: 90px;
+$image-height: 60px;
+
+.StudentAssignmentsListItem {
+  min-height: 60px;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid $color-dark-gray;
+  border-radius: 5px;
+  position: relative;
+  padding: 13px 20px 12px $image-width;
+  background: $color-white;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.StudentAssignmentsListItem__block {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.StudentAssignmentsListItem__blockMain {
+  flex-shrink: 10;
+}
+
+.StudentAssignmentsListItem__image {
+  @include absolute-attach(left, -1px);
+  width: $image-width;
+  height: $image-height;
+  object-fit: cover;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.StudentAssignmentsListItem__title {
+  @include text-shrink;
+  flex-shrink: 10;
+  font-size: 15px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.StudentAssignmentsListItem__subjects {
+  display: flex;
+  @include text-shrink;
+  min-width: 0;
+  margin-right: 10px;
+}
+
+.StudentAssignmentsListItem__subject {
+  @include text-shrink;
+  min-width: 0;
+  margin-right: 5px;
+  font-size: 13px;
+  background: $color-light-gray;
+  border: 1px solid $color-dark-gray;
+  border-radius: 17px;
+  padding: 7px 16px 6px 17px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.StudentAssignmentsListItem__questions {
+  @include text-shrink;
+  font-size: 13px;
+  color: $color-purple;
+  margin-right: 20px;
+}
+
+.StudentAssignmentsListItem__questions_mobile {
+  display: none;
+}
+
+.StudentAssignmentsListItem__deadline {
+  @include flex-center;
+  margin-right: 20px;
+  min-width: 0;
+}
+
+.StudentAssignmentsListItem__deadlineText {
+  @include text-shrink;
+  font-size: 13px;
+}
+
+.StudentAssignmentsListItem__deadlineImage {
+  margin-left: 9px;
+}
+
+.StudentAssignmentsListItem__deadlineText_passed {
+  color: $color-purple;
+}
+
+.StudentAssignmentsListItem__evaluationStatus {
+  @include flex-center;
+  margin-right: 20px;
+  min-width: 0;
+}
+
+.StudentAssignmentsListItem__evaluationStatusText {
+  @include text-shrink;
+  font-size: 13px;
+  color: $color-blue-gray;
+}
+
+.StudentAssignmentsListItem__evaluationStatusImage {
+  margin-left: 10px;
+}
+
+.StudentAssignmentsListItem__evaluationStatusText_evaluated {
+  color: $color-green;
+}
+
+.StudentAssignmentsListItem__evaluationStatusText_failed {
+  color: $color-purple;
+}
+
+.StudentAssignmentsListItem__answerStatus {
+  @include text-shrink;
+  border-radius: 17px;
+  padding: 7px 16px 7px 17px;
+  font-size: 13px;
+
+  background: $color-dark-gray;
+  border: 1px solid $color-blue-gray;
+}
+
+.StudentAssignmentsListItem__answerStatus_answered {
+  color: $color-white;
+  background: $color-green;
+  border: 1px solid $color-dark-green;
+}
+
+.StudentAssignmentsListItem__answerStatus_tablet {
+  display: none;
+}
+
+@media screen and (max-width: $screen-dimension-desktop) and (min-width: $screen-dimension-tablet + 1px) {
+  .StudentAssignmentsListItem {
+    padding-left: 160px;
+    flex-direction: column;
+    padding-bottom: 17px;
+    justify-content: center;
+    padding-top: 10px;
+  }
+
+  .StudentAssignmentsListItem__imageWrapper {
+    @include absolute-attach(left);
+    width: 130px;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .StudentAssignmentsListItem__blockMain {
+    border-bottom: 1px solid rgba($color-blue-gray, 0.2);
+    padding-bottom: 11px;
+  }
+
+  .StudentAssignmentsListItem__blockSecondary {
+    justify-content: flex-end;
+    padding-top: 15px;
+  }
+
+  .StudentAssignmentsListItem__image {
+    border-radius: 2px;
+    width: 100%;
+    height: 100%;
+  }
+
+  .StudentAssignmentsListItem__title {
+    margin-left: 0;
+  }
+
+  .StudentAssignmentsListItem__subjects {
+    flex-grow: 1;
+  }
+
+  .StudentAssignmentsListItem__answerStatus {
+    display: none;
+  }
+
+  .StudentAssignmentsListItem__answerStatus_tablet {
+    display: block;
+  }
+
+  .StudentAssignmentsListItem__evaluationStatus {
+    margin-right: 0;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .StudentAssignmentsListItem {
+    flex-direction: column;
+    padding: 15px;
+    height: auto;
+  }
+
+  .StudentAssignmentsListItem__blockMain {
+    display: block;
+    position: relative;
+    padding-left: $image-width + 19px;
+    height: $image-width + 15px;
+    border-bottom: 1px solid rgba($color-blue-gray, 0.18);
+  }
+
+  .StudentAssignmentsListItem__blockSecondary {
+    position: relative;
+    padding-top: 109px;
+  }
+
+  .StudentAssignmentsListItem__questions {
+    display: none;
+  }
+
+  .StudentAssignmentsListItem__title {
+    @include text-shrink-multiline(3);
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 7px;
+  }
+
+  .StudentAssignmentsListItem__questions_mobile {
+    display: block;
+    font-size: 15px;
+  }
+
+  .StudentAssignmentsListItem__image {
+    width: $image-width;
+    height: $image-width;
+    border-radius: 2px;
+  }
+
+  .StudentAssignmentsListItem__subjects {
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: calc(100% + 15px);
+    margin-right: 0;
+  }
+
+  .StudentAssignmentsListItem__subject {
+    @include flex-center;
+    flex: 1;
+    font-size: 14px;
+    font-weight: 300;
+  }
+
+  .StudentAssignmentsListItem__answerStatus {
+    @include flex-center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 61px;
+  }
+
+  .StudentAssignmentsListItem__answerStatus_tablet {
+    display: none;
+  }
+
+  .StudentAssignmentsListItem__deadline {
+    margin-right: 15px;
+  }
+
+  .StudentAssignmentsListItem__evaluationStatus {
+    margin-right: 0;
+  }
+}

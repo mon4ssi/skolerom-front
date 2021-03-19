@@ -1,0 +1,157 @@
+@import "../../../../style/index";
+
+.AnswerCover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.AnswerCover__imageWrapper {
+  align-self: stretch;
+  padding-top: 67%;
+  position: relative;
+  margin-bottom: 32px;
+}
+
+.AnswerCover__image {
+  @include absolute-attach(none);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+  z-index: -1;
+}
+
+.AnswerCover__teacherInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.AnswerCover__teacherLogo {
+  @include circle(48px);
+  background: $color-gray;
+  margin-bottom: 10px;
+}
+
+.AnswerCover__teacherName {
+  text-align: center;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.AnswerCover__subject {
+  letter-spacing: -0.01em;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.AnswerCover__assignmentInfo {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.AnswerCover__blockText {
+  margin-top: 2px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.AnswerCover__infoBlock {
+  display: flex;
+  align-items: center;
+  margin-right: 32px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.AnswerCover__blockImage {
+  margin-right: 10px;
+}
+
+.AnswerCover__title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 500;
+  font-size: 36px;
+}
+
+.AnswerCover__description {
+  font-weight: 300;
+  font-size: 17px;
+  text-align: center;
+}
+
+.AnswerCover__button {
+  background: $color-text-primary;
+  color: $color-light-gray;
+  font-weight: 500;
+  font-size: 17px;
+  padding: 9px 23px;
+  border-radius: 20px;
+}
+
+.AnswerCover__questionCount {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.AnswerCover__questionCount_light {
+  font-weight: 300;
+}
+
+@media screen and (max-width: $screen-dimension-desktop) and (min-width: $screen-dimension-tablet + 1px),
+        screen and (device-width: 810px) and (device-height: 1080px) and (orientation:landscape) {
+  .AnswerCover__imageWrapper {
+    padding-top: 38%;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-mobile-425) {
+  .AnswerCover__image {
+    border-radius: 0;
+  }
+
+  .AnswerCover__imageWrapper {
+    margin-bottom: 0;
+    margin-right: -15px;
+    margin-left: -15px;
+  }
+
+  .AnswerCover__teacherInfo {
+    margin-top: -36px;
+  }
+
+  .AnswerCover__teacherLogo {
+    @include circle(75px);
+    border: 3px solid $color-white;
+    margin-bottom: 15px;
+  }
+
+  .AnswerCover__assignmentInfo {
+    align-self: stretch;
+    margin-bottom: 24px;
+  }
+
+  .AnswerCover__infoBlock {
+    margin-right: 0;
+    padding-top: 13px;
+    padding-bottom: 12px;
+    border-top: 1px solid rgba($color-black, 0.0605878);
+
+    &:last-child {
+      border-bottom: 1px solid rgba($color-black, 0.0605878);
+    }
+  }
+
+  .AnswerCover__title {
+    font-size: 24px;
+  }
+
+  .AnswerCover__assignmentInfo {
+    flex-direction: column;
+  }
+}

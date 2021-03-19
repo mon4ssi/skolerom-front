@@ -1,0 +1,32 @@
+.summary {
+  display: flex;
+  flex-direction: column;
+  background: #E7ECEF;
+
+  .titleSummary {
+    text-transform: uppercase;
+    color: #e2017b;
+    font-weight: 500;
+    margin: 37px 20px 6px 20px;
+  }
+
+  .headerSummary {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 20px 5px 20px;
+
+    .studentsImg {
+      margin-right: 10px;
+    }
+
+    .date {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .noStudents {
+    padding: 0 20px;
+    font-size: 16px;
+  }
+}

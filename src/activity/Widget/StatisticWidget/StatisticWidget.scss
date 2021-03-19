@@ -1,0 +1,66 @@
+@import "../../../style";
+
+.StatisticWidget {
+  position: relative;
+  min-height: 150px;
+}
+
+.StatisticWidget__content {
+  display: flex;
+}
+
+.StatisticWidget__loader {
+  @include absolute-attach(none);
+  @include flex-center;
+}
+
+.StatisticWidget__item {
+  padding: 43px 30px 62px 30px;
+  flex: 1;
+  border-right: 1px solid $color-light-gray;
+
+  &:last-child {
+    border-right: 0;
+  }
+}
+
+.StatisticWidget__titleWrapper {
+  @include absolute-attach(top);
+}
+
+@media screen and (max-width: $screen-dimension-desktop-1366) and (min-width: $screen-dimension-mobile + 1px) {
+  .StatisticWidget__content {
+    flex-direction: column;
+  }
+
+  .StatisticWidget__item {
+    border-right: 0;
+    border-bottom: 1px solid $color-light-gray;
+    padding: 20px 20px 20px 20px;
+  }
+
+  .StatisticWidget__titleWrapper {
+    position: static;
+    border-bottom: 1px solid $color-light-gray;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-desktop-1366) and (min-width: $screen-dimension-mobile + 1px) {
+  .StatisticWidget__item {
+    padding: 20px 10px 20px 12px;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-mobile) {
+  .StatisticWidget__content {
+    flex-direction: column;
+  }
+
+  .StatisticWidget__item {
+    padding: 44px 13px 35px 13px;
+    padding-bottom: 30px;
+    padding-top: 30px;
+    border-right: 0px;
+    border-bottom: 1px solid $color-light-gray;
+  }
+}

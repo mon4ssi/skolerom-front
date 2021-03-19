@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Icon</title>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Evaluation-not-made" transform="translate(-70.000000, 0.000000)" stroke="#0B2541" stroke-width="1.25">
+            <g id="Evaluate">
+                <g id="Icon" transform="translate(70.000000, 0.000000)">
+                    <g id="Failed">
+                        <path d="M9.99833333,0.625 C15.1758333,0.625 19.3733333,4.8225 19.3733333,10 C19.3733333,15.1775 15.1758333,19.375 9.99833333,19.375 C4.82083333,19.375 0.623333333,15.1775 0.623333333,10 C0.623333333,4.8225 4.82083333,0.625 9.99833333,0.625 Z M5.5,10.5 L14.5,10.5" id="Path-2"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,112 @@
+@import "../../../style";
+
+.StudentListItem {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 60px;
+  margin: 10px 0;
+  padding: 8px 20px;
+  background: $color-white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px 0 $color-dark-gray;
+  cursor: pointer;
+}
+
+.StudentListItem__skeleton {
+  @extend .StudentListItem;
+  margin: 10px 0 0 0;
+}
+
+.StudentListItem__block {
+  display: flex;
+  min-width: 0;
+}
+
+.StudentListItem__avatar {
+  @include circle(44px);
+  object-fit: cover;
+}
+
+.StudentListItem__name {
+  @include text-shrink;
+  margin: auto 20px auto 20px;
+}
+
+.StudentListItem__subjects {
+  @include text-shrink;
+  margin: auto 0;
+  font-size: 15px;
+}
+
+.StudentListItem__subjects_mobile {
+  display: none;
+}
+
+.StudentListItem__grade {
+  @include flex-center;
+  margin: 7px 0 7px 20px;
+  padding: 7px 16px;
+  background: $color-dark-gray;
+  border: 1px solid $color-regent-gray;
+  border-radius: 17px;
+  font-size: 14px;
+}
+
+.StudentListItem__level {
+  display: flex;
+  margin-left: 20px;
+  align-items: center;
+}
+
+.StudentListItem__levelImage {
+  margin-right: 10px;
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .StudentListItem {
+    height: auto;
+    position: relative;
+    padding: 15px 15px 12px 15px;
+    flex-direction: column;
+  }
+
+  .StudentListItem__blockMain {
+    border-bottom: 1px solid rgba($color-blue-gray, 0.18);
+    padding-top: 8px;
+    padding-left: 80px;
+    padding-bottom: 15px;
+    min-height: 75px;
+    flex-direction: column;
+    margin-bottom: 12px;
+  }
+
+  .StudentListItem__avatar {
+    @include circle(60px);
+    position: absolute;
+    top: 15px;
+    left: 15px;
+  }
+
+  .StudentListItem__name {
+    margin: 0 0 9px 0;
+    font-size: 15px;
+  }
+
+  .StudentListItem__subjects {
+    display: none;
+  }
+
+  .StudentListItem__subjects_mobile {
+    display: block;
+    font-size: 13px;
+  }
+
+  .StudentListItem__grade {
+    margin: 0;
+  }
+
+  .StudentListItem__level {
+    display: none;
+  }
+}

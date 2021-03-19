@@ -1,0 +1,85 @@
+.cover {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 55%;
+
+  .mainImage {
+    width: 600px;
+    height: 45%;
+    max-height: 326px;
+    align-self: center;
+  }
+
+  .infoTeacher {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    img {
+      margin-bottom: 10px;
+      width: 48px;
+      height: 48px;
+      border-radius: 100%;
+    }
+
+    .subject {
+      font-size: 15px;
+      font-weight: 300;
+    }
+  }
+
+  .assignmentInfo {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+    margin-bottom: 10px;
+
+    .extraInfo {
+      display: flex;
+      align-items: flex-end;
+      font-size: 13px;
+      margin: 0 16px;
+
+      img {
+        width: 18px;
+        height: 18px;
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .assignmentTitle {
+    font-size: 36px;
+    display: flex;
+    align-self: center;
+    font-weight: 500;
+    padding: 10px 20px;
+    word-break: break-all;
+    text-align: center;
+  }
+
+  .assignmentDescription {
+    font-size: 17px;
+    margin-bottom: 30px;
+    display: flex;
+    align-self: center;
+    padding: 10px 20px;
+    // word-break: break-word;
+    text-align: center;
+    font-weight: 300;
+    justify-content: center;
+  }
+
+  .startButton {
+    width: 34%;
+    min-width: 170px;
+    align-self: center;
+    text-align: center;
+    margin-bottom: 20px;
+
+    button {
+      font-weight: 500;
+    }
+  }
+}

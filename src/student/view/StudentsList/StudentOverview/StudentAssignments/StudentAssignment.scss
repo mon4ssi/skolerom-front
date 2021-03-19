@@ -1,0 +1,156 @@
+@import "style";
+
+.StudentAssignment {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+  padding: 0 20px;
+  background: $color-white;
+  border: 1px solid $color-dark-gray;
+  border-radius: 5px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.07);
+  cursor: pointer;
+}
+
+.StudentAssignment__skeleton {
+  @extend .StudentAssignment;
+  margin: 0 0 10px 0;
+}
+
+.StudentAssignment__blockMain {
+  min-width: 0;
+}
+
+.StudentAssignment__title {
+  @include text-shrink;
+  font-size: 15px;
+  margin-right: 10px;
+}
+
+.StudentAssignment__info {
+  display: flex;
+  align-items: center;
+}
+
+.StudentAssignment__answerStatus {
+  @include text-shrink;
+  padding: 5px 15px;
+  background: $color-dark-gray;
+  border: 1px solid $color-blue-gray;
+  border-radius: 17px;
+  font-size: 13px;
+}
+
+.StudentAssignment__answerStatus_mobile {
+  display: none;
+}
+
+.StudentAssignment__answerStatus_answered {
+  background: $color-green;
+  border: 1px solid $color-dark-green;
+  color: $color-white;
+}
+
+.StudentAssignment__deadline {
+  @include text-shrink;
+  display: flex;
+  margin-left: 20px;
+  font-size: 13px;
+}
+
+.StudentAssignment__deadline_grey {
+  color: $color-blue-gray;
+}
+
+.StudentAssignment__deadline_purple {
+  color: $color-purple;
+}
+
+.StudentAssignment__deadlineImage {
+  margin-left: 10px;
+}
+
+.StudentAssignment__deadlineImage_grey {
+  filter: invert(41%) sepia(34%) saturate(202%) hue-rotate(160deg) brightness(92%) contrast(97%);
+}
+
+.StudentAssignment__evaluationStatus {
+  @include text-shrink;
+  display: flex;
+  margin-left: 20px;
+  font-size: 13px;
+  color: $color-blue-gray;
+}
+
+.StudentAssignment__evaluationStatus_evaluate {
+  color: $color-text-primary;
+}
+
+.StudentAssignment__evaluationStatus_passed {
+  color: $color-green;
+}
+
+.StudentAssignment__evaluationStatus_failed {
+  color: $color-purple;
+}
+
+.StudentAssignment__evaluationStatusImage {
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+  filter: invert(38%) sepia(22%) saturate(345%) hue-rotate(160deg) brightness(97%) contrast(88%);
+}
+
+.StudentAssignment__evaluationStatusImage_evaluate {
+  filter: none;
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .StudentAssignment {
+    height: auto;
+    align-items: flex-start;
+    flex-direction: column;
+    padding-top: 15px;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-bottom: 14px;
+    box-shadow: 0 2px 2px 0 rgba($color-black, 0.13);
+  }
+
+  .StudentAssignment__blockMain {
+    align-self: stretch;
+  }
+
+  .StudentAssignment__title {
+    margin-bottom: 15px;
+    margin-right: 0;
+  }
+
+  .StudentAssignment__answerStatus {
+    display: none;
+  }
+
+  .StudentAssignment__answerStatus_mobile {
+    display: block;
+    margin-bottom: 15px;
+    align-self: stretch;
+    text-align: center;
+    padding-top: 7px;
+    padding-bottom: 6px;
+  }
+
+  .StudentAssignment__deadline {
+    margin-left: 0;
+  }
+
+  .StudentAssignment__evaluationStatus {
+    margin-left: 14px;
+  }
+
+  .StudentAssignment__info {
+    border-top: 1px solid rgba($color-blue-gray, 0.18);
+    padding-top: 15px;
+    align-self: stretch;
+  }
+}

@@ -1,0 +1,23 @@
+.AnswerMultipleChoiceQuestion {
+  display: flex;
+  width: 100%;
+
+  .option {
+    cursor: initial;
+  }
+
+  .isRight {
+    background: #D3D9DE;
+    border: 1px solid #0B2541;
+  }
+
+  .statusBox {
+    .checkStatus {
+      margin-right: 0;
+    }
+
+    .readOnly {
+      cursor: default;
+    }
+  }
+}

@@ -1,0 +1,52 @@
+@import "style";
+
+.teachingPathsList {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .cardList {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -10px;
+    flex-flow: row wrap;
+    width: auto;
+    overflow: auto;
+    height: 100%;
+
+    .InfoCard {
+      margin: 10px;
+      width: 285px;
+      min-height: 300px;
+
+      .cardTitle {
+        height: 44px;
+      }
+
+      .cardDescription {
+        @include text-shrink-multiline(1);
+        margin-top: 10px;
+      }
+
+      .grades {
+        height: 25px;
+      }
+    }
+  }
+}
+@media screen and (max-width: 575px) {
+  .teachingPathsList .cardList .InfoCard {
+    width: 100% ;
+    min-height: auto;
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 992px) {
+  .teachingPathsList .cardList .InfoCard {
+    width: 30% ;
+  }
+}
+@media screen and (min-width: 576px) and (max-width: 767px) {
+  .teachingPathsList .cardList .InfoCard {
+    width: 40% ;
+  }
+}

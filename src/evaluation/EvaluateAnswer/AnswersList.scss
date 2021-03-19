@@ -1,0 +1,57 @@
+@import "style";
+
+.AnswerList {
+  width: 100%;
+  min-height: 100%;
+  background: $color-light-gray;
+  z-index: 2;
+  padding-top: 1px;
+  padding-right: 2px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.AnswerList__content {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.AnswerList__pagination {
+  margin-bottom: 10px;
+}
+
+.AnswerList__title {
+  color: $color-purple;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.AnswerList__entityTitle {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.AnswerList__item {
+  margin-bottom: 20px;
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .AnswerList__entityTitle {
+    font-size: 24px;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-mobile) {
+  .AnswerList {
+    width: calc(100% + 10px);
+    margin-left: -5px;
+    margin-right: -5px;
+  }
+
+  .AnswerList__entityTitle {
+    margin-bottom: 48px;
+  }
+}

@@ -1,0 +1,248 @@
+@import "style";
+
+.evaluationInfo {
+  display: flex;
+  flex-direction: column;
+  width: 380px;
+  background: white;
+  height: calc(100% - #{$header-height});
+  right: 0;
+  position: fixed;
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+  .contentContainer {
+    position: relative;
+    flex: 1;
+    overflow-y: auto;
+    min-height: fit-content;
+
+    .close-panel {
+      display: none;
+    }
+
+    .headerPanel {
+      width: 100%;
+      height: calc(100vh / 3);
+      overflow-x: hidden;
+
+      .imagePlaceholder {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
+
+      .imageBlock {
+        width: 100%;
+        height: 100%;
+
+        .shadow {
+          background: #0B2541;
+          opacity: 0.8;
+          position: absolute;
+          z-index: 1;
+          width: 100%;
+          height: calc(100vh / 3);
+        }
+      }
+
+      .subjectInfo {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 2;
+        height: calc(100vh / 3);
+        padding: 19px;
+        overflow: hidden;
+
+        .subject {
+          background: #071E37;
+          border-radius: 20px;
+          padding: 7px 17px;
+          font-size: 13px;
+          color: white;
+          width: fit-content;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .entityTitle {
+          margin: 40px 20px;
+          color: white;
+          height: 65px;
+          font-size: 24px;
+          text-align: center;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+
+        .infoTeacher {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .userPhoto {
+            width: 48px;
+            height: 48px;
+            border-radius: 100%;
+            margin-bottom: 10px;
+          }
+
+          .name {
+            color: white;
+            font-size: 17px;
+            text-align: center;
+          }
+
+          .lesson {
+            color: white;
+            font-size: 15px;
+            font-weight: 300;
+            font-style: italic;
+          }
+        }
+      }
+    }
+
+    .entityInfo {
+      height: 67px;
+      border-bottom: 1px solid #D3D9DE;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .deadline {
+        display: flex;
+        font-size: 15px;
+        align-items: center;
+
+        img {
+          margin-right: 10px;
+        }
+      }
+
+      .passed {
+        color: #E2017B;
+      }
+
+      .partsInfo {
+        display: flex;
+        font-size: 15px;
+
+        img {
+          margin-right: 10px;
+        }
+      }
+    }
+
+    .summary {
+      display: flex;
+      padding: 20px;
+      background: white;
+      height: calc(100% - (calc(100% / 3)) - 120px);
+
+      .commentToEntity {
+        font-weight: 300;
+        overflow: auto;
+        max-height: 90px;
+        font-size: 16px;
+      }
+
+      .view {
+        margin-top: 20px;
+        height: auto;
+      }
+    }
+  }
+
+  .answerButton {
+    flex: 0;
+    padding: 20px;
+    border-top: 1px solid #D3D9DE;
+    width: 100%;
+    background-color: $color-white;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-desktop) {
+  .evaluationInfo .contentContainer .summary .commentToEntity {
+    max-height: none;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .evaluationInfo {
+    left: 0;
+    right: 0;
+    top: $header-height-tablet;
+    bottom: 0;
+    width: 100%;
+    overflow-y: auto;
+    height: auto;
+    display: block;
+
+    .contentContainer {
+      .close-panel {
+        display: block;
+        height: 35px;
+
+        .close-button {
+          position: absolute;
+          right: 16.41px;
+          top: 11.41px;
+          width: 12.19px;
+          height: 12.19px;
+        }
+      }
+
+      .headerPanel {
+        height: auto;
+        position: relative;
+
+        .imageBlock {
+          width: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+
+          .shadow {
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: auto;
+          }
+        }
+
+        .imagePlaceholder {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .subjectInfo {
+          position: relative;
+          height: auto;
+          z-index: 1;
+        }
+      }
+
+      .entityInfo {
+        height: auto;
+      }
+
+      .summary {
+        height: auto;
+      }
+    }
+
+    .answerButton {
+      position: static;
+    }
+  }
+}
+

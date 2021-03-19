@@ -1,0 +1,86 @@
+@import "style/index";
+
+.Notification_container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 340px;
+  margin-bottom: 5px;
+  padding: 24px 47px 25px 40px;
+  z-index: 100;
+  opacity: 1;
+  border-radius: 5px;
+  background: $color-white;
+  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.168898);
+  border: 1px solid;
+  cursor: default;
+}
+
+.Notification_container__confirm {
+  @extend .Notification_container;
+  border-color: $color-text-primary;
+}
+
+.Notification_container__success {
+  @extend .Notification_container;
+  border-color: $color-green;
+}
+
+.Notification_container__error {
+  @extend .Notification_container;
+  border-color: $color-purple;
+}
+
+.Notification_content {
+  display: flex;
+  align-items: center;
+}
+
+.Notification_icon {
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  min-height: 28px;
+}
+
+.Notification_title {
+  margin: 0 0 0 20px;
+  font-size: 17px;
+}
+
+.Notification_close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.Notification_footer {
+  margin-top: 30px;
+}
+
+.Notification_button {
+  height: 40px;
+  padding: 9px 23px;
+  border-radius: 20px;
+  font-size: 17px;
+  color: white;
+}
+
+.Notification_submit {
+  @extend .Notification_button;
+  background: $color-green;
+}
+
+.Notification_cancel {
+  @extend .Notification_button;
+  margin-left: 17px;
+  background: $color-purple  ;
+}
+
+@media screen and (max-width: $screen-dimension-mobile) {
+  .Notification_container {
+    width: auto;
+  }
+}

@@ -1,0 +1,191 @@
+@import "../../../style";
+
+//.QuestionPreview {
+//  width: 100%;
+//}
+//
+//.QuestionPreview__title {
+//  @include text-shrink;
+//  margin-bottom: 20px;
+//}
+//
+//.QuestionPreview__content {
+//  margin-bottom: 20px;
+//}
+//
+//.QuestionPreview__answers {
+//  margin-top: 40px;
+//}
+
+.QuestionPreview {
+  overflow-y: auto;
+  width: 60%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: fit-content;
+
+  .largeCounter {
+    text-transform: capitalize;
+    color: #596A75;
+    display: flex;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .evaluationTitle {
+    font-size: 17px !important;
+    font-weight: 500 !important;
+  }
+
+  .title {
+    display: flex;
+    font-size: 36px;
+    overflow-wrap: anywhere;
+    padding: 20px 20px 20px 0;
+
+    .counter {
+      border: 2px solid #596A75;
+      border-radius: 50%;
+      width: 20px;
+      min-width: 20px;
+      height: 20px;
+      font-size: 12px;
+      transform: translate(0, 80%);
+      margin-right: 20px;
+      margin-left: 20px;
+
+      span {
+        color: #596A75;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .mainContent {
+    overflow: scroll;
+
+    .withoutTopLine {
+      margin-top: 0 !important;
+
+      .questionComment {
+        border-top: 1px solid #D3D9DE;
+      }
+    }
+
+    .questionCommentWrapper{
+      display: flex;
+      flex-direction: column;
+      padding-left: 20px;
+      border-left: 1px solid #D3D9DE;
+
+      .questionComment {
+        display: flex;
+        flex-direction: column;
+        padding-top: 20px;
+
+        button {
+          color: #E7ECEF;
+          min-width: auto;
+          padding: 0 23px;
+        }
+
+        .commentTitle {
+          font-weight: 500;
+          font-size: 17px;
+          padding-bottom: 10px;
+        }
+
+        .comment {
+          resize: none;
+          width: 100%;
+          border: none;
+          font-weight: 300;
+          //margin-bottom: 10px;
+          background: white;
+        }
+      }
+    }
+
+    .commentButton {
+      margin-top: 24px;
+      min-width: auto;
+      padding: 0 23px;
+    }
+  }
+
+  .evaluationContent {
+    button {
+      margin-top: 20px;
+      width: fit-content;
+      font-size: 17px;
+      font-weight: 500;
+    }
+  }
+
+  .withQuestionCounter {
+    padding: 0 60px;
+  }
+
+  .videoWrapper {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 40px;
+
+    .playButton {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        height: 55px;
+        width: 55px;
+      }
+    }
+
+    .videoView {
+      display: flex;
+      //position: relative;
+      margin-bottom: 40px;
+      flex-direction: column;
+
+      video {
+        object-fit: cover;
+      }
+
+      .videoDuration {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 10px 0;
+
+        .duration {
+          align-self: flex-start;
+
+          .clockDuration {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.isEvaluationStyle {
+  overflow: unset;
+  margin-bottom: 40px;
+
+  .title {
+    padding-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+

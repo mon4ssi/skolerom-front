@@ -1,0 +1,183 @@
+@import 'style';
+
+$image-width: 90px;
+
+.AssignmentDistribute {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  margin-top: 10px;
+  height: 60px;
+  background: $color-white;
+  border: 1px solid $color-dark-gray;
+  border-radius: 5px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.13);
+  padding: 14px 20px 13px ($image-width + 20px);
+  cursor: pointer;
+}
+
+.AssignmentDistribute__block {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.AssignmentDistribute__textBlock {
+  @include text-shrink;
+  font-size: 15px;
+}
+
+.AssignmentDistribute__imageContainer {
+  @include absolute-attach(left, -1px);
+  @include flex-center;
+  width: $image-width;
+  background: $color-blue-gray;
+  border-radius: 5px 0 0 5px;
+  overflow: hidden;
+}
+
+.AssignmentDistribute__image {
+  object-fit: cover;
+}
+
+.AssignmentDistribute__image_fullSize {
+  width: 100%;
+  height: 100%;
+}
+
+.AssignmentDistribute__title {
+  font-size: 17px;
+  flex-shrink: 1;
+}
+
+.AssignmentDistribute__subjects {
+  display: flex;
+  margin-left: 20px;
+  margin-right: 20px;
+  min-width: 0;
+}
+
+.AssignmentDistribute__subject {
+  @include text-shrink;
+  background: $color-light-gray;
+  border: 1px solid $color-dark-gray;
+  box-sizing: border-box;
+  border-radius: 17px;
+  padding: 7px 18px 8px 21px;
+  margin-right: 5px;
+  min-width: 0;
+  font-size: 15px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.AssignmentDistribute__subject_mobile {
+  display: none;
+}
+
+.AssignmentDistribute__deadline {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  min-width: 0;
+}
+
+.AssignmentDistribute__deadlineText {
+  @include text-shrink;
+  padding-right: 9px;
+}
+
+.AssignmentDistribute__questions {
+  color: $color-purple;
+  margin-right: 20px;
+}
+
+.AssignmentDistribute__questions_mobile {
+  display: none;
+}
+
+.AssignmentDistribute__students {
+}
+
+.AssignmentDistribute__deadlineText_passed {
+  color: $color-blue-gray;
+}
+
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .AssignmentDistribute {
+    flex-direction: column;
+    padding: 15px;
+    align-items: stretch;
+    height: auto;
+  }
+
+  .AssignmentDistribute__blockTop {
+    position: relative;
+    box-sizing: content-box;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: $image-width;
+    max-width: none;
+
+    padding-left: ($image-width + 20px);
+    padding-bottom: 60px;
+    border-bottom: 1px solid rgba($color-blue-gray, 0.18);
+  }
+
+  .AssignmentDistribute__blockBottom {
+    padding-top: 15px;
+    justify-content: space-between;
+  }
+
+  .AssignmentDistribute__title {
+    @include text-shrink-multiline(3);
+  }
+
+  .AssignmentDistribute__deadline {
+    margin-right: 0;
+    order: 1;
+  }
+
+  .AssignmentDistribute__imageContainer {
+    top: 0;
+    left: 0;
+    width: $image-width;
+    height: $image-width;
+    border-radius: 2px;
+  }
+
+  .AssignmentDistribute__subjects {
+    text-align: center;
+    margin-left: 0;
+    margin-right: 0;
+    @include absolute-attach(bottom);
+    bottom: 15px;
+  }
+
+  .AssignmentDistribute__subject {
+    flex: 1;
+  }
+
+  .AssignmentDistribute__subject_desktop {
+    display: none;
+  }
+
+  .AssignmentDistribute__subject_mobile {
+    display: block;
+  }
+
+  .AssignmentDistribute__questions {
+    display: none;
+  }
+
+  .AssignmentDistribute__questions_mobile {
+    font-size: 15px;
+    margin-right: 0;
+    display: block;
+    margin-top: 5px;
+  }
+}

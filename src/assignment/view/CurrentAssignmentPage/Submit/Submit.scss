@@ -1,0 +1,53 @@
+@import "../../../../style/index";
+
+.Submit__title {
+  margin-bottom: 32px;
+  font-size: 36px;
+}
+
+.Submit__delete {
+  display: inline-block;
+  margin-top: 20px;
+  text-decoration: underline;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.Submit__button {
+  display: flex;
+  align-items: center;
+  padding: 7.5px 27px 7.5px 9px;
+  margin-top: 32px;
+  color: $color-white;
+  background: $color-green;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 17px;
+}
+
+.Submit__description {
+  font-size: 17px;
+  font-weight: 300;
+}
+
+.Submit__image {
+  margin-right: 15px;
+}
+
+.Submit__defaultCursor {
+  cursor: default;
+}
+
+@media screen and (max-width: $screen-dimension-mobile-425) {
+  .Submit__title {
+    font-size: 24px;
+    margin-top: 60px;
+    margin-bottom: 7px;
+  }
+
+  .Submit__button {
+    margin-top: 60px;
+    font-size: 14px;
+    padding-right: 25px;
+  }
+}

@@ -1,0 +1,143 @@
+@import "../../../../style";
+
+.Sidebar {
+  width: $sidebar-width;
+  position: relative;
+  background: $color-white;
+  overflow-y: auto;
+}
+
+.Sidebar__list {
+  width: 100%;
+}
+
+.Sidebar__listItem {
+  display: flex;
+  align-items: center;
+  position: relative;
+  border-bottom: 1px solid $color-light-gray;
+  padding-top: 26px;
+  padding-bottom: 26px;
+}
+
+.Sidebar__listItem_active {
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    bottom: 10px;
+    width: 4px;
+    background: $color-purple;
+  }
+}
+
+.Sidebar__icon {
+  margin-left: 21px;
+}
+
+.Sidebar__text {
+  @include text-shrink;
+  margin-left: 19px;
+  align-self: center;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.Sidebar__toggleButton {
+  display: none;
+}
+
+.Sidebar__overlay {
+  content: " ";
+  background: rgba(0, 0, 0, 0.4);
+  position: absolute;
+  top: $header-height;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+@media screen and (max-width: $screen-dimension-desktop) and (min-width: $screen-dimension-tablet + 1px) {
+  .Sidebar {
+    @include absolute-attach(left);
+    top: $header-height;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: $sidebar-width-tablet;
+    border-right: 2px solid $color-gray;
+    transition: width 200ms ease-in-out;
+    z-index: 13;
+  }
+
+  .Sidebar__list {
+    padding-top: 10px;
+  }
+
+  .Sidebar__listItem {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    border-bottom: 0;
+  }
+
+  .Sidebar__listItem_active {
+    &::after {
+      top: 7px;
+      bottom: 7px;
+    }
+  }
+
+  .Sidebar__icon {
+    width: 25px;
+    margin-left: 19px;
+  }
+
+  .Sidebar__text {
+    margin-left: 20px;
+  }
+
+  .Sidebar_expanded {
+    width: $sidebar-width;
+    border-right: 0;
+  }
+
+  .Sidebar__toggleButton {
+    align-self: flex-start;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid $color-dark-gray;
+    background: transparent;
+    margin-left: 8.5px;
+    margin-bottom: 19px;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .Sidebar {
+    position: absolute;
+    top: $header-height;
+    left: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    transition: transform 200ms ease-in-out, opacity 200ms ease-in-out;
+    z-index: 13;
+  }
+
+  .Sidebar_visible {
+    transform: translateX(0);
+  }
+
+  .Sidebar__burger {
+    width: 22px;
+    height: 22px;
+    background: url(../../../../assets/images/sidebar.svg) center center no-repeat;
+    background-size: 20px;
+    position: absolute;
+    top: 35px;
+    left: 15px;
+    z-index: 9999;
+  }
+}

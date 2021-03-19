@@ -1,0 +1,74 @@
+@import "../../../style/index";
+
+.Submitted {
+  @include flex-center;
+  position: absolute;
+  top: $header-height;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - #{$header-height});
+  background: $color-white;
+  z-index: 15;
+}
+
+.Submitted__container {
+  width: $assignment-width + 15px * 2;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.Submitted__image {
+  margin-bottom: 42px;
+  margin-left: 1px;
+}
+
+.Submitted__title {
+  margin-bottom: 24px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 36px;
+}
+
+.Submitted__description {
+  margin-bottom: 37px;
+  text-align: center;
+  font-weight: 300;
+  font-size: 17px;
+}
+
+.Submitted__button {
+  background: $color-text-primary;
+  border-radius: 20px;
+  position: relative;
+  color: $color-white;
+  padding: 9px 18px 9px 47px;
+  margin-left: 1px;
+  font-weight: 500;
+  font-size: 17px;
+}
+
+.Submitted__revert {
+  margin-top: 24px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.Submitted__buttonImage {
+  @include absolute-center-y();
+  left: 8px;
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .Submitted__title {
+    margin-bottom: 17px;
+    font-size: 24px;
+  }
+
+  .Submitted__description {
+    margin-bottom: 60px;
+  }
+}

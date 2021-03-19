@@ -1,0 +1,20 @@
+@import "../../../../style/index";
+
+.AnswerCurrentQuestion {
+  width: $assignment-width + 15px * 2;
+  margin: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .AnswerCurrentQuestion {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-mobile-425) {
+  .AnswerCurrentQuestion {
+    margin: 0;
+  }
+}

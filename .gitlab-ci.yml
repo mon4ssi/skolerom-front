@@ -1,0 +1,29 @@
+stages:
+  - build
+  - deploy
+
+build-production:
+  image: node:lts-alpine
+  stage: build
+  script:
+    - unset CI
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - build/
+    expire_in: 1 hour
+  only:
+    - master
+  #when: manual
+
+deploy-production:
+  image: python:3-alpine
+  stage: deploy
+  script:
+    - pip3 install awscli --upgrade
+    - aws s3 sync ./build "s3://${S3_BUCKET_NAME}"  --acl public-read
+    - aws s3 cp ./build/index.html "s3://${S3_BUCKET_NAME}/index.html" --acl public-read --cache-control max-age=0
+  only:
+    - master
+  #when: manual

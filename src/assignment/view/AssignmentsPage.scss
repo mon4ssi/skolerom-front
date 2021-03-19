@@ -1,0 +1,68 @@
+@import "style";
+
+.AssignmentsPage {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .NewAssignment {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    z-index: 4;
+
+    .addAssignmentFlow {
+      overflow: auto;
+    }
+
+    .newAssignmentPreview {
+      background: #E7ECEF;
+      border-left: 1px solid #d3d9de;
+
+      .nothingPhrase {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        font-size: 22px;
+      }
+
+      .previewPhrase {
+        width: 350px;
+        text-align: center;
+      }
+    }
+  }
+
+  .notFoundPage {
+    .container-404 {
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+    }
+  }
+
+  .assignmentList{
+    height: 100%;
+    overflow: auto;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-desktop) {
+
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .AssignmentsPage_noTabs {
+    padding-top: 15px;
+  }
+
+  .assignmentList{
+    height: 100%;
+
+    .MyListPagination {
+      margin-bottom: 20px;
+    }
+  }
+}

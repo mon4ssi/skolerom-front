@@ -1,0 +1,113 @@
+@import "style";
+
+.AssignmentArticlesToReading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.AssignmentArticlesToReading__title {
+  font-size: 36px;
+  margin: 40px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.AssignmentArticlesToReading__articles {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 282px);
+  grid-gap: 36px;
+  justify-content: center;
+}
+
+.AssignmentArticlesToReading__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.AssignmentArticlesToReading__defaultCursor {
+  cursor: default;
+}
+
+.AssignmentArticlesToReading__checkbox {
+  width: 32px;
+  height: 32px;
+  align-self: center;
+  margin: 20px;
+}
+
+.AssignmentArticlesToReading {
+  .cardBorder .InfoCard {
+    border: 1px solid #596A75;
+  }
+
+  .readArticle >:first-child {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.27)
+  }
+
+  .article {
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background: white;
+    width: 100%;
+    height: 100%;
+
+    .headerArticle {
+      box-sizing: border-box;
+      width: 100%;
+      background-color: #ffffff;
+      height: 80px;
+      border-top: 10px solid #e2017b;
+      padding: 0 20px;
+      border-bottom: 1px solid #e4e9ed;
+      display: flex;
+      justify-content: space-between;
+      position: fixed;
+      top: 0;
+
+      .back {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+          span {
+            margin: 0 7px;
+            color: #0B2541;
+            font-weight: 500;
+            font-size: 15px;
+          }
+        }
+
+      .finish {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    .inlineArticle {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+      padding-top: 80px;
+      box-sizing: unset;
+    }
+  }
+}
+
+@media screen and (max-width: $screen-dimension-mobile) {
+  .AssignmentArticlesToReading__title {
+    font-size: 24px;
+    margin: 16px 0 21px 0;
+    font-weight: 500;
+    text-align: left;
+  }
+}
+
+

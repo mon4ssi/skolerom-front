@@ -1,0 +1,288 @@
+import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
+import { NavLink, withRouter, RouteComponentProps } from 'react-router-dom';
+import intl from 'react-intl-universal';
+import moment from 'moment';
+
+import { CreateButton } from 'components/common/CreateButton/CreateButton';
+import { EditTeachingPathStore } from '../EditTeachingPathStore';
+import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
+import { TeachingPathValidationError } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
+import { DistributionValidationError } from 'distribution/Distribution';
+import { UserType } from 'user/User';
+import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
+
+import backImg from 'assets/images/back-arrow.svg';
+
+import './Header.scss';
+
+interface MatchProps {
+  id: string;
+}
+
+interface Props extends RouteComponentProps<MatchProps> {
+  editTeachingPathStore?: EditTeachingPathStore;
+  teachingPathsListStore?: TeachingPathsListStore;
+  isCreation?: boolean;
+  isPublishing?: boolean;
+  isDistribution?: boolean;
+  readOnly?: boolean;
+}
+
+@inject('editTeachingPathStore', 'teachingPathsListStore')
+@observer
+export class HeaderComponent extends Component<Props> {
+
+  private isDisabledSaveButton = () => false;
+  private isDisabledPublishButton = () => false;
+
+  private onSave = async (): Promise<void> => {
+    const { editTeachingPathStore, history } = this.props;
+    const { id } = editTeachingPathStore!.currentEntity!;
+
+    try {
+      await editTeachingPathStore!.save();
+      Notification.create({
+        type: NotificationTypes.SUCCESS,
+        title: intl.get('edit_teaching_path.header.after_saving')
+      });
+
+      history.push({
+        pathname: `/teaching-paths/edit/${id}/publish`,
+      });
+    } catch (e) {
+      if (e instanceof TeachingPathValidationError) {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get(e.localizationKey)
+        });
+      }
+    }
+  }
+
+  private onPublish = (onlyPublish: boolean) => async () => {
+    const { editTeachingPathStore, history } = this.props;
+    const { id } = editTeachingPathStore!.currentEntity!;
+    const userType = editTeachingPathStore!.getCurrentUser()!.type;
+    const tpTitle = editTeachingPathStore!.teachingPathContainer!.teachingPath!.title;
+    const isPrivate = editTeachingPathStore!.teachingPathContainer!.teachingPath!.isPrivate;
+    const isCopy = editTeachingPathStore!.teachingPathContainer!.teachingPath!.isCopy;
+
+    if (
+      !isPrivate &&
+      isCopy && (
+        /Copy$/.test(tpTitle) ||
+        /Kopi$/.test(tpTitle) ||
+        /copy$/.test(tpTitle) ||
+        /kopi$/.test(tpTitle)
+      )
+    ) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('new assignment.copy_title_not_allow')
+      });
+
+      return;
+    }
+
+    try {
+      await editTeachingPathStore!.publish();
+
+      Notification.create({
+        type: NotificationTypes.SUCCESS,
+        title: intl.get('edit_teaching_path.header.after_publishing')
+      });
+
+      if (userType === UserType.Teacher) {
+        onlyPublish ? history.push('/teaching-paths/all') : history.push(`/teaching-paths/edit/${id}/distribute`);
+      }
+
+      if (userType === UserType.ContentManager) {
+        history.push('/teaching-paths/all');
+      }
+
+    } catch (e) {
+      if (e instanceof TeachingPathValidationError) {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get(e.localizationKey)
+        });
+      }
+    }
+  }
+
+  private onDistribute = async () => {
+    const { editTeachingPathStore, history } = this.props;
+
+    editTeachingPathStore!.distribute()
+      .then(() => history.push({
+        pathname: '/distributed',
+        state: {
+          entityType: 'teaching path',
+          editPath: `/teaching-paths/edit/${editTeachingPathStore!.currentEntity!.id}`,
+          exitPath: '/teaching-paths/all'
+        }
+      }))
+      .catch((error) => {
+        if (error instanceof DistributionValidationError) {
+          Notification.create({
+            type: NotificationTypes.ERROR,
+            title: intl.get(error.localizationKey)
+          });
+        }
+      });
+  }
+
+  private checkUpdatedAt = () => {
+    const { editTeachingPathStore } = this.props;
+    const currentLocale = editTeachingPathStore!.getCurrentLocale();
+
+    return editTeachingPathStore!.getIsDraftSaving()
+      ? intl.get('new assignment.Changes made')
+      : `
+        ${intl.get('new assignment.Last edit was made')}
+        ${moment(editTeachingPathStore!.getUpdatedAt() || new Date())
+        .locale(currentLocale)
+        .fromNow()}
+        `;
+  }
+
+  private onGoBack = () => {
+    const { isCreation, isPublishing, isDistribution, teachingPathsListStore } = this.props;
+
+    if (isCreation) {
+      this.props.history.push(`/teaching-paths/${teachingPathsListStore!.typeOfTeachingPathsList}`);
+    }
+    if (isPublishing) {
+      this.props.history.push(`/teaching-paths/edit/${this.props.match.params.id}/`);
+    }
+
+    if (isDistribution) {
+      this.props.history.push(`/teaching-paths/edit/${this.props.match.params.id}/publish`);
+    }
+  }
+
+  private renderDistributeButton = () => {
+    const { editTeachingPathStore } = this.props;
+    const userType = editTeachingPathStore!.getCurrentUser()!.type;
+
+    if (userType !== UserType.ContentManager) {
+      return (
+        <CreateButton
+          onClick={this.onPublish(false)}
+          disabled={this.isDisabledPublishButton()}
+        >
+          {intl.get('edit_teaching_path.header.publish_and_distribute_teaching_path')}
+        </CreateButton>
+      );
+    }
+  }
+
+  public renderFunctionalSide = () => {
+    const { isCreation, isDistribution, isPublishing, editTeachingPathStore } = this.props;
+    if (isCreation) {
+      return (
+        <>
+          <span>{this.checkUpdatedAt()}</span>
+          <CreateButton
+            onClick={this.onSave}
+            disabled={this.isDisabledSaveButton()}
+          >
+            {intl.get('edit_teaching_path.header.save_teaching_path')}
+          </CreateButton>
+        </>
+      );
+    }
+
+    if (isPublishing) {
+      return (
+        <>
+          <span>{this.checkUpdatedAt()}</span>
+          <CreateButton
+            onClick={this.onPublish(true)}
+            disabled={this.isDisabledPublishButton()}
+          >
+            {intl.get('edit_teaching_path.header.publish_teaching_path')}
+          </CreateButton>
+          {this.renderDistributeButton()}
+        </>
+      );
+    }
+
+    if (isDistribution) {
+      return (
+        <CreateButton
+          onClick={this.onDistribute}
+          disabled={this.isDisabledPublishButton()}
+        >
+          {intl.get('edit_teaching_path.header.distribute_teaching_path')}
+        </CreateButton>
+      );
+    }
+  }
+
+  public renderCreationItem = () => (
+    <NavLink
+      exact
+      className="link flexBox alignCenter disabled-link"
+      to={`/teaching-paths/edit/${this.props.match.params.id}`}
+      activeClassName="activeRoute"
+    >
+      {intl.get('edit_teaching_path.header.create_teaching_path')}
+    </NavLink>
+  )
+
+  public renderPublishingItem = () => (
+    <NavLink
+      className="link flexBox alignCenter disabled-link"
+      to={`/teaching-paths/edit/${this.props.match.params.id}/publish`}
+      activeClassName="activeRoute"
+    >
+      {intl.get('edit_teaching_path.header.publish')}
+    </NavLink>
+  )
+
+  public renderDistributionItem = () => {
+    const { editTeachingPathStore, match, location } = this.props;
+
+    const userType = editTeachingPathStore!.getCurrentUser()!.type;
+
+    return !location.state && userType === UserType.Teacher ? (
+      <NavLink
+        className="link flexBox alignCenter disabled-link"
+        to={`/teaching-paths/edit/${match.params.id}/distribute`}
+        activeClassName="activeRoute"
+      >
+        {intl.get('edit_teaching_path.header.distribute')}
+      </NavLink>
+    ) : null;
+  }
+
+  public renderHeaderTabs = () => (
+    <>
+      <div className="flexBox assignmentTabs">
+        {this.renderCreationItem()}
+        {this.renderPublishingItem()}
+        {this.renderDistributionItem()}
+      </div>
+
+      <div className="doneBox flexBox alignCenter">
+        {this.renderFunctionalSide()}
+      </div>
+    </>
+  )
+
+  public render() {
+    return (
+      <div className="header flexBox spaceBetween alignCenter fw500">
+        <div className="flexBox alignCenter back-button fs15" onClick={this.onGoBack}>
+          <img src={backImg} alt="Back" />
+          {intl.get('edit_teaching_path.header.go_back')}
+        </div>
+        {this.renderHeaderTabs()}
+      </div>
+    );
+  }
+}
+
+export const Header = withRouter(HeaderComponent);

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Ikon - Nivå</title>
+    <g id="New-assignment" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="New-assignment---Publish" transform="translate(-46.000000, -514.000000)" fill="#6E7C85" stroke="#6E7C85" stroke-width="1.25">
+            <g id="Left-Column" transform="translate(-1.000000, 77.000000)">
+                <g id="Content">
+                    <g id="Visibility" transform="translate(0.000000, 332.000000)">
+                        <g id="Level" transform="translate(21.000000, 39.000000)">
+                            <g id="Valg" transform="translate(1.000000, 50.000000)">
+                                <g id="1" transform="translate(25.000000, 15.000000)">
+                                    <g id="Ikon---Nivå-Copy" transform="translate(0.000000, 1.000000)">
+                                        <g id="Ikon---Nivå">
+                                            <path d="M1.875,0.6275 L18.125,0.6275 C18.815,0.6275 19.375,1.1875 19.375,1.8775 L19.375,3.1275 C19.375,3.8175 18.815,4.3775 18.125,4.3775 L1.875,4.3775 C1.185,4.3775 0.625,3.8175 0.625,3.1275 L0.625,1.8775 C0.625,1.1875 1.185,0.6275 1.875,0.6275 Z" id="Path"></path>
+                                            <path d="M1.875,8.1275 L18.125,8.1275 C18.815,8.1275 19.375,8.6875 19.375,9.3775 L19.375,10.6275 C19.375,11.3175 18.815,11.8775 18.125,11.8775 L1.875,11.8775 C1.185,11.8775 0.625,11.3175 0.625,10.6275 L0.625,9.3775 C0.625,8.6875 1.185,8.1275 1.875,8.1275 Z" id="Path"></path>
+                                            <path d="M1.875,15.6275 L18.125,15.6275 C18.815,15.6275 19.375,16.1875 19.375,16.8775 L19.375,18.1275 C19.375,18.8175 18.815,19.3775 18.125,19.3775 L1.875,19.3775 C1.185,19.3775 0.625,18.8175 0.625,18.1275 L0.625,16.8775 C0.625,16.1875 1.185,15.6275 1.875,15.6275 Z" id="Path"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

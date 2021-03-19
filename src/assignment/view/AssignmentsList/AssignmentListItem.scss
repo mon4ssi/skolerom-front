@@ -1,0 +1,271 @@
+@import "../../../style";
+
+$image-width: 90px;
+$image-height: 60px;
+
+.AssignmentListItem {
+  min-height: 60px;
+  position: relative;
+  border-radius: 5px;
+  background: $color-white;
+  box-shadow: 0 2px 2px rgba($color-black, 0.13);
+  padding: 10px 20px 10px $image-width + 20px;
+  margin-bottom: 10px;
+  border: 1px solid $color-dark-gray;
+  display: flex;
+  justify-content: space-between;
+
+  &:hover {
+    background: $color-dark-gray;
+  }
+}
+
+.AssignmentListItem__block {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.AssignmentListItem__blockMain {
+  flex-shrink: 3;
+}
+
+.AssignmentListItem__image {
+  @include absolute-attach(left, -1px);
+  width: $image-width;
+  height: $image-height;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  object-fit: cover;
+}
+
+.AssignmentListItem__contentCreatorImage {
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.AssignmentListItem__likes {
+  @include flex-center;
+  padding: 8px 10px 8px 8px;
+  border-radius: 5px;
+  background: $color-light-gray;
+  margin-right: 20px;
+  min-width: 0;
+}
+
+.AssignmentListItem__likes_mobile {
+  display: none;
+}
+
+.AssignmentListItem__likesImage {
+  margin-right: 7px;
+}
+
+.AssignmentListItem__title {
+  @include text-shrink;
+  flex-shrink: 3;
+  margin-right: 5px;
+}
+
+.AssignmentListItem__noTitle {
+  color: #939FA7;
+}
+
+.AssignmentListItem__status {
+  @include text-shrink;
+  color: $color-blue-gray;
+  margin-left: 6px;
+}
+
+.AssignmentListItem__subjects {
+  display: flex;
+  margin-right: 20px;
+  min-width: 0;
+}
+
+.AssignmentListItem__subjects_mobile {
+  display: none;
+}
+
+.AssignmentListItem__subject {
+  @include text-shrink;
+  font-size: 15px;
+  padding: 7px 18px 8px 21px;
+  background: $color-light-gray;
+  border: 1px solid $color-dark-gray;
+  border-radius: 17px;
+  margin-right: 5px;
+  font-weight: 300;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.AssignmentListItem__subject_mobile {
+  display: none;
+}
+
+.AssignmentListItem__questions {
+  @include text-shrink;
+  color: $color-purple;
+  margin-right: 20px;
+  font-size: 15px;
+  min-width: 0;
+}
+
+.AssignmentListItem__questions_mobile {
+  display: none;
+}
+
+.AssignmentListItem__level {
+  @include flex-center;
+  flex-shrink: 0;
+  font-size: 13px;
+}
+
+.AssignmentListItem__levelImage {
+  margin-right: 10px;
+}
+
+.AssignmentListItem__moreWrapper {
+  flex-shrink: 0;
+}
+
+.AssignmentListItem__more {
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  margin-left: 20px;
+  background: url(../../../assets/images/hovered-more.svg) no-repeat;
+
+  &:hover {
+    background: url(../../../assets/images/more.svg) no-repeat;
+  }
+}
+
+.AssignmentListItem__more_clicked {
+  background: url(../../../assets/images/more.svg) no-repeat;
+}
+
+.AssignmentListItem__actionMenu {
+  position: absolute;
+  right: -1px;
+  z-index: 10;
+  top: 64%;
+}
+
+.AssignmentListItem__actionMenu_top {
+  top: auto;
+  bottom: 64%;
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .AssignmentListItem {
+    flex-direction: column;
+    padding: 15px;
+
+    &:hover {
+      background-color: $color-white;
+    }
+  }
+
+  .AssignmentListItem__blockMain {
+    box-sizing: content-box;
+    display: block;
+    position: relative;
+    padding-left: $image-width + 19px;
+    min-height: $image-width;
+    border-bottom: 1px solid rgba($color-blue-gray, 0.18);
+    padding-bottom: 20px;
+    margin-bottom: 63px;
+  }
+
+  .AssignmentListItem__blockSecondary {
+    justify-content: space-between;
+  }
+
+  .AssignmentListItem__title {
+    @include text-shrink-multiline(3);
+    margin-bottom: 7px;
+    font-size: 15px;
+  }
+
+  .AssignmentListItem__image {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: $image-width;
+    height: $image-width;
+    border-radius: 2px;
+  }
+
+  .AssignmentListItem__contentCreatorImage {
+    display: none;
+  }
+
+  .AssignmentListItem__likes {
+    display: none;
+  }
+
+  .AssignmentListItem__likes_mobile {
+    display: flex;
+    margin-right: 0;
+  }
+
+  .AssignmentListItem__questions {
+    display: none;
+  }
+
+  .AssignmentListItem__questions_mobile {
+    display: block;
+  }
+
+  .AssignmentListItem__level {
+    display: none;
+  }
+
+  .AssignmentListItem__subjects {
+    display: none;
+  }
+
+  .AssignmentListItem__subjects_mobile {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -50px;
+    display: flex;
+    margin-top: 11px;
+    margin-right: 0;
+    justify-content: stretch
+  }
+
+  .AssignmentListItem__subject {
+    text-align: center;
+    flex: 1;
+    padding: 7px 15px 8px 15px;
+  }
+
+  .AssignmentListItem__subject_mobile {
+    display: block;
+  }
+
+  .AssignmentListItem__subject_desktop {
+    display: none;
+  }
+
+  .AssignmentListItem__more {
+    margin-left: 0;
+  }
+
+  .AssignmentListItem__actionMenu {
+    top: calc(100% - 24px);
+    right: auto;
+    left: -1px;
+  }
+
+  .AssignmentListItem__actionMenu_top {
+    top: auto;
+    bottom: 44px;
+  }
+}

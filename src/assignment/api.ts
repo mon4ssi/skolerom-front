@@ -1,0 +1,381 @@
+import { injector } from 'Injector';
+import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteractor';
+import { API } from 'utils/api';
+import {
+  Article,
+  ArticleRepo,
+  Assignment,
+  AssignmentDistribute,
+  AssignmentRepo,
+  Attachment,
+  Filter,
+  Grade,
+  QuestionAttachment,
+  Subject,
+  WPLocale
+} from './Assignment';
+import {
+  AssignmentDistributeDTO,
+  buildAllAssignmentsList,
+  buildArticle,
+  buildAttachment,
+  buildFilterDTO,
+  buildMyAssignmentsList,
+  buildStudentAssignmentList,
+  GradeDTO,
+  SubjectDTO
+} from './factory';
+import { DEFAULT_AMOUNT_ARTICLES_PER_PAGE } from 'utils/constants';
+import { ContentBlockType } from './ContentBlock';
+import { Locales } from 'utils/enums';
+
+export interface AttachmentDTO {
+  id: number;
+  url: string;
+  alt: string;
+  file_name: string;
+  title: string;
+  duration?: number;
+  src?: Array<string>;
+}
+
+export interface ImageArticleDTO {
+  img_id: number;
+  img_url: string;
+}
+
+export interface StudentLevelDTO {
+  term_id: number;
+  name: string;
+  slug: string;
+  childArticles?: Array<ArticleDTO>;
+}
+
+export interface ArticleDTO {
+  id: number;
+  title: string;
+  link: string;
+  excerpt: string;
+  images: ImageArticleDTO;
+  student_grade: Array<GradeDTO>;
+  student_subject: Array<SubjectDTO>;
+  student_level: Array<StudentLevelDTO>;
+  level?: StudentLevelDTO;
+}
+
+export interface ContentBlockDTO {
+  type: ContentBlockType;
+  orderPosition: number;
+  text?: string;
+  images?: Array<QuestionAttachment>;
+  videos?: Array<QuestionAttachment>;
+}
+
+export interface OptionDTO {
+  title: string;
+  image?: QuestionAttachment | undefined;
+  orderPosition?: number;
+  isRight: boolean;
+}
+
+export interface QuestionDTO {
+  id?: number;
+  type: string;
+  title: string;
+  orderPosition: number;
+  options?: Array<OptionDTO>;
+  content?: Array<ContentBlockDTO>;
+}
+
+export interface TeacherAssignmentByIdResponseDTO {
+  id: number;
+  title: string;
+  description?: string;
+  isPrivate: boolean;
+  questions: Array<QuestionDTO>;
+  subjects: Array<Subject>;
+  grades: Array<Grade>;
+  levels: Array<number>;
+  relatedArticles: Array<Article>;
+  ownedByMe: boolean;
+}
+
+export interface StudentAssignmentResponseDTO {
+  id: number;
+  title: string;
+  description: string;
+  numberOfQuestions: number;
+  author: string;
+  subjects: Array<SubjectDTO>;
+  isAnswered: boolean;
+  endDate: Date;
+  featuredImage: string | null;
+  answerId: number | null;
+  isPassed: boolean | null;
+  mark: number | null;
+  status: boolean | null;
+  comment: string | null;
+  levels: Array<number>;
+  isEvaluated?: boolean;
+}
+
+export interface ArticleLevelRequestDTO {
+  wpId: number;
+  childArticles?: Array<ArticleRequestDTO>;
+}
+
+export interface ArticleRequestDTO {
+  wpId: number;
+  title: string;
+  url?: string;
+  levels: Array<ArticleLevelRequestDTO>;
+}
+
+export interface AssignmentRequestDTO {
+  title: string;
+  description: string;
+  questions: Array<QuestionDTO>;
+  visibility: boolean;
+  relatedArticles: Array<ArticleRequestDTO>;
+  featuredImage: string | undefined;
+}
+
+export interface MultipleChoiceQuestionOptionDTO {
+  title: string;
+  isRight: boolean;
+}
+
+export interface ImageChoiceQuestionOptionDTO {
+  title: string;
+  image?: QuestionAttachment | undefined;
+  orderPosition?: number;
+  isRight: boolean;
+}
+
+interface AssignmentByIdResponseDTO {
+  id: number;
+  title: string;
+  description: string;
+  featuredImage: string;
+  grades: Array<GradeDTO>;
+  isPrivate: boolean;
+  levels: Array<number>;
+  questions: Array<QuestionDTO>;
+  relatedArticles: Array<ArticleRequestDTO>;
+  subjects: Array<SubjectDTO>;
+}
+
+export class AssignmentApi implements AssignmentRepo {
+
+  public async getAssignmentById(id: number): Promise<Assignment> {
+    const assignmentDTO: AssignmentByIdResponseDTO = (await API.get(`api/teacher/assignments/${id}`)).data;
+
+    // questions and relatedArticles ignored here because it not essential for stores that use this method
+    return new Assignment({
+      id: assignmentDTO.id,
+      title: assignmentDTO.title,
+      description: assignmentDTO.description,
+      featuredImage: assignmentDTO.featuredImage,
+      grades: assignmentDTO.grades,
+      isPrivate: assignmentDTO.isPrivate,
+      levels: assignmentDTO.levels,
+      subjects: assignmentDTO.subjects,
+    });
+  }
+
+  public async getGrades(): Promise<Array<Grade>> {
+    return (await API.get('api/classes')).data.data.map(
+      (item: GradeDTO) => new Grade(item.id, item.title)
+    );
+  }
+
+  public async getSubjects(): Promise<Array<Subject>> {
+    return (await API.get('api/subjects')).data.data.map(
+      (item: SubjectDTO) => new Subject(item.id, item.title)
+    );
+  }
+
+  public async removeAssignment(assignmentId: number): Promise<void> {
+    try {
+      await API.delete(`/api/teacher/assignments/${assignmentId}`);
+    } catch (e) {
+      throw Error(`remove assignment ${e}`);
+    }
+  }
+
+  public async copyAssignment(id: number): Promise<number> {
+    try {
+      const response = await API.get(`api/teacher/assignments/${id}/copy`);
+
+      return response.data.id;
+    } catch (e) {
+      throw new Error(`copy assignment ${e}`);
+    }
+  }
+
+  public async getMyAssignmentsList(filter: Filter) {
+    const response = await API.get('api/teacher/assignments/draft', {
+      params: buildFilterDTO(filter)
+    });
+
+    return {
+      myAssignments: response.data.data.map(buildMyAssignmentsList),
+      total_pages: response.data.meta.pagination.total_pages
+    };
+  }
+
+  public async getAllAssignmentsList(filter: Filter) {
+    try {
+      const response = await API.get('api/teacher/assignments', {
+        params: buildFilterDTO(filter)
+      });
+
+      return {
+        myAssignments: response.data.data.map(buildAllAssignmentsList),
+        total_pages: response.data.meta.pagination.total_pages
+      };
+    } catch {
+      return {
+        myAssignments: [],
+        total_pages: 0
+      };
+    }
+  }
+
+  public async getStudentAssignmentList(filter: Filter) {
+    try {
+      const response = await API.get('api/student/assignments', {
+        params: buildFilterDTO(filter)
+      });
+      return {
+        myAssignments: response.data.data.map(buildStudentAssignmentList),
+        total_pages: response.data.meta.pagination.total_pages
+      };
+    } catch {
+      return {
+        myAssignments: [],
+        total_pages: 0
+      };
+    }
+  }
+
+  public async getAssignmentListOfStudentInList(studentId: number, filter: Filter) {
+    try {
+      const response = await API.get('api/teacher/students/assignments', {
+        params: {
+          studentId,
+          ...buildFilterDTO(filter)
+        }
+      });
+
+      return {
+        myAssignments: response.data.data.map(buildStudentAssignmentList),
+        total_pages: response.data.meta.pagination.total_pages
+      };
+    } catch {
+      return {
+        myAssignments: [],
+        total_pages: 0
+      };
+    }
+  }
+
+  public async getAssignmentDistributes(filter: Filter): Promise<{
+    distributes: Array<AssignmentDistribute>,
+    total_pages: number;
+  }> {
+    const response = (await API.get('api/teacher/assignments/distributes', { params: filter })).data;
+
+    return {
+      distributes: response.data.map((distribute: AssignmentDistributeDTO) => new AssignmentDistribute(distribute)),
+      total_pages: response.meta.pagination.total_pages,
+    };
+  }
+}
+
+enum AttachmentType {
+  image = 'img',
+  video = 'video',
+  sound = 'sound',
+}
+
+export class WPApi implements ArticleRepo {
+
+  private storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
+  private currentLocale = this.storageInteractor.getCurrentLocale()!;
+
+  public async getArticles({
+    page = 1,
+    perPage = DEFAULT_AMOUNT_ARTICLES_PER_PAGE,
+    order,
+    grades,
+    subjects,
+    searchTitle
+  }: { page: number, perPage: number, order: string, grades?: number, subjects?: number, searchTitle?: string }): Promise<Array<Article>> {
+    return (
+      await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/filterarticle/v1/post/`, {
+        params:
+        {
+          page,
+          order_by: order,
+          per_page: perPage,
+          student_grade_id: grades || null,
+          student_subject_id: subjects || null,
+          search_title: searchTitle || null,
+          lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
+        }
+      },
+      )
+    ).data.map(buildArticle);
+  }
+
+  public async getArticlesByIds(ids: Array<number>): Promise<Array<Article>> {
+    const includes = ids.join();
+
+    const response = await API.get(
+      `${process.env.REACT_APP_WP_URL}/wp-json/getarticles/v1/post/`, {
+        params: {
+          ids: includes,
+          // lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
+        }
+      }
+    );
+
+    return response.data.map(buildArticle);
+  }
+
+  public async fetchVideos(postIds: Array<number>): Promise<Array<Attachment>> {
+    return (
+      await API.get(
+        `${process.env.REACT_APP_WP_URL}/wp-json/media/v1/post/`, {
+          params:  {
+            id: postIds.join(),
+            content: AttachmentType.video
+          }
+        }
+      )
+    ).data.media.map(buildAttachment);
+  }
+
+  public async fetchImages(postIds: Array<number>): Promise<Array<Attachment>> {
+    return (
+      await API.get(
+        `${process.env.REACT_APP_WP_URL}/wp-json/media/v1/post/`, {
+          params: {
+            id: postIds.join(','),
+            content: AttachmentType.image,
+            size: 'full'
+          },
+        }
+      )
+    ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
+  }
+
+  public async getLocaleData(locale: Locales): Promise<Array<WPLocale>> {
+    return (await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/getlang/v1/post/`, {
+      params: {
+        lang: locale
+      }
+    })).data;
+  }
+}

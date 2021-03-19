@@ -1,0 +1,46 @@
+@import 'style/index';
+
+.ConfirmationPage_container {
+  @include flex-center;
+  flex-direction: column;
+  position: fixed;
+  top: $header-height;
+  height: calc(100% - #{$header-height});
+  width: 100%;
+  background: #ffffff;
+  z-index: 15;
+}
+
+.ConfirmationPage_thumb {
+  width: 78px;
+  height: 78px;
+  margin-bottom: 42px;
+}
+
+.ConfirmationPage_title {
+  font-size: 36px;
+  margin-bottom: 24px;
+}
+
+.ConfirmationPage_body {
+  font-weight: 300;
+  margin-bottom: 37px;
+}
+
+.ConfirmationPage_edit {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.ConfirmationPage_button {
+  @include flex-center;
+  height: 50px;
+  border-radius: 25px;
+  flex-direction: row;
+  padding: 0 15px 0 10px;
+
+  img {
+    width: 33px;
+    margin-right: 10px;
+  }
+}

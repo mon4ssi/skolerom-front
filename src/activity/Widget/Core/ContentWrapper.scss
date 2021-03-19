@@ -1,0 +1,21 @@
+@import "../../../style";
+
+.ContentWrapper_animated-enter, .ContentWrapper_animated-enter-active, .ContentWrapper_animated-exit, .ContentWrapper_animated-exit-active {
+  @include animate(opacity, 0.3s)
+}
+
+.ContentWrapper_animated-enter {
+  opacity: 0;
+}
+
+.ContentWrapper_animated-enter-active {
+  opacity: 1;
+}
+
+.ContentWrapper_animated-exit {
+  opacity: 1;
+}
+
+.ContentWrapper_animated-exit-active {
+  opacity: 0;
+}

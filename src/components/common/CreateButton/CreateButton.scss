@@ -1,0 +1,57 @@
+@import "../../../style";
+
+.CreateButton {
+  height: 40px;
+  min-height: 40px;
+  background: #0b2541;
+  color: #E7ECEF;
+  border-radius: 20px;
+  padding: 0 23px;
+  font-size: 17px;
+  font-weight: 500;
+
+  &.light {
+    background: #939FA7;
+    color: #0B2541;
+  }
+
+  &.green {
+    background: #0A7B24;
+    color: white;
+  }
+
+  &.backButton {
+    padding: 0 17px 0 8px;
+    font-weight: 500;
+    width: fit-content;
+
+    div {
+      display: flex;
+      align-items: center;
+
+      img {
+        margin-right: 13px;
+      }
+
+      span {
+        color: white;
+      }
+    }
+  }
+
+  &:disabled {
+    color: #596A75;
+    background: #E7ECEF;
+    cursor: default;
+  }
+}
+@media screen and (max-width: $screen-dimension-tablet) {
+  .CreateButton {
+    width: 100%;
+    padding: 10px 0;
+    margin-top: 20px;
+    min-width: 290px;
+  }
+
+}
+

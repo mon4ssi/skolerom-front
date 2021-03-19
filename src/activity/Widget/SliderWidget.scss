@@ -1,0 +1,232 @@
+@import "../../style";
+
+.SliderWidget {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.SliderWidget_collapsed {
+  height: 122px;
+}
+
+.SliderWidget__contentWrapper {
+  width: 100%;
+  // HACK to make sass use built-in css min() function instead of sass defined
+  padding-top: unquote("min(56%, 550px)");
+}
+
+.SliderWidget__infoWrapper_outside {
+  display: none;
+}
+
+.SliderWidget__titleWrapper {
+  @include absolute-attach(top);
+  z-index: 2;
+}
+
+.SliderWidget__content {
+  @include absolute-attach(none);
+  @include flex-center;
+}
+
+.SliderWidget__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.SliderWidget__info {
+  position: absolute;
+  bottom: 24px;
+  left: 21px;
+  right: 21px;
+}
+
+.SliderWidget__title {
+  @include text-shrink-multiline(2);
+  margin-bottom: 5px !important;
+  color: $color-white;
+  font-size: 30px;
+}
+
+.SliderWidget__title_oneLine {
+  @include text-shrink-multiline(1);
+  padding-right: 26px;
+}
+
+.SliderWidget__description {
+  margin-bottom: 12px;
+  font-size: 20px;
+  color: $color-white;
+  width: 65%;
+  font-weight: 300;
+
+  // Needed to make color of text in layout provided from WP white and have needed size
+  & * {
+    font-size: 20px;
+    color: $color-white;
+  }
+}
+
+.SliderWidget__description_oneLine {
+  @include text-shrink-multiline(1);
+  padding-right: 80px;
+  //margin-bottom: 5px;
+}
+
+.SliderWidget__button {
+  padding: 9px 23px;
+  border-radius: 20px;
+  background-color: $color-purple;
+  color: $color-white;
+  font-size: 17px;
+}
+
+.SliderWidget__slideSwitcher {
+  position: absolute;
+  bottom: 24px;
+  right: 21px;
+}
+
+.SliderWidget__switchButton {
+  @include circle(15px);
+  border: 1px solid $color-white;
+  border-radius: 50%;
+  background-color: transparent;
+  transition: background-color 100ms ease-in-out;
+  margin-left: 12px;
+  padding: 0.40em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &:first-child {
+    margin-left: 0;
+  }
+}
+
+.SliderWidget__switchButton_active {
+  background-color: $color-white;
+}
+
+.SliderWidget__content_animated-enter, .SliderWidget__content_animated-exit {
+  @include animate(transform, 0.5s)
+}
+
+.SliderWidget__content_animated-enter {
+  transform: translateX(100%);
+}
+
+.SliderWidget__content_animated-enter-active {
+  transform: translateX(0);
+}
+
+.SliderWidget__content_animated-exit {
+  transform: translateX(0);
+}
+
+.SliderWidget__content_animated-exit-active {
+  transform: translateX(-100%);
+}
+
+.SliderWidget__image_animated {
+  animation: zoomOut 7s linear;
+
+  @keyframes zoomOut {
+    from {
+      transform: scale(1.2) translate(50px, 20px);
+    }
+    to {
+      transform: scale(1) translate(0, 0);
+    }
+  }
+}
+
+.SliderWidget__image_animatedCollapsed {
+  animation: zoomOut 7s linear;
+
+  @keyframes zoomOut {
+    from {
+      transform: scale(1.2) translate(10px, 5px);
+    }
+    to {
+      transform: scale(1) translate(0, 0);
+    }
+  }
+}
+
+
+@media screen and (max-width: $screen-dimension-desktop-l) {
+  .SliderWidget__title {
+    font-size: 24px;
+    margin-bottom: 3px;
+  }
+
+  .SliderWidget__description {
+    font-size: 17px;
+    margin-bottom: 9px;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-mobile) {
+  .SliderWidget {
+    border-radius: 0;
+  }
+
+  .SliderWidget_small {
+    height: auto;
+  }
+
+  .SliderWidget__title {
+    @include text-shrink-multiline(4);
+    color: $color-text-primary;
+    font-size: 24px;
+    line-height: 31px;
+    margin-bottom: 5px;
+  }
+
+  .SliderWidget__description {
+    margin-bottom: 18px;
+    color: $color-text-primary;
+  }
+
+  .SliderWidget__button {
+    width: 100%;
+  }
+
+  .SliderWidget__infoWrapper_outside {
+    padding: 16px 16px 0 16px;
+    background-color: $color-light-gray;
+    display: block;
+  }
+
+  .SliderWidget__infoWrapper_inside {
+    display: none;
+  }
+
+  .SliderWidget__info {
+    position: static;
+  }
+
+  .SliderWidget__contentWrapper {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .SliderWidget__slideSwitcher {
+    left: 21px;
+    display: flex;
+    justify-content: center;
+  }
+
+  @keyframes zoomOut {
+    from {
+      transform: scale(1.2) translate(10px, 5px);
+    }
+    to {
+      transform: scale(1) translate(0, 0);
+    }
+  }
+}

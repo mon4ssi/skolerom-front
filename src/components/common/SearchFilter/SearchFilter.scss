@@ -1,0 +1,84 @@
+@import "../../../style";
+
+.SearchFilter {
+  display: flex;
+  justify-content: space-between;
+  background: $color-white;
+  border-radius: 8px;
+  padding: 14px 0 0 20px;
+  box-shadow: 0 2px 2px 0 $color-dark-gray;
+  border: 1px solid $color-dark-gray;
+  align-items: center;
+  flex-wrap: wrap;
+  box-sizing: padding-box;
+  min-height: fit-content;
+
+  select:focus > option:checked { // TODO use BEM here
+    font-weight: bold !important;
+  }
+}
+
+.SearchFilter__select {
+  margin-right: 20px;
+  margin-bottom: 14px;
+  position: relative;
+  padding-right: 28px;
+  height: 33px;
+  border-radius: 5px;
+  border: 1px solid $color-regent-gray;
+  color: $color-text-primary;
+  font-weight: 300;
+  font-size: 15px;
+  min-width: 150px;
+  background: url(../../../assets/images/arrow-down.svg) no-repeat right 10px center, $color-light-gray;
+}
+
+.SearchFilter__option {
+  background: $color-light-gray;
+  color: $color-text-primary;
+}
+
+.SearchFilter__search {
+  margin-right: 20px;
+  margin-bottom: 15px;
+  display: block;
+  padding: 5px 20px 6px 20px;
+  background: url(../../../assets/images/search.svg) no-repeat right center;
+  border: none;
+  border-left: 1px solid;
+  border-radius: unset;
+  width: 228px;
+  font-size: 15px;
+  font-weight: 300;
+
+  &::placeholder {
+    @include text-shrink;
+    color: $color-text-primary;
+    font-size: 15px;
+    font-weight: 300;
+  }
+  .large-search {
+    width: 227px;
+  }
+  .small-search {
+    width: 137px;
+  }
+}
+
+.SearchFilter__space {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 2;
+}
+
+.SearchFilter__select_sorting {
+  width: 232px;
+}
+
+// media rule for tablets contains in component file
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .SearchFilter__select {
+    flex: 1 1 100% !important; // !important needed here because media rule that contained in component class has higher specificity
+  }
+}

@@ -1,0 +1,51 @@
+.NewAssignmentPreviewPagination {
+  width: 100%;
+  height: 5%;
+  margin-bottom: 20px;
+  margin-top: 20px;
+
+  .controls {
+    display: none;
+  }
+
+  .linkPageWrapper {
+    width: 33px;
+    height: 33px;
+    margin-right: 10px;
+    background: #E7ECEF;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid #bdc3c8;
+
+    &.activePage {
+      background: #0b2541;
+      color: #fff;
+      border: none;
+      width: max-content;
+    }
+  }
+
+  .linkPage {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 300;
+
+    &.activePage {
+      justify-content: flex-end;
+      padding: 0 10px;
+      position: relative;
+    }
+  }
+
+  .en::before {
+    content: "Question";
+    margin-right: 4px;
+  }
+
+  .no::before {
+    content: "Spørsmål";
+    margin-right: 4px;
+  }
+}

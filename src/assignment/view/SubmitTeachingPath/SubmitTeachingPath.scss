@@ -1,0 +1,46 @@
+.SubmitTeachingPath {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50%;
+}
+
+.SubmitTeachingPath__title {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.SubmitTeachingPath__description {
+  font-weight: 300;
+}
+
+.SubmitTeachingPath__deleteButton {
+  background-color: transparent;
+  text-decoration: underline;
+  margin-top: 10px;
+}
+
+.SubmitTeachingPath__button {
+  margin-top: 20px;
+  border-radius: 30px;
+  background: #379b43;
+  width: fit-content;
+  padding: 5px 20px;
+  align-items: center;
+  color: #fff;
+  font-size: 17px;
+  border: 1px solid #379b43;
+  display: flex;
+  justify-content: center;
+}
+
+.SubmitTeachingPath__buttonImage {
+  margin-right: 10px;
+}
+
+.submitButton:disabled {
+  color: white;
+  background-color: #939FA7;
+  border: 1px solid #939FA7;
+  cursor: default;
+}

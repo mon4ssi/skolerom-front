@@ -1,0 +1,67 @@
+.StudentsAssigning {
+  height: 100%;
+  background-color: #ffffff;
+
+  .dueDate {
+    margin: 19px 18px 20px 20px;
+
+    .title {
+      text-transform: uppercase;
+      color: #e2017b;
+      margin-bottom: 25px;
+    }
+
+    .deadlineInfo {
+      position: relative;
+      font-size: 15px;
+
+      img {
+        margin-right: 10px;
+        width: 18px;
+        height: 18px;
+      }
+
+      span {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      .Calendar {
+        left: 0;
+      }
+    }
+  }
+
+  .assignToClass {
+    text-transform: uppercase;
+    color: #e2017b;
+    margin: 40px 20px 0 20px;
+  }
+
+    .searchClassesContainer {
+      display: flex;
+      margin: 18px;
+      border: 1px solid #939FA7;
+      border-radius: 7px;
+
+      .searchClasses {
+        height: 60px;
+        width: 100%;
+        padding: 20px;
+        font-size: 15px;
+        border: 0;
+        border-radius: 7px;
+
+        &::placeholder {
+          font-weight: 300;
+          color: #6E7C85;
+        }
+      }
+
+      img {
+        width: 20px;
+        margin-right: 20px;
+      }
+    }
+
+}

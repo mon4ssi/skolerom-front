@@ -1,0 +1,42 @@
+.statusInfo {
+  border-radius: 8px;
+  display: flex;
+  width: fit-content;
+  overflow: hidden;
+  min-height: 50px;
+  align-items: center;
+  margin: 20px 0;
+
+  .statusLabel {
+    padding: 14px 22px;
+  }
+
+  .mark {
+    height: 100%;
+    padding: 10px 19px 10px 17px;
+    color: white;
+    font-size: 23px;
+    display: flex;
+    align-items: center;
+  }
+
+  .mark-notPassed {
+    background: #E2017B;
+  }
+
+  .mark-passed {
+    background: #0A7B24;
+  }
+}
+
+.status-passed {
+  border: 1px solid #0A7B24;
+}
+
+.status-notPassed {
+  border: 1px solid #E2017B;
+}
+
+.status-notEvaluated {
+  border: 1px solid #0B2541;
+}

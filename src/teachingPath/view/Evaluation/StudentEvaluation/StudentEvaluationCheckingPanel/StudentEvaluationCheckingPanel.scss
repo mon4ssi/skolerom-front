@@ -1,0 +1,214 @@
+@import "style";
+
+.StudentEvaluationPage__container {
+  display: flex;
+}
+
+.StudentEvaluationPage__leftSide {
+  flex: 3 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.StudentEvaluationPage__evaluation {
+  margin: 40px 0 10px;
+  color: #E2017B;
+  text-transform: uppercase;
+  font-size: 16px;
+}
+
+.StudentEvaluationPage__teachingPathTitle {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.loader {
+  height: auto;
+  flex: 2;
+  border-right: 1px solid #D3D9DE;
+  background-color: $color-white;
+}
+
+.StudentEvaluationPage__leftLoader {
+  display: flex;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+}
+
+.StudentEvaluationPage__rightLoader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 2 1;
+  height: 100%;
+  background: white;
+  box-shadow: 0 2px 5px 0 #d3d9de;
+  border-radius: 5px;
+}
+
+.StudentEvaluationPage__steps {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 5px 0 #d3d9de;
+  border-radius: 5px;
+  background-color: $color-white;
+}
+
+.StudentEvaluationPage_stepInfo {
+  width: 100%;
+  padding: 20px;
+  flex-direction: column;
+  display: flex;
+  flex: 2;
+  background-color: $color-white;
+
+  &:first-child {
+    border-radius: 5px 5px 0 0;
+  }
+
+  &:last-child {
+    border-radius: 0 0 5px 5px;
+  }
+
+  .stepCounterWrapper {
+    margin-bottom: 16px;
+    display: flex;
+
+    .stepCounter {
+      display: flex;
+      color: $color-white;
+      justify-content: center;
+      align-items: center;
+      width: 31px;
+      height: 31px;
+      background: $color-purple;
+      border-radius: 100%;
+    }
+
+    .stepCounterTitle {
+      margin-left: 13px;
+    }
+  }
+
+  .teachingPathNodeQuestions {
+    display: flex;
+    flex: 2;
+    padding: 20px 0;
+    flex-direction: column;
+  }
+}
+
+.comments {
+  display: flex;
+  flex-direction: column;
+  min-width: 451px;
+  flex: 1;
+
+  .comment {
+    display: flex;
+    border-bottom: 1px solid #D3D9DE;
+    width: 100%;
+    flex: 2;
+    padding: 20px;
+    flex-direction: column;
+
+    .text {
+      resize: none;
+      width: 100%;
+      border: none;
+      font-weight: 300;
+      background: white;
+      overflow: hidden;
+    }
+  }
+
+  .evaluation {
+    display: flex;
+    flex: 1;
+    padding: 20px;
+    flex-direction: column;
+
+    .mark {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+  }
+
+  .headline {
+    color: #0B2541;
+    font-size: 17px;
+    margin-bottom: 21px;
+  }
+
+  .markItem {
+    background: #E7ECEF;
+    border: 1px solid #939FA7;
+    border-radius: 5px;
+    height: 32px;
+    min-width: 32px;
+    padding: 0 12px;
+    width: fit-content;
+    margin-right: 10px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    font-size: 15px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+
+  .activeMark {
+    background: #0A7B24;
+    border: 1px solid #065F1B;
+    color: white;
+  }
+
+  .failed {
+    background: #E2017B;
+    border: 1px solid #E2017B;
+  }
+}
+
+.StudentEvaluationPage__rightSide {
+  display: flex;
+  flex-direction: column;
+  flex: 2 1;
+  background: white;
+  margin-left: 20px;
+  box-shadow: 0 2px 5px 0 #d3d9de;
+  border-radius: 5px;
+  height: fit-content;
+
+  .comments {
+    display: flex;
+    flex-direction: column;
+
+    .comment {
+      display: flex;
+      border-bottom: 1px solid #D3D9DE;
+      width: 100%;
+      padding: 20px 20px 25px 20px;
+      flex-direction: column;
+
+    }
+
+    .evaluation {
+      display: flex;
+      padding: 22px 20px 0;
+      flex-direction: column;
+    }
+
+    .headline {
+      color: #0B2541;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .withPadding {
+      padding-bottom: 21px;
+    }
+  }
+  
+}

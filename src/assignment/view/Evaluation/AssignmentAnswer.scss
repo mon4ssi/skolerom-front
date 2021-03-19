@@ -1,0 +1,132 @@
+@import "../../../style";
+
+.AssignmentAnswer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 0 20px;
+  height: 60px;
+  background: $color-white;
+  border-radius: 5px;
+  box-shadow: 0 2px 2px 0 $color-dark-gray;
+
+  .answeredStatus {
+    display: flex;
+    margin-right: 20px;
+
+    .label {
+    }
+
+    .answeredLabel {
+    }
+  }
+}
+
+.AssignmentAnswer__student {
+  @include text-shrink;
+  font-size: 17px;
+  margin-right: 10px;
+}
+
+.AssignmentAnswer__statusBar {
+  @include flex-center;
+  //min-width: 0;
+}
+
+.AssignmentAnswer__answeredStatus {
+  @include text-shrink;
+  padding: 7px 16px 7px 17px;
+  font-size: 13px;
+  border-radius: 50px;
+  border: 1px solid $color-blue-gray;
+  background: $color-dark-gray;
+  margin-right: 20px;
+}
+
+.AssignmentAnswer__answeredStatus_answered {
+  background: $color-green;
+  color: $color-white;
+  border-color: $color-green;
+}
+
+.AssignmentAnswer__deadline {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.AssignmentAnswer__deadlineText {
+  @include text-shrink;
+  font-size: 13px;
+}
+
+.AssignmentAnswer__deadlineText_passed {
+  color: $color-purple;
+}
+
+.AssignmentAnswer__deadlineImage {
+  margin-left: 10px;
+}
+
+.AssignmentAnswer__evaluationStatus {
+  display: flex;
+  align-items: center;
+}
+
+.AssignmentAnswer__evaluationStatusText {
+  @include text-shrink;
+  font-size: 13px;
+}
+
+.AssignmentAnswer__evaluationStatusText_evaluate {
+  color: $color-regent-gray;
+}
+
+.AssignmentAnswer__evaluationStatusText_passed {
+  color: $color-sea-green;
+}
+
+.AssignmentAnswer__evaluationStatusText_failed {
+  color: $color-purple;
+}
+
+.AssignmentAnswer__evaluationStatusImage {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .AssignmentAnswer {
+    align-items: stretch;
+    justify-content: flex-start;
+    height: auto;
+    padding: 15px 15px 19px 15px;
+    flex-direction: column;
+  }
+
+  .AssignmentAnswer__student {
+    margin-right: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid $color-dark-gray;
+  }
+
+  .AssignmentAnswer__statusBar {
+    padding-top: 10px;
+  }
+
+  .AssignmentAnswer__answeredStatus {
+    display: none;
+  }
+
+  .AssignmentAnswer__deadline {
+    display: none;
+  }
+
+  .AssignmentAnswer__evaluationStatus {
+    justify-content: space-between;
+    width: 100%;
+  }
+}

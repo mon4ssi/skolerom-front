@@ -1,0 +1,18 @@
+@import "./_constants";
+
+$mok-up-width: 1440px;
+$mok-up-height: 1024px;
+
+.CurrentAssignmentPage {
+  width: $mok-up-width !important;
+  height: $mok-up-height !important;
+}
+
+.CurrentAssignmentPage__content {
+  height: calc(#{$mok-up-height} - #{$header-height});;
+}
+
+//.CurrentAssignmentPage__main {
+//  height: 100%;
+//  overflow-y: auto;
+//}

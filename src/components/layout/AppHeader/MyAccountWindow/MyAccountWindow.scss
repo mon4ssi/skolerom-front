@@ -1,0 +1,165 @@
+@import '../../../../style';
+
+$my-account-width: 218px;
+$my-account-padding: 19px;
+
+.MyAccountWindow {
+  overflow: hidden;
+  box-sizing: content-box;
+  padding-left: $my-account-padding;
+  padding-right: $my-account-padding;
+  padding-top: $my-account-padding;
+  width: $my-account-width;
+  background: $color-white;
+  position: absolute;
+  top: calc(100% + 1px);
+  right: 21px;
+  border: 1px solid $color-dark-gray;
+  border-top: 0;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0 2px 4px 0 rgba($color-white, 0.11);
+  transition: height 200ms ease-in-out;
+  z-index: 1;
+}
+
+.MyAccountWindow__container {
+  position: relative;
+}
+
+.MyAccountWindow__item {
+  display: flex;
+  align-items: center;
+  padding-bottom: 20px;
+  cursor: pointer;
+}
+
+.MyAccountWindow__itemText {
+  @include text-shrink;
+  font-weight: 300;
+}
+
+.MyAccountWindow__title {
+  word-break: break-all;
+  padding-right: 20px;
+}
+
+.MyAccountWindow__item_centered {
+  justify-content: center;
+}
+
+.MyAccountWindow__itemImage {
+  margin-right: 10px;
+}
+
+.MyAccountWindow__logOut {
+  padding-top: 20px;
+  padding-bottom: 0;
+}
+
+.MyAccountWindow__list {
+  padding-top: 20px;
+
+  &:first-child {
+    padding-top: 0;
+  }
+}
+
+.MyAccountWindow__list_separated {
+  border-bottom: 1px solid $color-dark-gray;
+}
+
+.MyAccountWindow__list_mobile {
+  display: none;
+}
+
+.MyAccountWindow__itemText_selected {
+  font-weight: 500;
+  cursor: default;
+}
+
+.MyAccountWindow__closeButton {
+  width: 15.19px;
+  height: 15.19px;
+  position: absolute;
+  top: 4px;
+  right: -1px;
+  cursor: pointer;
+}
+
+.MyAccountWindow__backButton {
+  width: 15.19px;
+  height: 15.19px;
+  position: absolute;
+  top: 4px;
+  left: -4px;
+  cursor: pointer;
+}
+
+.MyAccountWindow__container_animated-enter,
+.MyAccountWindow__container_animated-enter-active,
+.MyAccountWindow__container_animated-exit,
+.MyAccountWindow__container_animated-exit-active,
+.MyAccountWindow__secondaryContainer_animated-enter,
+.MyAccountWindow__secondaryContainer_animated-enter-active,
+.MyAccountWindow__secondaryContainer_animated-exit,
+.MyAccountWindow__secondaryContainer_animated-exit-active
+{
+  transition: transform 200ms ease-in-out, opacity 200ms ease-in-out; // TODO rewrite animate-many and use here
+}
+
+.MyAccountWindow__container_animated-enter {
+  @include absolute-attach(top, $my-account-padding);
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.MyAccountWindow__container_animated-enter-active {
+  @include absolute-attach(top, $my-account-padding);
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.MyAccountWindow__container_animated-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.MyAccountWindow__container_animated-exit-active {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.MyAccountWindow__secondaryContainer_animated-enter {
+  @include absolute-attach(top, $my-account-padding);
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.MyAccountWindow__secondaryContainer_animated-enter-active {
+  @include absolute-attach(top, $my-account-padding);
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.MyAccountWindow__secondaryContainer_animated-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.MyAccountWindow__secondaryContainer_animated-exit-active {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .MyAccountWindow {
+    width: auto;
+    left: 0;
+    right: 0;
+  }
+
+  .MyAccountWindow__list_mobile {
+    display: block;
+  }
+}

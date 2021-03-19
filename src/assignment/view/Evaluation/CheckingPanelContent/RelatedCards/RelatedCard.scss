@@ -1,0 +1,146 @@
+@import "style";
+
+$image-height: 58px;
+$image-width: 90px;
+
+.relatedCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 60px;
+  min-height: 60px;
+  margin-bottom: 10px;
+  padding: 0 25px 0 0;
+  border: 1px solid $color-dark-gray;
+  border-radius: 5px;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.13);
+  cursor: pointer;
+  min-width: 0;
+
+  div {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .relatedCard__featuredImage {
+    height: $image-height;
+    min-height: $image-height;
+    width: $image-width;
+    object-fit: cover;
+    border-radius: 5px 0 0 5px;
+  }
+
+  .relatedCard__title {
+    @include text-shrink;
+    min-width: 0;
+    margin-left: 30px;
+  }
+
+  .isChosenTitle {
+    color: $color-green;
+  }
+
+  .relatedCard__subject {
+    margin-right: 10px;
+    padding: 7px 18px 8px 21px;
+    border-radius: 17px;
+    border: 1px solid $color-dark-gray;
+    background: $color-light-gray;
+    font-size: 15px;
+    font-weight: 300;
+
+    &:last-child {
+      margin-right: 20px;
+    }
+  }
+
+  .relatedCard_questionCounter {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+
+    span {
+      color: $color-purple;
+      font-size: 15px;
+    }
+  }
+
+  .relatedCard__level {
+    font-size: 13px;
+    img {
+      margin-right: 10px;
+    }
+  }
+}
+
+.withoutCursor {
+  cursor: default;
+}
+
+.isChosen {
+  border: 1px solid $color-green;
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .relatedCard {
+    position: relative;
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    padding: 15px;
+
+    .relatedCard__blockMain {
+      box-sizing: content-box;
+      position: relative;
+      padding-left: $image-width + 10px;
+      min-height: $image-height;
+      align-items: flex-start;
+      flex-direction: column;
+      padding-bottom: 15px;
+      border-bottom: 1px solid $color-dark-gray;
+    }
+
+    .relatedCard_questionCounter {
+      margin-bottom: 10px;
+    }
+
+    .relatedCard__blockSecondary {
+      flex-direction: column;
+      padding-top: 15px;
+      align-items: flex-start;
+    }
+
+    .relatedCard__featuredImage {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: $image-width;
+      height: $image-height;
+    }
+
+    .relatedCard__title {
+      @include text-shrink-multiline(3);
+      margin: 0;
+    }
+
+    .relatedCard__subjects {
+      align-self: stretch;
+    }
+
+    .relatedCard__subject {
+
+      &:last-child {
+
+      }
+    }
+
+    .relatedCard__level {
+
+      img {
+
+      }
+    }
+  }
+}

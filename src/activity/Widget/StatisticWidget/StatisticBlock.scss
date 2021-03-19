@@ -1,0 +1,79 @@
+@import "../../../style";
+
+.StatisticBlock {
+
+}
+
+.StatisticBlock__info {
+  display: flex;
+  align-items: center;
+  font-size: 60px;
+  font-weight: 500;
+}
+
+.StatisticBlock__image {
+  margin-right: 17.38px;
+}
+
+.StatisticBlock__title {
+  @include text-shrink;
+  margin-bottom: 26px;
+  font-size: 24px;
+  font-weight: 300;
+}
+
+.StatisticBlock__button {
+  @include text-shrink;
+  font-size: 17px;
+  font-weight: 500;
+  padding: 9px 23px;
+  border-radius: 20px;
+  background-color: $color-text-primary;
+  color: $color-light-gray;
+}
+
+@media screen and (max-width: $screen-dimension-desktop-1366) {
+  .StatisticBlock {
+    @include flex-center;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .StatisticBlock__title {
+    flex: 1;
+    margin-left: 47px;
+    margin-bottom: 0;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-desktop-l) {
+  .StatisticBlock__image {
+    width: 40px;
+    height: 40px;
+  }
+
+  .StatisticBlock__value {
+    font-size: 48px;
+  }
+
+  .StatisticBlock__title {
+    font-size: 16px;
+  }
+
+  .StatisticBlock__button {
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-mobile) {
+  .StatisticBlock {
+    flex-direction: column;
+  }
+
+  .StatisticBlock__title {
+    margin-left: 0;
+    margin-bottom: 14px;
+  }
+}

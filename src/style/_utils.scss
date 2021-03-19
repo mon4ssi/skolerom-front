@@ -1,0 +1,78 @@
+@mixin circle($diameter) {
+  width: $diameter !important;
+  height: $diameter;
+  border-radius: 50%;
+}
+
+@mixin text-shrink {
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin text-shrink-multiline($lines) {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
+  overflow-y: hidden;
+}
+
+@mixin absolute-center-y($top: 50%) {
+  position: absolute;
+  top: $top;
+  transform: translateY(-50%);
+}
+
+@mixin absolute-center-x($left: 50%) {
+  position: absolute;
+  left: $left;
+  transform: translateX(-50%);
+}
+
+@mixin absolute-attach($attachTo, $value: 0) {
+  position: absolute;
+  top: $value;
+  left: $value;
+  right: $value;
+  bottom: $value;
+
+  @if($attachTo == top) {
+    bottom: auto;
+  }
+  @if($attachTo == bottom) {
+    top: auto;
+  }
+  @if($attachTo == left) {
+    right: auto;
+  }
+  @if($attachTo == right) {
+    left: 0;
+  }
+}
+
+@mixin flex-center() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin animate-many($properties...) {
+  $transitions: ();
+  @each $property in $properties {
+    $transitions: append($transitions, $property 0.15s ease-in-out);
+  }
+
+  transition: join($transitions, (), $separator: comma);
+}
+
+@mixin animate($property, $timing) {
+  transition: $property $timing ease-in-out;
+}
+
+@mixin reset-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}

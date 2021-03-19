@@ -1,0 +1,150 @@
+@import "style";
+
+.studentsList {
+  margin: 0 20px;
+  border: 1px solid #939FA7;
+  border-radius: 5px;
+
+  .includeExclude {
+    display: inline-flex;
+    justify-content: flex-end;
+  }
+
+  .listHeader {
+    padding: 10px 20px;
+    font-size: 13px;
+    color: #939FA7;
+    border: 1px solid #939FA7;
+    border-bottom: none;
+    border-top: none;
+
+    div {
+      color: #596A75;
+    }
+
+    .level {
+      width: 37px;
+    }
+
+    .name {
+      margin-left: 20px;
+    }
+  }
+
+  .studentsListContainer {
+    background-color: #E7ECEF;
+    padding: 0 20px 20px 20px;
+    // height: 220px;
+    // overflow: auto;
+    border-radius: 0 0 5px 5px;
+    border: 1px solid #939FA7;
+
+    .student {
+      z-index: 100;
+      padding: 20px 0 0 0;
+      align-items: center;
+      justify-content: space-between;
+
+      .level {
+        width: 37px;
+
+        img {
+          margin-right: 7px;
+        }
+
+        &.disabled {
+          text-decoration: line-through;
+          color: #939FA7;
+        }
+      }
+
+      .name {
+        margin-left: 20px;
+
+        span {
+          text-decoration: line-through;
+          color: #596A75;
+        }
+      }
+
+      div {
+        color: #0B2541;
+      }
+
+      img {
+        width: 20px;
+        height: 20px;
+      }
+
+
+      .deadline {
+        cursor: pointer;
+        position: relative;
+        font-size: 14px;
+
+        img {
+          margin-left: 10px;
+        }
+
+        .Calendar {
+          right: 0;
+        }
+
+        &.endDateFromOutside {
+          color: #939FA7;
+          font-weight: 500;
+          font-size: 14px;
+          align-items: center;
+        }
+
+        &.disabled {
+          cursor: default;
+        }
+      }
+
+      .includeExclude {
+        cursor: pointer;
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .whiteBackground {
+    background: white;
+  }
+}
+
+.myClassesBorder {
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+
+  .student {
+    &:last-child {
+      border-bottom: none;
+      border-radius: 0 0 5px 5px;
+    }
+  }
+}
+
+@media screen and (max-width: $screen-dimension-desktop-l) {
+  .studentsList {
+    .studentsListContainer {
+      .student {
+
+        .level {
+          font-size: 15px;
+        }
+
+        .name {
+          font-size: 12px;
+        }
+
+        .deadline {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+

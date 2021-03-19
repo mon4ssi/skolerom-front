@@ -1,0 +1,89 @@
+.MyClasses {
+  max-height: calc(100% - 245px);
+
+  .classesContainer {
+    overflow: auto;
+
+    .myClassContainer {
+      margin: 0 20px 16px 18px;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+
+
+      .myClassInfo {
+        background-color: #ffffff;
+        border: 1px solid #939FA7;
+        border-radius: 7px;
+        padding: 0 20px;
+
+        .title {
+          padding: 20px 0;
+        }
+
+        .studentsNumber {
+          text-align: right;
+          padding: 20px 0;
+          color: #E2017B;
+        }
+
+        .deadline {
+          position: relative;
+          display: flex;
+          justify-content: flex-end;
+          margin-left: 20px;
+          padding: 20px 0;
+          cursor: pointer;
+          font-weight: 500;
+
+          img {
+            margin-left: 10px;
+          }
+
+          .Calendar {
+            right: 0;
+            top: 40px;
+          }
+
+          &.endDateFromOutside {
+            color: #939FA7;
+            font-size: 15px;
+          }
+
+          &.disabled {
+            cursor: default;
+          }
+        }
+
+        .includeExclude {
+          cursor: pointer;
+          justify-content: flex-end;
+          padding: 20px 0;
+          margin-left: 20px;
+          color: #939FA7;
+
+          img {
+            width: 20px;
+            height: 20px;
+          }
+        }
+
+        .check {
+          cursor: pointer;
+          justify-content: flex-end;
+          margin-left: 20px;
+          padding: 10px 0;
+
+          img {
+            width: 30px;
+          }
+        }
+
+      }
+    }
+
+  }
+}
+

@@ -1,0 +1,117 @@
+@import "style";
+
+.MyListPagination {
+  margin-top: 10px;
+  min-height: 60px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 4px 0 #d3d9de;
+  padding: 0 20px;
+  border: 1px solid #D3D9DE;
+
+  .controls {
+    background: #E7ECEF;
+    border-radius: 5px;
+    margin-right: 10px;
+    height: 35px;
+    justify-content: center;
+    padding: 0 10px;
+    cursor: pointer;
+    border: 1px solid #939FA7;
+    font-size: 15px;
+    font-weight: 300;
+    min-width: 0;
+    flex-shrink: 10;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    a {
+      @include text-shrink;
+    }
+
+    &:hover {
+      background: #d3d9de;
+    }
+
+    &.disabled {
+      color: #939FA7;
+      cursor: default;
+      border: 1px solid #E7ECEF;
+    }
+  }
+
+  .hide {
+    display: none;
+  }
+
+  .linkPageWrapper {
+    width: 33px;
+    height: 33px;
+    margin-right: 10px;
+    background: #E7ECEF;
+    border: 1px solid #939FA7;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 300;
+
+    &.activePage {
+      background: #0B2541;
+      color: white;
+    }
+
+    &:hover {
+      background: #d3d9de;
+    }
+  }
+
+  .break {
+    background: #E7ECEF;
+    border: 1px solid #D3D9DE;
+    color: #939FA7;
+  }
+
+  .linkPage {
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .MyListPagination {
+    margin-bottom: 20px;
+
+    .controls {
+      width: 33px;
+      height: 33px;
+      & a {
+        visibility: hidden;
+        position: relative;
+
+        &::after {
+          @include flex-center;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          visibility: visible;
+          position: absolute;
+          content: "<";
+          font-weight: 600;
+        }
+      }
+    }
+
+    .control-next {
+      & a {
+        &::after {
+          content: ">";
+        }
+      }
+    }
+  }
+}

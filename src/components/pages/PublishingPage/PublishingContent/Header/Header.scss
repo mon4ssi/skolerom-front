@@ -1,0 +1,78 @@
+.Header {
+  display: flex;
+  flex-direction: column;
+
+  .withPicture {
+    min-height: 244px;
+    display: flex;
+    width: 100%;
+    padding: 20px;
+    background: #0B2541;
+    // background: url('https://scx1.b-cdn.net/csz/news/800/2019/4-space.jpg');
+    // background-size: cover;
+
+    .headerBackground {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .teachingPathTitle {
+      font-size: 36px;
+      font-weight: 500;
+      color: #ffffff;
+      text-align: center;
+      word-break: break-all;
+    }
+
+    .teacher {
+      margin-top: 20px;
+      z-index: 2;
+
+      img {
+        width: 48px;
+        border-radius: 24px;
+        border: 1px solid #ffffff;
+      }
+
+      .teacherInfo {
+        margin-left: 17px;
+        font-size: 17px;
+
+        div {
+          color: #ffffff;
+
+          span {
+            color: #ffffff;
+          }
+        }
+      }
+    }
+  }
+
+  .teachingPathInfo {
+    min-height: 67px;
+    display: flex;
+    border-bottom: 1px solid #d3d9de;
+
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 500;
+      margin-left: 32px;
+
+      img {
+        margin-right: 7px;
+        width: 19px;
+        height: 19px;
+      }
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+}

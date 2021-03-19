@@ -1,0 +1,68 @@
+.MoreOptions {
+  cursor: pointer;
+  position: relative;
+
+  .moreIcon {
+    margin-left: 10px;
+  }
+
+  .tooltip .left {
+    top: -10px;
+    right: 35px;
+    position: absolute;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #596A75;
+    box-shadow: 0 2px 4px 0 #d3d9de;
+    padding: 20px;
+    cursor: default;
+
+    ul {
+      width: max-content;
+
+      li {
+        margin-bottom: 10px;
+        justify-content: flex-end;
+        cursor: pointer;
+        align-items: center;
+
+        span {
+          font-size: 15px;
+          font-weight: 500;
+        }
+
+        img {
+          margin-left: 13px;
+          width: 12px;
+          height: 14px;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    i {
+      position: absolute;
+      top: 20px;
+      left: 100%;
+      margin-top: -12px;
+      width: 12px;
+      height: 24px;
+      overflow: hidden;
+
+      &::after {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        left: 0;
+        top: 50%;
+        transform: translate(-50%, -50%) rotate(-45deg);
+        background-color: #fff;
+        border: 1px solid #596A75;
+      }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+.NewAssignmentPreview {
+  position: relative;
+  border-left: 1px solid #d3d9de;
+  height: 100%;
+
+  .questionPreviewContainer {
+    height: calc(100% - 60px);
+    width: 100%;
+
+    .previewHeadPhrase {
+      height: 5%;
+      width: 100%;
+      margin-top: 20px;
+      color: #e2017b;
+      text-transform: uppercase;
+      padding: 0 20px;
+    }
+
+    .previewQuestion {
+      display: flex;
+      height: calc(100% - 60px);
+      overflow-y: auto;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  }
+
+  .previewQuestion {
+    width: 100%;
+
+    .imagesWrapper {
+      margin-top: 20px;
+    }
+  }
+
+  .nothingPhrase {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 22px;
+  }
+
+  .previewPhrase {
+    width: 350px;
+    text-align: center;
+    font-weight: 300;
+  }
+
+
+  .paginationPanel {
+    display: flex;
+    width: 100%;
+    height: 64px;
+    align-items: center;
+    padding: 0 20px;
+    border-top: 1px solid #D3D9DE;
+    z-index: 2;
+    background: white;
+  }
+
+}

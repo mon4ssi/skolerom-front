@@ -1,0 +1,34 @@
+@import "style";
+
+.addItemModalBackground {
+  position: fixed;
+  overflow: auto;
+  justify-content: flex-end;
+  width: 100vw;
+  height: calc(100% - 80px);
+  top: 80px;
+  background: rgba(11, 37, 65, 0.2171);
+  z-index: 100;
+
+  .addItemModal {
+    width: 50%;
+    height: 100%;
+    background: #ffffff;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-desktop) {
+  .addItemModalBackground {
+    .addItemModal {
+      width: 70%;
+    }
+  }
+}
+
+@media screen and (device-width: 810px) and (device-height: 1080px) {
+  .addItemModalBackground {
+    .addItemModal {
+      width: 70%;
+    }
+  }
+}

@@ -1,0 +1,91 @@
+.Versions {
+  padding: 20px;
+  border-left: 1px solid #d3d9de;
+  overflow: auto;
+  height: 100%;
+
+  .versionsHeader {
+
+    p {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 500;
+    }
+
+    .select {
+      width: 200px;
+      height: 30px;
+      font-weight: 300;
+      border: 1px solid #939FA7;
+      border-radius: 5px;
+      background: url(../../../../../assets/images/arrow-down.svg) no-repeat right 10px center, #E7ECEF;
+    }
+  }
+
+  .versionsList {
+
+    .version {
+      margin-top: 20px;
+      padding: 20px;
+      border: 1px solid #D3D9DE;
+      border-radius: 5px;
+
+      .versionTitle {
+        margin: 0;
+        font-weight: 15px;
+      }
+
+      .versionDate {
+        margin: 0;
+        font-style: italic;
+        font-size: 13px;
+      }
+
+      .versionInfo {
+        margin-top: 20px;
+
+        .clock {
+          width: 18px;
+          height: 18px;
+        }
+
+        .question {
+          width: 19px;
+          height: 19px;
+        }
+
+        .level {
+          height: 20px;
+          width: 20px;
+        }
+
+        .like {
+          width: 20px;
+          height: 19px;
+        }
+
+        div {
+          margin-right: 10px;
+          display: flex;
+          align-items: center;
+          font-size: 15px;
+
+          &:last-child {
+            margin-right: 0;
+          }
+
+          img {
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.Versions p {
+  color: #939FA7;
+}
+.Versions span {
+  color: #939FA7;
+}

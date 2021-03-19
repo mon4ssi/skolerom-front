@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.svg" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Skolerom</title>
+    <!--Needed for hiding browser-message before styles are loaded-->
+    <style>
+      .IEMessage_container {
+        display: none;
+      }
+    </style>
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-T822LPZ');
+    </script>
+    <!-- End Google Tag Manager -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="notifications" class="App__notifications ignore-react-onclickoutside"></div>
+
+    <!-- For reload after dublicate tab. (Start of section) -->
+    <input id="lockInput" value="" style="position: absolute; height: 0; width: 0; left: 0; top: 0; z-index: -1;" />
+    <script>
+      window.addEventListener("load", function() {
+        if (document.getElementById("lockInput").value === "") {
+          document.getElementById("lockInput").value = "already loaded";
+        } else {
+          window.location.reload();
+        }
+        window.addEventListener("beforeunload", function() {
+          document.getElementById("lockInput").value = "";
+        });
+      });
+    </script>
+    <!-- (End of ection) -->
+    <div id="browser-message" class="IEMessage_container">
+      <div class="IEMessage_window">
+        <div class="IEMessage_header">
+          <img src="../src/assets/images/warning.svg" alt="warning" />
+            {{ browserMessage.title }}
+        </div>
+
+        <div class="IEMessage_body">
+          {{#each browserMessage.messages}}
+            <p class="IEMessage_body__part1">
+              {{this}}
+            </p>
+          {{/each}}
+
+          <div class="IEMessage_browsers">
+            <a class="IEMessage_browser" href="https://www.opera.com/">
+              <img src="../src/assets/images/opera.svg" alt="browser" />
+              <div class="IEMessage_browser__name">Opera</div>
+              <div class="IEMessage_browser__founder">Opera Software</div>
+            </a>
+            <a class="IEMessage_browser" href="https://www.mozilla.org/">
+              <img src="../src/assets/images/firefox.svg" alt="browser" />
+              <div class="IEMessage_browser__name">Firefox</div>
+              <div class="IEMessage_browser__founder">Mozilla Foundation</div>
+            </a>
+            <a class="IEMessage_browser" href="https://www.microsoft.com/edge">
+              <img src="../src/assets/images/edge.svg" alt="browser" />
+              <div class="IEMessage_browser__name">Edge</div>
+              <div class="IEMessage_browser__founder">Microsoft</div>
+            </a>
+            <a class="IEMessage_browser" href="https://www.google.com/chrome/">
+              <img src="../src/assets/images/google-chrome.svg" alt="browser" />
+              <div class="IEMessage_browser__name">Google Chrome</div>
+              <div class="IEMessage_browser__founder">Google</div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

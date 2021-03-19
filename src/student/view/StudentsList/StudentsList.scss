@@ -1,0 +1,53 @@
+@import "../../../style";
+
+.StudentsList {
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.StudentsList__list {
+  margin: 10px 0 0 0;
+  height: 100%;
+  overflow: auto;
+}
+
+.StudentsList__listItem {
+  margin: 10px 0;
+}
+
+.StudentsList__overview {
+  display: flex;
+  position: absolute;
+  overflow: auto;
+  left: $sidebar-width;
+  justify-content: flex-end;
+  width: calc(100vw - #{$sidebar-width});
+  height: calc(100% - #{$header-height});
+  top: $header-height;
+  background: rgba(11, 37, 65, 0.2171);
+  z-index: 1;
+}
+
+.StudentsList__overviewClickable {
+  width: 100%;
+  height: 100%;
+}
+
+.StudentsList__slideOutPanel {
+  flex-shrink: 0;
+}
+
+@media screen and (max-width: $screen-dimension-desktop) {
+  .StudentsList__overview {
+    left: 0;
+    width: 100vw;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .StudentsList__list {
+    overflow: scroll;
+  }
+}

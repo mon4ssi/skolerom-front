@@ -1,0 +1,64 @@
+.QuestionsOverview {
+  width: 100%;
+  padding: 20px;
+  overflow: auto;
+  height: 100%;
+
+  .questions {
+    margin-bottom: 40px;
+
+    .question {
+      margin-bottom: 10px;
+
+      p {
+        width: calc(100% - 25px);
+        font-size: 16px;
+        font-weight: 300;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden !important;
+        text-overflow: ellipsis;
+      }
+
+      &:last-child {
+        font-weight: 500;
+      }
+
+      .questionNumber {
+        font-weight: 500;
+        margin-right: 10px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #000;
+        font-size: 10px;
+      }
+    }
+  }
+
+  .title {
+    margin: 0 0 10px 0;
+    font-weight: 500;
+    font-size: 17px;
+  }
+
+  .gradesSubjectsContainer {
+    margin-bottom: 40px;
+
+    .gradesSubjects {
+      width: 100%;
+      flex-wrap: wrap;
+
+      .gradeSubject {
+        display: inline-flex;
+        padding: 7px 16px 7px 17px;
+        font-size: 13px;
+        margin: 0 10px 10px 0;
+        background: #0B2541;
+        border: 1px solid #071E37;
+        border-radius: 25px;
+        color: #ffffff;
+      }
+    }
+  }
+}

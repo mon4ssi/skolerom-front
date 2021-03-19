@@ -1,0 +1,176 @@
+@import "../../../style";
+
+.CurrentAssignmentPage {
+  position: absolute; // FIXME this needed because of src/components/App/App.tsx
+  top: 0; // add logic for conditional rendering of Sidebars and Header, remove Header and
+  width: 100vw; // Sidebar from children, then remove this code
+  height: 100vh;
+  z-index: 20;
+  background: $color-white;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.CurrentAssignmentPage__content {
+  position: relative;
+  height: calc(100vh - #{$header-height}); // FIXME see issue above
+}
+
+.CurrentAssignmentPage__container {
+  display: flex;
+  flex-direction: column;
+  //height: calc(100vh - #{$header-height});
+  height: 100%;
+  overflow-y: auto;
+}
+
+.CurrentAssignmentPage__main {
+  @include flex-center;
+  flex: 10 0;
+  padding-top: 50px;
+  padding-bottom: 140px;
+  width: 100%;
+  position: relative;
+  min-height: fit-content;
+  height: auto;
+}
+
+.CurrentAssignmentPage__breadcrumbs {
+  flex: 1 0;
+  padding-left: $assignment-navigation-width;
+  position: fixed;
+  bottom: 0;
+  background-color: $color-white;
+  width: 100%;
+}
+
+.CurrentAssignmentPage__navigation {
+  display: none;
+  height: 50px;
+  border-bottom: 1px solid $color-gray;
+}
+
+.CurrentAssignmentPage__button {
+  background: transparent;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  padding: 10px 0 10px 2px;
+  border-right: 1px solid $color-gray;
+  cursor: pointer;
+  background: $color-white;
+}
+
+.CurrentAssignmentPage__button_disabled {
+  color: rgba($color-text-primary, 0.5);
+}
+
+.CurrentAssignmentPage__button_right {
+  justify-content: flex-end;
+  padding-left: 0;
+  padding-right: 2px;
+}
+
+.CurrentAssignmentPage__buttonImage {
+  @include circle(30px);
+  margin-left: 14px;
+  margin-right: 14px;
+}
+
+.CurrentAssignmentPage__navBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  background: $color-light-gray;
+  width: $assignment-navigation-width;
+
+  z-index: 1;
+}
+
+.CurrentAssignmentPage__overlay {
+  background: rgba($color-black, 0.4);
+  position: absolute;
+  top: $header-height;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+
+  display: none;
+}
+
+.CurrentAssignmentPage__notification {
+  display: inline-block;
+  position: fixed;
+  font-size: 17px;
+  right: 20px;
+  top: 33px;
+  z-index: 4;
+
+  div {
+    color: $color-blue-gray;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-desktop-l) {
+  .CurrentAssignmentPage__main {
+    padding-left: $assignment-navigation-width;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .CurrentAssignmentPage__main {
+    padding-top: 0;
+    padding-left: 0;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+  }
+
+  .CurrentAssignmentPage__navigation {
+    top: 0;
+    position: sticky;
+    display: flex;
+    z-index: 1;
+  }
+
+  .CurrentAssignmentPage__navBar {
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: transform 200ms ease-in-out, opacity 200ms ease-in-out;
+  }
+
+  .CurrentAssignmentPage__navBar_visible {
+    transform: translateX(0);
+    opacity: 1;
+    z-index: 10;
+  }
+
+  .CurrentAssignmentPage__overlay {
+    display: block;
+    top: $header-height-tablet;
+  }
+
+  .CurrentAssignmentPage__content {
+    height: calc(100vh - #{$header-height-tablet});
+  }
+
+  .CurrentAssignmentPage__notification {
+    display: none;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-mobile-425) {
+  .CurrentAssignmentPage__main {
+    padding-top: 0;
+  }
+}
+

@@ -1,0 +1,60 @@
+@import "../../../style/index";
+
+.ImageViewer {
+  position: fixed;
+  top: $header-height;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.ImageViewer__overlay {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: rgba($color-white, 0.95);
+}
+
+.ImageViewer__description {
+  @include absolute-center-x;
+  bottom: 19px;
+  max-width: calc(100% - 38px);
+  background: $color-white;
+  border-radius: 8px;
+  padding: 13px 25px 11px 23px;
+}
+
+.ImageViewer__image {
+  position: absolute;
+  width: calc(100% - 80px);
+  height: calc(100% - 80px);
+  top: 40px;
+  left: 40px;
+  right: 40px;
+  bottom: 40px;
+  object-fit: contain;
+  cursor: zoom-in;
+}
+
+.ImageViewer__image_zoomed {
+  transform: scale(2);
+  cursor: zoom-out;
+}
+
+.ImageViewer__button {
+  position: absolute;
+  right: 40px;
+  top: 40px;
+  background: $color-purple;
+  color: $color-white;
+  border-radius: 20px;
+  padding: 9px 47px 9px 18px;
+  z-index: 1;
+}
+
+.ImageViewer__buttonImage {
+  @include absolute-center-y;
+  right: 11px;
+  width: 24.38px;
+  height: 24.38px;
+}

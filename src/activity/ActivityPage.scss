@@ -1,0 +1,115 @@
+@import "style";
+
+$second-column-with: 280px;
+$second-column-with-desktop-l: 252px;
+$second-column-with-desktop: 212px;
+
+.ActivityPage {
+
+}
+
+.ActivityPage__greeting {
+  margin-top: -1px;
+  margin-left: -2px;
+  margin-bottom: 20px;
+  font-size: 26px;
+}
+
+.ActivityPage__content {
+  display: flex;
+  margin-right: -2px;
+  margin-left: -2px;
+}
+
+.ActivityPage__main {
+  flex: 1 1 auto;
+  padding-right: 19px;
+  z-index: 1;
+}
+
+.ActivityPage__targetRoleTitle {
+  display: flex;
+  margin: 10px 0;
+}
+
+.ActivityPage__aside {
+  width: $second-column-with;
+  flex: 0 0 auto;
+}
+
+.marginTop {
+  margin-top: 42px;
+}
+
+.ActivityPage__widget {
+  border-radius: 8px;
+  background-color: $color-white;
+  border: 1px solid $color-dark-gray;
+  margin-bottom: 20px;
+}
+
+@media screen and (max-width: $screen-dimension-desktop-l) {
+  .ActivityPage__greeting {
+    display: none;
+  }
+
+  .ActivityPage__aside {
+    width: $second-column-with-desktop-l;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-desktop) {
+  .ActivityPage__aside {
+    width: $second-column-with-desktop;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-tablet-xl) {
+  .ActivityPage__content {
+    flex-direction: column;
+  }
+
+  .ActivityPage__main {
+    padding-right: 0;
+  }
+
+  .ActivityPage__aside {
+    width: auto;
+  }
+
+  .marginTop {
+    margin-top: 0;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+  .ActivityPage {
+    padding-top: 20px;
+  }
+
+  .marginTop {
+    margin-top: 0;
+  }
+}
+
+@media screen and (max-width: $screen-dimension-mobile) {
+  .ActivityPage {
+    padding-top: 0;
+  }
+
+  .marginTop {
+    margin-top: 0;
+  }
+
+  .ActivityPage__widgetSlider {
+    margin-left: -18px;
+    margin-right: -16px;
+    border-radius: 0;
+    border: 0;
+    overflow: hidden;
+  }
+
+  .ActivityPage__content {
+    margin-right: -3px;
+  }
+}

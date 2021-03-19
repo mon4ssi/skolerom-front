@@ -1,0 +1,38 @@
+.AddingButtons {
+  cursor: pointer;
+  width: 248px;
+  height: 186px;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.09487);
+  border-radius: 5px;
+
+  .addingButton {
+    display: flex;
+    height: 62px;
+    align-items: center;
+    padding: 10px 20px;
+
+    img {
+      margin-right: 20px;
+      width: 38px;
+      height: 38px;
+    }
+
+    &:first-child {
+      border-radius: 5px 5px 0 0;
+    }
+
+    &:last-child {
+      border-radius: 0 0 5px 5px;
+    }
+
+    &:hover {
+      background: #939FA7;
+      color: #ffffff;
+
+      img {
+        filter: brightness(0) invert(1);
+      }
+    }
+  }
+}

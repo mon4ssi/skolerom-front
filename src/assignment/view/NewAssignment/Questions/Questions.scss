@@ -1,0 +1,285 @@
+@import "style";
+
+@mixin actionButtons {
+  .blockActions {
+    display: none;
+    align-self: flex-start;
+
+    img {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+  }
+  .activeBlock {
+    display: flex;
+  }
+
+  &:hover {
+    .blockActions {
+      display: flex;
+    }
+  }
+
+  .hovered {
+    display: flex;
+  }
+}
+
+// HACK dirty way to change button, better find other way
+.content-block-dragged {
+  position: relative;
+  border: 1px dashed #D3D9DE;
+  border-radius: 4px;
+  background-color: $color-white;
+
+  &::after {
+    position: absolute;
+    top: 21px;
+    right: 48px;
+    content: '';
+    display: block;
+    background: url('../../../../assets/images/drag-active.svg');
+    background-size: contain;
+    width: 25px;
+    height: 25px;
+  }
+}
+
+.NewAssignment {
+  .AddQuestion {
+    background: #E7ECEF;
+    padding: 20px;
+
+    .addQuestionPhase {
+      margin-bottom: 20px;
+    }
+
+    .questionTypeBox {
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      border: 1px solid #d3d9de;
+      height: 100px;
+      width: 49%;
+      cursor: pointer;
+
+      &:first-child {
+        margin-bottom: 20px;
+      }
+
+      img {
+        margin-right: 20px;
+      }
+
+      .questionType {
+        margin-bottom: 5px;
+      }
+    }
+  }
+
+  .questionTitle {
+    padding: 20px 20px  0;
+
+    & * {
+      color: #596A75;
+    }
+
+    .questionIcon {
+      margin-right: 10px;
+      padding: 0;
+    }
+
+    .questionTitleText {
+      padding: 0;
+      word-break: break-all;
+    }
+
+    .questionTitleText-hasError {
+      color: #E2017B;
+    }
+  }
+
+  .newTextQuestionInput {
+    border: none;
+    resize: none;
+    outline: none;
+    padding: 0 20px;
+    font-size: 22px;
+    margin-top: 20px;
+    margin-bottom: 0;
+    background-color: #E7ECEF;
+
+    &::placeholder {
+      color: #939FA7;
+    }
+  }
+
+  .questionControlPanel {
+    padding: 0 20px;
+    margin-top: 20px;
+  }
+
+  .textExtra {
+    align-items: flex-start;
+    margin-bottom: 20px;
+
+    textarea {
+      resize: none;
+      border: none;
+      width: 100%;
+      margin-left: 20px;
+    }
+  }
+}
+
+.NewTextQuestion {
+  cursor: move;
+  background-color: #E7ECEF;
+  padding: 20px 0 40px;
+  border-bottom: 1px solid #d3d9de;
+
+  .newTextQuestionInput {
+    border: none;
+    font-size: 22px;
+    margin-top: 20px;
+    margin-bottom: 0;
+    padding: 0 20px;
+
+    &::placeholder {
+      color: #939FA7;
+    }
+  }
+
+  .questionControlPanel {
+    padding: 0 20px;
+    margin-top: 20px;
+  }
+
+  .attached-files {
+    margin-top: 0;
+    cursor: pointer;
+  }
+}
+
+.hasError {
+  border: 1px solid #e2017b !important;
+  border-radius: 5px;
+}
+
+.NewMultipleChoiceQuestion {
+  cursor: move;
+  background: #E7ECEF;
+  border-bottom: 1px solid #d3d9de;
+
+  .newTextQuestionInput {
+    border: none;
+    font-size: 22px;
+    margin-top: 20px;
+    margin-bottom: 0;
+
+    &::placeholder {
+      color: #939FA7;
+    }
+  }
+
+  .options {
+    margin-top: 20px;
+    padding: 0 20px;
+  }
+
+  .functionalButtons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+
+    .newAnswerButtons {
+      width: max-content;
+    }
+  }
+}
+
+.content-block-dragged.attached-files {
+  &::after {
+    top: 10px;
+  }
+}
+
+.attached-files {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 80px;
+  padding: 10px 20px 10px 20px;
+  margin-top: 20px;
+  cursor: pointer;
+
+  .imageContent {
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(100% - 60px);
+    min-height: 60px;
+    align-items: center;
+
+    .questionImageThumbnail {
+      margin: 0px 10px 10px 0;
+    }
+
+    .placeholderImage {
+      color: #6c6d7e;
+      font-weight: 300;
+    }
+
+    .videoContent {
+      display: flex;
+      position: relative;
+      align-items: center;
+      justify-content: center;
+
+      .playButton {
+        height: 19px;
+        width: 19px;
+        position: absolute;
+      }
+
+      video {
+        width: 80px;
+        margin: 2px;
+        height: 60px;
+        object-fit: cover;
+      }
+    }
+  }
+
+  img {
+    padding: 0px;
+  }
+
+  @include actionButtons
+}
+
+.textDecorator {
+  cursor: default;
+  display: flex;
+  justify-content: space-between;
+  padding: 19px 20px 1px 20px;
+
+  .textContent {
+    width: calc(100% - 60px);
+    font-weight: 300;
+  }
+
+  .ql-blank::before {
+    font-size: 17px;
+  }
+
+  @include actionButtons
+}
+
+.activeBlock {
+  background: #E7ECEF;
+}

@@ -1,0 +1,239 @@
+@import "style";
+
+.InfoCard {
+  position: relative;
+  width: 282px;
+  height: 344px;
+  min-height: 344px;
+  box-sizing: content-box;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.100661);
+  border-radius: 5px;
+
+  .actionButtons {
+    position: absolute;
+    top: -13px;
+    left: 123px; // TODO: 110px after adding DnD
+    z-index: 3;
+
+    img {
+      width: 26px;
+      height: 26px;
+      cursor: pointer;
+
+      &:first-child {
+        margin-right: 5px;
+        // TODO: Remove after adding DnD
+        // opacity: 0;
+        // cursor: default;
+      }
+
+      &:last-child {
+        margin-left: 5px;
+      }
+    }
+  }
+
+  .cardImage {
+    width: 100%;
+    min-height: 50%;
+    background: #939FA7;
+    border-radius: 5px 5px 0px 0px;
+    object-fit: cover;
+  }
+
+  .cardInfo {
+    min-height: 50%;
+    height: auto;
+    position: relative;
+    padding: 15px;
+
+    .cardTitle {
+      flex: 1 1;
+      min-width: 0;
+
+      .noTitle {
+        color: #939FA7;
+      }
+
+      p {
+        @include text-shrink-multiline(2);
+        margin: 0;
+        font-size: 17px;
+        font-weight: 500;
+      }
+
+      .levelIcon{
+        margin: 0;
+      }
+    }
+
+    .withTooltip {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      position: relative;
+      align-items: center;
+
+      .defaultIcons {
+        margin: 0;
+        align-items: center;
+      }
+
+      img {
+        height: 23px;
+        width: 23px;
+      }
+
+      .tooltip {
+        z-index: 2;
+        right: -15px;
+        position: absolute;
+        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.129753);
+        margin-top: 20px;
+        top: 16px;
+        width: max-content;
+
+        .left {
+          border-radius: 4px;
+          border: 1px solid #939FA7;
+          padding: 15px;
+          cursor: default;
+          z-index: 2;
+          background: #fff;
+
+          ul {
+            li {
+              cursor: pointer;
+              margin: 7px;
+            }
+
+            .disabled {
+              color: #939FA7;
+              cursor: default;
+            }
+          }
+        }
+
+        i {
+          position: absolute;
+          top: -6px;
+          right: 20px;
+          margin-top: -12px;
+          width: 12px;
+          height: 24px;
+          // overflow: hidden;
+          transform: rotate(-90deg);
+
+          &::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            left: 0;
+            top: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            background-color: #fff;
+            border-right: 1px solid #939fa7;
+            border-bottom: 1px solid #939fa7;
+          }
+        }
+      }
+    }
+
+    .withoutTooltip {
+      display: flex;
+      height: fit-content;
+      margin-left: 10px;
+      margin-top: 0;
+    }
+
+    .defaultIcons {
+      height: 23px;
+      justify-content: space-between;
+      align-items: center;
+      margin: 4px 0 0 0;
+
+      img {
+        width: 20px;
+        height: 20px;
+      }
+
+      .tpIcon {
+        width: 23px;
+        height: 23px;
+      }
+
+      .levels {
+        margin-right: 15px;
+        font-size: 15px;
+        align-items: center;
+        width: max-content;
+
+        img {
+          margin: 0 7px 0 0;
+        }
+      }
+    }
+
+    .numberOfQuestions {
+      font-size: 15px;
+      color: #E2017B;
+      font-weight: bold;
+    }
+
+    .cardDescription {
+      @include text-shrink-multiline(2);
+      margin-top: 4px;
+      font-size: 15px;
+      font-weight: 300;
+    }
+
+    .grades {
+      flex-wrap: wrap;
+      margin-top: 4px;
+
+      & > div {
+        max-width: 31%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        padding: 4px;
+        margin: 0 5px;
+        background: #D3D9DE;
+        border-radius: 4px;
+        font-size: 13px;
+        margin-left: 0;
+        font-weight: 300;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $screen-dimension-desktop) {
+  .InfoCard {
+    .cardInfo {
+      .withTooltip {
+        .tooltip {
+          .left {
+            background: $color-text-primary;
+            border-color: $color-text-primary;
+
+            ul {
+              li {
+                color: $color-white;
+              }
+            }
+          }
+
+          i {
+            &::after {
+              background-color: $color-text-primary;
+              border-color: $color-text-primary;
+            }
+          }
+        }
+      }
+    }
+  }
+}
