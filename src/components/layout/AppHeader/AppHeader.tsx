@@ -33,7 +33,7 @@ const ANIMATION_TIMEOUT = 200;
 const headerLinks: Array<HeaderNavigationLink> = [
   {
     name: 'School',
-    url: 'https://skolerom.no/undervisning/'
+    url: `${process.env.REACT_APP_WP_URL}/undervisning/`
   },
   {
     name: 'Library',
@@ -42,49 +42,49 @@ const headerLinks: Array<HeaderNavigationLink> = [
     submenuItems: [
       {
         name: 'Articles',
-        url: 'https://skolerom.no/artikler/'
+        url: `${process.env.REACT_APP_WP_URL}/artikler/`
       },
       {
         name: 'Publications',
-        url: 'https://skolerom.no/temaboker/'
+        url: `${process.env.REACT_APP_WP_URL}/temaboker/`
       },
       {
         name: 'Sound articles',
-        url: 'https://skolerom.no/lydartikler/'
+        url: `${process.env.REACT_APP_WP_URL}/lydartikler/`
       }
     ]
   },
   {
     name: 'About skolerom',
-    url: 'https://skolerom.no/om-skolerom/'
+    url: `${process.env.REACT_APP_WP_URL}/om-skolerom/`
   }
 ];
 const tabletHeaderLinks: Array<HeaderNavigationLink> = [
   {
     name: 'School',
-    url: 'https://skolerom.no/undervisning/'
+    url: `${process.env.REACT_APP_WP_URL}/undervisning/`
   },
   {
     name: 'Articles',
-    url: 'https://skolerom.no/artikler/'
+    url: `${process.env.REACT_APP_WP_URL}/artikler/`
   },
   {
     name: 'Publications',
-    url: 'https://skolerom.no/temaboker/'
+    url: `${process.env.REACT_APP_WP_URL}/temaboker/`
   },
   {
     name: 'Sound articles',
-    url: 'https://skolerom.no/lydartikler/'
+    url: `${process.env.REACT_APP_WP_URL}/lydartikler/`
   },
   {
     name: 'About skolerom',
-    url: 'https://skolerom.no/om-skolerom/'
+    url: `${process.env.REACT_APP_WP_URL}/om-skolerom/`
   }
 ];
 const nynorskHeaderLinks: Array<HeaderNavigationLink> = [
   {
     name: 'School',
-    url: 'https://skolerom.no/nn/undervisning/'
+    url: `${process.env.REACT_APP_WP_URL}/nn/undervisning/`
   }
 ];
 
