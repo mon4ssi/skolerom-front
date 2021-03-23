@@ -23,6 +23,7 @@ interface SliderWidgetState {
   isUpdated: boolean;
   isRunning: boolean;
   isVisibleContent: boolean;
+  isPause: boolean;
 }
 
 const ANIMATION_TIMEOUT = 500;
@@ -36,7 +37,8 @@ export class SliderWidget extends Component<SliderWidgetProps, SliderWidgetState
     isRunning: false,
     popupShown: false,
     iframeURL: '',
-    isVisibleContent: true
+    isVisibleContent: true,
+    isPause: false
   };
 
   private start(startingSlide: number) {
@@ -48,7 +50,9 @@ export class SliderWidget extends Component<SliderWidgetProps, SliderWidgetState
     const timeTilNextSlide = this.props.widget
       ? this.props.widget.slides[startingSlide].timeTilNextSlide
       : SLIDER_WIDGET_TIME_TIL_NEXT_SLIDE;
-    this.startTimer(timeTilNextSlide, startingSlide + 1);
+    if (!this.state.isPause) {
+      this.startTimer(timeTilNextSlide, startingSlide + 1);
+    }
   }
 
   private stop() {
@@ -57,6 +61,25 @@ export class SliderWidget extends Component<SliderWidgetProps, SliderWidgetState
       currentSlide: 0,
       isRunning: false,
     });
+  }
+
+  private pause(currentSlide: number) {
+    if (this.props.widget) {
+      window.clearTimeout(this.timer);
+      if (!this.state.isPause) {
+        this.setState({
+          isPause: true
+        });
+      } else {
+        this.setState({
+          isPause: false
+        });
+        const timeTilNextSlide = this.props.widget
+        ? this.props.widget.slides[currentSlide].timeTilNextSlide
+        : SLIDER_WIDGET_TIME_TIL_NEXT_SLIDE;
+        this.startTimer(timeTilNextSlide, currentSlide + 1);
+      }
+    }
   }
 
   private startTimer(time: number, nextSlide: number) {
@@ -122,6 +145,9 @@ export class SliderWidget extends Component<SliderWidgetProps, SliderWidgetState
               timeout={ANIMATION_TIMEOUT}
             >
               <div className="SliderWidget__content">
+                <div className={`SliderWidget__content__pause ${this.state.isPause && 'active'}`} onClick={() => this.pause(this.state.currentSlide)}>
+                  <i className="SliderWidget__content__pauseicon" />
+                </div>
                 <img className={imageClasses} src={slide.imageURL} alt="slider_image" />
                 <div className="SliderWidget__infoWrapper_inside">
                   {this.renderInfo()}
@@ -183,7 +209,7 @@ export class SliderWidget extends Component<SliderWidgetProps, SliderWidgetState
           SliderWidget__switchButton_active: idx === this.state.currentSlide,
         });
 
-        return (<button key={idx} className={classes} onClick={this.selectSlide.bind(this, idx)}/>);
+        return (<button key={idx} role="button" className={classes} onClick={this.selectSlide.bind(this, idx)}/>);
       });
 
       return (

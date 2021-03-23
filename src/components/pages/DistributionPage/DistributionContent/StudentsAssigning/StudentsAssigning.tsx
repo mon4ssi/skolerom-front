@@ -137,8 +137,10 @@ export class StudentsAssigning extends Component<Props, State> {
               onChange={this.changeSearchValue}
               className="searchClasses"
               placeholder={intl.get('distribution_page.search_placeholder')}
+              aria-labelledby="searchClassesId"
+              aria-required="true"
+              aria-invalid="false"
             />
-
             <img src={searchImg} alt="search" />
           </div>
 

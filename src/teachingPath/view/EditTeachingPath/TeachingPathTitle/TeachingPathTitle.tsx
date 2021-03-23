@@ -69,6 +69,7 @@ export class TeachingPathTitle extends Component<Props> {
         onChange={this.setDescription}
         maxLength={MAX_DESCRIPTION_LENGTH}
         readOnly={readOnly}
+        aria-labelledby="DescriptionInputTextArea"
       />
     );
   }
@@ -81,6 +82,7 @@ export class TeachingPathTitle extends Component<Props> {
       <div className="TeachingPathTitle flexBox justifyCenter">
         <div className="titleWrapper flexBox dirColumn">
           {!readOnly && <span>{intl.get('edit_teaching_path.title.new_entity')}</span>}
+          <label id="titleInputTextArea" className="hidden">{intl.get('edit_teaching_path.title.title_placeholder')}</label>
           <TextAreaAutosize
             autoFocus
             inputRef={this.titleRef}
@@ -91,7 +93,9 @@ export class TeachingPathTitle extends Component<Props> {
             onKeyUp={this.focusDescriptionField}
             maxLength={MAX_TITLE_LENGTH}
             readOnly={readOnly}
+            aria-labelledby="titleInputTextArea"
           />
+          <label id="DescriptionInputTextArea" className="hidden">{intl.get('edit_teaching_path.title.description_placeholder')}</label>
           {this.renderDescription()}
           <div className="horizontalLine" />
         </div>

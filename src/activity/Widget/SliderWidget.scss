@@ -5,50 +5,58 @@
   z-index: 1;
   overflow: hidden;
   border-radius: 8px;
+  &__contentWrapper {
+    width: 100%;
+    // HACK to make sass use built-in css min() function instead of sass defined
+    padding-top: unquote("min(56%, 550px)");
+  }
+  &__infoWrapper_outside {
+    display: none;
+  }
+  &__titleWrapper {
+    @include absolute-attach(top);
+    z-index: 2;
+  }
+  &__content {
+    @include absolute-attach(none);
+    @include flex-center;
+    z-index: 1;
+    &:before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      background: black;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+  }
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: relative;
+    z-index: 0;
+
+  }
+  &__info {
+    position: absolute;
+    bottom: 24px;
+    left: 21px;
+    right: 21px;
+    z-index: 2;
+  }
+  &__title {
+    @include text-shrink-multiline(2);
+    margin-bottom: 5px;
+    color: $color-white;
+    font-size: 1.875rem;
+  }
 }
 
 .SliderWidget_collapsed {
   height: 122px;
-}
-
-.SliderWidget__contentWrapper {
-  width: 100%;
-  // HACK to make sass use built-in css min() function instead of sass defined
-  padding-top: unquote("min(56%, 550px)");
-}
-
-.SliderWidget__infoWrapper_outside {
-  display: none;
-}
-
-.SliderWidget__titleWrapper {
-  @include absolute-attach(top);
-  z-index: 2;
-}
-
-.SliderWidget__content {
-  @include absolute-attach(none);
-  @include flex-center;
-}
-
-.SliderWidget__image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.SliderWidget__info {
-  position: absolute;
-  bottom: 24px;
-  left: 21px;
-  right: 21px;
-}
-
-.SliderWidget__title {
-  @include text-shrink-multiline(2);
-  margin-bottom: 5px !important;
-  color: $color-white;
-  font-size: 30px;
 }
 
 .SliderWidget__title_oneLine {
@@ -109,6 +117,59 @@
 
 .SliderWidget__switchButton_active {
   background-color: $color-white;
+}
+
+.SliderWidget__content__pauseicon {
+  position: absolute;
+  width: 100%;
+  pointer-events: none;
+  height: 100%;
+  &:before {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: 7px;
+    border: solid 2px #0b2541;
+    top: 5px;
+    left: 5px;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    width: 0px;
+    height: 7px;
+    border: solid 2px #0b2541;
+    top: 5px;
+    right: 6px;
+  }
+}
+.SliderWidget__content__pause {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  top: 48px;
+  right: 18px;
+  background: white;
+  z-index: 2;
+  border-radius: 50%;
+  border: solid 2px #0b2541;  
+  &.active {
+    i {
+      &:after {
+        display: none;
+      }
+      &:before {
+        top: 6px;
+        left: 8px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 5px 0 5px 9px;
+        border-color: transparent transparent transparent #0b2541;
+      }
+    }    
+  }
 }
 
 .SliderWidget__content_animated-enter, .SliderWidget__content_animated-exit {

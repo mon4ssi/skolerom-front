@@ -357,3 +357,20 @@ pre {
 .overHidden {
   overflow: hidden;
 }
+
+.hidden {
+  position: absolute;
+  height: 0;
+  width: 0;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.generalTitle {
+  font-size: 1.625rem;
+  margin: 0px;
+  margin-bottom: 20px;
+}

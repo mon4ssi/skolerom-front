@@ -101,22 +101,34 @@ export class LoginForm extends Component<LoginFormProps, State> {
           <p className="title">{intl.get('login_page.Log in with user')}</p>
 
           <div className="inputs flexBox">
-            <input
-              type="email"
-              name="email"
-              placeholder={intl.get('login_page.Username')}
-              value={email}
-              onChange={this.handleChangeInput}
-              pattern="*"
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder={intl.get('login_page.Password')}
-              value={password}
-              onChange={this.handleChangeInput}
-              pattern="*"
-            />
+            <div className="inputcontent">
+              <label id="email_label" className="hidden">Email</label>
+              <input
+                type="email"
+                name="email"
+                aria-labelledby="email_label"
+                placeholder={intl.get('login_page.Username')}
+                value={email}
+                onChange={this.handleChangeInput}
+                pattern="*"
+                aria-required="true"
+                aria-invalid="false"
+              />
+            </div>
+            <div className="inputcontent">
+              <label id="password_label" className="hidden">Password</label>
+              <input
+                type="password"
+                name="password"
+                aria-labelledby="password_label"
+                placeholder={intl.get('login_page.Password')}
+                value={password}
+                onChange={this.handleChangeInput}
+                pattern="*"
+                aria-required="true"
+                aria-invalid="false"
+              />
+            </div>
           </div>
 
           <button className="logInSubmit">

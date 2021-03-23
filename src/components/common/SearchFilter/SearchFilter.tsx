@@ -273,8 +273,14 @@ class SearchFilter extends Component<Props, State> {
       activity,
       orderFieldFilterValue
     } = this.props;
-
+    let myValue : any;
     const searchQueryValue = searchQueryFilterValue || '';
+    const searchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.target.value;
+      myValue = newValue;
+      const inputTag = document.getElementById('ChangeForce') as HTMLInputElement;
+      inputTag.value = myValue;
+    };
     return (
       <div className="SearchFilter" ref={this.container}>
         {isStudent && this.renderEvaluationStatus()}
@@ -287,13 +293,20 @@ class SearchFilter extends Component<Props, State> {
 
         {!isStudent && date && this.renderDate()}
         {orderFieldFilterValue === SortingFilter.DEADLINE ? this.renderSorting() : popularity && this.renderPopularities()}
-
-        <input
-          className="SearchFilter__search"
-          placeholder={placeholder}
-          onChange={handleInputSearchQuery}
-          value={searchQueryValue}
-        />
+        <div className="SearchFilter__search__content">
+          <input
+            className="SearchFilter__search"
+            placeholder={placeholder}
+            value={myValue}
+            onChange={searchQueryChange}
+            aria-labelledby="searchfilterInput"
+            id="SendFilter"
+            aria-required="true"
+            aria-invalid="false"
+          />
+          <label id="searchfilterInput" className="hidden">{placeholder}</label>
+          <button id="ChangeForce" type="submit" className="SearchFilter__search__submit" onClick={handleInputSearchQuery} />
+        </div>
       </div>
     );
   }
