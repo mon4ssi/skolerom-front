@@ -5,13 +5,13 @@
   ],
   "rules": {
     "ban-ts-ignore": "true",
-    "no-any": true,
     "no-empty-interface": true,
     "no-import-side-effect": [true, { "ignore-module": "(\\.scss)$" }],
     "member-access": [
       true,
       "check-accessor"
     ],
+    "jsx-no-lambda": false,
     "no-magic-numbers": true,
     "only-arrow-functions": [
       true,
