@@ -135,6 +135,7 @@
     "questions answered": "questions answered"
   },
   "assignments search": {
+    "title": "Assingments",
     "Choose subject": "Choose subject",
     "Choose grade": "Choose grade",
     "Class": "Class",
@@ -324,6 +325,7 @@
     "no_title": "No title"
   },
   "evaluation_page": {
+    "title": "Evaluation",
     "Assignments": "Assignments",
     "Teaching paths": "Teaching paths",
     "Search for assignments": "Search for assignments...",
@@ -460,7 +462,8 @@
     "steps": "steps"
   },
   "teaching path search": {
-    "Search for teaching paths": "Search for teaching paths..."
+    "Search for teaching paths": "Search for teaching paths...",
+    "title":"Teaching path"
   },
   "teaching path passing": {
     "choose one": "Choose one",
@@ -553,6 +556,7 @@
     "No results found": "No results found"
   },
   "students_list": {
+    "title":"Students",
     "tabs": {
       "my_students": "My students",
       "previous_students": "Previous students",

@@ -48,7 +48,7 @@ $image-width: 90px;
     border-radius: 17px;
     border: 1px solid $color-dark-gray;
     background: $color-light-gray;
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: 300;
 
     &:last-child {
@@ -63,12 +63,12 @@ $image-width: 90px;
 
     span {
       color: $color-purple;
-      font-size: 15px;
+      font-size: 0.9375rem;
     }
   }
 
   .relatedCard__level {
-    font-size: 13px;
+    font-size: 0.8125rem;
     img {
       margin-right: 10px;
     }

@@ -66,14 +66,14 @@
 
 .SliderWidget__description {
   margin-bottom: 12px;
-  font-size: 20px;
+  font-size: 1.25rem;
   color: $color-white;
   width: 65%;
   font-weight: 300;
 
   // Needed to make color of text in layout provided from WP white and have needed size
   & * {
-    font-size: 20px;
+    font-size: 1.25rem;
     color: $color-white;
   }
 }
@@ -89,9 +89,11 @@
   border-radius: 20px;
   background-color: $color-purple;
   color: $color-white;
-  font-size: 17px;
+  font-size: 1.0625rem;
+  &:hover {
+    background-color: #af0060;
+  }
 }
-
 .SliderWidget__slideSwitcher {
   position: absolute;
   bottom: 24px;
@@ -221,12 +223,12 @@
 
 @media screen and (max-width: $screen-dimension-desktop-l) {
   .SliderWidget__title {
-    font-size: 24px;
+    font-size: 1.5rem;
     margin-bottom: 3px;
   }
 
   .SliderWidget__description {
-    font-size: 17px;
+    font-size: 1.0625rem;
     margin-bottom: 9px;
   }
 }
@@ -243,7 +245,7 @@
   .SliderWidget__title {
     @include text-shrink-multiline(4);
     color: $color-text-primary;
-    font-size: 24px;
+    font-size: 1.5rem;
     line-height: 31px;
     margin-bottom: 5px;
   }

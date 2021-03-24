@@ -57,6 +57,8 @@ class OptionComponent extends Component<OptionComponentProps> {
           onChange={this.onTitleChange}
           style={option.isRight ? { color: '#0A7B24' } : undefined}
           placeholder={placeholder}
+          aria-required="true"
+          aria-invalid="false"
         />
 
         <div className="statusBox">

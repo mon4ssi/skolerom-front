@@ -134,6 +134,7 @@
     "questions answered": "spørsmål er besvart"
   },
   "assignments search": {
+    "title": "Uppgifter",
     "Choose subject": "Vel fag",
     "Choose grade": "Vel klasse",
     "Class": "Klassetrinn",
@@ -323,6 +324,7 @@
     "no_title": "Utan tittel"
   },
   "evaluation_page": {
+    "title": "Utvärdering",
     "Assignments": "Oppgåver",
     "Teaching paths": "Læringsstiar",
     "Search for assignments": "Søk etter oppgåve...",
@@ -459,7 +461,8 @@
     "steps": "spor"
   },
   "teaching path search": {
-    "Search for teaching paths": "Søk etter læringsstiar..."
+    "Search for teaching paths": "Søk etter læringsstiar...",
+    "title": "Undervisningsväg"
   },
   "teaching path passing": {
     "choose one": "Vel ein",
@@ -552,6 +555,7 @@
     "No results found": "Søket ditt ga ingen resultater"
   },
   "students_list": {
+    "title":"Studenter",
     "tabs": {
       "my_students": "Mine elevar",
       "previous_students": "Tidlegare elevar",

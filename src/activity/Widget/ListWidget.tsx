@@ -47,7 +47,7 @@ export class ListWidget extends Component<IListWidgetProps, State> {
     }
 
     return (
-      <ul className="ListWidget__list">
+      <ul className="ListWidget__list" role="region" id="listInfoWidget" aria-live="polite" aria-atomic="true">
         {items.map(this.renderItem)}
       </ul>
     );

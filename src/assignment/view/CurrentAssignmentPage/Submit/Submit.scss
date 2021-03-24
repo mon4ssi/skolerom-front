@@ -2,7 +2,7 @@
 
 .Submit__title {
   margin-bottom: 32px;
-  font-size: 36px;
+  font-size: 2.25rem;
 }
 
 .Submit__delete {
@@ -22,11 +22,11 @@
   background: $color-green;
   border-radius: 20px;
   font-weight: 500;
-  font-size: 17px;
+  font-size: 1.0625rem;
 }
 
 .Submit__description {
-  font-size: 17px;
+  font-size: 1.0625rem;
   font-weight: 300;
 }
 
@@ -40,14 +40,14 @@
 
 @media screen and (max-width: $screen-dimension-mobile-425) {
   .Submit__title {
-    font-size: 24px;
+    font-size: 1.5rem;
     margin-top: 60px;
     margin-bottom: 7px;
   }
 
   .Submit__button {
     margin-top: 60px;
-    font-size: 14px;
+    font-size: 0.875rem;
     padding-right: 25px;
   }
 }

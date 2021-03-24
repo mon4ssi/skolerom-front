@@ -35,7 +35,7 @@ export class UserApi implements UserRepo {
 
   public async getUserWithToken(code: string): Promise<string | null> {
     try {
-      const response = await API.post('/api/login/dataporten/authorize', { code });
+      const response = await API.post('/api/login/dataporten/authorize', { code }, { withCredentials: true });
 
       this.storageInteractor.setUserWithToken(response.data.access_token, response.data.user);
       return response.data.access_token;
@@ -53,7 +53,7 @@ export class UserApi implements UserRepo {
 
   public async getUserWithTokenFromLogPass(email: string, password: string) {
     try {
-      const response = await API.post('/api/login', { email, password });
+      const response = await API.post('/api/login', { email, password }, { withCredentials: true });
 
       this.storageInteractor.setUserWithToken(response.data.access_token, response.data.user);
 
@@ -75,7 +75,7 @@ export class UserApi implements UserRepo {
   public async logOut() {
     const currentUserRole = this.storageInteractor.getUserRole();
 
-    const { data } = await API.get('/api/logout');
+    const { data } = await API.get('/api/logout', { withCredentials: true });
     this.storageInteractor.logOut();
 
     if (currentUserRole === UserType.ContentManager) {

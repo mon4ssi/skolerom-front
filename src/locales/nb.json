@@ -136,6 +136,7 @@
     "questions answered": "spørsmål er besvart"
   },
   "assignments search": {
+    "title": "Oppgaver",
     "Choose subject": "Velg fag",
     "Choose grade": "Velg trinn",
     "Class": "Trinn",
@@ -325,6 +326,7 @@
     "no_title": "Uten tittel"
   },
   "evaluation_page": {
+    "title": "Evaluering",
     "Assignments": "Oppgaver",
     "Teaching paths": "Læringsstier",
     "Search for assignments": "Søk etter oppgave...",
@@ -460,7 +462,8 @@
     "steps": "spor"
   },
   "teaching path search": {
-    "Search for teaching paths": "Søk etter læringsstier..."
+    "Search for teaching paths": "Søk etter læringsstier...",
+    "title": "Undervisningsvei"
   },
   "teaching path passing": {
     "choose one": "Velg en",
@@ -553,6 +556,7 @@
     "No results found": "Søket ditt ga ingen resultater"
   },
   "students_list": {
+    "title":"Studenter",
     "tabs": {
       "my_students": "Mine elever",
       "previous_students": "Tidligere elever",

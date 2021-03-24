@@ -59,6 +59,8 @@ export class NewTeachingPathQuestion extends Component<Props> {
           placeholder={intl.get('new assignment.Enter a question')}
           value={question}
           onChange={this.handleChangeNewQuestion}
+          aria-required="true"
+          aria-invalid="false"
         />
 
         <div className="textExtra flexBox">

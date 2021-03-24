@@ -37,6 +37,13 @@ $my-account-padding: 19px;
 .MyAccountWindow__itemText {
   @include text-shrink;
   font-weight: 300;
+  transition: 0.3s;
+  &:hover {
+    color: #E2017B;
+    span {
+      color: #E2017B;
+    }
+  }
 }
 
 .MyAccountWindow__title {

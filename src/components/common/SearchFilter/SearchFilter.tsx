@@ -282,7 +282,7 @@ class SearchFilter extends Component<Props, State> {
       inputTag.value = myValue;
     };
     return (
-      <div className="SearchFilter" ref={this.container}>
+      <div className="SearchFilter" aria-controls="List" ref={this.container}>
         {isStudent && this.renderEvaluationStatus()}
         {isStudent && this.renderAnswerStatus()}
         {subject && this.renderSubjects()}

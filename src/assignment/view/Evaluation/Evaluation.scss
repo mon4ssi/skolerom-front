@@ -18,11 +18,11 @@
       color: #E2017B;
       text-transform: uppercase;
       margin-bottom: 10px;
-      font-size: 16px;
+      font-size: 1rem;
     }
 
     .assignmentTitle {
-      font-size: 36px;
+      font-size: 2.25rem;
       margin-bottom: 20px;
     }
 
@@ -44,7 +44,7 @@
         padding: 0 20px;
 
         .name {
-          font-size: 17px;
+          font-size: 1.0625rem;
         }
         .line{
           display: none;
@@ -55,7 +55,7 @@
           margin-left: 20px;
           display: flex;
           align-items: center;
-          font-size: 13px;
+          font-size: 0.8125rem;
 
           .evaluate {
             color: #939FA7;
@@ -83,7 +83,7 @@
 
         .deadline {
           display: flex;
-          font-size: 13px;
+          font-size: 0.8125rem;
           align-items: center;
 
           img {
@@ -102,7 +102,7 @@
           .label {
             height: 31px;
             padding: 7px 16px 7px 17px;
-            font-size: 13px;
+            font-size: 0.8125rem;
             border-radius: 50px;
             align-items: center;
             display: flex;
@@ -188,7 +188,7 @@
 
             .headline {
               color: #0B2541;
-              font-size: 17px;
+              font-size: 1.0625rem;
               margin-bottom: 21px;
             }
 
@@ -204,7 +204,7 @@
               align-items: center;
               display: flex;
               justify-content: center;
-              font-size: 15px;
+              font-size: 0.9375rem;
               margin-bottom: 10px;
               cursor: pointer;
             }
@@ -258,7 +258,7 @@
     min-width: 100%;
   }
   .Answers .answerWrapper .assignmentTitle {
-    font-size: 30px;
+    font-size: 1.875rem;
   }
   .Answers .answerWrapper {
     background: #E7ECEF;

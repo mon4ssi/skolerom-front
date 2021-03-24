@@ -18,6 +18,10 @@
   border-bottom: 1px solid $color-light-gray;
   padding-top: 26px;
   padding-bottom: 26px;
+  transition: 0.3s;
+  &:hover {
+    background: #dedede;
+  }
 }
 
 .Sidebar__listItem_active {
@@ -40,7 +44,7 @@
   @include text-shrink;
   margin-left: 19px;
   align-self: center;
-  font-size: 17px;
+  font-size: 1.0625rem;
   font-weight: 500;
 }
 

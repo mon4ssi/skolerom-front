@@ -8,7 +8,7 @@
 
     p {
       margin: 0;
-      font-size: 17px;
+      font-size: 1.0625rem;
       font-weight: 500;
     }
 
@@ -38,7 +38,7 @@
       .versionDate {
         margin: 0;
         font-style: italic;
-        font-size: 13px;
+        font-size: 0.8125rem;
       }
 
       .versionInfo {
@@ -68,7 +68,7 @@
           margin-right: 10px;
           display: flex;
           align-items: center;
-          font-size: 15px;
+          font-size: 0.9375rem;
 
           &:last-child {
             margin-right: 0;

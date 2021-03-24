@@ -32,6 +32,7 @@ interface ActivityPageProps {
 interface ActivityPageState {
   iframeURL: string;
   popupShown: boolean;
+  isPause: boolean;
 }
 
 @inject('activityStore', 'loginStore')
@@ -42,6 +43,7 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
   public state = {
     iframeURL: '',
     popupShown: false,
+    isPause: false
   };
 
   private loadWidgetData() {
@@ -145,7 +147,7 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
 
   private renderRecentActivitiesList = () =>
     this.props.role !== UserType.Student && (
-        <div className="ActivityPage__widget">
+        <div className="ActivityPage__widget" aria-live="polite">
           <RecentActivitiesList/>
         </div>
       )
@@ -248,14 +250,37 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
     if (role === UserType.Teacher) {
       activityStore!.loadRecentActivity();
       activityStore!.loadStatisticWidget();
-      this.getRecentActivityWithInterval = window.setInterval(
-        () => {
-          this.props.activityStore!.loadRecentActivity();
-        },
-        loadRecentActivityInterval,
-      );
+      if (!this.state.isPause) {
+        this.getRecentActivityWithInterval = window.setInterval(
+          () => {
+            this.props.activityStore!.loadRecentActivity();
+          },
+          loadRecentActivityInterval,
+        );
+      }
     }
     this.loadWidgetData();
+  }
+
+  public stopComponent() {
+    if (this.props.activityStore) {
+      if (!this.state.isPause) {
+        this.setState({
+          isPause: true
+        });
+        window.clearInterval(this.getRecentActivityWithInterval);
+      } else {
+        this.setState({
+          isPause: false
+        });
+        this.getRecentActivityWithInterval = window.setInterval(
+          () => {
+            this.props.activityStore!.loadRecentActivity();
+          },
+          loadRecentActivityInterval,
+        );
+      }
+    }
   }
 
   public componentWillUnmount() {
@@ -275,13 +300,18 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
     return (
       <div className="ActivityPage">
         <div className="ActivityPage__greeting">
-          {intl.get('activity_page.Hello')} {username}
+          <h1>{intl.get('activity_page.Hello')} {username}</h1>
         </div>
         <div className="ActivityPage__content">
           <div className="ActivityPage__main">
             {this.renderSliderWidgetBlock()}
             {/* {/* {role === UserType.Teacher && this.renderStatisticWidget()} */}
+            <div className="recentActivityNewContent">
+              <div className={`recentActivityNewContent__pause ${this.state.isPause && 'active'}`} onClick={() => this.stopComponent()}>
+                <i />
+              </div>
             {/* {role === UserType.Teacher && this.renderRecentActivitiesList()} */}
+            </div>
           </div>
 
           <div className={`ActivityPage__aside ${isContentManager && 'marginTop'}`}>

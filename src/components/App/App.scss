@@ -47,7 +47,7 @@ a {
 
 button {
   border: none;
-  font-size: 16px;
+  font-size: 1rem;
   outline: none;
   cursor: pointer;
 }
@@ -57,7 +57,7 @@ button {
 }
 
 select {
-  font-size: 16px;
+  font-size: 1rem;
   border: none;
   outline: none;
   padding: 0 10px;
@@ -158,23 +158,23 @@ input, select, option {
 }
 
 .fs12 {
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 .fs15 {
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 
 .fs17 {
-  font-size: 17px;
+  font-size: 1.0625rem;
 }
 
 .fs22 {
-  font-size: 22px;
+  font-size: 1.375rem;
 }
 
 .fs36 {
-  font-size: 36px;
+  font-size: 2.25rem;
 }
 
 .mr20 {
@@ -210,7 +210,7 @@ input, select, option {
 }
 
 .fs13 {
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 #root {
@@ -221,7 +221,16 @@ input, select, option {
   height: 100%;
   flex-direction: column;
   overflow: hidden;
-  font-size: 17px;
+  font-size: 1.0625rem;  
+  &.zoom100 {
+    zoom: 1;
+  }
+  &.zoom150 {
+    zoom: 1.1;
+  }
+  &.zoom200 {
+    zoom: 1.2;
+  }
 }
 
 .App__sidebar {
@@ -326,27 +335,27 @@ pre {
 }
 
 .fs15 {
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 
 .fs17 {
-  font-size: 17px;
+  font-size: 1.0625rem;
 }
 
 .fs24 {
-  font-size: 24px;
+  font-size: 1.5rem;
 }
 
 .fs30 {
-  font-size: 30px;
+  font-size: 1.875rem;
 }
 
 .fs36 {
-  font-size: 36px;
+  font-size: 2.25rem;
 }
 
 .fs60 {
-  font-size: 60px;
+  font-size: 3.75rem;
 }
 
 .disabledArea {

@@ -26,11 +26,11 @@
   color: $color-purple;
   text-transform: uppercase;
   margin-bottom: 10px;
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .AssignmentAnswerList__assignmentTitle {
-  font-size: 36px;
+  font-size: 2.25rem;
   margin-bottom: 20px;
 }
 
@@ -40,7 +40,7 @@
 
 @media screen and (max-width: $screen-dimension-tablet) {
   .AssignmentAnswerList__assignmentTitle {
-    font-size: 24px;
+    font-size: 1.5rem;
   }
 }
 

@@ -24,7 +24,8 @@ interface INavigationItem {
 
 enum Screen {
   MAIN,
-  LOCALE
+  LOCALE,
+  FONTS
 }
 
 interface MyAccountWindowProps {
@@ -57,6 +58,10 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
 
   private goToLocaleScreen = () => {
     this.setState({ currentScreen:Screen.LOCALE });
+  }
+
+  private goToFontsScreen = () => {
+    this.setState({ currentScreen:Screen.FONTS });
   }
 
   private logOut = () => {
@@ -141,6 +146,20 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
         </li>
 
         <img className="MyAccountWindow__closeButton" src={closeIcon} alt="Close" onClick={closeMyAccountWindow} />
+      </ul>
+    );
+  }
+
+  private renderChangeFontSize() {
+    const { loginStore, uiStore } = this.props;
+    return loginStore!.currentUser
+    && (
+      <ul className="MyAccountWindow__list MyAccountWindow__list_separated">
+        <li className="MyAccountWindow__item"  onClick={this.goToFontsScreen}>
+          <div className="MyAccountWindow__itemText">
+            {intl.get('header.change_font_size')}
+          </div>
+        </li>
       </ul>
     );
   }
@@ -233,6 +252,67 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
     );
   }
 
+  private renderFontsChangeScreen = () => {
+    const { uiStore, closeMyAccountWindow, loginStore } = this.props;
+    const fontsStore = [
+      {
+        name: '100%',
+        classname: 'zoom100'
+      },
+      {
+        name: '150%',
+        classname: 'zoom150'
+      },
+      {
+        name: '200%',
+        classname: 'zoom200'
+      }
+    ];
+    const setCurrentFonts = (font: string) => {
+      if (uiStore!.currentFont === font) {
+        return null;
+      }
+      uiStore!.setCurrentFont(font);
+      document.querySelectorAll('.App')[0].classList.remove('zoom100');
+      document.querySelectorAll('.App')[0].classList.remove('zoom150');
+      document.querySelectorAll('.App')[0].classList.remove('zoom200');
+      document.querySelectorAll('.App')[0].classList.add(font);
+    };
+    const renderFont = (fontstore: { name: string, classname: string }) => (
+      <li
+        className="MyAccountWindow__item"
+        // tslint:disable-next-line: jsx-no-lambda
+        onClick={() => setCurrentFonts(fontstore.classname)}
+      >
+        <div
+          className={classnames('MyAccountWindow__itemText', { MyAccountWindow__itemText_selected: uiStore!.currentFont === fontstore.classname })}
+        >
+          {fontstore.name}
+        </div>
+      </li>
+    );
+
+    return (
+      <>
+        <ul className="MyAccountWindow__list MyAccountWindow__list_separated">
+          <li className="MyAccountWindow__item MyAccountWindow__item_centered">
+            <img className="MyAccountWindow__backButton" src={backIcon} alt={intl.get('header.Back')} onClick={this.goToMainScreen} />
+
+            <div className="MyAccountWindow__itemText MyAccountWindow__itemText_selected">
+              {intl.get('header.change_font_size')}
+            </div>
+
+            <img className="MyAccountWindow__closeButton" src={closeIcon} alt="Close" onClick={closeMyAccountWindow} />
+          </li>
+        </ul>
+
+        <ul className="MyAccountWindow__list">
+        {fontsStore.map(renderFont)}
+        </ul>
+      </>
+    );
+  }
+
   private renderAnimationWrapper = (className: string, children: ReactNode) => (
     <CSSTransition
       key={this.state.currentScreen}
@@ -251,6 +331,7 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
   public render() {
     const { currentScreen } = this.state;
     const localeScreen = this.renderAnimationWrapper('MyAccountWindow__secondaryContainer_animated', this.renderLanguageChangeScreen());
+    const fontsScreen = this.renderAnimationWrapper('MyAccountWindow__secondaryContainer_animated', this.renderFontsChangeScreen());
     const mainScreen = this.renderAnimationWrapper('MyAccountWindow__container_animated', this.renderMainScreen());
 
     return (
@@ -258,6 +339,7 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
         <TransitionGroup>
           {currentScreen === Screen.MAIN && mainScreen}
           {currentScreen === Screen.LOCALE && localeScreen}
+          {currentScreen === Screen.FONTS && fontsScreen}
         </TransitionGroup>
       </div>
     );
