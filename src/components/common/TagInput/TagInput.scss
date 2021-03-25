@@ -28,7 +28,7 @@
         margin-right: 13px;
         color: #0B2541;
         margin-bottom: 1px;
-        font-size: 15px;
+        font-size: 0.9375rem;
         font-weight: 300;
       }
 
@@ -47,7 +47,7 @@
 
   .unselected {
     transition: 0.3s;
-    font-size: 15px;
+    font-size: 0.9375rem;
     padding: 0 5px;
     cursor: pointer;
     height: max-content;
@@ -63,7 +63,7 @@
   .selected {
     color: #0B2541;
     transition: 0.3s;
-    font-size: 15px;
+    font-size: 0.9375rem;
     padding: 0 5px;
     height: max-content;
     background: #e8edef;
@@ -80,7 +80,7 @@
 
   input {
     border: none;
-    font-size: 16px;
+    font-size: 1rem;
     margin-bottom: 4px;
     background: none;
   }

@@ -69,6 +69,7 @@ export class AssignmentTitle extends Component<Props> {
           <span className="fw500">
             {intl.get('assignments_tabs.new_assignment')}
           </span>
+          <label id="titleInputTextArea" className="hidden">{intl.get('new assignment.title.title_placeholder')}</label>
           <TextAreaAutosize
             autoFocus
             value={assignment!.title}
@@ -78,7 +79,9 @@ export class AssignmentTitle extends Component<Props> {
             onKeyUp={this.focusDescriptionField}
             inputRef={this.setTitleRef}
             maxLength={MAX_TITLE_LENGTH}
+            aria-labelledby="titleInputTextArea"
           />
+          <label id="DescriptionInputTextArea" className="hidden">{intl.get('new assignment.title.description_placeholder')}</label>
           <TextAreaAutosize
             className={`newAssignmentDescriptionInput fw300 ${lightItem}`}
             placeholder={intl.get('new assignment.title.description_placeholder')}
@@ -86,6 +89,7 @@ export class AssignmentTitle extends Component<Props> {
             onChange={this.setAssignmentDescription}
             inputRef={this.setDescriptionRef}
             maxLength={MAX_DESCRIPTION_LENGTH}
+            aria-labelledby="DescriptionInputTextArea"
           />
         </div>
       </div>

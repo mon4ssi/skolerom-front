@@ -41,7 +41,7 @@
         height: 34px;
         background: #E7ECEF;
         border-radius: 8px;
-        font-size: 12px;
+        font-size: 0.75rem;
         margin-right: 20px;
         cursor: pointer;
 
@@ -83,7 +83,7 @@
           font-weight: lighter;
           margin-right: 4px;
           border: 1px solid #D3D9DE;
-          font-size: 15px;
+          font-size: 0.9375rem;
 
           &:last-child {
             margin-right: 0;
@@ -98,11 +98,11 @@
         text-overflow: ellipsis;
         overflow: hidden;
         margin-right: 20px;
-        font-size: 15px;
+        font-size: 0.9375rem;
       }
 
       .levels {
-        font-size: 13px;
+        font-size: 0.8125rem;
 
         img {
           margin-right: 10px;
@@ -216,7 +216,7 @@
 
 @media screen and (max-width: $screen-dimension-desktop) {
   .mob-container {
-    font-size: 15px;
+    font-size: 0.9375rem;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -313,7 +313,7 @@
   .MyList .listItemWrapper .tooltip .left {
     color: #fff !important;
     background: #08203F;
-    font-size: 13px;
+    font-size: 0.8125rem;
   }
 
   .MyList .listItemWrapper i {

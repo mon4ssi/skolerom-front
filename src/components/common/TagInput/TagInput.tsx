@@ -25,6 +25,7 @@ export interface TagProp {
 }
 
 interface Props {
+  dataid?: string;
   className?: string;
   autoFocus?: boolean;
   listView?: boolean;
@@ -183,7 +184,7 @@ class TagInputWrapper extends Component<Props, State> {
   }
 
   public render() {
-    const { className, autoFocus, currentTags } = this.props;
+    const { dataid, className, autoFocus, currentTags } = this.props;
     const { tagInput } = this.state;
 
     return (
@@ -194,7 +195,7 @@ class TagInputWrapper extends Component<Props, State> {
         <div className={'tagWrapper'}>
           {currentTags!.sort(sortByAlphabet).map(this.renderCurrentTag)}
         </div>
-
+        <label id={dataid} className="hidden">{tagInput}</label>
         <input
           onFocus={this.onFocusInput}
           autoFocus={autoFocus}
@@ -202,6 +203,9 @@ class TagInputWrapper extends Component<Props, State> {
           style={{ width: 110, flex: 1 }}
           onChange={this.handleChangeTagInput}
           ref={node => (this.tagInput = node)}
+          aria-labelledby={dataid}
+          aria-required="true"
+          aria-invalid="false"
         />
 
         {this.renderVisibleTags()}

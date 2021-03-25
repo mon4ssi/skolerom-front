@@ -93,6 +93,9 @@ class EvaluationPage extends Component<IEvaluationPageProps & RouteComponentProp
   public render() {
     return (
       <div className="EvaluationPage">
+        <h1 className="generalTitle">
+        {intl.get('evaluation_page.title')}
+        </h1>
         <TabNavigation {...tabNavigationData}/>
         <SearchFilter
           subject

@@ -31,17 +31,20 @@ $image-padding-left: 18px;
 .ListWidget__item {
   position: relative;
   height: $image-size;
-  min-height: $image-size;
   margin-bottom: 20px;
   cursor: pointer;
+  &:hover .ListWidget__text {
+    color: #e2017b;
+  }
 }
+
 
 .ListWidget__text {
   @include text-shrink-multiline(4);
   @include absolute-center-y();
   right: $image-size + $image-padding-left;
   width: calc(100% - #{$image-size + $image-padding-left});
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 
 .ListWidget__image {

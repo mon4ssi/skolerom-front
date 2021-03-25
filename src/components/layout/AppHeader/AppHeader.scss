@@ -10,28 +10,47 @@
   background: $color-white;
   position: relative;
   z-index: 16;
-}
-
-.AppHeader__block {
-  display: flex;
-  align-items: center;
-  min-width: 0;
+  &__block {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
+  &__logo {
+    margin-bottom: 7px;
+  }
+  &__role {
+    margin-left: 17px;
+    font-family: 'Roboto Slab', serif;
+    color: $color-text-secondary;
+    font-size: 1.0625rem;
+    font-weight: 400;
+  }
+  &__navigationItem {
+    @include text-shrink;
+    display: flex;
+    align-items: center;
+    margin-left: 19px;
+    cursor: pointer;
+    min-width: 0;
+    a {
+      transition: 0.3s;
+      &:hover {
+        color: #E2017B;   
+      }
+    }
+  }
+  &__navigationItemText {
+    @include text-shrink;
+    min-width: 0;
+    transition: 0.3s;
+    &:hover {
+      color: #E2017B;   
+    }
+  }
 }
 
 .AppHeader__block_mobile {
   display: none;
-}
-
-.AppHeader__logo {
-  margin-bottom: 7px;
-}
-
-.AppHeader__role {
-  margin-left: 17px;
-  font-family: 'Roboto Slab', serif;
-  color: $color-text-secondary;
-  font-size: 17px;
-  font-weight: 400;
 }
 
 .AppHeader__navigation {
@@ -40,35 +59,15 @@
   min-width: 0;
 }
 
-.AppHeader__navigationItem {
-  @include text-shrink;
-  display: flex;
-  align-items: center;
-  margin-left: 19px;
-  cursor: pointer;
-  min-width: 0;
 
-  &:first-child {
-    margin: 0;
-  }
-}
 
 .AppHeader__navigationItemImage {
   width: 25px;
   height: 25px;
 }
 
-.AppHeader__navigationItemText {
-  @include text-shrink;
-  min-width: 0;
-}
-
 .AppHeader__navigationItemText:hover .AppHeader__submenuWrapper {
   display: block;
-}
-
-.AppHeader__navigationItemText:hover {
-  text-decoration: underline;
 }
 
 .AppHeader__submenuWrapper {

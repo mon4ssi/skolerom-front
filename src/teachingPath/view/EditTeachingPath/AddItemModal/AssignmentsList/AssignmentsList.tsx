@@ -297,7 +297,7 @@ export class AssignmentsList extends Component<Props, State> {
 
     if (assignmentListStore!.assignmentsState === StoreState.PENDING && !assignmentsList.length) {
       return (
-        <div className="noResults">
+        <div className="noResults" id="List" aria-live="polite" aria-atomic="true">
           {intl.get('assignment list.Nothing')}
         </div>
       );
@@ -324,6 +324,9 @@ export class AssignmentsList extends Component<Props, State> {
         className="assignmentsListContainer flexBox dirColumn spaceBetween"
         ref={this.ref}
         onScroll={this.onScroll}
+        id="List"
+        aria-live="polite"
+        aria-atomic="true"
       >
         {assignments.map(this.renderAssignment)}
       </div>

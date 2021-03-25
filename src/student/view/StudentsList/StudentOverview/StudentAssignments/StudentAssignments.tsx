@@ -78,6 +78,9 @@ class StudentAssignments extends Component<Props> {
       className="StudentAssignments__search"
       placeholder={intl.get('assignments search.Search for assignments')}
       onChange={this.handleChangeSearchQuery}
+      aria-labelledby="renderSearchField"
+      aria-required="true"
+      aria-invalid="false"
     />
   )
 
@@ -144,6 +147,7 @@ class StudentAssignments extends Component<Props> {
   public renderFilterPanel() {
     return (
       <div className="StudentAssignments__filterPanel">
+        <label id="renderSearchField" className="hidden">{intl.get('assignments search.Search for assignments')}</label>
         {this.renderSearchField()}
         <div className="StudentAssignments__selectBlock">
           {this.renderAnswerStatus()}

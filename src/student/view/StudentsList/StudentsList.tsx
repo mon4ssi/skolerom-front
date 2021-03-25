@@ -206,11 +206,14 @@ export class StudentsListComponent extends Component<Props> {
     return (
       <>
         <div className="StudentsList">
+          <h1 className="generalTitle">
+          {intl.get('students_list.title')}
+          </h1>
           {this.renderTabNavigate()}
 
           {this.renderSearchFilter()}
 
-          <div className="StudentsList__list">
+          <div className="StudentsList__list" id="List" aria-live="polite">
             {this.renderStudents()}
           </div>
           {this.renderPagination()}

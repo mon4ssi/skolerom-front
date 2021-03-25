@@ -25,7 +25,7 @@
 
 .AssignmentAnswer__student {
   @include text-shrink;
-  font-size: 17px;
+  font-size: 1.0625rem;
   margin-right: 10px;
 }
 
@@ -37,7 +37,7 @@
 .AssignmentAnswer__answeredStatus {
   @include text-shrink;
   padding: 7px 16px 7px 17px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   border-radius: 50px;
   border: 1px solid $color-blue-gray;
   background: $color-dark-gray;
@@ -58,7 +58,7 @@
 
 .AssignmentAnswer__deadlineText {
   @include text-shrink;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .AssignmentAnswer__deadlineText_passed {
@@ -76,7 +76,7 @@
 
 .AssignmentAnswer__evaluationStatusText {
   @include text-shrink;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .AssignmentAnswer__evaluationStatusText_evaluate {

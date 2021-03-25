@@ -42,6 +42,8 @@ class TabNavigationComponent extends Component<Props> {
         to={link.url}
         activeClassName="activeRoute"
         onClick={this.preventLinkEvent.bind(this, link.isDisabled)}
+        aria-label={intl.get(`${this.props.sourceTranslation}.${link.name}`)}
+        role="tab"
       >
         {intl.get(`${this.props.sourceTranslation}.${link.name}`)}
       </NavLink>

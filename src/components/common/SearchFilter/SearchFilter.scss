@@ -28,9 +28,14 @@
   border: 1px solid $color-regent-gray;
   color: $color-text-primary;
   font-weight: 300;
-  font-size: 15px;
+  font-size: 0.9375rem;
   min-width: 150px;
   background: url(../../../assets/images/arrow-down.svg) no-repeat right 10px center, $color-light-gray;
+  transition: 0.3s;
+  cursor: pointer;
+  &:hover {
+    border-color: #0b2541;
+  }
 }
 
 .SearchFilter__option {
@@ -48,13 +53,13 @@
   border-left: 1px solid;
   border-radius: unset;
   width: 228px;
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 300;
 
   &::placeholder {
     @include text-shrink;
     color: $color-text-primary;
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: 300;
   }
   .large-search {

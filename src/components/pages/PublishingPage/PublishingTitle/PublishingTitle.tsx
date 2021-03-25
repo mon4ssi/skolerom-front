@@ -59,6 +59,7 @@ export class PublishingTitle extends Component<Props> {
           <span className="fw500">
             {intl.get(`${localeKey}.title.new_entity`)}
           </span>
+          <label id="titleInputTextArea" className="hidden">{intl.get('edit_teaching_path.title.title_placeholder')}</label>
           <TextAreaAutosize
             autoFocus
             id={'textAreaAutosize'}
@@ -68,7 +69,9 @@ export class PublishingTitle extends Component<Props> {
             placeholder={intl.get(`${localeKey}.title.title_placeholder`)}
             onKeyUp={this.focusDescriptionField}
             maxLength={MAX_TITLE_LENGTH}
+            aria-labelledby="titleInputTextArea"
           />
+          <label id="DescriptionInputTextArea" className="hidden">{intl.get('edit_teaching_path.title.description_placeholder')}</label>
           <TextAreaAutosize
             className="entityDescriptionInput fw300"
             placeholder={intl.get(`${localeKey}.title.description_placeholder`)}
@@ -76,6 +79,7 @@ export class PublishingTitle extends Component<Props> {
             onChange={this.setTeachingPathDescription}
             inputRef={this.descriptionRef}
             maxLength={MAX_DESCRIPTION_LENGTH}
+            aria-labelledby="DescriptionInputTextArea"
           />
         </div>
       </div>

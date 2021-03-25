@@ -38,6 +38,8 @@ export class AnswerTextQuestion extends Component<Props> {
             className="studentsAnswer"
             placeholder={intl.get('new assignment.Write your answer here')}
             onChange={this.handleChangeAnswer}
+            aria-required="true"
+            aria-invalid="false"
           />
         </div>
       </div>

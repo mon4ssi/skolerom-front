@@ -37,6 +37,8 @@ const RenderOption = (props: RenderOptionProps) => {
         <input
           className="fw500"
           value={option.title}
+          aria-required="true"
+          aria-invalid="false"
           readOnly
         />
 

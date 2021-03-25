@@ -9,7 +9,7 @@
       padding-right: 20px;
 
       .statBlock .questionsStudent {
-        font-size: 13px;
+        font-size: 0.8125rem;
       }
     }
 
@@ -32,7 +32,7 @@
         font-weight: 500;
         margin-right: 4px;
         border: 1px solid #D3D9DE;
-        font-size: 13px;
+        font-size: 0.8125rem;
 
         &:last-child {
           margin-right: 0;
@@ -41,7 +41,7 @@
     }
 
     .questions {
-      font-size: 16px;
+      font-size: 1rem;
       text-align: right;
       color: #E2017B;
       margin-right: 20px;
@@ -56,7 +56,7 @@
 
     .deadline {
       display: flex;
-      font-size: 13px;
+      font-size: 0.8125rem;
       align-items: center;
       margin-right: 20px;
 
@@ -70,7 +70,7 @@
     .evaluated-status {
       display: flex;
       align-items: center;
-      font-size: 13px;
+      font-size: 0.8125rem;
       color: #939FA7;
       cursor: pointer;
       white-space: nowrap;
@@ -107,7 +107,7 @@
       margin-right: 4px;
       color: #0B2541;
       justify-content: center;
-      font-size: 13px;
+      font-size: 0.8125rem;
       font-weight: 500;
 
       &:last-child {
@@ -139,7 +139,7 @@
     background: #fff;
     .deadline, .evaluated-status {
       margin-right: 0;
-      font-size: 13px;
+      font-size: 0.8125rem;
     }
 
   }

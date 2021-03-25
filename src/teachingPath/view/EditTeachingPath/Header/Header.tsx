@@ -227,6 +227,7 @@ export class HeaderComponent extends Component<Props> {
       className="link flexBox alignCenter disabled-link"
       to={`/teaching-paths/edit/${this.props.match.params.id}`}
       activeClassName="activeRoute"
+      aria-label={intl.get('edit_teaching_path.header.create_teaching_path')}
     >
       {intl.get('edit_teaching_path.header.create_teaching_path')}
     </NavLink>
@@ -237,6 +238,7 @@ export class HeaderComponent extends Component<Props> {
       className="link flexBox alignCenter disabled-link"
       to={`/teaching-paths/edit/${this.props.match.params.id}/publish`}
       activeClassName="activeRoute"
+      aria-label={intl.get('edit_teaching_path.header.publish')}
     >
       {intl.get('edit_teaching_path.header.publish')}
     </NavLink>
@@ -252,6 +254,7 @@ export class HeaderComponent extends Component<Props> {
         className="link flexBox alignCenter disabled-link"
         to={`/teaching-paths/edit/${match.params.id}/distribute`}
         activeClassName="activeRoute"
+        aria-label={intl.get('edit_teaching_path.header.distribute')}
       >
         {intl.get('edit_teaching_path.header.distribute')}
       </NavLink>

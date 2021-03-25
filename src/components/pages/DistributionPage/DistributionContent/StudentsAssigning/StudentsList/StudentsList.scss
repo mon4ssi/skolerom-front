@@ -12,7 +12,7 @@
 
   .listHeader {
     padding: 10px 20px;
-    font-size: 13px;
+    font-size: 0.8125rem;
     color: #939FA7;
     border: 1px solid #939FA7;
     border-bottom: none;
@@ -80,7 +80,7 @@
       .deadline {
         cursor: pointer;
         position: relative;
-        font-size: 14px;
+        font-size: 0.875rem;
 
         img {
           margin-left: 10px;
@@ -93,7 +93,7 @@
         &.endDateFromOutside {
           color: #939FA7;
           font-weight: 500;
-          font-size: 14px;
+          font-size: 0.875rem;
           align-items: center;
         }
 
@@ -132,15 +132,15 @@
       .student {
 
         .level {
-          font-size: 15px;
+          font-size: 0.9375rem;
         }
 
         .name {
-          font-size: 12px;
+          font-size: 0.75rem;
         }
 
         .deadline {
-          font-size: 12px;
+          font-size: 0.75rem;
         }
       }
     }

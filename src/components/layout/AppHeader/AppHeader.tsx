@@ -193,6 +193,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
           className="AppHeader__userLogo"
           src={loginStore!.currentUser.photo ? loginStore!.currentUser.photo : userPlaceholder}
           alt={loginStore!.currentUser.name}
+          aria-label="User Logo Description"
         />
       </li>
     ) : (
@@ -326,10 +327,12 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       <header className="AppHeader">
         {this.renderUserModalIfNeeded()}
         {this.state.modalVisible !== Modals.NONE && <div className="AppHeader__headerOverlay" onClick={this.closeModals} />}
-        <div className="AppHeader__block">
+        {!fromAssignmentPassing && !fromTeachingPathPassing && <p id="LogoDescription" className="hidden">Logo Skolerom</p>}
+        {fromAssignmentPassing && fromTeachingPathPassing && <p id="LogoDescriptionStudent" className="hidden">Logo Skolerom</p>}
+        <div className="AppHeader__block" aria-labelledby="LogoDescription">
           <NavLink to={redirectLink} onClick={this.handleLogoClick}>
             <div className="AppHeader__block">
-              <img src={logoImage} alt="Temabok Dashboard" className="AppHeader__logo"/>
+              <img src={logoImage} alt="Temabok Dashboard" className="AppHeader__logo" title="Logo Skolerom"/>
               <span className="AppHeader__role">{this.renderRole()}</span>
             </div>
           </NavLink>

@@ -74,7 +74,7 @@ class AssignmentDistributeList extends Component<IAssignmentDistributeListProps 
 
   public render() {
     return (
-      <div className="AssignmentDistributeList">
+      <div className="AssignmentDistributeList" id="List" aria-live="polite">
         {this.props.assignmentListStore!.assignmentDistributeList.distributes.map(this.renderDistribute)}
       </div>
     );

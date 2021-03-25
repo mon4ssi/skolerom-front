@@ -23,7 +23,7 @@
       flex-direction: column;
 
       .overview {
-        font-size: 15px;
+        font-size: 0.9375rem;
         color: #E2017B;
         text-transform: uppercase;
         margin-bottom: 10px;
@@ -34,7 +34,9 @@
       }
 
       .titleTeachingPath {
-        word-break: break-word;
+        word-break: break-all;
+        margin: 0px;
+        font-size: 1.7rem;
       }
 
       .questionWrapper {
@@ -46,7 +48,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          font-size: 12px;
+          font-size: 0.75rem;
           border: 2px solid #0B2541;
           border-radius: 50%;
           min-width: 20px;
@@ -55,7 +57,7 @@
         }
 
         .questionName {
-          font-size: 15px;
+          font-size: 0.9375rem;
         }
 
         .selectedItem-circle {
@@ -83,7 +85,7 @@
 
         span {
           margin-left: 10px;
-          font-size: 15px;
+          font-size: 0.9375rem;
         }
       }
 
@@ -95,7 +97,7 @@
 
         span {
           margin-left: 10px;
-          font-size: 15px;
+          font-size: 0.9375rem;
           color: #E2017B;
         }
       }

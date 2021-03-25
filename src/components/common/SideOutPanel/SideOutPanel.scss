@@ -59,7 +59,7 @@
           background: #071E37;
           border-radius: 20px;
           padding: 7px 17px;
-          font-size: 13px;
+          font-size: 0.8125rem;
           color: white;
           width: fit-content;
           margin-left: auto;
@@ -70,7 +70,7 @@
           margin: 40px 20px;
           color: white;
           height: 65px;
-          font-size: 24px;
+          font-size: 1.5rem;
           text-align: center;
           white-space: nowrap;
           text-overflow: ellipsis;
@@ -91,13 +91,13 @@
 
           .name {
             color: white;
-            font-size: 17px;
+            font-size: 1.0625rem;
             text-align: center;
           }
 
           .lesson {
             color: white;
-            font-size: 15px;
+            font-size: 0.9375rem;
             font-weight: 300;
             font-style: italic;
           }
@@ -115,7 +115,7 @@
 
       .deadline {
         display: flex;
-        font-size: 15px;
+        font-size: 0.9375rem;
         align-items: center;
 
         img {
@@ -129,7 +129,7 @@
 
       .partsInfo {
         display: flex;
-        font-size: 15px;
+        font-size: 0.9375rem;
 
         img {
           margin-right: 10px;
@@ -147,7 +147,7 @@
         font-weight: 300;
         overflow: auto;
         max-height: 90px;
-        font-size: 16px;
+        font-size: 1rem;
       }
 
       .view {

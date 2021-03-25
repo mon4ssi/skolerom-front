@@ -117,6 +117,8 @@ class OptionComponent extends Component<OptionComponentProps> {
           style={option.isRight ? { color: '#0A7B24' } : undefined}
           placeholder={placeholder}
           onClick={this.closeImageChoice}
+          aria-required="true"
+          aria-invalid="false"
         />
 
         <div className="statusBox" onClick={this.closeImageChoice}>

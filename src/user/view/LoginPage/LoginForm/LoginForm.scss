@@ -5,7 +5,7 @@
 
   .formTitle {
     color: #0B2541;
-    font-size: 36px;
+    font-size: 2.25rem;
     margin-bottom: 64px;
   }
 
@@ -19,12 +19,12 @@
 
   .formSubtitle {
     color: #0B2541;
-    font-size: 22px;
+    font-size: 1.375rem;
   }
 
   .formTitle {
     color: #0B2541;
-    font-size: 36px;
+    font-size: 2.25rem;
     margin-bottom: 64px;
   }
 
@@ -33,9 +33,12 @@
     background-color: #E2017B;
     width: 171px;
     height: 50px;
-    font-size: 21px;
-
-
+    font-size: 1.35rem;
+    transition: 0.3s;
+    &:hover {
+      background-color: #af0060;
+    }
+  
     span {
       color: #fff;
       padding-left: 5px;
@@ -58,7 +61,7 @@
       padding: 10px;
       box-sizing: border-box;
       cursor: pointer;
-      font-size: 17px;
+      font-size: 1.0625rem;
     }
 
     li:hover {
@@ -74,7 +77,7 @@
 
   .or {
     margin: 80px 0;
-    font-size: 22px;
+    font-size: 1.375rem;
     color: #596A75;
     text-transform: uppercase;
   }
@@ -84,7 +87,7 @@
 
     .title {
       margin: 0;
-      font-size: 22px;
+      font-size: 1.375rem;
       text-transform: uppercase;
     }
 
@@ -93,26 +96,38 @@
       justify-content: space-between;
       margin: 30px 0 35px;
 
-      input {
+      .inputcontent {
         // width: 240px;
         width: calc((100% - 40px) / 2);
         height: 40px;
         padding-bottom: 11px;
-        border: 0;
-        border-bottom: 2px solid #0B2541;
         text-align: center;
-        font-size: 22px;
+        //font-size: 1.375rem;
+        font-size: 1.35rem;
         font-weight: 500;
-
-        &::placeholder {
-          color: #596A75;
-        }
-
-        &:-webkit-autofill,
-        &:-webkit-autofill:hover,
-        &:-webkit-autofill:focus,
-        &:-webkit-autofill:active {
-          box-shadow: 0 0 0 30px white inset;
+        input {
+          width: 100%;
+          height: 40px;
+          border: 0;
+          border-bottom: 2px solid #0B2541;
+          text-align: center;
+          //font-size: 1.375rem;
+          font-size: 1.35rem;
+          font-weight: 500;
+          transition: 0.3s;
+          &:hover, &:active, &:focus {
+            border-bottom: 2px solid #e2017b;
+          }
+          &::placeholder {
+            color: #596A75;
+          }
+  
+          &:-webkit-autofill,
+          &:-webkit-autofill:hover,
+          &:-webkit-autofill:focus,
+          &:-webkit-autofill:active  {
+            box-shadow: 0 0 0 30px white inset;
+          }
         }
       }
     }
@@ -122,12 +137,15 @@
       height: 50px;
       background: #0B2541;
       border-radius: 25px;
-      color: #fff
+      color: #fff;
+      &:hover {
+        background: #000;
+      }
     }
 
     .forgotPassword {
       margin: 10px 0 0;
-      font-size: 17px;
+      font-size: 1.0625rem;
       font-weight: 300;
       color: #596A75;
     }
@@ -153,7 +171,7 @@
     .formSubtitle {
       text-transform: uppercase;
       text-align: center;
-      font-size: 18px;
+      font-size: 1.125rem;
       margin-top: 52px;
     }
 
@@ -163,13 +181,13 @@
 
     .or {
       margin: 0 0 25px;
-      font-size: 18px;
+      font-size: 1.125rem;
     }
 
     .logInForm {
 
       .title {
-        font-size: 18px;
+        font-size: 1.125rem;
       }
 
       .inputs {
@@ -212,12 +230,12 @@
   .formSubtitle {
     text-transform: uppercase;
     text-align: center;
-    font-size: 18px;
+    font-size: 1.125rem;
   }
   .mobileFormTitle {
     display: block;
     text-align: center;
-    font-size: 24px;
+    font-size: 1.5rem;
     padding-top: 25px;
     padding-bottom: 15px;
   }
@@ -242,23 +260,23 @@
     display: -webkit-box;
     -webkit-box-orient: horizontal;
     padding: 20px;
-    font-size: 18px;
+    font-size: 1.125rem;
   }
 
   .formSubtitle {
     margin: 0 0 10px 0 !important;
-    font-size: 15px;
+    font-size: 0.9375rem;
   }
 
   .or {
     margin: 0 0 5px 0 !important;
-    font-size: 15px;
+    font-size: 0.9375rem;
   }
 
   .logInForm {
 
     .title {
-      font-size: 15px;
+      font-size: 0.9375rem;
     }
     .inputs {
       margin: 10px 10px 30px 0 !important;
@@ -270,7 +288,7 @@
         border-bottom: 3px solid #0B2541 !important;
         width: 25% !important;
         height: 30px;
-        font-size: 16px;
+        font-size: 1rem;
         font-weight: 500;
         -webkit-appearance: none;
         box-shadow: 0 0 0 30px #E7ECEF inset;

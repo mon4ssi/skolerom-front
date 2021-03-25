@@ -30,14 +30,14 @@
   margin-bottom: 24px;
   text-align: center;
   font-weight: 500;
-  font-size: 36px;
+  font-size: 2.25rem;
 }
 
 .Submitted__description {
   margin-bottom: 37px;
   text-align: center;
   font-weight: 300;
-  font-size: 17px;
+  font-size: 1.0625rem;
 }
 
 .Submitted__button {
@@ -48,7 +48,7 @@
   padding: 9px 18px 9px 47px;
   margin-left: 1px;
   font-weight: 500;
-  font-size: 17px;
+  font-size: 1.0625rem;
 }
 
 .Submitted__revert {
@@ -65,7 +65,7 @@
 @media screen and (max-width: $screen-dimension-tablet) {
   .Submitted__title {
     margin-bottom: 17px;
-    font-size: 24px;
+    font-size: 1.5rem;
   }
 
   .Submitted__description {
