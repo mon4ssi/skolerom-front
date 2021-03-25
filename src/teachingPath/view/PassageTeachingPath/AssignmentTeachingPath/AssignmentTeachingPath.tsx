@@ -64,7 +64,7 @@ class AssignmentTeachingPathComponent extends Component<ComponentProps> {
     return (
       <div className={'articleTeachingPath'}>
         <span className={'chooseOne'}>{intl.get('teaching path passing.choose one')}</span>
-        <span className={'title'}>{questionaryTeachingPathStore!.currentNode!.selectQuestion}</span>
+        <h1 className={'title'}>{questionaryTeachingPathStore!.currentNode!.selectQuestion}</h1>
         <div className="cards">
           {this.renderCards()}
         </div>

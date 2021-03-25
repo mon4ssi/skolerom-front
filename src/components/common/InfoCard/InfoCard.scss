@@ -9,6 +9,11 @@
   background: #FFFFFF;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.100661);
   border-radius: 5px;
+  transition: 0.5s;
+  &:hover {
+    transform: translateY(-4px)scale(1.01);
+    box-shadow: 0 8px 10px #00000061;
+  }
 
   .actionButtons {
     position: absolute;
@@ -59,7 +64,7 @@
       p {
         @include text-shrink-multiline(2);
         margin: 0;
-        font-size: 17px;
+        font-size: 1.0625rem;
         font-weight: 500;
       }
 
@@ -166,7 +171,7 @@
 
       .levels {
         margin-right: 15px;
-        font-size: 15px;
+        font-size: 0.9375rem;
         align-items: center;
         width: max-content;
 
@@ -177,7 +182,7 @@
     }
 
     .numberOfQuestions {
-      font-size: 15px;
+      font-size: 0.9375rem;
       color: #E2017B;
       font-weight: bold;
     }
@@ -185,7 +190,7 @@
     .cardDescription {
       @include text-shrink-multiline(2);
       margin-top: 4px;
-      font-size: 15px;
+      font-size: 0.9375rem;
       font-weight: 300;
     }
 
@@ -202,7 +207,7 @@
         margin: 0 5px;
         background: #D3D9DE;
         border-radius: 4px;
-        font-size: 13px;
+        font-size: 0.8125rem;
         margin-left: 0;
         font-weight: 300;
       }

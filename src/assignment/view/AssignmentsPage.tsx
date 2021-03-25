@@ -287,6 +287,9 @@ class AssignmentsPageWrapper extends Component<Props> {
 
     return (
       <div className={classes}>
+        <h1 className="generalTitle">
+        {intl.get('assignments search.title')}
+        </h1>
         {this.renderTabNavigations()}
 
         {this.renderSearchFilter()}

@@ -8,7 +8,7 @@
 }
 
 .AssignmentArticlesToReading__title {
-  font-size: 36px;
+  font-size: 2.25rem;
   margin: 40px;
   text-align: center;
   font-weight: 500;
@@ -81,7 +81,7 @@
             margin: 0 7px;
             color: #0B2541;
             font-weight: 500;
-            font-size: 15px;
+            font-size: 0.9375rem;
           }
         }
 
@@ -103,7 +103,7 @@
 
 @media screen and (max-width: $screen-dimension-mobile) {
   .AssignmentArticlesToReading__title {
-    font-size: 24px;
+    font-size: 1.5rem;
     margin: 16px 0 21px 0;
     font-weight: 500;
     text-align: left;

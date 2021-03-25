@@ -37,13 +37,13 @@
 
 .AnswerCover__teacherName {
   text-align: center;
-  font-size: 17px;
+  font-size: 1.0625rem;
   font-weight: 500;
 }
 
 .AnswerCover__subject {
   letter-spacing: -0.01em;
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 300;
 }
 
@@ -54,7 +54,7 @@
 
 .AnswerCover__blockText {
   margin-top: 2px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 500;
 }
 
@@ -76,12 +76,12 @@
   text-align: center;
   margin-bottom: 20px;
   font-weight: 500;
-  font-size: 36px;
+  font-size: 2.25rem;
 }
 
 .AnswerCover__description {
   font-weight: 300;
-  font-size: 17px;
+  font-size: 1.0625rem;
   text-align: center;
 }
 
@@ -89,7 +89,7 @@
   background: $color-text-primary;
   color: $color-light-gray;
   font-weight: 500;
-  font-size: 17px;
+  font-size: 1.0625rem;
   padding: 9px 23px;
   border-radius: 20px;
 }
@@ -148,7 +148,7 @@
   }
 
   .AnswerCover__title {
-    font-size: 24px;
+    font-size: 1.5rem;
   }
 
   .AnswerCover__assignmentInfo {

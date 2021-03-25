@@ -325,6 +325,9 @@ class TeachingPathsListComponent extends Component<Props, State> {
 
     return (
       <div className="teachingPathsList">
+        <h1 className="generalTitle">
+          {intl.get('teaching path search.title')}
+        </h1>
         {this.renderTabNavigate()}
 
         <SearchFilter
@@ -347,7 +350,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
           searchQueryFilterValue={QueryStringHelper.getString(this.props.history, QueryStringKeys.SEARCH)}
         />
 
-        <div className="cardList">
+        <div className="cardList" aria-live="polite" id="List" aria-atomic="true">
           {this.renderTeachingPathCards()}
         </div>
 

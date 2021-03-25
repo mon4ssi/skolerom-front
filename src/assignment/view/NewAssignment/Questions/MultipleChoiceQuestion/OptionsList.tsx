@@ -33,7 +33,6 @@ class OptionComponent extends Component<OptionComponentProps> {
 
   private toggleIsRight = () => {
     const { option } = this.props;
-
     option.setIsRight(!option.isRight);
   }
 
@@ -45,15 +44,12 @@ class OptionComponent extends Component<OptionComponentProps> {
 
   public render() {
     const { option, hasEnoughOptionsAndRightOptions, newAssignmentStore } = this.props;
-
     const placeholder = intl.get('new assignment.write_your_answer_here');
     const hasErrorOption = (!option.isValid || !hasEnoughOptionsAndRightOptions) && newAssignmentStore!.showValidationErrors;
-
     const className = classnames('option', {
       hasErrorOption,
       isRight: option.isRight,
     });
-
     return (
       <div className={className}>
         <input
@@ -61,6 +57,8 @@ class OptionComponent extends Component<OptionComponentProps> {
           onChange={this.onTitleChange}
           style={option.isRight ? { color: '#0A7B24' } : undefined}
           placeholder={placeholder}
+          aria-required="true"
+          aria-invalid="false"
         />
 
         <div className="statusBox">

@@ -11,6 +11,9 @@
   border-radius: 8px;
   box-shadow: 0 2px 5px 0 $color-dark-gray;
   cursor: pointer;
+  &:hover {
+    background: #D3D9DE;
+  }
 }
 
 .StudentListItem__skeleton {
@@ -36,7 +39,7 @@
 .StudentListItem__subjects {
   @include text-shrink;
   margin: auto 0;
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 
 .StudentListItem__subjects_mobile {
@@ -50,7 +53,7 @@
   background: $color-dark-gray;
   border: 1px solid $color-regent-gray;
   border-radius: 17px;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .StudentListItem__level {
@@ -90,7 +93,7 @@
 
   .StudentListItem__name {
     margin: 0 0 9px 0;
-    font-size: 15px;
+    font-size: 0.9375rem;
   }
 
   .StudentListItem__subjects {
@@ -99,7 +102,7 @@
 
   .StudentListItem__subjects_mobile {
     display: block;
-    font-size: 13px;
+    font-size: 0.8125rem;
   }
 
   .StudentListItem__grade {

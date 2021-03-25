@@ -7,11 +7,16 @@ export class UIStore {
   private userService: UserService = injector.get<UserService>(USER_SERVICE);
 
   @observable private _currentLocale: string = '';
+  @observable private _currentFont: string = '';
   @observable private _sidebarShown: boolean = false;
   @observable private _currentActiveTab: string = 'activity';
 
   public get currentLocale() {
     return this._currentLocale;
+  }
+
+  public get currentFont() {
+    return this._currentFont;
   }
 
   public get sidebarShown() {
@@ -27,6 +32,12 @@ export class UIStore {
   public setCurrentLocale(locale: string): void {
     this._currentLocale = locale;
     localStorage.setItem('currentLocale', locale);
+  }
+
+  @action
+  public setCurrentFont(font: string): void {
+    this._currentFont = font;
+    localStorage.setItem('currentFont', font);
   }
 
   @action

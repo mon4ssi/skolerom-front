@@ -65,7 +65,7 @@ export class StudentAssignmentsList extends Component<Props> {
 
     return (
       <>
-        <ul className="MyList">{assignments.map(this.renderListItem)}</ul>
+        <ul className="MyList" id="List" aria-live="polite">{assignments.map(this.renderListItem)}</ul>
         {isAssignmentPreviewVisible && this.renderSlideOutPanel()}
       </>
     );

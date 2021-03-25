@@ -7,7 +7,7 @@
 
 .AssignmentOverview__header {
   font-weight: 500;
-  font-size: 17px;
+  font-size: 1.0625rem;
 }
 
 .AssignmentOverview__questions {
@@ -21,7 +21,7 @@
 .AssignmentOverview__question {
   margin-bottom: 10px;
   @include animate-many(color);
-  font-size: 15px;
+  font-size: 0.9375rem;
   cursor: pointer;
   position: relative;
   padding-left: 30px;
@@ -43,7 +43,7 @@
   @include flex-center;
   @include animate-many(border-color, color);
   left: 0;
-  font-size: 12px;
+  font-size: 0.75rem;
   margin-right: 10px;
   border: 2px solid $color-text-primary;
   padding-bottom: 1px;

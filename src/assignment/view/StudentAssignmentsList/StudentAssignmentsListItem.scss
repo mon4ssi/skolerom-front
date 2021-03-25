@@ -38,7 +38,7 @@ $image-height: 60px;
 .StudentAssignmentsListItem__title {
   @include text-shrink;
   flex-shrink: 10;
-  font-size: 15px;
+  font-size: 0.9375rem;
   margin-left: 20px;
   margin-right: 20px;
 }
@@ -54,7 +54,7 @@ $image-height: 60px;
   @include text-shrink;
   min-width: 0;
   margin-right: 5px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   background: $color-light-gray;
   border: 1px solid $color-dark-gray;
   border-radius: 17px;
@@ -67,7 +67,7 @@ $image-height: 60px;
 
 .StudentAssignmentsListItem__questions {
   @include text-shrink;
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: $color-purple;
   margin-right: 20px;
 }
@@ -84,7 +84,7 @@ $image-height: 60px;
 
 .StudentAssignmentsListItem__deadlineText {
   @include text-shrink;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .StudentAssignmentsListItem__deadlineImage {
@@ -103,7 +103,7 @@ $image-height: 60px;
 
 .StudentAssignmentsListItem__evaluationStatusText {
   @include text-shrink;
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: $color-blue-gray;
 }
 
@@ -123,7 +123,7 @@ $image-height: 60px;
   @include text-shrink;
   border-radius: 17px;
   padding: 7px 16px 7px 17px;
-  font-size: 13px;
+  font-size: 0.8125rem;
 
   background: $color-dark-gray;
   border: 1px solid $color-blue-gray;
@@ -226,7 +226,7 @@ $image-height: 60px;
 
   .StudentAssignmentsListItem__questions_mobile {
     display: block;
-    font-size: 15px;
+    font-size: 0.9375rem;
   }
 
   .StudentAssignmentsListItem__image {
@@ -246,7 +246,7 @@ $image-height: 60px;
   .StudentAssignmentsListItem__subject {
     @include flex-center;
     flex: 1;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 300;
   }
 

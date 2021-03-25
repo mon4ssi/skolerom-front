@@ -179,7 +179,7 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
       return (
         <>
           <span className={'overview'}>{intl.get('teaching path preview.Start teaching path')}</span>
-          <span className={'titleTeachingPath'}>{currentTeachingPath && currentTeachingPath.title}</span>
+          <h1 className={'titleTeachingPath'}>{currentTeachingPath && currentTeachingPath.title}</h1>
         </>
       );
     }

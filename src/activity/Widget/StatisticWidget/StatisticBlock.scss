@@ -7,7 +7,7 @@
 .StatisticBlock__info {
   display: flex;
   align-items: center;
-  font-size: 60px;
+  font-size: 3.75rem;
   font-weight: 500;
 }
 
@@ -18,13 +18,13 @@
 .StatisticBlock__title {
   @include text-shrink;
   margin-bottom: 26px;
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 300;
 }
 
 .StatisticBlock__button {
   @include text-shrink;
-  font-size: 17px;
+  font-size: 1.0625rem;
   font-weight: 500;
   padding: 9px 23px;
   border-radius: 20px;
@@ -57,13 +57,13 @@
   }
 
   .StatisticBlock__title {
-    font-size: 16px;
+    font-size: 1rem;
   }
 
   .StatisticBlock__button {
     padding-left: 15px;
     padding-right: 15px;
-    font-size: 16px;
+    font-size: 1rem;
   }
 }
 

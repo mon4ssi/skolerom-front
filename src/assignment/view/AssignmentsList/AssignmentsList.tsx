@@ -52,7 +52,7 @@ class AssignmentsList extends Component<Props> {
   public render() {
     const { assignments } = this.props;
 
-    return <ul className="MyList">{assignments.map(this.renderListItem)}</ul>;
+    return <ul className="MyList" id="List" aria-live="polite">{assignments.map(this.renderListItem)}</ul>;
   }
 }
 

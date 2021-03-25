@@ -139,6 +139,7 @@ export class PublishingActions extends Component<Props> {
         </div>
 
         <TagInputComponent
+          dataid="renderSubjectInput"
           className="filterBy darkTheme"
           tags={subjects}
           addTag={this.addSubject}
@@ -166,6 +167,7 @@ export class PublishingActions extends Component<Props> {
         </div>
 
         <TagInputComponent
+          dataid="renderGradeInput"
           className="filterBy darkTheme"
           tags={grades}
           addTag={this.addGrade}

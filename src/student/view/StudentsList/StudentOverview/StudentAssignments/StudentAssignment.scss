@@ -24,7 +24,7 @@
 
 .StudentAssignment__title {
   @include text-shrink;
-  font-size: 15px;
+  font-size: 0.9375rem;
   margin-right: 10px;
 }
 
@@ -39,7 +39,7 @@
   background: $color-dark-gray;
   border: 1px solid $color-blue-gray;
   border-radius: 17px;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .StudentAssignment__answerStatus_mobile {
@@ -56,7 +56,7 @@
   @include text-shrink;
   display: flex;
   margin-left: 20px;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .StudentAssignment__deadline_grey {
@@ -79,7 +79,7 @@
   @include text-shrink;
   display: flex;
   margin-left: 20px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: $color-blue-gray;
 }
 

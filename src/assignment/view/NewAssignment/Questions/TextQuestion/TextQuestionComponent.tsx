@@ -58,6 +58,7 @@ class TextQuestionContent extends Component<TextQuestionProps> {
   public render() {
     const { question, newAssignmentStore } = this.props;
     const order = question.orderPosition + 1;
+    const titleId = `id_question_${question.orderPosition}`;
     const lightItem = newAssignmentStore!.isHighlightedItem(CreationElements.Questions, question.orderPosition) ? 'lightItem' : '';
     const hasError = newAssignmentStore!.currentEntity!.questionsWithErrors === question.orderPosition;
 
@@ -77,13 +78,14 @@ class TextQuestionContent extends Component<TextQuestionProps> {
             />
           </div>
         </div>
-
+        <label id={titleId} className="hidden">{intl.get('new assignment.Enter a question')}</label>
         <TextAreaAutosize
           className={`newTextQuestionInput ${lightItem}`}
           placeholder={intl.get('new assignment.Enter a question')}
           value={question.title}
           onChange={this.handleChangeTitle}
           maxLength={MAX_DESCRIPTION_LENGTH}
+          aria-labelledby={titleId}
         />
 
         <MappingContentBlocks question={question} helperClass="content-block-dragged" onSortEnd={this.onSortEnd} useDragHandle />

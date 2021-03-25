@@ -459,6 +459,8 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
               placeholder={this.renderPlaceholder()}
               value={query}
               onChange={this.handleSearch}
+              aria-required="true"
+              aria-invalid="false"
             />
 
             <img src={searchIcon} alt="search-icon" />

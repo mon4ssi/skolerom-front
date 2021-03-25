@@ -356,6 +356,8 @@ export class ArticlesList extends Component<Props, State> {
           className="articlesListContainer flexBox"
           ref={this.ref}
           onScroll={this.onScroll}
+          aria-live="polite"
+          id="List"
         >
           {this.renderArticlesList()}
         </div>

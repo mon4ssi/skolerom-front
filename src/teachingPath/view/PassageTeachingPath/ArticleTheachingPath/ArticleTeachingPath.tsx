@@ -65,7 +65,7 @@ export class ArticleTeachingPath extends Component<Props, State> {
     return questionaryTeachingPathStore!.currentArticlesList.map((item) => {
       const passedStyle = item.isSelected ? 'passedStyle' : '';
       return (
-        <div className={passedStyle} key={item.id}>
+        <div className={passedStyle} key={item.id} role="region" aria-live="polite" aria-atomic="true">
           <InfoCard
             icon={reading}
             title={item.title}
