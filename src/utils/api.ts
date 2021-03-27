@@ -20,6 +20,12 @@ API.interceptors.request.use(
       const locale = storageInteractor.getCurrentLocale() as Locales;
 
       if (token) {
+        const setCookie = document.cookie;
+
+        if (setCookie.split('sso-authcookie-skolerom').length <= 1) {
+          storageInteractor.logOut();
+          window.location.reload();
+        }
         config.headers.Authorization = `Bearer ${token}`;
       }
 
