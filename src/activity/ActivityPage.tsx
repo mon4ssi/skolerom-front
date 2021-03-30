@@ -307,9 +307,6 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
             {this.renderSliderWidgetBlock()}
             {/* {/* {role === UserType.Teacher && this.renderStatisticWidget()} */}
             <div className="recentActivityNewContent">
-              <div className={`recentActivityNewContent__pause ${this.state.isPause && 'active'}`} onClick={() => this.stopComponent()}>
-                <i />
-              </div>
             {/* {role === UserType.Teacher && this.renderRecentActivitiesList()} */}
             </div>
           </div>

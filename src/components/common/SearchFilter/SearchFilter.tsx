@@ -241,16 +241,8 @@ class SearchFilter extends Component<Props, State> {
 
         .SearchFilter__select {
           margin-right: 15px;
-          flex: 1 1 calc(33% - 1em);
+          flex: 1 1 calc(25% - 1em);
           margin-bottom: 15px;
-        }
-
-        .SearchFilter__search {
-          padding: 0 30px 0 10px;
-          flex: 1 1 100%;
-          margin-bottom: 15px;
-          margin-right: 15px;
-          border: none;
         }
       }
     `;
