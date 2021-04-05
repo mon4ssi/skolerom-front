@@ -8,7 +8,7 @@
     "Feide": "Feide",
     "Or": "Eller",
     "Log in with user": "Logg inn med brukar",
-    "Username": "Brukarnamn",
+    "Username": "E-postadresse",
     "Password": "Passord",
     "Log in": "Logg inn",
     "Forgot password": "Gløymt passordet?",
@@ -555,6 +555,7 @@
     "No results found": "Søket ditt ga ingen resultater"
   },
   "students_list": {
+    "change_font_size": "Endre skriftstorleik",
     "title":"Studenter",
     "tabs": {
       "my_students": "Mine elevar",

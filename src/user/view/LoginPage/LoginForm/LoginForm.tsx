@@ -77,28 +77,15 @@ export class LoginForm extends Component<LoginFormProps, State> {
         <div className="flexBox dirColumn justifyCenter alignCenter">
           <h1 className="formTitle fw500">{intl.get('login_page.Log in to Skolerom')}</h1>
 
-          <p className="formSubtitle fw500 upp">{intl.get('login_page.Log in with Feide')}</p>
-
-          <a
-            className="loginButton flexBox justifyCenter alignCenter rightClickArea"
-            onContextMenu={this.rightClickFeide}
-            href={`${process.env.REACT_APP_BASE_URL}/api/dataporten/auth`}
-          >
-            <img src={loginBtnIcon} alt="Login" />
-            <span>{intl.get('login_page.Feide')}</span>
-          </a>
-
-          <RightClickMenu reference={this.rightClickMenuRef} hideMenu={this.hideMenu}/>
-
         </div>
 
-        <p className="or">{intl.get('login_page.Or')}</p>
+        {/*<p className="or">{intl.get('login_page.Or')}</p>*/}
 
         <form
           className="logInForm flexBox dirColumn alignCenter"
           onSubmit={this.submitLoginWithLogPass}
         >
-          <p className="title">{intl.get('login_page.Log in with user')}</p>
+          {/*<p className="title">{intl.get('login_page.Log in with user')}</p>*/}
 
           <div className="inputs flexBox">
             <div className="inputcontent">

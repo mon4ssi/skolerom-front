@@ -6,7 +6,7 @@
   .formTitle {
     color: #0B2541;
     font-size: 2.25rem;
-    margin-bottom: 64px;
+    margin-bottom: 24px;
   }
 
   .formWrapper {
@@ -92,9 +92,9 @@
     }
 
     .inputs {
-      width: calc(100% - 200px);
+      width: calc(100% - 600px);
       justify-content: space-between;
-      margin: 30px 0 35px;
+      margin: 10px 0 35px;
 
       .inputcontent {
         // width: 240px;

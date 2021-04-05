@@ -238,7 +238,15 @@ class SearchFilter extends Component<Props, State> {
         .SearchFilter__space {
           display: none;
         }
-
+        .SearchFilter__search__content {
+          margin-left: 0px;
+          width: 100%;
+        }
+        .SearchFilter__search {
+          width: 100%;
+          border-left: 0px;
+          padding-left: 2px;
+        }
         .SearchFilter__select {
           margin-right: 15px;
           flex: 1 1 calc(25% - 1em);
@@ -289,15 +297,15 @@ class SearchFilter extends Component<Props, State> {
           <input
             className="SearchFilter__search"
             placeholder={placeholder}
-            value={myValue}
-            onChange={searchQueryChange}
+            value={searchQueryValue}
+            onChange={handleInputSearchQuery}
             aria-labelledby="searchfilterInput"
             id="SendFilter"
             aria-required="true"
             aria-invalid="false"
           />
           <label id="searchfilterInput" className="hidden">{placeholder}</label>
-          <button id="ChangeForce" type="submit" className="SearchFilter__search__submit" onClick={handleInputSearchQuery} />
+          <button id="ChangeForce" type="submit" className="SearchFilter__search__submit" />
         </div>
       </div>
     );

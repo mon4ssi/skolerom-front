@@ -173,6 +173,7 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
           {navigation.map(this.renderNavigation)}
         </ul>
         {this.renderLocaleChooserIfNeeded()}
+        {this.renderChangeFontSize()}
         {this.renderLogOutButtonIfNeeded()}
         {this.renderLogInButtonIfNeeded()}
       </>

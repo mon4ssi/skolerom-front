@@ -3,12 +3,12 @@
   "assignment": "assignment",
   "teaching path": "teaching path",
   "login_page": {
-    "Log in to Temabok": "Log in to Temabok",
+    "Log in to Temabok": "Log in to Skolerom",
     "Log in with Feide": "Log in with Feide",
     "Feide": "Feide",
     "Or": "Or",
     "Log in with user": "Log in with user",
-    "Username": "Username",
+    "Username": "E-mail",
     "Password": "Password",
     "Log in": "Log in",
     "Forgot password": "Forgot password?",
@@ -54,6 +54,7 @@
     "teaching_path_back": "Back to all teaching paths"
   },
   "header": {
+    "change_font_size": "Change font size",
     "Articles": "Articles",
     "Article":  "Article",
     "Publications": "Publications",
@@ -135,7 +136,7 @@
     "questions answered": "questions answered"
   },
   "assignments search": {
-    "title": "Assingments",
+    "title": "Assignments",
     "Choose subject": "Choose subject",
     "Choose grade": "Choose grade",
     "Class": "Class",
@@ -463,7 +464,7 @@
   },
   "teaching path search": {
     "Search for teaching paths": "Search for teaching paths...",
-    "title":"Teaching path"
+    "title":"Teaching Paths"
   },
   "teaching path passing": {
     "choose one": "Choose one",
