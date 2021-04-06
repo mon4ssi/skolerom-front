@@ -131,7 +131,7 @@
   z-index: 4;
   border-radius: 50%;
   &:before {
-    content: 'Pause';
+    content: attr(data-pause);
     z-index: 2;
     position: absolute;
     box-shadow: 0 2px 2px #00000021;
@@ -170,7 +170,7 @@
   }
   &.active {
     &:before {
-      content: 'Play';
+      content: attr(data-play);
     }
     i {
       background-image:url('../../assets/images/button-play.svg');

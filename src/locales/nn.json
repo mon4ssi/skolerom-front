@@ -587,6 +587,8 @@
   },
   "activity_page": {
     "Hello": "Hei",
+    "pause":"pause",
+    "play":"spille",
     "No available content": "Ikkje tilgjengeleg innhald",
     "Widget failed to load": "Modulen blei ikkje lasta",
     "active assignments":  "Aktive oppgåver",

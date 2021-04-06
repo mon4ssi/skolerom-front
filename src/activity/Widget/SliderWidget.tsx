@@ -145,7 +145,12 @@ export class SliderWidget extends Component<SliderWidgetProps, SliderWidgetState
               timeout={ANIMATION_TIMEOUT}
             >
               <div className="SliderWidget__content">
-                <div className={`SliderWidget__content__pause ${this.state.isPause && 'active'}`} onClick={() => this.pause(this.state.currentSlide)}>
+                <div
+                  className={`SliderWidget__content__pause ${this.state.isPause && 'active'}`}
+                  onClick={() => this.pause(this.state.currentSlide)}
+                  data-pause={intl.get('activity_page.pause')}
+                  data-play={intl.get('activity_page.play')}
+                >
                   <i className="SliderWidget__content__pauseicon" />
                 </div>
                 <img className={imageClasses} src={slide.imageURL} alt="slider_image" />
