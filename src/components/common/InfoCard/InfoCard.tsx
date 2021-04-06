@@ -162,7 +162,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
     return (
       <div className={`withTooltip ${!withTooltip && 'withoutTooltip'}`}>
         {this.renderDefaultIcons()}
-        {withTooltip && <img src={tooltipImageSrc} alt="info-icon" onClick={this.handleTooltipVisible} />}
+        {withTooltip && <span className="OptionMsj" data-msj={intl.get('activity_page.options')}><img src={tooltipImageSrc} alt="info-icon" onClick={this.handleTooltipVisible} /></span>}
         {(!isNull(idActiveCard) && idActiveCard === id) && this.renderTooltip()}
       </div>
     );
