@@ -1,7 +1,6 @@
 @import "style";
 
 .InfoCard {
-  position: relative;
   width: 282px;
   height: 344px;
   min-height: 344px;
@@ -10,10 +9,6 @@
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.100661);
   border-radius: 5px;
   transition: 0.5s;
-  &:hover {
-    transform: translateY(-4px)scale(1.01);
-    box-shadow: 0 8px 10px #00000061;
-  }
 
   .actionButtons {
     position: absolute;

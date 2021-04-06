@@ -1,4 +1,5 @@
 import React, { Component, SyntheticEvent } from 'react';
+import intl from 'react-intl-universal';
 import './WidgetHeader.scss';
 import optionsImage from 'assets/images/more-with-bg.svg';
 import { WidgetTooltip } from '../WidgetTooltip';
@@ -57,8 +58,10 @@ export class WidgetHeader extends Component<IWidgetHeaderProps, State> { // TODO
     return (
       <div className="WidgetHeader" onClick={this.handleClickCollapse}>
         <div className="WidgetHeader__title">{title}</div>
-        <img src={optionsImage} alt="Options" className="WidgetHeader__image" onClick={this.handleClickTooltip}/>
-        {this.renderTooltip()}
+        <span className="OptionMsj" data-msj={intl.get('activity_page.options')} >
+          <img src={optionsImage} alt="Options" className="WidgetHeader__image" onClick={this.handleClickTooltip}/>
+          </span>
+          {this.renderTooltip()}
       </div>
     );
   }

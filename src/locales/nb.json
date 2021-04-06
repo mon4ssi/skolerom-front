@@ -589,7 +589,8 @@
   "activity_page": {
     "Hello": "Hei",
     "pause":"pause",
-    "play":"spille",
+    "play":"Spill av",
+    "options":"Options",
     "No available content": "Ikke tilgjengelig innhold",
     "Widget failed to load": "Modulen ble ikke lastet",
     "active assignments":  "Aktive oppgaver",

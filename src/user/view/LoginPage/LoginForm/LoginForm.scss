@@ -95,7 +95,7 @@
       width: calc(100% - 600px);
       justify-content: space-between;
       margin: 10px 0 35px;
-
+      min-width: 320px;
       .inputcontent {
         // width: 240px;
         width: calc((100% - 40px) / 2);
