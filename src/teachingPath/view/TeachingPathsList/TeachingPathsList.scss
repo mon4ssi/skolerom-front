@@ -50,3 +50,9 @@
     width: 40% ;
   }
 }
+.teachingPathsList .cardList .InfoCard {
+  transition: 0.3s;
+}
+.teachingPathsList .cardList .InfoCard:hover {
+  box-shadow: 0 8px 10px #00000061;
+}

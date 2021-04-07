@@ -87,24 +87,26 @@
           border: 1px solid #596a75;
           padding: 20px;
           cursor: default;
-          background: #fff;
+          background: #596a75;
           content: attr(data-msj);
           right: -2px;
           top: 18px;
           opacity: 0;
           pointer-events: none;
           z-index: 2;
+          color: white;
+          font-size: 1.0625rem;
         }
         &:after {
           content: "";
           position: absolute;
           width: 12px;
           height: 12px;
-          background: #fff;
+          background: #596a75;
           right: 0px;
           -webkit-transform: translate(-50%,-50%) rotate(-45deg);
           transform: translate(-50%,-50%) rotate(-45deg);
-          background-color: #fff;
+          background-color: #596a75;
           border-right: 1px solid #596a75;
           border-top: 1px solid #596a75;
           top: 38px;

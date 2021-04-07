@@ -146,7 +146,7 @@ export class SliderWidget extends Component<SliderWidgetProps, SliderWidgetState
             >
               <div className="SliderWidget__content">
                 <div
-                  className={`SliderWidget__content__pause ${this.state.isPause && 'active'}`}
+                  className={`SliderWidget__content__pause opacity ${this.state.isPause && 'active'}`}
                   onClick={() => this.pause(this.state.currentSlide)}
                   data-pause={intl.get('activity_page.pause')}
                   data-play={intl.get('activity_page.play')}
@@ -220,6 +220,13 @@ export class SliderWidget extends Component<SliderWidgetProps, SliderWidgetState
       return (
         <div className="SliderWidget__slideSwitcher">
           {buttons}
+          <div
+            className={`SliderWidget__content__pause ${this.state.isPause && 'active'}`}
+            data-pause={intl.get('activity_page.pause')}
+            data-play={intl.get('activity_page.play')}
+          >
+            <i className="SliderWidget__content__pauseicon" />
+          </div>
         </div>
       );
     }

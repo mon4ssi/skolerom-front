@@ -88,7 +88,13 @@
   position: absolute;
   bottom: 24px;
   right: 55px;
-  z-index: 2;
+  z-index: 3;
+}
+
+.SliderWidget__slideSwitcher .SliderWidget__content__pause {
+  bottom: 0;
+  right: -35px;
+  pointer-events: none;
 }
 
 .SliderWidget__switchButton {
@@ -125,9 +131,8 @@
   width: 26px;
   height: 26px;
   cursor: pointer;
-  bottom: 25px;
+  bottom: 23px;
   right: 20px;
-  background: white;
   z-index: 4;
   border-radius: 50%;
   &:before {
@@ -141,21 +146,23 @@
     border: 1px solid #596A75;
     padding: 20px;
     cursor: default;
-    background: #fff;
+    background: #596A75;
     right: -6px;
     top: -92px;
     pointer-events: none;
     opacity: 0;
+    color: white;
+    font-size: 1.0625rem;
   }
   &:after {
     content: '';
     position: absolute;
     width: 12px;
     height: 12px;
-    background: white;
+    background: #596A75;
     right: -2px;
     transform: translate(-50%, -50%) rotate(-45deg);
-    background-color: #fff;
+    background-color: #596A75;
     border-left: 1px solid #596A75;
     border-bottom: 1px solid #596A75;
     top: -8px;
@@ -176,6 +183,10 @@
       background-image:url('../../assets/images/button-play.svg');
     }    
   }
+}
+
+.SliderWidget__content__pause.opacity .SliderWidget__content__pauseicon {
+  opacity: 0;
 }
 
 .SliderWidget__content_animated-enter, .SliderWidget__content_animated-exit {
