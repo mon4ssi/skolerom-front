@@ -102,7 +102,7 @@ export class LoginForm extends Component<LoginFormProps, State> {
             <div className="inputcontent">
               <label id="email_label" className="hidden">Email</label>
               <input
-                type="email"
+                type="text"
                 name="email"
                 aria-labelledby="email_label"
                 placeholder={intl.get('login_page.Username')}
