@@ -68,7 +68,8 @@ export class LoginStore {
       this.currentUser = this.storageInteractor.getUser();
     }
 
-    if (response !== 'login_wp') this.isCurrentUserFetching = false;
+    this.isCurrentUserFetching = false;
+    // if (response !== 'login_wp') this.isCurrentUserFetching = false;
   }
 
   @action
