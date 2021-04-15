@@ -55,11 +55,6 @@ export class UserApi implements UserRepo {
     try {
       const response = await API.post('/api/login', { email, password }, { withCredentials: true });
 
-      if (response.data.access_token === 'login_wp') {
-        window.location.href = `${process.env.REACT_APP_WP_URL}/wp-content/plugins/skolerom-sso/skolerom-sso-login.php?nl=1&sso=${response.data.sso}`;
-        return 'login_wp';
-      }
-
       this.storageInteractor.setUserWithToken(response.data.access_token, response.data.user);
 
       return response.data.access_token;

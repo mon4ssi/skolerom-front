@@ -250,9 +250,9 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
     return (
       <div className={infoCardClassNames} onClick={this.onCardClick}>
         {withButtons && this.renderActionButtons()}
-
-        <img src={img || placeholderImg} alt="info-background" className="cardImage"/>
-
+        <button>
+          <img src={img || placeholderImg} alt="info-background" className="cardImage"/>
+        </button>
         <div className="cardInfo flexBox dirColumn spaceBetween">
           <div>
             <div className={`${!withTooltip && 'flexBox'}`}>

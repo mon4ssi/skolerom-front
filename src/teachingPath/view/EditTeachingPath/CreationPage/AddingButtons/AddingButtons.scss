@@ -10,8 +10,21 @@
     display: flex;
     height: 62px;
     align-items: center;
-    padding: 10px 20px;
-
+    background: transparent;
+    button {
+      padding: 0px;
+      width: 100%;
+      display: flex;
+      height: 62px;
+      align-items: center;
+      background: transparent;
+      font-size: 1.0625rem;
+      padding: 10px 20px;
+      &:focus {
+        outline: solid;
+        outline-style: auto;
+      }
+    }
     img {
       margin-right: 20px;
       width: 38px;
@@ -29,7 +42,9 @@
     &:hover {
       background: #939FA7;
       color: #ffffff;
-
+      button {
+        color: #ffffff;
+      }
       img {
         filter: brightness(0) invert(1);
       }

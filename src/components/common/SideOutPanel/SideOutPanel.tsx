@@ -89,7 +89,7 @@ class SideOutPanelComponent extends Component<Props & RouteComponentProps> {
       intl.get('answers.answer_teaching_path');
 
     return (
-      <div className={'evaluationInfo'} onClick={this.stopPropagation}>
+      <div className={'evaluationInfo'} onClick={this.stopPropagation} tabIndex={0}>
         <div className="contentContainer">
           <div className="close-panel">
             <img
@@ -114,7 +114,8 @@ class SideOutPanelComponent extends Component<Props & RouteComponentProps> {
               </div>
             </div>
           </div>
-
+          <div id="aux1" className="hidden">Not name</div>
+          <input type="text" aria-labelledby="aux1" autoFocus className="hidden"/>
           <div className="entityInfo">
             <div className={`deadline ${isPassedDeadline && 'passed'}`}>
               <img src={clock} alt="clock"/>

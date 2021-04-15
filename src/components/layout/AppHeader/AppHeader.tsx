@@ -186,9 +186,9 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
 
     return loginStore!.currentUser ? (
       <li className="AppHeader__navigationItem" onClick={this.showUserModal}>
-        <div className="AppHeader__navigationItemText">
+        <a href="javascript:void(0)" className="AppHeader__navigationItemText">
           {intl.get('header.My account')}
-        </div>
+        </a>
         <img
           className="AppHeader__userLogo"
           src={loginStore!.currentUser.photo ? loginStore!.currentUser.photo : userPlaceholder}
@@ -252,6 +252,18 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       </a>
     </li>
   )
+
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      this.setState({
+        modalVisible: Modals.NONE,
+      });
+    }
+  }
+
+  public async componentDidMount() {
+    document.addEventListener('keyup', this.handleKeyboardControl);
+  }
 
   public renderNavigation = () => {
     const { uiStore } = this.props;

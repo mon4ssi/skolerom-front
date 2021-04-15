@@ -382,10 +382,89 @@ pre {
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
+  opacity: 0;
 }
-
+.AppHeader__submenuWrapper:focus-within {
+  opacity: 1;
+  pointer-events: all;
+}
 .generalTitle {
   font-size: 1.625rem;
   margin: 0px;
   margin-bottom: 20px;
+}
+
+//focus event
+.AppHeader__block a:focus {
+  outline: solid;
+}
+.MyAccountWindow__itemText:focus {
+  text-decoration: underline;
+}
+.AppHeader__navigationItem a:focus {
+  border-bottom: solid 1px black;
+  display: block;
+}
+.SliderWidget__button:focus {
+  outline: solid;
+  outline-offset: 5px;
+  outline-width: thin;
+  outline-color: black;
+  outline-style: auto;
+}
+.SliderWidget__switchButton:focus {
+  outline: solid;
+}
+.Sidebar__listItem:focus {
+  background: #f1f1f1;
+  border-bottom: solid 2px black;
+}
+.TabNavigation ul li .sidebarLink:focus {
+  outline: solid;
+}
+.CreateButton:focus {
+  outline: solid;
+  outline-color: black;
+  outline-style: auto;
+  outline-offset: 2px;
+}
+.SearchFilter__select:focus {
+  outline: solid;
+  outline-offset: 5px;
+  outline-style: auto;
+}
+.ListWidget__text:focus {
+  outline: solid;
+}
+.MyList a:focus img, .AssignmentDistributeList a:focus img, .StudentsList__list a:focus img, .MyList a.StudentAssignmentsListItem:focus {
+  outline: solid;
+  outline-color: white;
+  outline-width: thin;
+}
+.MyList a:focus li, .AssignmentDistributeList a:focus li, .StudentsList__list a:focus li, .MyList a.StudentAssignmentsListItem:focus {
+  background: #e4e4e4 !important;
+}
+.SubmitTeachingPath__button:focus {
+  outline: black;
+  outline-style: auto;
+  outline-offset: 3px;
+}
+.Submitted__button:focus {
+  outline: black;
+  outline-style: auto;
+  outline-offset: 3px;
+}
+.AnswerCover__button:focus {
+  outline: black;
+  outline-style: auto;
+  outline-offset: 3px;
+}
+.AppHeader__dropdown:focus ~ .AppHeader__submenuWrapper {
+  opacity: 1;
+  pointer-events: all;
+}
+.passageTeachingPath .teachingPathNavigate .arrowControlsTeachingPath .navigationExitButton:focus {
+  outline: black;
+  outline-style: auto;
+  outline-offset: 2px;
 }

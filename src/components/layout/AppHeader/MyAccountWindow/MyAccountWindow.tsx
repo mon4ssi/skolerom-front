@@ -66,7 +66,6 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
 
   private logOut = () => {
     const { loginStore } = this.props;
-
     loginStore!.logOut();
   }
 
@@ -76,9 +75,9 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
     && (
       <ul className="MyAccountWindow__list MyAccountWindow__list_separated">
         <li className="MyAccountWindow__item" onClick={this.goToLocaleScreen}>
-          <div className="MyAccountWindow__itemText">
+          <a href="javascript:void(0)" className="MyAccountWindow__itemText">
             {intl.get('header.Change Language')} (<span style={{ textTransform: 'uppercase' }}>{uiStore!.currentLocale})</span>
-          </div>
+          </a>
         </li>
       </ul>
     );
@@ -112,9 +111,9 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
       <ul className="MyAccountWindow__list">
         <li className="MyAccountWindow__item" onClick={this.logOut}>
           <img className="MyAccountWindow__itemImage" src={logOutIcon} alt={intl.get('header.Log out')} />
-          <div className="MyAccountWindow__itemText">
+          <a href="javascript:void(0)" className="MyAccountWindow__itemText">
             {intl.get('header.Log out')}
-          </div>
+          </a>
         </li>
       </ul>
     );
@@ -126,9 +125,9 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
         <ul className="MyAccountWindow__list">
           <li className="MyAccountWindow__item" onClick={this.props.onLogIn}>
             <img className="MyAccountWindow__itemImage" src={logOutIcon} alt={intl.get('header.Log out')} />
-            <div className="MyAccountWindow__itemText">
+            <a href="javascript:void(0)" className="MyAccountWindow__itemText">
               {intl.get('header.Log in')}
-            </div>
+            </a>
           </li>
         </ul>
       );
@@ -156,9 +155,9 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
     && (
       <ul className="MyAccountWindow__list MyAccountWindow__list_separated">
         <li className="MyAccountWindow__item"  onClick={this.goToFontsScreen}>
-          <div className="MyAccountWindow__itemText">
+          <a href="javascript:void(0)" className="MyAccountWindow__itemText">
             {intl.get('header.change_font_size')}
-          </div>
+          </a>
         </li>
       </ul>
     );
@@ -224,11 +223,12 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
         onClick={() => setCurrentLocale(language.shortName)}
         key={language.language}
       >
-        <div
+        <a
+          href="javascript:void(0)"
           className={classnames('MyAccountWindow__itemText', { MyAccountWindow__itemText_selected: uiStore!.currentLocale === language.shortName })}
         >
           {language.language} {uiStore!.currentLocale === language.shortName && `(${intl.get('header.selected')})`}
-        </div>
+        </a>
       </li>
     );
 
@@ -245,7 +245,8 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
             <img className="MyAccountWindow__closeButton" src={closeIcon} alt="Close" onClick={closeMyAccountWindow} />
           </li>
         </ul>
-
+        <div id="aux4" className="hidden">Not name</div>
+        <input type="text" aria-labelledby="aux4" autoFocus className="hidden"/>
         <ul className="MyAccountWindow__list">
           {languages.map(renderLanguage)}
         </ul>
@@ -285,11 +286,12 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
         // tslint:disable-next-line: jsx-no-lambda
         onClick={() => setCurrentFonts(fontstore.classname)}
       >
-        <div
+        <a
+          href="javascript:void(0)"
           className={classnames('MyAccountWindow__itemText', { MyAccountWindow__itemText_selected: uiStore!.currentFont === fontstore.classname })}
         >
           {fontstore.name}
-        </div>
+        </a>
       </li>
     );
 
@@ -306,7 +308,8 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
             <img className="MyAccountWindow__closeButton" src={closeIcon} alt="Close" onClick={closeMyAccountWindow} />
           </li>
         </ul>
-
+        <div id="aux3" className="hidden">Not name</div>
+        <input type="text" aria-labelledby="aux3" autoFocus className="hidden"/>
         <ul className="MyAccountWindow__list">
         {fontsStore.map(renderFont)}
         </ul>
@@ -329,6 +332,17 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
     </CSSTransition>
   )
 
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    const { closeMyAccountWindow } = this.props;
+    if (event.key === 'ArrowLeft') {
+      this.goToMainScreen();
+    }
+  }
+
+  public async componentDidMount() {
+    document.addEventListener('keyup', this.handleKeyboardControl);
+  }
+
   public render() {
     const { currentScreen } = this.state;
     const localeScreen = this.renderAnimationWrapper('MyAccountWindow__secondaryContainer_animated', this.renderLanguageChangeScreen());
@@ -337,6 +351,8 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
 
     return (
       <div className="MyAccountWindow" ref={this.containerRef}>
+        <div id="aux2" className="hidden">Not name</div>
+        <input type="text" aria-labelledby="aux2" autoFocus className="hidden"/>
         <TransitionGroup>
           {currentScreen === Screen.MAIN && mainScreen}
           {currentScreen === Screen.LOCALE && localeScreen}

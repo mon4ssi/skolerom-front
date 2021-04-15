@@ -63,22 +63,28 @@ class AddingButtonsContainer extends Component<Props> {
           className="addingButton"
           onClick={this.openArticlesList}
         >
-          <img src={addArticleImg} alt="add-article" />
-          {intl.get('edit_teaching_path.modals.add_articles')}
+          <button>
+            <img src={addArticleImg} alt="add-article" />
+            {intl.get('edit_teaching_path.modals.add_articles')}
+          </button>
         </div>
         <div
           className="addingButton"
           onClick={this.openAssignmentsList}
         >
+          <button>
           <img src={addAssignemntImg} alt="add-assignment" />
           {intl.get('edit_teaching_path.modals.add_assignments')}
+          </button>
         </div>
         <div
           className="addingButton"
           onClick={this.openCreatingAssignment}
         >
-          <img src={createAssignmentImg} alt="create-assignment" />
-          {intl.get('edit_teaching_path.modals.create_assignment')}
+          <button>
+            <img src={createAssignmentImg} alt="create-assignment" />
+            {intl.get('edit_teaching_path.modals.create_assignment')}
+          </button>
         </div>
       </div>
     );

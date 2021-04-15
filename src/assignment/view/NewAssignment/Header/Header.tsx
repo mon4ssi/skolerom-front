@@ -298,6 +298,35 @@ class HeaderWrapper extends Component<Props> {
     ) : null;
   }
 
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    const { isCreation, isDistribution, isPublishing, newAssignmentStore } = this.props;
+    const userType = newAssignmentStore!.getCurrentUser()!.type;
+    if (event.key === 'Escape') {
+      this.onGoBack();
+    }
+    if (event.shiftKey && event.key === 'S' || event.key === 's') {
+      if (isCreation) {
+        if (this.isDisabledSaveButton()) {
+          this.onSave();
+        }
+      }
+      if (isPublishing) {
+        if (this.isDisabledDistributeButton()) {
+          this.onPublish(true);
+        }
+      }
+      if (isDistribution) {
+        if (this.isDisabledPublishButton()) {
+          this.onDistribute();
+        }
+      }
+    }
+  }
+
+  public async componentDidMount() {
+    document.addEventListener('keyup', this.handleKeyboardControl);
+  }
+
   public render() {
     return (
       <div className="header flexBox spaceBetween alignCenter">

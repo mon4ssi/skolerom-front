@@ -101,6 +101,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
     this.setCurrentTab();
     this.fetchTeachingPaths();
     this.unregisterListener = this.props.history.listen(this.locationUpdateListener);
+    document.addEventListener('keyup', this.handleKeyboardControl);
   }
 
   public componentDidUpdate = async (prevProps: Props) => {
@@ -127,6 +128,12 @@ class TeachingPathsListComponent extends Component<Props, State> {
     this.unregisterListener();
     this.props.teachingPathsListStore!.setCurrentTeachingPath(id);
     this.setState({ isTeachingPathPreviewVisible: true });
+  }
+
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      this.setState({ isTeachingPathPreviewVisible: false });
+    }
   }
 
   public onClickTeachingPath = (id: number, view?: string) => {

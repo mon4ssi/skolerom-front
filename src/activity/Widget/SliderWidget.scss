@@ -136,10 +136,12 @@
   width: 26px;
   height: 26px;
   cursor: pointer;
-  bottom: 23px;
+  bottom: 24px;
   right: 20px;
   z-index: 4;
   border-radius: 50%;
+  margin: 0px;
+  padding: 0px;
   &:before {
     content: attr(data-pause);
     z-index: 1;
@@ -175,7 +177,7 @@
     pointer-events: none;
     opacity: 0;
   }
-  &:hover {
+  &:hover, &:focus {
     &:before, &:after {
       opacity: 1;
     }

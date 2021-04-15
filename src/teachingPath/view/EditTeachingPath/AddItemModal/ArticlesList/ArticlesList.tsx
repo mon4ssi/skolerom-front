@@ -118,6 +118,7 @@ export class ArticlesList extends Component<Props, State> {
   public async componentDidMount() {
     const { appliedFilters } = this.state;
     const { articlesList } = this.props.editTeachingPathStore!;
+    document.addEventListener('keyup', this.handleKeyboardControl);
 
     this.setState({ itemsForNewChildren: this.getAllChildrenItems() });
     const isNextPage = articlesList.length > 0;
@@ -315,6 +316,14 @@ export class ArticlesList extends Component<Props, State> {
     return (
       sortedArticles.map(this.renderArticle)
     );
+  }
+
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    if (this.state.itemsForNewChildren.length > 0) {
+      if (event.shiftKey && event.key === 'S' || event.key === 's') {
+        this.closeModal();
+      }
+    }
   }
 
   public renderSubmitFooter = () => (

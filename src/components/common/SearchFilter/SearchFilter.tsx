@@ -305,7 +305,7 @@ class SearchFilter extends Component<Props, State> {
             aria-invalid="false"
           />
           <label id="searchfilterInput" className="hidden">{placeholder}</label>
-          <button id="ChangeForce" type="submit" className="SearchFilter__search__submit" />
+          <div id="ChangeForce" className="SearchFilter__search__submit" />
         </div>
       </div>
     );

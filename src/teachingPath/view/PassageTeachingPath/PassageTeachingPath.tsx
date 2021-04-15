@@ -39,6 +39,8 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
     const { location, questionaryTeachingPathStore, history } = this.props;
     const state = history.location.state;
     const id = Number(location.pathname.split('/', limitSplit)[itemSplit]);
+    document.addEventListener('keyup', this.handleKeyboardControl);
+
     questionaryTeachingPathStore!.setFetchingDataStatus(true);
 
     questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Root);
@@ -62,6 +64,20 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
     }
 
     questionaryTeachingPathStore!.setFetchingDataStatus(false);
+  }
+
+  public handleKeyboardControl = async (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      const exitTeachingPath = await Notification.create({
+        type: NotificationTypes.CONFIRM,
+        title: intl.get('teaching path passing.confirm_exit')
+      });
+
+      if (exitTeachingPath) {
+        this.props.questionaryTeachingPathStore!.resetAllInfoAboutTeachingPath();
+        this.props.history.push('/teaching-paths');
+      }
+    }
   }
 
   public exit = () => {
@@ -232,10 +248,10 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
             </div>
 
             <div className="arrowControlsTeachingPath">
-              <div className={'navigationExitButton'} onClick={this.handleExit}>
+              <button className={'navigationExitButton'} onClick={this.handleExit}>
                 <img src={actualArrowLeftRounded} alt="actualArrowLeftRounded"/>
                 <span>{intl.get('teaching path passing.exit')}</span>
-              </div>
+              </button>
             </div>
           </div>
 

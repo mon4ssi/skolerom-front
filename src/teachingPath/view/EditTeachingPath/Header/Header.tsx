@@ -221,6 +221,34 @@ export class HeaderComponent extends Component<Props> {
     }
   }
 
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    const { isCreation, isDistribution, isPublishing, editTeachingPathStore } = this.props;
+    if (event.key === 'Escape') {
+      this.onGoBack();
+    }
+    if (event.shiftKey && event.key === 'S' || event.key === 's') {
+      if (isCreation) {
+        if (this.isDisabledSaveButton()) {
+          this.onSave();
+        }
+      }
+      if (isPublishing) {
+        if (this.isDisabledPublishButton()) {
+          this.onPublish(true);
+        }
+      }
+      if (isDistribution) {
+        if (this.isDisabledPublishButton()) {
+          this.onDistribute();
+        }
+      }
+    }
+  }
+
+  public async componentDidMount() {
+    document.addEventListener('keyup', this.handleKeyboardControl);
+  }
+
   public renderCreationItem = () => (
     <NavLink
       exact

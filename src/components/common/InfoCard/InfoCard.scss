@@ -9,7 +9,20 @@
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.100661);
   border-radius: 5px;
   transition: 0.5s;
-
+  button {
+    padding: 0;
+    width: 100%;
+    min-height: 50%;
+    background: #939fa7;
+    border-radius: 5px 5px 0 0;
+    object-fit: cover;
+    overflow: hidden;
+    &:focus {
+      outline: auto;
+      outline-style: auto;
+      outline-offset: 2px;
+    }
+  }
   .actionButtons {
     position: absolute;
     top: -13px;
@@ -36,7 +49,7 @@
 
   .cardImage {
     width: 100%;
-    min-height: 50%;
+    min-height: 100%;
     background: #939FA7;
     border-radius: 5px 5px 0px 0px;
     object-fit: cover;
