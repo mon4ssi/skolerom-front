@@ -69,6 +69,7 @@ export class LoginStore {
     }
 
     this.isCurrentUserFetching = false;
+    // if (response !== 'login_wp') this.isCurrentUserFetching = false;
   }
 
   @action
