@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 import max from 'lodash/max';
@@ -24,11 +24,14 @@ interface Props {
 @inject('currentQuestionaryStore')
 @observer
 export class AnswerCover extends Component<Props> {
+  public ref = createRef<HTMLButtonElement>();
 
   public async componentDidMount() {
     await this.props.currentQuestionaryStore!.getRelatedArticles();
+    if (this.ref.current) {
+      this.ref.current!.focus();
+    }
   }
-
   public getStartButtonTitle = () => {
     const { currentQuestionaryStore } = this.props;
 
@@ -152,7 +155,7 @@ export class AnswerCover extends Component<Props> {
         <span className="AnswerCover__title">{assignment!.title}</span>
         {assignment!.description && <span className="AnswerCover__description">{assignment!.description}</span>}
         {this.getAnsweredQuestionsCount()}
-        <button className="AnswerCover__button" onClick={switchCover}>
+        <button className="AnswerCover__button" onClick={switchCover} ref={this.ref}>
           {this.getStartButtonTitle()}
         </button>
       </div>

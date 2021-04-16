@@ -51,8 +51,9 @@ export class Notification extends Component<Props, State> {
 
   public componentDidMount = () => {
     const { type } = this.props;
-    this.ref.current!.focus();
-
+    if (type === NotificationTypes.CONFIRM) {
+      this.ref.current!.focus();
+    }
     if (
       type === NotificationTypes.SUCCESS ||
       type === NotificationTypes.ERROR

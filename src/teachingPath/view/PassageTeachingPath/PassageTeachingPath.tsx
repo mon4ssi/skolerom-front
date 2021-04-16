@@ -1,4 +1,4 @@
-import React, { Component, MouseEvent } from 'react';
+import React, { Component, MouseEvent, createRef } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import intl from 'react-intl-universal';
 import { inject, observer } from 'mobx-react';
@@ -34,12 +34,13 @@ type PropsComponent = Props & RouteComponentProps<{}, {}, LocationState>;
 @inject('questionaryTeachingPathStore')
 @observer
 class PassageTeachingPathComponent extends Component<PropsComponent> {
-
+  public ref = createRef<HTMLDivElement>();
   public async componentDidMount() {
     const { location, questionaryTeachingPathStore, history } = this.props;
     const state = history.location.state;
     const id = Number(location.pathname.split('/', limitSplit)[itemSplit]);
     document.addEventListener('keyup', this.handleKeyboardControl);
+    this.ref.current!.focus();
 
     questionaryTeachingPathStore!.setFetchingDataStatus(true);
 
@@ -262,7 +263,7 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
           </div>
 
           <div className="flexBox dirColumn wrapperTeachingPath">
-            <div className="contentTeachingPath">
+            <div className="contentTeachingPath" ref={this.ref}>
               {this.renderContent()}
             </div>
 

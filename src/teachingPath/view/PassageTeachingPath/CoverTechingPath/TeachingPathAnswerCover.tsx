@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
@@ -19,11 +19,15 @@ interface Props extends RouteComponentProps{
 @inject('questionaryTeachingPathStore')
 @observer
 class TeachingPathAnswerCoverComponent extends Component<Props>{
+  public ref = createRef<HTMLButtonElement>();
+  public async componentDidMount() {
+    this.ref.current!.focus();
+  }
+
   public render() {
     const { questionaryTeachingPathStore, onClickStart } = this.props;
     const currentTeachingPath = questionaryTeachingPathStore!.currentTeachingPath;
     const numberOfSteps = currentTeachingPath && currentTeachingPath.numberOfSteps;
-
     return (
       <div className={'cover'}>
         <div className={'infoTeacher'}>
@@ -46,8 +50,11 @@ class TeachingPathAnswerCoverComponent extends Component<Props>{
         <span className="assignmentTitle">{currentTeachingPath && currentTeachingPath.title}</span>
         <span className="assignmentDescription">{currentTeachingPath && currentTeachingPath.description}</span>
 
-        <div className={'startButton'}>
-          <CreateButton onClick={onClickStart}>{intl.get('teaching path preview.Start teaching path')}</CreateButton>
+        <div className={'startButton'} >
+          <button className="CreateButton" onClick={onClickStart} ref={this.ref}>
+          {intl.get('teaching path preview.Start teaching path')}
+          </button>
+          {/*<CreateButton onClick={onClickStart} >{intl.get('teaching path preview.Start teaching path')}</CreateButton>*/}
         </div>
       </div>
     );

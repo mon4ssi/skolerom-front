@@ -28,10 +28,7 @@ export class ArrowControls extends Component<Props> {
   }
 
   private renderPrevQuestionButton = () => (
-    <button
-      className="ArrowControls__button"
-      onClick={this.goPreviousQuestion}
-    >
+    <button className="ArrowControls__button" onClick={this.goPreviousQuestion}>
       <div className="ArrowControls__imageContainer">
         <img src={arrowRight} alt="Previous" className="ArrowControls__image ArrowControls__image_previous"/>
       </div>
@@ -89,6 +86,20 @@ export class ArrowControls extends Component<Props> {
       {intl.get('current_assignment_page.Exit assignment')}
     </button>
   )
+
+  public async componentDidMount() {
+    document.addEventListener('keyup', this.handleKeyboardControl);
+  }
+
+  public componentWillUnmount() {
+    document.removeEventListener('keyup', this.handleKeyboardControl);
+  }
+
+  public handleKeyboardControl = async (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      this.exitAssignment();
+    }
+  }
 
   public render() {
     return (
