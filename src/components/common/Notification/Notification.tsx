@@ -1,4 +1,4 @@
-import React, { Component, MouseEvent } from 'react';
+import React, { Component, MouseEvent, createRef } from 'react';
 import ReactDOM from 'react-dom';
 import isFunction from 'lodash/isFunction';
 import { Animated } from 'react-animated-css';
@@ -40,16 +40,18 @@ export type State = {
 
 // USE ASYNC/AWAIT FOR TYPE === NotificationTypes.CONFIRM
 export class Notification extends Component<Props, State> {
+  public ref = createRef<HTMLButtonElement>();
 
   public state = {
     isOpen: false,
     isAnimated: true,
   };
 
-  public resolve?: (value?: boolean | PromiseLike<boolean> | undefined) => void;
+  public resolve?: (value?: any | boolean | PromiseLike<boolean> | undefined) => void;
 
   public componentDidMount = () => {
     const { type } = this.props;
+    this.ref.current!.focus();
 
     if (
       type === NotificationTypes.SUCCESS ||
@@ -200,7 +202,7 @@ export class Notification extends Component<Props, State> {
     } = this.props;
     return (
       <footer className="Notification_footer">
-        <button className="Notification_submit" onClick={this.handleSubmitClick}>{submitButtonTitle}</button>
+        <button className="Notification_submit" ref={this.ref} onClick={this.handleSubmitClick}>{submitButtonTitle}</button>
         <button className="Notification_cancel" onClick={this.handleCancelClick}>{cancelButtonTitle}</button>
       </footer>
     );

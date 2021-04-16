@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 
@@ -23,6 +23,7 @@ interface State {
 @inject('questionaryTeachingPathStore')
 @observer
 export class ArticleTeachingPath extends Component<Props, State> {
+  public ref = createRef<HTMLDivElement>();
 
   public state = {
     attachedArticleId: -1,
@@ -34,6 +35,7 @@ export class ArticleTeachingPath extends Component<Props, State> {
     const ids = questionaryTeachingPathStore!.idsItemsNode;
     await questionaryTeachingPathStore!.getCurrentArticlesList(ids);
     questionaryTeachingPathStore!.setFetchingDataStatus(false);
+    this.ref.current!.focus();
   }
 
   public closeArticleReading = () => {
@@ -65,7 +67,7 @@ export class ArticleTeachingPath extends Component<Props, State> {
     return questionaryTeachingPathStore!.currentArticlesList.map((item) => {
       const passedStyle = item.isSelected ? 'passedStyle' : '';
       return (
-        <div className={passedStyle} key={item.id} role="region" aria-live="polite" aria-atomic="true">
+        <div className={passedStyle} key={item.id} role="region" aria-live="polite" aria-atomic="true" ref={this.ref}>
           <InfoCard
             icon={reading}
             title={item.title}

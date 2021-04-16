@@ -84,3 +84,9 @@
     width: auto;
   }
 }
+
+.Notification_submit:focus, .Notification_cancel:focus {
+  outline: black !important;
+  outline-offset: 2px;
+  outline-style: auto !important;
+}

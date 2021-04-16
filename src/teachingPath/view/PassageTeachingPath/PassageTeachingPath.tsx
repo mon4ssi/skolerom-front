@@ -66,16 +66,23 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
     questionaryTeachingPathStore!.setFetchingDataStatus(false);
   }
 
-  public handleKeyboardControl = async (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      const exitTeachingPath = await Notification.create({
-        type: NotificationTypes.CONFIRM,
-        title: intl.get('teaching path passing.confirm_exit')
-      });
+  public componentWillUnmount() {    
+    document.removeEventListener("keyup", this.handleKeyboardControl);
+  }
 
-      if (exitTeachingPath) {
-        this.props.questionaryTeachingPathStore!.resetAllInfoAboutTeachingPath();
-        this.props.history.push('/teaching-paths');
+  private handleKeyboardControl = async (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      let store = this.props.questionaryTeachingPathStore;
+      if(store!.teachingPathId) {
+        const exitTeachingPath = await Notification.create({
+          type: NotificationTypes.CONFIRM,
+          title: intl.get('teaching path passing.confirm_exit')
+        });
+  
+        if (exitTeachingPath) {
+          this.props.questionaryTeachingPathStore!.resetAllInfoAboutTeachingPath();
+          this.props.history.push('/teaching-paths');
+        }
       }
     }
   }

@@ -22,6 +22,16 @@ interface Props {
 @observer
 export class StudentAssignmentsList extends Component<Props> {
 
+  public async componentDidMount() {
+    document.addEventListener('keyup', this.handleKeyboardControl);
+  }
+
+  public handleKeyboardControl = (event: KeyboardEvent) => {    
+    if (event.key === 'Escape') {
+      this.props.onClose();
+    }
+  }
+
   public handleAssignmentPreviewVisible = (id: number) => (e: SyntheticEvent) => {
     e.stopPropagation();
     e.preventDefault();
