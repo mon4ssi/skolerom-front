@@ -25,13 +25,13 @@ export class Tag extends Component<TagProps> {
     });
 
     return (
-      <div
+      <button
         className={classNames}
         key={id}
         onClick={this.onClick}
       >
         {title}
-      </div>
+      </button>
     );
   }
 }

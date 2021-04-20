@@ -79,6 +79,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     const { appliedFilters } = this.state;
 
     const isNextPage = newAssignmentStore!.allArticles.length > 0;
+    document.addEventListener('keyup', this.handleKeyboardControl);
     await newAssignmentStore!.getArticles({ isNextPage, ...appliedFilters });
     await newAssignmentStore!.getGrades();
     await newAssignmentStore!.getSubjects();
@@ -86,11 +87,21 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
 
   public componentWillUnmount() {
     const { newAssignmentStore } = this.props;
+    document.removeEventListener('keyup', this.handleKeyboardControl);
 
     this.closePanel();
     newAssignmentStore!.resetCurrentArticlesPage();
     newAssignmentStore!.resetArticlesList();
     newAssignmentStore!.resetIsFetchedArticlesListFinished();
+  }
+
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      this.closePanel();
+    }
+    if (event.shiftKey && event.key === 'S' || event.key === 's') {
+      this.closePanel();
+    }
   }
 
   public isCheckedArticle = (id: number) => {
@@ -240,7 +251,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
 
             <div className="title">
               <span>{intl.get('new assignment.Set related article(s)')}</span>
-              <img src={closeCross} alt="Close" onClick={this.closePanel} />
+              <button onClick={this.closePanel}><img src={closeCross} alt="Close" /></button>
             </div>
 
             <SearchFilter

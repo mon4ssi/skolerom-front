@@ -59,12 +59,14 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
 
     if (this.context.contentType === AttachmentContentType.image) {
       return (
-        <img
-          src={attachment.path}
-          alt={attachment.alt}
-          srcSet={attachment.src && attachment.src[1] && attachment.src[1]}
-          sizes={'(min-width: 320px) 300px'}
-        />
+        <button>
+          <img
+            src={attachment.path}
+            alt={attachment.alt}
+            srcSet={attachment.src && attachment.src[1] && attachment.src[1]}
+            sizes={'(min-width: 320px) 300px'}
+          />
+        </button>
       );
     }
     if (this.context.contentType === AttachmentContentType.video) {

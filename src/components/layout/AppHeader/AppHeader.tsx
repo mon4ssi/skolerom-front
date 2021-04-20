@@ -264,6 +264,9 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   public async componentDidMount() {
     document.addEventListener('keyup', this.handleKeyboardControl);
   }
+  public componentWillUnmount() {
+    document.removeEventListener('keyup', this.handleKeyboardControl);
+  }
 
   public renderNavigation = () => {
     const { uiStore } = this.props;

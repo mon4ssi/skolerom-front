@@ -45,7 +45,7 @@ export class AddItemModal extends Component {
     const { contentType } = this.context;
 
     return !isNull(contentType) && (
-      <div className="addItemModalBackground flexBox">
+      <div className="addItemModalBackground flexBox paymenth">
         <AddItemModalComponent />
       </div>
     );

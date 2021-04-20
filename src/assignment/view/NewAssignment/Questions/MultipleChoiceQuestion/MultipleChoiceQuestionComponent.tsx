@@ -103,6 +103,7 @@ class MultipleChoiceQuestionContent extends Component<Props> {
           onChange={this.handleChangeTitle}
           maxLength={MAX_DESCRIPTION_LENGTH}
           aria-labelledby={titleId}
+          autoFocus
         />
 
         <MappingContentBlocks question={question} helperClass="content-block-dragged" onSortEnd={this.onSortEnd} useDragHandle />

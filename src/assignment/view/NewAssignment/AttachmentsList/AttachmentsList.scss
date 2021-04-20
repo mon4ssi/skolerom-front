@@ -26,6 +26,13 @@
     .attachments-tab:first-child {
       margin-right: 30px;
     }
+    button {
+      background: transparent;
+      &:focus {
+        outline: auto !important;
+        padding: 0px;
+      }
+    }
 
     .wrapper-tabs {
       display: flex;
@@ -107,6 +114,16 @@
         background-color: rgba(0, 0, 0, 0.3);
         height: 200px;
         position: relative;
+        button {
+          padding: 0px;
+          height: 100%;
+          display: block;
+          &:focus {
+            outline: auto;
+            outline-style: auto;
+            outline-offset: 3px;
+          }
+        }
 
         &.disabled:before {
           content: '';

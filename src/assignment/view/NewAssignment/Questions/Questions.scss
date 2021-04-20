@@ -64,11 +64,14 @@
       height: 100px;
       width: 49%;
       cursor: pointer;
-
+      text-align: left;
       &:first-child {
         margin-bottom: 20px;
       }
-
+      &:focus {
+        outline: auto;
+        outline-offset: 4px;
+      }
       img {
         margin-right: 20px;
       }

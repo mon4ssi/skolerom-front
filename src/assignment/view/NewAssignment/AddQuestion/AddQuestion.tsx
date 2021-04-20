@@ -79,7 +79,7 @@ class NewQuestionTile extends Component<NewQuestionTileProps> {
   public render() {
     const { type } = this.props;
     return (
-      <div
+      <button
         className="questionTypeBox flexBox alignCenter"
         key={type}
         onClick={this.onClick}
@@ -93,7 +93,7 @@ class NewQuestionTile extends Component<NewQuestionTileProps> {
 
           <div className={'questionTypeDescription'}>{intl.get(`new assignment.QUESTION_DESCRIPTION.${type}`)}</div>
         </div>
-      </div>
+      </button>
     );
   }
 }

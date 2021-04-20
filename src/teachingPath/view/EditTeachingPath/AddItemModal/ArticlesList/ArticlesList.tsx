@@ -1,4 +1,4 @@
-import React, { Component, ChangeEvent } from 'react';
+import React, { Component, ChangeEvent, createRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 import isNaN from 'lodash/isNaN';
@@ -75,6 +75,7 @@ export class ArticlesList extends Component<Props, State> {
 
   public static contextType = ItemContentTypeContext;
   public ref = React.createRef<HTMLDivElement>();
+  public refButton = React.createRef<HTMLButtonElement>();
 
   constructor(props: Props) {
     super(props);
@@ -119,6 +120,7 @@ export class ArticlesList extends Component<Props, State> {
     const { appliedFilters } = this.state;
     const { articlesList } = this.props.editTeachingPathStore!;
     document.addEventListener('keyup', this.handleKeyboardControl);
+    this.refButton.current!.focus();
 
     this.setState({ itemsForNewChildren: this.getAllChildrenItems() });
     const isNextPage = articlesList.length > 0;
@@ -132,6 +134,7 @@ export class ArticlesList extends Component<Props, State> {
     this.props.editTeachingPathStore!.resetCurrentArticlesPage();
     this.props.editTeachingPathStore!.resetArticlesList();
     this.props.editTeachingPathStore!.resetIsFetchedArticlesListFinished();
+    document.removeEventListener('keyup', this.handleKeyboardControl);
   }
 
   public handleChangeGrade = async (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -231,15 +234,16 @@ export class ArticlesList extends Component<Props, State> {
   }
 
   public renderHeader = () => (
-    <div className="articlesListHeader flexBox spaceBetween">
+    <div className="articlesListHeader flexBox spaceBetween" tabIndex={0}>
       <div>
         {intl.get('edit_teaching_path.modals.add_articles')}
       </div>
+      <button ref={this.refButton} onClick={this.closeModal}>
       <img
         src={closeImg}
         alt="close"
-        onClick={this.closeModal}
       />
+      </button>
     </div>
   )
 
@@ -319,6 +323,9 @@ export class ArticlesList extends Component<Props, State> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      this.closeModal();
+    }
     if (this.state.itemsForNewChildren.length > 0) {
       if (event.shiftKey && event.key === 'S' || event.key === 's') {
         this.closeModal();

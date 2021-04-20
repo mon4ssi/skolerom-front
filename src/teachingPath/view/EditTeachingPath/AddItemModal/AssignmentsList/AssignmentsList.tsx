@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 
@@ -41,10 +41,8 @@ class AssignmentItem extends Component<AssignmentProps> {
     );
   }
 
-  public handleSelectAssignment = (event: React.MouseEvent<HTMLImageElement>) => {
+  public handleSelectAssignment = () => {
     const { assignment, addItem, removeItem } = this.props;
-    event.preventDefault();
-
     this.isAssignmentSelected() ?
       removeItem(assignment) :
       addItem(assignment);
@@ -59,9 +57,11 @@ class AssignmentItem extends Component<AssignmentProps> {
       null;
 
     return (
-      <div
+      <a
+        href="javascript:void(0)"
         key={assignment.id}
         className="assignmentItem flexBox spaceBetween"
+        onClick={this.handleSelectAssignment}
       >
         <div className="flexBox alignCenter w50" style={{ flex: 1 }}>
           <img
@@ -89,11 +89,10 @@ class AssignmentItem extends Component<AssignmentProps> {
             <img
               src={this.isAssignmentSelected() ? checkFilledImg : checkImg}
               alt="item-selected"
-              onClick={this.handleSelectAssignment}
             />
           </div>
         </div>
-      </div>
+      </a>
     );
   }
 }
@@ -115,6 +114,7 @@ export class AssignmentsList extends Component<Props, State> {
 
   public static contextType = ItemContentTypeContext;
   public ref = React.createRef<HTMLDivElement>();
+  public refButton = React.createRef<HTMLButtonElement>();
 
   public state = {
     currentTab: 'all',
@@ -135,6 +135,8 @@ export class AssignmentsList extends Component<Props, State> {
     this.setState({ itemsForNewChildren: this.getAllChildrenItems() });
     this.props.assignmentListStore!.setFromTeachingPath(true);
     this.props.assignmentListStore!.setFiltersForTeachingPath();
+    document.addEventListener('keyup', this.handleKeyboardControl);
+    this.refButton.current!.focus();
   }
 
   public componentWillUnmount() {
@@ -143,6 +145,7 @@ export class AssignmentsList extends Component<Props, State> {
     this.props.assignmentListStore!.setFiltersIsPublished(0, true);
     this.props.assignmentListStore!.setFromTeachingPath(false);
     this.props.assignmentListStore!.clearMyAssignmentsList();
+    document.removeEventListener('keyup', this.handleKeyboardControl);
   }
 
   public addItemToNewChild = (item: Assignment) => {
@@ -178,7 +181,7 @@ export class AssignmentsList extends Component<Props, State> {
     });
   }
 
-  public selectAllAssignmentsTab = async (event: React.MouseEvent<HTMLDivElement>) => {
+  public selectAllAssignmentsTab = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     this.setState({ currentTab: 'all' });
     this.props.assignmentListStore!.isFetchedAssignmentsListFinished = false;
@@ -189,7 +192,7 @@ export class AssignmentsList extends Component<Props, State> {
     this.props.assignmentListStore!.getAssignmentsList();
   }
 
-  public selectMyAssignmentsTab = async (event: React.MouseEvent<HTMLDivElement>) => {
+  public selectMyAssignmentsTab = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     this.setState({ currentTab: 'my' });
     this.props.assignmentListStore!.isFetchedAssignmentsListFinished = false;
@@ -200,12 +203,9 @@ export class AssignmentsList extends Component<Props, State> {
 
   }
 
-  public closeModal = (event: React.MouseEvent<HTMLImageElement>) => {
+  public closeModal = () => {
     const { editTeachingPathStore, } = this.props;
     const { itemsForNewChildren } = this.state;
-
-    event.preventDefault();
-
     if (itemsForNewChildren.length) {
       const newChildren = itemsForNewChildren.map(
         item => editTeachingPathStore!.createNewNode(
@@ -245,30 +245,42 @@ export class AssignmentsList extends Component<Props, State> {
     );
   }
 
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      this.closeModal();
+    }
+    if (this.state.itemsForNewChildren.length > 0) {
+      if (event.shiftKey && event.key === 'S' || event.key === 's') {
+        this.closeModal();
+      }
+    }
+  }
+
   public renderHeader = () => {
     const { currentTab } = this.state;
 
     return (
       <div className="assignmentsListHeader flexBox spaceBetween">
         <div className="assignmentsListType flexBox">
-          <div
+          <button
             className={`fs15 ${currentTab === 'all' ? 'selectedTab' : null}`}
             onClick={this.selectAllAssignmentsTab}
           >
             {intl.get('edit_teaching_path.modals.all_assignments')}
-          </div>
-          <div
+          </button>
+          <button
             className={`fs15 ${currentTab === 'my' ? 'selectedTab' : null}`}
             onClick={this.selectMyAssignmentsTab}
           >
             {intl.get('edit_teaching_path.modals.my_assignments')}
-          </div>
+          </button>
         </div>
-        <img
-          src={closeImg}
-          alt="close"
-          onClick={this.closeModal}
-        />
+        <button ref={this.refButton} onClick={this.closeModal}>
+          <img
+            src={closeImg}
+            alt="close"
+          />
+          </button>
       </div>
     );
   }

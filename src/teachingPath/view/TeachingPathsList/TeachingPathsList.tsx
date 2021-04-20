@@ -115,6 +115,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
   public componentWillUnmount() {
     this.unregisterListener();
     this.props.teachingPathsListStore!.resetTeachingPathsList();
+    document.removeEventListener('keyup', this.handleKeyboardControl);
   }
 
   public setCurrentTab = async () => {

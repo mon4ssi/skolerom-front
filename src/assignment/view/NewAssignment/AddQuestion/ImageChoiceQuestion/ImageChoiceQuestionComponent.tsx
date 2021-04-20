@@ -102,6 +102,7 @@ class ImageChoiceQuestion extends Component<Props> {
           value={question.title}
           onChange={this.handleChangeTitle}
           maxLength={MAX_DESCRIPTION_LENGTH}
+          autoFocus
         />
 
         <MappingContentBlocks question={question} helperClass="content-block-dragged" onSortEnd={this.onSortEnd} useDragHandle />

@@ -109,7 +109,9 @@ class OptionComponent extends Component<OptionComponentProps> {
     return (
       <div className={className} onClick={this.setCurrentOption}>
         <img src={this.renderMiniImage()} alt="landscape" className={'miniImage'}/>
-        <img src={this.renderImageHandler()} alt="add-remove" className={'handleImage'} onClick={this.handleImage}/>
+        <button onClick={this.handleImage}>
+          <img src={this.renderImageHandler()} alt="add-remove" className={'handleImage'}/>
+        </button>
         <input
           className="inputImageOption fw500"
           value={option.title}
@@ -122,14 +124,16 @@ class OptionComponent extends Component<OptionComponentProps> {
         />
 
         <div className="statusBox" onClick={this.closeImageChoice}>
-          <img
-            src={option.isRight ? checkActiveIcon : checkInactiveIcon}
-            alt="Status"
-            className="checkStatus"
-            onClick={this.toggleIsRight}
-          />
-
-          <img src={deleteIcon} alt="Delete" onClick={this.onDelete} style={{ width: 18 }}/>
+          <button className="status" onClick={this.toggleIsRight}>
+            <img
+              src={option.isRight ? checkActiveIcon : checkInactiveIcon}
+              alt="Status"
+              className="checkStatus"
+            />
+          </button>
+          <button onClick={this.onDelete}>
+            <img src={deleteIcon} alt="Delete" style={{ width: 18 }}/>
+          </button>
         </div>
       </div>
     );

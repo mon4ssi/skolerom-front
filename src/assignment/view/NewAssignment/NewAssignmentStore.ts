@@ -55,7 +55,7 @@ export class NewAssignmentStore {
   private articleService: ArticleService = injector.get<ArticleService>(ARTICLE_SERVICE_KEY);
   private userService: UserService = injector.get(USER_SERVICE);
 
-  private currentArticlesPage: number = 1;
+  public currentArticlesPage: number = 1;
 
   @observable public fetchingArticles: boolean = false;
   @observable public fetchingAttachments: boolean = false;

@@ -14,6 +14,7 @@ import { DistributionValidationError } from 'distribution/Distribution';
 import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
 import { UserType } from 'user/User';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
+import { AttachmentContentType, AttachmentContentTypeContext } from '../AttachmentContentTypeContext';
 
 import './Header.scss';
 
@@ -302,7 +303,9 @@ class HeaderWrapper extends Component<Props> {
     const { isCreation, isDistribution, isPublishing, newAssignmentStore } = this.props;
     const userType = newAssignmentStore!.getCurrentUser()!.type;
     if (event.key === 'Escape') {
-      this.onGoBack();
+      if (newAssignmentStore!.currentArticlesPage === 1) {
+        this.onGoBack();
+      }
     }
     if (event.shiftKey && event.key === 'S' || event.key === 's') {
       if (isCreation) {
@@ -325,6 +328,9 @@ class HeaderWrapper extends Component<Props> {
 
   public async componentDidMount() {
     document.addEventListener('keyup', this.handleKeyboardControl);
+  }
+  public componentWillUnmount() {
+    document.removeEventListener('keyup', this.handleKeyboardControl);
   }
 
   public render() {

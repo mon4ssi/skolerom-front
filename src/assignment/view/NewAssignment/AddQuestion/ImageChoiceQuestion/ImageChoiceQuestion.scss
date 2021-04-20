@@ -10,6 +10,13 @@
   z-index: 7;
   cursor: move;
   overflow: hidden;
+  button {
+    background: transparent;
+    padding: 0px;
+    &:focus {
+      outline: auto;
+    }
+  }
 
   input {
     border: none;
@@ -42,13 +49,17 @@
   .statusBox {
     display: flex;
     padding-right: 20px;
+    button {
+      &.status {        
+        margin-right: 20px;
+      }
+    }
 
     img {
       cursor: pointer;
     }
 
     .checkStatus {
-      margin-right: 20px;
       width: 30px;
     }
   }

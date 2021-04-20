@@ -468,3 +468,30 @@ pre {
   outline-style: auto;
   outline-offset: 2px;
 }
+.addItemModal button:focus {
+  outline: black !important;
+  outline-style: auto !important;
+  outline-offset: -4px;
+}
+.AssignmentsList .assignmentsListHeader button {
+  background: transparent;
+}
+.AssignmentsList .assignmentsListHeader button:focus {
+  outline: black !important;
+  outline-style: auto !important;
+  outline-offset: -4px;
+}
+.AssignmentsList .assignmentsListContainer .assignmentItem:focus {
+  background: #d8d8d8;
+  outline: auto !important;
+  outline-offset: -1px;
+}
+.RelatedArticlesPreview .title button:focus {
+  outline: auto;
+  outline-style: auto !important;
+  outline-offset: 2px;
+}
+.extra .extra-button:focus {
+  outline: auto !important;
+  outline-offset: 2px;
+}

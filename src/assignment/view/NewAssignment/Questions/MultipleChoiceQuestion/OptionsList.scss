@@ -35,7 +35,6 @@
     }
 
     .checkStatus {
-      margin-right: 20px;
       width: 30px;
       height: 30px;
     }
@@ -74,4 +73,15 @@
 
 .isWrong {
   border: 1px solid $color-purple !important;
+}
+
+.option .statusBox button {
+  padding: 0px;
+  background: transparent;
+  &.status {    
+    margin-right: 20px;
+  }
+  &:focus {
+    outline: auto !important;
+  }
 }

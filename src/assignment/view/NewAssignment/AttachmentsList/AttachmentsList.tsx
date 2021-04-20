@@ -446,8 +446,9 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
               {/*{this.renderAttachmentsStockTab()}*/}
             </div>
           </div>
-
-          <img src={closeCross} alt="Close" onClick={this.closeAttachmentsList} />
+          <button onClick={this.closeAttachmentsList}>
+            <img src={closeCross} alt="Close"  />
+          </button>
         </div>
 
         <div className="contentWrapper">

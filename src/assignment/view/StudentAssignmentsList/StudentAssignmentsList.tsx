@@ -25,6 +25,9 @@ export class StudentAssignmentsList extends Component<Props> {
   public async componentDidMount() {
     document.addEventListener('keyup', this.handleKeyboardControl);
   }
+  public componentWillUnmount() {
+    document.removeEventListener('keyup', this.handleKeyboardControl);
+  }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
     if (event.key === 'Escape') {

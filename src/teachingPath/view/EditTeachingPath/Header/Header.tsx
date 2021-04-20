@@ -224,7 +224,9 @@ export class HeaderComponent extends Component<Props> {
   public handleKeyboardControl = (event: KeyboardEvent) => {
     const { isCreation, isDistribution, isPublishing, editTeachingPathStore } = this.props;
     if (event.key === 'Escape') {
-      this.onGoBack();
+      if (!this.props.editTeachingPathStore!.currentNode) {
+        this.onGoBack();
+      }
     }
     if (event.shiftKey && event.key === 'S' || event.key === 's') {
       if (isCreation) {
@@ -247,6 +249,9 @@ export class HeaderComponent extends Component<Props> {
 
   public async componentDidMount() {
     document.addEventListener('keyup', this.handleKeyboardControl);
+  }
+  public componentWillUnmount() {
+    document.removeEventListener('keyup', this.handleKeyboardControl);
   }
 
   public renderCreationItem = () => (
