@@ -81,6 +81,7 @@ class StudentAssignments extends Component<Props> {
       aria-labelledby="renderSearchField"
       aria-required="true"
       aria-invalid="false"
+      autoFocus
     />
   )
 
@@ -121,7 +122,7 @@ class StudentAssignments extends Component<Props> {
     const { studentsListStore, history, uiStore } = this.props;
     const locale = studentsListStore!.getCurrentLocale();
 
-    const handleClickAssignment = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleClickAssignment = (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
       if (!assignment.isAnswered) {
         return;

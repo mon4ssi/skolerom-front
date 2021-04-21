@@ -34,6 +34,7 @@ interface State {
 class RelatedArticlesPreviewComponent extends Component<Props, State> {
   public static contextType = AttachmentContentTypeContext;
   public ref = createRef<HTMLDivElement>();
+  public refButton = createRef<HTMLButtonElement>();
 
   constructor(props: Props) {
     super(props);
@@ -77,6 +78,9 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
   public async componentDidMount() {
     const { newAssignmentStore } = this.props;
     const { appliedFilters } = this.state;
+    if (this.refButton.current) {
+      this.refButton.current!.focus();
+    }
 
     const isNextPage = newAssignmentStore!.allArticles.length > 0;
     document.addEventListener('keyup', this.handleKeyboardControl);
@@ -251,7 +255,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
 
             <div className="title">
               <span>{intl.get('new assignment.Set related article(s)')}</span>
-              <button onClick={this.closePanel}><img src={closeCross} alt="Close" /></button>
+              <button onClick={this.closePanel} ref={this.refButton}><img src={closeCross} alt="Close"/></button>
             </div>
 
             <SearchFilter

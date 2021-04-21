@@ -72,7 +72,7 @@ export class CheckingPanel extends Component<Props> {
   public renderMark = (mark: number) => {
     const { store } = this.props;
     const style = `markItem ${store!.currentEvaluation!.mark === mark && 'activeMark'} ${(store!.currentEvaluation!.mark === mark && mark === 1) && 'failed'}`;
-    return <span key={mark} className={style} onClick={this.setMark(mark)}>{mark}</span>;
+    return <button key={mark} className={style} onClick={this.setMark(mark)}>{mark}</button>;
   }
 
   public renderSavePanel = () => {
@@ -81,7 +81,7 @@ export class CheckingPanel extends Component<Props> {
     if (store!.currentEvaluation && store!.currentEvaluation.isReadyToEvaluate) {
       return (
         <div className="controlPanel">
-          <span className={'save'} onClick={save}>{intl.get('answers.Save changes')}</span>
+          <button className={'save'} onClick={save}>{intl.get('answers.Save changes')}</button>
           {store!.displaySaveMessage && <span className="saved">{intl.get('answers.Answer edited')}</span>}
         </div>
       );
@@ -145,13 +145,13 @@ export class CheckingPanel extends Component<Props> {
                   {marks.map(this.renderMark)}
                 </div>
                 <div className="flexBox markButtons">
-                  <span className={minusStatusStyle} onClick={this.setStatus(false)}>-</span>
-                  <span className={plusStatusStyle} onClick={this.setStatus(true)}>+</span>
+                  <button className={minusStatusStyle} onClick={this.setStatus(false)}>-</button>
+                  <button className={plusStatusStyle} onClick={this.setStatus(true)}>+</button>
                 </div>
               </div>
               <div className="flexBox">
-                <span className={passedStatusStyle} onClick={this.setPassedStatus(true)}>{intl.get('answers.Passed')}</span>
-                <span className={notPassedStatusStyle} onClick={this.setPassedStatus(false)}>{intl.get('answers.Not passed')}</span>
+                <button className={passedStatusStyle} onClick={this.setPassedStatus(true)}>{intl.get('answers.Passed')}</button>
+                <button className={notPassedStatusStyle} onClick={this.setPassedStatus(false)}>{intl.get('answers.Not passed')}</button>
               </div>
             </div>
           </div>

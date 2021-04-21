@@ -495,3 +495,25 @@ pre {
   outline: auto !important;
   outline-offset: 2px;
 }
+.AssignmentAnswer:focus {
+  background: #d4d4d4;
+}
+.checking .controlPanel .save:focus {
+  outline: black;
+  outline-style: auto;
+  outline-offset: 2px;
+}
+.checking .mainContainer .comments .markItem:focus {
+  outline: black;
+  outline-style: auto;
+}
+.StudentAssignments__search:focus {
+  outline: black;
+  outline-style: auto;
+  outline-offset: 4px;
+}
+.StudentAssignments__select:focus {
+  outline: black;
+  outline-style: auto;
+  outline-offset: 4px;
+}

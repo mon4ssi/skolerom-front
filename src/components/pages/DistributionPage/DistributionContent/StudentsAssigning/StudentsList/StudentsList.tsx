@@ -111,11 +111,12 @@ class Student extends Component<StudentProps, StudentState> {
     const { student } = this.props;
     return (
       <div className="includeExclude">
-        <img
-          src={student.isSelected ? checkActiveImg : checkImg}
-          alt="check"
-          onClick={this.handleSelectStudent}
-        />
+        <button onClick={this.handleSelectStudent}>
+          <img
+            src={student.isSelected ? checkActiveImg : checkImg}
+            alt="check"
+          />
+        </button>
       </div>
     );
   }

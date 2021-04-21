@@ -63,6 +63,14 @@
           padding: 20px 0;
           margin-left: 20px;
           color: #939FA7;
+          button {
+            background: transparent;
+            padding: 0px;
+            &:focus {              
+              outline: auto;
+              outline-offset: 2px;
+            }
+          }
 
           img {
             width: 20px;

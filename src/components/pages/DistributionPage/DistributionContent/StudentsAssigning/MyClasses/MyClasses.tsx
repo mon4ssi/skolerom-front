@@ -43,7 +43,7 @@ class MyClass extends Component<MyClassProps, MyClassState> {
     isCalendarOpened: false,
   };
 
-  public toggleOpenStudentsList = (event: React.MouseEvent<HTMLDivElement>) => {
+  public toggleOpenStudentsList = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     this.setState({ isStudentsListOpened: !this.state.isStudentsListOpened });
   }
@@ -196,14 +196,10 @@ class MyClass extends Component<MyClassProps, MyClassState> {
 
             {myClass.isSelected && this.renderDeadline()}
 
-            <div
-              className="includeExclude flexBox"
-              onClick={this.toggleOpenStudentsList}
-            >
-              <img
-                src={isStudentsListOpened ? arrowUpImg : arrowDownImg}
-                alt="arrow-up"
-              />
+            <div className="includeExclude flexBox">
+              <button onClick={this.toggleOpenStudentsList}>
+                <img src={isStudentsListOpened ? arrowUpImg : arrowDownImg} alt="arrow-up" />
+              </button>
             </div>
 
             {!readOnly && this.renderCheck()}

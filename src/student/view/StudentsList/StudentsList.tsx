@@ -76,12 +76,20 @@ export class StudentsListComponent extends Component<Props> {
     } else {
       QueryStringHelper.remove(this.props.history, STUDENT_QUERY_STRING, STUDENT_TAB);
     }
+    document.addEventListener('keyup', this.handleKeyboardControl);
 
     this.unregisterListener = this.props.history.listen(this.locationUpdateListener);
   }
 
   public componentWillUnmount() {
+    document.removeEventListener('keyup', this.handleKeyboardControl);
     this.unregisterListener();
+  }
+
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      this.closeStudentOverview();
+    }
   }
 
   public onChangePage = ({ selected }: { selected: number }) => {

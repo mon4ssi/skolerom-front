@@ -23,7 +23,7 @@ interface Props {
 class CustomCalendarComponent extends Component<Props> {
 
   // public componentDidMount() {
-  //   const element = document.getElementsByClassName('react-datepicker__day--selected')[0];
+  //   const element = document.getElementsByClassName('--selected')[0];
   //   const elementClone = element.cloneNode(true);
 
   //   element.innerHTML = '';

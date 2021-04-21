@@ -14,7 +14,7 @@ import './StudentAssignment.scss';
 interface StudentAssignmentProps {
   assignment: Assignment;
   locale: string;
-  onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export const StudentAssignment = (props: StudentAssignmentProps) => {
@@ -66,7 +66,7 @@ export const StudentAssignment = (props: StudentAssignmentProps) => {
   }
 
   return (
-    <div
+    <button
       className="StudentAssignment"
       onClick={onClick}
     >
@@ -97,6 +97,6 @@ export const StudentAssignment = (props: StudentAssignmentProps) => {
           />
         </div>
       </div>
-    </div>
+    </button>
   );
 };
