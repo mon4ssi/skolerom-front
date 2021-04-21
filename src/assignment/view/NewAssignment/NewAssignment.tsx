@@ -43,6 +43,8 @@ class NewAssignmentComponent extends Component<Props & RouteComponentProps, Stat
     const { newAssignmentStore, history } = this.props;
     newAssignmentStore!.getArticles({});
     const response = await newAssignmentStore!.getAssigmentForEditing(this.getParams());
+    const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
+    headerArray[0].style.display = 'none';
     if (isNull(response)) {
       history.push('/not-found');
     }
@@ -50,6 +52,8 @@ class NewAssignmentComponent extends Component<Props & RouteComponentProps, Stat
 
   public componentWillUnmount() {
     this.props.newAssignmentStore!.clearAssignmentContainer();
+    const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
+    headerArray[0].style.display = 'flex';
   }
 
   public getParams = (): number =>

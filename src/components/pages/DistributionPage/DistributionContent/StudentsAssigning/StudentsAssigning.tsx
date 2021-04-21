@@ -119,9 +119,9 @@ export class StudentsAssigning extends Component<Props, State> {
             <img src={clockImg} alt="deadline" />
             {dueDate}
             (
-              <span onClick={this.toggleOpenCalendar}>
+              <button onClick={this.toggleOpenCalendar}>
               {intl.get('distribution_page.change')}
-              </span>
+              </button>
             )
             {this.state.isCalendarOpened && this.renderCalendar()}
           </div>
@@ -140,6 +140,7 @@ export class StudentsAssigning extends Component<Props, State> {
               aria-labelledby="searchClassesId"
               aria-required="true"
               aria-invalid="false"
+              autoFocus
             />
             <img src={searchImg} alt="search" />
           </div>

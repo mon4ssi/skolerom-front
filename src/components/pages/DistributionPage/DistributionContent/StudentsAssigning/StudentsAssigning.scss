@@ -21,9 +21,14 @@
         height: 18px;
       }
 
-      span {
+      span, button {
         text-decoration: underline;
         cursor: pointer;
+        background: transparent;
+        padding: 0px;
+        &:focus {
+          outline: auto;
+        }
       }
 
       .Calendar {

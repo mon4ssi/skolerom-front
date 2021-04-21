@@ -40,6 +40,8 @@ class EditTeachingPathComponent extends Component<Props & RouteComponentProps, S
     const { getTeachingPathForEditing, isAssignmentCreating, getDraftForeignTeachingPath } = editTeachingPathStore!;
 
     this.props.editTeachingPathStore!.getArticles({});
+    const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
+    headerArray[0].style.display = 'none';
 
     if (!isAssignmentCreating) {
       if (readOnly) {
@@ -65,6 +67,8 @@ class EditTeachingPathComponent extends Component<Props & RouteComponentProps, S
     if (!this.props.editTeachingPathStore!.isAssignmentCreating) {
       this.props.editTeachingPathStore!.resetTeachingPath();
     }
+    const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
+    headerArray[0].style.display = 'flex';
   }
 
   public getParams = (): number => (

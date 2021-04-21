@@ -49,6 +49,13 @@
       background: #0B2541;
       border-color: #0A243F;
 
+      button {
+        background: transparent;
+        padding: 0px;
+        &:focus {
+          outline: auto;
+        }
+      }
       span {
         color: white;
       }

@@ -75,7 +75,14 @@
           justify-content: flex-end;
           margin-left: 20px;
           padding: 10px 0;
-
+          button {
+            background: transparent;
+            padding: 0px;
+            &:focus {              
+              outline: auto;
+              outline-offset: 2px;
+            }
+          }
           img {
             width: 30px;
           }

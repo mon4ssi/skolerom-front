@@ -14,6 +14,7 @@ import './TagInput.scss';
 
 const sixArticles = 6;
 const scrollDelay = 200;
+const timeoutlint = 3000;
 
 export interface TagProp {
   id: number;
@@ -64,6 +65,12 @@ class TagInputWrapper extends Component<Props, State> {
     if (this.props.addTag) {
       this.props.addTag(id);
     }
+    setTimeout(
+      () => {
+        this.setState({ isTagsWindowVisible: false });
+      },
+      timeoutlint
+    );
   }
 
   private onRemoveTag = (id: number): void => {
@@ -135,6 +142,7 @@ class TagInputWrapper extends Component<Props, State> {
 
   public onFocusInput = () => {
     const { noOpenOnFocus } = this.props;
+    this.setState({ isTagsWindowVisible: false });
     if (!noOpenOnFocus) {
       this.setState({ isTagsWindowVisible: true });
     }
@@ -232,7 +240,9 @@ class CurrentTag extends Component<CurrentTagProps> {
     return (
       <div className="tag">
         <span className={'title'}>{title}</span>
-        <img src={dark ? closeCrossLight : closeCross} alt="Close" onClick={this.onRemove}/>
+        <button onClick={this.onRemove}>
+          <img src={dark ? closeCrossLight : closeCross} alt="Close" />
+        </button>
       </div>
     );
   }

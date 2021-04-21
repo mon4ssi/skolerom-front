@@ -122,11 +122,12 @@ class MyClass extends Component<MyClassProps, MyClassState> {
 
     return (
       <div className="check flexBox alignCenter">
-        <img
-          onClick={this.handleSelectFullClass}
-          src={isSelectedIcon}
-          alt="check"
-        />
+        <button onClick={this.handleSelectFullClass}>
+          <img
+            src={isSelectedIcon}
+            alt="check"
+          />
+        </button>
       </div>
     );
   }
