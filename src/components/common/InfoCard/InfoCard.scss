@@ -28,7 +28,14 @@
     top: -13px;
     left: 143px; // TODO: 110px after adding DnD
     z-index: 3;
-
+    button {
+      padding: 0px;
+      background: transparent;
+      &:focus {
+        outline: black;
+        outline-style: auto;
+      }
+    }
     img {
       width: 26px;
       height: 26px;

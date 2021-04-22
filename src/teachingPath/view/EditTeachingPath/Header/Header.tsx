@@ -33,6 +33,9 @@ interface Props extends RouteComponentProps<MatchProps> {
 @observer
 export class HeaderComponent extends Component<Props> {
 
+  private ref = React.createRef<HTMLButtonElement>();
+  private refGoDistribution = React.createRef<HTMLButtonElement>();
+  private refFinalDistribution = React.createRef<HTMLButtonElement>();
   private isDisabledSaveButton = () => false;
   private isDisabledPublishButton = () => false;
 
@@ -168,12 +171,14 @@ export class HeaderComponent extends Component<Props> {
 
     if (userType !== UserType.ContentManager) {
       return (
-        <CreateButton
+        <button
           onClick={this.onPublish(false)}
           disabled={this.isDisabledPublishButton()}
+          className="CreateButton"
+          ref={this.refGoDistribution}
         >
           {intl.get('edit_teaching_path.header.publish_and_distribute_teaching_path')}
-        </CreateButton>
+        </button>
       );
     }
   }
@@ -198,12 +203,14 @@ export class HeaderComponent extends Component<Props> {
       return (
         <>
           <span>{this.checkUpdatedAt()}</span>
-          <CreateButton
+          <button
             onClick={this.onPublish(true)}
             disabled={this.isDisabledPublishButton()}
+            className="CreateButton"
+            ref={this.ref}
           >
             {intl.get('edit_teaching_path.header.publish_teaching_path')}
-          </CreateButton>
+          </button>
           {this.renderDistributeButton()}
         </>
       );
@@ -211,12 +218,14 @@ export class HeaderComponent extends Component<Props> {
 
     if (isDistribution) {
       return (
-        <CreateButton
+        <button
           onClick={this.onDistribute}
           disabled={this.isDisabledPublishButton()}
+          className="CreateButton"
+          ref={this.refFinalDistribution}
         >
           {intl.get('edit_teaching_path.header.distribute_teaching_path')}
-        </CreateButton>
+        </button>
       );
     }
   }
@@ -228,20 +237,29 @@ export class HeaderComponent extends Component<Props> {
         this.onGoBack();
       }
     }
-    if (event.shiftKey && event.key === 'S' || event.key === 's') {
+    if (event.shiftKey && event.key === 'S' || event.shiftKey && event.key === 's') {
       if (isCreation) {
-        if (this.isDisabledSaveButton()) {
+        if (!this.isDisabledSaveButton()) {
           this.onSave();
         }
       }
+    }
+    if (event.shiftKey && event.key === 'P' || event.shiftKey && event.key === 'p') {
       if (isPublishing) {
-        if (this.isDisabledPublishButton()) {
-          this.onPublish(true);
+        if (!this.isDisabledPublishButton()) {
+          this.ref.current!.click();
+        }
+      }
+    }
+    if (event.shiftKey && event.key === 'D' || event.shiftKey && event.key === 'd') {
+      if (isPublishing) {
+        if (!this.isDisabledPublishButton()) {
+          this.refGoDistribution.current!.click();
         }
       }
       if (isDistribution) {
-        if (this.isDisabledPublishButton()) {
-          this.onDistribute();
+        if (!this.isDisabledPublishButton()) {
+          this.refFinalDistribution.current!.click();
         }
       }
     }

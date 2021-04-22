@@ -50,7 +50,7 @@ interface Props {
 
 class InfoCardComponent extends Component<Props & RouteComponentProps> {
 
-  private handleClickDelete = (event: React.SyntheticEvent<HTMLImageElement>) => {
+  private handleClickDelete = (event: React.SyntheticEvent<HTMLButtonElement>) => {
     event.preventDefault();
     this.props.onDelete!(this.props.id!);
   }
@@ -69,11 +69,12 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
   public renderActionButtons = () => (
     <div className="actionButtons flexBox">
       {/* <img src={dragImg} alt="drag" /> */}
-      <img
-        src={trashImg}
-        alt="trash"
-        onClick={this.handleClickDelete}
-      />
+      <button onClick={this.handleClickDelete}>
+        <img
+          src={trashImg}
+          alt="trash"
+        />
+      </button>
     </div>
   )
 

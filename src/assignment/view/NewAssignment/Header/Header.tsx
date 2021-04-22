@@ -35,6 +35,9 @@ interface Props extends RouteComponentProps<MatchProps> {
 @inject('newAssignmentStore', 'assignmentListStore')
 @observer
 class HeaderWrapper extends Component<Props> {
+  private ref = React.createRef<HTMLButtonElement>();
+  private refGoDistribution = React.createRef<HTMLButtonElement>();
+  private refFinalDistribution = React.createRef<HTMLButtonElement>();
   private isDisabledPublishButton = (): boolean => {
     const { currentEntity: currentAssignment } = this.props.newAssignmentStore!;
 
@@ -207,12 +210,14 @@ class HeaderWrapper extends Component<Props> {
     const userType = newAssignmentStore!.getCurrentUser()!.type;
     if (userType !== UserType.ContentManager && !(location.state && location.state.fromTeachingPath)) {
       return (
-        <CreateButton
+        <button
           onClick={this.onPublish(false)}
           disabled={this.isDisabledPublishButton()}
+          className="CreateButton"
+          ref={this.refGoDistribution}
         >
           {intl.get('new assignment.publish_and_distribute_assignment')}
-        </CreateButton>
+        </button>
       );
     }
   }
@@ -239,12 +244,14 @@ class HeaderWrapper extends Component<Props> {
       return (
         <>
           <span>{this.checkUpdatedAt()}</span>
-          <CreateButton
+          <button
             onClick={this.onPublish(true)}
             disabled={this.isDisabledDistributeButton()}
+            className="CreateButton"
+            ref={this.ref}
           >
             {intl.get('new assignment.publish_assignment')}
-          </CreateButton>
+          </button>
           {this.renderDistributeButton()}
         </>
       );
@@ -252,12 +259,14 @@ class HeaderWrapper extends Component<Props> {
 
     if (isDistribution) {
       return (
-        <CreateButton
+        <button
           onClick={this.onDistribute}
           disabled={this.isDisabledPublishButton()}
+          className="CreateButton"
+          ref={this.refFinalDistribution}
         >
           {intl.get('distribution_page.distribute_assignment')}
-        </CreateButton>
+        </button>
       );
     }
   }
@@ -307,20 +316,29 @@ class HeaderWrapper extends Component<Props> {
         this.onGoBack();
       }
     }
-    if (event.shiftKey && event.key === 'S' || event.key === 's') {
+    if (event.shiftKey && event.key === 'S' || event.shiftKey && event.key === 's') {
       if (isCreation) {
-        if (this.isDisabledSaveButton()) {
+        if (!this.isDisabledSaveButton()) {
           this.onSave();
         }
       }
+    }
+    if (event.shiftKey && event.key === 'P' || event.shiftKey && event.key === 'p') {
       if (isPublishing) {
-        if (this.isDisabledDistributeButton()) {
-          this.onPublish(true);
+        if (!this.isDisabledPublishButton()) {
+          this.ref.current!.click();
+        }
+      }
+    }
+    if (event.shiftKey && event.key === 'D' || event.shiftKey && event.key === 'd') {
+      if (isPublishing) {
+        if (!this.isDisabledPublishButton()) {
+          this.refGoDistribution.current!.click();
         }
       }
       if (isDistribution) {
-        if (this.isDisabledPublishButton()) {
-          this.onDistribute();
+        if (!this.isDisabledPublishButton()) {
+          this.refFinalDistribution.current!.click();
         }
       }
     }

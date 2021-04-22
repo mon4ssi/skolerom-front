@@ -27,9 +27,11 @@ interface Props extends RouteComponentProps {
 @inject('loginStore')
 @observer
 class TabNavigationComponent extends Component<Props> {
+  public ref = React.createRef<HTMLButtonElement>();
+
   private mainButton = () => {
     const { textMainButton, onClickMainButton } = this.props;
-    return <CreateButton onClick={onClickMainButton}>{textMainButton!}</CreateButton>;
+    return <button className="CreateButton" ref={this.ref} onClick={onClickMainButton}>{textMainButton!}</button>;
   }
 
   private renderTabNavigationLinks = (link: TabNavigationLink) => (
@@ -57,6 +59,21 @@ class TabNavigationComponent extends Component<Props> {
   }
 
   public hasButton = () => this.props.loginStore!.currentUser!.type !== UserType.Student && this.props.textMainButton;
+
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    if (event.shiftKey && event.key === 'C' || event.shiftKey && event.key === 'c') {
+      if (this.props.loginStore!.currentUser!.type !== UserType.Student && this.props.textMainButton) {
+        this.ref.current!.click();
+      }
+    }
+  }
+
+  public async componentDidMount() {
+    document.addEventListener('keyup', this.handleKeyboardControl);
+  }
+  public componentWillUnmount() {
+    document.removeEventListener('keyup', this.handleKeyboardControl);
+  }
 
   public render() {
     const { tabNavigationLinks } = this.props;

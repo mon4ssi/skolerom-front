@@ -8,6 +8,13 @@
   &.firstNumber {
     margin-bottom: 20px;
   }
+  button {
+    padding: 0px;
+    &:focus {
+      outline: black;
+      outline-style: auto;
+    }
+  }
 
   .nestedOrderNumber {
     display: flex;

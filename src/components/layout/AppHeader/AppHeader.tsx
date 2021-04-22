@@ -259,6 +259,15 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         modalVisible: Modals.NONE,
       });
     }
+    if (event.shiftKey && event.key === 'R' || event.shiftKey && event.key === 'r') {
+      window.open(`${process.env.REACT_APP_WP_URL}/artikler/`, '_blank');
+    }
+    if (event.shiftKey && event.key === 'U' || event.shiftKey && event.key === 'u') {
+      window.open(`${process.env.REACT_APP_WP_URL}/temaboker/`, '_blank');
+    }
+    if (event.shiftKey && event.key === 'O' || event.shiftKey && event.key === 'o') {
+      window.open(`${process.env.REACT_APP_WP_URL}/lydartikler/`, '_blank');
+    }
   }
 
   public async componentDidMount() {

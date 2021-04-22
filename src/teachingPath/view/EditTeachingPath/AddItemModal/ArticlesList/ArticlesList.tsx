@@ -327,7 +327,7 @@ export class ArticlesList extends Component<Props, State> {
       this.closeModal();
     }
     if (this.state.itemsForNewChildren.length > 0) {
-      if (event.shiftKey && event.key === 'S' || event.key === 's') {
+      if (event.shiftKey && event.key === 'S' || event.shiftKey && event.key === 's') {
         this.closeModal();
       }
     }

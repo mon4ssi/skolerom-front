@@ -27,7 +27,7 @@ export class NestedOrderNumber extends Component<Props> {
 
   public static contextType = ItemContentTypeContext;
 
-  public handleEditClick = (event: React.MouseEvent<HTMLImageElement>) => {
+  public handleEditClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { editTeachingPathStore, node } = this.props;
 
     event.preventDefault();
@@ -35,7 +35,7 @@ export class NestedOrderNumber extends Component<Props> {
     this.context.changeContentType(node.children[0].type === TeachingPathNodeType.Article ? 0 : 1);
   }
 
-  public handleDeleteClick = async (event: React.MouseEvent<HTMLImageElement>) => {
+  public handleDeleteClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
     const deleteConfirm = await Notification.create({
@@ -51,19 +51,21 @@ export class NestedOrderNumber extends Component<Props> {
   }
 
   public renderEditIcon = () => (
-    <img
-      src={editImg}
-      alt="edit"
-      onClick={this.handleEditClick}
-    />
+    <button onClick={this.handleEditClick}>
+      <img
+        src={editImg}
+        alt="edit"
+      />
+    </button>
   )
 
   public renderDeleteIcon = () => (
-    <img
-      src={deleteImg}
-      alt="delete"
-      onClick={this.handleDeleteClick}
-    />
+    <button onClick={this.handleDeleteClick}>
+      <img
+        src={deleteImg}
+        alt="delete"
+      />
+    </button>
   )
 
   public render() {

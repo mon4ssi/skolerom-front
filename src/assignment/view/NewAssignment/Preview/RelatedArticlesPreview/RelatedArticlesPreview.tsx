@@ -103,7 +103,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     if (event.key === 'Escape') {
       this.closePanel();
     }
-    if (event.shiftKey && event.key === 'S' || event.key === 's') {
+    if (event.shiftKey && event.key === 'S' || event.shiftKey && event.key === 's') {
       this.closePanel();
     }
   }

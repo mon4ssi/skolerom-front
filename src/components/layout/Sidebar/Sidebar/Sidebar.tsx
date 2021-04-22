@@ -148,10 +148,24 @@ class Sidebar extends Component<Props> {
     }
   }
 
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    if (event.shiftKey && event.key === 'T' || event.key === 't') {
+      window.location.href = '/teaching-paths/';
+    }
+    if (event.shiftKey && event.key === 'A' || event.key === 'a') {
+      window.location.href = '/assignments/';
+    }
+  }
+
   public componentDidMount() {
     const { uiStore, history } = this.props;
     const currentActiveTab = history.location.pathname.split('/')[1];
     uiStore!.setCurrentActiveTab(currentActiveTab);
+    document.addEventListener('keyup', this.handleKeyboardControl);
+  }
+
+  public componentWillUnmount() {
+    document.removeEventListener('keyup', this.handleKeyboardControl);
   }
 
   public render() {
