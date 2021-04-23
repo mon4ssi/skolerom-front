@@ -134,7 +134,7 @@ export class PublishingActions extends Component<Props> {
     return (
       <div className="flexBox dirColumn w50 subject">
         <div className="flexBox">
-          <img src={tagsImg} alt="tags" />
+          <img src={tagsImg} alt="Subjects" title="Subjects"/>
           <div className={'title'}>{intl.get('publishing_page.subject')}</div>
         </div>
 
@@ -162,7 +162,7 @@ export class PublishingActions extends Component<Props> {
     return (
       <div className="flexBox dirColumn w50 grade">
         <div className="flexBox">
-          <img src={gradeImg} alt="grade" />
+          <img src={gradeImg} alt={intl.get('generals.grade')} title={intl.get('generals.grade')} />
           <div className={'title'}>{intl.get('publishing_page.grade')}</div>
         </div>
 
@@ -204,7 +204,7 @@ export class PublishingActions extends Component<Props> {
   public renderLevelChoice = () => (
     <div className="flexBox dirColumn w50 levels">
       <div className="flexBox">
-        <img src={settingsImg} alt="student-level" />
+        <img src={settingsImg} alt={intl.get('generals.student_level')} title={intl.get('generals.student_level')} />
         <div className={'title'}>{intl.get('publishing_page.student_level')}</div>
       </div>
 
@@ -235,7 +235,7 @@ export class PublishingActions extends Component<Props> {
     return (
       <div className="flexBox dirColumn w50 visibility">
         <div className="flexBox">
-          <img src={visibilityImg} alt="visibility" />
+          <img src={visibilityImg} alt={intl.get('generals.visibility')} title={intl.get('generals.visibility')} />
           <div className={'title'}>{intl.get('publishing_page.visibility')}</div>
         </div>
 

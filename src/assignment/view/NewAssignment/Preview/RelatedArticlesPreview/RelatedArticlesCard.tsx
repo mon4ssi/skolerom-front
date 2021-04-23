@@ -30,9 +30,9 @@ export const RelatedArticlesCard = (props: Props) => {
 
   const renderImageArticle = () => {
     if (article.images && article.images.url) {
-      return <img src={article.images!.url} alt="article"/>;
+      return <img src={article.images!.url} alt={article.title} title={article.title} />;
     }
-    return <img className="listImage" src={listPlaceholderImg} alt={'title'}/>;
+    return <img className="listImage" src={listPlaceholderImg} title={article.title} alt={article.title}/>;
   };
 
   const renderGrades = () => {

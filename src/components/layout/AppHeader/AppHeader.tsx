@@ -356,7 +356,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         <div className="AppHeader__block" aria-labelledby="LogoDescription">
           <NavLink to={redirectLink} onClick={this.handleLogoClick}>
             <div className="AppHeader__block">
-              <img src={logoImage} alt="Temabok Dashboard" className="AppHeader__logo" title="Logo Skolerom"/>
+              <img src={logoImage} alt="Skolerom Dashboard" className="AppHeader__logo" title="Skolerom Skolerom"/>
               <span className="AppHeader__role">{this.renderRole()}</span>
             </div>
           </NavLink>

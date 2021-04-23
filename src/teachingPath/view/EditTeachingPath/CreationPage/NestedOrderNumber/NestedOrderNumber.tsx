@@ -54,7 +54,8 @@ export class NestedOrderNumber extends Component<Props> {
     <button onClick={this.handleEditClick}>
       <img
         src={editImg}
-        alt="edit"
+        alt={intl.get('generals.edit')}
+        title={intl.get('generals.edit')}
       />
     </button>
   )
@@ -63,7 +64,8 @@ export class NestedOrderNumber extends Component<Props> {
     <button onClick={this.handleDeleteClick}>
       <img
         src={deleteImg}
-        alt="delete"
+        alt={intl.get('generals.delete')}
+        title={intl.get('generals.delete')}
       />
     </button>
   )

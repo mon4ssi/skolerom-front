@@ -126,7 +126,7 @@ class Sidebar extends Component<Props> {
       onClick={this.handleClickLink(link)}
       aria-label={intl.get(`sidebar.${link.name}`)}
     >
-      <img className="Sidebar__icon" src={link.icon} alt={link.name} />
+      <img className="Sidebar__icon" src={link.icon} alt={intl.get(`sidebar.alt.${link.name}`)} title={intl.get(`sidebar.title.${link.name}`)} />
       <span className="Sidebar__text">
         {intl.get(`sidebar.${link.name}`)}
       </span>

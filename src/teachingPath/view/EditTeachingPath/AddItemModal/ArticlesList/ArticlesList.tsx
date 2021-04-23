@@ -241,7 +241,8 @@ export class ArticlesList extends Component<Props, State> {
       <button ref={this.refButton} onClick={this.closeModal}>
       <img
         src={closeImg}
-        alt="close"
+        alt={intl.get('generals.close')}
+        title={intl.get('generals.close')}
       />
       </button>
     </div>

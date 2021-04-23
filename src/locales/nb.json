@@ -73,7 +73,6 @@
     "About skolerom": "Om skolerom",
     "School": "Skole",
     "Library": "Biblioteket",
-    "Nynorsk": "Nynorsk",
     "teacher": "Lærer",
     "student": "Elev",
     "content_manager": "Redaktør"
@@ -86,7 +85,21 @@
     "Favorites": "Favoritter",
     "Forum": "Forum",
     "Log out": "Logg ut",
-    "Evaluation": "Vurdering"
+    "Evaluation": "Vurdering",
+    "alt": {
+      "Activity": "Gå til aktivitet oversikt",
+      "Teaching Paths": "Gå til læringsstier",
+      "Assignments": "Gå til oppgaver",
+      "Students": "Gå til vurdering oversikt",
+      "Evaluation": "Gå til vurdering oversikt"
+    },
+    "title": {
+      "Activity": "Gå til aktivitet oversikt",
+      "Teaching Paths": "Gå til læringsstier",
+      "Assignments": "Gå til oppgaver",
+      "Students": "Gå til vurdering oversikt",
+      "Evaluation": "Gå til vurdering oversikt"
+    }
   },
   "subjects": {
     "Science": "Vitenskap",
@@ -586,11 +599,27 @@
     "part1": "Din nettleser kan ikke bruke denne applikasjonen.",
     "part2": "Følgende nettlesere er støttet: Firefox, Opera, Edge og Google Chrome."
   },
+  "generals": {
+    "edit": "Edith Path",
+    "delete": "Delete Path",
+    "close": "Lukk artikkelvisning",
+    "close_assignment": "Lukk oppgave vinduet",
+    "selected_assignment": "Velg oppgave",
+    "unselected_assignment": "Velg oppgave",
+    "addQuestion_buttons": {
+      "TEXT": "Tekst spørsmål",
+      "MULTIPLE_CHOICE": "Flervalgsspørsmål",
+      "IMAGE_CHOICE": "Bildevalg spørsmål"
+    },
+    "grade": "Velg fag",
+    "student_level": "Velg elevnivå",
+    "visibility": "visibility"
+  },
   "activity_page": {
     "Hello": "Hei",
     "pause":"pause",
     "play":"Spill av",
-    "options":"Se valg",
+    "options":"Modul valg",
     "No available content": "Ikke tilgjengelig innhold",
     "Widget failed to load": "Modulen ble ikke lastet",
     "active assignments":  "Aktive oppgaver",

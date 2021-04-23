@@ -85,7 +85,21 @@
     "Favorites": "Favorites",
     "Forum": "Forum",
     "Log out": "Log out",
-    "Evaluation": "Evaluation"
+    "Evaluation": "Evaluation",
+    "alt": {
+      "Activity": "Go to activity overview",
+      "Teaching Paths": "Go to teaching paths",
+      "Assignments": "Go to assignments",
+      "Students": "Go to evaluation overview",
+      "Evaluation": "Go to evaluation overview"
+    },
+    "title": {
+      "Activity": "Go to activity overview",
+      "Teaching Paths": "Go to teaching paths",
+      "Assignments": "Go to assignments",
+      "Students": "Go to evaluation overview",
+      "Evaluation": "Go to evaluation overview"
+    }
   },
   "subjects": {
     "Science": "Science",
@@ -585,6 +599,22 @@
     "warning": "Warning",
     "part1": "Your browser is not allowed to access this page.",
     "part2": "Supporting browsers: Firefox, Opera, Edge and Google Chrome only."
+  },
+  "generals": {
+    "edit": "Edith Path",
+    "delete": "Delete Path",
+    "close": "Close",
+    "close_assignment": "Close",
+    "selected_assignment": "Select assignment",
+    "unselected_assignment": "UnSelect assignment",
+    "addQuestion_buttons": {
+      "TEXT": "Text",
+      "MULTIPLE_CHOICE": "Multiple Choice",
+      "IMAGE_CHOICE": "Image Choice"
+    },
+    "grade": "Grade",
+    "student_level": "Student level",
+    "visibility": "visibility"
   },
   "activity_page": {
     "Hello": "Hello",

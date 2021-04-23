@@ -69,9 +69,6 @@ class AssignmentItem extends Component<AssignmentProps> {
             alt="item-img"
             className="itemImg"
           />
-          <div className="itemLikes flexBox spaceBetween alignCenter">
-            <img src={notLikedIcon} alt="Not liked"/>0
-          </div>
           <div className="itemTitle">
             {assignment.title}
           </div>
@@ -88,7 +85,8 @@ class AssignmentItem extends Component<AssignmentProps> {
           <div className="itemIsSelected">
             <img
               src={this.isAssignmentSelected() ? checkFilledImg : checkImg}
-              alt="item-selected"
+              alt={this.isAssignmentSelected() ? intl.get('generals.unselected_assignment') : intl.get('generals.selected_assignment')}
+              title={this.isAssignmentSelected() ? intl.get('generals.unselected_assignment') : intl.get('generals.selected_assignment')}
             />
           </div>
         </div>
@@ -278,7 +276,8 @@ export class AssignmentsList extends Component<Props, State> {
         <button ref={this.refButton} onClick={this.closeModal}>
           <img
             src={closeImg}
-            alt="close"
+            alt={intl.get('generals.close_assignment')}
+            title={intl.get('generals.close_assignment')}
           />
           </button>
       </div>

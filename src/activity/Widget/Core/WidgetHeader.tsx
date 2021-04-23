@@ -58,8 +58,8 @@ export class WidgetHeader extends Component<IWidgetHeaderProps, State> { // TODO
     return (
       <div className="WidgetHeader" onClick={this.handleClickCollapse}>
         <div className="WidgetHeader__title">{title}</div>
-        <span className="OptionMsj" data-msj={intl.get('activity_page.options')} >
-          <img src={optionsImage} alt="Options" className="WidgetHeader__image" onClick={this.handleClickTooltip}/>
+        <span className="OptionMsj" >
+          <img src={optionsImage} alt={intl.get('activity_page.options')} title={intl.get('activity_page.options')} className="WidgetHeader__image" onClick={this.handleClickTooltip}/>
           </span>
           {this.renderTooltip()}
       </div>

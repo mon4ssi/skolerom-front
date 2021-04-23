@@ -34,7 +34,7 @@ export class ListWidget extends Component<IListWidgetProps, State> {
         <button className="ListWidget__text">
           {item.text}
         </button>
-        <img src={item.imageSrc} alt="widget_image" className="ListWidget__image"/>
+        <img src={item.imageSrc} alt={item.text} title={item.text} className="ListWidget__image"/>
       </li>
     );
   }

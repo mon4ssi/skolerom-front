@@ -54,6 +54,7 @@
     "teaching_path_back": "Tilbake til alle læringsstiar"
   },
   "header": {
+    "change_font_size": "Endre skriftstørrelse",
     "Articles": "Artiklar",
     "Article": "Artikkel",
     "Publications": "Temabøker",
@@ -71,6 +72,7 @@
     "Log in": "Logg inn",
     "About skolerom": "Om skolerom",
     "School": "Skole",
+    "Library": "Biblioteket",
     "teacher": " Lærar",
     "student": "Elev",
     "content_manager": "Redaktør"
@@ -83,7 +85,21 @@
     "Favorites": "Favorittar",
     "Forum": "Forum",
     "Log out": "Logg ut",
-    "Evaluation": "Evaluering"
+    "Evaluation": "Evaluering",
+    "alt": {
+      "Activity": "Gå til aktivitet oversyn",
+      "Teaching Paths": "Gå til læringsstier",
+      "Assignments": "Gå til oppgåver",
+      "Students": "Gå til vurdering oversyn",
+      "Evaluation": "Gå til vurdering oversyn"
+    },
+    "title": {
+      "Activity": "Gå til aktivitet oversyn",
+      "Teaching Paths": "Gå til læringsstier",
+      "Assignments": "Gå til oppgåver",
+      "Students": "Gå til vurdering oversyn",
+      "Evaluation": "Gå til vurdering oversyn"
+    }
   },
   "subjects": {
     "Science": "Vitskap",
@@ -585,11 +601,27 @@
     "part1": "Nettlesaren din kan ikkje bruke denne applikasjonen.",
     "part2": "Følgjande nettlesarar er støtta: Firefox, Opera, Edge og Google Chrome."
   },
+  "generals": {
+    "edit": "Edith Path",
+    "delete": "Delete Path",
+    "close":"Lukk artikkelvisning",
+    "close_assignment":"Lukk oppgåve vindauget",
+    "selected_assignment": "Velg oppgåve",
+    "unselected_assignment": "Velg oppgåve",
+    "addQuestion_buttons": {
+      "TEXT": "Tekst spørsmål",
+      "MULTIPLE_CHOICE": "Flervalgsspørsmål",
+      "IMAGE_CHOICE": "Bildevalg spørsmål"
+    },
+    "grade": "Velg fag",
+    "student_level": "Velg elevnivå",
+    "visibility": "visibility"
+  },
   "activity_page": {
     "Hello": "Hei",
     "pause":"pause",
     "play":"Spill av",
-    "options":"Se valg",
+    "options":"Modul valg",
     "No available content": "Ikkje tilgjengeleg innhald",
     "Widget failed to load": "Modulen blei ikkje lasta",
     "active assignments":  "Aktive oppgåver",

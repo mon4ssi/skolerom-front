@@ -84,7 +84,7 @@ class NewQuestionTile extends Component<NewQuestionTileProps> {
         key={type}
         onClick={this.onClick}
       >
-        <img src={questionIcons[type]} alt={type} />
+        <img src={questionIcons[type]} alt={intl.get(`generals.addQuestion_buttons.${type}`)} title={intl.get(`generals.addQuestion_buttons.${type}`)} />
 
         <div className={'questionWrapper'}>
           <div className="questionType fw500">

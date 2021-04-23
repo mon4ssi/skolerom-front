@@ -153,7 +153,7 @@ export class SliderWidget extends Component<SliderWidgetProps, SliderWidgetState
                 >
                   <i className="SliderWidget__content__pauseicon" />
                 </button>
-                <img className={imageClasses} src={slide.imageURL} alt="slider_image" />
+                <img className={imageClasses} src={slide.imageURL} alt={slide.title} title={slide.title} />
                 <div className="SliderWidget__infoWrapper_inside">
                   {this.renderInfo()}
                 </div>

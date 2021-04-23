@@ -190,7 +190,8 @@ export class Notification extends Component<Props, State> {
   public renderCloseIcon = () => (
     <img
       src={closeImg}
-      alt="close"
+      alt={intl.get('generals.close')}
+      title={intl.get('generals.close')}
       onClick={this.onCloseIconClick}
       className="Notification_close"
     />

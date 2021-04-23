@@ -9,6 +9,7 @@
   justify-content: space-between;
   .OptionMsj {
     position: relative;
+    /*
     &:before {
       position: absolute;
       box-shadow: 0 2px 2px #00000021;
@@ -52,6 +53,7 @@
         opacity: 1;
       }
     }
+    */
   }
 }
 
