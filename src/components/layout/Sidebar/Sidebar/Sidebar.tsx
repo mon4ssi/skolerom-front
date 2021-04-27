@@ -7,6 +7,8 @@ import { inject, observer } from 'mobx-react';
 import { LoginStore } from 'user/view/LoginStore';
 import { UserType } from 'user/User';
 import { UIStore } from 'locales/UIStore';
+import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
+import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
 
 import activityIcon from 'assets/images/activity.svg';
 import assignmentsImg from 'assets/images/assignment.svg';
@@ -100,9 +102,13 @@ const contentManagerSidebar = [
 interface Props extends RouteComponentProps {
   loginStore?: LoginStore;
   uiStore?: UIStore;
+  newAssignmentStore?: NewAssignmentStore;
+  editTeachingPathStore?: EditTeachingPathStore;
 }
 
 @inject('loginStore', 'uiStore')
+@inject('assignmentListStore', 'newAssignmentStore')
+@inject('teachingPathsListStore', 'editTeachingPathStore')
 @observer
 class Sidebar extends Component<Props> {
 
@@ -152,9 +158,32 @@ class Sidebar extends Component<Props> {
     if (event.shiftKey && event.key === 'T' || event.key === 't') {
       window.location.href = '/teaching-paths/';
     }
-    if (event.shiftKey && event.key === 'A' || event.key === 'a') {
+    if (event.shiftKey && event.key === 'N' || event.key === 'n') {
       window.location.href = '/assignments/';
     }
+    if (event.shiftKey && event.key === 'G' || event.key === 'g') {
+      this.createAssignment();
+    }
+    if (event.shiftKey && event.key === 'C' || event.key === 'c') {
+      this.createTeachingPath();
+    }
+  }
+
+  public createAssignment = async () => {
+    const { newAssignmentStore, history } = this.props;
+
+    const id = await newAssignmentStore!
+      .createAssigment()
+      .then(response => response.id);
+    history.push(`/assignments/edit/${id}`);
+  }
+
+  public createTeachingPath = async () => {
+    const { editTeachingPathStore, history } = this.props;
+    const id = await editTeachingPathStore!
+      .createTeachingPath()
+      .then(response => response.id);
+    history.push(`/teaching-paths/edit/${id}`);
   }
 
   public componentDidMount() {

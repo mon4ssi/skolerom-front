@@ -601,6 +601,23 @@
     "part2": "Supporting browsers: Firefox, Opera, Edge and Google Chrome only."
   },
   "generals": {
+    "support":"Support",
+    "keyboard":"Keyboard shortcuts",
+    "accesibility_text": {
+      "title_quick": "Quick access to the lists",
+      "shift_t": "List of teaching paths",
+      "shift_n": "List of assignments",
+      "shift_r": "Articles",
+      "shift_u": "Publications",
+      "shift_o": "Sound articles",
+      "title_when_editing": "When editing a teaching path or assignment",
+      "shift_a": "Add selected item",
+      "shift_s": "Save teaching path or assignment",
+      "shift_p": "Publish teaching path or assignment",
+      "shift_d": "Distribute teaching path or assignment",
+      "shift_c": "Create a new teaching path",
+      "shift_g": "Create a new assignment"
+    },
     "edit": "Edith Path",
     "delete": "Delete Path",
     "close": "Close",

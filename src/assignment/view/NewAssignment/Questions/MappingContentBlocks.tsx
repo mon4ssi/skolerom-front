@@ -31,7 +31,9 @@ interface ContentBlockProps {
 }
 
 const DragIcon = SortableHandle(() => (
-  <img src={drag} alt="drag"/>
+  <button>
+    <img src={drag} alt="drag"/>
+  </button>
 ));
 @inject('newAssignmentStore')
 @observer
@@ -119,7 +121,9 @@ class ContentBlockComponent extends Component<ContentBlockProps> {
     return (
       <div className={`blockActions ${activeBlock} ${hoveredClass}`}>
         <DragIcon />
-        <img src={trash} alt="trash" onClick={this.removeContentBlock(block)}/>
+        <button onClick={this.removeContentBlock(block)}>
+          <img src={trash} alt="trash" />
+        </button>
       </div>
     );
   }

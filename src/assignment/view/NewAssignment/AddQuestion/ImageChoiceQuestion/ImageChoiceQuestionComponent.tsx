@@ -50,6 +50,12 @@ class ImageChoiceQuestion extends Component<Props> {
     }
   }
 
+  private changeKeyFunction = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+    if (e.shiftKey && e.key === 'S' || e.shiftKey && e.key === 's') {
+      e.preventDefault();
+    }
+  }
+
   public addNewContentBlock = (type: ContentBlockType) => {
     const { question, newAssignmentStore } = this.props;
     question.addContentBlock(type, question);
@@ -101,6 +107,7 @@ class ImageChoiceQuestion extends Component<Props> {
           placeholder={intl.get('new assignment.Enter a question')}
           value={question.title}
           onChange={this.handleChangeTitle}
+          onKeyDown={this.changeKeyFunction}
           maxLength={MAX_DESCRIPTION_LENGTH}
           autoFocus
         />

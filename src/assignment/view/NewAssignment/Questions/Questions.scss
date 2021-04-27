@@ -4,12 +4,20 @@
   .blockActions {
     display: none;
     align-self: flex-start;
+    button {
+      padding: 0px;
+      background: transparent;
+      margin-left: 10px;
+      &:focus {
+        outline: black;
+        outline-style: auto;
+      }
+    }
 
     img {
       width: 20px;
       height: 20px;
       cursor: pointer;
-      margin-left: 10px;
     }
   }
   .activeBlock {

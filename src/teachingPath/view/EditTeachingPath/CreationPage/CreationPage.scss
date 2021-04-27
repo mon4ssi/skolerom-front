@@ -242,6 +242,10 @@
         z-index: 3;
         background: url(../../../../assets/images/merge.svg);
         background-size: cover;
+        &:focus {
+          outline: black;
+          outline-style: auto;
+        }
       }
 
       &:hover {

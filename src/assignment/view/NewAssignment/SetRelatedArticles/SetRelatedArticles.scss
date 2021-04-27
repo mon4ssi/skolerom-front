@@ -38,5 +38,11 @@
     button{
       font-size: 1.0625rem;
     }
+    .tag {
+      button {
+        background: transparent;
+        padding: 0px;
+      }
+    }
   }
 }

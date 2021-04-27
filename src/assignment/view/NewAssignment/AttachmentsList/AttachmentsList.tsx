@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Component } from 'react';
+import React, { ChangeEvent, Component, createRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
@@ -52,7 +52,8 @@ export interface FilterableAttachment {
 @observer
 class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
   public static contextType = AttachmentContentTypeContext;
-  private reaction: IReactionDisposer | null = null;
+  public refButton = createRef<HTMLButtonElement>();
+  public reaction: IReactionDisposer | null = null;
   public state: State = {
     selectedTab: '',
     query: '',
@@ -292,12 +293,23 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
   }
 
-  private closeAttachmentsList = () => {
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    if (event.shiftKey && event.key === 'A' || event.shiftKey && event.key === 'a') {
+      this.props.context.changeContentType(AttachmentContentType.text);
+      this.props.newAssignmentStore!.clearCurrentOption();
+    }
+  }
+
+  public closeAttachmentsList = () => {
     this.props.context.changeContentType(AttachmentContentType.text);
     this.props.newAssignmentStore!.clearCurrentOption();
   }
 
   public async componentDidMount() {
+    if (this.refButton.current) {
+      this.refButton.current!.focus();
+    }
+    document.addEventListener('keyup', this.handleKeyboardControl);
     await this.fetchAttachments();
     this.reaction = reaction(() => {
       if (!isNull(this.props.newAssignmentStore!.currentEntity!.relatedArticles)) {
@@ -313,6 +325,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
       this.reaction();
     }
     this.closeAttachmentsList();
+    document.removeEventListener('keyup', this.handleKeyboardControl);
   }
 
   public async componentDidUpdate(prevProps: AttachmentsListProps) {
@@ -446,7 +459,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
               {/*{this.renderAttachmentsStockTab()}*/}
             </div>
           </div>
-          <button onClick={this.closeAttachmentsList}>
+          <button onClick={this.closeAttachmentsList} ref={this.refButton}>
             <img src={closeCross} alt="Close"  />
           </button>
         </div>

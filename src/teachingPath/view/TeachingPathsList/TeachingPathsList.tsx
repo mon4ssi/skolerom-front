@@ -106,7 +106,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
 
   public componentDidUpdate = async (prevProps: Props) => {
     const { typeOfTeachingPathsList } = this.props;
-
     if (prevProps.typeOfTeachingPathsList !== typeOfTeachingPathsList) {
       this.setCurrentTab();
     }
@@ -115,7 +114,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
   public componentWillUnmount() {
     this.unregisterListener();
     this.props.teachingPathsListStore!.resetTeachingPathsList();
-    document.removeEventListener('keyup', this.handleKeyboardControl);
   }
 
   public setCurrentTab = async () => {

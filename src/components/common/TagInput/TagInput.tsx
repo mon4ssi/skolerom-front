@@ -78,6 +78,12 @@ class TagInputWrapper extends Component<Props, State> {
     if (removeTag) {
       removeTag(id);
     }
+    setTimeout(
+      () => {
+        this.setState({ isTagsWindowVisible: false });
+      },
+      timeoutlint
+    );
   }
 
   private isTagSelected = (tag: TagProp): boolean => {

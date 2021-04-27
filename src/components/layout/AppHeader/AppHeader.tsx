@@ -137,6 +137,7 @@ enum Modals {
 
 interface HeaderState {
   modalVisible: Modals;
+  isModalKeyboard: boolean;
 }
 
 @inject('loginStore', 'uiStore')
@@ -145,6 +146,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
 
   public readonly state: HeaderState = {
     modalVisible: Modals.NONE,
+    isModalKeyboard: false
   };
 
   private renderUserModalIfNeeded() {
@@ -245,11 +247,138 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     this.setState({ modalVisible: Modals.NONE });
   }
 
+  private openKeyboardModal = () => {
+    const { isModalKeyboard } = this.state;
+    return this.setState({ isModalKeyboard: true });
+  }
+
+  private closeModalKeyboard = () => {
+    const { isModalKeyboard } = this.state;
+    return this.setState({ isModalKeyboard: false });
+  }
+
+  private renderContentKeyboardStudent = () => (
+    <div className="modalKeyboard__list">
+      <h2>{intl.get('generals.accesibility_text.title_quick')}</h2>
+      <ul>
+        <li>
+          <strong>Shift + T</strong>
+          <p>{intl.get('generals.accesibility_text.shift_t')}</p>
+        </li>
+        <li>
+          <strong>Shift + N</strong>
+          <p>{intl.get('generals.accesibility_text.shift_n')}</p>
+        </li>
+        <li>
+          <strong>Shift + R</strong>
+          <p>{intl.get('generals.accesibility_text.shift_r')}</p>
+        </li>
+        <li>
+          <strong>Shift + U</strong>
+          <p>{intl.get('generals.accesibility_text.shift_u')}</p>
+        </li>
+        <li>
+          <strong>Shift + O</strong>
+          <p>{intl.get('generals.accesibility_text.shift_o')}</p>
+        </li>
+      </ul>
+    </div>
+  )
+
+  private renderContentKeyboardTeacher = () => (
+    <div className="modalKeyboard__list">
+      <h2>{intl.get('generals.accesibility_text.title_when_editing')}</h2>
+      <ul>
+        <li>
+          <strong>Shift + A</strong>
+          <p>{intl.get('generals.accesibility_text.shift_a')}</p>
+        </li>
+        <li>
+          <strong>Shift + S</strong>
+          <p>{intl.get('generals.accesibility_text.shift_s')}</p>
+        </li>
+        <li>
+          <strong>Shift + P</strong>
+          <p>{intl.get('generals.accesibility_text.shift_p')}</p>
+        </li>
+        <li>
+          <strong>Shift + D</strong>
+          <p>{intl.get('generals.accesibility_text.shift_d')}</p>
+        </li>
+        <li>
+          <strong>Shift + C</strong>
+          <p>{intl.get('generals.accesibility_text.shift_c')}</p>
+        </li>
+        <li>
+          <strong>Shift + G</strong>
+          <p>{intl.get('generals.accesibility_text.shift_g')}</p>
+        </li>
+      </ul>
+    </div>
+  )
+
+  private renderKeyboardModal = () => {
+    const currentUser = this.props.loginStore!.currentUser;
+    if (currentUser && currentUser.type === UserType.Student) {
+      return (
+        <div className="modalKeyboard">
+          <div className="modalKeyboard__background" onClick={this.closeModalKeyboard} />
+          <div className="modalKeyboard__content">
+            <div className="modalKeyboard__close" onClick={this.closeModalKeyboard} />
+            <div className="modalKeyboard__inside">
+              {this.renderContentKeyboardStudent()}
+            </div>
+          </div>
+        </div>
+      );
+    }
+    if (currentUser && currentUser.type === UserType.Teacher) {
+      return (
+        <div className="modalKeyboard">
+          <div className="modalKeyboard__background" onClick={this.closeModalKeyboard} />
+          <div className="modalKeyboard__content">
+            <div className="modalKeyboard__close" onClick={this.closeModalKeyboard} />
+            <div className="modalKeyboard__inside">
+              {this.renderContentKeyboardStudent()}
+              {this.renderContentKeyboardTeacher()}
+            </div>
+          </div>
+        </div>
+      );
+    }
+    if (currentUser && currentUser.type === UserType.ContentManager) {
+      return (
+        <div className="modalKeyboard">
+          <div className="modalKeyboard__background" onClick={this.closeModalKeyboard} />
+          <div className="modalKeyboard__content">
+            <div className="modalKeyboard__close" onClick={this.closeModalKeyboard} />
+            <div className="modalKeyboard__inside">
+              {this.renderContentKeyboardStudent()}
+              {this.renderContentKeyboardTeacher()}
+            </div>
+          </div>
+        </div>
+      );
+    }
+  }
+
   private renderQuestionTab = () => (
-    <li className="AppHeader__navigationItem">
-      <a href="https://skolerom.no/support">
-        <img src={question} alt="question" className="AppHeader__navigationItemImage"/>
-      </a>
+    <li className="AppHeader__navigationItem helpNavigation">
+      <div className="AppHeader__navigationItemText">
+        <a href="javascript:void(0)" className="AppHeader__dropdown">
+          <img src={question} alt="question" className="AppHeader__navigationItemImage"/>
+        </a>
+        <div className="AppHeader__submenuWrapper">
+          <ul className="AppHeader__submenu">
+            <li className="AppHeader__dropdownItem">
+              <a href="https://skolerom.no/support" target="_blank">{intl.get('generals.support')}</a>
+            </li>
+            <li className="AppHeader__dropdownItem">
+              <a href="javascript:void(0)" onClick={this.openKeyboardModal}>{intl.get('generals.keyboard')}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </li>
   )
 
@@ -258,6 +387,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       this.setState({
         modalVisible: Modals.NONE,
       });
+      this.setState({ isModalKeyboard: false });
     }
     if (event.shiftKey && event.key === 'R' || event.shiftKey && event.key === 'r') {
       window.open(`${process.env.REACT_APP_WP_URL}/artikler/`, '_blank');
@@ -381,6 +511,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
             <img src={verticalDots} alt="user menu"/>
           </button>
         </div>
+        {this.state.isModalKeyboard && this.renderKeyboardModal()}
       </header>
     );
   }

@@ -60,21 +60,6 @@ class TabNavigationComponent extends Component<Props> {
 
   public hasButton = () => this.props.loginStore!.currentUser!.type !== UserType.Student && this.props.textMainButton;
 
-  public handleKeyboardControl = (event: KeyboardEvent) => {
-    if (event.shiftKey && event.key === 'C' || event.shiftKey && event.key === 'c') {
-      if (this.props.loginStore!.currentUser!.type !== UserType.Student && this.props.textMainButton) {
-        this.ref.current!.click();
-      }
-    }
-  }
-
-  public async componentDidMount() {
-    document.addEventListener('keyup', this.handleKeyboardControl);
-  }
-  public componentWillUnmount() {
-    document.removeEventListener('keyup', this.handleKeyboardControl);
-  }
-
   public render() {
     const { tabNavigationLinks } = this.props;
 
