@@ -35,7 +35,9 @@ export class ArticleTeachingPath extends Component<Props, State> {
     const ids = questionaryTeachingPathStore!.idsItemsNode;
     await questionaryTeachingPathStore!.getCurrentArticlesList(ids);
     questionaryTeachingPathStore!.setFetchingDataStatus(false);
-    this.ref.current!.focus();
+    if (this.ref.current) {
+      this.ref.current!.focus();
+    }
   }
 
   public closeArticleReading = () => {

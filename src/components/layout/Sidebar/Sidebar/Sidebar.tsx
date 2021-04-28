@@ -155,17 +155,22 @@ class Sidebar extends Component<Props> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
-    if (event.shiftKey && event.key === 'T' || event.key === 't') {
+    const { currentUser } = this.props.loginStore!;
+    if (event.shiftKey && event.key === 'T' || event.shiftKey && event.key === 't') {
       window.location.href = '/teaching-paths/';
     }
-    if (event.shiftKey && event.key === 'N' || event.key === 'n') {
+    if (event.shiftKey && event.key === 'N' || event.shiftKey && event.key === 'n') {
       window.location.href = '/assignments/';
     }
-    if (event.shiftKey && event.key === 'G' || event.key === 'g') {
-      this.createAssignment();
+    if (event.shiftKey && event.key === 'G' || event.shiftKey && event.key === 'g') {
+      if (UserType.Teacher || UserType.ContentManager) {
+        this.createAssignment();
+      }
     }
-    if (event.shiftKey && event.key === 'C' || event.key === 'c') {
-      this.createTeachingPath();
+    if (event.shiftKey && event.key === 'C' || event.shiftKey && event.key === 'c') {
+      if (UserType.Teacher || UserType.ContentManager) {
+        this.createTeachingPath();
+      }
     }
   }
 

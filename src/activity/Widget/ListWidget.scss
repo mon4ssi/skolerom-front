@@ -46,6 +46,7 @@ $image-padding-left: 18px;
   width: calc(100% - #{$image-size + $image-padding-left});
   font-size: 0.9375rem;
   background: transparent;
+  text-align: left;
 }
 
 .ListWidget__image {

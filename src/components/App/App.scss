@@ -441,7 +441,7 @@ pre {
   outline-color: white;
   outline-width: thin;
 }
-.MyList a:focus li, .AssignmentDistributeList a:focus li, .StudentListItem:focus , .AssignmentDistributeList a:focus div, .StudentsList__list a:focus li, .MyList a.StudentAssignmentsListItem:focus {
+.MyList a:focus li.AssignmentListItem, .AssignmentDistributeList a:focus li, .StudentListItem:focus , .AssignmentDistributeList a:focus div, .StudentsList__list a:focus li, .MyList a.StudentAssignmentsListItem:focus {
   background: #e4e4e4 !important;
 }
 .SubmitTeachingPath__button:focus {

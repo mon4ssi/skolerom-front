@@ -79,7 +79,14 @@ export class ReadingArticle extends Component<Props, State> {
     this.props.finishReading(this.state.graduation!);
   }
 
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    if (event.shiftKey && event.key === 'F' || event.shiftKey && event.key === 'f') {
+      this.props.finishReading(this.state.graduation!);
+    }
+  }
+
   public componentDidMount() {
+    document.addEventListener('keyup', this.handleKeyboardControl);
     if (this.props.currentArticleChildren) {
       const currentArticle = this.props.currentArticleChildren.find(
         article => article.id === this.props.shownArticleId || article.wpId === this.props.shownArticleId
@@ -102,6 +109,10 @@ export class ReadingArticle extends Component<Props, State> {
       newArticleId: this.props.shownArticleId || null,
       graduation: 2
     });
+  }
+
+  public componentWillUnmount() {
+    document.removeEventListener('keyup', this.handleKeyboardControl);
   }
 
   public render() {

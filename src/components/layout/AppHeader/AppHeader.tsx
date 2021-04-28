@@ -281,6 +281,10 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
           <strong>Shift + O</strong>
           <p>{intl.get('generals.accesibility_text.shift_o')}</p>
         </li>
+        <li>
+          <strong>Shift + F</strong>
+          <p>{intl.get('generals.accesibility_text.shift_f')}</p>
+        </li>
       </ul>
     </div>
   )
@@ -289,6 +293,14 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     <div className="modalKeyboard__list">
       <h2>{intl.get('generals.accesibility_text.title_when_editing')}</h2>
       <ul>
+        <li>
+          <strong>Shift + C</strong>
+          <p>{intl.get('generals.accesibility_text.shift_c')}</p>
+        </li>
+        <li>
+          <strong>Shift + G</strong>
+          <p>{intl.get('generals.accesibility_text.shift_g')}</p>
+        </li>
         <li>
           <strong>Shift + A</strong>
           <p>{intl.get('generals.accesibility_text.shift_a')}</p>
@@ -304,14 +316,6 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         <li>
           <strong>Shift + D</strong>
           <p>{intl.get('generals.accesibility_text.shift_d')}</p>
-        </li>
-        <li>
-          <strong>Shift + C</strong>
-          <p>{intl.get('generals.accesibility_text.shift_c')}</p>
-        </li>
-        <li>
-          <strong>Shift + G</strong>
-          <p>{intl.get('generals.accesibility_text.shift_g')}</p>
         </li>
       </ul>
     </div>
