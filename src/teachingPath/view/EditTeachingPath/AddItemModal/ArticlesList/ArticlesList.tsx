@@ -238,7 +238,7 @@ export class ArticlesList extends Component<Props, State> {
       <div>
         {intl.get('edit_teaching_path.modals.add_articles')}
       </div>
-      <button ref={this.refButton} onClick={this.closeModal}>
+      <button ref={this.refButton} onClick={this.closeModal} title={intl.get('generals.close')}>
       <img
         src={closeImg}
         alt={intl.get('generals.close')}
@@ -328,7 +328,7 @@ export class ArticlesList extends Component<Props, State> {
       this.closeModal();
     }
     if (this.state.itemsForNewChildren.length > 0) {
-      if (event.shiftKey && event.key === 'A' || event.shiftKey && event.key === 'a') {
+      if (event.altKey && event.key === 'A' || event.altKey && event.key === 'a') {
         this.closeModal();
       }
     }
@@ -342,6 +342,7 @@ export class ArticlesList extends Component<Props, State> {
       <div onClick={this.closeModal}>
         <CreateButton
           disabled={!this.state.itemsForNewChildren.length}
+          title={intl.get('edit_teaching_path.modals.add_articles')}
         >
           {intl.get('edit_teaching_path.modals.add_articles')}
         </CreateButton>

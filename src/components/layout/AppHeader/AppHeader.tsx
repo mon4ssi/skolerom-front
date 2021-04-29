@@ -281,10 +281,6 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
           <strong>Shift + O</strong>
           <p>{intl.get('generals.accesibility_text.shift_o')}</p>
         </li>
-        <li>
-          <strong>Shift + F</strong>
-          <p>{intl.get('generals.accesibility_text.shift_f')}</p>
-        </li>
       </ul>
     </div>
   )
@@ -393,13 +389,13 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       });
       this.setState({ isModalKeyboard: false });
     }
-    if (event.shiftKey && event.key === 'R' || event.shiftKey && event.key === 'r') {
+    if (event.altKey && event.key === 'R' || event.altKey && event.key === 'r') {
       window.open(`${process.env.REACT_APP_WP_URL}/artikler/`, '_blank');
     }
-    if (event.shiftKey && event.key === 'U' || event.shiftKey && event.key === 'u') {
+    if (event.altKey && event.key === 'U' || event.altKey && event.key === 'u') {
       window.open(`${process.env.REACT_APP_WP_URL}/temaboker/`, '_blank');
     }
-    if (event.shiftKey && event.key === 'O' || event.shiftKey && event.key === 'o') {
+    if (event.altKey && event.key === 'O' || event.altKey && event.key === 'o') {
       window.open(`${process.env.REACT_APP_WP_URL}/lydartikler/`, '_blank');
     }
   }
@@ -452,6 +448,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     <div className="doneBox flexBox alignCenter">
       <CreateButton
         onClick={this.handleCopy}
+        title={intl.get(intlKey)}
       >
         {intl.get(intlKey)}
       </CreateButton>
@@ -466,8 +463,9 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         <button
           className="AppHeader__block AppHeader__button AppHeader__block_mobile"
           onClick={this.toggleSidebar}
+          title="menu button"
         >
-          <img src={burger} alt="burger button"/>
+          <img src={burger} alt="burger button" title="menu button"/>
         </button>
       );
     }
@@ -490,7 +488,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         <div className="AppHeader__block" aria-labelledby="LogoDescription">
           <NavLink to={redirectLink} onClick={this.handleLogoClick}>
             <div className="AppHeader__block">
-              <img src={logoImage} alt="Skolerom Dashboard" className="AppHeader__logo" title="Skolerom Skolerom"/>
+              <img src={logoImage} alt="Skolerom Logo" className="AppHeader__logo" title="Skolerom"/>
               <span className="AppHeader__role">{this.renderRole()}</span>
             </div>
           </NavLink>
@@ -511,6 +509,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
           <button
             className="AppHeader__block AppHeader__button AppHeader__block_mobile AppHeader__userMenuButton"
             onClick={this.showUserModal}
+            title="user menu"
           >
             <img src={verticalDots} alt="user menu"/>
           </button>

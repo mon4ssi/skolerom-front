@@ -102,6 +102,8 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     const { currentQuestionaryStore, match, isTeacher, history } = this.props;
     currentQuestionaryStore.handleShowArrowsTooltip(true);
     document.addEventListener('keyup', this.handleKeyboardControl);
+    const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
+    headerArray[0].style.display = 'none';
 
     if (isTeacher) {
       await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
@@ -131,6 +133,8 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
 
   public async componentDidUpdate(prevProps: CurrentAssignmentPageProps) {
     const { currentQuestionaryStore, match, history } = this.props;
+    const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
+    headerArray[0].style.display = 'flex';
 
     if (match.params.id !== prevProps.match.params.id) {
       const { teachingPath, node } = (history.location.state || {}) as RedirectData;
@@ -300,12 +304,14 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
         className={classes}
         onClick={this.goToNextQuestion}
         disabled={!this.canGoToNextQuestion}
+        title="Next"
       >
         Next
         <img
           className="CurrentAssignmentPage__buttonImage"
           src={this.canGoToNextQuestion ? arrowRightRounded : arrowRightRoundedGray}
           alt="arrow right"
+          title="arrow right"
         />
       </button>
     );
@@ -321,11 +327,13 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
         className={classes}
         onClick={this.goToPrevQuestion}
         disabled={!this.canGoToPrevQuestion}
+        title="Back"
       >
         <img
           className="CurrentAssignmentPage__buttonImage"
           src={this.canGoToPrevQuestion ? arrowLeftRounded : arrowLeftRoundedGray}
           alt="arrow left"
+          title="arrow left"
         />
         Back
       </button>

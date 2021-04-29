@@ -17,7 +17,7 @@ export const Page404: React.FC = () =>
         {intl.get('not found.description2')}
       </span>
       <Link to="/activity">
-        <button className="home">{intl.get('not found.back')}</button>
+        <button className="home" title={intl.get('not found.back')}>{intl.get('not found.back')}</button>
       </Link>
     </div>
   );

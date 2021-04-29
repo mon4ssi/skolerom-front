@@ -78,7 +78,7 @@ export class NewTeachingPathQuestion extends Component<Props> {
           {attachments.map(item => <img key={item.id} src={item.path} alt={item.path.split('/').pop()!.split('.')[0]}/>)}
         </div>
 
-        <CreateButton light className="addAssignmentsButton">
+        <CreateButton light className="addAssignmentsButton" title={intl.get('new assignment.Add assignments')}>
           {intl.get('new assignment.Add assignments')}
         </CreateButton>
       </div>

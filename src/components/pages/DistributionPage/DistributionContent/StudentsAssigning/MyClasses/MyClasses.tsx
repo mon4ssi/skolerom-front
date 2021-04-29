@@ -122,10 +122,11 @@ class MyClass extends Component<MyClassProps, MyClassState> {
 
     return (
       <div className="check flexBox alignCenter">
-        <button onClick={this.handleSelectFullClass}>
+        <button onClick={this.handleSelectFullClass} title="Check">
           <img
             src={isSelectedIcon}
             alt="check"
+            title="Check"
           />
         </button>
       </div>
@@ -197,8 +198,8 @@ class MyClass extends Component<MyClassProps, MyClassState> {
             {myClass.isSelected && this.renderDeadline()}
 
             <div className="includeExclude flexBox">
-              <button onClick={this.toggleOpenStudentsList}>
-                <img src={isStudentsListOpened ? arrowUpImg : arrowDownImg} alt="arrow-up" />
+              <button onClick={this.toggleOpenStudentsList} title="Arrow Up">
+                <img src={isStudentsListOpened ? arrowUpImg : arrowDownImg} alt="arrow-up" title="Arrow Up" />
               </button>
             </div>
 

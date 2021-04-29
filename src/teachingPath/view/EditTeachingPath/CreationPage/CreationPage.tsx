@@ -355,7 +355,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     return !!index && (
       <div className="mergePanel">
         <div className={mergeTooltipClassnames}>{intl.get('edit_teaching_path.merge')}</div>
-        <button className="mergeButton" onClick={this.handleMergeNodes}/>
+        <button className="mergeButton" onClick={this.handleMergeNodes} title={intl.get('edit_teaching_path.merge')}/>
       </div>
     );
   }
@@ -371,7 +371,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     return node.type !== TeachingPathNodeType.Root && node.items!.length > 1 ? (
       <div className="mergePanel">
         <div className={unmergeTooltipClassnames}>{intl.get('edit_teaching_path.expand')}</div>
-        <button className="unmergeImg" onClick={this.handleUnmergeNode}/>
+        <button className="unmergeImg" onClick={this.handleUnmergeNode} title={intl.get('edit_teaching_path.expand')} />
       </div>
     ) : null;
   }

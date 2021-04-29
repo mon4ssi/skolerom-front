@@ -110,11 +110,12 @@ export class ImageViewer extends Component<IProps> {
     return (
       <div className="ImageViewer">
         <div className="ImageViewer__overlay">
-          <button className="fw500 fs17 ImageViewer__button">
+          <button className="fw500 fs17 ImageViewer__button" title="Close">
             Close image
             <img
               src={closeCross}
               alt="Image"
+              title="Close"
               className="ImageViewer__buttonImage"
             />
           </button>

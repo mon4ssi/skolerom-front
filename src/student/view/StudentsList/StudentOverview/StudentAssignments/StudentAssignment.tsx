@@ -69,6 +69,7 @@ export const StudentAssignment = (props: StudentAssignmentProps) => {
     <button
       className="StudentAssignment"
       onClick={onClick}
+      title="Student Assignment"
     >
       <div className="StudentAssignment__blockMain">
         <div className="StudentAssignment__title">

@@ -28,9 +28,9 @@ export class ArrowControls extends Component<Props> {
   }
 
   private renderPrevQuestionButton = () => (
-    <button className="ArrowControls__button" onClick={this.goPreviousQuestion}>
+    <button className="ArrowControls__button" onClick={this.goPreviousQuestion} title={intl.get('pagination.Previous page')}>
       <div className="ArrowControls__imageContainer">
-        <img src={arrowRight} alt="Previous" className="ArrowControls__image ArrowControls__image_previous"/>
+        <img src={arrowRight} alt="Previous" title={intl.get('pagination.Previous page')} className="ArrowControls__image ArrowControls__image_previous"/>
       </div>
       {intl.get('pagination.Previous page')}
       {this.renderTooltip(intl.get('current_assignment_page.Press Shift + Arrow Left for prev question'))}
@@ -41,9 +41,10 @@ export class ArrowControls extends Component<Props> {
     <button
       className="ArrowControls__button"
       onClick={this.goNextQuestion}
+      title={intl.get('pagination.Next page')}
     >
       <div className="ArrowControls__imageContainer">
-        <img src={arrowRight} alt="Previous" className="ArrowControls__image ArrowControls__image_next"/>
+        <img src={arrowRight} alt="Previous" title={intl.get('pagination.Next page')} className="ArrowControls__image ArrowControls__image_next"/>
       </div>
       {intl.get('pagination.Next page')}
       {this.renderTooltip(intl.get('current_assignment_page.Press Shift + Arrow Right for next question'))}
@@ -79,9 +80,10 @@ export class ArrowControls extends Component<Props> {
       name="prev"
       className="ArrowControls__button ArrowControls__button_exit"
       onClick={this.exitAssignment}
+      title={intl.get('current_assignment_page.Exit assignment')}
     >
       <div className="ArrowControls__imageContainer ArrowControls__imageContainer_exit">
-        <img src={exitIcon} alt="Previous" className="ArrowControls__image"/>
+        <img src={exitIcon} alt={intl.get('current_assignment_page.Exit assignment')} title={intl.get('current_assignment_page.Exit assignment')} className="ArrowControls__image"/>
       </div>
       {intl.get('current_assignment_page.Exit assignment')}
     </button>

@@ -122,7 +122,7 @@ class StudentEvaluationCheckingPanel extends Component<Props> {
 
     return (
       <div className="StudentEvaluationPage__leftSide">
-        <CreateButton className="backButton" onClick={this.handleExit}>
+        <CreateButton className="backButton" onClick={this.handleExit} title={intl.get('answers.teaching_path_back')}>
           <div>
             <img src={exitImg} alt="exit"/>
             <span>{intl.get('answers.teaching_path_back')}</span>

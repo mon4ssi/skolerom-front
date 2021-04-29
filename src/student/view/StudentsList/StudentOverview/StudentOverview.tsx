@@ -142,8 +142,8 @@ class StudentOverview extends Component<Props & RouteComponentProps, State> {
       <div className="StudentOverview__userPanel">
         <img className="StudentOverview__userImage" src={currentStudent!.photo || userPlaceholderImage} alt="student_photo" />
         <div className="StudentOverview__userName">{currentStudent!.name}</div>
-        <button className="StudentOverview__closeButton" onClick={this.props.closeModal}>
-          <img src={closeImage} alt="close" className="StudentOverview__closeButtonImage"/>
+        <button className="StudentOverview__closeButton" onClick={this.props.closeModal} title="Close">
+          <img src={closeImage} alt="close" title="Close" className="StudentOverview__closeButtonImage"/>
         </button>
       </div>
     );

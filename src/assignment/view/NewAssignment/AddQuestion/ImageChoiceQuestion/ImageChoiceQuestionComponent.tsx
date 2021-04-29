@@ -51,7 +51,7 @@ class ImageChoiceQuestion extends Component<Props> {
   }
 
   private changeKeyFunction = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    if (e.shiftKey && e.key === 'S' || e.shiftKey && e.key === 's') {
+    if (e.altKey && e.key === 'S' || e.altKey && e.key === 's') {
       e.preventDefault();
     }
   }
@@ -128,6 +128,7 @@ class ImageChoiceQuestion extends Component<Props> {
             disabled={this.isDisabledButton()}
             className="newAnswerButton"
             onClick={this.addNewOption}
+            title={intl.get('new assignment.Add image')}
           >
             {intl.get('new assignment.Add image')}
           </CreateButton>

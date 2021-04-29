@@ -194,8 +194,9 @@ export class PublishingActions extends Component<Props> {
         value={level}
         className={buttonClassName}
         onClick={this.handleSelectLevel}
+        title={`${level}-level-icon`}
       >
-        <img src={levelIcon} alt={`${level}-level-icon`} />
+        <img src={levelIcon} alt={`${level}-level-icon`} title={`${level}-level-icon`} />
         {level}
       </button>
     );
@@ -243,10 +244,12 @@ export class PublishingActions extends Component<Props> {
           <button
             className={publicButtonClassnames}
             onClick={this.handlePrivateOff}
+            title={intl.get('publishing_page.public')}
           >
             <img
               src={publicIconImg}
               alt="Public"
+              title={intl.get('publishing_page.public')}
             />
             {intl.get('publishing_page.public')}
           </button>
@@ -254,10 +257,12 @@ export class PublishingActions extends Component<Props> {
           <button
             className={privateButtonClassnames}
             onClick={this.handlePrivateOn}
+            title={intl.get('publishing_page.private')}
           >
             <img
               src={privateIconImg}
               alt="Private"
+              title={intl.get('publishing_page.private')}
             />
             {intl.get('publishing_page.private')}
           </button>

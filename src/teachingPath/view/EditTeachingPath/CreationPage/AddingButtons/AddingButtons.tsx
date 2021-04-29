@@ -63,7 +63,7 @@ class AddingButtonsContainer extends Component<Props> {
           className="addingButton"
           onClick={this.openArticlesList}
         >
-          <button>
+          <button title={intl.get('edit_teaching_path.modals.add_articles')}>
             <img src={addArticleImg} alt="add-article" />
             {intl.get('edit_teaching_path.modals.add_articles')}
           </button>
@@ -72,7 +72,7 @@ class AddingButtonsContainer extends Component<Props> {
           className="addingButton"
           onClick={this.openAssignmentsList}
         >
-          <button>
+          <button title={intl.get('edit_teaching_path.modals.add_assignments')}>
           <img src={addAssignemntImg} alt="add-assignment" />
           {intl.get('edit_teaching_path.modals.add_assignments')}
           </button>
@@ -81,7 +81,7 @@ class AddingButtonsContainer extends Component<Props> {
           className="addingButton"
           onClick={this.openCreatingAssignment}
         >
-          <button>
+          <button title={intl.get('edit_teaching_path.modals.create_assignment')}>
             <img src={createAssignmentImg} alt="create-assignment" />
             {intl.get('edit_teaching_path.modals.create_assignment')}
           </button>

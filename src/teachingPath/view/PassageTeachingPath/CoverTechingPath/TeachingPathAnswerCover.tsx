@@ -51,7 +51,7 @@ class TeachingPathAnswerCoverComponent extends Component<Props>{
         <span className="assignmentDescription">{currentTeachingPath && currentTeachingPath.description}</span>
 
         <div className={'startButton'} >
-          <button className="CreateButton" onClick={onClickStart} ref={this.ref}>
+          <button className="CreateButton" onClick={onClickStart} ref={this.ref} title={intl.get('teaching path preview.Start teaching path')}>
           {intl.get('teaching path preview.Start teaching path')}
           </button>
           {/*<CreateButton onClick={onClickStart} >{intl.get('teaching path preview.Start teaching path')}</CreateButton>*/}

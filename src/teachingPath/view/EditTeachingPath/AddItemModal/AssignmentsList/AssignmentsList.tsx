@@ -248,7 +248,7 @@ export class AssignmentsList extends Component<Props, State> {
       this.closeModal();
     }
     if (this.state.itemsForNewChildren.length > 0) {
-      if (event.shiftKey && event.key === 'A' || event.shiftKey && event.key === 'a') {
+      if (event.altKey && event.key === 'A' || event.altKey && event.key === 'a') {
         this.closeModal();
       }
     }
@@ -263,17 +263,19 @@ export class AssignmentsList extends Component<Props, State> {
           <button
             className={`fs15 ${currentTab === 'all' ? 'selectedTab' : null}`}
             onClick={this.selectAllAssignmentsTab}
+            title={intl.get('edit_teaching_path.modals.all_assignments')}
           >
             {intl.get('edit_teaching_path.modals.all_assignments')}
           </button>
           <button
             className={`fs15 ${currentTab === 'my' ? 'selectedTab' : null}`}
             onClick={this.selectMyAssignmentsTab}
+            title={intl.get('edit_teaching_path.modals.my_assignments')}
           >
             {intl.get('edit_teaching_path.modals.my_assignments')}
           </button>
         </div>
-        <button ref={this.refButton} onClick={this.closeModal}>
+        <button ref={this.refButton} onClick={this.closeModal} title={intl.get('generals.close_assignment')}>
           <img
             src={closeImg}
             alt={intl.get('generals.close_assignment')}
@@ -352,6 +354,7 @@ export class AssignmentsList extends Component<Props, State> {
       <div onClick={this.closeModal}>
         <CreateButton
           disabled={!this.state.itemsForNewChildren.length}
+          title={intl.get('new assignment.Add assignments')}
         >
           {intl.get('new assignment.Add assignments')}
         </CreateButton>

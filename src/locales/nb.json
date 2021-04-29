@@ -90,14 +90,14 @@
       "Activity": "Gå til aktivitet oversikt",
       "Teaching Paths": "Gå til læringsstier",
       "Assignments": "Gå til oppgaver",
-      "Students": "Gå til vurdering oversikt",
+      "Students": "Gå til Elever oversikt",
       "Evaluation": "Gå til vurdering oversikt"
     },
     "title": {
       "Activity": "Gå til aktivitet oversikt",
       "Teaching Paths": "Gå til læringsstier",
       "Assignments": "Gå til oppgaver",
-      "Students": "Gå til vurdering oversikt",
+      "Students": "Gå til Elever oversikt",
       "Evaluation": "Gå til vurdering oversikt"
     }
   },
@@ -611,15 +611,15 @@
       "shift_o": "Lydartikler",
       "shift_f": "Fullfør lese artikkelen",
       "title_when_editing": "Ved redigering av læringsstier og oppgaver",
-      "shift_c": "Nye Læringsstier",
-      "shift_g": "Nye Oppgaver",
+      "shift_c": "Opprett ny læringssti",
+      "shift_g": "Opprett ny oppgave",
       "shift_a": "Legg til valgt element",
-      "shift_s": "Lagre",
-      "shift_p": "Publisere",
-      "shift_d": "Distribuere"
+      "shift_s": "Lagre læringssti/oppgave",
+      "shift_p": "Publiser læringssti/oppgave",
+      "shift_d": "Distribuer læringssti/oppgave"
     },
-    "edit": "Edith Path",
-    "delete": "Delete Path",
+    "edit": "Rediger sti",
+    "delete": "Slett sti",
     "close": "Lukk artikkelvisning",
     "close_assignment": "Lukk oppgave vinduet",
     "selected_assignment": "Velg oppgave",

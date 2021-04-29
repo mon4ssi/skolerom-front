@@ -30,13 +30,13 @@ export class PublishingTitle extends Component<Props> {
   }
 
   private changeKeyFunction = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    if (e.shiftKey && e.key === 'S' || e.shiftKey && e.key === 's') {
+    if (e.altKey && e.key === 'S' || e.altKey && e.key === 's') {
       e.preventDefault();
     }
-    if (e.shiftKey && e.key === 'P' || e.shiftKey && e.key === 'p') {
+    if (e.altKey && e.key === 'P' || e.altKey && e.key === 'p') {
       e.preventDefault();
     }
-    if (e.shiftKey && e.key === 'D' || e.shiftKey && e.key === 'd') {
+    if (e.altKey && e.key === 'D' || e.altKey && e.key === 'd') {
       e.preventDefault();
     }
   }

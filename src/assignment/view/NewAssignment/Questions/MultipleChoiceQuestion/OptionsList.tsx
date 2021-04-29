@@ -62,15 +62,16 @@ class OptionComponent extends Component<OptionComponentProps> {
         />
 
         <div className="statusBox">
-          <button onClick={this.toggleIsRight} className="status">
+          <button onClick={this.toggleIsRight} className="status" title="Status">
             <img
               src={option.isRight ? checkActiveIcon : checkInactiveIcon}
               alt="Status"
+              title="Status"
               className="checkStatus"
             />
           </button>
-          <button onClick={this.onDelete}>
-            <img src={deleteIcon} className={'delete'} alt="Delete" style={{ width: 18 }} />
+          <button onClick={this.onDelete} title="Delete">
+            <img src={deleteIcon} className={'delete'} alt="Delete" title="Delete" style={{ width: 18 }} />
           </button>
         </div>
       </div>

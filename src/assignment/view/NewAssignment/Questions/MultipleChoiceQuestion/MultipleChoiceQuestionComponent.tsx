@@ -49,7 +49,7 @@ class MultipleChoiceQuestionContent extends Component<Props> {
   }
 
   private changeKeyFunction = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    if (e.shiftKey && e.key === 'S' || e.shiftKey && e.key === 's') {
+    if (e.altKey && e.key === 'S' || e.altKey && e.key === 's') {
       e.preventDefault();
     }
   }
@@ -128,6 +128,7 @@ class MultipleChoiceQuestionContent extends Component<Props> {
           <CreateButton
             className="newAnswerButtons"
             onClick={this.addNewOption}
+            title={intl.get('new assignment.New answer')}
           >
             {intl.get('new assignment.New answer')}
           </CreateButton>

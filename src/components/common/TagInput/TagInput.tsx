@@ -246,8 +246,8 @@ class CurrentTag extends Component<CurrentTagProps> {
     return (
       <div className="tag">
         <span className={'title'}>{title}</span>
-        <button onClick={this.onRemove}>
-          <img src={dark ? closeCrossLight : closeCross} alt="Close" />
+        <button onClick={this.onRemove} title={title}>
+          <img src={dark ? closeCrossLight : closeCross} alt="Close" title={title} />
         </button>
       </div>
     );

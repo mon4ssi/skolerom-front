@@ -52,8 +52,9 @@ class Submitted extends Component<Props> {
           <button
             className="Submitted__button"
             onClick={this.goToDashboard}
+            title={intl.get('current_assignment_page.submited_button_title')}
           >
-            <img className="Submitted__buttonImage" src={goToAccountIcon} alt="Go to account" />
+            <img className="Submitted__buttonImage" src={goToAccountIcon} title={intl.get('current_assignment_page.submited_button_title')} alt="Go to account" />
             {intl.get('current_assignment_page.submited_button_title')}
           </button>
         </div>

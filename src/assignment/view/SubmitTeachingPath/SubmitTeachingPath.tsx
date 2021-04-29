@@ -27,11 +27,13 @@ export class SubmitTeachingPath extends Component<Props> {
         <button
           className="SubmitTeachingPath__button"
           onClick={this.props.onSubmit}
+          title={intl.get('current_assignment_page.submit')}
         >
           <img
             className="SubmitTeachingPath__buttonImage"
             src={submitAnswersIcon}
             alt={intl.get('current_assignment_page.submit')}
+            title={intl.get('current_assignment_page.submit')}
           />
           {intl.get('teaching path passing.complete.button')}
         </button>

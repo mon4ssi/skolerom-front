@@ -150,6 +150,7 @@ export class SliderWidget extends Component<SliderWidgetProps, SliderWidgetState
                   onClick={() => this.pause(this.state.currentSlide)}
                   data-pause={intl.get('activity_page.pause')}
                   data-play={intl.get('activity_page.play')}
+                  title={intl.get('activity_page.pause')}
                 >
                   <i className="SliderWidget__content__pauseicon" />
                 </button>
@@ -187,7 +188,7 @@ export class SliderWidget extends Component<SliderWidgetProps, SliderWidgetState
         });
 
         const button = (
-          <button className="SliderWidget__button" onClick={this.openSlide.bind(this, slide.buttonURL, slide.buttonBehavior)}>
+          <button className="SliderWidget__button" onClick={this.openSlide.bind(this, slide.buttonURL, slide.buttonBehavior)} title={slide.buttonText}>
             {slide.buttonText}
           </button>
         );
@@ -214,7 +215,7 @@ export class SliderWidget extends Component<SliderWidgetProps, SliderWidgetState
           SliderWidget__switchButton_active: idx === this.state.currentSlide,
         });
 
-        return (<button key={idx} role="button" className={classes} onClick={this.selectSlide.bind(this, idx)}/>);
+        return (<button key={idx} role="button" title="Switch" className={classes} onClick={this.selectSlide.bind(this, idx)}/>);
       });
 
       return (

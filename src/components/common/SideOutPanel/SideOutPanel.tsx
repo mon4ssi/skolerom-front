@@ -137,7 +137,7 @@ class SideOutPanelComponent extends Component<Props & RouteComponentProps> {
             </div>
 
             <div className={'view'}>
-              <CreateButton disabled={disableViewButton} green onClick={this.viewEvaluation}>
+              <CreateButton disabled={disableViewButton} green onClick={this.viewEvaluation} title={intl.get('answers.view')}>
                 {intl.get('answers.view')}
               </CreateButton>
             </div>
@@ -145,7 +145,7 @@ class SideOutPanelComponent extends Component<Props & RouteComponentProps> {
         </div>
 
         <div className={'answerButton'}>
-          <CreateButton disabled={isPassedDeadline} onClick={this.answerEntity}>
+          <CreateButton disabled={isPassedDeadline} onClick={this.answerEntity} title={buttonTitle} >
             {buttonTitle}
           </CreateButton>
         </div>

@@ -83,6 +83,7 @@ class NewQuestionTile extends Component<NewQuestionTileProps> {
         className="questionTypeBox flexBox alignCenter"
         key={type}
         onClick={this.onClick}
+        title={intl.get(`new assignment.${type}`)}
       >
         <img src={questionIcons[type]} alt={intl.get(`generals.addQuestion_buttons.${type}`)} title={intl.get(`generals.addQuestion_buttons.${type}`)} />
 

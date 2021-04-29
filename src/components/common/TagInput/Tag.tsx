@@ -29,6 +29,7 @@ export class Tag extends Component<TagProps> {
         className={classNames}
         key={id}
         onClick={this.onClick}
+        title={title}
       >
         {title}
       </button>

@@ -84,6 +84,7 @@ export class StudentSettings extends Component<Props, State> {
             value={firstLevelId}
             onClick={this.setLevel}
             className={currentStudent!.level!.graduation === firstLevel ? 'active' : undefined}
+            title="first-level"
           >
             <img src={firstLevelImg} alt="first-level" />
             <span className={`fw300 ${currentStudent!.level!.graduation === firstLevel ? 'activeNumber' : undefined}`}>1</span>
@@ -93,6 +94,7 @@ export class StudentSettings extends Component<Props, State> {
             value={secondLevelId}
             onClick={this.setLevel}
             className={currentStudent!.level!.graduation === secondLevel ? 'active' : undefined}
+            title="second-level"
           >
             <img src={secondLevelImg} alt="second-level" />
             <span className={`fw300 ${currentStudent!.level!.graduation === secondLevel ? 'activeNumber' : undefined}`}>2</span>
@@ -102,6 +104,7 @@ export class StudentSettings extends Component<Props, State> {
             value={thirdLevelId}
             onClick={this.setLevel}
             className={currentStudent!.level!.graduation === thirdLevel ? 'active' : undefined}
+            title="third-level"
           >
             <img src={thirdLevelImg} alt="third-level" />
             <span className={`fw300 ${currentStudent!.level!.graduation === thirdLevel ? 'activeNumber' : undefined}`}>3</span>

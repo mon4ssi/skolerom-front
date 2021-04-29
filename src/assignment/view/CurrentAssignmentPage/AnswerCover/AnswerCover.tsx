@@ -155,7 +155,7 @@ export class AnswerCover extends Component<Props> {
         <span className="AnswerCover__title">{assignment!.title}</span>
         {assignment!.description && <span className="AnswerCover__description">{assignment!.description}</span>}
         {this.getAnsweredQuestionsCount()}
-        <button className="AnswerCover__button" onClick={switchCover} ref={this.ref}>
+        <button className="AnswerCover__button" onClick={switchCover} ref={this.ref} title={this.getStartButtonTitle()}>
           {this.getStartButtonTitle()}
         </button>
       </div>

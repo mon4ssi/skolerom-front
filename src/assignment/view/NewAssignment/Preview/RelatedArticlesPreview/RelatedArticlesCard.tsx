@@ -91,8 +91,8 @@ export const RelatedArticlesCard = (props: Props) => {
     <div className={'RelatedArticlesCard'} onClick={props.handleArticle}>
       <div className="image">
         {renderImageArticle()}
-        <button className="check">
-          <img src={props.isCheckedArticle ? checkActive : checkRounded} alt="Check" className={'checkImg'}/>
+        <button className="check" title="check">
+          <img src={props.isCheckedArticle ? checkActive : checkRounded} alt="Check" title="check" className={'checkImg'}/>
         </button>
       </div>
       <div className="info">

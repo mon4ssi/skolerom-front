@@ -204,8 +204,8 @@ export class Notification extends Component<Props, State> {
     } = this.props;
     return (
       <footer className="Notification_footer">
-        <button className="Notification_submit" ref={this.ref} onClick={this.handleSubmitClick}>{submitButtonTitle}</button>
-        <button className="Notification_cancel" onClick={this.handleCancelClick}>{cancelButtonTitle}</button>
+        <button className="Notification_submit" title={intl.get('notifications.ok')} ref={this.ref} onClick={this.handleSubmitClick}>{submitButtonTitle}</button>
+        <button className="Notification_cancel" title={intl.get('notifications.cancel')} onClick={this.handleCancelClick}>{cancelButtonTitle}</button>
       </footer>
     );
   }

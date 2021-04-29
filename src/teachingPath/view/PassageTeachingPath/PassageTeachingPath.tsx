@@ -255,7 +255,7 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
             </div>
 
             <div className="arrowControlsTeachingPath">
-              <button className={'navigationExitButton'} onClick={this.handleExit}>
+              <button className={'navigationExitButton'} onClick={this.handleExit} title={intl.get('teaching path passing.exit')} >
                 <img src={actualArrowLeftRounded} alt="actualArrowLeftRounded"/>
                 <span>{intl.get('teaching path passing.exit')}</span>
               </button>

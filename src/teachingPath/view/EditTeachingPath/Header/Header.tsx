@@ -176,6 +176,7 @@ export class HeaderComponent extends Component<Props> {
           disabled={this.isDisabledPublishButton()}
           className="CreateButton"
           ref={this.refGoDistribution}
+          title={intl.get('edit_teaching_path.header.publish_and_distribute_teaching_path')}
         >
           {intl.get('edit_teaching_path.header.publish_and_distribute_teaching_path')}
         </button>
@@ -192,6 +193,7 @@ export class HeaderComponent extends Component<Props> {
           <CreateButton
             onClick={this.onSave}
             disabled={this.isDisabledSaveButton()}
+            title={intl.get('edit_teaching_path.header.save_teaching_path')}
           >
             {intl.get('edit_teaching_path.header.save_teaching_path')}
           </CreateButton>
@@ -208,6 +210,7 @@ export class HeaderComponent extends Component<Props> {
             disabled={this.isDisabledPublishButton()}
             className="CreateButton"
             ref={this.ref}
+            title={intl.get('edit_teaching_path.header.publish_teaching_path')}
           >
             {intl.get('edit_teaching_path.header.publish_teaching_path')}
           </button>
@@ -223,6 +226,7 @@ export class HeaderComponent extends Component<Props> {
           disabled={this.isDisabledPublishButton()}
           className="CreateButton"
           ref={this.refFinalDistribution}
+          title={intl.get('edit_teaching_path.header.distribute_teaching_path')}
         >
           {intl.get('edit_teaching_path.header.distribute_teaching_path')}
         </button>
@@ -237,21 +241,21 @@ export class HeaderComponent extends Component<Props> {
         this.onGoBack();
       }
     }
-    if (event.shiftKey && event.key === 'S' || event.shiftKey && event.key === 's') {
+    if (event.altKey && event.key === 'S' || event.altKey && event.key === 's') {
       if (isCreation) {
         if (!this.isDisabledSaveButton()) {
           this.onSave();
         }
       }
     }
-    if (event.shiftKey && event.key === 'P' || event.shiftKey && event.key === 'p') {
+    if (event.altKey && event.key === 'P' || event.altKey && event.key === 'p') {
       if (isPublishing) {
         if (!this.isDisabledPublishButton()) {
           this.ref.current!.click();
         }
       }
     }
-    if (event.shiftKey && event.key === 'D' || event.shiftKey && event.key === 'd') {
+    if (event.altKey && event.key === 'D' || event.altKey && event.key === 'd') {
       if (isPublishing) {
         if (!this.isDisabledPublishButton()) {
           this.refGoDistribution.current!.click();

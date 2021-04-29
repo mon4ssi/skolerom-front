@@ -294,7 +294,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
-    if (event.shiftKey && event.key === 'A' || event.shiftKey && event.key === 'a') {
+    if (event.altKey && event.key === 'A' || event.altKey && event.key === 'a') {
       this.props.context.changeContentType(AttachmentContentType.text);
       this.props.newAssignmentStore!.clearCurrentOption();
     }
@@ -459,8 +459,8 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
               {/*{this.renderAttachmentsStockTab()}*/}
             </div>
           </div>
-          <button onClick={this.closeAttachmentsList} ref={this.refButton}>
-            <img src={closeCross} alt="Close"  />
+          <button onClick={this.closeAttachmentsList} ref={this.refButton} title="Close">
+            <img src={closeCross} alt="Close" title="Close" />
           </button>
         </div>
 
@@ -489,7 +489,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
             {isMultipleChoice ? this.renderSelectedImageChoiceAttachment() : this.renderSelectedAttachmentsCount()}
           </div>
 
-          <CreateButton onClick={this.closeAttachmentsList} disabled={this.calcDisabledAttachmentButton()}>
+          <CreateButton onClick={this.closeAttachmentsList} disabled={this.calcDisabledAttachmentButton()} title={isMultipleChoice ? intl.get('new assignment.use_this_image') : intl.get('new assignment.add_to_assignment')}>
             {isMultipleChoice ? intl.get('new assignment.use_this_image') : intl.get('new assignment.add_to_assignment')}
           </CreateButton>
         </div>

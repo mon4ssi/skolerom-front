@@ -31,7 +31,7 @@ export class ListWidget extends Component<IListWidgetProps, State> {
   private renderItem(item: IListWidgetItem) {
     return (
       <li className="ListWidget__item" key={item.id} onClick={item.onClick}>
-        <button className="ListWidget__text">
+        <button className="ListWidget__text" title={item.text}>
           {item.text}
         </button>
         <img src={item.imageSrc} alt={item.text} title={item.text} className="ListWidget__image"/>

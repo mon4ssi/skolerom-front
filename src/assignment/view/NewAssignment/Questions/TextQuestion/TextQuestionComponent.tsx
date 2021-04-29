@@ -30,7 +30,7 @@ class TextQuestionContent extends Component<TextQuestionProps> {
   public static contextType = AttachmentContentTypeContext;
 
   public changeKeyFunction = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    if (e.shiftKey && e.key === 'S' || e.shiftKey && e.key === 's') {
+    if (e.altKey && e.key === 'S' || e.altKey && e.key === 's') {
       e.preventDefault();
     }
   }

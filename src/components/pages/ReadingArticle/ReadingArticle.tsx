@@ -59,6 +59,7 @@ export class ReadingArticle extends Component<Props, State> {
         value={article.id}
         onClick={this.handleLevelClick(Number(title))}
         className={classes}
+        title={title}
       >
         {title}
       </button>
@@ -80,7 +81,7 @@ export class ReadingArticle extends Component<Props, State> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
-    if (event.shiftKey && event.key === 'F' || event.shiftKey && event.key === 'f') {
+    if (event.altKey && event.key === 'F' || event.altKey && event.key === 'f') {
       this.props.finishReading(this.state.graduation!);
     }
   }
@@ -124,8 +125,8 @@ export class ReadingArticle extends Component<Props, State> {
       <div className="ReadingArticle">
         <div className="ReadingArticle__headerWrapper">
           <div className="ReadingArticle__header">
-            <button className="ReadingArticle__backButton" onClick={closeArticle}>
-              <img src={back} alt="back"/>
+            <button className="ReadingArticle__backButton" onClick={closeArticle} title="back">
+              <img src={back} alt="back" title="back" />
               <span className="ReadingArticle__backButtonText">
                 {intl.get('header.Article')}: {titleCurrentArticle}
               </span>
@@ -137,6 +138,7 @@ export class ReadingArticle extends Component<Props, State> {
               <CreateButton
                 children={intl.get('assignment preview.Finish reading article')}
                 onClick={this.finishReading}
+                title={intl.get('assignment preview.Finish reading article')}
               />
             </div>
           </div>

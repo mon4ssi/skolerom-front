@@ -38,8 +38,9 @@ class ContentButton extends Component<ContentButtonProps> {
         type="button"
         name={text.toLowerCase()}
         onClick={this.onClick}
+        title={text}
       >
-        <img src={icon} alt={alt} />
+        <img src={icon} alt={alt} title={text}/>
         <span className={'fw500 fs13'}>{text}</span>
       </button>
     );

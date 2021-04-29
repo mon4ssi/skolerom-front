@@ -118,7 +118,7 @@ class ImageOption extends Component<ImageOptionProps, ImageOptionState> {
         <div className={optionTitleStyle}>
           {option.title}
         </div>
-        <button className={imageOptionTickClassNames} onClick={this.setIsRight}>
+        <button className={imageOptionTickClassNames} onClick={this.setIsRight} title="Check">
           <img
             className="ImageOption__buttonImage"
             src={isValueSelected ? select : selectBlueGray}

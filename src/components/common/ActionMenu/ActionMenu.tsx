@@ -120,7 +120,7 @@ class ActionMenu extends Component<ActionMenuProps> {
       case ActionMenuItemType.BUTTON:
         return (
           <li key={item.text} className={`ActionMenu__item ${item.disabled && 'ActionMenu__item__disabled'}`}>
-            <button className={`ActionMenu__actionTarget ${item.disabled && 'ActionMenu__item__disabled'}`} onClick={item.onClick}>
+            <button className={`ActionMenu__actionTarget ${item.disabled && 'ActionMenu__item__disabled'}`} onClick={item.onClick} title={item.text}>
               {item.text}
             </button>
           </li>

@@ -129,7 +129,7 @@ export class LoginForm extends Component<LoginFormProps, State> {
             </div>
           </div>
 
-          <button className="logInSubmit">
+          <button className="logInSubmit" title={intl.get('login_page.Log in')}>
             {intl.get('login_page.Log in')}
           </button>
 

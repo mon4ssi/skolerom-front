@@ -88,7 +88,7 @@ class StudentEvaluation extends Component<Props & RouteComponentProps> {
     return (
       <div className={'flexBox'}>
         <div className={'flexBox dirColumn leftside'}>
-          <CreateButton className={'backButton'} onClick={this.back}>
+          <CreateButton className={'backButton'} onClick={this.back} title={intl.get('answers.back')} >
             <div>
               <img src={exit} alt="exit"/>
               <span>{intl.get('answers.back')}</span>

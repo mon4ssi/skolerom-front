@@ -244,7 +244,7 @@ export class QuestionPreview extends Component<Props, State> {
     const isVisibleCommentButton = isEvaluationStyle && (visibleCommentPanel !== question.id) && !comment;
 
     if (isVisibleCommentButton && isReadyToEvaluate) {
-      return <CreateButton children={intl.get('answers.comment answer')} light onClick={this.openCommentPanel} className={'commentButton'}/>;
+      return <CreateButton children={intl.get('answers.comment answer')} light onClick={this.openCommentPanel} className={'commentButton'} title="{intl.get('answers.comment answer')}" />;
     }
   }
 

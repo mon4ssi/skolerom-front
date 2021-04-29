@@ -94,6 +94,7 @@ export class SubmitComponent extends Component<Props> {
           disabled={numberOfAnsweredQuestions !== numberOfQuestions}
           className="Submit__button"
           onClick={this.publishQuestionary}
+          title={intl.get('current_assignment_page.complete_and_submit_button')}
         >
           <>
             <img className="Submit__image" src={check} alt={intl.get('current_assignment_page.submit')} />

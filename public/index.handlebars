@@ -29,7 +29,7 @@
 
     <!-- For reload after dublicate tab. (Start of section) -->
     <label id="lockInputlabel" class="hidden" style="opacity:0;position: absolute; height: 0; width: 0; left: 0; top: 0; z-index: -1;">LockInput</label>
-    <input id="lockInput" aria-labelledby="lockInputlabel" value="" style="position: absolute; height: 0; width: 0; left: 0; top: 0; z-index: -1;" />
+    <input id="lockInput" aria-labelledby="lockInputlabel" value="" style="opacity:0; overflow:hidden; position: absolute; height: 0; width: 0; left: 0; top: 0; z-index: -1;" />
     <script>
       window.addEventListener("load", function() {
         if (document.getElementById("lockInput").value === "") {

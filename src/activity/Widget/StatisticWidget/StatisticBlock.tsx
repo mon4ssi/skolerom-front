@@ -27,7 +27,7 @@ export class StatisticBlock extends Component<IStatisticBlockProps> {
 
     if (hasButton && !small) {
       return (
-        <button className="StatisticBlock__button" onClick={onClick}>
+        <button className="StatisticBlock__button" onClick={onClick} title={buttonLabel} >
           {buttonLabel}
         </button>
       );

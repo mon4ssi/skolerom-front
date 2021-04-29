@@ -27,6 +27,7 @@ export class Popup extends Component<IPopupProps> {
             <button
               className="Popup__button"
               onClick={this.props.onClose}
+              title={intl.get('evaluation_page.Close')}
             >
               {intl.get('evaluation_page.Close')}
               <img

@@ -99,7 +99,7 @@ export class SetRelatedArticles extends Component<Props> {
 
         <div className="articlesWrapper">
           {this.renderArticleInput(selectedArticles)}
-          <CreateButton className="newAnswerButton" onClick={this.handleRelatedArticles}>
+          <CreateButton className="newAnswerButton" title={this.renderButtonTitle()} onClick={this.handleRelatedArticles}>
             {this.renderButtonTitle()}
           </CreateButton>
         </div>

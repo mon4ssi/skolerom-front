@@ -59,7 +59,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
 
     if (this.context.contentType === AttachmentContentType.image) {
       return (
-        <button>
+        <button title="Attachment Media">
           <img
             src={attachment.path}
             alt={attachment.alt}

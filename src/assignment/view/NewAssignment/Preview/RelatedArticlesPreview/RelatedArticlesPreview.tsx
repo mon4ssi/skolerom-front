@@ -103,7 +103,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     if (event.key === 'Escape') {
       this.closePanel();
     }
-    if (event.shiftKey && event.key === 'A' || event.shiftKey && event.key === 'a') {
+    if (event.altKey && event.key === 'A' || event.altKey && event.key === 'a') {
       this.closePanel();
     }
   }
@@ -255,7 +255,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
 
             <div className="title">
               <span>{intl.get('new assignment.Set related article(s)')}</span>
-              <button onClick={this.closePanel} ref={this.refButton}><img src={closeCross} alt="Close"/></button>
+              <button onClick={this.closePanel} title={intl.get('new assignment.Set related article(s)')} ref={this.refButton}><img src={closeCross} alt="Close"/></button>
             </div>
 
             <SearchFilter
@@ -282,7 +282,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
 
           <div className={'selectedArticles'}>
             <div className={'counter'}>{selectedArticles.length} {intl.get('new assignment.articles selected')}</div>
-            <CreateButton onClick={this.closePanel} disabled={selectedArticles.length === 0}>
+            <CreateButton onClick={this.closePanel} disabled={selectedArticles.length === 0} title={intl.get('new assignment.Set as related articles')}>
               {intl.get('new assignment.Set as related articles')}
             </CreateButton>
           </div>

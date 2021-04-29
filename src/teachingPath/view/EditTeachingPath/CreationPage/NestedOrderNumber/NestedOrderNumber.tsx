@@ -51,7 +51,7 @@ export class NestedOrderNumber extends Component<Props> {
   }
 
   public renderEditIcon = () => (
-    <button onClick={this.handleEditClick}>
+    <button onClick={this.handleEditClick} title={intl.get('generals.edit')}>
       <img
         src={editImg}
         alt={intl.get('generals.edit')}
@@ -61,7 +61,7 @@ export class NestedOrderNumber extends Component<Props> {
   )
 
   public renderDeleteIcon = () => (
-    <button onClick={this.handleDeleteClick}>
+    <button onClick={this.handleDeleteClick} title={intl.get('generals.delete')}>
       <img
         src={deleteImg}
         alt={intl.get('generals.delete')}

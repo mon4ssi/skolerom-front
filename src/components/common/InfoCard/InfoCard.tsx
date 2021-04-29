@@ -69,7 +69,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
   public renderActionButtons = () => (
     <div className="actionButtons flexBox">
       {/* <img src={dragImg} alt="drag" /> */}
-      <button onClick={this.handleClickDelete}>
+      <button onClick={this.handleClickDelete} title={intl.get('generals.delete')}>
         <img
           src={trashImg}
           alt={intl.get('generals.delete')}
@@ -252,7 +252,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
     return (
       <div className={infoCardClassNames} onClick={this.onCardClick}>
         {withButtons && this.renderActionButtons()}
-        <button>
+        <button title={title}>
           <img src={img || placeholderImg} alt={title} title={title} className="cardImage"/>
         </button>
         <div className="cardInfo flexBox dirColumn spaceBetween">

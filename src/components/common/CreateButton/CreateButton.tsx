@@ -9,11 +9,12 @@ interface Props {
   disabled?: boolean;
   children: string | React.ReactNode;
   className?: string;
+  title?: string;
   onClick?: () => void;
 }
 
 export const CreateButton = (props: Props) => {
-  const { light, green, disabled, children, className, onClick } = props;
+  const { light, green, disabled, children, className, onClick, title } = props;
   const classNames = classnames(
     'CreateButton',
     className && className,
@@ -26,6 +27,7 @@ export const CreateButton = (props: Props) => {
       className={classNames}
       disabled={disabled}
       onClick={onClick}
+      title={title}
     >
       {children}
     </button>
