@@ -262,23 +262,23 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       <h2>{intl.get('generals.accesibility_text.title_quick')}</h2>
       <ul>
         <li>
-          <strong>Shift + T</strong>
+          <strong>Alt + T</strong>
           <p>{intl.get('generals.accesibility_text.shift_t')}</p>
         </li>
         <li>
-          <strong>Shift + N</strong>
+          <strong>Alt + N</strong>
           <p>{intl.get('generals.accesibility_text.shift_n')}</p>
         </li>
         <li>
-          <strong>Shift + R</strong>
+          <strong>Alt + R</strong>
           <p>{intl.get('generals.accesibility_text.shift_r')}</p>
         </li>
         <li>
-          <strong>Shift + U</strong>
+          <strong>Alt + U</strong>
           <p>{intl.get('generals.accesibility_text.shift_u')}</p>
         </li>
         <li>
-          <strong>Shift + O</strong>
+          <strong>Alt + O</strong>
           <p>{intl.get('generals.accesibility_text.shift_o')}</p>
         </li>
       </ul>
@@ -290,27 +290,27 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       <h2>{intl.get('generals.accesibility_text.title_when_editing')}</h2>
       <ul>
         <li>
-          <strong>Shift + C</strong>
+          <strong>Alt + C</strong>
           <p>{intl.get('generals.accesibility_text.shift_c')}</p>
         </li>
         <li>
-          <strong>Shift + G</strong>
+          <strong>Alt + G</strong>
           <p>{intl.get('generals.accesibility_text.shift_g')}</p>
         </li>
         <li>
-          <strong>Shift + A</strong>
+          <strong>Alt + A</strong>
           <p>{intl.get('generals.accesibility_text.shift_a')}</p>
         </li>
         <li>
-          <strong>Shift + S</strong>
+          <strong>Alt + S</strong>
           <p>{intl.get('generals.accesibility_text.shift_s')}</p>
         </li>
         <li>
-          <strong>Shift + P</strong>
+          <strong>Alt + P</strong>
           <p>{intl.get('generals.accesibility_text.shift_p')}</p>
         </li>
         <li>
-          <strong>Shift + D</strong>
+          <strong>Alt + D</strong>
           <p>{intl.get('generals.accesibility_text.shift_d')}</p>
         </li>
       </ul>
