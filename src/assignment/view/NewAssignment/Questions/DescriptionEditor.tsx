@@ -21,11 +21,6 @@ export class DescriptionEditor extends Component<Props> {
       onChange(content);
     }
   }
-  private changeKeyFunction = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    if (e.altKey && e.key === 'S' || e.altKey && e.key === 's') {
-      e.preventDefault();
-    }
-  }
 
   public render() {
     const { description, readOnly, className } = this.props;
@@ -58,7 +53,6 @@ export class DescriptionEditor extends Component<Props> {
         value={description}
         onChange={this.onChange}
         placeholder={placeholder}
-        onKeyDown={this.changeKeyFunction}
         bounds=".app"
         readOnly={readOnly}
       />

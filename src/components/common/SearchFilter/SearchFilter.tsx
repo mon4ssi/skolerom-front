@@ -55,11 +55,10 @@ interface State {
 @observer
 class SearchFilter extends Component<Props, State> {
   private container: RefObject<HTMLDivElement> = React.createRef();
-
   private space: RefObject<HTMLDivElement> = React.createRef();
 
   public state = {
-    displayWidthBreakpoint: 0
+    displayWidthBreakpoint: 0,
   };
 
   public componentDidMount() {

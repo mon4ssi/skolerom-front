@@ -32,12 +32,6 @@ export class TeachingPathTitle extends Component<Props> {
     }
   }
 
-  private changeKeyFunction = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    if (e.altKey && e.key === 'S' || e.altKey && e.key === 's') {
-      e.preventDefault();
-    }
-  }
-
   public componentDidMount() {
     this.titleRef.current!.selectionStart = this.titleRef.current!.selectionEnd - this.titleRef.current!.value!.length;
 
@@ -73,7 +67,6 @@ export class TeachingPathTitle extends Component<Props> {
         placeholder={intl.get('edit_teaching_path.title.description_placeholder')}
         value={currentTeachingPath!.description}
         onChange={this.setDescription}
-        onKeyDown={this.changeKeyFunction}
         maxLength={MAX_DESCRIPTION_LENGTH}
         readOnly={readOnly}
         aria-labelledby="DescriptionInputTextArea"
@@ -98,7 +91,6 @@ export class TeachingPathTitle extends Component<Props> {
             onChange={this.setTitle}
             placeholder={intl.get('edit_teaching_path.title.title_placeholder')}
             onKeyUp={this.focusDescriptionField}
-            onKeyDown={this.changeKeyFunction}
             maxLength={MAX_TITLE_LENGTH}
             readOnly={readOnly}
             aria-labelledby="titleInputTextArea"

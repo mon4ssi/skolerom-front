@@ -30,12 +30,6 @@ export class AssignmentTitle extends Component<Props> {
     }
   }
 
-  private changeKeyFunction = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    if (e.altKey && e.key === 'S' || e.altKey && e.key === 's') {
-      e.preventDefault();
-    }
-  }
-
   private setAssignmentTitle = (e: ChangeEvent<HTMLTextAreaElement>): void => {
     if (e.target.value === '' || lettersNoEn(e.target.value)) {
       this.props.assignment.setTitle(e.target.value);
@@ -84,7 +78,6 @@ export class AssignmentTitle extends Component<Props> {
             placeholder={intl.get('new assignment.title.title_placeholder')}
             onKeyUp={this.focusDescriptionField}
             inputRef={this.setTitleRef}
-            onKeyDown={this.changeKeyFunction}
             maxLength={MAX_TITLE_LENGTH}
             aria-labelledby="titleInputTextArea"
           />
@@ -94,7 +87,6 @@ export class AssignmentTitle extends Component<Props> {
             placeholder={intl.get('new assignment.title.description_placeholder')}
             value={assignment.description}
             onChange={this.setAssignmentDescription}
-            onKeyDown={this.changeKeyFunction}
             inputRef={this.setDescriptionRef}
             maxLength={MAX_DESCRIPTION_LENGTH}
             aria-labelledby="DescriptionInputTextArea"

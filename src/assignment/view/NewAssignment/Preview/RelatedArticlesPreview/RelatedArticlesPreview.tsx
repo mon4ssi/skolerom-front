@@ -23,7 +23,7 @@ import { SCROLL_OFFSET } from 'utils/constants';
 interface Props {
   newAssignmentStore?: NewAssignmentStore;
 }
-
+const PATHLENGTH = 4;
 interface State {
   isSortedByDate: boolean;
   appliedFilters: { [field: string]: number | string };
@@ -100,11 +100,14 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
+    const path = event.composedPath().length;
     if (event.key === 'Escape') {
       this.closePanel();
     }
-    if (event.altKey && event.key === 'A' || event.altKey && event.key === 'a') {
-      this.closePanel();
+    if (path <= PATHLENGTH) {
+      if (event.shiftKey && event.key === 'A' || event.shiftKey && event.key === 'a') {
+        this.closePanel();
+      }
     }
   }
 

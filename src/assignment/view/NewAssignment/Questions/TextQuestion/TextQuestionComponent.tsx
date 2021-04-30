@@ -29,12 +29,6 @@ interface TextQuestionProps {
 class TextQuestionContent extends Component<TextQuestionProps> {
   public static contextType = AttachmentContentTypeContext;
 
-  public changeKeyFunction = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    if (e.altKey && e.key === 'S' || e.altKey && e.key === 's') {
-      e.preventDefault();
-    }
-  }
-
   public addNewContentBlock = (type: ContentBlockType): void => {
     const { question, newAssignmentStore } = this.props;
 
@@ -90,7 +84,6 @@ class TextQuestionContent extends Component<TextQuestionProps> {
           placeholder={intl.get('new assignment.Enter a question')}
           value={question.title}
           onChange={this.handleChangeTitle}
-          onKeyDown={this.changeKeyFunction}
           maxLength={MAX_DESCRIPTION_LENGTH}
           aria-labelledby={titleId}
           autoFocus

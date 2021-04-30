@@ -98,6 +98,7 @@ const contentManagerSidebar = [
     url: '/assignments'
   }
 ];
+const PATHLENGTH = 4;
 
 interface Props extends RouteComponentProps {
   loginStore?: LoginStore;
@@ -131,7 +132,7 @@ class Sidebar extends Component<Props> {
       activeClassName="Sidebar__listItem_active"
       onClick={this.handleClickLink(link)}
       aria-label={intl.get(`sidebar.${link.name}`)}
-      title={intl.get(`sidebar.${link.name}`)}
+      title={intl.get(`sidebar.title.${link.name}`)}
     >
       <img className="Sidebar__icon" src={link.icon} alt={intl.get(`sidebar.alt.${link.name}`)} title={intl.get(`sidebar.title.${link.name}`)} />
       <span className="Sidebar__text">
@@ -157,20 +158,23 @@ class Sidebar extends Component<Props> {
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
     const { currentUser } = this.props.loginStore!;
-    if (event.altKey && event.key === 'T' || event.altKey && event.key === 't') {
-      window.location.href = '/teaching-paths/';
-    }
-    if (event.altKey && event.key === 'N' || event.altKey && event.key === 'n') {
-      window.location.href = '/assignments/';
-    }
-    if (event.altKey && event.key === 'G' || event.altKey && event.key === 'g') {
-      if (UserType.Teacher || UserType.ContentManager) {
-        this.createAssignment();
+    const path = event.composedPath().length;
+    if (path <= PATHLENGTH) {
+      if (event.shiftKey && event.key === 'T' || event.shiftKey && event.key === 't') {
+        window.location.href = '/teaching-paths/';
       }
-    }
-    if (event.altKey && event.key === 'C' || event.altKey && event.key === 'c') {
-      if (UserType.Teacher || UserType.ContentManager) {
-        this.createTeachingPath();
+      if (event.shiftKey && event.key === 'N' || event.shiftKey && event.key === 'n') {
+        window.location.href = '/assignments/';
+      }
+      if (event.shiftKey && event.key === 'G' || event.shiftKey && event.key === 'g') {
+        if (UserType.Teacher || UserType.ContentManager) {
+          this.createAssignment();
+        }
+      }
+      if (event.shiftKey && event.key === 'C' || event.shiftKey && event.key === 'c') {
+        if (UserType.Teacher || UserType.ContentManager) {
+          this.createTeachingPath();
+        }
       }
     }
   }

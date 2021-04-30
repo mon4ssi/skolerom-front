@@ -19,6 +19,7 @@ import { AttachmentContentType, AttachmentContentTypeContext } from '../Attachme
 import './Header.scss';
 
 type LocationProps = Location<{ fromTeachingPath: boolean, teachingPathId: number }>;
+const PATHLENGTH = 4;
 interface MatchProps {
   id: string;
 }
@@ -315,34 +316,37 @@ class HeaderWrapper extends Component<Props> {
   public handleKeyboardControl = (event: KeyboardEvent) => {
     const { isCreation, isDistribution, isPublishing, newAssignmentStore } = this.props;
     const userType = newAssignmentStore!.getCurrentUser()!.type;
+    const path = event.composedPath().length;
     if (event.key === 'Escape') {
       if (newAssignmentStore!.currentArticlesPage === 1) {
         this.onGoBack();
       }
     }
-    if (event.altKey && event.key === 'S' || event.altKey && event.key === 's') {
-      if (isCreation) {
-        if (!this.isDisabledSaveButton()) {
-          this.onSave();
+    if (path <= PATHLENGTH) {
+      if (event.shiftKey && event.key === 'S' || event.shiftKey && event.key === 's') {
+        if (isCreation) {
+          if (!this.isDisabledSaveButton()) {
+            this.onSave();
+          }
         }
       }
-    }
-    if (event.altKey && event.key === 'P' || event.altKey && event.key === 'p') {
-      if (isPublishing) {
-        if (!this.isDisabledPublishButton()) {
-          this.ref.current!.click();
+      if (event.shiftKey && event.key === 'P' || event.shiftKey && event.key === 'p') {
+        if (isPublishing) {
+          if (!this.isDisabledPublishButton()) {
+            this.ref.current!.click();
+          }
         }
       }
-    }
-    if (event.altKey && event.key === 'D' || event.altKey && event.key === 'd') {
-      if (isPublishing) {
-        if (!this.isDisabledPublishButton()) {
-          this.refGoDistribution.current!.click();
+      if (event.shiftKey && event.key === 'D' || event.shiftKey && event.key === 'd') {
+        if (isPublishing) {
+          if (!this.isDisabledPublishButton()) {
+            this.refGoDistribution.current!.click();
+          }
         }
-      }
-      if (isDistribution) {
-        if (!this.isDisabledPublishButton()) {
-          this.refFinalDistribution.current!.click();
+        if (isDistribution) {
+          if (!this.isDisabledPublishButton()) {
+            this.refFinalDistribution.current!.click();
+          }
         }
       }
     }

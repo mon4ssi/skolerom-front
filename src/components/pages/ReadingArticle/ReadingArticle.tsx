@@ -9,7 +9,7 @@ import { Article } from 'assignment/Assignment';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 
 import './ReadingArticle.scss';
-
+const PATHLENGTH = 4;
 interface Props {
   titleCurrentArticle: string;
   currentArticleChildren?: Array<Article>;
@@ -81,8 +81,11 @@ export class ReadingArticle extends Component<Props, State> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
-    if (event.altKey && event.key === 'F' || event.altKey && event.key === 'f') {
-      this.props.finishReading(this.state.graduation!);
+    const path = event.composedPath().length;
+    if (path <= PATHLENGTH) {
+      if (event.shiftKey && event.key === 'F' || event.shiftKey && event.key === 'f') {
+        this.props.finishReading(this.state.graduation!);
+      }
     }
   }
 

@@ -29,6 +29,7 @@ interface HeaderNavigationLink {
 }
 
 const ANIMATION_TIMEOUT = 200;
+const PATHLENGTH = 4;
 
 const headerLinks: Array<HeaderNavigationLink> = [
   {
@@ -262,23 +263,23 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       <h2>{intl.get('generals.accesibility_text.title_quick')}</h2>
       <ul>
         <li>
-          <strong>Alt + T</strong>
+          <strong>Shift + T</strong>
           <p>{intl.get('generals.accesibility_text.shift_t')}</p>
         </li>
         <li>
-          <strong>Alt + N</strong>
+          <strong>Shift + N</strong>
           <p>{intl.get('generals.accesibility_text.shift_n')}</p>
         </li>
         <li>
-          <strong>Alt + R</strong>
+          <strong>Shift + R</strong>
           <p>{intl.get('generals.accesibility_text.shift_r')}</p>
         </li>
         <li>
-          <strong>Alt + U</strong>
+          <strong>Shift + U</strong>
           <p>{intl.get('generals.accesibility_text.shift_u')}</p>
         </li>
         <li>
-          <strong>Alt + O</strong>
+          <strong>Shift + O</strong>
           <p>{intl.get('generals.accesibility_text.shift_o')}</p>
         </li>
       </ul>
@@ -290,27 +291,27 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       <h2>{intl.get('generals.accesibility_text.title_when_editing')}</h2>
       <ul>
         <li>
-          <strong>Alt + C</strong>
+          <strong>Shift + C</strong>
           <p>{intl.get('generals.accesibility_text.shift_c')}</p>
         </li>
         <li>
-          <strong>Alt + G</strong>
+          <strong>Shift + G</strong>
           <p>{intl.get('generals.accesibility_text.shift_g')}</p>
         </li>
         <li>
-          <strong>Alt + A</strong>
+          <strong>Shift + A</strong>
           <p>{intl.get('generals.accesibility_text.shift_a')}</p>
         </li>
         <li>
-          <strong>Alt + S</strong>
+          <strong>Shift + S</strong>
           <p>{intl.get('generals.accesibility_text.shift_s')}</p>
         </li>
         <li>
-          <strong>Alt + P</strong>
+          <strong>Shift + P</strong>
           <p>{intl.get('generals.accesibility_text.shift_p')}</p>
         </li>
         <li>
-          <strong>Alt + D</strong>
+          <strong>Shift + D</strong>
           <p>{intl.get('generals.accesibility_text.shift_d')}</p>
         </li>
       </ul>
@@ -383,20 +384,23 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   )
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
+    const path = event.composedPath().length;
     if (event.key === 'Escape') {
       this.setState({
         modalVisible: Modals.NONE,
       });
       this.setState({ isModalKeyboard: false });
     }
-    if (event.altKey && event.key === 'R' || event.altKey && event.key === 'r') {
-      window.open(`${process.env.REACT_APP_WP_URL}/artikler/`, '_blank');
-    }
-    if (event.altKey && event.key === 'U' || event.altKey && event.key === 'u') {
-      window.open(`${process.env.REACT_APP_WP_URL}/temaboker/`, '_blank');
-    }
-    if (event.altKey && event.key === 'O' || event.altKey && event.key === 'o') {
-      window.open(`${process.env.REACT_APP_WP_URL}/lydartikler/`, '_blank');
+    if (path <= PATHLENGTH) {
+      if (event.shiftKey && event.key === 'R' || event.shiftKey && event.key === 'r') {
+        window.open(`${process.env.REACT_APP_WP_URL}/artikler/`, '_blank');
+      }
+      if (event.shiftKey && event.key === 'U' || event.shiftKey && event.key === 'u') {
+        window.open(`${process.env.REACT_APP_WP_URL}/temaboker/`, '_blank');
+      }
+      if (event.shiftKey && event.key === 'O' || event.shiftKey && event.key === 'o') {
+        window.open(`${process.env.REACT_APP_WP_URL}/lydartikler/`, '_blank');
+      }
     }
   }
 

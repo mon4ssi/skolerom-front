@@ -15,7 +15,7 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 import backImg from 'assets/images/back-arrow.svg';
 
 import './Header.scss';
-
+const PATHLENGTH = 4;
 interface MatchProps {
   id: string;
 }
@@ -235,35 +235,38 @@ export class HeaderComponent extends Component<Props> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
+    const path = event.composedPath().length;
     const { isCreation, isDistribution, isPublishing, editTeachingPathStore } = this.props;
     if (event.key === 'Escape') {
       if (!this.props.editTeachingPathStore!.currentNode) {
         this.onGoBack();
       }
     }
-    if (event.altKey && event.key === 'S' || event.altKey && event.key === 's') {
-      if (isCreation) {
-        if (!this.isDisabledSaveButton()) {
-          this.onSave();
+    if (path <= PATHLENGTH) {
+      if (event.shiftKey && event.key === 'S' || event.shiftKey && event.key === 's') {
+        if (isCreation) {
+          if (!this.isDisabledSaveButton()) {
+            this.onSave();
+          }
         }
       }
-    }
-    if (event.altKey && event.key === 'P' || event.altKey && event.key === 'p') {
-      if (isPublishing) {
-        if (!this.isDisabledPublishButton()) {
-          this.ref.current!.click();
+      if (event.shiftKey && event.key === 'P' || event.shiftKey && event.key === 'p') {
+        if (isPublishing) {
+          if (!this.isDisabledPublishButton()) {
+            this.ref.current!.click();
+          }
         }
       }
-    }
-    if (event.altKey && event.key === 'D' || event.altKey && event.key === 'd') {
-      if (isPublishing) {
-        if (!this.isDisabledPublishButton()) {
-          this.refGoDistribution.current!.click();
+      if (event.shiftKey && event.key === 'D' || event.shiftKey && event.key === 'd') {
+        if (isPublishing) {
+          if (!this.isDisabledPublishButton()) {
+            this.refGoDistribution.current!.click();
+          }
         }
-      }
-      if (isDistribution) {
-        if (!this.isDisabledPublishButton()) {
-          this.refFinalDistribution.current!.click();
+        if (isDistribution) {
+          if (!this.isDisabledPublishButton()) {
+            this.refFinalDistribution.current!.click();
+          }
         }
       }
     }

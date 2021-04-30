@@ -29,18 +29,6 @@ export class PublishingTitle extends Component<Props> {
     }
   }
 
-  private changeKeyFunction = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    if (e.altKey && e.key === 'S' || e.altKey && e.key === 's') {
-      e.preventDefault();
-    }
-    if (e.altKey && e.key === 'P' || e.altKey && e.key === 'p') {
-      e.preventDefault();
-    }
-    if (e.altKey && e.key === 'D' || e.altKey && e.key === 'd') {
-      e.preventDefault();
-    }
-  }
-
   private setTeachingPathTitle = (e: ChangeEvent<HTMLTextAreaElement>): void => {
     const { currentEntity } = this.props;
 
@@ -80,7 +68,6 @@ export class PublishingTitle extends Component<Props> {
             onChange={this.setTeachingPathTitle}
             placeholder={intl.get(`${localeKey}.title.title_placeholder`)}
             onKeyUp={this.focusDescriptionField}
-            onKeyDown={this.changeKeyFunction}
             maxLength={MAX_TITLE_LENGTH}
             aria-labelledby="titleInputTextArea"
           />
@@ -90,7 +77,6 @@ export class PublishingTitle extends Component<Props> {
             placeholder={intl.get(`${localeKey}.title.description_placeholder`)}
             value={currentEntity!.description}
             onChange={this.setTeachingPathDescription}
-            onKeyDown={this.changeKeyFunction}
             inputRef={this.descriptionRef}
             maxLength={MAX_DESCRIPTION_LENGTH}
             aria-labelledby="DescriptionInputTextArea"

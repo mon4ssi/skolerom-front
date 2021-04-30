@@ -20,7 +20,7 @@ import checkFilledImg from 'assets/images/check-active.svg';
 
 import './AssignmentsList.scss';
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
-
+const PATHLENGTH = 4;
 interface AssignmentProps {
   editTeachingPathStore?: EditTeachingPathStore;
   assignment: Assignment;
@@ -244,12 +244,15 @@ export class AssignmentsList extends Component<Props, State> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
+    const path = event.composedPath().length;
     if (event.key === 'Escape') {
       this.closeModal();
     }
-    if (this.state.itemsForNewChildren.length > 0) {
-      if (event.altKey && event.key === 'A' || event.altKey && event.key === 'a') {
-        this.closeModal();
+    if (path <= PATHLENGTH) {
+      if (this.state.itemsForNewChildren.length > 0) {
+        if (event.shiftKey && event.key === 'A' || event.shiftKey && event.key === 'a') {
+          this.closeModal();
+        }
       }
     }
   }

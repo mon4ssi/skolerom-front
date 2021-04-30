@@ -20,7 +20,7 @@ import imageChoiceLight from 'assets/images/image-choice-light.svg';
 import imageChoiceLightPink from 'assets/images/image-choice-light-pink.svg';
 
 import './ImageChoiceQuestion.scss';
-
+const PATHLENGTH = 4;
 interface Props {
   question: EditableImageChoiceQuestion;
   newAssignmentStore?: NewAssignmentStore;
@@ -47,12 +47,6 @@ class ImageChoiceQuestion extends Component<Props> {
     const { question } = this.props;
     if (lettersNoEn(e.target.value)) {
       question.setTitle(e.target.value);
-    }
-  }
-
-  private changeKeyFunction = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    if (e.altKey && e.key === 'S' || e.altKey && e.key === 's') {
-      e.preventDefault();
     }
   }
 
@@ -107,7 +101,6 @@ class ImageChoiceQuestion extends Component<Props> {
           placeholder={intl.get('new assignment.Enter a question')}
           value={question.title}
           onChange={this.handleChangeTitle}
-          onKeyDown={this.changeKeyFunction}
           maxLength={MAX_DESCRIPTION_LENGTH}
           autoFocus
         />

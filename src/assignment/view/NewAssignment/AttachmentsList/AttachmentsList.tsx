@@ -32,6 +32,8 @@ export interface AttachmentsListProps {
   newAssignmentStore?: NewAssignmentStore;
 }
 
+const PATHLENGTH = 4;
+
 interface State {
   selectedTab: string;
   query: string;
@@ -294,9 +296,12 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
-    if (event.altKey && event.key === 'A' || event.altKey && event.key === 'a') {
-      this.props.context.changeContentType(AttachmentContentType.text);
-      this.props.newAssignmentStore!.clearCurrentOption();
+    const path = event.composedPath().length;
+    if (path <= PATHLENGTH) {
+      if (event.shiftKey && event.key === 'A' || event.shiftKey && event.key === 'a') {
+        this.props.context.changeContentType(AttachmentContentType.text);
+        this.props.newAssignmentStore!.clearCurrentOption();
+      }
     }
   }
 

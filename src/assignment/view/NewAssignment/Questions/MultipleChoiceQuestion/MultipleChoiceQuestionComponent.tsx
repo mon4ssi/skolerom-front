@@ -48,12 +48,6 @@ class MultipleChoiceQuestionContent extends Component<Props> {
     }
   }
 
-  private changeKeyFunction = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    if (e.altKey && e.key === 'S' || e.altKey && e.key === 's') {
-      e.preventDefault();
-    }
-  }
-
   public addNewContentBlock = (type: ContentBlockType) => {
     const { question, newAssignmentStore } = this.props;
 
@@ -108,7 +102,6 @@ class MultipleChoiceQuestionContent extends Component<Props> {
           value={question.title}
           onChange={this.handleChangeTitle}
           maxLength={MAX_DESCRIPTION_LENGTH}
-          onKeyDown={this.changeKeyFunction}
           aria-labelledby={titleId}
           autoFocus
         />
