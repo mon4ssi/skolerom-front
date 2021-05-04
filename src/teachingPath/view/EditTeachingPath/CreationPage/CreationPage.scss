@@ -71,7 +71,10 @@
       top: 377px;
       transform: translateX(-50%);
     }
-
+    .teachingPathItemsTitleDiv {
+      position: relative;
+      z-index: 1;
+    }
     .teachingPathItemsTitle {
       margin: 0 0 17px 0;
       min-height: 34px;

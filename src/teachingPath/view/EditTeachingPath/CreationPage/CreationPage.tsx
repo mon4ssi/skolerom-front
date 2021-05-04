@@ -312,6 +312,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       intl.get('edit_teaching_path.paths.teaching_path_title');
 
     return node.type === TeachingPathNodeType.Root || node.children.length ? (
+      <div className="teachingPathItemsTitleDiv">
       <TextAreaAutosize
         ref={this.titleRef}
         className="teachingPathItemsTitle fw500"
@@ -322,6 +323,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         maxLength={MAX_TITLE_LENGTH}
         readOnly={readOnly}
       />
+      </div>
     ) : null;
   }
 

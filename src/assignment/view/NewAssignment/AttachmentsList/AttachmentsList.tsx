@@ -297,8 +297,11 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
     const path = event.composedPath().length;
-    if (path <= PATHLENGTH) {
-      if (event.shiftKey && event.key === 'A' || event.shiftKey && event.key === 'a') {
+    const htmlPathArea = String(event.composedPath()[0]);
+    const htmlText = '[object HTMLTextAreaElement]';
+    const inputText = '[object HTMLInputElement]';
+    if (event.shiftKey && event.key === 'A' || event.shiftKey && event.key === 'a') {
+      if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
         this.props.context.changeContentType(AttachmentContentType.text);
         this.props.newAssignmentStore!.clearCurrentOption();
       }

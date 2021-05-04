@@ -72,7 +72,10 @@ $image-container-height: 186px;
   background: $color-white;
   bottom: -51px;
 }
-
+.ImageOption__button:focus {
+  outline: black;
+  outline-style: auto;
+}
 .ImageOption_selected {
   background: $color-dark-gray;
 }

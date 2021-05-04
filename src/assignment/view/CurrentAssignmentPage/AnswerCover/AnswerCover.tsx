@@ -25,11 +25,13 @@ interface Props {
 @observer
 export class AnswerCover extends Component<Props> {
   public ref = createRef<HTMLButtonElement>();
+  public refEl = createRef<HTMLDivElement>();
 
   public async componentDidMount() {
     await this.props.currentQuestionaryStore!.getRelatedArticles();
     if (this.ref.current) {
       this.ref.current!.focus();
+      this.refEl.current!.scrollIntoView({ behavior: 'smooth' });
     }
   }
   public getStartButtonTitle = () => {
@@ -155,9 +157,11 @@ export class AnswerCover extends Component<Props> {
         <span className="AnswerCover__title">{assignment!.title}</span>
         {assignment!.description && <span className="AnswerCover__description">{assignment!.description}</span>}
         {this.getAnsweredQuestionsCount()}
-        <button className="AnswerCover__button" onClick={switchCover} ref={this.ref} title={this.getStartButtonTitle()}>
-          {this.getStartButtonTitle()}
-        </button>
+        <div ref={this.refEl} className="AnswerCover__div_button">
+          <button className="AnswerCover__button" onClick={switchCover} ref={this.ref} title={this.getStartButtonTitle()}>
+            {this.getStartButtonTitle()}
+          </button>
+        </div>
       </div>
     );
   }

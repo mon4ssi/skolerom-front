@@ -317,12 +317,15 @@ class HeaderWrapper extends Component<Props> {
     const { isCreation, isDistribution, isPublishing, newAssignmentStore } = this.props;
     const userType = newAssignmentStore!.getCurrentUser()!.type;
     const path = event.composedPath().length;
+    const htmlPathArea = String(event.composedPath()[0]);
+    const htmlText = '[object HTMLTextAreaElement]';
+    const inputText = '[object HTMLInputElement]';
     if (event.key === 'Escape') {
       if (newAssignmentStore!.currentArticlesPage === 1) {
         this.onGoBack();
       }
     }
-    if (path <= PATHLENGTH) {
+    if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
       if (event.shiftKey && event.key === 'S' || event.shiftKey && event.key === 's') {
         if (isCreation) {
           if (!this.isDisabledSaveButton()) {

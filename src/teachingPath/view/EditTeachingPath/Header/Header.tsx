@@ -15,7 +15,8 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 import backImg from 'assets/images/back-arrow.svg';
 
 import './Header.scss';
-const PATHLENGTH = 4;
+const PATHLENGTH1 = 11;
+const PATHLENGTH2 = 12;
 interface MatchProps {
   id: string;
 }
@@ -236,28 +237,35 @@ export class HeaderComponent extends Component<Props> {
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
     const path = event.composedPath().length;
+    const htmlPathArea = String(event.composedPath()[0]);
+    const htmlText = '[object HTMLTextAreaElement]';
+    const inputText = '[object HTMLInputElement]';
     const { isCreation, isDistribution, isPublishing, editTeachingPathStore } = this.props;
     if (event.key === 'Escape') {
       if (!this.props.editTeachingPathStore!.currentNode) {
         this.onGoBack();
       }
     }
-    if (path <= PATHLENGTH) {
-      if (event.shiftKey && event.key === 'S' || event.shiftKey && event.key === 's') {
+    if (event.shiftKey && event.key === 'S' || event.shiftKey && event.key === 's') {
+      if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
         if (isCreation) {
           if (!this.isDisabledSaveButton()) {
             this.onSave();
           }
         }
       }
-      if (event.shiftKey && event.key === 'P' || event.shiftKey && event.key === 'p') {
+    }
+    if (event.shiftKey && event.key === 'P' || event.shiftKey && event.key === 'p') {
+      if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
         if (isPublishing) {
           if (!this.isDisabledPublishButton()) {
             this.ref.current!.click();
           }
         }
       }
-      if (event.shiftKey && event.key === 'D' || event.shiftKey && event.key === 'd') {
+    }
+    if (event.shiftKey && event.key === 'D' || event.shiftKey && event.key === 'd') {
+      if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
         if (isPublishing) {
           if (!this.isDisabledPublishButton()) {
             this.refGoDistribution.current!.click();

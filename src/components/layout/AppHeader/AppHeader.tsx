@@ -385,13 +385,16 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
     const path = event.composedPath().length;
+    const htmlPathArea = String(event.composedPath()[0]);
+    const htmlText = '[object HTMLTextAreaElement]';
+    const inputText = '[object HTMLInputElement]';
     if (event.key === 'Escape') {
       this.setState({
         modalVisible: Modals.NONE,
       });
       this.setState({ isModalKeyboard: false });
     }
-    if (path <= PATHLENGTH) {
+    if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
       if (event.shiftKey && event.key === 'R' || event.shiftKey && event.key === 'r') {
         window.open(`${process.env.REACT_APP_WP_URL}/artikler/`, '_blank');
       }

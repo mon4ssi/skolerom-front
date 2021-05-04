@@ -209,6 +209,15 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
+    const path = event.composedPath().length;
+    const htmlPathArea = String(event.composedPath()[0]);
+    const htmlText = '[object HTMLTextAreaElement]';
+    const inputText = '[object HTMLInputElement]';
+    if (htmlPathArea === htmlText || htmlPathArea === inputText) {
+      if (event.key === 'Enter') {
+        this.goToNextQuestion();
+      }
+    }
     if (event.shiftKey && event.key === 'ArrowRight' && this.canGoToNextQuestion) {
       this.goToNextQuestion();
     } else if (event.shiftKey && event.key === 'ArrowLeft' && this.canGoToPrevQuestion) {

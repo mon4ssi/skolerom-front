@@ -76,19 +76,19 @@ class RenderOption extends Component<RenderOptionProps>{
     });
 
     return (
-      <div className={`Option ${this.calculateIsRightStyle()} ${isStudentView && 'light'}`}>
+      <a href="javascript:void(0)" className={`Option ${this.calculateIsRightStyle()} ${isStudentView && 'light'}`} onClick={this.setIsRight}>
         <div className={inputClassNames}>
           {option.title}
         </div>
 
-        <div className={statusClassNames} onClick={this.setIsRight}>
+        <div className={statusClassNames}>
           <img
             src={isValueSelected ? select : selectBlueGray}
             alt="Status"
             className={classnames('Option__image', readOnly && 'readOnly')}
           />
         </div>
-      </div>
+      </a>
     );
   }
 }

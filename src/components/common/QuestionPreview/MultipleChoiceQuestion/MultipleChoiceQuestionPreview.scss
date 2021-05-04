@@ -14,6 +14,12 @@
   background: $color-light-gray;
   padding: 6.5px 19px 6.5px 19px;
   margin-bottom: 10px;
+  &:focus {
+    outline: black;
+    outline-style: auto;
+    background: white;
+    outline-offset: -1px;
+  }
 }
 
 .Option__text {

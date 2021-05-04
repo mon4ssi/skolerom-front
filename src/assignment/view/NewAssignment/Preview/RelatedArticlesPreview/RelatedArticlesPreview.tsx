@@ -101,10 +101,13 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
     const path = event.composedPath().length;
+    const htmlPathArea = String(event.composedPath()[0]);
+    const htmlText = '[object HTMLTextAreaElement]';
+    const inputText = '[object HTMLInputElement]';
     if (event.key === 'Escape') {
       this.closePanel();
     }
-    if (path <= PATHLENGTH) {
+    if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
       if (event.shiftKey && event.key === 'A' || event.shiftKey && event.key === 'a') {
         this.closePanel();
       }
