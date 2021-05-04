@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import * as intl from 'react-intl-universal';
 import ReactQuill from 'react-quill';
 import classnames from 'classnames';
@@ -15,11 +15,16 @@ interface Props {
 }
 
 export class DescriptionEditor extends Component<Props> {
+  public bodyInput = createRef<ReactQuill>();
   private onChange = (content: string): void => {
     const { onChange } = this.props;
     if (onChange) {
       onChange(content);
     }
+  }
+
+  public componentDidMount() {
+    this.bodyInput.current!.focus();
   }
 
   public render() {
@@ -55,6 +60,7 @@ export class DescriptionEditor extends Component<Props> {
         placeholder={placeholder}
         bounds=".app"
         readOnly={readOnly}
+        ref={this.bodyInput}
       />
     );
   }

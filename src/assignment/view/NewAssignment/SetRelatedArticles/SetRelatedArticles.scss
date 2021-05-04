@@ -42,6 +42,11 @@
       button {
         background: transparent;
         padding: 0px;
+        &:focus {
+          outline: black;
+          outline-style: auto;
+          outline-offset: 2px;
+        }
       }
     }
   }

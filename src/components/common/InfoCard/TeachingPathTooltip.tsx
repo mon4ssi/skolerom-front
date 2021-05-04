@@ -125,7 +125,7 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
 
   private renderTooltipItems = (list: Array<ActionMenuItem>) =>
     list.map((item, index) => (
-      <li key={index} className={`fw500 flexBox fs15 ${item.disabled && 'disabled'}`} onClick={item.onClick}>{item.text}</li>
+      <li key={index} className={`fw500 flexBox fs15 ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick}>{item.text}</a></li>
     ))
 
   public handleClickOutside = (e: SyntheticEvent) => this.props.handleTooltipVisible(e);

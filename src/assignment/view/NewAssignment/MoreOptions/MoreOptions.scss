@@ -1,9 +1,14 @@
 .MoreOptions {
   cursor: pointer;
   position: relative;
-
-  .moreIcon {
+  button {
+    padding: 0px;
+    background: transparent;
     margin-left: 10px;
+    &:focus {
+      outline:black;
+      outline-style:auto;
+    }
   }
 
   .tooltip .left {
@@ -25,7 +30,11 @@
         justify-content: flex-end;
         cursor: pointer;
         align-items: center;
-
+        a {
+          width: 100%;
+          justify-content: space-between;
+          align-items: center;
+        }
         span {
           font-size: 0.9375rem;
           font-weight: 500;

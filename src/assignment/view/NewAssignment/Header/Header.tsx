@@ -322,33 +322,47 @@ class HeaderWrapper extends Component<Props> {
     const inputText = '[object HTMLInputElement]';
     if (event.key === 'Escape') {
       if (newAssignmentStore!.currentArticlesPage === 1) {
-        this.onGoBack();
+        if (!newAssignmentStore!.fetchingAttachments) {
+          this.onGoBack();
+        }
       }
     }
     if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
       if (event.shiftKey && event.key === 'S' || event.shiftKey && event.key === 's') {
-        if (isCreation) {
-          if (!this.isDisabledSaveButton()) {
-            this.onSave();
+        if (newAssignmentStore!.currentArticlesPage === 1) {
+          if (!newAssignmentStore!.fetchingAttachments) {
+            if (isCreation) {
+              if (!this.isDisabledSaveButton()) {
+                this.onSave();
+              }
+            }
           }
         }
       }
       if (event.shiftKey && event.key === 'P' || event.shiftKey && event.key === 'p') {
-        if (isPublishing) {
-          if (!this.isDisabledPublishButton()) {
-            this.ref.current!.click();
+        if (newAssignmentStore!.currentArticlesPage === 1) {
+          if (!newAssignmentStore!.fetchingAttachments) {
+            if (isPublishing) {
+              if (!this.isDisabledPublishButton()) {
+                this.ref.current!.click();
+              }
+            }
           }
         }
       }
       if (event.shiftKey && event.key === 'D' || event.shiftKey && event.key === 'd') {
-        if (isPublishing) {
-          if (!this.isDisabledPublishButton()) {
-            this.refGoDistribution.current!.click();
-          }
-        }
-        if (isDistribution) {
-          if (!this.isDisabledPublishButton()) {
-            this.refFinalDistribution.current!.click();
+        if (newAssignmentStore!.currentArticlesPage === 1) {
+          if (!newAssignmentStore!.fetchingAttachments) {
+            if (isPublishing) {
+              if (!this.isDisabledPublishButton()) {
+                this.refGoDistribution.current!.click();
+              }
+            }
+            if (isDistribution) {
+              if (!this.isDisabledPublishButton()) {
+                this.refFinalDistribution.current!.click();
+              }
+            }
           }
         }
       }

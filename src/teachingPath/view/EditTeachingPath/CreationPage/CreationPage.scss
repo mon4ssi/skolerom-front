@@ -107,6 +107,10 @@
         background: url(../../../../assets/images/unmerged-hovered.svg);
         background-size: cover;
       }
+      &:focus {
+        outline: black;
+        outline-style: auto;
+      }
     }
 
     .nestedOrderNumberContainer {

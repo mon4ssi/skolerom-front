@@ -381,40 +381,41 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
     });
 
     return (
-      <Link to={linkOptions}>
-        <li className="AssignmentListItem">
-          <div className="AssignmentListItem__block AssignmentListItem__blockMain">
-            <img
-              className="AssignmentListItem__image"
-              src={assignment.featuredImage ? assignment.featuredImage : listPlaceholderImg}
-              alt={assignment.title}
-            />
-            {/*{hasLikes && this.renderLikes()}*/}
-            <div className="AssignmentListItem__title">
-              {assignment.title ? assignment.title : <span className={'AssignmentListItem__noTitle'}>{intl.get('new assignment.no_title')}</span>}
-              <span className="AssignmentListItem__status">
-                {this.checkAssignmentStatus()}
-              </span>
-            </div>
-            {this.renderQuestions(true)}
-            {this.renderSubjects(true)}
-          </div>
-          <div className="AssignmentListItem__block AssignmentListItem__blockSecondary">
-            {this.renderContentCreatorIcon()}
-            {this.renderSubjects()}
-            {this.renderQuestions()}
-            {this.renderLevels()}
-
-            <div className="AssignmentListItem__moreWrapper">
-              <div className={moreButtonClasses} onClick={this.toggleActionMenu} data-msj={intl.get('activity_page.options')} />
-              <div className={actionMenuWrapperClasses}>
-                {isActionMenuVisible && this.renderActionMenu()}
+      <div className="AssignmentListItem__super">
+        <Link to={linkOptions}>
+          <li className="AssignmentListItem">
+            <div className="AssignmentListItem__block AssignmentListItem__blockMain">
+              <img
+                className="AssignmentListItem__image"
+                src={assignment.featuredImage ? assignment.featuredImage : listPlaceholderImg}
+                alt={assignment.title}
+              />
+              {/*{hasLikes && this.renderLikes()}*/}
+              <div className="AssignmentListItem__title">
+                {assignment.title ? assignment.title : <span className={'AssignmentListItem__noTitle'}>{intl.get('new assignment.no_title')}</span>}
+                <span className="AssignmentListItem__status">
+                  {this.checkAssignmentStatus()}
+                </span>
               </div>
+              {this.renderQuestions(true)}
+              {this.renderSubjects(true)}
             </div>
-            {/*{hasLikes && this.renderLikes(true)}*/}
+            <div className="AssignmentListItem__block AssignmentListItem__blockSecondary">
+              {this.renderContentCreatorIcon()}
+              {this.renderSubjects()}
+              {this.renderQuestions()}
+              {this.renderLevels()}
+              {/*{hasLikes && this.renderLikes(true)}*/}
+            </div>
+          </li>
+        </Link>
+        <div className="AssignmentListItem__moreWrapper">
+          <button className={moreButtonClasses} onClick={this.toggleActionMenu} data-msj={intl.get('activity_page.options')} />
+          <div className={actionMenuWrapperClasses}>
+            {isActionMenuVisible && this.renderActionMenu()}
           </div>
-        </li>
-      </Link>
+        </div>
+      </div>
     );
   }
 }

@@ -1,3 +1,4 @@
+@import "style";
 .ArticlesList {
   position: relative;
   height: calc(100% - 60px);
@@ -73,6 +74,15 @@
       background: #FFFFFF;
       border: 1px solid #D3D9DE;
       border-radius: 5px;
+    }
+  }
+}
+@media screen and (max-width: $screen-dimension-desktop-l) {
+  .ArticlesList {
+    .articlesListContainer {
+      .RelatedArticlesCard {
+        width: calc((100% - 30px) / 2);
+      }
     }
   }
 }

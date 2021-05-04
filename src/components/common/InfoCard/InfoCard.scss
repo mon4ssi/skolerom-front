@@ -96,6 +96,12 @@
       align-items: center;
       .OptionMsj {
         position: relative;
+        background: transparent;
+        width: auto;
+        &:focus {
+          outline: black;
+          outline-style: auto;
+        }
         &:before {
           position: absolute;
           box-shadow: 0 2px 2px #00000021;
@@ -171,6 +177,12 @@
             li {
               cursor: pointer;
               margin: 7px;
+              a {
+                &:focus {
+                  outline: black;
+                  outline-style: auto;
+                }
+              }
             }
 
             .disabled {

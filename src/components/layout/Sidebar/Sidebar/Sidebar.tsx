@@ -159,7 +159,10 @@ class Sidebar extends Component<Props> {
   public handleKeyboardControl = (event: KeyboardEvent) => {
     const { currentUser } = this.props.loginStore!;
     const path = event.composedPath().length;
-    if (path <= PATHLENGTH) {
+    const htmlPathArea = String(event.composedPath()[0]);
+    const htmlText = '[object HTMLTextAreaElement]';
+    const inputText = '[object HTMLInputElement]';
+    if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
       if (event.shiftKey && event.key === 'T' || event.shiftKey && event.key === 't') {
         window.location.href = '/teaching-paths/';
       }

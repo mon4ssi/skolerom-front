@@ -38,6 +38,11 @@
     &:hover {
       background-color: #af0060;
     }
+    &:focus {
+      outline: black;
+      outline-style: auto;
+      outline-offset: 2px;
+    }
   
     span {
       color: #fff;

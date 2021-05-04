@@ -3,6 +3,8 @@
 $image-width: 90px;
 $image-height: 60px;
 
+
+
 .AssignmentListItem {
   min-height: 60px;
   position: relative;
@@ -17,6 +19,16 @@ $image-height: 60px;
 
   &:hover {
     background: $color-dark-gray;
+  }
+}
+
+.AssignmentListItem__super {
+  position: relative;
+  a {
+    display: block;
+    li.AssignmentListItem {
+      padding-right: 48px;
+    }
   }
 }
 
@@ -129,17 +141,23 @@ $image-height: 60px;
 }
 
 .AssignmentListItem__moreWrapper {
-  flex-shrink: 0;
+  position: absolute;
+  top: 50%;
+  margin-top: -14px;
+  right: 10px;
 }
 
 .AssignmentListItem__more {
   cursor: pointer;
   width: 28px;
   height: 28px;
-  margin-left: 20px;
   background: url(../../../assets/images/hovered-more.svg) no-repeat;
-
   position: relative;
+  cursor: pointer;
+  &:focus {
+    outline: black;
+    outline-style: auto;
+  }
   &:before {
     position: absolute;
     box-shadow: 0 2px 2px #00000021;

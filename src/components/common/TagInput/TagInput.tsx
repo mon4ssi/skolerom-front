@@ -192,7 +192,7 @@ class TagInputWrapper extends Component<Props, State> {
 
     return (
       <Suspense fallback={loading}>
-        {isTagsWindowVisible && this.renderTags()}
+        {this.renderTags()}
       </Suspense>
     );
   }

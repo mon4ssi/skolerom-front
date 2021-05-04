@@ -300,6 +300,10 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     const htmlPathArea = String(event.composedPath()[0]);
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
+    if (event.key === 'Escape') {
+      this.props.context.changeContentType(AttachmentContentType.text);
+      this.props.newAssignmentStore!.clearCurrentOption();
+    }
     if (event.shiftKey && event.key === 'A' || event.shiftKey && event.key === 'a') {
       if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
         this.props.context.changeContentType(AttachmentContentType.text);
@@ -326,6 +330,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     },                       () => {
       this.fetchAttachments();
     });
+    this.props.newAssignmentStore!.fetchingAttachments = true;
   }
 
   public componentWillUnmount() {
@@ -334,6 +339,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
     this.closeAttachmentsList();
     document.removeEventListener('keyup', this.handleKeyboardControl);
+    this.props.newAssignmentStore!.fetchingAttachments = false;
   }
 
   public async componentDidUpdate(prevProps: AttachmentsListProps) {

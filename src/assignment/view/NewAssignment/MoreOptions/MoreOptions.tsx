@@ -34,7 +34,7 @@ class MoreOptionsWrapper extends Component<MoreOptionsWrapperProps> {
       isMoreOptionsTooltipVisible: !this.state.isMoreOptionsTooltipVisible
     })
 
-  public duplicate = (event: React.MouseEvent<HTMLLIElement>) => {
+  public duplicate = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const { newAssignmentStore } = this.props;
     newAssignmentStore!.duplicateQuestion(this.props.question);
 
@@ -50,7 +50,7 @@ class MoreOptionsWrapper extends Component<MoreOptionsWrapperProps> {
     event.stopPropagation();
   }
 
-  public delete = async (event: React.MouseEvent<HTMLLIElement>) => {
+  public delete = async (event: React.MouseEvent<HTMLAnchorElement>) => {
     const { newAssignmentStore, question } = this.props;
 
     if (await Notification.create({
@@ -78,14 +78,17 @@ class MoreOptionsWrapper extends Component<MoreOptionsWrapperProps> {
     <div className="tooltip">
       <div className="left">
         <ul className="flexBox dirColumn">
-          <li className="flexBox" onClick={this.duplicate}>
-            <span>{intl.get('new assignment.Duplicate question')}</span>
-            <img src={duplicateIcon} alt="Duplicate qustion"/>
+          <li>
+            <a href="javascript:void(0)" onClick={this.duplicate} className="flexBox">
+              <span>{intl.get('new assignment.Duplicate question')}</span>
+              <img src={duplicateIcon} alt="Duplicate qustion"/>
+            </a>
           </li>
-
-          <li className="flexBox" onClick={this.delete}>
-            <span style={{ color: '#E2017B' }}>{intl.get('new assignment.Remove question')}</span>
-            <img src={deleteIcon} alt="Delete qustion"/>
+          <li>
+            <a href="javascript:void(0)" onClick={this.delete} className="flexBox">
+              <span style={{ color: '#E2017B' }}>{intl.get('new assignment.Remove question')}</span>
+              <img src={deleteIcon} alt="Delete qustion"/>
+            </a>
           </li>
         </ul>
 
@@ -102,12 +105,13 @@ class MoreOptionsWrapper extends Component<MoreOptionsWrapperProps> {
 
     return (
       <div className="MoreOptions">
-        <img
-          src={image}
-          alt="More"
-          onClick={this.handleClickIcon}
-          className={'moreIcon'}
-        />
+        <button onClick={this.handleClickIcon}>
+          <img
+            src={image}
+            alt="More"
+            className={'moreIcon'}
+          />
+        </button>
 
         {isMoreOptionsTooltipVisible && this.renderMoreOptions()}
       </div>
