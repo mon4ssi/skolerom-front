@@ -121,6 +121,7 @@ class OptionComponent extends Component<OptionComponentProps> {
           onClick={this.closeImageChoice}
           aria-required="true"
           aria-invalid="false"
+          autoFocus
         />
 
         <div className="statusBox" onClick={this.closeImageChoice}>

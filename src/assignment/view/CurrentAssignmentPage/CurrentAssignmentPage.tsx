@@ -204,7 +204,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
         history.push(exitEventTarget === ExitEventTarget.EXIT_BUTTON ? '/assignments' : '/activity');
       }
     } else {
-      history.push('/assignments');
+      // history.push('/assignments');
     }
   }
 
@@ -424,9 +424,15 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     const navBarClasses = classNames('CurrentAssignmentPage__navBar', {
       CurrentAssignmentPage__navBar_visible: this.props.uiStore!.sidebarShown,
     });
+    let isVisibleButtonRender = false;
 
     if (isLoading) {
       return <div className={'loading'}><Loader /></div>;
+    }
+    if (currentAnswer) {
+      if (currentAnswer.key.type === 'MULTIPLE_CHOICE') {
+        isVisibleButtonRender = true;
+      }
     }
 
     return !isLoading && (
@@ -479,7 +485,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
                   showCover={this.state.showCover}
                   isTeachingPath={state && !!state.teachingPath}
                 />
-                {isMultipleQuestion && this.renderIfneedNextButton()}
+                {isVisibleButtonRender && this.renderIfneedNextButton()}
               </div>
             </div>
             {this.renderBreadcrumbsIfNeeded()}

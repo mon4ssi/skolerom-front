@@ -59,6 +59,7 @@ class OptionComponent extends Component<OptionComponentProps> {
           placeholder={placeholder}
           aria-required="true"
           aria-invalid="false"
+          autoFocus
         />
 
         <div className="statusBox">
