@@ -168,6 +168,26 @@
   }
 }
 
+.ButtonNextNew {
+  padding: 0px 15px;
+  button {
+    padding: 10px;
+    border-radius: 25px;
+    color: white;
+    background: #e2017b;
+    min-width: 200px;
+    &:disabled {
+      opacity: 0.4;
+    }
+    &:focus {
+      outline: black;
+      outline-style: auto;
+      outline-offset: 2px;
+    }
+  }
+}
+
+
 @media screen and (max-width: $screen-dimension-mobile-425) {
   .CurrentAssignmentPage__main {
     padding-top: 0;

@@ -1,4 +1,4 @@
-import React, { Component, ChangeEvent, createRef } from 'react';
+import React, { Component, ChangeEvent } from 'react';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 import isNaN from 'lodash/isNaN';
@@ -17,7 +17,6 @@ import closeImg from 'assets/images/close-rounded-black.svg';
 import './ArticlesList.scss';
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
 import { SCROLL_OFFSET } from 'utils/constants';
-const PATHLENGTH = 13;
 interface ArticleItemProps {
   editTeachingPathStore?: EditTeachingPathStore;
   article: Article;
@@ -324,14 +323,13 @@ export class ArticlesList extends Component<Props, State> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
-    const path = event.composedPath().length;
     const htmlPathArea = String(event.composedPath()[0]);
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
     if (event.key === 'Escape') {
       this.closeModal();
     }
-    if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
+    if ((htmlPathArea !== htmlText) && (htmlPathArea !== inputText)) {
       if (this.state.itemsForNewChildren.length > 0) {
         if (event.shiftKey && event.key === 'A' || event.shiftKey && event.key === 'a') {
           this.closeModal();

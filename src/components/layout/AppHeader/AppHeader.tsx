@@ -29,7 +29,6 @@ interface HeaderNavigationLink {
 }
 
 const ANIMATION_TIMEOUT = 200;
-const PATHLENGTH = 4;
 
 const headerLinks: Array<HeaderNavigationLink> = [
   {
@@ -248,15 +247,9 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     this.setState({ modalVisible: Modals.NONE });
   }
 
-  private openKeyboardModal = () => {
-    const { isModalKeyboard } = this.state;
-    return this.setState({ isModalKeyboard: true });
-  }
+  private openKeyboardModal = () => (this.setState({ isModalKeyboard: true }));
 
-  private closeModalKeyboard = () => {
-    const { isModalKeyboard } = this.state;
-    return this.setState({ isModalKeyboard: false });
-  }
+  private closeModalKeyboard = () => (this.setState({ isModalKeyboard: false }));
 
   private renderContentKeyboardStudent = () => (
     <div className="modalKeyboard__list">
@@ -384,7 +377,6 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   )
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
-    const path = event.composedPath().length;
     const htmlPathArea = String(event.composedPath()[0]);
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
@@ -395,13 +387,13 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       this.setState({ isModalKeyboard: false });
     }
     if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
-      if (event.shiftKey && event.key === 'R' || event.shiftKey && event.key === 'r') {
+      if ((event.shiftKey && event.key === 'R') || (event.shiftKey && event.key === 'r')) {
         window.open(`${process.env.REACT_APP_WP_URL}/artikler/`, '_blank');
       }
-      if (event.shiftKey && event.key === 'U' || event.shiftKey && event.key === 'u') {
+      if ((event.shiftKey && event.key === 'U') || (event.shiftKey && event.key === 'u')) {
         window.open(`${process.env.REACT_APP_WP_URL}/temaboker/`, '_blank');
       }
-      if (event.shiftKey && event.key === 'O' || event.shiftKey && event.key === 'o') {
+      if ((event.shiftKey && event.key === 'O') || (event.shiftKey && event.key === 'o')) {
         window.open(`${process.env.REACT_APP_WP_URL}/lydartikler/`, '_blank');
       }
     }

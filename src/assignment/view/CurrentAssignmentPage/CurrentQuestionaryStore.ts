@@ -19,6 +19,7 @@ export class CurrentQuestionaryStore {
 
   @observable public isLoading: boolean = false;
   @observable public currentQuestionary: Questionary | null = null;
+  @observable public isMultipleQuestion: boolean = false;
   @observable public assignment: Assignment | null = null;
   @observable public questions: Array<Question> = [];
   @observable public answers: Array<Answer> = [];

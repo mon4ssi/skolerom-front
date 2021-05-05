@@ -236,18 +236,17 @@ export class HeaderComponent extends Component<Props> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
-    const path = event.composedPath().length;
     const htmlPathArea = String(event.composedPath()[0]);
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
-    const { isCreation, isDistribution, isPublishing, editTeachingPathStore } = this.props;
+    const { isCreation, isDistribution, isPublishing } = this.props;
     if (event.key === 'Escape') {
       if (!this.props.editTeachingPathStore!.currentNode) {
         this.onGoBack();
       }
     }
-    if (event.shiftKey && event.key === 'S' || event.shiftKey && event.key === 's') {
-      if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
+    if ((event.shiftKey && event.key === 'S') || (event.shiftKey && event.key === 's')) {
+      if ((htmlPathArea !== htmlText) && (htmlPathArea !== inputText)) {
         if (isCreation) {
           if (!this.isDisabledSaveButton()) {
             this.onSave();
@@ -255,8 +254,8 @@ export class HeaderComponent extends Component<Props> {
         }
       }
     }
-    if (event.shiftKey && event.key === 'P' || event.shiftKey && event.key === 'p') {
-      if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
+    if ((event.shiftKey && event.key === 'P') || (event.shiftKey && event.key === 'p')) {
+      if ((htmlPathArea !== htmlText) && (htmlPathArea !== inputText)) {
         if (isPublishing) {
           if (!this.isDisabledPublishButton()) {
             this.ref.current!.click();
@@ -264,8 +263,8 @@ export class HeaderComponent extends Component<Props> {
         }
       }
     }
-    if (event.shiftKey && event.key === 'D' || event.shiftKey && event.key === 'd') {
-      if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
+    if ((event.shiftKey && event.key === 'D') || (event.shiftKey && event.key === 'd')) {
+      if ((htmlPathArea !== htmlText) && (htmlPathArea !== inputText)) {
         if (isPublishing) {
           if (!this.isDisabledPublishButton()) {
             this.refGoDistribution.current!.click();

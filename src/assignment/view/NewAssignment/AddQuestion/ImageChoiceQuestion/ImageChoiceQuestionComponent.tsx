@@ -20,7 +20,6 @@ import imageChoiceLight from 'assets/images/image-choice-light.svg';
 import imageChoiceLightPink from 'assets/images/image-choice-light-pink.svg';
 
 import './ImageChoiceQuestion.scss';
-const PATHLENGTH = 4;
 interface Props {
   question: EditableImageChoiceQuestion;
   newAssignmentStore?: NewAssignmentStore;

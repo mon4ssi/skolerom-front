@@ -157,24 +157,22 @@ class Sidebar extends Component<Props> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
-    const { currentUser } = this.props.loginStore!;
-    const path = event.composedPath().length;
     const htmlPathArea = String(event.composedPath()[0]);
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
     if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
-      if (event.shiftKey && event.key === 'T' || event.shiftKey && event.key === 't') {
+      if ((event.shiftKey && event.key === 'T') || (event.shiftKey && event.key === 't')) {
         window.location.href = '/teaching-paths/';
       }
-      if (event.shiftKey && event.key === 'N' || event.shiftKey && event.key === 'n') {
+      if ((event.shiftKey && event.key === 'N') || (event.shiftKey && event.key === 'n')) {
         window.location.href = '/assignments/';
       }
-      if (event.shiftKey && event.key === 'G' || event.shiftKey && event.key === 'g') {
+      if ((event.shiftKey && event.key === 'G') || (event.shiftKey && event.key === 'g')) {
         if (UserType.Teacher || UserType.ContentManager) {
           this.createAssignment();
         }
       }
-      if (event.shiftKey && event.key === 'C' || event.shiftKey && event.key === 'c') {
+      if ((event.shiftKey && event.key === 'C' || event.shiftKey && event.key === 'c')) {
         if (UserType.Teacher || UserType.ContentManager) {
           this.createTeachingPath();
         }

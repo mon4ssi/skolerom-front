@@ -315,22 +315,20 @@ class HeaderWrapper extends Component<Props> {
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
     const { isCreation, isDistribution, isPublishing, newAssignmentStore } = this.props;
-    const userType = newAssignmentStore!.getCurrentUser()!.type;
-    const path = event.composedPath().length;
     const htmlPathArea = String(event.composedPath()[0]);
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
     if (event.key === 'Escape') {
-      if (newAssignmentStore!.currentArticlesPage === 1) {
-        if (!newAssignmentStore!.fetchingAttachments) {
+      if (!newAssignmentStore!.visibilityArticles) {
+        if (!newAssignmentStore!.visibilityAttachments) {
           this.onGoBack();
         }
       }
     }
-    if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
-      if (event.shiftKey && event.key === 'S' || event.shiftKey && event.key === 's') {
-        if (newAssignmentStore!.currentArticlesPage === 1) {
-          if (!newAssignmentStore!.fetchingAttachments) {
+    if ((htmlPathArea !== htmlText) && (htmlPathArea !== inputText)) {
+      if ((event.shiftKey && event.key === 'S') || (event.shiftKey && event.key === 's')) {
+        if (!newAssignmentStore!.visibilityArticles) {
+          if (!newAssignmentStore!.visibilityAttachments) {
             if (isCreation) {
               if (!this.isDisabledSaveButton()) {
                 this.onSave();
@@ -339,9 +337,9 @@ class HeaderWrapper extends Component<Props> {
           }
         }
       }
-      if (event.shiftKey && event.key === 'P' || event.shiftKey && event.key === 'p') {
-        if (newAssignmentStore!.currentArticlesPage === 1) {
-          if (!newAssignmentStore!.fetchingAttachments) {
+      if ((event.shiftKey && event.key === 'P') || (event.shiftKey && event.key === 'p')) {
+        if (!newAssignmentStore!.visibilityArticles) {
+          if (!newAssignmentStore!.visibilityAttachments) {
             if (isPublishing) {
               if (!this.isDisabledPublishButton()) {
                 this.ref.current!.click();
@@ -350,9 +348,9 @@ class HeaderWrapper extends Component<Props> {
           }
         }
       }
-      if (event.shiftKey && event.key === 'D' || event.shiftKey && event.key === 'd') {
-        if (newAssignmentStore!.currentArticlesPage === 1) {
-          if (!newAssignmentStore!.fetchingAttachments) {
+      if ((event.shiftKey && event.key === 'D') || (event.shiftKey && event.key === 'd')) {
+        if (!newAssignmentStore!.visibilityArticles) {
+          if (!newAssignmentStore!.visibilityAttachments) {
             if (isPublishing) {
               if (!this.isDisabledPublishButton()) {
                 this.refGoDistribution.current!.click();

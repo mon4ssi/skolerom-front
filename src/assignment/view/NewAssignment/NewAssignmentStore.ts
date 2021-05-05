@@ -58,7 +58,9 @@ export class NewAssignmentStore {
   public currentArticlesPage: number = 1;
 
   @observable public fetchingArticles: boolean = false;
+  @observable public visibilityArticles: boolean = false;
   @observable public fetchingAttachments: boolean = false;
+  @observable public visibilityAttachments: boolean = false;
   @observable public showValidationErrors: boolean = false;
   @observable public assignmentContainer: AssignmentContainer | null = null;
   @observable public currentPreviewQuestion: number = -1;

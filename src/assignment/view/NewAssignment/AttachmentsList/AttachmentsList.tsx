@@ -32,8 +32,6 @@ export interface AttachmentsListProps {
   newAssignmentStore?: NewAssignmentStore;
 }
 
-const PATHLENGTH = 4;
-
 interface State {
   selectedTab: string;
   query: string;
@@ -296,7 +294,6 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
-    const path = event.composedPath().length;
     const htmlPathArea = String(event.composedPath()[0]);
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
@@ -304,7 +301,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
       this.props.context.changeContentType(AttachmentContentType.text);
       this.props.newAssignmentStore!.clearCurrentOption();
     }
-    if (event.shiftKey && event.key === 'A' || event.shiftKey && event.key === 'a') {
+    if ((event.shiftKey && event.key === 'A') || (event.shiftKey && event.key === 'a')) {
       if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
         this.props.context.changeContentType(AttachmentContentType.text);
         this.props.newAssignmentStore!.clearCurrentOption();
@@ -315,6 +312,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
   public closeAttachmentsList = () => {
     this.props.context.changeContentType(AttachmentContentType.text);
     this.props.newAssignmentStore!.clearCurrentOption();
+    this.props.newAssignmentStore!.visibilityAttachments = false;
   }
 
   public async componentDidMount() {
@@ -330,7 +328,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     },                       () => {
       this.fetchAttachments();
     });
-    this.props.newAssignmentStore!.fetchingAttachments = true;
+    this.props.newAssignmentStore!.visibilityAttachments = true;
   }
 
   public componentWillUnmount() {
@@ -339,7 +337,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
     this.closeAttachmentsList();
     document.removeEventListener('keyup', this.handleKeyboardControl);
-    this.props.newAssignmentStore!.fetchingAttachments = false;
+    this.props.newAssignmentStore!.visibilityAttachments = false;
   }
 
   public async componentDidUpdate(prevProps: AttachmentsListProps) {

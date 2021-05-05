@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react';
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 
@@ -14,13 +14,12 @@ import { lettersNoEn } from 'utils/lettersNoEn';
 
 import closeImg from 'assets/images/close-rounded-black.svg';
 import imagePlaceholderImg from 'assets/images/list-placeholder.svg';
-import notLikedIcon from 'assets/images/not-liked.svg';
 import checkImg from 'assets/images/check-rounded-white-bg.svg';
 import checkFilledImg from 'assets/images/check-active.svg';
 
 import './AssignmentsList.scss';
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
-const PATHLENGTH = 13;
+
 interface AssignmentProps {
   editTeachingPathStore?: EditTeachingPathStore;
   assignment: Assignment;
@@ -244,14 +243,13 @@ export class AssignmentsList extends Component<Props, State> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
-    const path = event.composedPath().length;
     const htmlPathArea = String(event.composedPath()[0]);
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
     if (event.key === 'Escape') {
       this.closeModal();
     }
-    if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
+    if ((htmlPathArea !== htmlText) && (htmlPathArea !== inputText)) {
       if (this.state.itemsForNewChildren.length > 0) {
         if (event.shiftKey && event.key === 'A' || event.shiftKey && event.key === 'a') {
           this.closeModal();

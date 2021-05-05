@@ -209,7 +209,6 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
-    const path = event.composedPath().length;
     const htmlPathArea = String(event.composedPath()[0]);
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
@@ -381,6 +380,21 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     );
   }
 
+  public renderIfneedNextButton() {
+    return (
+      <div className="ButtonNextNew">
+        <button
+          className="ButtonNextNew--btn"
+          onClick={this.goToNextQuestion}
+          disabled={!this.canGoToNextQuestion}
+          title={intl.get('pagination.Next page')}
+        >
+          {intl.get('pagination.Next page')}
+        </button>
+      </div>
+    );
+  }
+
   public render() {
     const {
       currentQuestionaryStore: {
@@ -394,7 +408,8 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
         isLoading,
         handleShowArrowsTooltip,
         getIsReadArticles,
-        isStartedAssignment
+        isStartedAssignment,
+        isMultipleQuestion
       },
       location: { state },
       uiStore,
@@ -452,17 +467,20 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
           </div>
           <div className="CurrentAssignmentPage__container">
             <div className="CurrentAssignmentPage__main">
-              {this.renderNavigationIfNeeded()}
-              <AnswerCurrentQuestion
-                answer={currentAnswer}
-                numberOfQuestions={numberOfQuestions}
-                numberOfAnsweredQuestions={numberOfAnsweredQuestions}
-                publishQuestionary={this.handlePublish}
-                readOnly={this.isReadOnly}
-                switchCover={this.switchCover}
-                showCover={this.state.showCover}
-                isTeachingPath={state && !!state.teachingPath}
-              />
+              <div className="CurrentAssignmentPage__main__center">
+                {this.renderNavigationIfNeeded()}
+                <AnswerCurrentQuestion
+                  answer={currentAnswer}
+                  numberOfQuestions={numberOfQuestions}
+                  numberOfAnsweredQuestions={numberOfAnsweredQuestions}
+                  publishQuestionary={this.handlePublish}
+                  readOnly={this.isReadOnly}
+                  switchCover={this.switchCover}
+                  showCover={this.state.showCover}
+                  isTeachingPath={state && !!state.teachingPath}
+                />
+                {isMultipleQuestion && this.renderIfneedNextButton()}
+              </div>
             </div>
             {this.renderBreadcrumbsIfNeeded()}
           </div>

@@ -23,7 +23,6 @@ import { SCROLL_OFFSET } from 'utils/constants';
 interface Props {
   newAssignmentStore?: NewAssignmentStore;
 }
-const PATHLENGTH = 4;
 interface State {
   isSortedByDate: boolean;
   appliedFilters: { [field: string]: number | string };
@@ -87,6 +86,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     await newAssignmentStore!.getArticles({ isNextPage, ...appliedFilters });
     await newAssignmentStore!.getGrades();
     await newAssignmentStore!.getSubjects();
+    this.props.newAssignmentStore!.visibilityArticles = true;
   }
 
   public componentWillUnmount() {
@@ -97,10 +97,10 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     newAssignmentStore!.resetCurrentArticlesPage();
     newAssignmentStore!.resetArticlesList();
     newAssignmentStore!.resetIsFetchedArticlesListFinished();
+    this.props.newAssignmentStore!.visibilityArticles = false;
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
-    const path = event.composedPath().length;
     const htmlPathArea = String(event.composedPath()[0]);
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
@@ -108,7 +108,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       this.closePanel();
     }
     if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
-      if (event.shiftKey && event.key === 'A' || event.shiftKey && event.key === 'a') {
+      if ((event.shiftKey && event.key === 'A') || (event.shiftKey && event.key === 'a')) {
         this.closePanel();
       }
     }
@@ -205,6 +205,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
   public closePanel = () => {
     this.props.newAssignmentStore!.setPreviewQuestionByIndex(0);
     this.context.changeContentType(AttachmentContentType.text);
+    this.props.newAssignmentStore!.visibilityArticles = false;
   }
 
   public switchNewestOldest = async (e: ChangeEvent<HTMLSelectElement>) => {

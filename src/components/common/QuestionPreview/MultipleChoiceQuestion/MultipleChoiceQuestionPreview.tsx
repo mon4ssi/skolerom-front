@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import classnames from 'classnames';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ import { MultipleChoiceQuestion, MultipleChoiceQuestionOption, TypedQuestion } f
 import { EditableMultipleChoiceQuestion, EditableMultipleChoiceQuestionOption, EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
 import { Answer, RedirectData } from 'assignment/questionary/Questionary';
 import { LocationState } from 'assignment/view/CurrentAssignmentPage/CurrentAssignmentPage';
+import { CurrentQuestionaryStore } from 'assignment/view/CurrentAssignmentPage/CurrentQuestionaryStore';
 
 import select from 'assets/images/select.svg';
 import selectBlueGray from 'assets/images/select-blue-gray.svg';
@@ -23,6 +24,7 @@ interface Props {
   redirectData?: RedirectData;
   isEvaluationStyle?: boolean;
   isStudentView?: boolean;
+  currentQuestionaryStore?: CurrentQuestionaryStore;
   handleShowArrowsTooltip?(status: boolean): void;
 }
 
@@ -36,6 +38,7 @@ interface RenderOptionProps {
   isStudentView?: boolean;
 }
 
+@inject('currentQuestionaryStore')
 @observer
 class RenderOption extends Component<RenderOptionProps>{
 
@@ -110,6 +113,15 @@ class MultipleChoiceQuestionPreviewComponent extends Component<Props & RouteComp
       answerValue = [...answerValue, title];
 
     answer!.setValue(answerValue, redirectData);
+  }
+
+  public async componentDidMount() {
+    const { currentQuestionaryStore } = this.props;
+    currentQuestionaryStore!.isMultipleQuestion = true;
+  }
+  public async componentWillUnmount() {
+    const { currentQuestionaryStore } = this.props;
+    currentQuestionaryStore!.isMultipleQuestion = false;
   }
 
   public renderOptions = () => {
