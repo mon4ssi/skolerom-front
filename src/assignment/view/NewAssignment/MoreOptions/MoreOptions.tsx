@@ -75,11 +75,11 @@ class MoreOptionsWrapper extends Component<MoreOptionsWrapperProps> {
   }
 
   public renderMoreOptions = () => (
-    <div className="tooltip">
+    <div className="tooltip" >
       <div className="left">
         <ul className="flexBox dirColumn">
           <li>
-            <a href="javascript:void(0)" onClick={this.duplicate} className="flexBox">
+            <a href="javascript:void(0)" onClick={this.duplicate} className="flexBox" >
               <span>{intl.get('new assignment.Duplicate question')}</span>
               <img src={duplicateIcon} alt="Duplicate qustion"/>
             </a>

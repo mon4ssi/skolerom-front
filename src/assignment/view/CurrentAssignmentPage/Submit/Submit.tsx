@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import intl from 'react-intl-universal';
 import { inject, observer } from 'mobx-react';
@@ -32,6 +32,7 @@ interface Props extends RouteComponentProps<{}, {}, LocationState> {
 @inject('currentQuestionaryStore', 'questionaryTeachingPathStore')
 @observer
 export class SubmitComponent extends Component<Props> {
+  private refbutton = createRef<HTMLButtonElement>();
 
   private clickRevert = () => {
     const { readOnly, revertQuestionary } = this.props;
@@ -70,6 +71,12 @@ export class SubmitComponent extends Component<Props> {
       });
   }
 
+  public async componentDidMount() {
+    if (this.refbutton.current) {
+      this.refbutton.current!.focus();
+    }
+  }
+
   public render() {
     const { numberOfQuestions, numberOfAnsweredQuestions, readOnly } = this.props;
     const submitDescriptionText = intl.get('current_assignment_page.submit_description', { numberOfAnsweredQuestions, numberOfQuestions });
@@ -90,17 +97,18 @@ export class SubmitComponent extends Component<Props> {
         {/*  {intl.get('current_assignment_page.delete_all_answers')}*/}
         {/*</div>*/}
 
-        <CreateButton
+        <button
           disabled={numberOfAnsweredQuestions !== numberOfQuestions}
-          className="Submit__button"
+          className="CreateButton Submit__button"
           onClick={this.publishQuestionary}
           title={intl.get('current_assignment_page.complete_and_submit_button')}
+          ref={this.refbutton}
         >
           <>
             <img className="Submit__image" src={check} alt={intl.get('current_assignment_page.submit')} />
           {intl.get('current_assignment_page.complete_and_submit_button')}
           </>
-        </CreateButton>
+        </button>
       </div>
     );
   }

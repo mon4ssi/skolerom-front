@@ -31,6 +31,11 @@
     justify-content: center;
     font-size: 0.9375rem;
     font-weight: 300;
+    &:focus {
+      outline: black;
+      outline-style: auto;
+      outline-offset: 2px;
+    }
 
     &.activePage {
       justify-content: flex-end;

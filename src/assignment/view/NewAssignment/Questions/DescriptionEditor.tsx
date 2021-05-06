@@ -24,7 +24,7 @@ export class DescriptionEditor extends Component<Props> {
   }
 
   public componentDidMount() {
-    this.bodyInput.current!.focus();
+    this.bodyInput.current!.getEditor().root.focus();
   }
 
   public render() {

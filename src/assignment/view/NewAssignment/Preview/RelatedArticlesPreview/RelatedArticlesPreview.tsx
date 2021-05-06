@@ -98,6 +98,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     newAssignmentStore!.resetArticlesList();
     newAssignmentStore!.resetIsFetchedArticlesListFinished();
     this.props.newAssignmentStore!.visibilityArticles = false;
+    document.getElementById('newAnswerRelatedButton')!.focus();
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {

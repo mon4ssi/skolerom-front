@@ -430,9 +430,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
       return <div className={'loading'}><Loader /></div>;
     }
     if (currentAnswer) {
-      if (currentAnswer.key.type === 'MULTIPLE_CHOICE') {
-        isVisibleButtonRender = true;
-      }
+      isVisibleButtonRender = true;
     }
 
     return !isLoading && (

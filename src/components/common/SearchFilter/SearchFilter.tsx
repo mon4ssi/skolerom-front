@@ -23,6 +23,8 @@ interface Props {
   date?: boolean;
   activity?: boolean;
   popularity?: boolean;
+  isTeachingPathPage?: boolean;
+  isAssignmentsPathPage?: boolean;
   width?: number;
 
   customGradesList?: Array<Grade>;
@@ -56,13 +58,15 @@ interface State {
 class SearchFilter extends Component<Props, State> {
   private container: RefObject<HTMLDivElement> = React.createRef();
   private space: RefObject<HTMLDivElement> = React.createRef();
+  private subjectRef: RefObject<HTMLSelectElement> = React.createRef();
+  private evaluationRef: RefObject<HTMLSelectElement> = React.createRef();
 
   public state = {
     displayWidthBreakpoint: 0,
   };
 
   public componentDidMount() {
-    const { assignmentListStore, customGradesList, customSubjectsList } = this.props;
+    const { isStudent, isAssignmentsPathPage, isTeachingPathPage, assignmentListStore, customGradesList, customSubjectsList } = this.props;
     if (!customGradesList) {
       assignmentListStore!.getGrades();
     }
@@ -70,7 +74,22 @@ class SearchFilter extends Component<Props, State> {
     if (!customSubjectsList) {
       assignmentListStore!.getSubjects();
     }
-
+    if (isTeachingPathPage) {
+      if (this.subjectRef.current) {
+        this.subjectRef.current!.focus();
+      }
+    }
+    if (isAssignmentsPathPage) {
+      if (isStudent) {
+        if (this.evaluationRef.current) {
+          this.evaluationRef.current!.focus();
+        }
+      } else {
+        if (this.subjectRef.current) {
+          this.subjectRef.current!.focus();
+        }
+      }
+    }
     window.addEventListener('resize', this.handleResize);
     this.createOrUpdateStyleElement(0); // needed here to reset style from previous SearchFilter
     this.handleResize();
@@ -93,7 +112,7 @@ class SearchFilter extends Component<Props, State> {
     const value = subjectFilterValue || 0;
 
     return (
-      <select className="SearchFilter__select" onChange={handleChangeSubject} value={value}>
+      <select className="SearchFilter__select" onChange={handleChangeSubject} value={value} ref={this.subjectRef} >
         <option key={0} value={0}>{intl.get('assignments search.Choose subject')}</option>
         {subjects}
       </select>
@@ -186,7 +205,7 @@ class SearchFilter extends Component<Props, State> {
     const value = isEvaluatedFilterValue || undefined;
 
     return (
-      <select className="SearchFilter__select" onChange={handleChangeEvaluationStatus} value={value}>
+      <select className="SearchFilter__select" onChange={handleChangeEvaluationStatus} value={value} ref={this.evaluationRef}>
         <option>{intl.get('assignments search.Evaluation status')}</option>
         <option value={BooleanFilter.TRUE}>{intl.get('assignments search.Evaluated')}</option>
         <option value={BooleanFilter.FALSE}>{intl.get('assignments search.Not evaluated')}</option>

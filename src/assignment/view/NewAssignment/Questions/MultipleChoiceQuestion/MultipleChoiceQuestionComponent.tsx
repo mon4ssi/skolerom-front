@@ -31,7 +31,6 @@ class MultipleChoiceQuestionContent extends Component<Props> {
 
   private addNewOption = () => {
     const { question } = this.props;
-
     question.addNewOption();
   }
 

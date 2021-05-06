@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 
@@ -20,6 +20,7 @@ interface Props {
 @observer
 export class SetRelatedArticles extends Component<Props> {
   public static contextType = AttachmentContentTypeContext;
+  public refButton = createRef<HTMLButtonElement>();
 
   private renderButtonTitle() {
     const { newAssignmentStore } = this.props;
@@ -99,9 +100,9 @@ export class SetRelatedArticles extends Component<Props> {
 
         <div className="articlesWrapper">
           {this.renderArticleInput(selectedArticles)}
-          <CreateButton className="newAnswerButton" title={this.renderButtonTitle()} onClick={this.handleRelatedArticles}>
+          <button className="CreateButton newAnswerButton" id="newAnswerRelatedButton" title={this.renderButtonTitle()} onClick={this.handleRelatedArticles}>
             {this.renderButtonTitle()}
-          </CreateButton>
+          </button>
         </div>
 
       </div>

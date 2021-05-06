@@ -10,18 +10,10 @@
   border: 1px solid #D3D9DE;
 
   .controls {
-    background: #E7ECEF;
-    border-radius: 5px;
-    margin-right: 10px;
-    height: 35px;
     justify-content: center;
-    padding: 0 10px;
-    cursor: pointer;
-    border: 1px solid #939FA7;
-    font-size: 0.9375rem;
-    font-weight: 300;
     min-width: 0;
     flex-shrink: 10;
+    margin-right: 10px;
 
     &:last-child {
       margin-right: 0;
@@ -29,6 +21,18 @@
 
     a {
       @include text-shrink;
+      background: #E7ECEF;
+      border-radius: 5px;
+      padding: 7px 10px;
+      cursor: pointer;
+      border: 1px solid #939FA7;
+      font-size: 0.9375rem;
+      font-weight: 300;
+      &:focus {
+        outline: black;
+        outline-style: auto;
+        outline-offset: 2px;
+      }
     }
 
     &:hover {
@@ -78,6 +82,11 @@
     width: 100%;
     height: 100%;
     justify-content: center;
+    &:focus {
+      outline: black;
+      outline-style: auto;
+      outline-offset: 2px;
+    }
   }
 }
 

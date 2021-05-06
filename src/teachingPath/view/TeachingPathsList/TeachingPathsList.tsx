@@ -340,6 +340,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
           subject
           grade
           popularity
+          isTeachingPathPage
           placeholder={intl.get('teaching path search.Search for teaching paths')}
           // METHODS
           handleChangeSubject={this.handleChangeSubject}

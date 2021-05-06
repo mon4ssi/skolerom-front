@@ -22,6 +22,7 @@ interface OptionComponentProps {
   onDelete: OptionDeleteHandler;
   hasEnoughOptionsAndRightOptions: boolean;
   newAssignmentStore?: NewAssignmentStore;
+  optionLengthBoolean: boolean;
 }
 
 @inject('newAssignmentStore')
@@ -43,7 +44,7 @@ class OptionComponent extends Component<OptionComponentProps> {
   }
 
   public render() {
-    const { option, hasEnoughOptionsAndRightOptions, newAssignmentStore } = this.props;
+    const { optionLengthBoolean, option, hasEnoughOptionsAndRightOptions, newAssignmentStore } = this.props;
     const placeholder = intl.get('new assignment.write_your_answer_here');
     const hasErrorOption = (!option.isValid || !hasEnoughOptionsAndRightOptions) && newAssignmentStore!.showValidationErrors;
     const className = classnames('option', {
@@ -59,7 +60,7 @@ class OptionComponent extends Component<OptionComponentProps> {
           placeholder={placeholder}
           aria-required="true"
           aria-invalid="false"
-          autoFocus
+          autoFocus={optionLengthBoolean && true}
         />
 
         <div className="statusBox">
@@ -85,6 +86,7 @@ const SortableOptionComponent = SortableElement(OptionComponent);
 interface OptionsListComponentProps {
   options: Array<EditableMultipleChoiceQuestionOption>;
   hasEnoughOptionsAndRightOptions: boolean;
+  optionLengthBoolean: boolean;
   onDeleteOption: OptionDeleteHandler;
   setCurrentQuestion(): void;
 }
@@ -93,6 +95,10 @@ interface OptionsListComponentProps {
 class OptionsListComponent extends Component<OptionsListComponentProps> {
   private renderOption = (option: EditableMultipleChoiceQuestionOption, index: number) => {
     const key = `option-${index}`;
+    let constantTrue = false;
+    if (index > 0) {
+      constantTrue = true;
+    }
 
     return (
       <SortableOptionComponent
@@ -102,6 +108,7 @@ class OptionsListComponent extends Component<OptionsListComponentProps> {
         index={index}
         onDelete={this.props.onDeleteOption}
         hasEnoughOptionsAndRightOptions={this.props.hasEnoughOptionsAndRightOptions}
+        optionLengthBoolean={constantTrue}
       />
     );
   }
@@ -145,6 +152,7 @@ export class OptionsList extends Component<OptionsListProps> {
       <OptionsListHolder
         options={question.options}
         hasEnoughOptionsAndRightOptions={question.hasEnoughOptionsAndRightOptions}
+        optionLengthBoolean={false}
         onDeleteOption={this.onDeleteOption}
         helperClass="z10"
         distance={distance}

@@ -29,6 +29,7 @@ interface OptionComponentProps {
   hasEnoughOptionsAndRightOptions: boolean;
   newAssignmentStore?: NewAssignmentStore;
   orderQuestion: number;
+  optionLengthBoolean: boolean;
 }
 
 @inject('newAssignmentStore')
@@ -96,7 +97,7 @@ class OptionComponent extends Component<OptionComponentProps> {
   }
 
   public render() {
-    const { option, hasEnoughOptionsAndRightOptions, newAssignmentStore } = this.props;
+    const { optionLengthBoolean, option, hasEnoughOptionsAndRightOptions, newAssignmentStore } = this.props;
 
     const placeholder = intl.get('new assignment.Image caption');
     const hasErrorOption = (!option.isValid || !hasEnoughOptionsAndRightOptions) && newAssignmentStore!.showValidationErrors;
@@ -121,7 +122,7 @@ class OptionComponent extends Component<OptionComponentProps> {
           onClick={this.closeImageChoice}
           aria-required="true"
           aria-invalid="false"
-          autoFocus
+          autoFocus={optionLengthBoolean && true}
         />
 
         <div className="statusBox" onClick={this.closeImageChoice}>
@@ -147,6 +148,7 @@ const SortableOptionComponent = SortableElement(OptionComponent);
 interface OptionsListComponentProps {
   options: Array<EditableImageChoiceQuestionOption>;
   hasEnoughOptionsAndRightOptions: boolean;
+  optionLengthBoolean: boolean;
   onDeleteOption: OptionDeleteHandler;
   orderQuestion: number;
   setCurrentQuestion(): void;
@@ -156,6 +158,10 @@ interface OptionsListComponentProps {
 class ImageOptionsListComponent extends Component<OptionsListComponentProps> {
   private renderOption = (option: EditableImageChoiceQuestionOption, index: number) => {
     const key = `option-${index}`;
+    let constantTrue = false;
+    if (index > 0) {
+      constantTrue = true;
+    }
 
     return (
       <SortableOptionComponent
@@ -166,6 +172,7 @@ class ImageOptionsListComponent extends Component<OptionsListComponentProps> {
         onDelete={this.props.onDeleteOption}
         hasEnoughOptionsAndRightOptions={this.props.hasEnoughOptionsAndRightOptions}
         orderQuestion={this.props.orderQuestion}
+        optionLengthBoolean={constantTrue}
       />
     );
   }
@@ -210,6 +217,7 @@ export class ImageOptionsList extends Component<OptionsListProps> {
         options={question.options}
         hasEnoughOptionsAndRightOptions={question.hasEnoughOptionsAndRightOptions}
         onDeleteOption={this.onDeleteOption}
+        optionLengthBoolean={false}
         helperClass="z10"
         distance={distance}
         onSortEnd={this.onSortEnd}

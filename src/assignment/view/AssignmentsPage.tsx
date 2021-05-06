@@ -239,6 +239,7 @@ class AssignmentsPageWrapper extends Component<Props> {
           subject
           grade
           popularity
+          isAssignmentsPathPage
           placeholder={intl.get('assignments search.Search for assignments')}
           // METHODS
           handleChangeSubject={this.handleChangeSubject}
