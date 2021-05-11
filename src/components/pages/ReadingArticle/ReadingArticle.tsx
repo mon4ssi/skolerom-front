@@ -85,10 +85,8 @@ export class ReadingArticle extends Component<Props, State> {
     const htmlPathArea = String(event.composedPath()[0]);
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
-    if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
-      if (event.shiftKey && event.key === 'F' || event.shiftKey && event.key === 'f') {
-        this.props.finishReading(this.state.graduation!);
-      }
+    if (event.shiftKey && event.key === 'F' || event.shiftKey && event.key === 'f') {
+      this.props.finishReading(this.state.graduation!);
     }
   }
 

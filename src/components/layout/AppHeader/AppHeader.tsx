@@ -28,6 +28,8 @@ interface HeaderNavigationLink {
   submenuItems?: Array<HeaderNavigationLink>;
 }
 
+const LEFTCODE = 8592;
+const RIGHTCODE = 8594;
 const ANIMATION_TIMEOUT = 200;
 
 const headerLinks: Array<HeaderNavigationLink> = [
@@ -143,7 +145,6 @@ interface HeaderState {
 @inject('loginStore', 'uiStore')
 @observer
 class AppHeader extends Component<HeaderProps, HeaderState> {
-
   public readonly state: HeaderState = {
     modalVisible: Modals.NONE,
     isModalKeyboard: false
@@ -278,6 +279,14 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         <li>
           <strong>Shift + F</strong>
           <p>{intl.get('assignment preview.Finish reading article')}</p>
+        </li>
+        <li>
+          <strong>Shift + {String.fromCharCode(LEFTCODE)}</strong>
+          <p>{intl.get('pagination.Previous page')}</p>
+        </li>
+        <li>
+          <strong>Shift + {String.fromCharCode(RIGHTCODE)}</strong>
+          <p>{intl.get('pagination.Next page')}</p>
         </li>
       </ul>
     </div>

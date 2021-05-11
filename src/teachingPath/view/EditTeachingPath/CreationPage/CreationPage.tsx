@@ -65,7 +65,6 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   public componentDidMount() {
     if (this.titleRef && this.titleRef.current) {
       const valueLength = this.titleRef.current.props.value!.length;
-
       this.handleChangeNumberOfTitleCols(valueLength);
     }
   }
@@ -396,7 +395,6 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         mergeLineAfterButton: index === parentNode.children.length - 1 && parentNode.children.length > 1 && !readOnly
       }
     );
-
     return (
       <div className={containerClassNames}>
         {this.renderItems()}

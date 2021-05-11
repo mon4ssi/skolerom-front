@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { observer, inject } from 'mobx-react';
 import intl from 'react-intl-universal';
 import classnames from 'classnames';
@@ -27,6 +27,13 @@ export class NestedOrderNumber extends Component<Props> {
 
   public static contextType = ItemContentTypeContext;
 
+  public buttonref = React.createRef<HTMLButtonElement>();
+  public componentDidMount() {
+    if (this.buttonref.current) {
+      this.buttonref.current.focus();
+    }
+  }
+
   public handleEditClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { editTeachingPathStore, node } = this.props;
 
@@ -51,7 +58,7 @@ export class NestedOrderNumber extends Component<Props> {
   }
 
   public renderEditIcon = () => (
-    <button onClick={this.handleEditClick} title={intl.get('generals.edit')}>
+    <button onClick={this.handleEditClick} title={intl.get('generals.edit')} ref={this.buttonref}>
       <img
         src={editImg}
         alt={intl.get('generals.edit')}

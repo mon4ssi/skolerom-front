@@ -71,14 +71,14 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     }
     if (this.context.contentType === AttachmentContentType.video) {
       return (
-        <>
+        <button title="Attachment Media">
           <div className={'playButton'}>
             <img src={play} alt="play"/>
           </div>
           <video width="100%" height="100%" style={{ objectFit: 'cover' }}>
             <source src={attachment.path} type="video/mp4" />
           </video>
-          </>
+        </button>
       );
     }
   }

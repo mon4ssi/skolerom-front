@@ -250,10 +250,14 @@
     top: 50%;
     transform: translateX(-50%)translateY(-50%);
     border-radius: 10px;
-    min-width: 350px;
+    min-width: 330px;
+    padding-top: 15px;
   }
   &__list {
     margin-top: 25px;
+    &:first-child {
+      margin-top: 0px;
+    }
     h2 {
       font-size: 18px;
       border-bottom: solid 1px #0000002e;
@@ -266,6 +270,9 @@
       align-items: center;
       line-height: 15px;
       border-bottom: solid 1px #97979729;
+      p {
+        margin: 8px 0px;
+      }
     }
   }
   &__close {
