@@ -75,7 +75,18 @@
     "Library": "Library",
     "teacher": "Teacher",
     "student": "Student",
-    "content_manager": "Content manager"
+    "content_manager": "Content manager",
+    "title": {
+      "School": "Read school articles",
+      "Library": "Use our library content",
+      "Articles": "Read our articles",
+      "Publications": "Read our magazines",
+      "Sound articles": "Listen to our sound articles",
+      "About skolerom": "Read about skolerom",
+      "My account": "Account",
+      "Help": "Help",
+      "keyboard": "keyboards"
+    }
   },
   "sidebar": {
     "Activity": "Activity",

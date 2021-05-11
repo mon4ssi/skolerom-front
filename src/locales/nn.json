@@ -71,11 +71,22 @@
     "selected": "valt",
     "Log in": "Logg inn",
     "About skolerom": "Om skolerom",
-    "School": "Skole",
+    "School": "Skoleartikler",
     "Library": "Biblioteket",
     "teacher": " Lærar",
     "student": "Elev",
-    "content_manager": "Redaktør"
+    "content_manager": "Redaktør",
+    "title": {
+      "School": "Gå til skoleartikler",
+      "Library": "Bruk innhold fra vårt bibliotek",
+      "Articles": "Les og finn artikler",
+      "Publications": "Les våre temabøker",
+      "Sound articles": "Lytt til våre lydartikler",
+      "About skolerom": "Les om skolerom",
+      "My account": "Kontoinnstillinger",
+      "Help": "Hjelp",
+      "keyboard": "keyboards"
+    }
   },
   "sidebar": {
     "Activity": "Aktivitet",
@@ -90,15 +101,15 @@
       "Activity": "Gå til aktivitet oversyn",
       "Teaching Paths": "Gå til læringsstier",
       "Assignments": "Gå til oppgåver",
-      "Students": "Gå til Elever oversyn",
-      "Evaluation": "Gå til vurdering oversyn"
+      "Students": "Gå til elevoversikten",
+      "Evaluation": "Gå til vurderinger"
     },
     "title": {
       "Activity": "Gå til aktivitet oversyn",
       "Teaching Paths": "Gå til læringsstier",
       "Assignments": "Gå til oppgåver",
-      "Students": "Gå til Elever oversyn",
-      "Evaluation": "Gå til vurdering oversyn"
+      "Students": "Gå til elevoversikten",
+      "Evaluation": "Gå til vurderinger"
     }
   },
   "subjects": {
@@ -572,7 +583,7 @@
   },
   "students_list": {
     "change_font_size": "Endre skriftstorleik",
-    "title":"Studenter",
+    "title":"Elever",
     "tabs": {
       "my_students": "Mine elevar",
       "previous_students": "Tidlegare elevar",

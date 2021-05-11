@@ -92,14 +92,14 @@ const renderHeaderLink = (link: HeaderNavigationLink) => {
   if (link.dropdown) {
     const renderSubmenu = (item: HeaderNavigationLink) => (
       <li key={item.name} className={'AppHeader__dropdownItem'}>
-        <a href={item.url}>{intl.get(`header.${item.name}`)}</a>
+        <a href={item.url} title={intl.get(`header.title.${link.name}`)}>{intl.get(`header.${item.name}`)}</a>
       </li>
     );
 
     return (
       <li key={link.name} className="AppHeader__navigationItem tc1 fs17 fw500">
         <div className="AppHeader__navigationItemText">
-          <a href={link.url} className="AppHeader__dropdown">{intl.get(`header.${link.name}`)}</a>
+          <a href={link.url} className="AppHeader__dropdown" title={intl.get(`header.title.${link.name}`)}>{intl.get(`header.${link.name}`)}</a>
           <div className={'AppHeader__submenuWrapper'}>
             <ul className={'AppHeader__submenu'}>
               {link.submenuItems!.map(renderSubmenu)}
@@ -113,7 +113,7 @@ const renderHeaderLink = (link: HeaderNavigationLink) => {
   return (
     <li key={link.name} className="AppHeader__navigationItem tc1 fs17 fw500">
       <div className="AppHeader__navigationItemText">
-        <a href={link.url}>{intl.get(`header.${link.name}`)}</a>
+        <a href={link.url} title={intl.get(`header.title.${link.name}`)}>{intl.get(`header.${link.name}`)}</a>
       </div>
     </li>
   );
@@ -188,7 +188,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
 
     return loginStore!.currentUser ? (
       <li className="AppHeader__navigationItem" onClick={this.showUserModal}>
-        <a href="javascript:void(0)" className="AppHeader__navigationItemText">
+        <a href="javascript:void(0)" className="AppHeader__navigationItemText" title={intl.get('header.title.My account')}>
           {intl.get('header.My account')}
         </a>
         <img
@@ -200,7 +200,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       </li>
     ) : (
       <li className="AppHeader__navigationItem">
-        <a href={`${process.env.REACT_APP_BASE_URL}/api/dataporten/auth`}>
+        <a href={`${process.env.REACT_APP_BASE_URL}/api/dataporten/auth`} title={intl.get('header.Log in')}>
           {intl.get('header.Log in')}
         </a>
       </li>
@@ -363,16 +363,16 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   private renderQuestionTab = () => (
     <li className="AppHeader__navigationItem helpNavigation">
       <div className="AppHeader__navigationItemText">
-        <a href="javascript:void(0)" className="AppHeader__dropdown">
-          <img src={question} alt="question" className="AppHeader__navigationItemImage"/>
+        <a href="javascript:void(0)" className="AppHeader__dropdown" title={intl.get('header.title.Help')}>
+          <img src={question} className="AppHeader__navigationItemImage" title={intl.get('header.title.Help')} alt={intl.get('header.title.Help')}/>
         </a>
         <div className="AppHeader__submenuWrapper">
           <ul className="AppHeader__submenu">
             <li className="AppHeader__dropdownItem">
-              <a href="https://skolerom.no/support" target="_blank">{intl.get('generals.support')}</a>
+              <a href="https://skolerom.no/support" title={intl.get('header.title.Help')} target="_blank">{intl.get('generals.support')}</a>
             </li>
             <li className="AppHeader__dropdownItem">
-              <a href="javascript:void(0)" onClick={this.openKeyboardModal}>{intl.get('generals.keyboard')}</a>
+              <a href="javascript:void(0)" onClick={this.openKeyboardModal} title={intl.get('header.title.keyboard')}>{intl.get('generals.keyboard')}</a>
             </li>
           </ul>
         </div>

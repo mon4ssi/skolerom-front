@@ -7,18 +7,21 @@
 
   .cardList {
     display: flex;
-    flex-wrap: wrap;
-    margin: 0 -10px;
+    flex-wrap: wrap;    
     flex-flow: row wrap;
     width: auto;
     overflow: auto;
     height: 100%;
-
+    margin-top: 10px;
+    justify-content: space-between;
+    transition: 0.3s;
     .InfoCard {
-      margin: 10px;
-      width: 285px;
+      width: calc(16.68% - 15px);
       min-height: 300px;
-
+      margin-bottom: 20px;
+      &:hover {
+        box-shadow: 0 8px 10px #00000061;
+      }
       .cardTitle {
         height: 44px;
       }
@@ -34,25 +37,44 @@
     }
   }
 }
-@media screen and (max-width: 575px) {
+
+
+@media screen and (max-width: 1800px) {
   .teachingPathsList .cardList .InfoCard {
-    width: 100% ;
-    min-height: auto;
+    width: calc(20% - 15px);
   }
 }
-@media screen and (min-width: 768px) and (max-width: 992px) {
+@media screen and (max-width: 1450px) {
   .teachingPathsList .cardList .InfoCard {
-    width: 30% ;
+    width: calc(25% - 15px);
   }
+}
+@media screen and (max-width: 1200px) {
+  .teachingPathsList .cardList .InfoCard {
+    width: calc(33.33% - 15px);
+  }
+}
+@media screen and (max-width: 575px) {
+  .teachingPathsList {
+    height: auto;
+    .cardList {
+      flex-flow: nowrap;
+      width: calc(100% + 19px);
+      .InfoCard {
+        width: calc(100% - 50px);
+        min-height: auto;
+        flex: none;
+        margin-right: 10px;
+        margin-bottom: 5px;
+        &:hover {
+          box-shadow: none;
+        }
+      }
+    }
+  }  
 }
 @media screen and (min-width: 576px) and (max-width: 767px) {
   .teachingPathsList .cardList .InfoCard {
-    width: 40% ;
+    width: calc(50% - 15px);
   }
-}
-.teachingPathsList .cardList .InfoCard {
-  transition: 0.3s;
-}
-.teachingPathsList .cardList .InfoCard:hover {
-  box-shadow: 0 8px 10px #00000061;
 }
