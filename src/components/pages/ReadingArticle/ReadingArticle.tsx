@@ -118,10 +118,6 @@ export class ReadingArticle extends Component<Props, State> {
     });
   }
 
-  public componentWillUnmount() {
-    document.removeEventListener('keyup', this.handleKeyboardControl);
-  }
-
   public render() {
     const { closeArticle, titleCurrentArticle, shownArticleId } = this.props;
     const { newArticleId } = this.state;

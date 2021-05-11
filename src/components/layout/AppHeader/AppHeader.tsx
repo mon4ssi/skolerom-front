@@ -275,6 +275,10 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
           <strong>Shift + O</strong>
           <p>{intl.get('generals.accesibility_text.shift_o')}</p>
         </li>
+        <li>
+          <strong>Shift + F</strong>
+          <p>{intl.get('assignment preview.Finish reading article')}</p>
+        </li>
       </ul>
     </div>
   )

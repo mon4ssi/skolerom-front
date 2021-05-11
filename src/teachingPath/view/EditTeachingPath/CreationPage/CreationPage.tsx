@@ -58,7 +58,6 @@ interface NodeContentState {
 class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
   public titleRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
-
   public state = {
     numberOfTitleCols: 20
   };
@@ -288,7 +287,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   }
 
   public renderAddingButtons = (withUnmergeButton: boolean) => {
-    const { node } = this.props;
+    const { nestedOrder, node } = this.props;
     const containerClassNames = classnames(
       'teachingPathButtons flexBox justifyCenter',
       withUnmergeButton && 'withUnmergeButton',
@@ -300,19 +299,19 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     return !node.children.length && (
       <div className={containerClassNames}>
         {node.type !== TeachingPathNodeType.Root && <div className="topVerticalLine"/>}
-        <AddingButtons node={node}/>
+        <AddingButtons node={node} nester={nestedOrder}/>
       </div>
     );
   }
 
   public renderInput = () => {
-    const { node, readOnly } = this.props;
+    const { nestedOrder, node, readOnly } = this.props;
     const placeholder = node.type === TeachingPathNodeType.Root ?
       intl.get('edit_teaching_path.paths.main_teaching_path_title') :
       intl.get('edit_teaching_path.paths.teaching_path_title');
 
     return node.type === TeachingPathNodeType.Root || node.children.length ? (
-      <div className="teachingPathItemsTitleDiv">
+      <div className="teachingPathItemsTitleDiv" data-number={nestedOrder} >
       <TextAreaAutosize
         ref={this.titleRef}
         className="teachingPathItemsTitle fw500"

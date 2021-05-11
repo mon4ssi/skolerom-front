@@ -1,4 +1,4 @@
-import React, { Component, SyntheticEvent } from 'react';
+import React, { Component, SyntheticEvent, createRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import { SortableContainer, SortableElement, SortEnd } from 'react-sortable-hoc';
 import intl from 'react-intl-universal';
@@ -36,6 +36,7 @@ interface OptionComponentProps {
 @observer
 class OptionComponent extends Component<OptionComponentProps> {
   public static contextType = AttachmentContentTypeContext;
+  private refbutton = createRef<HTMLButtonElement>();
 
   private onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (lettersNoEn(e.target.value)) {
@@ -79,6 +80,12 @@ class OptionComponent extends Component<OptionComponentProps> {
     }
     return landscape;
   }
+  public async componentDidMount() {
+    const { optionLengthBoolean } = this.props;
+    if (optionLengthBoolean && this.refbutton.current) {
+      this.refbutton.current!.focus();
+    }
+  }
 
   public closeImageChoice = () => {
     const { newAssignmentStore, orderQuestion } = this.props;
@@ -97,7 +104,7 @@ class OptionComponent extends Component<OptionComponentProps> {
   }
 
   public render() {
-    const { optionLengthBoolean, option, hasEnoughOptionsAndRightOptions, newAssignmentStore } = this.props;
+    const { option, hasEnoughOptionsAndRightOptions, newAssignmentStore } = this.props;
 
     const placeholder = intl.get('new assignment.Image caption');
     const hasErrorOption = (!option.isValid || !hasEnoughOptionsAndRightOptions) && newAssignmentStore!.showValidationErrors;
@@ -110,7 +117,7 @@ class OptionComponent extends Component<OptionComponentProps> {
     return (
       <div className={className} onClick={this.setCurrentOption}>
         <img src={this.renderMiniImage()} alt="landscape" className={'miniImage'}/>
-        <button onClick={this.handleImage} title="add-remove">
+        <button onClick={this.handleImage} title="add-remove" ref={this.refbutton} >
           <img src={this.renderImageHandler()} alt="add-remove" title="add-remove" className={'handleImage'}/>
         </button>
         <input
@@ -122,7 +129,6 @@ class OptionComponent extends Component<OptionComponentProps> {
           onClick={this.closeImageChoice}
           aria-required="true"
           aria-invalid="false"
-          autoFocus={optionLengthBoolean && true}
         />
 
         <div className="statusBox" onClick={this.closeImageChoice}>

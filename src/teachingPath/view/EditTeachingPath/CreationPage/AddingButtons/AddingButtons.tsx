@@ -18,6 +18,7 @@ interface Props extends RouteComponentProps {
   node?: EditableTeachingPathNode;
   editTeachingPathStore?: EditTeachingPathStore;
   newAssignmentStore?: NewAssignmentStore;
+  nester: number;
 }
 
 @inject('editTeachingPathStore', 'newAssignmentStore')
