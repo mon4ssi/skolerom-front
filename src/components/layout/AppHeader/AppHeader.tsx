@@ -94,7 +94,7 @@ const renderHeaderLink = (link: HeaderNavigationLink) => {
   if (link.dropdown) {
     const renderSubmenu = (item: HeaderNavigationLink) => (
       <li key={item.name} className={'AppHeader__dropdownItem'}>
-        <a href={item.url} title={intl.get(`header.title.${link.name}`)}>{intl.get(`header.${item.name}`)}</a>
+        <a href={item.url} title={intl.get(`header.title.${item.name}`)}>{intl.get(`header.${item.name}`)}</a>
       </li>
     );
 

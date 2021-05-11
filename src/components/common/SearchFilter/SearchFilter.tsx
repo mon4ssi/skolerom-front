@@ -261,7 +261,7 @@ class SearchFilter extends Component<Props, State> {
           width: 100%;
         }
         .SearchFilter__search {
-          width: 100%;
+          width: calc(100% - 34px);
           border-left: 0px;
           padding-left: 2px;
         }
