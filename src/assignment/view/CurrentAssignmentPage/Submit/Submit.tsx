@@ -72,6 +72,7 @@ export class SubmitComponent extends Component<Props> {
   }
 
   public async componentDidMount() {
+    const { numberOfQuestions, numberOfAnsweredQuestions } = this.props;
     if (this.refbutton.current) {
       this.refbutton.current!.focus();
     }

@@ -412,6 +412,37 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     }
   }
 
+  public sendTitleActivity = () => {
+    const currentUser = this.props.loginStore!.currentUser;
+    if (currentUser && currentUser.type === UserType.Student) {
+      return (
+        <li className="AppHeader__navigationItem tc1 fs17 fw500 ">
+          <div className="AppHeader__navigationItemText">
+            <a href="/activity" className="permanActive" title={intl.get('header.student_room')}>{intl.get('header.student_room')}</a>
+          </div>
+        </li>
+      );
+    }
+    if (currentUser && currentUser.type === UserType.Teacher) {
+      return (
+        <li className="AppHeader__navigationItem tc1 fs17 fw500 ">
+          <div className="AppHeader__navigationItemText">
+            <a href="/activity" className="permanActive" title={intl.get('header.teacher_room')}>{intl.get('header.teacher_room')}</a>
+          </div>
+        </li>
+      );
+    }
+    if (currentUser && currentUser.type === UserType.ContentManager) {
+      return (
+        <li className="AppHeader__navigationItem tc1 fs17 fw500 ">
+          <div className="AppHeader__navigationItemText">
+            <a href="/activity" className="permanActive" title={intl.get('header.teacher_room')}>{intl.get('header.teacher_room')}</a>
+          </div>
+        </li>
+      );
+    }
+  }
+
   public async componentDidMount() {
     document.addEventListener('keyup', this.handleKeyboardControl);
   }
@@ -427,6 +458,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     return (
       <>
         <ul className="AppHeader__navigation">
+          {this.sendTitleActivity()}
           {linksList.map(renderHeaderLink)}
           {this.renderAccountTab()}
           {this.renderQuestionTab()}
@@ -505,7 +537,6 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
             </div>
           </NavLink>
         </div>
-
         {!fromAssignmentPassing && !fromTeachingPathPassing && this.renderNavigation()}
         {!isStudent && fromAssignmentPassing && this.renderCopyButton('assignment list.Copy assignment')}
         {!isStudent && fromTeachingPathPassing && this.renderCopyButton('teaching_paths_list.copy')}

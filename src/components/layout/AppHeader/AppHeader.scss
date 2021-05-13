@@ -37,6 +37,9 @@
       &:hover {
         color: #E2017B;   
       }
+      &.permanActive {
+        color: #E2017B;   
+      }
     }
     &.helpNavigation {
       .AppHeader__dropdown::after {

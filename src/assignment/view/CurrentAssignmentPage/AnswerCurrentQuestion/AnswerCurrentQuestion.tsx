@@ -105,7 +105,6 @@ class AnswerCurrentQuestion extends Component<Props> {
     if (redirectData !== undefined && currentQuestionaryStore!.currentQuestionIndex < 0) {
       currentQuestionaryStore!.setCurrentQuestion(0);
     }
-
     return answer ? (
       <QuestionPreview
         isStudentView
