@@ -369,6 +369,12 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     }
   }
 
+  private dropDownKeyboard = () => (
+    <li className="AppHeader__dropdownItem">
+      <a href="javascript:void(0)" onClick={this.openKeyboardModal} title={intl.get('header.title.keyboard')}>{intl.get('generals.keyboard')}</a>
+    </li>
+  )
+
   private renderQuestionTab = () => (
     <li className="AppHeader__navigationItem helpNavigation">
       <div className="AppHeader__navigationItemText">
@@ -380,9 +386,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
             <li className="AppHeader__dropdownItem">
               <a href="https://skolerom.no/support" title={intl.get('header.title.Help')} target="_blank">{intl.get('generals.support')}</a>
             </li>
-            <li className="AppHeader__dropdownItem">
-              <a href="javascript:void(0)" onClick={this.openKeyboardModal} title={intl.get('header.title.keyboard')}>{intl.get('generals.keyboard')}</a>
-            </li>
+            {this.props.loginStore!.currentUser && this.dropDownKeyboard()}
           </ul>
         </div>
       </div>
