@@ -86,13 +86,6 @@ class ImageChoiceQuestion extends Component<Props> {
             <span className={`questionTitleText ${hasError && 'questionTitleText-hasError'}`}>{intl.get('new assignment.IMAGE_CHOICE')}</span>
           </div>
 
-          <div className={`${hasError && 'questionTitleText-hasError'} flexBox`}>
-            {intl.get('new assignment.Question')} {question.orderPosition + 1}
-            <MoreOptions
-              question={question}
-              newAssignmentStore={newAssignmentStore}
-            />
-          </div>
         </div>
 
         <TextAreaAutosize
@@ -103,6 +96,15 @@ class ImageChoiceQuestion extends Component<Props> {
           maxLength={MAX_DESCRIPTION_LENGTH}
           autoFocus
         />
+        <div className="absQuestionMoreOptions">
+          <div className={`${hasError && 'questionTitleText-hasError'} flexBox`}>
+            {intl.get('new assignment.Question')} {question.orderPosition + 1}
+            <MoreOptions
+              question={question}
+              newAssignmentStore={newAssignmentStore}
+            />
+          </div>
+        </div>
 
         <MappingContentBlocks question={question} helperClass="content-block-dragged" onSortEnd={this.onSortEnd} useDragHandle />
 

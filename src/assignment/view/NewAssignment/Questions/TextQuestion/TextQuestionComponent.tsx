@@ -69,14 +69,6 @@ class TextQuestionContent extends Component<TextQuestionProps> {
             <img src={hasError ? textQuestionIconPink : textQuestionIcon} alt="Text question" className={'questionIcon'}/>
             <span className={`questionTitleText ${hasError && 'questionTitleText-hasError'}`}>{intl.get('new assignment.TEXT')}</span>
           </div>
-
-          <div className={`${hasError && 'questionTitleText-hasError'} flexBox`}>
-            {intl.get('new assignment.Question')} {order}
-            <MoreOptions
-              question={question}
-              newAssignmentStore={newAssignmentStore}
-            />
-          </div>
         </div>
         <label id={titleId} className="hidden">{intl.get('new assignment.Enter a question')}</label>
         <TextAreaAutosize
@@ -88,6 +80,15 @@ class TextQuestionContent extends Component<TextQuestionProps> {
           aria-labelledby={titleId}
           autoFocus
         />
+        <div className="absQuestionMoreOptions">
+          <div className={`${hasError && 'questionTitleText-hasError'} flexBox`}>
+            {intl.get('new assignment.Question')} {order}
+            <MoreOptions
+              question={question}
+              newAssignmentStore={newAssignmentStore}
+            />
+          </div>
+        </div>
 
         <MappingContentBlocks question={question} helperClass="content-block-dragged" onSortEnd={this.onSortEnd} useDragHandle />
 

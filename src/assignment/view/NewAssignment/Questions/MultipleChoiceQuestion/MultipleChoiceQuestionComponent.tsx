@@ -84,14 +84,6 @@ class MultipleChoiceQuestionContent extends Component<Props> {
             />
             <span className={`questionTitleText ${hasError && 'questionTitleText-hasError'}`}>{intl.get('new assignment.MULTIPLE_CHOICE')}</span>
           </div>
-
-          <div className={`${hasError && 'questionTitleText-hasError'} flexBox`}>
-            {intl.get('new assignment.Question')} {question.orderPosition + 1}
-            <MoreOptions
-              question={question}
-              newAssignmentStore={newAssignmentStore}
-            />
-          </div>
         </div>
 
         <label id={titleId} className="hidden">{intl.get('new assignment.Enter a question')}</label>
@@ -104,6 +96,15 @@ class MultipleChoiceQuestionContent extends Component<Props> {
           aria-labelledby={titleId}
           autoFocus
         />
+        <div className="absQuestionMoreOptions">
+          <div className={`${hasError && 'questionTitleText-hasError'} flexBox`}>
+            {intl.get('new assignment.Question')} {question.orderPosition + 1}
+            <MoreOptions
+              question={question}
+              newAssignmentStore={newAssignmentStore}
+            />
+          </div>
+        </div>
 
         <MappingContentBlocks question={question} helperClass="content-block-dragged" onSortEnd={this.onSortEnd} useDragHandle />
 

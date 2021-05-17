@@ -55,6 +55,19 @@
   }
 }
 
+.absQuestionMoreOptions {
+  position: absolute;
+  top: 45px;
+  right: 20px;
+}
+.NewTextQuestion {
+  position: relative;
+}
+.NewMultipleChoiceQuestion {
+  position: relative;
+}
+
+
 .NewAssignment {
   .AddQuestion {
     background: #E7ECEF;
