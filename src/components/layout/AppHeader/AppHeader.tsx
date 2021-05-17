@@ -211,12 +211,12 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   private renderRole = () => {
     const currentUser = this.props.loginStore!.currentUser;
 
-    if (currentUser && currentUser.type === UserType.Teacher) {
+    /*if (currentUser && currentUser.type === UserType.Teacher) {
       return intl.get('header.teacher');
     }
     if (currentUser && currentUser.type === UserType.Student) {
       return intl.get('header.student');
-    }
+    }*/
     if (currentUser && currentUser.type === UserType.ContentManager) {
       return intl.get('header.content_manager');
     }
