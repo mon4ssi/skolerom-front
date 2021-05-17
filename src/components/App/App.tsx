@@ -19,6 +19,7 @@ import { AssignStudentToAssignment } from 'assignment/view/AssignStudentToAssign
 import { AssignStudentToTeachingPath } from 'teachingPath/view/AssignStudentToTeachingPath/AssignStudentToTeachingPath';
 import { Submitted } from 'components/pages/Submited/Submitted';
 import { LoginPage } from 'user/view/LoginPage/LoginPage';
+import { LogOutPage } from 'user/view/LogOutPage/LogOutPage';
 import { FeideCodeGetter } from 'user/view/FeideCodeGetter/FeideCodeGetter';
 import { NewAssignment } from 'assignment/view/NewAssignment/NewAssignment';
 import { CurrentAssignmentPage } from 'assignment/view/CurrentAssignmentPage/CurrentAssignmentPage';
@@ -164,7 +165,7 @@ class LocalizedApp extends Component<Props> {
         />
 
         <Route path="/login" component={LoginPage} />
-
+        <Route path="/logout" component={LogOutPage} />
         <Route path="/dataporten" component={FeideCodeGetter} />
       </>
     );
@@ -202,7 +203,7 @@ class LocalizedApp extends Component<Props> {
         />
 
         <Route path="/login" component={LoginPage} />
-
+        <Route path="/logout" component={LogOutPage} />
         <Route path="/dataporten" component={FeideCodeGetter} />
       </>
     );
@@ -225,7 +226,7 @@ class LocalizedApp extends Component<Props> {
         />
 
         <Route path="/login" component={LoginPage} />
-
+        <Route path="/logout" component={LogOutPage} />
         <Route path="/dataporten" component={FeideCodeGetter} />
       </>
     );
@@ -288,6 +289,7 @@ class LocalizedApp extends Component<Props> {
             {currentUserRole === UserType.ContentManager && contentManagerRoutes}
 
             <Route path="/login" component={LoginPage} />
+            <Route path="/logout" component={LogOutPage} />
             <Route path="/dataporten/auth" component={RedirectPage} />
             <Route path="/dataporten" component={FeideCodeGetter} />
           </Switch>

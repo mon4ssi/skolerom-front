@@ -17,6 +17,7 @@ interface LoginFormProps {
 interface State {
   email: string;
   password: string;
+  hideLoginFeide: {};
 }
 
 @inject('loginStore')
@@ -26,8 +27,15 @@ export class LoginForm extends Component<LoginFormProps, State> {
 
   public state = {
     email: '',
-    password: ''
+    password: '',
+    hideLoginFeide: {},
   };
+
+  public componentWillMount() {
+    const url: URL = new URL(window.location.href);
+    const isMainLogin: boolean = (url.searchParams.get('main') === '1' ? true : false);
+    this.setState({ hideLoginFeide: isMainLogin ? { display: 'none' } : { display: '' } });
+  }
 
   public hideMenu = () => {
     this.rightClickMenuRef.current!.classList.remove('active');
@@ -61,7 +69,7 @@ export class LoginForm extends Component<LoginFormProps, State> {
 
   public render() {
     const { isCurrentUserFetching } = this.props.loginStore!;
-    const { email, password } = this.state;
+    const { email, password, hideLoginFeide } = this.state;
 
     if (isCurrentUserFetching) {
       return (
@@ -76,11 +84,12 @@ export class LoginForm extends Component<LoginFormProps, State> {
       <div className="flexBox dirColumn justifyCenter alignCenter LoginFormContainer">
         <div className="flexBox dirColumn justifyCenter alignCenter">
           <h1 className="formTitle fw500">{intl.get('login_page.Log in to Skolerom')}</h1>
-          <p className="formSubtitle fw500 upp">{intl.get('login_page.Log in with Feide')}</p>
+          <p className="formSubtitle fw500 upp" style={hideLoginFeide}>{intl.get('login_page.Log in with Feide')}</p>
           <a
             className="loginButton flexBox justifyCenter alignCenter rightClickArea"
             onContextMenu={this.rightClickFeide}
             href={`${process.env.REACT_APP_BASE_URL}/api/dataporten/auth`}
+            style={hideLoginFeide}
           >
             <img src={loginBtnIcon} alt="Login" />
             <span>{intl.get('login_page.Feide')}</span>
@@ -90,7 +99,7 @@ export class LoginForm extends Component<LoginFormProps, State> {
 
         </div>
 
-        <p className="or">{intl.get('login_page.Or')}</p>
+        <p className="or" style={hideLoginFeide}>{intl.get('login_page.Or')}</p>
 
         <form
           className="logInForm flexBox dirColumn alignCenter"
@@ -102,7 +111,7 @@ export class LoginForm extends Component<LoginFormProps, State> {
             <div className="inputcontent">
               <label id="email_label" className="hidden">Email</label>
               <input
-                type="email"
+                type="text"
                 name="email"
                 aria-labelledby="email_label"
                 placeholder={intl.get('login_page.Username')}

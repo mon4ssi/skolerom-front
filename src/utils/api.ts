@@ -21,10 +21,15 @@ API.interceptors.request.use(
 
       if (token) {
         const setCookie = document.cookie;
-        if (setCookie.split('sso-authcookie-skolerom').length <= 1) {
-          storageInteractor.logOut();
-          window.location.reload();
+        const pathName: string = window.location.pathname;
+
+        if (pathName !== '/logout') {
+          if (setCookie.split('sso-authcookie-skolerom').length <= 1) {
+            storageInteractor.logOut();
+            window.location.reload();
+          }
         }
+
         config.headers.Authorization = `Bearer ${token}`;
       }
 
