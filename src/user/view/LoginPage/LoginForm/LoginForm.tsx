@@ -141,10 +141,6 @@ export class LoginForm extends Component<LoginFormProps, State> {
           <button className="logInSubmit" title={intl.get('login_page.Log in')}>
             {intl.get('login_page.Log in')}
           </button>
-
-          <p className="forgotPassword">
-            {intl.get('login_page.Forgot password')}
-          </p>
         </form>
       </div>
     );
