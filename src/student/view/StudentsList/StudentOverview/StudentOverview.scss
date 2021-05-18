@@ -67,8 +67,22 @@ $student-overview-user-panel-height: 63px;
 }
 
 @media screen and (max-width: $screen-dimension-tablet) {
+  .StudentsList__slideOutPanel {
+    background: #e7ecef;
+  }
   .StudentOverview {
     width: 100vw;
+    height: auto;
+    padding-top: 14px;
+  }
+  .StudentAssignments__list {
+    height: auto;
+    display: flex;
+    width: calc(100% + 15px);
+  }
+  .StudentAssignments__item {
+    margin-bottom: 5px;
+    margin-right: 10px;
   }
 
   .StudentOverview__header {

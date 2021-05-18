@@ -42,7 +42,7 @@ class AssignmentDistributeList extends Component<IAssignmentDistributeListProps 
     return assignmentDistributeList.state === StoreState.LOADING ? (
       <SkeletonLoader key={index} className="AssignmentDistribute" />
     ) : (
-      <div key={distribute.id}>
+      <div className="AssignmentDistributeItem" key={distribute.id}>
         <AssignmentDistribute distribute={distribute}/>
       </div>
     );

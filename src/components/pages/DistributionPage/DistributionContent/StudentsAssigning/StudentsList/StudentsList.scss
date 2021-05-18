@@ -154,5 +154,20 @@
     }
   }
 }
-
+@media screen and (max-width: 575px) {
+  .StudentsList {
+    height: auto;
+    &__list {
+      width: calc(100% + 19px);
+      display: flex;
+    }
+    &__listItem {
+      margin-bottom: 5px;
+      margin-top: 0px;
+      width: calc(100% - 20px);
+      flex: none;
+      margin-right: 10px;
+   }
+  }
+}
 

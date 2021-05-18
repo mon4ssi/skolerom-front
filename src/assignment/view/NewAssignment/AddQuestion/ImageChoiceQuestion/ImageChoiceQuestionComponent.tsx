@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { SortableElement, SortEnd, SortEvent } from 'react-sortable-hoc';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
@@ -29,6 +29,7 @@ interface Props {
 @observer
 class ImageChoiceQuestion extends Component<Props> {
   public static contextType = AttachmentContentTypeContext;
+  private refbutton = createRef<HTMLButtonElement>();
 
   private addNewOption = () => {
     const { question } = this.props;
@@ -46,6 +47,13 @@ class ImageChoiceQuestion extends Component<Props> {
     const { question } = this.props;
     if (lettersNoEn(e.target.value)) {
       question.setTitle(e.target.value);
+    }
+  }
+
+  public async componentDidUpdate() {
+    if (this.refbutton.current && this.props.newAssignmentStore!.showDeleteButton) {
+      this.refbutton.current!.focus();
+      this.props.newAssignmentStore!.showDeleteButton = false;
     }
   }
 
@@ -118,14 +126,15 @@ class ImageChoiceQuestion extends Component<Props> {
         <ImageOptionsList question={question} setCurrentQuestion={this.setCurrentQuestion}/>
 
         <div className={'functionalButtons'}>
-          <CreateButton
+          <button
             disabled={this.isDisabledButton()}
-            className="newAnswerButton"
+            className="newAnswerButton CreateButton"
             onClick={this.addNewOption}
             title={intl.get('new assignment.Add image')}
+            ref={this.refbutton}
           >
             {intl.get('new assignment.Add image')}
-          </CreateButton>
+          </button>
         </div>
       </div>
     );

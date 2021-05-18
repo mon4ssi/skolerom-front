@@ -39,7 +39,7 @@ class OptionComponent extends Component<OptionComponentProps> {
 
   private onDelete = () => {
     const { indexAsProp, onDelete } = this.props;
-
+    this.props.newAssignmentStore!.showDeleteButton = true;
     onDelete(indexAsProp);
   }
 

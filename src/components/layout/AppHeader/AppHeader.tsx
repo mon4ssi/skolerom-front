@@ -292,6 +292,38 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     </div>
   )
 
+  private renderContentKeyboardStudentTeacher = () => (
+    <div className="modalKeyboard__list">
+      <h2>{intl.get('generals.accesibility_text.title_quick')}</h2>
+      <ul>
+        <li>
+          <strong>Shift + T</strong>
+          <p>{intl.get('generals.accesibility_text.shift_t')}</p>
+        </li>
+        <li>
+          <strong>Shift + N</strong>
+          <p>{intl.get('generals.accesibility_text.shift_n')}</p>
+        </li>
+        <li>
+          <strong>Shift + R</strong>
+          <p>{intl.get('generals.accesibility_text.shift_r')}</p>
+        </li>
+        <li>
+          <strong>Shift + U</strong>
+          <p>{intl.get('generals.accesibility_text.shift_u')}</p>
+        </li>
+        <li>
+          <strong>Shift + O</strong>
+          <p>{intl.get('generals.accesibility_text.shift_o')}</p>
+        </li>
+        <li>
+          <strong>Shift + F</strong>
+          <p>{intl.get('assignment preview.Finish reading article')}</p>
+        </li>
+      </ul>
+    </div>
+  )
+
   private renderContentKeyboardTeacher = () => (
     <div className="modalKeyboard__list">
       <h2>{intl.get('generals.accesibility_text.title_when_editing')}</h2>
@@ -346,7 +378,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
           <div className="modalKeyboard__content">
             <div className="modalKeyboard__close" onClick={this.closeModalKeyboard} />
             <div className="modalKeyboard__inside">
-              {this.renderContentKeyboardStudent()}
+              {this.renderContentKeyboardStudentTeacher()}
               {this.renderContentKeyboardTeacher()}
             </div>
           </div>
@@ -360,7 +392,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
           <div className="modalKeyboard__content">
             <div className="modalKeyboard__close" onClick={this.closeModalKeyboard} />
             <div className="modalKeyboard__inside">
-              {this.renderContentKeyboardStudent()}
+              {this.renderContentKeyboardStudentTeacher()}
               {this.renderContentKeyboardTeacher()}
             </div>
           </div>

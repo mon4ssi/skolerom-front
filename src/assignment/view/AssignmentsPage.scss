@@ -66,3 +66,21 @@
     }
   }
 }
+
+@media screen and (max-width: 575px) {
+  .AssignmentsPage {
+    height: auto;
+    .assignmentList {
+      flex-flow: nowrap;
+      width: calc(100% + 19px);
+      .MyList {
+        display: flex;
+        flex-wrap: nowrap;
+      }
+      .AssignmentListItem__super {
+        width: calc(100% - 10px);
+        margin-right: 10px;
+      }
+    }
+  }  
+}

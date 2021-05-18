@@ -36,12 +36,15 @@ interface OptionComponentProps {
 @observer
 class OptionComponent extends Component<OptionComponentProps> {
   public static contextType = AttachmentContentTypeContext;
+  private stateImg = false;
   private refbutton = createRef<HTMLButtonElement>();
+  private refInput = createRef<HTMLInputElement>();
 
   private onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (lettersNoEn(e.target.value)) {
       this.props.option.setTitle(e.target.value);
     }
+    this.stateImg = false;
   }
 
   private toggleIsRight = () => {
@@ -52,7 +55,7 @@ class OptionComponent extends Component<OptionComponentProps> {
 
   private onDelete = () => {
     const { indexAsProp, onDelete } = this.props;
-
+    this.props.newAssignmentStore!.showDeleteButton = true;
     onDelete(indexAsProp);
   }
 
@@ -60,10 +63,12 @@ class OptionComponent extends Component<OptionComponentProps> {
     const { option, newAssignmentStore, orderQuestion } = this.props;
     if (option.image) {
       option.removeImage();
+      this.stateImg = false;
     } else {
       // newAssignmentStore!.setCurrentContentBlock(option.question.orderPosition, -1);
       this.context.changeContentType(AttachmentContentType.image);
       newAssignmentStore!.setHighlightingItem(CreationElements.Questions, orderQuestion);
+      this.stateImg = true;
     }
   }
 
@@ -93,6 +98,7 @@ class OptionComponent extends Component<OptionComponentProps> {
     this.context.changeContentType(AttachmentContentType.text);
     newAssignmentStore!.setHighlightingItem(CreationElements.Questions, orderQuestion);
     newAssignmentStore!.setCurrentPreviewQuestion(orderQuestion);
+    this.stateImg = false;
   }
 
   public renderImageHandler = () => {
@@ -114,6 +120,10 @@ class OptionComponent extends Component<OptionComponentProps> {
       isRight: option.isRight,
     });
 
+    if (this.refInput.current && !newAssignmentStore!.visibilityAttachments && this.stateImg) {
+      this.refInput.current!.focus();
+    }
+
     return (
       <div className={className} onClick={this.setCurrentOption}>
         <img src={this.renderMiniImage()} alt="landscape" className={'miniImage'}/>
@@ -129,6 +139,7 @@ class OptionComponent extends Component<OptionComponentProps> {
           onClick={this.closeImageChoice}
           aria-required="true"
           aria-invalid="false"
+          ref={this.refInput}
         />
 
         <div className="statusBox" onClick={this.closeImageChoice}>

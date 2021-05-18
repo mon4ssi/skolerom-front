@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { observer } from 'mobx-react';
 import classnames from 'classnames';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
@@ -38,6 +38,7 @@ interface RenderOptionProps {
 
 @observer
 class RenderOption extends Component<RenderOptionProps>{
+  private refInput = createRef<HTMLAnchorElement>();
 
   public setIsRight = () => {
     const { handleChooseAnswer, option } = this.props;
@@ -62,6 +63,11 @@ class RenderOption extends Component<RenderOptionProps>{
       return option.isRight ? 'Option__input_right' : (isValueSelected && !option.isRight) ? 'Option__input_wrong' : '';
     }
   }
+  public async componentDidMount() {
+    if (this.refInput.current && !this.props.isStudentView) {
+      this.refInput.current!.focus();
+    }
+  }
 
   public render() {
     const { option, answer, readOnly, isEvaluationStyle, isStudentView } = this.props;
@@ -76,7 +82,7 @@ class RenderOption extends Component<RenderOptionProps>{
     });
 
     return (
-      <a href="javascript:void(0)" className={`Option ${this.calculateIsRightStyle()} ${isStudentView && 'light'}`} onClick={this.setIsRight}>
+      <a href="javascript:void(0)" className={`Option ${this.calculateIsRightStyle()} ${isStudentView && 'light'}`} onClick={this.setIsRight} ref={this.refInput}>
         <div className={inputClassNames}>
           {option.title}
         </div>

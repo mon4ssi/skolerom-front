@@ -62,6 +62,7 @@ export class NewAssignmentStore {
   @observable public fetchingAttachments: boolean = false;
   @observable public visibilityAttachments: boolean = false;
   @observable public showValidationErrors: boolean = false;
+  @observable public showDeleteButton: boolean = false;
   @observable public assignmentContainer: AssignmentContainer | null = null;
   @observable public currentPreviewQuestion: number = -1;
   @observable public currentContentBlock: CurrentContentBlock = { orderQuestion: -1, orderBlock: -1 };
