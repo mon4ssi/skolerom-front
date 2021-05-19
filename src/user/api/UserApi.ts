@@ -84,7 +84,7 @@ export class UserApi implements UserRepo {
     this.storageInteractor.logOut();
 
     if (currentUserRole === UserType.ContentManager) {
-      window.location.href = '/login';
+      window.location.href = `${process.env.REACT_APP_WP_URL}`;
     } else {
       window.location.href = 'https://auth.dataporten.no/openid/endsession?' +
       `post_logout_redirect_uri=${encodeURIComponent(data.post_logout_redirect_uri)}&id_token_hint=${data.id_token}`;
