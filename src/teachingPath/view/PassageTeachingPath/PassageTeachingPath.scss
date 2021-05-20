@@ -34,9 +34,11 @@
       }
 
       .titleTeachingPath {
-        word-break: break-all;
         margin: 0px;
-        font-size: 1.7rem;
+        font-size: 1.375rem;
+        text-overflow: ellipsis;
+        width: 190px;
+        overflow: hidden;
       }
 
       .questionWrapper {
@@ -92,7 +94,6 @@
       .navigationExitButton {
         display: flex;
         align-items: center;
-        margin-top: 10px;
         cursor: pointer;
         background: transparent;
         span {

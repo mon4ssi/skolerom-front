@@ -13,12 +13,14 @@
     overflow: auto;
     height: 100%;
     margin-top: 10px;
-    justify-content: space-between;
+    justify-content: start;
+    padding-top: 5px;
     transition: 0.3s;
     .InfoCard {
       width: calc(16.68% - 15px);
       min-height: 300px;
       margin-bottom: 20px;
+      margin-right: 14px;
       &:hover {
         box-shadow: 0 8px 10px #00000061;
       }

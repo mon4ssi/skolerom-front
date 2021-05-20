@@ -22,14 +22,11 @@ interface Props {
 
 @observer
 class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps<{}, {}, LocationState>> {
-  public handleChangeAnswer = (event: React.ChangeEvent<HTMLInputElement>) => {
+  public handleChangeAnswer = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { redirectData, answer, handleShowArrowsTooltip } = this.props;
-
-    if (lettersNoEn(event.target.value)) {
-      answer!.setValue(event.target.value, redirectData);
-      if (handleShowArrowsTooltip) {
-        handleShowArrowsTooltip(true);
-      }
+    answer!.setValue(event.target.value, redirectData);
+    if (handleShowArrowsTooltip) {
+      handleShowArrowsTooltip(true);
     }
   }
 
@@ -42,7 +39,7 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
     return (
       <div className="InputSy">
         <label id="titleTextAnswser" className="hidden">{intl.get('new assignment.Write your answer here')}</label>
-        <input
+        <textarea
           autoFocus={!readOnly}
           value={answer && answer.value}
           className="studentsAnswer"

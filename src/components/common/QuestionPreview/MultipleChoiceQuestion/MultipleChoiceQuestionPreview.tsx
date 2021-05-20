@@ -64,7 +64,7 @@ class RenderOption extends Component<RenderOptionProps>{
     }
   }
   public async componentDidMount() {
-    if (this.refInput.current && !this.props.isStudentView) {
+    if (this.refInput.current && !this.props.readOnly) {
       this.refInput.current!.focus();
     }
   }

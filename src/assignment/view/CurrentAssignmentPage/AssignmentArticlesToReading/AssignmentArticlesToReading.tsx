@@ -10,6 +10,7 @@ import checkActive from 'assets/images/check-active-green.svg';
 
 import { CurrentQuestionaryStore } from '../CurrentQuestionaryStore';
 import { InfoCard } from 'components/common/InfoCard/InfoCard';
+import { Loader } from 'components/common/Loader/Loader';
 import { Article } from 'assignment/Assignment';
 import { ReadingArticle } from 'components/pages/ReadingArticle/ReadingArticle';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
@@ -42,6 +43,8 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
     shownArticleId: null,
     shownArticleLevelId: -1
   };
+
+  public refArticle = React.createRef<HTMLDivElement>();
 
   public openArticle = (article: Article) => () => {
     const { title, id, levels, correspondingLevelArticleId } = article;
@@ -120,8 +123,8 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
       currentArticleChildren,
       shownArticleId
     } = this.state;
-    const { currentQuestionaryStore } = this.props;
 
+    const { currentQuestionaryStore } = this.props;
     if (isShowArticle) {
       return (
         <ReadingArticle
@@ -134,14 +137,17 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
         />
       );
     }
-    return (
-      <>
-        <span className="AssignmentArticlesToReading__title">{intl.get('assignment preview.Assignment articles')}</span>
-        <div className="AssignmentArticlesToReading__articles">
-          {currentQuestionaryStore!.relatedAllArticles.map(this.renderArticlesCards)}
-        </div>
-      </>
-    );
+    if (currentQuestionaryStore!.isLoadingArticles) {
+      return (
+        <>
+          <span className="AssignmentArticlesToReading__title">{intl.get('assignment preview.Assignment articles')}</span>
+          <div className="AssignmentArticlesToReading__articles" ref={this.refArticle}>
+            {currentQuestionaryStore!.relatedAllArticles.map(this.renderArticlesCards)}
+          </div>
+        </>
+      );
+    }
+    return (<div className={'loading'}><Loader /></div>);
   }
 
   public render() {
