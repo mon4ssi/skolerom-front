@@ -3,7 +3,7 @@
   "assignment": "oppgaven",
   "teaching path": "læringssti",
   "login_page": {
-    "Log in to Temabok": "Logg inn på Skolerommet",
+    "Log in to Temabok": "Logg inn på Skolerom",
     "Log in with Feide": "Logg inn via Feide",
     "Feide": "Feide",
     "Or": "Eller",
@@ -12,7 +12,7 @@
     "Password": "Passord",
     "Log in": "Logg inn",
     "Forgot password": "Glemt passordet?",
-    "Log in to Skolerom": "Logg inn på Skolerommet",
+    "Log in to Skolerom": "Logg inn på Skolerom",
     "Copy url": "Kopier url",
     "not permission": "Beklager, du har ikke tilgang til denne plattformen. Kontakt organisasjonen din for å få tilgang"
   },
@@ -55,6 +55,9 @@
   },
   "header": {
     "change_font_size": "Endre skriftstørrelse",
+    "contact_menu": "Kontakt oss",
+    "about_menu": "Hva er skolerom.no?",
+    "logg_in": "Logg inn med Feide",
     "Articles": "Artikler",
     "Article": "Artikkel",
     "teacher_room": "Lærerrom",

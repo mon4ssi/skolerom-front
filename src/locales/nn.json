@@ -54,7 +54,10 @@
     "teaching_path_back": "Tilbake til alle læringsstiar"
   },
   "header": {
-    "change_font_size": "Endre skriftstørrelse",
+    "change_font_size": "Endre skriftstørrelse",    
+    "contact_menu": "Kontakt oss",
+    "about_menu": "Hva er skolerom.no?",
+    "logg_in": "Logg inn med Feide",
     "Articles": "Artiklar",
     "Article": "Artikkel",
     "teacher_room": "Lærerrom",

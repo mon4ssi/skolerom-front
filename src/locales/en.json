@@ -55,6 +55,9 @@
   },
   "header": {
     "change_font_size": "Change font size",
+    "contact_menu": "Contact",
+    "about_menu": "About Skoleroom",
+    "logg_in": "Log with Feide",
     "Articles": "Articles",
     "Article":  "Article",
     "teacher_room": "Teacher's Room",
