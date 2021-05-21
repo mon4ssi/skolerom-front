@@ -603,7 +603,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   )
 
   public renderLineMobileButton = () => (
-    <div className="singleFlexElements">
+    <div className="singleFlexElements AppHeader__block">
       {this.renderItemsNotLogin()}
     </div>
   )
