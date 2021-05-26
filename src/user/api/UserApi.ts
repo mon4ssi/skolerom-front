@@ -7,7 +7,7 @@ import intl from 'react-intl-universal';
 import { LoginPayload } from 'user/UserService';
 
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
-import { STATUS_NOT_FOUND, STATUS_SERVER_ERROR } from '../../utils/constants';
+import { STATUS_NOT_FOUND, STATUS_SERVER_ERROR, STATUS_BACKEND_ERROR } from '../../utils/constants';
 
 export interface UserDTO {
   role: UserType;
@@ -45,6 +45,9 @@ export class UserApi implements UserRepo {
           type: NotificationTypes.ERROR,
           title: intl.get('login_page.not permission')
         });
+        return null;
+      }
+      if (error.response.status === STATUS_BACKEND_ERROR) {
         return null;
       }
       throw new Error(error);

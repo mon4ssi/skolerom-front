@@ -1,12 +1,15 @@
 @import "../../../../style/index";
 
 .AnswerCurrentQuestion {
-  width: $assignment-width + 15px * 2;
+  width: 100%;
   margin: auto;
   padding-left: 15px;
   padding-right: 15px;
 }
-
+.CurrentAssignmentPage__main__center {
+  max-width: 800px;
+  width: 100%;
+}
 @media screen and (max-width: $screen-dimension-tablet) {
   .AnswerCurrentQuestion {
     width: 100%;

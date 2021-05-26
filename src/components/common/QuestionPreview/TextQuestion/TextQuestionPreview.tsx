@@ -4,6 +4,7 @@ import intl from 'react-intl-universal';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { TypedQuestion } from 'assignment/Assignment';
+import TextAreaAutosize from 'react-textarea-autosize';
 import { EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
 import { Answer, RedirectData } from 'assignment/questionary/Questionary';
 import { LocationState } from 'assignment/view/CurrentAssignmentPage/CurrentAssignmentPage';
@@ -39,9 +40,9 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
     return (
       <div className="InputSy">
         <label id="titleTextAnswser" className="hidden">{intl.get('new assignment.Write your answer here')}</label>
-        <textarea
+        <TextAreaAutosize
           autoFocus={!readOnly}
-          value={answer && answer.value}
+          value={String(answer!.value)}
           className="studentsAnswer"
           placeholder={intl.get('new assignment.Write your answer here')}
           readOnly={readOnly}
