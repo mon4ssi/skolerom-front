@@ -37,6 +37,24 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
     if (isEvaluationStyle) {
       return <span className={'evaluationAnswer'}>{answer && answer.value}</span>;
     }
+    if (readOnly) {
+      return (
+        <div className="InputSy">
+          <label id="titleTextAnswser" className="hidden">{intl.get('new assignment.Write your answer here')}</label>
+          <textarea
+            autoFocus={!readOnly}
+            value={answer && answer!.value}
+            className="studentsAnswer"
+            placeholder={intl.get('new assignment.Write your answer here')}
+            readOnly={readOnly}
+            onChange={this.handleChangeAnswer}
+            aria-labelledby="titleTextAnswser"
+            aria-required="true"
+            aria-invalid="false"
+          />
+        </div>
+      );
+    }
     return (
       <div className="InputSy">
         <label id="titleTextAnswser" className="hidden">{intl.get('new assignment.Write your answer here')}</label>
