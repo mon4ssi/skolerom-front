@@ -638,6 +638,7 @@
     "edit": "Edith Path",
     "delete": "Delete Path",
     "close": "Close",
+    "maintenance": "Scheduled maintenance today between 4pm and 7pm. The System can be unresponsive in this period",
     "close_assignment": "Close",
     "selected_assignment": "Select assignment",
     "unselected_assignment": "UnSelect assignment",

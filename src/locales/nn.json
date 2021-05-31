@@ -638,6 +638,7 @@
     },
     "edit": "Rediger sti",
     "delete": "Slett sti",
+    "maintenance": "Scheduled maintenance today between 4pm and 7pm. The System can be unresponsive in this period",
     "close":"Lukk artikkelvisning",
     "close_assignment":"Lukk oppgåve vindauget",
     "selected_assignment": "Velg oppgåve",

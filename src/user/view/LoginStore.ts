@@ -1,5 +1,6 @@
 import { action, computed, observable } from 'mobx';
 import isNull from 'lodash/isNull';
+import { API } from 'utils/api';
 
 import { injector } from 'Injector';
 import { User, UserType } from 'user/User';
@@ -143,5 +144,25 @@ export class LoginStore {
         this.storageInteractor.setArticlesLocaleId(locale.id);
       }
     });
+  }
+
+  public async getMaintenance_mode() {
+    const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/maintenance/v1/status`);
+    return response.data.maintenance_mode;
+  }
+
+  public async getMaintenance_msj() {
+    const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/maintenance/v1/status`);
+    return response.data.maintenance_msg;
+  }
+
+  public async getMaintenance_start_time() {
+    const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/maintenance/v1/status`);
+    return response.data.start_time;
+  }
+
+  public async getMaintenance_end_time() {
+    const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/maintenance/v1/status`);
+    return response.data.end_time;
   }
 }
