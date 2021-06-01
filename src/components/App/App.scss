@@ -290,6 +290,38 @@ pre {
   z-index: 100;
 }
 
+.isMaintenance .ConfirmationPage_container {
+  top: 105px;
+}
+.isMaintenance .StudentOverview__content {
+  margin-top: 40px;
+  height: calc(100% - 100px);
+}
+.isMaintenance .teachingPathsList .dark .evaluationInfo {
+  height: calc(100% - 180px);
+  top: 180px;
+}
+
+.isMaintenance .teachingPathsList .dark {
+  top: 115px;
+  height: calc(100% - 115px);
+}
+.isMaintenance .assignmentList .darkStudentList {
+  top: 105px;
+  height: calc(100% - 105px);
+}
+.isMaintenance .assignmentList .darkStudentList .evaluationInfo {
+  top: 180px;
+  height: calc(100% - 180px);
+}
+.isMaintenance .Submitted {
+  top: 105px;
+}
+.isMaintenance .loading {
+  top: 105px;
+  height: calc(100vh - 105px);
+}
+
 @media screen and (max-width: $screen-dimension-desktop) {
   ::-webkit-scrollbar {
     width: 0;

@@ -4,6 +4,9 @@
   border-bottom: 1px solid #596A75;
   padding-bottom: 20px;
   width: 100%;
+  max-height: 450px;
+  resize: none;
+  font-weight: 300;
   &::placeholder {
     color: #596A75;
     font-weight: 300;

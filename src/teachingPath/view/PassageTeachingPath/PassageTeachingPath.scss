@@ -21,7 +21,10 @@
       display: flex;
       padding: 20px;
       flex-direction: column;
-
+      span {
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
       .overview {
         font-size: 0.9375rem;
         color: #E2017B;
