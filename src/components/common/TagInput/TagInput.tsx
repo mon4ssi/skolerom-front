@@ -34,6 +34,7 @@ interface Props {
   removeTag?: (id: number) => void;
   addTag?: (id: number) => void;
   currentTags: Array<TagProp>;
+  orderbyid : boolean;
   noOpenOnFocus?: boolean;
   temporaryTagsArray?: boolean;
 }
@@ -197,8 +198,16 @@ class TagInputWrapper extends Component<Props, State> {
     );
   }
 
+  public setNamesRender() {
+    const { currentTags, orderbyid } = this.props;
+    if (orderbyid) {
+      return  currentTags!.sort((a, b) => a.id - b.id).map(this.renderCurrentTag);
+    }
+    return currentTags!.sort(sortByAlphabet).map(this.renderCurrentTag);
+  }
+
   public render() {
-    const { dataid, className, autoFocus, currentTags } = this.props;
+    const { dataid, className, autoFocus, currentTags, orderbyid } = this.props;
     const { tagInput } = this.state;
 
     return (
@@ -207,7 +216,7 @@ class TagInputWrapper extends Component<Props, State> {
         // onClick={this.focusInput}
       >
         <div className={'tagWrapper'}>
-          {currentTags!.sort(sortByAlphabet).map(this.renderCurrentTag)}
+          {this.setNamesRender()}
         </div>
         <label id={dataid} className="hidden">{tagInput}</label>
         <input
