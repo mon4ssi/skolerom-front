@@ -9,6 +9,7 @@ import { EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
 import { Answer, RedirectData } from 'assignment/questionary/Questionary';
 import { LocationState } from 'assignment/view/CurrentAssignmentPage/CurrentAssignmentPage';
 import { lettersNoEn } from 'utils/lettersNoEn';
+import { MAX_DESCRIPTION_LENGTH_MAX } from 'utils/constants';
 
 import './TextQuestionPreview.scss';
 
@@ -65,6 +66,7 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
           placeholder={intl.get('new assignment.Write your answer here')}
           readOnly={readOnly}
           onChange={this.handleChangeAnswer}
+          maxLength={MAX_DESCRIPTION_LENGTH_MAX}
           aria-labelledby="titleTextAnswser"
           aria-required="true"
           aria-invalid="false"
