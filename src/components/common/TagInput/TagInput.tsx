@@ -14,7 +14,7 @@ import './TagInput.scss';
 
 const sixArticles = 6;
 const scrollDelay = 200;
-const timeoutlint = 3000;
+const timeoutlint = 4500;
 
 export interface TagProp {
   id: number;
