@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { Location } from 'history';
 
 import { RedirectData } from 'assignment/questionary/Questionary';
+import { Article } from 'assignment/Assignment';
 import { QuestionaryTeachingPathStore } from 'teachingPath/questionaryTeachingPath/questionaryTeachingPathStore';
 import { LocationState } from '../CurrentAssignmentPage';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
@@ -13,7 +14,7 @@ import { CurrentQuestionaryStore } from '../CurrentQuestionaryStore';
 import check from 'assets/images/check-white.svg';
 
 import './Submit.scss';
-
+const showDelay = 500;
 type LocataionProps = Location<{ readOnly: boolean } & LocationState>;
 
 interface Props extends RouteComponentProps<{}, {}, LocationState> {
@@ -32,9 +33,15 @@ interface Props extends RouteComponentProps<{}, {}, LocationState> {
 @inject('currentQuestionaryStore', 'questionaryTeachingPathStore')
 @observer
 export class SubmitComponent extends Component<Props> {
-  private refbutton = createRef<HTMLButtonElement>();
 
-  private clickRevert = () => {
+  public refbutton = createRef<HTMLButtonElement>();
+  public state = {
+    sumArticlesRead : 0,
+    sumArticlesTotal : 0,
+    disablebutton : true
+  };
+
+  public clickRevert = () => {
     const { readOnly, revertQuestionary } = this.props;
 
     if (!readOnly) {
@@ -42,13 +49,13 @@ export class SubmitComponent extends Component<Props> {
     }
   }
 
-  private renderRevertButton = () => (
+  public renderRevertButton = () => (
     <div className={`Submitted__revert ${this.props.readOnly && 'Submit__defaultCursor'}`} onClick={this.clickRevert}>
       {intl.get('current_assignment_page.revert_button')}
     </div>
   )
 
-  private deleteAnswers = () => {
+  public deleteAnswers = () => {
     const { readOnly, deleteQuestionary } = this.props;
 
     if (!readOnly) {
@@ -71,17 +78,52 @@ export class SubmitComponent extends Component<Props> {
       });
   }
 
-  public async componentDidMount() {
-    const { numberOfQuestions, numberOfAnsweredQuestions } = this.props;
-    if (this.refbutton.current) {
-      this.refbutton.current!.focus();
+  public validArticles = (article: Article) => {
+    this.state.sumArticlesTotal += 1;
+    if (article.isRead) {
+      this.state.sumArticlesRead += 1;
     }
   }
 
-  public render() {
-    const { numberOfQuestions, numberOfAnsweredQuestions, readOnly } = this.props;
-    const submitDescriptionText = intl.get('current_assignment_page.submit_description', { numberOfAnsweredQuestions, numberOfQuestions });
+  public sendValidArticlesRead() {
+    const { currentQuestionaryStore } = this.props;
+    if (this.state.sumArticlesRead > 0) {
+      if (this.state.sumArticlesTotal === this.state.sumArticlesRead) {
+        currentQuestionaryStore!.allArticlesread = true;
+      }
+    }
+  }
 
+  public componentDidMount() {
+    const { numberOfQuestions, numberOfAnsweredQuestions, currentQuestionaryStore } = this.props;
+    currentQuestionaryStore!.relatedAllArticles.map(this.validArticles);
+    this.sendValidArticlesRead();
+    if (numberOfAnsweredQuestions === numberOfQuestions && currentQuestionaryStore!.allArticlesread) {
+      this.setState({ disablebutton : false });
+      setTimeout(
+        () => {
+          if (this.refbutton.current) {
+            this.refbutton.current!.focus();
+          }
+        },
+        showDelay
+      );
+    } else {
+      this.setState({ disablebutton : true });
+    }
+  }
+
+  public msjeArticles() {
+    const { sumArticlesRead, sumArticlesTotal } = this.state;
+    return (
+      <p className="sumMsj">{intl.get('current_assignment_page.readNotArticles')}</p>
+    );
+  }
+
+  public render() {
+    const { numberOfQuestions, numberOfAnsweredQuestions, readOnly, currentQuestionaryStore } = this.props;
+    const { sumArticlesRead, sumArticlesTotal } = this.state;
+    const submitDescriptionText = intl.get('current_assignment_page.submit_description', { numberOfAnsweredQuestions, numberOfQuestions });
     return (
       <div>
         <div className="Submit__title">
@@ -99,7 +141,7 @@ export class SubmitComponent extends Component<Props> {
         {/*</div>*/}
 
         <button
-          disabled={numberOfAnsweredQuestions !== numberOfQuestions}
+          disabled={this.state.disablebutton}
           className="CreateButton Submit__button"
           onClick={this.publishQuestionary}
           title={intl.get('current_assignment_page.complete_and_submit_button')}
@@ -110,6 +152,7 @@ export class SubmitComponent extends Component<Props> {
           {intl.get('current_assignment_page.complete_and_submit_button')}
           </>
         </button>
+        {this.state.disablebutton && this.msjeArticles()}
       </div>
     );
   }

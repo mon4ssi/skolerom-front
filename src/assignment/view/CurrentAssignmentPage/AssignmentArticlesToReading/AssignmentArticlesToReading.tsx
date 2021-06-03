@@ -41,7 +41,9 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
     currentArticleChildren: [],
     attachedArticleId: -1,
     shownArticleId: null,
-    shownArticleLevelId: -1
+    shownArticleLevelId: -1,
+    allArticlesRead: 0,
+    allArticles: 0
   };
 
   public refArticle = React.createRef<HTMLDivElement>();
@@ -80,6 +82,10 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
     const levels = article.levels && article.levels.length && article.levels![0].childArticles!.length ? article.levels![0].childArticles!.map(
       (article: Article) => Number(article.levels![0].slug.split('-')[1])
     ) : [Number(article.levels![0].slug.split('-')[1])];
+    this.state.allArticles += 1;
+    if (article.isRead) {
+      this.state.allArticlesRead += 1;
+    }
     return (
       <div
         className={`AssignmentArticlesToReading__card ${article.isRead && 'cardBorder' } ${readOnly && 'AssignmentArticlesToReading__defaultCursor'}`}
@@ -116,6 +122,15 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
     this.setState({ shownArticleLevelId: levelId });
   }
 
+  public sendValidArticlesRead() {
+    const { currentQuestionaryStore } = this.props;
+    if (this.state.allArticlesRead > 0) {
+      if (this.state.allArticles === this.state.allArticlesRead) {
+        currentQuestionaryStore!.allArticlesread = true;
+      }
+    }
+  }
+
   public renderContent = () => {
     const {
       isShowArticle,
@@ -143,6 +158,7 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
           <span className="AssignmentArticlesToReading__title">{intl.get('assignment preview.Assignment articles')}</span>
           <div className="AssignmentArticlesToReading__articles" ref={this.refArticle}>
             {currentQuestionaryStore!.relatedAllArticles.map(this.renderArticlesCards)}
+            {this.sendValidArticlesRead()}
           </div>
         </>
       );

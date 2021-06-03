@@ -29,6 +29,7 @@ export class CurrentQuestionaryStore {
   public isArrowsTooltipVisible: boolean = true;
   @observable public isStartedAssignment: boolean = false;
   @observable public relatedArticles: Array<Article> = [];
+  public allArticlesread: boolean = false;
 
   public async createQuestionaryByAssignmentId(id: number, redirectData?: RedirectData) {
     this.isLoading = true;
