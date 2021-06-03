@@ -36,7 +36,8 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
     const { readOnly, answer, isEvaluationStyle } = this.props;
 
     if (isEvaluationStyle) {
-      return <span className={'evaluationAnswer'}>{answer && answer.value}</span>;
+      const answerSplit = String(answer && answer.value).replace(/\n/g, '<br />');
+      return <span className={'evaluationAnswer'} dangerouslySetInnerHTML={{ __html: answerSplit }} />;
     }
     if (readOnly) {
       return (
