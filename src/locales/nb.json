@@ -551,6 +551,7 @@
     "modals": {
       "add_articles": "Legg til artikler",
       "add_assignments": "Legg til oppgaver",
+      "add_domain": "Legg til Domain",
       "create_assignment": "Lag oppgave",
       "loading": "Laster...",
       "nothing_found": "Ingenting funnet...",
@@ -638,6 +639,7 @@
     "edit": "Rediger sti",
     "delete": "Slett sti",
     "close": "Lukk artikkelvisning",
+    "close_maintenance": "Lukk melding",
     "maintenance": "Scheduled maintenance today between 4pm and 7pm. The System can be unresponsive in this period",
     "close_assignment": "Lukk oppgave vinduet",
     "selected_assignment": "Velg oppgave",

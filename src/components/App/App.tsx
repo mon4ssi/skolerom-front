@@ -198,7 +198,7 @@ class LocalizedApp extends Component<Props> {
       </div>
       <div className="maintenance__close" onClick={this.closeRenderMaintenance}>
         <img src={closeImg} />
-        <p>{intl.get('generals.close')}</p>
+        <p>{intl.get('generals.close_maintenance')}</p>
       </div>
     </div>
   )

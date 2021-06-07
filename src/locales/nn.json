@@ -551,7 +551,8 @@
     },
     "modals": {
       "add_articles": "Legg til artiklar",
-      "add_assignments": "Legg til oppgåver",
+      "add_assignments": "Legg til oppgåver",      
+      "add_domain": "Legg til Domain",
       "create_assignment": "Lag oppgåve",
       "loading": "Lastar...",
       "nothing_found": "Ingenting funne...",
@@ -641,6 +642,7 @@
     "delete": "Slett sti",
     "maintenance": "Scheduled maintenance today between 4pm and 7pm. The System can be unresponsive in this period",
     "close":"Lukk artikkelvisning",
+    "close_maintenance": "Lukk melding",
     "close_assignment":"Lukk oppgåve vindauget",
     "selected_assignment": "Velg oppgåve",
     "unselected_assignment": "Velg oppgåve",
