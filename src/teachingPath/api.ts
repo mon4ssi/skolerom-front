@@ -190,6 +190,10 @@ export class TeachingPathApi implements TeachingPathRepo {
     await API.post(`api/student/teaching-paths/${teachingPathId}/node/${nodeId}/article/${idArticle}/mark`, { graduation });
   }
 
+  public async sendDataDomain(domain: string): Promise<void> {
+    await API.post('api/teacher/teaching-paths/domain', { domain });
+  }
+
   public async finishTeachingPath(id: number): Promise<void> {
     await API.get(`api/student/teaching-paths/${id}/finish`);
   }

@@ -13,6 +13,7 @@ import { EditEntityLocaleKeys, Locales } from 'utils/enums';
 import { Distribution } from 'distribution/Distribution';
 import { DISTRIBUTION_SERVICE, DistributionService } from 'distribution/service';
 import { USER_SERVICE, UserService } from 'user/UserService';
+import { TEACHING_PATH_SERVICE, TeachingPathService } from 'teachingPath/service';
 
 const error400 = 400;
 
@@ -22,6 +23,7 @@ export class EditTeachingPathStore {
   private articleService: ArticleService = injector.get<ArticleService>(ARTICLE_SERVICE_KEY);
   private assignmentService: AssignmentService = injector.get<AssignmentService>(ASSIGNMENT_SERVICE);
   private distributionService: DistributionService = injector.get<DistributionService>(DISTRIBUTION_SERVICE);
+  private teachingPathService = injector.get<TeachingPathService>(TEACHING_PATH_SERVICE);
   private userService: UserService = injector.get(USER_SERVICE);
 
   private currentArticlesPage: number = 1;
@@ -331,6 +333,11 @@ export class EditTeachingPathStore {
   @action
   public setIsAssignmentCreating = (isAssignmentCreating: boolean) => {
     this.isAssignmentCreating = isAssignmentCreating;
+  }
+
+  @action
+  public async sendDataDomain(domain:string) {
+    return this.teachingPathService.sendDataDomain(domain);
   }
 
 }

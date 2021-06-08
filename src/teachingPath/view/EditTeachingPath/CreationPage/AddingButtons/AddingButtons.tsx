@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
+import { validDomain } from 'utils/validDomain';
 import { lettersNoEn } from 'utils/lettersNoEn';
 import intl from 'react-intl-universal';
 
@@ -29,7 +30,8 @@ class AddingButtonsContainer extends Component<Props> {
   public static contextType = ItemContentTypeContext;
   public state = {
     modalDomain : false,
-    disabledbutton : false,
+    disabledbutton : true,
+    loading : true,
     valueInputDomain: ''
   };
 
@@ -70,19 +72,26 @@ class AddingButtonsContainer extends Component<Props> {
   }
 
   private closeDomainModal = () => {
-    this.setState({
-      modalDomain: false
-    });
-  }
-
-  private handleChangeNewQuestion = (e:  React.ChangeEvent<HTMLInputElement>) => {
-    if (lettersNoEn(e.target.value)) {
-      this.setState({ valueInputDomain: e.target.value });
+    if (this.state.loading) {
+      this.setState({
+        modalDomain: false
+      });
     }
   }
 
-  private sendDomain = () => {
-    this.setState({ disabledbutton: false });
+  private handleChangeNewQuestion = (e:  React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ valueInputDomain: e.target.value });
+    if (validDomain(e.target.value)) {
+      this.setState({ disabledbutton: false });
+    } else {
+      this.setState({ disabledbutton: true });
+    }
+  }
+
+  private sendDomain = async () => {
+    this.setState({ loading: false });
+    this.setState({ disabledbutton: true });
+    const response = await this.props.editTeachingPathStore!.sendDataDomain(this.state.valueInputDomain);
   }
 
   private renderModalDomain = () => {
@@ -90,31 +99,29 @@ class AddingButtonsContainer extends Component<Props> {
     return (
       <div className="modalDomain">
         <div className="modalDomain__background" onClick={this.closeDomainModal} />
-        <div className="modalDomain__content" onClick={this.closeDomainModal}>
-          <div className="modalDomain__close">
-            <i />
-          </div>
+        <div className="modalDomain__content">
           <div className="modalDomain__context">
             <div className="modalDomain__form">
               <div className="modalDomain__input">
                 <img src={addArticleImg} alt="add-article" />
                 <input
                   className="newTextQuestionInput"
-                  placeholder={intl.get('new assignment.Enter a question')}
+                  placeholder={intl.get('new assignment.type_or_paste')}
                   value={this.state.valueInputDomain}
                   onChange={this.handleChangeNewQuestion}
                   aria-required="true"
                   aria-invalid="false"
+                  autoFocus={true}
                 />
               </div>
               <div className="modalDomain__button">
                 <button
                   className="btn"
                   onClick={this.sendDomain}
-                  title={intl.get('new assignment.Enter a question')}
+                  title={intl.get('new assignment.add_link')}
                   disabled={disabledbutton}
                 >
-                  {intl.get('new assignment.Enter a question')}
+                  {intl.get('new assignment.add_link')}
                 </button>
               </div>
             </div>
@@ -148,7 +155,7 @@ class AddingButtonsContainer extends Component<Props> {
             {intl.get('edit_teaching_path.modals.add_articles')}
           </button>
         </div>
-        {this.state.modalDomain && this.renderButtonDomain()}
+        {this.renderButtonDomain()}
         {this.state.modalDomain && this.renderModalDomain()}
         <div
           className="addingButton"

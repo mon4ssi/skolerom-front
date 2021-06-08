@@ -791,3 +791,27 @@ export class Article {
     this.readLevel = args.readLevel;
   }
 }
+
+export interface DomainArgs {
+  id: number;
+  title: string;
+  url?: string;
+  excerpt?: string;
+  images?: string;
+}
+
+export class Domain {
+  public id: number;
+  public readonly title: string;
+  public readonly url?: string;
+  public readonly excerpt?: string;
+  public readonly images?: string;
+
+  constructor(args: DomainArgs) {
+    this.id = args.id;
+    this.title = args.title;
+    this.url = args.url;
+    this.excerpt = args.excerpt;
+    this.images = args.images;
+  }
+}

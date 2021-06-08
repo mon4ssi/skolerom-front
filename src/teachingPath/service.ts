@@ -32,6 +32,10 @@ export class TeachingPathService {
     return this.teachingPathRepo.markAsPickedArticle(teachingPathId, nodeId, idArticle, levelWpId);
   }
 
+  public async sendDataDomain(domain: string) {
+    return this.teachingPathRepo.sendDataDomain(domain);
+  }
+
   public async finishTeachingPath(id: number) {
     return this.teachingPathRepo.finishTeachingPath(id);
   }
