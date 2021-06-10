@@ -152,7 +152,6 @@ export class ArticlesList extends Component<Props, State> {
 
   public addItemToNewChild = (item: Article) => {
     const { currentNode } = this.props.editTeachingPathStore!;
-
     const ifAddingItemIsSaved = !!currentNode!.children.filter(
       child => child.items!.find(el => el.value.id === item.id)
     ).length;

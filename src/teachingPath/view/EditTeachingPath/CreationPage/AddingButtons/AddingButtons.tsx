@@ -6,7 +6,8 @@ import { lettersNoEn } from 'utils/lettersNoEn';
 import intl from 'react-intl-universal';
 
 import { ItemContentTypeContext } from '../../ItemContentTypeContext';
-import { EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
+import { TeachingPathNodeType } from 'teachingPath/TeachingPath';
+import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
 import { EditTeachingPathStore } from '../../EditTeachingPathStore';
 import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
 
@@ -15,6 +16,7 @@ import addAssignemntImg from 'assets/images/add-assignment.svg';
 import createAssignmentImg from 'assets/images/create-assignment.svg';
 
 import './AddingButtons.scss';
+import { Domain } from 'domain';
 
 interface Props extends RouteComponentProps {
   node?: EditableTeachingPathNode;
@@ -32,7 +34,8 @@ class AddingButtonsContainer extends Component<Props> {
     modalDomain : false,
     disabledbutton : true,
     loading : true,
-    valueInputDomain: ''
+    valueInputDomain: '',
+    itemsForNewChildren: []
   };
 
   private openArticlesList = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -89,9 +92,19 @@ class AddingButtonsContainer extends Component<Props> {
   }
 
   private sendDomain = async () => {
+    const { editTeachingPathStore, node } = this.props;
+    editTeachingPathStore!.setCurrentNode(node!);
     this.setState({ loading: false });
     this.setState({ disabledbutton: true });
-    const response = await this.props.editTeachingPathStore!.sendDataDomain(this.state.valueInputDomain);
+    const response = await editTeachingPathStore!.sendDataDomain(this.state.valueInputDomain);
+    this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
+    const newChildren = this.state.itemsForNewChildren.map(
+      item => editTeachingPathStore!.createNewNode(
+        item,
+        TeachingPathNodeType.Domain
+      )
+    );
+    newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
   }
 
   private renderModalDomain = () => {
