@@ -1,3 +1,4 @@
+import { School } from 'distribution/Distribution';
 import { LoginPayload } from './UserService';
 
 export const USER_REPO = 'USER_REPO';
@@ -20,6 +21,7 @@ export type UserParams = {
   id: number;
   name: string;
   photo: string;
+  schools: Array<School>;
 };
 
 export abstract class User {
@@ -27,11 +29,13 @@ export abstract class User {
   public readonly name: string;
   public readonly id: number;
   public readonly photo: string;
+  public readonly schools: Array<School>;
 
   protected constructor(params: UserParams & { type: UserType }) {
     this.type = params.type;
     this.id = params.id;
     this.name = params.name;
     this.photo = params.photo;
+    this.schools = params.schools;
   }
 }
