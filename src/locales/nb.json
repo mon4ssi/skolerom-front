@@ -212,6 +212,11 @@
     "Nothing": "Søket ditt ga ingen resultater",
     "not for you": "Oppgaven er ikke tildelt deg",
     "copy": "Kopi av oppgaven er opprettet"
+  },  
+  "spanicon": {
+    "DOMAIN": "Domain.com",
+    "ARTICLE": "Article",
+    "ASSIGNMENT": "Assignment"
   },
   "new assignment": {
     "go_back": "Gå tilbake",

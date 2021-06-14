@@ -143,13 +143,13 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
   }
 
   public renderDefaultIcons = () => {
-    const { levels, icon } = this.props;
-
+    const { levels, icon, type } = this.props;
     return (
       <div className="defaultIcons flexBox">
         <div className="flexBox">
           {levels && levels.length ? this.renderLevel(levels) : null}
           <img src={icon} className="tpIcon" alt="info-icon"/>
+          <span>{intl.get(`spanicon.${type}`)}</span>
         </div>
         {this.renderNumberOfQuestions()}
       </div>
@@ -257,15 +257,13 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
         </button>
         <div className="cardInfo flexBox dirColumn spaceBetween">
           <div>
+            {!isTeachingPath && this.renderDefaultIcons()}
             <div className={`${!withTooltip && 'flexBox'}`}>
               <div className="cardTitle">
                 <p className={`${!title && 'noTitle'}`}>{title ? title : intl.get('edit_teaching_path.no_title')}</p>
               </div>
-
               {isTeachingPath && this.renderTeachingPathIcons()}
             </div>
-
-            {!isTeachingPath && this.renderDefaultIcons()}
 
             {this.renderDescription()}
           </div>

@@ -66,12 +66,12 @@ class TagInputWrapper extends Component<Props, State> {
     if (this.props.addTag) {
       this.props.addTag(id);
     }
-    setTimeout(
+    /*setTimeout(
       () => {
         this.setState({ isTagsWindowVisible: false });
       },
       timeoutlint
-    );
+    );*/
   }
 
   private onRemoveTag = (id: number): void => {
