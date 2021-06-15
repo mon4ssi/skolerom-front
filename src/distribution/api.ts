@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import { API } from 'utils/api';
 import { STATUS_FORBIDDEN, STATUS_NOT_FOUND } from 'utils/constants';
 
-import { DistributionRepo, Distribution } from './Distribution';
+import { DistributionRepo, Distribution, School } from './Distribution';
 import { buildDistribution, buildDistributionRequestDTO } from './factory';
 import { LevelDTO } from 'student/api';
 
@@ -13,6 +13,13 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 interface GrepDataDTO {
   displayName: string;
   code: string;
+}
+
+interface SchoolDTO {
+  groupApiId : string;
+  name: string;
+  parent: string;
+  address: string;
 }
 
 export interface DistributionStudentDTO {
@@ -26,6 +33,7 @@ export interface DistributionStudentDTO {
 export interface DistributionGroupResponseDTO {
   id: number;
   groupName: string;
+  school: SchoolDTO | null;
   grepData: GrepDataDTO | null;
   startDate: Date | null;
   endDate: Date | null;

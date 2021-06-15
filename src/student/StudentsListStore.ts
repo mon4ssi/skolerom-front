@@ -23,7 +23,7 @@ export class StudentsListStore {
 
   @observable public studentsListState: StoreState = StoreState.PENDING;
   @observable public studentsList: Array<Student> = [];
-  @observable public studentsListForSkeleton: Array<Student> = new Array(STUDENTS_PER_PAGE).fill(new Student({ id: 0, name: '', photo: '' }));
+  @observable public studentsListForSkeleton: Array<Student> = new Array(STUDENTS_PER_PAGE).fill(new Student({ id: 0, name: '', photo: '' , schools: [] }));
   @observable public totalPages: number = 0;
   @observable public currentStudent: Student | null = null;
 

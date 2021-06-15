@@ -5,7 +5,7 @@ import classnames from 'classnames';
 
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
 import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
-import { DistributionGroup } from 'distribution/Distribution';
+import { DistributionGroup, DistributionStudent, DistributionStudentArgs } from 'distribution/Distribution';
 
 import { StudentsList } from '../StudentsList/StudentsList';
 import { CustomCalendar } from '../CustomCalendar/CustomCalendar';
@@ -19,6 +19,9 @@ import checkImg from 'assets/images/check-rounded-white-bg.svg';
 import checkActiveImg from 'assets/images/check-active.svg';
 import checkIntermidiateImg from 'assets/images/check-intermidiate.svg';
 import greyClockImg from 'assets/images/rounded-clock-grey.svg';
+import { LoginStore } from 'user/view/LoginStore';
+import { USER_SERVICE, UserService } from 'user/UserService';
+import { injector } from 'Injector';
 
 import './MyClasses.scss';
 
@@ -37,6 +40,7 @@ interface MyClassState {
 
 @observer
 class MyClass extends Component<MyClassProps, MyClassState> {
+  private userService: UserService = injector.get<UserService>(USER_SERVICE);
 
   public state = {
     isStudentsListOpened: false,
@@ -48,6 +52,17 @@ class MyClass extends Component<MyClassProps, MyClassState> {
     this.setState({ isStudentsListOpened: !this.state.isStudentsListOpened });
   }
 
+  public getAllStudents(studentsGroupedByClasses: Array<Array<DistributionStudent>>): Array<DistributionStudent> {
+
+    let allStudents : Array<DistributionStudent> = [];
+
+    studentsGroupedByClasses.forEach((classStudents) => {
+      allStudents =  allStudents.concat(classStudents);
+    });
+
+    return allStudents;
+  }
+
   public renderStudentsList = () => {
     const { store, myClass, defaultDeadline, index, readOnly } = this.props;
     const { isStudentsListOpened } = this.state;
@@ -56,11 +71,14 @@ class MyClass extends Component<MyClassProps, MyClassState> {
       ? store!.filteredStudentsWithoutFilters[index]
       : store!.filteredStudents[index];
 
+    const allStudents : Array<DistributionStudent> = this.getAllStudents(store!.filteredStudents);
+
     return isStudentsListOpened && (
       <StudentsList
         store={store}
         readOnly={this.props.readOnly}
         students={studentsList}
+        allStudents={allStudents}
         classDeadline={myClass.endDate || defaultDeadline}
         myClass={myClass}
       />
@@ -132,8 +150,19 @@ class MyClass extends Component<MyClassProps, MyClassState> {
       </div>
     );
   }
+  public isCheckedInAllStudents = (id: number, allStudents : Array<DistributionStudent>) => {
+
+    const studentInAllStudents: DistributionStudent | undefined = allStudents.find(
+        _studentInAllStudents => (
+          _studentInAllStudents.id === id && _studentInAllStudents.isSelected
+        )
+    );
+    return studentInAllStudents !== undefined ? true : false;
+
+  }
 
   public handleSelectFullClass = (event: React.SyntheticEvent) => {
+
     const { store, myClass, readOnly } = this.props;
 
     const allStudents = myClass.assignedStudents;
@@ -141,15 +170,30 @@ class MyClass extends Component<MyClassProps, MyClassState> {
 
     const selectedAllStudents = allStudents.filter(student => student.isSelected);
 
+    const allStudentsFullGroups : Array<DistributionStudent> = this.getAllStudents(store!.filteredStudents);
+
     if (readOnly) {
       event.stopPropagation();
     } else {
       event.preventDefault();
 
       if (filteredStudents.length === allStudents.length) {
-        myClass.setIsSelectedAll(!myClass.isSelectedAll);
+        const newState = !myClass.isSelectedAll;
         allStudents.forEach(
-          student => student.setIsSelected(myClass.isSelectedAll)
+          (student) => {
+            if (newState) {
+              if (!this.isCheckedInAllStudents(student.id, allStudentsFullGroups)) {
+                myClass.setIsSelectedAll(true);
+                student.setIsSelected(true);
+              }else {
+                myClass.setIsSelectedAll(false);
+              }
+            }else {
+              myClass.setIsSelectedAll(false);
+              student.setIsSelected(false);
+            }
+
+          }
         );
 
       } else {
@@ -159,20 +203,32 @@ class MyClass extends Component<MyClassProps, MyClassState> {
 
         selectedAllStudents.length !== filteredStudents.length ?
           filteredStudents.forEach(
-            student => student.setIsSelected(true)
+            (student) => {
+              if (this.isCheckedInAllStudents(student.id, allStudentsFullGroups)) {
+                student.setIsSelected(true);
+              }
+            }
           ) :
           filteredStudents.forEach(
-            student => student.setIsSelected(false)
+            (student) => {
+
+              student.setIsSelected(false);
+            }
           );
       }
 
-      allStudents.filter(student => student.isSelected).length ?
-        myClass.setIsSelected(true) :
-        myClass.setIsSelected(false);
+      // allStudents.filter(student => student.isSelected).length ?
+      //   myClass.setIsSelected(true) :
+      //   myClass.setIsSelected(false);
     }
   }
 
   public render() {
+    const currentUser = this.userService.getCurrentUser();
+    const schoolCount:number = (currentUser !== undefined && currentUser !== null) && currentUser.schools !== undefined ? currentUser.schools.length : 0;
+
+    const maxNumberOfSchools = 2;
+
     const { myClass, readOnly } = this.props;
 
     const { isStudentsListOpened } = this.state;
@@ -187,7 +243,7 @@ class MyClass extends Component<MyClassProps, MyClassState> {
         <div className="myClassInfo flexBox spaceBetween">
 
           <div className="title fw500">
-            {myClass.name}
+            {myClass.name}{myClass.school !== null && schoolCount && schoolCount >=  maxNumberOfSchools  ? `( ${myClass.school.name} )` : ''}
           </div>
 
           <div className="flexBox justifyEnd alignCenter">
@@ -219,7 +275,7 @@ interface Props {
   readOnly?: boolean;
 }
 @observer
-export class MyClasses extends Component<Props> {
+export class MyClasses extends Component<Props>{
 
   public renderClass = (myClass: DistributionGroup, index: number) => {
     const { readOnly, store } = this.props;

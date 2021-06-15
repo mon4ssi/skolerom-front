@@ -4,6 +4,7 @@ import { API } from 'utils/api';
 import { buildStudentsList, buildStudentFilterDTO, buildAdditionalData } from './factory';
 import { Grade, Subject } from 'assignment/Assignment';
 import { GradeDTO, SubjectDTO } from 'assignment/factory';
+import { School } from 'distribution/Distribution';
 
 export const STUDENT_REPO = 'STUDENT_REPO';
 
@@ -29,6 +30,7 @@ export interface StudentResponseDTO {
   subjects: Array<StudentGradeSubject>;
   grades: Array<StudentGradeSubject>;
   level: LevelDTO;
+  schools: Array<School>;
 }
 
 export interface StudentAdditionalDataResponseDTO {
