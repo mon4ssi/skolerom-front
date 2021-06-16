@@ -5,7 +5,7 @@ import { DraftTeachingPath, EditableTeachingPathNode } from './TeachingPathDraft
 import { TeachingPathItem, TeachingPathNode, TeachingPathNodeType } from '../TeachingPath';
 import { DraftTeachingPathResponseDTO, TeachingPathItemSaveResponseDTO, TeachingPathNodeSaveResponseDTO } from './api';
 import { TeachingPathNodeResponseDTO } from 'teachingPath/api';
-import { Article, Assignment, Grade, Subject } from 'assignment/Assignment';
+import { Article, Assignment, Grade, Subject, Domain } from 'assignment/Assignment';
 
 export const buildNewTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
   const draftTeachingPath = new DraftTeachingPath({
@@ -117,11 +117,29 @@ const buildAssignmentItemDTO = (
   featuredImage: item.featuredImage
 });
 
-const buildTeachingPathItemRequestDTO = (item: TeachingPathItem): TeachingPathItemSaveResponseDTO => (
-  item.type === TeachingPathNodeType.Article ?
-    buildArticleItemDTO(item.value as Article) :
-    buildAssignmentItemDTO(item.value as Assignment)
-);
+const buildDomainItemDTO = (
+  item: Domain
+) => ({
+  id: item.id,
+  title: item.title,
+  description: item.description,
+  grades: item.grades || [],
+  url: item.url,
+  featuredImage: item.featuredImage
+});
+
+const buildTeachingPathItemRequestDTO = (item: TeachingPathItem): TeachingPathItemSaveResponseDTO => {
+  if (item.type === TeachingPathNodeType.Article) {
+    return buildArticleItemDTO(item.value as Article);
+  }
+  if (item.type === TeachingPathNodeType.Assignment) {
+    return buildAssignmentItemDTO(item.value as Assignment);
+  }
+  if (item.type === TeachingPathNodeType.Domain) {
+    return buildDomainItemDTO(item.value as Domain);
+  }
+  return buildArticleItemDTO(item.value as Article);
+};
 
 const buildImageUrlFromArticlesOrAssignment = (child: TeachingPathNodeSaveResponseDTO) => {
   if (child.type === TeachingPathNodeType.Article) {

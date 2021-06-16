@@ -123,7 +123,6 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         solo: parentNode!.children.length === 1 && parentNode!.children[0].items!.length === 1
       }
     );
-
     const image = item.value.images ?
       item.value.images.url : item.value.featuredImage ?
         item.value.featuredImage : item.value.relatedArticles && item.value.relatedArticles.length > 0 ?
@@ -137,9 +136,13 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
     const withoutBottomVerticalLine = readOnly && (this.props.node.children.length === 0);
     let imagenType = articleImg;
+    let urldomain = '';
     if (item.type === TeachingPathNodeType.Article) { imagenType = articleImg; }
     if (item.type === TeachingPathNodeType.Assignment) { imagenType = assignmentImg; }
-    if (item.type === TeachingPathNodeType.Article) { imagenType = articleImg; }
+    if (item.type === TeachingPathNodeType.Domain) {
+      imagenType = assignmentImg;
+      urldomain = item.value.url;
+    }
 
     return (
         <div className={containerClassNames} key={`${item.id}-${index}`}>
@@ -152,6 +155,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
             title={item.value.title}
             description={item.value.excerpt || item.value.description}
             img={image}
+            urldomain={urldomain}
             grades={item.value.grades}
             numberOfQuestions={item.value.numberOfQuestions}
             onDelete={this.handleDeleteItem}

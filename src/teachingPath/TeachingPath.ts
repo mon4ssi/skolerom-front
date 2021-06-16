@@ -159,6 +159,7 @@ export interface TeachingPathArgs {
   view?: string;
   levels?: Array<number>;
   featuredImage?: string;
+  url?: string;
   answerId?: number;
   isPassed?: boolean | null;
   mark?: number | null;
@@ -195,6 +196,7 @@ export class TeachingPath {
   @observable protected _levels: Array<number>;
   @observable protected _view: string;
   @observable protected _featuredImage?: string;
+  @observable protected _url?: string;
   @observable protected _answerId?: number;
   @observable protected _isPassed?: boolean | null;
   @observable protected _mark?: number | null;
@@ -227,6 +229,7 @@ export class TeachingPath {
     this._view = args.view || 'edit';
     this._levels = args.levels || [secondLevel];
     this._featuredImage = args.featuredImage;
+    this._url = args.url;
     this._answerId = args.answerId;
     this._comment = args.comment;
     this._mark = args.mark;
@@ -259,6 +262,11 @@ export class TeachingPath {
   @computed
   public get featuredImage() {
     return this._featuredImage;
+  }
+
+  @computed
+  public get url() {
+    return this._url;
   }
 
   @computed

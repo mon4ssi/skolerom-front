@@ -45,6 +45,7 @@ export interface TeacherTeachingPathResponseDTO {
   grades: Array<GradeDTO> | null;
   levels: Array<number>;
   featuredImage?: string;
+  url?: string;
   isPublished?: boolean;
   isDistributed?: boolean;
 }
@@ -84,6 +85,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         view: item.view,
         levels: item.levels,
         featuredImage: item.featuredImage,
+        url: item.url,
         isPublished: item.isPublished,
         isDistributed: item.isDistributed
       })),
@@ -103,6 +105,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         grades: isNil(item.grades) ? undefined : item.grades.map(grade => new Grade(grade.id, grade.title)),
         levels: item.levels,
         featuredImage: item.featuredImage,
+        url: item.url,
         isPublished: item.isPublished,
         isDistributed: item.isDistributed
       })),
@@ -193,11 +196,11 @@ export class TeachingPathApi implements TeachingPathRepo {
   public async sendDataDomain(url: string): Promise<Domain> {
     const { data } = await API.post('api/teacher/teaching-paths/domain', { url });
     return new Domain({
-      id: 0,
+      id: data.id,
       title: data.title,
       description: data.description,
-      image: data.image,
-      url: `${url}`
+      url: `${url}`,
+      featuredImage: data.image
     });
   }
 

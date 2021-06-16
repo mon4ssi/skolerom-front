@@ -797,21 +797,23 @@ export interface DomainArgs {
   title: string;
   url?: string;
   description?: string;
-  image?: string;
+  featuredImage?: string;
+  grades?: Array<Grade>;
 }
 
 export class Domain {
   public id: number;
   public readonly title: string;
-  public readonly url?: string;
   public readonly description?: string;
-  public readonly image?: string;
-
+  public readonly url?: string;
+  public grades?: Array<Grade>;
+  public readonly featuredImage?: string;
   constructor(args: DomainArgs) {
     this.id = args.id;
     this.title = args.title;
-    this.url = args.url;
     this.description = args.description;
-    this.image = args.image;
+    this.url = args.url;
+    this.featuredImage = args.featuredImage;
+    this.grades = args.grades;
   }
 }

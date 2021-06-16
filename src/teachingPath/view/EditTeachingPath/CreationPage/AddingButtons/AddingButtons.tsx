@@ -16,7 +16,6 @@ import addAssignemntImg from 'assets/images/add-assignment.svg';
 import createAssignmentImg from 'assets/images/create-assignment.svg';
 
 import './AddingButtons.scss';
-import { Domain } from 'domain';
 
 interface Props extends RouteComponentProps {
   node?: EditableTeachingPathNode;
@@ -105,6 +104,10 @@ class AddingButtonsContainer extends Component<Props> {
       )
     );
     newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
+    editTeachingPathStore!.currentEntity!.save();
+
+    this.context.changeContentType(null);
+    editTeachingPathStore!.setCurrentNode(null);
   }
 
   private renderModalDomain = () => {

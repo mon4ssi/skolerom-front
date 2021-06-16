@@ -32,6 +32,7 @@ interface Props {
   title: string;
   description?: string;
   img?: string;
+  urldomain?: string;
   grades?: Array<Grade>;
   numberOfQuestions?: number;
   levels?: Array<number>;
@@ -60,7 +61,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
       const title = grade.title.split('.', 1);
       return (
         <div key={grade.id}>
-          {title}{intl.get('new assignment.grade')}
+          {title}
         </div>
       );
     }
@@ -88,9 +89,12 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
         .map(this.renderGrade);
 
       return (
-        <div className="flexBox grades">
-          {visibleGrades}
-          {amountOfGrades > twoGrades && amountOfGrades !== threeGrades && <div>{intl.get('assignment list.Others')}</div>}
+        <div className="flexBox gradesLine">
+          <div className="flexBox gradesLineInside">
+            {visibleGrades}
+            {amountOfGrades > twoGrades && amountOfGrades !== threeGrades && <div>{intl.get('assignment list.Others')}</div>}
+          </div>
+          <p>{intl.get('new assignment.grade')}</p>
         </div>
       );
     }
@@ -142,16 +146,29 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
     );
   }
 
+  public renderRouteDomain = () => {
+    const { urldomain, type } = this.props;
+    if (type === 'DOMAIN') {
+      return (
+        <a href={urldomain} target="_blank">
+          {urldomain}
+        </a>
+      );
+    }
+    return (
+      <p>{intl.get(`spanicon.${type}`)}</p>
+    );
+  }
+
   public renderDefaultIcons = () => {
-    const { levels, icon, type } = this.props;
+    const { levels, icon } = this.props;
     return (
       <div className="defaultIcons flexBox">
         <div className="flexBox">
           {levels && levels.length ? this.renderLevel(levels) : null}
           <img src={icon} className="tpIcon" alt="info-icon"/>
-          <span>{intl.get(`spanicon.${type}`)}</span>
+          <span>{this.renderRouteDomain()}</span>
         </div>
-        {this.renderNumberOfQuestions()}
       </div>
     );
   }
@@ -250,7 +267,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
     );
 
     return (
-      <div className={infoCardClassNames} onClick={this.onCardClick}>
+      <div className={infoCardClassNames} onClick={this.onCardClick} data-id={this.props.id}>
         {withButtons && this.renderActionButtons()}
         <button title={title}>
           <img src={img || placeholderImg} alt={title} title={title} className="cardImage"/>
@@ -267,8 +284,10 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
 
             {this.renderDescription()}
           </div>
-
-          {this.renderGrades()}
+          <div className="footerCardInfo flexBox">
+            {this.renderGrades()}
+            {this.renderNumberOfQuestions()}
+          </div>
         </div>
       </div>
     );

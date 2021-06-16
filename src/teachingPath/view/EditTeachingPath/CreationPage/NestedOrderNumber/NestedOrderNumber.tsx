@@ -1,6 +1,7 @@
 import React, { Component, createRef } from 'react';
 import { observer, inject } from 'mobx-react';
 import intl from 'react-intl-universal';
+import { validDomain } from 'utils/validDomain';
 import classnames from 'classnames';
 
 import { EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
@@ -11,6 +12,7 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 
 import editImg from 'assets/images/edit-tp.svg';
 import deleteImg from 'assets/images/trash-tp.svg';
+import addArticleImg from 'assets/images/add-article.svg';
 
 import './NestedOrderNumber.scss';
 
@@ -26,6 +28,13 @@ interface Props {
 export class NestedOrderNumber extends Component<Props> {
 
   public static contextType = ItemContentTypeContext;
+  public state = {
+    modalDomain : false,
+    disabledbutton : true,
+    loading : true,
+    valueInputDomain: '',
+    itemsForNewChildren: [],
+  };
 
   public buttonref = React.createRef<HTMLButtonElement>();
   public componentDidMount() {
@@ -34,12 +43,90 @@ export class NestedOrderNumber extends Component<Props> {
     }
   }
 
+  public openDomainModal = () => {
+    this.setState({
+      modalDomain: true
+    });
+  }
+
+  public closeDomainModal = () => {
+    if (this.state.loading) {
+      this.setState({
+        modalDomain: false
+      });
+    }
+  }
+
+  public handleChangeNewQuestion = (e:  React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ valueInputDomain: e.target.value });
+    if (validDomain(e.target.value)) {
+      this.setState({ disabledbutton: false });
+    } else {
+      this.setState({ disabledbutton: true });
+    }
+  }
+
+  public sendDomain = async () => {
+    const { editTeachingPathStore, node } = this.props;
+    this.setState({ loading: false });
+    this.setState({ disabledbutton: true });
+    const response = await editTeachingPathStore!.sendDataDomain(this.state.valueInputDomain);
+    editTeachingPathStore!.currentNode!.children.forEach(
+      (child) => {
+        child.removeItem(child.items![0].value.id);
+      }
+    );
+  }
+
+  public renderModalDomain = () => {
+    const { disabledbutton } = this.state;
+    return (
+      <div className="modalDomain">
+        <div className="modalDomain__background" onClick={this.closeDomainModal} />
+        <div className="modalDomain__content">
+          <div className="modalDomain__context">
+            <div className="modalDomain__form">
+              <div className="modalDomain__input">
+                <img src={addArticleImg} alt="add-article" />
+                <input
+                  className="newTextQuestionInput"
+                  placeholder={intl.get('new assignment.type_or_paste')}
+                  value={this.state.valueInputDomain}
+                  onChange={this.handleChangeNewQuestion}
+                  aria-required="true"
+                  aria-invalid="false"
+                  autoFocus={true}
+                />
+              </div>
+              <div className="modalDomain__button">
+                <button
+                  className="btn"
+                  onClick={this.sendDomain}
+                  title={intl.get('new assignment.add_link')}
+                  disabled={disabledbutton}
+                >
+                  {intl.get('new assignment.add_link')}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   public handleEditClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { editTeachingPathStore, node } = this.props;
 
     event.preventDefault();
     editTeachingPathStore!.setCurrentNode(node!);
-    this.context.changeContentType(node.children[0].type === TeachingPathNodeType.Article ? 0 : 1);
+    if (node.children[0].type === TeachingPathNodeType.Domain) {
+      this.setState({
+        modalDomain: true
+      });
+    } else {
+      this.context.changeContentType(node.children[0].type === TeachingPathNodeType.Article ? 0 : 1);
+    }
   }
 
   public handleDeleteClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -88,6 +175,7 @@ export class NestedOrderNumber extends Component<Props> {
     return (
       <div className={numberAndActionsClassnames}>
         {!readOnly && this.renderEditIcon()}
+        {this.state.modalDomain && this.renderModalDomain()}
         <div className="nestedOrderNumber">
           {nestedOrderNumber}
         </div>
