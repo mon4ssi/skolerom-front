@@ -155,7 +155,7 @@ class AddingButtonsContainer extends Component<Props> {
             {intl.get('edit_teaching_path.modals.add_articles')}
           </button>
         </div>
-        {this.renderButtonDomain()}
+        {/* {this.renderButtonDomain()} */}
         {this.state.modalDomain && this.renderModalDomain()}
         <div
           className="addingButton"
