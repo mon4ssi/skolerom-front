@@ -246,6 +246,11 @@
       span {
         font-size: 14px;
         word-break: break-word;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+        overflow: hidden;
+        max-width: 220px;
       }
       .levels {
         margin-right: 10px;

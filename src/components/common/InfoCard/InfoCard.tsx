@@ -146,11 +146,16 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
     );
   }
 
+  public targetRouteDomain = () => {
+    const { urldomain } = this.props;
+    window.open(`${urldomain}`, '_blank');
+  }
+
   public renderRouteDomain = () => {
     const { urldomain, type } = this.props;
     if (type === 'DOMAIN') {
       return (
-        <a href={urldomain} target="_blank">
+        <a href="javascript:void(0)" onClick={this.targetRouteDomain}>
           {urldomain}
         </a>
       );

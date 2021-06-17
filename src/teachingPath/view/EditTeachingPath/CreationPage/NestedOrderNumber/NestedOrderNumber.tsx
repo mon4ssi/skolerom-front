@@ -71,11 +71,21 @@ export class NestedOrderNumber extends Component<Props> {
     this.setState({ loading: false });
     this.setState({ disabledbutton: true });
     const response = await editTeachingPathStore!.sendDataDomain(this.state.valueInputDomain);
+    this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
+    const newChildren = this.state.itemsForNewChildren.map(
+      item => editTeachingPathStore!.createNewNode(
+        item,
+        TeachingPathNodeType.Domain
+      )
+    );
+    let idNode = 0;
     editTeachingPathStore!.currentNode!.children.forEach(
       (child) => {
-        child.removeItem(child.items![0].value.id);
+        idNode = child.items![0].value.id;
+        node.removeChild(child);
       }
     );
+    node.addChild(newChildren[0], idNode);
   }
 
   public renderModalDomain = () => {

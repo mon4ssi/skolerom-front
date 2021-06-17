@@ -1,6 +1,6 @@
 import { action, computed, observable } from 'mobx';
 import { TeachingPath, TeachingPathNode, TeachingPathNodeType, TeachingPathsList } from '../TeachingPath';
-import { Article, ARTICLE_SERVICE_KEY, Assignment } from '../../assignment/Assignment';
+import { Article, ARTICLE_SERVICE_KEY, Assignment, Domain } from '../../assignment/Assignment';
 import { ArticleService } from '../../assignment/service';
 import { injector } from '../../Injector';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from '../service';
@@ -20,9 +20,11 @@ export class QuestionaryTeachingPathStore {
   @observable public currentTeachingPath: TeachingPath | null = null;
   @observable public currentArticlesList: Array<Article> = [];
   @observable public currentAssignmentList: Array<Assignment> = [];
+  @observable public currentDomainList: Array<Domain> = [];
   @observable public currentNode: TeachingPathNode | null = null;
   @observable public pickedItemArticle: {idNode: number, item: Article} | undefined = undefined;
   @observable public pickedItemAssignment: {idNode: number, item: Assignment} | undefined = undefined;
+  @observable public pickedItemDomain: {idNode: number, item: Domain} | undefined = undefined;
   @observable public fetchingData: boolean = false;
   @observable public isOpenIframe: boolean = false;
   @observable public isOpenAssignment: boolean = false;
@@ -88,6 +90,14 @@ export class QuestionaryTeachingPathStore {
   }
 
   @computed
+  public get childrenDomainType() {
+    if (this.currentNode!.children[0].children.length > 0) {
+      return this.currentNode!.children[0].children[0].type;
+    }
+    return undefined;
+  }
+
+  @computed
   public get currentListAssignment() {
     return this.currentAssignmentList;
   }
@@ -121,10 +131,12 @@ export class QuestionaryTeachingPathStore {
   public resetAllInfoAboutTeachingPath() {
     this.currentTeachingPath = null;
     this.currentArticlesList = [];
+    this.currentDomainList = [];
     this.currentAssignmentList = [];
     this.currentNode = null;
     this.pickedItemArticle = undefined;
     this.pickedItemAssignment = undefined;
+    this.pickedItemDomain = undefined;
     this.fetchingData = false;
     this.isOpenIframe = false;
     this.isOpenAssignment = false;
@@ -149,6 +161,11 @@ export class QuestionaryTeachingPathStore {
   @action
   public resetCurrentArticleList() {
     this.currentArticlesList = [];
+  }
+
+  @action
+  public resetCurrentDomainList() {
+    this.currentDomainList = [];
   }
 
   @action
@@ -208,6 +225,13 @@ export class QuestionaryTeachingPathStore {
             }
             return null;
           }
+          if (i.type === TeachingPathNodeType.Domain) {
+            const domain = i.value as Domain;
+            if (domain.id === idItem) {
+              this.pickedItemDomain = { idNode: child.id!, item: new Domain(domain) };
+            }
+            return null;
+          }
           return null;
         });
       }
@@ -245,6 +269,7 @@ export class QuestionaryTeachingPathStore {
     this.setFetchingDataStatus(true);
     this.resetCurrentArticleList();
     this.resetCurrentAssignmentList();
+    this.resetCurrentDomainList();
     await this.getCurrentNode(idTeachingPath, idNode);
     const type = this.childrenType;
 
@@ -254,6 +279,9 @@ export class QuestionaryTeachingPathStore {
         break;
       case TeachingPathNodeType.Assignment:
         this.setCurrentDisplayedElement(TeachingPathNodeType.Assignment);
+        break;
+      case TeachingPathNodeType.Domain:
+        this.setCurrentDisplayedElement(TeachingPathNodeType.Domain);
         break;
       default:
         this.setCurrentDisplayedElement(SubmitNodeType.Submit);
@@ -316,6 +344,21 @@ export class QuestionaryTeachingPathStore {
       }
       );
     }
+  }
+
+  @action
+  public domainFullInfo() {
+    this.currentNode!.children.forEach((child) => {
+      if (child.items) {
+        return child.items.forEach((item) => {
+          if (item.type === TeachingPathNodeType.Domain) {
+            const domain = item.value as Domain;
+            this.currentDomainList.push(domain);
+          }
+        });
+      }
+      return null;
+    });
   }
 
   @action

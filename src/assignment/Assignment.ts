@@ -799,6 +799,7 @@ export interface DomainArgs {
   description?: string;
   featuredImage?: string;
   grades?: Array<Grade>;
+  isRead?: boolean;
 }
 
 export class Domain {
@@ -808,6 +809,7 @@ export class Domain {
   public readonly url?: string;
   public grades?: Array<Grade>;
   public readonly featuredImage?: string;
+  public isRead?: boolean;
   constructor(args: DomainArgs) {
     this.id = args.id;
     this.title = args.title;
@@ -815,5 +817,6 @@ export class Domain {
     this.url = args.url;
     this.featuredImage = args.featuredImage;
     this.grades = args.grades;
+    this.isRead = args.isRead;
   }
 }
