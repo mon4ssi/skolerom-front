@@ -21,7 +21,8 @@ const buildStudent = (dto: StudentResponseDTO) => (
     photo: '',
     grades: dto.grades,
     subjects: dto.subjects,
-    level: buildLevel(dto.level)
+    level: buildLevel(dto.level),
+    schools: dto.schools
   })
 );
 

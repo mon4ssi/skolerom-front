@@ -18,12 +18,13 @@ import greyClockImg from 'assets/images/rounded-clock-grey.svg';
 import firstLevelImg from 'assets/images/level-1-blue.svg';
 import secondLevelImg from 'assets/images/level-2-blue.svg';
 import thirdLevelImg from 'assets/images/level-3-blue.svg';
-
+import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import './StudentsList.scss';
 
 interface StudentProps {
   store?: NewAssignmentStore | EditTeachingPathStore;
   student: DistributionStudent;
+  allStudents: Array<DistributionStudent>;
   classDeadline: Date;
   myClass: DistributionGroup;
   readOnly?: boolean;
@@ -56,13 +57,43 @@ class Student extends Component<StudentProps, StudentState> {
     this.setState({ isCalendarOpened: false });
   }
 
+  public getStudentFromAllStudentsById(id: number): DistributionStudent | undefined {
+    return  this.props.allStudents.find(_student => _student.id === id);
+  }
+
+  public isCheckedInAllStudents = (id: number) => {
+    const { allStudents } = this.props;
+
+    return allStudents.find(
+        _studentInAllStudents => (
+          _studentInAllStudents.id === id && _studentInAllStudents.isSelected
+        )
+    ) !== undefined ? true : false;
+  }
+
   public handleSelectStudent = (event: React.SyntheticEvent) => {
-    const { student, myClass, readOnly } = this.props;
+
+    const { student, myClass, readOnly, allStudents } = this.props;
+
     if (readOnly) {
       event.stopPropagation();
     } else {
       event.preventDefault();
-      student.setIsSelected(!student.isSelected);
+
+      const newState = !student.isSelected;
+      if (newState) {
+        if (!this.isCheckedInAllStudents(student.id)) {
+          student.setIsSelected(newState);
+        }else {
+          Notification.create({
+            type: NotificationTypes.ERROR,
+            title: 'Este alumno ya ha sido chekeado en otro curso'
+          });
+        }
+      }else {
+        student.setIsSelected(newState);
+      }
+
       if (myClass.numberOfSelectedStudents) {
         myClass.setIsSelected(true);
         if (myClass.numberOfSelectedStudents === myClass.numberOfStudents) {
@@ -175,6 +206,7 @@ interface Props {
   classDeadline: Date;
   myClass: DistributionGroup;
   readOnly?: boolean;
+  allStudents: Array<DistributionStudent>;
 }
 
 export class StudentsList extends Component<Props> {
@@ -185,6 +217,7 @@ export class StudentsList extends Component<Props> {
       store={this.props.store}
       readOnly={this.props.readOnly}
       student={student}
+      allStudents={this.props.allStudents}
       classDeadline={this.props.classDeadline}
       myClass={this.props.myClass}
     />
