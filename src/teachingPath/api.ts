@@ -3,7 +3,7 @@ import isNull from 'lodash/isNull';
 import intl from 'react-intl-universal';
 
 import { TeachingPath, TeachingPathItem, TeachingPathNode, TeachingPathNodeType, TeachingPathRepo } from './TeachingPath';
-import { Article, Filter, Grade } from 'assignment/Assignment';
+import { Article, Filter, Grade, Domain } from 'assignment/Assignment';
 import { API } from '../utils/api';
 import { buildFilterDTO, GradeDTO } from 'assignment/factory';
 import { Breadcrumbs } from './teachingPathDraft/TeachingPathDraft';
@@ -190,8 +190,15 @@ export class TeachingPathApi implements TeachingPathRepo {
     await API.post(`api/student/teaching-paths/${teachingPathId}/node/${nodeId}/article/${idArticle}/mark`, { graduation });
   }
 
-  public async sendDataDomain(domain: string): Promise<void> {
-    await API.post('api/teacher/teaching-paths/domain', { domain });
+  public async sendDataDomain(url: string): Promise<Domain> {
+    const { data } = await API.post('api/teacher/teaching-paths/domain', { url });
+    return new Domain({
+      id: 0,
+      title: data.title,
+      description: data.description,
+      image: data.image,
+      url: `${url}`
+    });
   }
 
   public async finishTeachingPath(id: number): Promise<void> {
