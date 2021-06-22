@@ -7,7 +7,6 @@ import { InfoCard } from 'components/common/InfoCard/InfoCard';
 import reading from 'assets/images/reading-icon.svg';
 import listPlaceholderImg from 'assets/images/list-placeholder.svg';
 import { QuestionaryTeachingPathStore } from '../../../questionaryTeachingPath/questionaryTeachingPathStore';
-import { ReadingDomain } from 'components/pages/ReadingDomain/ReadingDomain';
 import { Domain } from 'assignment/Assignment';
 
 interface Props {
