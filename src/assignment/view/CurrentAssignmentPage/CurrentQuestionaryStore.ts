@@ -126,8 +126,11 @@ export class CurrentQuestionaryStore {
     });
     article!.isRead = true;
     this.relatedArticles.splice(indexArticle, 1, article!);
-    this.currentQuestionary!.isQuestionaryChanged = true;
-    this.setCurrentQuestion(0);
+    const readArticles = this.relatedArticles.filter(article => article.isRead);
+    if (this.relatedArticles.length === readArticles.length) {
+      this.currentQuestionary!.isQuestionaryChanged = true;
+      this.setCurrentQuestion(0);
+    }
   }
 
   @action

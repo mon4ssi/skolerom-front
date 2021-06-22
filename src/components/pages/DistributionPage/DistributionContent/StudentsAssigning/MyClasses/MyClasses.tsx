@@ -176,7 +176,6 @@ class MyClass extends Component<MyClassProps, MyClassState> {
       event.stopPropagation();
     } else {
       event.preventDefault();
-
       if (filteredStudents.length === allStudents.length) {
         const newState = !myClass.isSelectedAll;
         allStudents.forEach(
@@ -185,14 +184,13 @@ class MyClass extends Component<MyClassProps, MyClassState> {
               if (!this.isCheckedInAllStudents(student.id, allStudentsFullGroups)) {
                 myClass.setIsSelectedAll(true);
                 student.setIsSelected(true);
-              }else {
+              } else {
                 myClass.setIsSelectedAll(false);
               }
-            }else {
+            } else {
               myClass.setIsSelectedAll(false);
               student.setIsSelected(false);
             }
-
           }
         );
 
@@ -217,9 +215,9 @@ class MyClass extends Component<MyClassProps, MyClassState> {
           );
       }
 
-      // allStudents.filter(student => student.isSelected).length ?
-      //   myClass.setIsSelected(true) :
-      //   myClass.setIsSelected(false);
+      allStudents.filter(student => student.isSelected).length ?
+        myClass.setIsSelected(true) :
+        myClass.setIsSelected(false);
     }
   }
 

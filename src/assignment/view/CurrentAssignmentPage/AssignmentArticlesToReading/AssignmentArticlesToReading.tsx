@@ -107,6 +107,7 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
   }
 
   public finishReading = (graduation: number) => { // TODO maybe it should be removed in future
+    const { currentQuestionaryStore } = this.props;
     const { shownArticleLevelId, attachedArticleId } = this.state;
     if (!isNull(attachedArticleId)) {
       this.props.currentQuestionaryStore!.setReadStatusToArticle(attachedArticleId!, shownArticleLevelId, graduation);
@@ -140,6 +141,7 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
     } = this.state;
 
     const { currentQuestionaryStore } = this.props;
+    this.sendValidArticlesRead();
     if (isShowArticle) {
       return (
         <ReadingArticle
@@ -158,7 +160,6 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
           <span className="AssignmentArticlesToReading__title">{intl.get('assignment preview.Assignment articles')}</span>
           <div className="AssignmentArticlesToReading__articles" ref={this.refArticle}>
             {currentQuestionaryStore!.relatedAllArticles.map(this.renderArticlesCards)}
-            {this.sendValidArticlesRead()}
           </div>
         </>
       );

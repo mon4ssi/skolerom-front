@@ -97,19 +97,50 @@ export class SubmitComponent extends Component<Props> {
   public componentDidMount() {
     const { numberOfQuestions, numberOfAnsweredQuestions, currentQuestionaryStore } = this.props;
     currentQuestionaryStore!.relatedAllArticles.map(this.validArticles);
+    const redirectData = (currentQuestionaryStore!.currentQuestionary && currentQuestionaryStore!.currentQuestionary.redirectData)
+      ? currentQuestionaryStore!.currentQuestionary.redirectData
+      : undefined;
     this.sendValidArticlesRead();
-    if (numberOfAnsweredQuestions === numberOfQuestions && currentQuestionaryStore!.allArticlesread) {
-      this.setState({ disablebutton : false });
-      setTimeout(
-        () => {
-          if (this.refbutton.current) {
-            this.refbutton.current!.focus();
-          }
-        },
-        showDelay
-      );
+    if (redirectData === undefined) {
+      if (currentQuestionaryStore!.relatedAllArticles.length) {
+        if (numberOfAnsweredQuestions === numberOfQuestions && currentQuestionaryStore!.allArticlesread) {
+          this.setState({ disablebutton : false });
+          setTimeout(
+            () => {
+              if (this.refbutton.current) {
+                this.refbutton.current!.focus();
+              }
+            },
+            showDelay
+          );
+        } else {
+          this.setState({ disablebutton : true });
+        }
+      } else {
+        if (numberOfAnsweredQuestions === numberOfQuestions) {
+          this.setState({ disablebutton : false });
+          setTimeout(
+            () => {
+              if (this.refbutton.current) {
+                this.refbutton.current!.focus();
+              }
+            },
+            showDelay
+          );
+        }
+      }
     } else {
-      this.setState({ disablebutton : true });
+      if (numberOfAnsweredQuestions === numberOfQuestions) {
+        this.setState({ disablebutton : false });
+        setTimeout(
+          () => {
+            if (this.refbutton.current) {
+              this.refbutton.current!.focus();
+            }
+          },
+          showDelay
+        );
+      }
     }
   }
 

@@ -132,7 +132,11 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
   public finishReadingDomain = async () => {
     const { questionaryTeachingPathStore } = this.props;
     questionaryTeachingPathStore!.setFetchingDataStatus(true);
-    const type = questionaryTeachingPathStore!.childrenDomainType;
+    await questionaryTeachingPathStore!.getCurrentNode(
+      questionaryTeachingPathStore!.teachingPathId!,
+      questionaryTeachingPathStore!.pickedItemDomain!.idNode
+    );
+    const type = questionaryTeachingPathStore!.childrenType;
     questionaryTeachingPathStore!.setFetchingDataStatus(false);
     switch (type) {
       case TeachingPathNodeType.Article:

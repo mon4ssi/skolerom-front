@@ -102,22 +102,21 @@ export class TeachingPathCheckingPanel extends Component<Props> {
 
   public renderSteps = () => {
     const { teachingPathEvaluationStore } = this.props;
-
     if (!teachingPathEvaluationStore!.evaluationSteps.length) {
       return <div className={'flexBox alignCenter justifyCenter w100 h100'}><Loader /></div>;
     }
 
     return teachingPathEvaluationStore!.evaluationSteps.map((step: EvaluationStep, index: number) => (
-          <div className={'teachingPathContainer'} key={step.nodeId}>
-            <div className={'alignCenter stepCounterWrapper'}>
-              <span className={'stepCounter'}>{index + 1}</span>
-              <span className={'stepCounterTitle'}>
-                {step.type === 'ASSIGNMENT' ? intl.get('evaluation_page.Choose assignment') : intl.get('evaluation_page.Choose article')}
-              </span>
-            </div>
-            {step.type === 'ASSIGNMENT' ? this.renderAssignmentType(step) : this.renderArticleType(step)}
-          </div>
-        ));
+      <div className={'teachingPathContainer'} key={step.nodeId}>
+        <div className={'alignCenter stepCounterWrapper'}>
+          <span className={'stepCounter'}>{index + 1}</span>
+          <span className={'stepCounterTitle'}>
+            {step.type === 'ASSIGNMENT' ? intl.get('evaluation_page.Choose assignment') : intl.get('evaluation_page.Choose article')}
+          </span>
+        </div>
+        {step.type === 'ASSIGNMENT' ? this.renderAssignmentType(step) : this.renderArticleType(step)}
+      </div>
+    ));
   }
 
   public render() {
