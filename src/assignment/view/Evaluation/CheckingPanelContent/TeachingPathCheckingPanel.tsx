@@ -83,13 +83,18 @@ export class TeachingPathCheckingPanel extends Component<Props> {
           type={step.type}
           title={articleItem.title}
           id={articleItem.id}
-          level={articleItem.levels}
           image={articleItem.featuredImage}
           isChosen={articleItem.isSelected}
-          handleClick={this.handleArticleClick}
+          handleClick={this.handleDomainClick}
         />
       );
     })
+
+  public handleDomainClick = (e: MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const urlpath = e.currentTarget.getAttribute('data-url');
+    window.open(`${urlpath}`);
+  }
 
   public renderAssignmentType = (step: EvaluationStep) => (
     <>
@@ -99,6 +104,51 @@ export class TeachingPathCheckingPanel extends Component<Props> {
       </div>
     </>
   )
+
+  public renderDomainType = (step: EvaluationStep) =>
+  step.items.map((item) => {
+    const articleItem = item as EvaluateTeachingPathNodeArticleItem;
+    return (
+      <RelatedCard
+        key={articleItem.id}
+        type={step.type}
+        title={articleItem.title}
+        id={articleItem.id}
+        level={articleItem.levels}
+        image={articleItem.featuredImage}
+        isChosen={articleItem.isSelected}
+        handleClick={this.handleDomainClick}
+        url={articleItem.url}
+      />
+    );
+  })
+  public renderchooseTitle = (type: string) => {
+    let chooseTitle = intl.get('evaluation_page.Choose article');
+    if (type === 'ASSIGNMENT') {
+      chooseTitle = intl.get('evaluation_page.Choose assignment');
+    }
+    if (type === 'DOMAIN') {
+      chooseTitle = intl.get('evaluation_page.Choose domain');
+    }
+    if (type === 'ARTICLE') {
+      chooseTitle = intl.get('evaluation_page.Choose article');
+    }
+    return chooseTitle;
+  }
+
+  public renderchooseContent = (step: EvaluationStep) => {
+    const type = step.type;
+    if (type === 'ASSIGNMENT') {
+      return this.renderAssignmentType(step);
+    }
+    if (type === 'DOMAIN') {
+      return this.renderDomainType(step);
+    }
+    if (type === 'ARTICLE') {
+      return this.renderArticleType(step);
+    }
+    return this.renderArticleType(step);
+  }
 
   public renderSteps = () => {
     const { teachingPathEvaluationStore } = this.props;
@@ -111,10 +161,10 @@ export class TeachingPathCheckingPanel extends Component<Props> {
         <div className={'alignCenter stepCounterWrapper'}>
           <span className={'stepCounter'}>{index + 1}</span>
           <span className={'stepCounterTitle'}>
-            {step.type === 'ASSIGNMENT' ? intl.get('evaluation_page.Choose assignment') : intl.get('evaluation_page.Choose article')}
+            {this.renderchooseTitle(step.type)}
           </span>
         </div>
-        {step.type === 'ASSIGNMENT' ? this.renderAssignmentType(step) : this.renderArticleType(step)}
+        {this.renderchooseContent(step)}
       </div>
     ));
   }

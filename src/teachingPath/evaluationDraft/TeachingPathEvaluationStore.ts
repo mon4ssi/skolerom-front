@@ -293,6 +293,17 @@ export class TeachingPathEvaluationStore {
           });
         }
       }
+
+      if (nodeInfo.type === 'DOMAIN') {
+        const domainInfo = nodeInfo.items;
+        steps.push({
+          items: domainInfo,
+          nodeId: node,
+          type: nodeInfo.type,
+          assignmentAnswers: undefined
+        });
+      }
+
       parentChildren = nodeInfo.children;
     }
     this._evaluationSteps = steps;

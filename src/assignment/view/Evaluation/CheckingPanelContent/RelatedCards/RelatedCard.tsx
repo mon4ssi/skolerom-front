@@ -15,10 +15,11 @@ interface Props {
   id: number;
   type: string;
   image?: string;
-  level: number;
+  level?: number;
   title: string;
   questionCounter?: number;
   isChosen?: boolean;
+  url?: string;
   handleClick?(e: MouseEvent<HTMLDivElement>): void;
 }
 
@@ -46,13 +47,27 @@ export class RelatedCard extends Component<Props> {
   }
 
   public render() {
-    const { image, id, level, title, type, handleClick, questionCounter, isChosen } = this.props;
-    const featuredImage = image ? image : type === 'ASSIGNMENT' ? placeholderAssignment : placeholderArticle ;
+    const { image, id, url, level, title, type, handleClick, questionCounter, isChosen } = this.props;
+    let featuredImage;
+    if (image) {
+      featuredImage = image;
+    } else {
+      if (type === 'ASSIGNMENT') {
+        featuredImage = placeholderAssignment;
+      }
+      if (type === 'ARTICLE') {
+        featuredImage = placeholderArticle;
+      }
+      if (type === 'DOMAIN') {
+        featuredImage = placeholderArticle;
+      }
+    }
 
     return (
       <div
         key={id}
         id={`${id}`}
+        data-url={url}
         onClick={handleClick}
         className={`relatedCard ${isChosen && 'isChosen'} ${!handleClick && 'withoutCursor'}`}
       >
