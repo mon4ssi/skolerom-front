@@ -233,16 +233,19 @@ export class ArticlesList extends Component<Props, State> {
 
   public renderHeader = () => (
     <div className="articlesListHeader flexBox spaceBetween" tabIndex={0}>
-      <div>
-        {intl.get('edit_teaching_path.modals.add_articles')}
+      <div className="articlesListHeader__left">
+        <p className="active">{intl.get('edit_teaching_path.modals.articles')}</p>
+        <p>{intl.get('edit_teaching_path.modals.assignmetns')}</p>
       </div>
-      <button ref={this.refButton} onClick={this.closeModal} title={intl.get('generals.close')}>
-      <img
-        src={closeImg}
-        alt={intl.get('generals.close')}
-        title={intl.get('generals.close')}
-      />
-      </button>
+      <div className="articlesListHeader__right">
+        <button ref={this.refButton} onClick={this.closeModal} title={intl.get('generals.close')}>
+          <img
+            src={closeImg}
+            alt={intl.get('generals.close')}
+            title={intl.get('generals.close')}
+          />
+        </button>
+      </div>
     </div>
   )
 

@@ -566,6 +566,8 @@
       "articles_selected": "{number} artikler valgt",
       "all_assignments": "Alle oppgaver",
       "my_assignments": "Mine oppgaver",
+      "articles": "Artikler",
+      "assignmetns": "Oppgaver",
       "assignments_selected": "{number} oppgaver valgt",
       "search_for_articles": "Søk etter artikler..."
     },

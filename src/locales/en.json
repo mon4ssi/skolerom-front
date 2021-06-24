@@ -567,6 +567,8 @@
       "articles_selected": "{number} articles selected",
       "all_assignments": "All assignments",
       "my_assignments": "My assignments",
+      "articles": "Articles",
+      "assignmetns": "Assignments",
       "assignments_selected": "{number} assignments selected",
       "search_for_articles": "Search for articles..."
     },

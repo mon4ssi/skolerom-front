@@ -10,6 +10,9 @@ import './AddItemModal.scss';
 
 class AddItemComponent extends Component {
   public static contextType = ItemContentTypeContext;
+  public state = {
+    greeddata: false
+  };
 
   public renderModalContent = () => {
     const { contentType } = this.context;
@@ -27,10 +30,35 @@ class AddItemComponent extends Component {
     this.context.changeContentType(null);
   }
 
+  public renderInformationContent = () => {
+    const { greeddata } = this.state;
+    return <div>Unique Information</div>;
+  }
+
+  public renderInformationContentDefault = () => {
+    const { greeddata } = this.state;
+    return <div>Default</div>;
+  }
+
+  public conditionalGreedData = () => {
+    const { greeddata } = this.state;
+    if (greeddata) {
+      this.renderInformationContent();
+    }
+    return this.renderInformationContentDefault();
+  }
+
   public render() {
     return (
         <div className="addItemModal">
-          {this.renderModalContent()}
+          <div className="addItemModal__content">
+            <div className="addItemModal__left">
+              {this.conditionalGreedData()}
+            </div>
+            <div className="addItemModal__right">
+              {this.renderModalContent()}
+            </div>
+          </div>
         </div>
     );
   }

@@ -141,7 +141,7 @@
   .assignmentsListFooter {
     position: fixed;
     bottom: 0;
-    width: 50%;
+    width: calc(100% - 400px);
     height: 64px;
     padding: 15px 20px;
     background: #FFF;
@@ -163,13 +163,13 @@
 
 @media screen and (max-width: $screen-dimension-desktop) {
   .AssignmentsList .assignmentsListFooter {
-    width: 70%;
+    width: calc(100% - 380px);
   }
 }
 
 
 @media screen and (device-width: 810px) and (device-height: 1080px) {
   .AssignmentsList .assignmentsListFooter {
-      width: 70%;
+      width: calc(100% - 300px);
     }
 }
