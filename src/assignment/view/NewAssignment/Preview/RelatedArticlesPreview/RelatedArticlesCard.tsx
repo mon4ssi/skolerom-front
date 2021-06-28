@@ -104,11 +104,6 @@ export const RelatedArticlesCard = (props: Props) => {
             {article.excerpt}
           </div>
         </div>
-
-        <div>
-          {article.levels && article.levels.length ? renderLevels() : null}
-          {renderGrades()}
-        </div>
       </div>
     </div>
   );

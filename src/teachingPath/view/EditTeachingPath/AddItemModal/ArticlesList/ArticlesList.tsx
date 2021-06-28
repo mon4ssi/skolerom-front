@@ -13,10 +13,13 @@ import { lettersNoEn } from 'utils/lettersNoEn';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 
 import closeImg from 'assets/images/close-rounded-black.svg';
+import tagsImg from 'assets/images/tags.svg';
+import gradeImg from 'assets/images/grade.svg';
 
 import './ArticlesList.scss';
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
 import { SCROLL_OFFSET } from 'utils/constants';
+const showDelay = 500;
 interface ArticleItemProps {
   editTeachingPathStore?: EditTeachingPathStore;
   article: Article;
@@ -66,6 +69,13 @@ interface State {
   itemsForNewChildren: Array<Article>;
   removingItems: Array<Article>;
   appliedFilters: { [field: string]: number | string };
+  isRedirect: boolean;
+  greeddata: boolean;
+  selectedArticle: Article | null;
+  expand: boolean;
+  expandCore: boolean;
+  expandGoals: boolean;
+  expandSubjects: boolean;
 }
 
 @inject('editTeachingPathStore')
@@ -81,7 +91,14 @@ export class ArticlesList extends Component<Props, State> {
     this.state = {
       itemsForNewChildren: [],
       removingItems: [],
-      appliedFilters: {}
+      appliedFilters: {},
+      isRedirect: false,
+      greeddata: false,
+      selectedArticle: null,
+      expand: false,
+      expandCore: false,
+      expandGoals: false,
+      expandSubjects: false
     };
   }
 
@@ -129,7 +146,9 @@ export class ArticlesList extends Component<Props, State> {
   }
 
   public componentWillUnmount() {
-    this.props.editTeachingPathStore!.setCurrentNode(null);
+    if (!this.state.isRedirect) {
+      this.props.editTeachingPathStore!.setCurrentNode(null);
+    }
     this.props.editTeachingPathStore!.resetCurrentArticlesPage();
     this.props.editTeachingPathStore!.resetArticlesList();
     this.props.editTeachingPathStore!.resetIsFetchedArticlesListFinished();
@@ -159,8 +178,9 @@ export class ArticlesList extends Component<Props, State> {
     if (ifAddingItemIsSaved) {
       this.setState({ removingItems: this.state.removingItems.filter((el: Article) => el.id !== item.id) });
     }
-
     this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, item] });
+    this.setState({ greeddata: true });
+    this.setState({ selectedArticle: item });
   }
 
   public removeItemFromNewChild = async (item: Article) => {
@@ -231,11 +251,24 @@ export class ArticlesList extends Component<Props, State> {
     }
   }
 
+  public redirectAssigment = () => {
+    const { currentNode } = this.props.editTeachingPathStore!;
+    const { editTeachingPathStore } = this.props;
+    editTeachingPathStore!.setCurrentNode(currentNode);
+    this.setState({ isRedirect: true });
+    setTimeout(
+      () => {
+        this.context.changeContentType(1);
+      },
+      showDelay
+    );
+  }
+
   public renderHeader = () => (
     <div className="articlesListHeader flexBox spaceBetween" tabIndex={0}>
       <div className="articlesListHeader__left">
         <p className="active">{intl.get('edit_teaching_path.modals.articles')}</p>
-        <p>{intl.get('edit_teaching_path.modals.assignmetns')}</p>
+        <a href="javascript:void(0)" onClick={this.redirectAssigment}>{intl.get('edit_teaching_path.modals.assignmetns')}</a>
       </div>
       <div className="articlesListHeader__right">
         <button ref={this.refButton} onClick={this.closeModal} title={intl.get('generals.close')}>
@@ -283,8 +316,8 @@ export class ArticlesList extends Component<Props, State> {
 
     const selectedAndLoadedArticles = this.addSelectedArticles(articlesList);
 
-    const allCardsMargins = 89; // Left padding of container + all right margins of card
-    const cardsInRow = 3;
+    const allCardsMargins = 129; // Left padding of container + all right margins of card
+    const cardsInRow = 4;
     const cardWidthToHeightIndex = 1.28;
 
     const cardsContainer = document.getElementsByClassName('articlesListContainer')[0];
@@ -356,38 +389,247 @@ export class ArticlesList extends Component<Props, State> {
     </div>
   )
 
+  public toggleData = () => {
+    const { expand } = this.state;
+    if (expand) {
+      this.setState({ expand: false });
+    } else {
+      this.setState({ expand: true });
+    }
+  }
+
+  public SelectedGrades = () => {
+    const { selectedArticle } = this.state;
+    const amountOfGrades = selectedArticle!.grades ? selectedArticle!.grades.length : 0;
+    if (amountOfGrades > 0) {
+      const visibleGrades = selectedArticle!.grades!.sort((a, b) => a.id - b.id).map((grade) => {
+        const title = grade.title.split('.', 1);
+        return <span key={grade.id}>{title}{intl.get('new assignment.grade')}</span>;
+      });
+      return (
+        <div className="grades">
+          {visibleGrades}
+        </div>
+      );
+    }
+    return (
+      <div className="grades" />
+    );
+  }
+
+  public SelectedSubjects = () => {
+    const { selectedArticle } = this.state;
+    const amountSubjects = selectedArticle!.subjects ? selectedArticle!.subjects.length : 0;
+    if (amountSubjects > 0) {
+      const visiblesubjects = selectedArticle!.subjects!.sort((a, b) => a.id - b.id).map((subject) => {
+        const title = subject.title;
+        return <span key={subject.id}>{title}</span>;
+      });
+      return (
+        <div className="subjects">
+          {visiblesubjects}
+        </div>
+      );
+    }
+    return (
+      <div className="subjects" />
+    );
+  }
+
+  public SelectedGreepCore = () => {
+    const { selectedArticle } = this.state;
+    return (
+      <div className="greepContentList">
+        <ul>
+          <li>Core Element 1</li>
+          <li>Core Element 2</li>
+          <li>Core Element 3</li>
+        </ul>
+      </div>
+    );
+  }
+
+  public SelectedCoreGoals = () => {
+    const { selectedArticle } = this.state;
+    return (
+      <div className="greepContentList">
+        <ul>
+          <li>Educational goals 1</li>
+          <li>Educational goals 2</li>
+        </ul>
+      </div>
+    );
+  }
+
+  public SelectedCoreSubjects = () => {
+    const { selectedArticle } = this.state;
+    return (
+      <div className="greepContentList">
+        <ul>
+          <li>Demokrati og medborgerskap</li>
+          <li>Folkehelse og livsmestring</li>
+        </ul>
+      </div>
+    );
+  }
+
+  public toggleDataCore = () => {
+    const { expandCore } = this.state;
+    if (expandCore) {
+      this.setState({ expandCore: false });
+    } else {
+      this.setState({ expandCore: true });
+    }
+  }
+
+  public toggleDataGoals = () => {
+    const { expandGoals } = this.state;
+    if (expandGoals) {
+      this.setState({ expandGoals: false });
+    } else {
+      this.setState({ expandGoals: true });
+    }
+  }
+
+  public toggleDataSubjects = () => {
+    const { expandSubjects } = this.state;
+    if (expandSubjects) {
+      this.setState({ expandSubjects: false });
+    } else {
+      this.setState({ expandSubjects: true });
+    }
+  }
+
+  public renderInsideData = () => {
+    const { expandGoals, expandCore, expandSubjects } = this.state;
+    return (
+      <div className="defaultContentModal__inside">
+        <div className="listItemInside">
+          <div className="lisItemInsideIcon">
+            <img src={gradeImg} />
+          </div>
+          <div className="lisItemInsideText">
+            <h5>{intl.get('generals.grade')}</h5>
+            {this.SelectedGrades()}
+          </div>
+        </div>
+        <div className="listItemInside">
+          <div className="lisItemInsideIcon">
+            <img src={tagsImg} />
+          </div>
+          <div className="lisItemInsideText">
+            <h5>{intl.get('new assignment.Subject')}</h5>
+            {this.SelectedSubjects()}
+          </div>
+        </div>
+        <div className={`listItemInside listItemGreep ${expandCore && 'active'}`}>
+          <div className="lisItemInsideIcon">
+            <img src={tagsImg} />
+          </div>
+          <div className="lisItemInsideText">
+            <h5 onClick={this.toggleDataCore}>{intl.get('new assignment.greep.core')}</h5>
+            {this.SelectedGreepCore()}
+          </div>
+        </div>
+        <div className={`listItemInside listItemGreep ${expandGoals && 'active'}`}>
+          <div className="lisItemInsideIcon">
+            <img src={tagsImg} />
+          </div>
+          <div className="lisItemInsideText">
+            <h5 onClick={this.toggleDataGoals}>{intl.get('new assignment.greep.goals')}</h5>
+            {this.SelectedCoreGoals()}
+          </div>
+        </div>
+        <div className={`listItemInside listItemGreep ${expandSubjects && 'active'}`}>
+          <div className="lisItemInsideIcon">
+            <img src={tagsImg} />
+          </div>
+          <div className="lisItemInsideText">
+            <h5 onClick={this.toggleDataSubjects}>{intl.get('new assignment.greep.subjects')}</h5>
+            {this.SelectedCoreSubjects()}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  public renderInformationContent = () => {
+    const { selectedArticle, expand } = this.state;
+    return (
+      <div className="defaultContentModal" data-id={selectedArticle!.id}>
+        <h2>{intl.get('edit_teaching_path.modals.articles_title')}</h2>
+        <div className="defaultContentModal__content">
+          <h3>{selectedArticle!.title}</h3>
+          <p>{selectedArticle!.excerpt}</p>
+          <a href="javascript:void(0)" className="CreateButton">{intl.get('edit_teaching_path.modals.articles_read')}</a>
+        </div>
+        <div className="defaultContentModal__expand">
+          <div className={`expandContent ${expand && 'active'}`} onClick={this.toggleData}>{intl.get('edit_teaching_path.modals.expand')}</div>
+          {expand && this.renderInsideData()}
+        </div>
+      </div>
+    );
+  }
+
+  public renderInformationContentDefault = () => {
+    const { contentType } = this.context;
+    return (
+      <div className="defaultContentModal">
+        <h2>{intl.get('edit_teaching_path.modals.articles_title')}</h2>
+        <div>
+          <p>{intl.get('edit_teaching_path.modals.articles_default')}</p>
+        </div>
+      </div>
+    );
+  }
+
+  public conditionalGreedData = () => {
+    const { greeddata } = this.state;
+    if (greeddata) {
+      return this.renderInformationContent();
+    }
+    return this.renderInformationContentDefault();
+  }
+
   public render() {
     const { appliedFilters } = this.state;
     return (
-      <div className="ArticlesList flexBox dirColumn">
-        {this.renderHeader()}
-
-        <SearchFilter
-          subject
-          grade
-          placeholder={intl.get('edit_teaching_path.modals.search_for_articles')}
-          // METHODS
-          handleChangeSubject={this.handleChangeSubject}
-          handleChangeGrade={this.handleChangeGrade}
-          handleInputSearchQuery={this.handleChangeSearchQuery}
-          // VALUES
-          subjectFilterValue={Number(appliedFilters.subjects)}
-          gradeFilterValue={Number(appliedFilters.grades)}
-          searchQueryFilterValue={appliedFilters.searchTitle as string}
-        />
-
-        <div
-          className="articlesListContainer flexBox"
-          ref={this.ref}
-          onScroll={this.onScroll}
-          aria-live="polite"
-          id="List"
-        >
-          {this.renderArticlesList()}
+      <div className="addItemModal__content">
+        <div className="addItemModal__left">
+          {this.conditionalGreedData()}
         </div>
+        <div className="addItemModal__right">
+          <div className="ArticlesList flexBox dirColumn">
+            {this.renderHeader()}
 
-        {this.renderSubmitFooter()}
+            <SearchFilter
+              subject
+              grade
+              placeholder={intl.get('edit_teaching_path.modals.search_for_articles')}
+              // METHODS
+              handleChangeSubject={this.handleChangeSubject}
+              handleChangeGrade={this.handleChangeGrade}
+              handleInputSearchQuery={this.handleChangeSearchQuery}
+              // VALUES
+              subjectFilterValue={Number(appliedFilters.subjects)}
+              gradeFilterValue={Number(appliedFilters.grades)}
+              searchQueryFilterValue={appliedFilters.searchTitle as string}
+            />
 
+            <div
+              className="articlesListContainer flexBox"
+              ref={this.ref}
+              onScroll={this.onScroll}
+              aria-live="polite"
+              id="List"
+            >
+              {this.renderArticlesList()}
+            </div>
+
+            {this.renderSubmitFooter()}
+
+          </div>
+        </div>
       </div>
     );
   }

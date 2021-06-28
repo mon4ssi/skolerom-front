@@ -218,7 +218,12 @@
     "ARTICLE": "Article",
     "ASSIGNMENT": "Assignment"
   },
-  "new assignment": {
+  "new assignment": {    
+    "greep": {
+      "core": "Core elements",
+      "goals": "Educations goals",
+      "subjects": "Multidisciplinary subjects"
+    },
     "go_back": "Gå tilbake",
     "Create assignment": "Lag oppgave",
     "publish": "Publiser",
@@ -567,9 +572,16 @@
       "all_assignments": "Alle oppgaver",
       "my_assignments": "Mine oppgaver",
       "articles": "Artikler",
+      "articles_title": "Artikler Information",
+      "articles_default": "Select an item to view its detailed information",
+      "articles_read": "Read Artikler",
+      "assignments_title": "Oppgaver Information",
+      "assignments_default": "Select an item to view its detailed information",
+      "assignments_read": "Read Oppgaver",
       "assignmetns": "Oppgaver",
       "assignments_selected": "{number} oppgaver valgt",
-      "search_for_articles": "Søk etter artikler..."
+      "search_for_articles": "Søk etter artikler...",
+      "expand": "Utvid all"
     },
     "validation": {
       "title_words_count": "Tittelen kan ikke være tom",

@@ -36,6 +36,7 @@ export class EditTeachingPathStore {
   // tslint:disable-next-line: no-magic-numbers
   @observable public articlesForSkeleton: Array<Article> = new Array(6).fill(new Article({ id: 0, title: '' }));
   @observable public usedArticles: Array<Article> = [];
+  @observable public selectedArticle: Article | null = null;
   @observable public teachingPathContainer: TeachingPathContainer | null = null;
   @observable public currentNode: EditableTeachingPathNode | null = null;
   @observable public searchValue: string = '';
@@ -64,6 +65,15 @@ export class EditTeachingPathStore {
 
   public getUpdatedAt() {
     return this.currentEntity!.updatedAt;
+  }
+
+  @action
+  public postSeletedArticle = (item: Article | null) => {
+    this.selectedArticle = item;
+  }
+
+  public getSeletedArticle() {
+    return this.selectedArticle;
   }
 
   @computed

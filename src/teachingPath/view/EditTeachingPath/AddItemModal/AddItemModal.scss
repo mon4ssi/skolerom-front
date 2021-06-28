@@ -25,25 +25,167 @@
       padding-top: 20px;
       padding-bottom: 20px;
       flex: none;
-      width: 400px;
+      width: 500px;
+      height: 100%;
+      overflow-y: scroll;
     }
     &__right {
-      width: calc(100% - 400px);
+      width: calc(100% - 500px);
       flex: none;
       border-left: solid 2px #d2d2d2;
     }
   }
 }
+.defaultContentModal {
+  p {
+    font-size: 16px;
+    line-height: 22px;
+  }
+  h2 {
+    margin: 10px 0px;
+    font-size: 22px;
+    color: #e2017b;
+    font-weight: 400;
+  }
+  &__content {
+    h3 {
+      font-size: 24px;
+      margin-bottom: 5px;
+      margin-top: 20px;
+    }
+    p {
+      margin: 0px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+    }
+    .CreateButton {
+      display: block;
+      padding: 9px 20px;
+      max-width: 150px;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+  }
+  &__expand {
+    .expandContent {
+      margin-bottom: 25px;
+      position: relative;
+      cursor: pointer;
+      &:after {
+        content: '';
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        border-bottom: solid 1px #0b2541;
+        border-right: solid 1px #0b2541;
+        transform: rotate(45deg);
+        position: relative;
+        top: -4px;
+        margin-left: 10px;
+        transition: 0.3s;
+      }
+      &.active {
+        &:after {
+          transform: rotate(225deg);
+          top: 1px;
+        }
+      }
+    }
+  }
+  &__inside {
+    .listItemInside {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 25px;
+      .lisItemInsideIcon {
+        margin-right: 5px;
+        img {
+          height: 22px;
+        }
+      }
+      .lisItemInsideText {
+        h5 {
+          margin-top: 0px;
+          margin-bottom: 5px;
+          font-size: 16px;
+        }
+        .grades, .subjects {
+          display: flex;
+          flex-wrap: wrap;
+          span {
+            background: #d2d2d2;
+            font-size: 14px;
+            padding: 6px 5px;
+            border-radius: 5px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+          }
+        }
+        .greepContentList {
+          font-size: 14px;
+          color: black;
+          li {
+            color: black;
+            margin-bottom: 5px;
+            position: relative;
+            &:before {
+              content: '';
+              margin-right: 5px;
+              width: 5px;
+              height: 1px;
+              background: black;
+              display: inline-block;
+              vertical-align: middle;
+            }
+          }
+        }
+      }
+      &.listItemGreep {
+        h5 {
+          position: relative;
+          cursor: pointer;
+          &:after {
+            content: '';
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-bottom: solid 1px #0b2541;
+            border-right: solid 1px #0b2541;
+            transform: rotate(45deg);
+            position: relative;
+            top: -4px;
+            margin-left: 10px;
+            transition: 0.3s;
+          }
+        }
+        .greepContentList {
+          display: none;
+        }
+        &.active {
+          h5 {
+            &:after {
+              transform: rotate(225deg);
+              top: 1px;
+            }
+          }
+          .greepContentList {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+} 
 
 @media screen and (max-width: $screen-dimension-desktop) {
   .addItemModalBackground {
     .addItemModal {
       width: 100%;
       &__left {
-        width: 380px;
+        width: 400px;
       }
       &__right {
-        width: calc(100% - 380px);
+        width: calc(100% - 400px);
       }
     }
   }

@@ -219,6 +219,11 @@
     "ASSIGNMENT": "Assignment"
   },
   "new assignment": {
+    "greep": {
+      "core": "Core elements",
+      "goals": "Educations goals",
+      "subjects": "Multidisciplinary subjects"
+    },
     "go_back": "Go back",
     "Create assignment": "Create assignment",
     "publish": "Publish",
@@ -568,9 +573,16 @@
       "all_assignments": "All assignments",
       "my_assignments": "My assignments",
       "articles": "Articles",
+      "articles_title": "Article Information",
+      "articles_default": "Select an item to view its detailed information",
+      "articles_read": "Read article",
+      "assignments_title": "Assignments Information",
+      "assignments_default": "Select an item to view its detailed information",
+      "assignmetns_read": "Read assignment",
       "assignmetns": "Assignments",
       "assignments_selected": "{number} assignments selected",
-      "search_for_articles": "Search for articles..."
+      "search_for_articles": "Search for articles...",
+      "expand": "Expand all"
     },
     "validation": {
       "title_words_count": "Title cannot be empty",
