@@ -14,6 +14,7 @@ import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentS
 import addArticleImg from 'assets/images/add-article.svg';
 import addAssignemntImg from 'assets/images/add-assignment.svg';
 import createAssignmentImg from 'assets/images/create-assignment.svg';
+import linkImg from 'assets/images/link.svg';
 
 import './AddingButtons.scss';
 
@@ -85,16 +86,22 @@ class AddingButtonsContainer extends Component<Props> {
     this.setState({ valueInputDomain: e.target.value });
     if (validDomain(e.target.value)) {
       this.setState({ disabledbutton: false });
+      document.addEventListener('keyup', this.handleKeyboardControl);
     } else {
       this.setState({ disabledbutton: true });
+      document.removeEventListener('keyup', this.handleKeyboardControl);
+    }
+  }
+
+  private handleKeyboardControl = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      this.sendDomain();
     }
   }
 
   private sendDomain = async () => {
     const { editTeachingPathStore, node } = this.props;
     editTeachingPathStore!.setCurrentNode(node!);
-    this.setState({ loading: false });
-    this.setState({ disabledbutton: true });
     const response = await editTeachingPathStore!.sendDataDomain(this.state.valueInputDomain);
     this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
     const newChildren = this.state.itemsForNewChildren.map(
@@ -119,7 +126,7 @@ class AddingButtonsContainer extends Component<Props> {
           <div className="modalDomain__context">
             <div className="modalDomain__form">
               <div className="modalDomain__input">
-                <img src={addArticleImg} alt="add-article" />
+                <img src={linkImg} alt="add-domain" />
                 <input
                   className="newTextQuestionInput"
                   placeholder={intl.get('new assignment.type_or_paste')}

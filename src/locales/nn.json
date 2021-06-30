@@ -560,7 +560,7 @@
     "modals": {
       "add_articles": "Legg til artiklar",
       "add_assignments": "Legg til oppgåver",      
-      "add_domain": "Legg til Domain",
+      "add_domain": "Legg til lenke",
       "create_assignment": "Lag oppgåve",
       "loading": "Lastar...",
       "nothing_found": "Ingenting funne...",

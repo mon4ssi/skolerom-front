@@ -559,7 +559,7 @@
     },
     "modals": {
       "add_articles": "Add articles",
-      "add_domain": "Add domain",
+      "add_domain": "Add Link",
       "add_assignments": "Add assignments",
       "create_assignment": "Create assignment",
       "loading": "Laster...",

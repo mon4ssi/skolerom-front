@@ -154,9 +154,10 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
   public renderRouteDomain = () => {
     const { urldomain, type } = this.props;
     if (type === 'DOMAIN') {
+      const pathLink = urldomain!.split('//')[1];
       return (
         <a href="javascript:void(0)" onClick={this.targetRouteDomain}>
-          {urldomain}
+          {pathLink}
         </a>
       );
     }
@@ -264,18 +265,18 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
   }
 
   public render() {
-    const { title, img, withButtons, onClick, isTeachingPath, withTooltip } = this.props;
-
+    const { title, img, withButtons, onClick, isTeachingPath, withTooltip, type } = this.props;
+    const isDomain = type === 'DOMAIN' ? true : false;
+    const placeholderImgDefault = type === 'DOMAIN' ? placeholderImg : placeholderImg;
     const infoCardClassNames = classnames(
       'InfoCard flexBox dirColumn',
       onClick && 'cursorPointer'
     );
-
     return (
       <div className={infoCardClassNames} onClick={this.onCardClick} data-id={this.props.id}>
-        {withButtons && this.renderActionButtons()}
+        {!isDomain && withButtons && this.renderActionButtons()}
         <button title={title}>
-          <img src={img || placeholderImg} alt={title} title={title} className="cardImage"/>
+          <img src={img || placeholderImgDefault} alt={title} title={title} className="cardImage"/>
         </button>
         <div className="cardInfo flexBox dirColumn spaceBetween">
           <div>

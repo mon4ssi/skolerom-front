@@ -154,6 +154,12 @@ const buildImageUrlFromArticlesOrAssignment = (child: TeachingPathNodeSaveRespon
       return itemWithImage.featuredImage;
     }
   }
+  if (child.type === TeachingPathNodeType.Domain) {
+    const itemWithImage = child.items!.find((item: TeachingPathItemSaveResponseDTO) => !isNil(item.featuredImage));
+    if (itemWithImage) {
+      return itemWithImage.featuredImage;
+    }
+  }
 };
 
 export const buildFeatureImageForTeachingPathRequestDTO = (data: TeachingPathNodeSaveResponseDTO): string | undefined => {
