@@ -87,7 +87,7 @@ class AddingButtonsContainer extends Component<Props> {
     if (value.split('//').length > 1) {
       return value;
     }
-    return `https://'${value}`;
+    return `https://${value}`;
   }
 
   private handleChangeNewQuestion = (e:  React.ChangeEvent<HTMLInputElement>) => {
