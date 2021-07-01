@@ -111,20 +111,27 @@ class AddingButtonsContainer extends Component<Props> {
     const { disabledbutton } = this.state;
     const { editTeachingPathStore, node } = this.props;
     if (!disabledbutton) {
-      editTeachingPathStore!.setCurrentNode(node!);
-      const response = await editTeachingPathStore!.sendDataDomain(this.validUrlPath(this.state.valueInputDomain));
-      this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
-      const newChildren = this.state.itemsForNewChildren.map(
-        item => editTeachingPathStore!.createNewNode(
-          item,
-          TeachingPathNodeType.Domain
-        )
-      );
-      newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
-      editTeachingPathStore!.currentEntity!.save();
+      try {
+        const response = await editTeachingPathStore!.sendDataDomain(this.validUrlPath(this.state.valueInputDomain));
+        editTeachingPathStore!.setCurrentNode(node!);
+        this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
+        const newChildren = this.state.itemsForNewChildren.map(
+          item => editTeachingPathStore!.createNewNode(
+            item,
+            TeachingPathNodeType.Domain
+          )
+        );
+        newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
+        editTeachingPathStore!.currentEntity!.save();
 
-      this.context.changeContentType(null);
-      editTeachingPathStore!.setCurrentNode(null);
+        this.context.changeContentType(null);
+        editTeachingPathStore!.setCurrentNode(null);
+      } catch (e) {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: 'SERVER ERROR PLEASE RELOAD'
+        });
+      }
     } else {
       Notification.create({
         type: NotificationTypes.ERROR,
