@@ -507,6 +507,10 @@
   },
   "teaching path passing": {
     "choose one": "Choose one",
+    "external_error": "The web address is invalid or could not be parsed",
+    "errortype_101": "The web address could not be parsed, make sure that it is a valid HTML page",
+    "errortype_102": "The web address could not be parsed, make sure that it contains a valid HTML title",
+    "errortype_103": "The web address could not be parsed, make sure that it contains a valid HTML description",
     "complete": {
       "title": "Teaching Path complete!",
       "description": "All steps successfully completed. Use the breadcrumbs at the bottom to go though and review each step. Come back here and press «Complete and submit» to submit your work to your teacher.",

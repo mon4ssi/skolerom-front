@@ -25,6 +25,8 @@ export const firstLevel = 1;
 export const secondLevel = 2;
 export const thirdLevel = 3;
 
+export const CONDITIONALERROR = 100;
+
 export const studentLevels = [firstLevel, secondLevel, thirdLevel];
 
 export const LOCALES_MAPPING_FOR_BACKEND = {

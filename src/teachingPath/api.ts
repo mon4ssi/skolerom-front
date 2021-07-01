@@ -9,7 +9,7 @@ import { buildFilterDTO, GradeDTO } from 'assignment/factory';
 import { Breadcrumbs } from './teachingPathDraft/TeachingPathDraft';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { StudentTeachingPathEvaluationNodeItem } from 'evaluation/api';
-import { STATUS_NOT_FOUND, STATUS_SERVER_ERROR, STATUS_BACKEND_ERROR } from 'utils/constants';
+import { CONDITIONALERROR, STATUS_SERVER_ERROR } from 'utils/constants';
 
 export interface TeachingPathNodeItemResponseDTO {
   id: number;
@@ -206,10 +206,17 @@ export class TeachingPathApi implements TeachingPathRepo {
       });
     } catch (error) {
       if (error.response.status === STATUS_SERVER_ERROR) {
-        Notification.create({
-          type: NotificationTypes.ERROR,
-          title: error.response.data.message
-        });
+        if (error.response.data.message.code === CONDITIONALERROR) {
+          Notification.create({
+            type: NotificationTypes.ERROR,
+            title: intl.get('teaching path passing.external_error')
+          });
+        } else {
+          Notification.create({
+            type: NotificationTypes.ERROR,
+            title: intl.get(`teaching path passing.errortype_${error.response.data.message.code}`)
+          });
+        }
       }
       throw error;
     }
