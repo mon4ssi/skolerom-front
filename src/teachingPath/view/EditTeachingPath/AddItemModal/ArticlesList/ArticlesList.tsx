@@ -11,6 +11,7 @@ import { RelatedArticlesCard } from 'assignment/view/NewAssignment/Preview/Relat
 import { SearchFilter } from 'components/common/SearchFilter/SearchFilter';
 import { lettersNoEn } from 'utils/lettersNoEn';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
+import { ReadingArticle } from 'components/pages/ReadingArticle/ReadingArticle';
 
 import closeImg from 'assets/images/close-rounded-black.svg';
 import tagsImg from 'assets/images/tags.svg';
@@ -76,6 +77,7 @@ interface State {
   expandCore: boolean;
   expandGoals: boolean;
   expandSubjects: boolean;
+  checkArticle: boolean;
 }
 
 @inject('editTeachingPathStore')
@@ -98,7 +100,8 @@ export class ArticlesList extends Component<Props, State> {
       expand: false,
       expandCore: false,
       expandGoals: false,
-      expandSubjects: false
+      expandSubjects: false,
+      checkArticle: false
     };
   }
 
@@ -561,7 +564,7 @@ export class ArticlesList extends Component<Props, State> {
         <div className="defaultContentModal__content">
           <h3>{selectedArticle!.title}</h3>
           <p>{selectedArticle!.excerpt}</p>
-          <a href="javascript:void(0)" className="CreateButton">{intl.get('edit_teaching_path.modals.articles_read')}</a>
+          <a href="javascript:void(0)" className="CreateButton" onClick={this.openArticleReading}>{intl.get('edit_teaching_path.modals.articles_read')}</a>
         </div>
         <div className="defaultContentModal__expand">
           <div className={`expandContent ${expand && 'active'}`} onClick={this.toggleData}>{intl.get('edit_teaching_path.modals.expand')}</div>
@@ -591,8 +594,36 @@ export class ArticlesList extends Component<Props, State> {
     return this.renderInformationContentDefault();
   }
 
+  public openArticleReading = () => {
+    this.setState({
+      checkArticle: true
+    });
+  }
+
+  public closeArticleReading = () => {
+    this.setState({
+      checkArticle: false
+    });
+  }
+
+  public finishReading = () => {
+    this.setState({
+      checkArticle: false
+    });
+  }
+
   public render() {
-    const { appliedFilters } = this.state;
+    const { appliedFilters, checkArticle, selectedArticle } = this.state;
+    if (checkArticle) {
+      return (
+        <ReadingArticle
+          titleCurrentArticle={selectedArticle!.title}
+          shownArticleId={selectedArticle!.correspondingLevelArticleId || selectedArticle!.wpId}
+          closeArticle={this.closeArticleReading}
+          finishReading={this.finishReading}
+        />
+      );
+    }
     return (
       <div className="addItemModal__content">
         <div className="addItemModal__left">
