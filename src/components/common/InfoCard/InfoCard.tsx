@@ -154,9 +154,9 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
   public renderRouteDomain = () => {
     const { urldomain, type } = this.props;
     if (type === 'DOMAIN') {
-      const pathLink = urldomain!.split('//')[1];
+      const pathLink = urldomain!.split('//')[1].split('/')[0];
       return (
-        <a href="javascript:void(0)" onClick={this.targetRouteDomain}>
+        <a href="javascript:void(0)" onClick={this.targetRouteDomain} title={urldomain}>
           {pathLink}
         </a>
       );
