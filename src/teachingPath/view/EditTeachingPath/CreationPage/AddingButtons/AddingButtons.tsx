@@ -15,6 +15,7 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 import addArticleImg from 'assets/images/add-article.svg';
 import addAssignemntImg from 'assets/images/add-assignment.svg';
 import createAssignmentImg from 'assets/images/create-assignment.svg';
+import addDomainImg from 'assets/images/app-window-link.svg';
 import linkImg from 'assets/images/link.svg';
 
 import './AddingButtons.scss';
@@ -174,7 +175,7 @@ class AddingButtonsContainer extends Component<Props> {
     return (
     <div className="addingButton" onClick={this.openDomainModal}>
       <button title={intl.get('edit_teaching_path.modals.add_domain')}>
-        <img src={addArticleImg} alt="add-article" />
+        <img src={addDomainImg} alt="add-article" />
         {intl.get('edit_teaching_path.modals.add_domain')}
       </button>
     </div>
