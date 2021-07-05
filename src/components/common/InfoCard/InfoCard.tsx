@@ -155,7 +155,10 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
   public renderRouteDomain = () => {
     const { urldomain, type } = this.props;
     if (type === 'DOMAIN') {
-      const pathLink = urldomain!.split('//')[1].split('/')[0];
+      let pathLink = urldomain!.split('//')[1].split('/')[0];
+      if (pathLink.split('www.').length > 1) {
+        pathLink = pathLink.split('www.')[1];
+      }
       return (
         <a href="javascript:void(0)" onClick={this.targetRouteDomain} title={urldomain}>
           {pathLink}
@@ -168,12 +171,23 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
   }
 
   public renderDefaultIcons = () => {
-    const { levels, icon } = this.props;
+    const { levels, icon, type } = this.props;
+    if (type === 'DOMAIN') {
+      return (
+        <div className="defaultIcons flexBox">
+          <div className="flexBox">
+            {levels && levels.length ? this.renderLevel(levels) : null}
+            <img src={icon} className={`tpIcon tpIcon-${type}`} alt="info-icon" onClick={this.targetRouteDomain}/>
+            <span>{this.renderRouteDomain()}</span>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="defaultIcons flexBox">
         <div className="flexBox">
           {levels && levels.length ? this.renderLevel(levels) : null}
-          <img src={icon} className="tpIcon" alt="info-icon"/>
+          <img src={icon} className={`tpIcon tpIcon-${type}`} alt="info-icon"/>
           <span>{this.renderRouteDomain()}</span>
         </div>
       </div>

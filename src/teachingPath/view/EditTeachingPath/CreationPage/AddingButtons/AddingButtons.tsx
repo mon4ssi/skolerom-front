@@ -74,6 +74,7 @@ class AddingButtonsContainer extends Component<Props> {
     this.setState({
       modalDomain: true
     });
+    document.addEventListener('keyup', this.handleKeyboardControl);
   }
 
   private closeDomainModal = () => {
@@ -81,6 +82,7 @@ class AddingButtonsContainer extends Component<Props> {
       this.setState({
         modalDomain: false
       });
+      document.removeEventListener('keyup', this.handleKeyboardControl);
     }
   }
 
@@ -95,16 +97,19 @@ class AddingButtonsContainer extends Component<Props> {
     this.setState({ valueInputDomain: e.target.value });
     if (validDomain(e.target.value)) {
       this.setState({ disabledbutton: false });
-      document.addEventListener('keyup', this.handleKeyboardControl);
     } else {
       this.setState({ disabledbutton: true });
-      document.removeEventListener('keyup', this.handleKeyboardControl);
     }
   }
 
   private handleKeyboardControl = (event: KeyboardEvent) => {
     if (event.key === 'Enter') {
-      this.sendDomain();
+      if (!this.state.disabledbutton) {
+        this.sendDomain();
+      }
+    }
+    if (event.key === 'Escape') {
+      this.closeDomainModal();
     }
   }
 

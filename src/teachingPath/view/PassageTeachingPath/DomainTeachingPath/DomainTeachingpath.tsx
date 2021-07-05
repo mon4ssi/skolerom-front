@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 
 import './DomainTeachingPath.scss';
 import { InfoCard } from 'components/common/InfoCard/InfoCard';
-import reading from 'assets/images/reading-icon.svg';
+import domainImg from 'assets/images/app-open-icon.svg';
 import listPlaceholderImg from 'assets/images/list-placeholder.svg';
 import { QuestionaryTeachingPathStore } from '../../../questionaryTeachingPath/questionaryTeachingPathStore';
 import { Domain } from 'assignment/Assignment';
@@ -46,7 +46,7 @@ export class DomainTeachingPath extends Component<Props, State> {
       return (
         <div className={passedStyle} key={item.id} role="region" aria-live="polite" aria-atomic="true">
           <InfoCard
-            icon={reading}
+            icon={domainImg}
             title={item.title}
             type="DOMAIN"
             grades={item.grades}
