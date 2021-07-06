@@ -15,6 +15,7 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 import addArticleImg from 'assets/images/add-article.svg';
 import addAssignemntImg from 'assets/images/add-assignment.svg';
 import createAssignmentImg from 'assets/images/create-assignment.svg';
+import addDomainImg from 'assets/images/app-window-link.svg';
 import linkImg from 'assets/images/link.svg';
 
 import './AddingButtons.scss';
@@ -73,6 +74,7 @@ class AddingButtonsContainer extends Component<Props> {
     this.setState({
       modalDomain: true
     });
+    document.addEventListener('keyup', this.handleKeyboardControl);
   }
 
   private closeDomainModal = () => {
@@ -80,6 +82,7 @@ class AddingButtonsContainer extends Component<Props> {
       this.setState({
         modalDomain: false
       });
+      document.removeEventListener('keyup', this.handleKeyboardControl);
     }
   }
 
@@ -94,16 +97,19 @@ class AddingButtonsContainer extends Component<Props> {
     this.setState({ valueInputDomain: e.target.value });
     if (validDomain(e.target.value)) {
       this.setState({ disabledbutton: false });
-      document.addEventListener('keyup', this.handleKeyboardControl);
     } else {
       this.setState({ disabledbutton: true });
-      document.removeEventListener('keyup', this.handleKeyboardControl);
     }
   }
 
   private handleKeyboardControl = (event: KeyboardEvent) => {
     if (event.key === 'Enter') {
-      this.sendDomain();
+      if (!this.state.disabledbutton) {
+        this.sendDomain();
+      }
+    }
+    if (event.key === 'Escape') {
+      this.closeDomainModal();
     }
   }
 
@@ -174,7 +180,7 @@ class AddingButtonsContainer extends Component<Props> {
     return (
     <div className="addingButton" onClick={this.openDomainModal}>
       <button title={intl.get('edit_teaching_path.modals.add_domain')}>
-        <img src={addArticleImg} alt="add-article" />
+        <img src={addDomainImg} alt="add-article" />
         {intl.get('edit_teaching_path.modals.add_domain')}
       </button>
     </div>

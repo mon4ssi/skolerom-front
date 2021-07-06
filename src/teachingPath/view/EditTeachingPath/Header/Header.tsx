@@ -241,8 +241,10 @@ export class HeaderComponent extends Component<Props> {
     const inputText = '[object HTMLInputElement]';
     const { isCreation, isDistribution, isPublishing } = this.props;
     if (event.key === 'Escape') {
-      if (!this.props.editTeachingPathStore!.currentNode) {
-        this.onGoBack();
+      if ((htmlPathArea !== htmlText) && (htmlPathArea !== inputText)) {
+        if (!this.props.editTeachingPathStore!.currentNode) {
+          this.onGoBack();
+        }
       }
     }
     if ((event.shiftKey && event.key === 'S') || (event.shiftKey && event.key === 's')) {

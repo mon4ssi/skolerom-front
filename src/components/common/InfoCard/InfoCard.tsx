@@ -17,6 +17,7 @@ import firstLevelImg from 'assets/images/level-1-blue.svg';
 import secondLevelImg from 'assets/images/level-2-blue.svg';
 import thirdLevelImg from 'assets/images/level-3-blue.svg';
 import placeholderImg from 'assets/images/list-placeholder.svg';
+import placeholderDomainImg from 'assets/images/addLink_placeholder.png';
 
 import './InfoCard.scss';
 
@@ -154,9 +155,12 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
   public renderRouteDomain = () => {
     const { urldomain, type } = this.props;
     if (type === 'DOMAIN') {
-      const pathLink = urldomain!.split('//')[1];
+      let pathLink = urldomain!.split('//')[1].split('/')[0];
+      if (pathLink.split('www.').length > 1) {
+        pathLink = pathLink.split('www.')[1];
+      }
       return (
-        <a href="javascript:void(0)" onClick={this.targetRouteDomain}>
+        <a href="javascript:void(0)" onClick={this.targetRouteDomain} title={urldomain}>
           {pathLink}
         </a>
       );
@@ -167,12 +171,23 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
   }
 
   public renderDefaultIcons = () => {
-    const { levels, icon } = this.props;
+    const { levels, icon, type } = this.props;
+    if (type === 'DOMAIN') {
+      return (
+        <div className="defaultIcons flexBox">
+          <div className="flexBox">
+            {levels && levels.length ? this.renderLevel(levels) : null}
+            <img src={icon} className={`tpIcon tpIcon-${type}`} alt="info-icon" onClick={this.targetRouteDomain}/>
+            <span>{this.renderRouteDomain()}</span>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="defaultIcons flexBox">
         <div className="flexBox">
           {levels && levels.length ? this.renderLevel(levels) : null}
-          <img src={icon} className="tpIcon" alt="info-icon"/>
+          <img src={icon} className={`tpIcon tpIcon-${type}`} alt="info-icon"/>
           <span>{this.renderRouteDomain()}</span>
         </div>
       </div>
@@ -267,7 +282,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
   public render() {
     const { title, img, withButtons, onClick, isTeachingPath, withTooltip, type } = this.props;
     const isDomain = type === 'DOMAIN' ? true : false;
-    const placeholderImgDefault = type === 'DOMAIN' ? placeholderImg : placeholderImg;
+    const placeholderImgDefault = type === 'DOMAIN' ? placeholderDomainImg : placeholderImg;
     const infoCardClassNames = classnames(
       'InfoCard flexBox dirColumn',
       onClick && 'cursorPointer'

@@ -321,7 +321,9 @@
     }
   }
 }
-
+.tpIcon-DOMAIN {
+  cursor: pointer;
+}
 @media screen and (max-width: $screen-dimension-desktop) {
   .InfoCard {
     .cardInfo {

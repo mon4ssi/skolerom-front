@@ -26,6 +26,7 @@ import { Loader } from 'components/common/Loader/Loader';
 
 import articleImg from 'assets/images/article-eye.svg';
 import assignmentImg from 'assets/images/assignment.svg';
+import domainImg from 'assets/images/app-open-icon.svg';
 import placeholderImg from 'assets/images/list-placeholder.svg';
 import actualArrowLeftRounded from 'assets/images/actual-arrow-left-rounded.svg';
 
@@ -140,7 +141,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     if (item.type === TeachingPathNodeType.Article) { imagenType = articleImg; }
     if (item.type === TeachingPathNodeType.Assignment) { imagenType = assignmentImg; }
     if (item.type === TeachingPathNodeType.Domain) {
-      imagenType = assignmentImg;
+      imagenType = domainImg;
       urldomain = item.value.url;
     }
 
