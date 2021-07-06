@@ -35,6 +35,8 @@ export class EditTeachingPathStore {
   @observable public articlesList: Array<Article> = [];
   // tslint:disable-next-line: no-magic-numbers
   @observable public articlesForSkeleton: Array<Article> = new Array(6).fill(new Article({ id: 0, title: '' }));
+  // tslint:disable-next-line: no-magic-numbers
+  @observable public articlesForSkeletonEight: Array<Article> = new Array(8).fill(new Article({ id: 0, title: '' }));
   @observable public usedArticles: Array<Article> = [];
   @observable public selectedArticle: Article | null = null;
   @observable public teachingPathContainer: TeachingPathContainer | null = null;

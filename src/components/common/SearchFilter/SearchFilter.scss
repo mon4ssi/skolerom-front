@@ -18,6 +18,32 @@
   }
 }
 
+.SearchFilter__link {
+  margin-bottom: 14px;
+  a {
+    display: flex;
+    background: #e7ecef;
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #939fa7;
+    color: #0B2541;
+    font-weight: 200;
+    &.openhandler {
+      background: #0B2541;
+      border: 1px solid #0B2541;
+      color: white;
+    }
+    img {
+      margin-right: 5px;
+    }
+    &:focus {
+      outline: black;
+      outline-offset: 4px;
+      outline-style: auto;
+    }
+  }
+}
+
 .SearchFilter__select {
   margin-right: 20px;
   margin-bottom: 14px;
@@ -109,6 +135,38 @@
 
 .SearchFilter__select_sorting {
   width: 232px;
+}
+
+.FiltersModal {
+  position: fixed;
+  left: 0;
+  width: 500px;
+  padding: 20px 30px;
+  box-sizing: border-box;
+  background: white;
+  height: calc(100% - 80px);
+  top: 80px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    h5 {
+      margin: 0px;
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: #e2017b;
+    }
+    button {
+      display: flex;
+      background: transparent;
+      img {
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+      }
+    }
+  }
 }
 
 // media rule for tablets contains in component file

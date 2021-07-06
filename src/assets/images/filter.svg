@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Filter</title>
+    <g id="Teaching-Path---V3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="New-Teaching-Path---Create-(add-articles)---Filters" transform="translate(-528.000000, -174.000000)" stroke="#0B2541">
+            <g id="Velg-oppgaver" transform="translate(-1.000000, 70.249397)">
+                <g id="Filtermenu" transform="translate(501.000000, 90.750603)">
+                    <g id="Filters-button" transform="translate(19.000000, 8.000000)">
+                        <g id="Filter" transform="translate(10.000000, 6.000000)">
+                            <polygon id="Path" points="0 0 20 0 20 20 0 20"></polygon>
+                            <line x1="11" y1="13.5" x2="16" y2="13.5" id="Path"></line>
+                            <line x1="4" y1="13.5" x2="7" y2="13.5" id="Path"></line>
+                            <path d="M11,13 C11,14.104454 10.1047499,14.9998364 9.00029617,15 C7.89584241,15.0001636 7.0003273,14.1050463 7,13.0005925 C6.99967288,11.8961388 7.89465746,11.0004911 8.99911111,11 C9.52969808,10.9997644 10.0386343,11.210374 10.4138993,11.5854723 C10.7891644,11.9605706 11,12.4694132 11,13 L11,13 Z" id="Path"></path>
+                            <line x1="12" y1="6.5" x2="4" y2="6.5" id="Path"></line>
+                            <path d="M16,7 C16,5.89554606 15.1047499,5.00016355 14.0002962,5 C12.8958424,4.99983645 12.0003273,5.89495378 12,6.99940756 C11.9996729,8.10386134 12.8946575,8.99950913 13.9991111,9 C15.1038245,9 15.9995092,8.10471322 16,7 Z" id="Path"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

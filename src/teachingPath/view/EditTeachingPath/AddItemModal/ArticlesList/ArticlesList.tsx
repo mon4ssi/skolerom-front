@@ -16,6 +16,9 @@ import { ReadingArticle } from 'components/pages/ReadingArticle/ReadingArticle';
 import closeImg from 'assets/images/close-rounded-black.svg';
 import tagsImg from 'assets/images/tags.svg';
 import gradeImg from 'assets/images/grade.svg';
+import cogsImg from 'assets/images/cogs.svg';
+import coreImg from 'assets/images/core.svg';
+import goalsImg from 'assets/images/goals.svg';
 
 import './ArticlesList.scss';
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
@@ -315,20 +318,20 @@ export class ArticlesList extends Component<Props, State> {
   }
 
   public renderArticlesList() {
-    const { articlesList, fetchingArticles, articlesForSkeleton } = this.props.editTeachingPathStore!;
+    const { articlesList, fetchingArticles, articlesForSkeletonEight } = this.props.editTeachingPathStore!;
 
     const selectedAndLoadedArticles = this.addSelectedArticles(articlesList);
 
     const allCardsMargins = 129; // Left padding of container + all right margins of card
     const cardsInRow = 4;
-    const cardWidthToHeightIndex = 1.28;
+    const cardWidthToHeightIndex = 1.2;
 
     const cardsContainer = document.getElementsByClassName('articlesListContainer')[0];
     const skeletonCardWidth = ((cardsContainer ? cardsContainer.clientWidth : 0) - allCardsMargins) / cardsInRow;
     const skeletonCardHeight = skeletonCardWidth * cardWidthToHeightIndex;
 
     if (fetchingArticles && !articlesList.length) {
-      return articlesForSkeleton.map((skeletonArticle, index) => (
+      return articlesForSkeletonEight.map((skeletonArticle, index) => (
                                        <SkeletonLoader
                                          key={index}
                                          className="RelatedArticlesCard"
@@ -354,7 +357,6 @@ export class ArticlesList extends Component<Props, State> {
         return 0;
       }
     );
-
     return (
       sortedArticles.map(this.renderArticle)
     );
@@ -527,7 +529,7 @@ export class ArticlesList extends Component<Props, State> {
         </div>
         <div className={`listItemInside listItemGreep ${expandCore && 'active'}`}>
           <div className="lisItemInsideIcon">
-            <img src={tagsImg} />
+            <img src={coreImg} />
           </div>
           <div className="lisItemInsideText">
             <h5 onClick={this.toggleDataCore}>{intl.get('new assignment.greep.core')}</h5>
@@ -536,7 +538,7 @@ export class ArticlesList extends Component<Props, State> {
         </div>
         <div className={`listItemInside listItemGreep ${expandGoals && 'active'}`}>
           <div className="lisItemInsideIcon">
-            <img src={tagsImg} />
+            <img src={goalsImg} />
           </div>
           <div className="lisItemInsideText">
             <h5 onClick={this.toggleDataGoals}>{intl.get('new assignment.greep.goals')}</h5>
@@ -545,7 +547,7 @@ export class ArticlesList extends Component<Props, State> {
         </div>
         <div className={`listItemInside listItemGreep ${expandSubjects && 'active'}`}>
           <div className="lisItemInsideIcon">
-            <img src={tagsImg} />
+            <img src={cogsImg} />
           </div>
           <div className="lisItemInsideText">
             <h5 onClick={this.toggleDataSubjects}>{intl.get('new assignment.greep.subjects')}</h5>
@@ -618,7 +620,7 @@ export class ArticlesList extends Component<Props, State> {
       return (
         <ReadingArticle
           titleCurrentArticle={selectedArticle!.title}
-          shownArticleId={selectedArticle!.correspondingLevelArticleId || selectedArticle!.wpId}
+          shownArticleId={selectedArticle!.correspondingLevelArticleId || selectedArticle!.wpId || selectedArticle!.id}
           closeArticle={this.closeArticleReading}
           finishReading={this.finishReading}
         />
@@ -637,6 +639,8 @@ export class ArticlesList extends Component<Props, State> {
               subject
               grade
               placeholder={intl.get('edit_teaching_path.modals.search_for_articles')}
+              popularity
+              isArticlesListPage
               // METHODS
               handleChangeSubject={this.handleChangeSubject}
               handleChangeGrade={this.handleChangeGrade}

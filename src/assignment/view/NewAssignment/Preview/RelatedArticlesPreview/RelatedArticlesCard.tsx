@@ -8,6 +8,7 @@ import { ArticleLevels } from 'utils/enums';
 
 import checkRounded from 'assets/images/check-rounded-white-bg.svg';
 import checkActive from 'assets/images/check-active.svg';
+import checkActiveGreen from 'assets/images/green_check.svg';
 import listPlaceholderImg from 'assets/images/list-placeholder.svg';
 import firstLevelImg from 'assets/images/level-1-blue.svg';
 import secondLevelImg from 'assets/images/level-2-blue.svg';
@@ -92,7 +93,7 @@ export const RelatedArticlesCard = (props: Props) => {
       <div className="image">
         {renderImageArticle()}
         <button className="check" title="check">
-          <img src={props.isCheckedArticle ? checkActive : checkRounded} alt="Check" title="check" className={'checkImg'}/>
+          <img src={props.isCheckedArticle ? checkActiveGreen : checkRounded} alt="Check" title="check" className={'checkImg'}/>
         </button>
       </div>
       <div className="info">

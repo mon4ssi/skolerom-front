@@ -582,7 +582,18 @@
       "assignmetns": "Assignments",
       "assignments_selected": "{number} assignments selected",
       "search_for_articles": "Search for articles...",
-      "expand": "Expand all"
+      "expand": "Expand all",      
+      "search": {
+        "buttons": {
+          "button_close": "Filters",
+          "button_open": "Apply filters",
+          "button_change": "Change filters"
+        },
+        "header": {
+          "title": "FILTERS",
+          "button": "Reset filters"
+        }
+      }
     },
     "validation": {
       "title_words_count": "Title cannot be empty",

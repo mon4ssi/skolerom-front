@@ -581,7 +581,18 @@
       "assignmetns": "Oppgaver",
       "assignments_selected": "{number} oppgaver valgt",
       "search_for_articles": "Søk etter artikler...",
-      "expand": "Utvid all"
+      "expand": "Utvid all",
+      "search": {
+        "buttons": {
+          "button_close": "Filtre",
+          "button_open": "Bruk filtre",
+          "button_change": "Endring filters"
+        },
+        "header": {
+          "title": "FILTRE",
+          "button": "Tilbakestill filtre"
+        }
+      }
     },
     "validation": {
       "title_words_count": "Tittelen kan ikke være tom",

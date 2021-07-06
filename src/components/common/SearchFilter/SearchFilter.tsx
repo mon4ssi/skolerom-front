@@ -8,6 +8,9 @@ import isNumber from 'lodash/isNumber';
 import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
 import { Grade, Subject } from 'assignment/Assignment';
 import { sortByAlphabet } from 'utils/sortByAlphabet';
+import filterImg from 'assets/images/filter.svg';
+import filterWhiteImg from 'assets/images/filter_white.svg';
+import resetImg from 'assets/images/reset.svg';
 
 import './SearchFilter.scss';
 
@@ -26,6 +29,7 @@ interface Props {
   isTeachingPathPage?: boolean;
   isAssignmentsPathPage?: boolean;
   width?: number;
+  isArticlesListPage?: boolean;
 
   customGradesList?: Array<Grade>;
   customSubjectsList?: Array<Subject>;
@@ -51,6 +55,8 @@ interface Props {
 
 interface State {
   displayWidthBreakpoint: number;
+  filtersModal: boolean;
+  filtersisUsed: boolean;
 }
 
 @inject('assignmentListStore')
@@ -60,9 +66,12 @@ class SearchFilter extends Component<Props, State> {
   private space: RefObject<HTMLDivElement> = React.createRef();
   private subjectRef: RefObject<HTMLSelectElement> = React.createRef();
   private evaluationRef: RefObject<HTMLSelectElement> = React.createRef();
+  private filtersModalRef: RefObject<HTMLButtonElement> = React.createRef();
 
   public state = {
     displayWidthBreakpoint: 0,
+    filtersModal: false,
+    filtersisUsed: false
   };
 
   public componentDidMount() {
@@ -70,7 +79,6 @@ class SearchFilter extends Component<Props, State> {
     if (!customGradesList) {
       assignmentListStore!.getGrades();
     }
-
     if (!customSubjectsList) {
       assignmentListStore!.getSubjects();
     }
@@ -278,6 +286,71 @@ class SearchFilter extends Component<Props, State> {
     document.getElementById(STYLE_ELEMENT_ID)!.innerHTML = this.getStyles(this.state.displayWidthBreakpoint);
   }
 
+  public openFiltersModal = () => {
+    const { filtersModal } = this.state;
+    if (filtersModal) {
+      this.setState({
+        filtersModal: false
+      });
+    } else {
+      this.setState({
+        filtersModal: true
+      });
+    }
+  }
+
+  public closeFiltersModal = () => {
+    this.setState({
+      filtersModal: false
+    });
+  }
+
+  public applyFiltersbutton() {
+    const { filtersModal, filtersisUsed } = this.state;
+    let buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_close');
+    let buttonClass = 'closehandler';
+    let imgFilter = filterImg;
+    if (filtersModal) {
+      buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_open');
+      buttonClass = 'openhandler';
+      imgFilter = filterWhiteImg;
+    } else {
+      if (filtersisUsed) {
+        buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_change');
+        buttonClass = 'openhandler';
+        imgFilter = filterWhiteImg;
+      }
+    }
+    return (
+      <div className="SearchFilter__link">
+        <a href="javascript:void(0)" className={buttonClass} onClick={this.openFiltersModal}>
+          <img src={imgFilter} /> {buttonTxt}
+        </a>
+      </div>
+    );
+  }
+
+  public modalFilters() {
+    const { filtersModal } = this.state;
+    if (this.filtersModalRef.current) {
+      this.filtersModalRef.current!.focus();
+    }
+    return (
+      <div className="FiltersModal">
+        <div className="FiltersModal__header">
+          <h5>{intl.get('edit_teaching_path.modals.search.header.title')}</h5>
+          <button ref={this.filtersModalRef}>
+            <img src={resetImg} />
+            <span>{intl.get('edit_teaching_path.modals.search.header.button')}</span>
+          </button>
+        </div>
+        <div className="FiltersModal__body">
+          testing
+        </div>
+      </div>
+    );
+  }
+
   public render() {
     const {
       isStudent,
@@ -289,7 +362,8 @@ class SearchFilter extends Component<Props, State> {
       popularity,
       searchQueryFilterValue,
       activity,
-      orderFieldFilterValue
+      orderFieldFilterValue,
+      isArticlesListPage
     } = this.props;
     let myValue : any;
     const searchQueryValue = searchQueryFilterValue || '';
@@ -301,11 +375,14 @@ class SearchFilter extends Component<Props, State> {
     };
     return (
       <div className="SearchFilter" aria-controls="List" ref={this.container}>
-        {isStudent && this.renderEvaluationStatus()}
-        {isStudent && this.renderAnswerStatus()}
-        {subject && this.renderSubjects()}
-        {!isStudent && grade && this.renderGrades()}
-        {activity && this.renderActivity()}
+        {!isArticlesListPage && isStudent && this.renderEvaluationStatus()}
+        {!isArticlesListPage && isStudent && this.renderAnswerStatus()}
+        {!isArticlesListPage && subject && this.renderSubjects()}
+        {!isArticlesListPage && !isStudent && grade && this.renderGrades()}
+        {!isArticlesListPage && activity && this.renderActivity()}
+
+        {isArticlesListPage &&  this.applyFiltersbutton()}
+        {this.state.filtersModal && this.modalFilters()}
 
         <div className="SearchFilter__space" ref={this.space}/>
 
