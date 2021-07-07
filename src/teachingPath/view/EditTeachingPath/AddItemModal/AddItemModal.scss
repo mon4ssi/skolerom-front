@@ -130,6 +130,7 @@
             color: black;
             margin-bottom: 5px;
             position: relative;
+            padding-left: 10px;
             &:before {
               content: '';
               margin-right: 5px;
@@ -138,6 +139,12 @@
               background: black;
               display: inline-block;
               vertical-align: middle;
+              position: absolute;
+              left: 0px;
+              top: 9px;
+            }
+            &::first-letter {
+              text-transform: uppercase;
             }
           }
         }
@@ -178,6 +185,20 @@
     }
   }
 } 
+
+@media screen and (max-width: $screen-dimension-desktop-l) {  
+  .addItemModalBackground {
+    .addItemModal {
+      width: 100%;
+      &__left {
+        width: 400px;
+      }
+      &__right {
+        width: calc(100% - 400px);
+      }
+    }
+  }
+}
 
 @media screen and (max-width: $screen-dimension-desktop) {
   .addItemModalBackground {

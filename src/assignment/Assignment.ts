@@ -744,6 +744,11 @@ export interface ReadLevel {
   level: number;
 }
 
+export interface GreepElements {
+  kode: string;
+  description: string;
+}
+
 export interface ArticleArgs {
   id: number;
   title: string;
@@ -758,6 +763,9 @@ export interface ArticleArgs {
   correspondingLevelArticleId?: number | null;
   isSelected?: boolean;
   readLevel?: ReadLevel;
+  grep_coreelements?: Array<GreepElements>;
+  grep_goals?: Array<GreepElements>;
+  grep_maintopic?: Array<GreepElements>;
 }
 
 export class Article {
@@ -774,6 +782,9 @@ export class Article {
   public correspondingLevelArticleId?: number | null;
   public isSelected?: boolean;
   public readLevel?: ReadLevel;
+  public grepCoreelements?: Array<GreepElements>;
+  public grepGoals?: Array<GreepElements>;
+  public grepMaintopic?: Array<GreepElements>;
 
   constructor(args: ArticleArgs) {
     this.id = args.id;
@@ -789,6 +800,9 @@ export class Article {
     this.correspondingLevelArticleId = args.correspondingLevelArticleId;
     this.isSelected = args.isSelected;
     this.readLevel = args.readLevel;
+    this.grepCoreelements = args.grep_coreelements;
+    this.grepGoals = args.grep_goals;
+    this.grepMaintopic = args.grep_maintopic;
   }
 }
 

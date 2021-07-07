@@ -23,11 +23,13 @@
   a {
     display: flex;
     background: #e7ecef;
-    padding: 6px 10px;
+    padding: 5px 10px;
     border-radius: 5px;
     border: 1px solid #939fa7;
     color: #0B2541;
     font-weight: 200;
+    margin-right: 20px;
+    font-size: 16px;
     &.openhandler {
       background: #0B2541;
       border: 1px solid #0B2541;

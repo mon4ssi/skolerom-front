@@ -428,7 +428,7 @@ export class ArticlesList extends Component<Props, State> {
     if (amountSubjects > 0) {
       const visiblesubjects = selectedArticle!.subjects!.sort((a, b) => a.id - b.id).map((subject) => {
         const title = subject.title;
-        return <span key={subject.id}>{title}</span>;
+        return <li key={subject.id}>{title}</li>;
       });
       return (
         <div className="subjects">
@@ -443,37 +443,69 @@ export class ArticlesList extends Component<Props, State> {
 
   public SelectedGreepCore = () => {
     const { selectedArticle } = this.state;
+    const amountCoreElements = selectedArticle!.grepCoreelements ? selectedArticle!.grepCoreelements.length : 0;
+    if (amountCoreElements > 0) {
+      const visibilityCores = selectedArticle!.grepCoreelements!.map((corelement) => {
+        const description = corelement.description;
+        return <li key={corelement.kode}>{description}</li>;
+      });
+      return (
+        <div className="greepContentList">
+          <ul>
+            {visibilityCores}
+          </ul>
+        </div>
+      );
+    }
     return (
       <div className="greepContentList">
-        <ul>
-          <li>Core Element 1</li>
-          <li>Core Element 2</li>
-          <li>Core Element 3</li>
-        </ul>
+        {intl.get('activity_page.No available content')}
       </div>
     );
   }
 
   public SelectedCoreGoals = () => {
     const { selectedArticle } = this.state;
+    const amountGoalsElements = selectedArticle!.grepGoals ? selectedArticle!.grepGoals.length : 0;
+    if (amountGoalsElements > 0) {
+      const visibilityGoals = selectedArticle!.grepGoals!.map((corelement) => {
+        const description = corelement.description;
+        return <li key={corelement.kode}>{description}</li>;
+      });
+      return (
+        <div className="greepContentList">
+          <ul>
+            {visibilityGoals}
+          </ul>
+        </div>
+      );
+    }
     return (
       <div className="greepContentList">
-        <ul>
-          <li>Educational goals 1</li>
-          <li>Educational goals 2</li>
-        </ul>
+        {intl.get('activity_page.No available content')}
       </div>
     );
   }
 
   public SelectedCoreSubjects = () => {
     const { selectedArticle } = this.state;
+    const amountSubjectsElements = selectedArticle!.grepMaintopic ? selectedArticle!.grepMaintopic.length : 0;
+    if (amountSubjectsElements > 0) {
+      const visibilityGoals = selectedArticle!.grepMaintopic!.map((corelement) => {
+        const description = corelement.description;
+        return <li key={corelement.kode}>{description}</li>;
+      });
+      return (
+        <div className="greepContentList">
+          <ul>
+            {visibilityGoals}
+          </ul>
+        </div>
+      );
+    }
     return (
       <div className="greepContentList">
-        <ul>
-          <li>Demokrati og medborgerskap</li>
-          <li>Folkehelse og livsmestring</li>
-        </ul>
+        {intl.get('activity_page.No available content')}
       </div>
     );
   }

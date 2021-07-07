@@ -104,7 +104,7 @@
 
 .RelatedArticlesCard {
   display: flex;
-  width: calc(100% / 4 - 20px);
+  width: calc(100% / 5 - 20px);
   flex-direction: column;
   border-radius: 6px;
   box-shadow: 0 0 13px -4px rgba(87, 87, 87, 1);
@@ -230,6 +230,18 @@
   .RelatedArticlesPreview .wrapperArticles .content .cards :nth-child(3n) {
     margin-right: 10px !important;
   }
+  .RelatedArticlesCard {
+      width: calc(100% / 4 - 20px);
+  }
+}
+
+@media screen and (max-width: $screen-dimension-desktop-1369) {  
+  .RelatedArticlesCard {
+      width: calc(100% / 3 - 20px);
+  }
+}
+
+@media screen and (max-width: $screen-dimension-tablet-xl) {  
   .RelatedArticlesCard {
       width: calc(100% / 2 - 20px);
   }

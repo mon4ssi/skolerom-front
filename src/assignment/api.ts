@@ -23,7 +23,8 @@ import {
   buildMyAssignmentsList,
   buildStudentAssignmentList,
   GradeDTO,
-  SubjectDTO
+  SubjectDTO,
+  GreepElements
 } from './factory';
 import { DEFAULT_AMOUNT_ARTICLES_PER_PAGE } from 'utils/constants';
 import { ContentBlockType } from './ContentBlock';
@@ -61,6 +62,9 @@ export interface ArticleDTO {
   student_subject: Array<SubjectDTO>;
   student_level: Array<StudentLevelDTO>;
   level?: StudentLevelDTO;
+  grep_coreelements?: Array<GreepElements>;
+  grep_goals?: Array<GreepElements>;
+  grep_maintopic?: Array<GreepElements>;
 }
 
 export interface ContentBlockDTO {

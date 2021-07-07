@@ -192,7 +192,6 @@ export class EditTeachingPathStore {
           subjects: rest.subjects,
           searchTitle: rest.searchTitle,
         });
-
         this.articlesList = isNextPage ? this.articlesList.concat(articles) : articles;
         if (articles.length < perPage) {
           this.isFetchedArticlesListFinished = true;

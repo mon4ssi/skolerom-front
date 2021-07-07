@@ -38,6 +38,11 @@ export interface GradeDTO {
   name: string;
 }
 
+export interface GreepElements {
+  kode: string;
+  description: string;
+}
+
 export interface AssignmentDistributeDTO {
   id: number;
   title: string;
@@ -302,6 +307,9 @@ export const buildArticle = (item: ArticleDTO) => (
     },
     grades: item.student_grade.map(grade => buildGrade(grade)) || [],
     subjects: item.student_subject.map(subject => buildSubject(subject)) || [],
+    grep_coreelements: item.grep_coreelements,
+    grep_goals: item.grep_goals,
+    grep_maintopic: item.grep_maintopic,
     levels: item.student_level.length && item.student_level[0] ?
     [
       buildArticleLevel(item.student_level)
@@ -313,6 +321,7 @@ export const buildArticle = (item: ArticleDTO) => (
       })
     ] :
                     [],
+
   })
 );
 
