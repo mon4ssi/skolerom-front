@@ -102,6 +102,9 @@ const buildArticleItemDTO = (
   url: item.url,
   images: item.images,
   levels: item.levels,
+  grepCoreelements: item.grepCoreelements,
+  grepGoals: item.grepGoals,
+  grepMaintopic: item.grepMaintopic
 });
 
 const buildAssignmentItemDTO = (

@@ -763,9 +763,9 @@ export interface ArticleArgs {
   correspondingLevelArticleId?: number | null;
   isSelected?: boolean;
   readLevel?: ReadLevel;
-  grep_coreelements?: Array<GreepElements>;
-  grep_goals?: Array<GreepElements>;
-  grep_maintopic?: Array<GreepElements>;
+  grepCoreelements?: Array<GreepElements>;
+  grepGoals?: Array<GreepElements>;
+  grepMaintopic?: Array<GreepElements>;
 }
 
 export class Article {
@@ -800,9 +800,9 @@ export class Article {
     this.correspondingLevelArticleId = args.correspondingLevelArticleId;
     this.isSelected = args.isSelected;
     this.readLevel = args.readLevel;
-    this.grepCoreelements = args.grep_coreelements;
-    this.grepGoals = args.grep_goals;
-    this.grepMaintopic = args.grep_maintopic;
+    this.grepCoreelements = args.grepCoreelements;
+    this.grepGoals = args.grepGoals;
+    this.grepMaintopic = args.grepMaintopic;
   }
 }
 

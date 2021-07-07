@@ -307,9 +307,9 @@ export const buildArticle = (item: ArticleDTO) => (
     },
     grades: item.student_grade.map(grade => buildGrade(grade)) || [],
     subjects: item.student_subject.map(subject => buildSubject(subject)) || [],
-    grep_coreelements: item.grep_coreelements,
-    grep_goals: item.grep_goals,
-    grep_maintopic: item.grep_maintopic,
+    grepCoreelements: item.grep_coreelements,
+    grepGoals: item.grep_goals,
+    grepMaintopic: item.grep_maintopic,
     levels: item.student_level.length && item.student_level[0] ?
     [
       buildArticleLevel(item.student_level)
