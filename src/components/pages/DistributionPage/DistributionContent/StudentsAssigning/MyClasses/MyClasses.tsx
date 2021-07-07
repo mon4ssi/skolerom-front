@@ -243,7 +243,7 @@ class MyClass extends Component<MyClassProps, MyClassState> {
         <div className="myClassInfo flexBox spaceBetween">
 
           <div className="title fw500">
-            {myClass.name}{myClass.school !== null && schoolCount && schoolCount >=  maxNumberOfSchools  ? `( ${myClass.school.name} )` : ''}
+            {myClass.name}{myClass.school !== null && myClass.school !== undefined && myClass.school.name !== undefined && schoolCount >=  maxNumberOfSchools  ? ` (${myClass.school.name}) ` : ''}
           </div>
 
           <div className="flexBox justifyEnd alignCenter">
