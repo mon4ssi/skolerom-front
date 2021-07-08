@@ -16,10 +16,11 @@ import closeImg from 'assets/images/close-rounded-black.svg';
 import imagePlaceholderImg from 'assets/images/list-placeholder.svg';
 import checkImg from 'assets/images/check-rounded-white-bg.svg';
 import checkFilledImg from 'assets/images/check-active.svg';
+import gradeImg from 'assets/images/grade.svg';
 
 import './AssignmentsList.scss';
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
-
+const showDelay = 500;
 interface AssignmentProps {
   editTeachingPathStore?: EditTeachingPathStore;
   assignment: Assignment;
@@ -99,10 +100,21 @@ interface Props {
   editTeachingPathStore?: EditTeachingPathStore;
 }
 
+interface MyGrades {
+  id: number;
+  title: string;
+}
+
 interface State {
   currentTab: string;
   itemsForNewChildren: Array<Assignment>;
   removingItems: Array<Assignment>;
+  isRedirect: boolean;
+  greeddata: boolean;
+  selectedAssignment: Assignment | null;
+  selectedAssignmentTitle: string;
+  selectedAssignmentDescription: string;
+  expand: boolean;
 }
 
 @inject('assignmentListStore', 'editTeachingPathStore')
@@ -113,11 +125,20 @@ export class AssignmentsList extends Component<Props, State> {
   public ref = React.createRef<HTMLDivElement>();
   public refButton = React.createRef<HTMLButtonElement>();
 
-  public state = {
-    currentTab: 'all',
-    itemsForNewChildren: [],
-    removingItems: [],
-  };
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      currentTab: 'all',
+      itemsForNewChildren: [],
+      removingItems: [],
+      isRedirect: false,
+      greeddata: false,
+      expand: false,
+      selectedAssignmentTitle: '',
+      selectedAssignmentDescription: '',
+      selectedAssignment: null
+    };
+  }
 
   private getAllChildrenItems = () => {
     const { currentNode } = this.props.editTeachingPathStore!;
@@ -137,7 +158,9 @@ export class AssignmentsList extends Component<Props, State> {
   }
 
   public componentWillUnmount() {
-    this.props.editTeachingPathStore!.setCurrentNode(null);
+    if (!this.state.isRedirect) {
+      this.props.editTeachingPathStore!.setCurrentNode(null);
+    }
     this.props.assignmentListStore!.setFilterShowMyAssignments(null);
     this.props.assignmentListStore!.setFiltersIsPublished(0, true);
     this.props.assignmentListStore!.setFromTeachingPath(false);
@@ -147,7 +170,6 @@ export class AssignmentsList extends Component<Props, State> {
 
   public addItemToNewChild = (item: Assignment) => {
     const { currentNode } = this.props.editTeachingPathStore!;
-
     const ifAddingItemIsSaved = !!currentNode!.children.filter(
       child => child.items!.find(el => el.value.id === item.id)
     ).length;
@@ -155,8 +177,11 @@ export class AssignmentsList extends Component<Props, State> {
     if (ifAddingItemIsSaved) {
       this.setState({ removingItems: this.state.removingItems.filter((el: Assignment) => el.id !== item.id) });
     }
-
     this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, item] });
+    this.setState({ greeddata: true });
+    this.setState({ selectedAssignmentTitle: item.title });
+    this.setState({ selectedAssignmentDescription: item.description });
+    this.setState({ selectedAssignment: item });
   }
 
   public removeItemFromNewChild = async (item: Assignment) => {
@@ -258,41 +283,55 @@ export class AssignmentsList extends Component<Props, State> {
     }
   }
 
+  public redirectAssigment = () => {
+    const { currentNode } = this.props.editTeachingPathStore!;
+    const { editTeachingPathStore } = this.props;
+    editTeachingPathStore!.setCurrentNode(currentNode);
+    this.setState({ isRedirect: true });
+    setTimeout(
+      () => {
+        this.context.changeContentType(0);
+      },
+      showDelay
+    );
+  }
+
   public renderHeader = () => {
     const { currentTab } = this.state;
-
     return (
-      <div className="assignmentsListHeader flexBox spaceBetween">
-        <div className="assignmentsListType flexBox">
+      <div className="assignmentsListHeader flexBox spaceBetween" tabIndex={0}>
+        <div className="assignmentsListHeader__left">
           <button
-            className={`fs15 ${currentTab === 'all' ? 'selectedTab' : null}`}
+            className={`buttonDev ${currentTab === 'all' ? 'selectedTab' : null}`}
             onClick={this.selectAllAssignmentsTab}
             title={intl.get('edit_teaching_path.modals.all_assignments')}
           >
             {intl.get('edit_teaching_path.modals.all_assignments')}
           </button>
           <button
-            className={`fs15 ${currentTab === 'my' ? 'selectedTab' : null}`}
+            className={`buttonDev ${currentTab === 'my' ? 'selectedTab' : null}`}
             onClick={this.selectMyAssignmentsTab}
             title={intl.get('edit_teaching_path.modals.my_assignments')}
           >
             {intl.get('edit_teaching_path.modals.my_assignments')}
           </button>
+          <a href="javascript:void(0)" onClick={this.redirectAssigment}>{intl.get('edit_teaching_path.modals.articles')}</a>
         </div>
-        <button ref={this.refButton} onClick={this.closeModal} title={intl.get('generals.close_assignment')}>
-          <img
-            src={closeImg}
-            alt={intl.get('generals.close_assignment')}
-            title={intl.get('generals.close_assignment')}
-          />
+        <div className="assignmentsListHeader__right">
+          <button ref={this.refButton} onClick={this.closeModal} title={intl.get('generals.close_assignment')}>
+            <img
+              src={closeImg}
+              alt={intl.get('generals.close_assignment')}
+              title={intl.get('generals.close_assignment')}
+            />
           </button>
+        </div>
       </div>
     );
   }
 
   public renderAssignment = (assignment: Assignment, index: number) => {
     const { assignmentsState } = this.props.assignmentListStore!;
-
     return (
       assignmentsState === StoreState.LOADING ? (
         <SkeletonLoader key={index} className="skeletonAssignmentItem" />
@@ -335,7 +374,6 @@ export class AssignmentsList extends Component<Props, State> {
     const assignments = assignmentListStore!.assignmentsState === StoreState.LOADING && !assignmentsList.length ?
       assignmentListStore!.assignmentsForSkeleton :
       sortedAssignments;
-
     return (
       <div
         className="assignmentsListContainer flexBox dirColumn spaceBetween"
@@ -409,29 +447,117 @@ export class AssignmentsList extends Component<Props, State> {
     }
   }
 
+  public toggleData = () => {
+    const { expand } = this.state;
+    if (expand) {
+      this.setState({ expand: false });
+    } else {
+      this.setState({ expand: true });
+    }
+  }
+
+  public SelectedGrades = () => {
+    const { selectedAssignment } = this.state;
+    const amountOfGrades = selectedAssignment!.grades ? selectedAssignment!.grades.length : 0;
+    if (amountOfGrades > 0) {
+      const visibleGrades = selectedAssignment!.grades!.sort((a, b) => a.id - b.id).map((grade) => {
+        const title = grade.title.split('.', 1);
+        return <span key={grade.id}>{title}{intl.get('new assignment.grade')}</span>;
+      });
+      return (
+        <div className="grades">
+          {visibleGrades}
+        </div>
+      );
+    }
+    return (
+      <div className="grades" />
+    );
+  }
+
+  public renderInsideData = () => {
+    const { expand } = this.state;
+    return (
+      <div className="defaultContentModal__inside">
+        <div className="listItemInside">
+          <div className="lisItemInsideIcon">
+            <img src={gradeImg} />
+          </div>
+          <div className="lisItemInsideText">
+            <h5>{intl.get('generals.grade')}</h5>
+            {this.SelectedGrades()}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  public renderInformationContent = () => {
+    const { selectedAssignmentTitle, selectedAssignmentDescription, expand } = this.state;
+    return (
+      <div className="defaultContentModal">
+        <h2>{intl.get('edit_teaching_path.modals.articles_title')}</h2>
+        <div className="defaultContentModal__content">
+          <h3>{selectedAssignmentTitle}</h3>
+          <p>{selectedAssignmentDescription}</p>
+        </div>
+        <div className="defaultContentModal__expand">
+          <div className={`expandContent ${expand && 'active'}`} onClick={this.toggleData}>{intl.get('edit_teaching_path.modals.expand')}</div>
+          {expand && this.renderInsideData()}
+        </div>
+      </div>
+    );
+  }
+
+  public renderInformationContentDefault = () => {
+    const { contentType } = this.context;
+    return (
+      <div className="defaultContentModal">
+        <h2>{intl.get('edit_teaching_path.modals.assignments_title')}</h2>
+        <div>
+          <p>{intl.get('edit_teaching_path.modals.assignments_default')}</p>
+        </div>
+      </div>
+    );
+  }
+
+  public conditionalGreedData = () => {
+    const { greeddata } = this.state;
+    if (greeddata) {
+      return this.renderInformationContent();
+    }
+    return this.renderInformationContentDefault();
+  }
+
   public render() {
     const { assignmentListStore } = this.props;
 
     return (
-      <div className="AssignmentsList flexBox dirColumn">
+      <div className="addItemModal__content">
+        <div className="addItemModal__left">
+          {this.conditionalGreedData()}
+        </div>
+        <div className="addItemModal__right">
+          <div className="AssignmentsList flexBox dirColumn">
+            {this.renderHeader()}
+            <SearchFilter
+              subject
+              grade
+              placeholder={intl.get('assignments search.Search')}
+              // METHODS
+              handleChangeSubject={this.handleChangeSubject}
+              handleChangeGrade={this.handleChangeGrade}
+              handleInputSearchQuery={this.handleInputSearchQuery}
+              // VALUES
+              subjectFilterValue={assignmentListStore!.subjectFilterValue}
+              gradeFilterValue={assignmentListStore!.gradeFilterValue}
+              searchQueryFilterValue={assignmentListStore!.searchQueryFilterValue}
+            />
+            {this.renderAssignmentsList()}
+            {this.renderSubmitFooter()}
 
-        {this.renderHeader()}
-        <SearchFilter
-          subject
-          grade
-          placeholder={intl.get('assignments search.Search')}
-          // METHODS
-          handleChangeSubject={this.handleChangeSubject}
-          handleChangeGrade={this.handleChangeGrade}
-          handleInputSearchQuery={this.handleInputSearchQuery}
-          // VALUES
-          subjectFilterValue={assignmentListStore!.subjectFilterValue}
-          gradeFilterValue={assignmentListStore!.gradeFilterValue}
-          searchQueryFilterValue={assignmentListStore!.searchQueryFilterValue}
-        />
-        {this.renderAssignmentsList()}
-        {this.renderSubmitFooter()}
-
+          </div>
+        </div>
       </div>
     );
   }

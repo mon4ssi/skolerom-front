@@ -100,3 +100,8 @@
     }
   }
 }
+.ArticlesList .articlesListHeader__left a:focus {
+  outline: black;
+  outline-style: auto;
+  outline-offset: 3px;
+}

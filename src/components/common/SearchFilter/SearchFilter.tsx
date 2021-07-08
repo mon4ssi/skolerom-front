@@ -10,7 +10,7 @@ import { Grade, Subject } from 'assignment/Assignment';
 import { sortByAlphabet } from 'utils/sortByAlphabet';
 import filterImg from 'assets/images/filter.svg';
 import filterWhiteImg from 'assets/images/filter_white.svg';
-import resetImg from 'assets/images/reset.svg';
+import resetImg from 'assets/images/reset-icon.svg';
 
 import './SearchFilter.scss';
 
@@ -30,6 +30,7 @@ interface Props {
   isAssignmentsPathPage?: boolean;
   width?: number;
   isArticlesListPage?: boolean;
+  isAssignmentsListPage?: boolean;
 
   customGradesList?: Array<Grade>;
   customSubjectsList?: Array<Subject>;
@@ -363,7 +364,8 @@ class SearchFilter extends Component<Props, State> {
       searchQueryFilterValue,
       activity,
       orderFieldFilterValue,
-      isArticlesListPage
+      isArticlesListPage,
+      isAssignmentsListPage
     } = this.props;
     let myValue : any;
     const searchQueryValue = searchQueryFilterValue || '';
@@ -382,8 +384,15 @@ class SearchFilter extends Component<Props, State> {
         {!isArticlesListPage && activity && this.renderActivity()}
 
         {isArticlesListPage &&  this.applyFiltersbutton()}
-        {this.state.filtersModal && this.modalFilters()}
 
+        {!isAssignmentsListPage && isStudent && this.renderEvaluationStatus()}
+        {!isAssignmentsListPage && isStudent && this.renderAnswerStatus()}
+        {!isAssignmentsListPage && subject && this.renderSubjects()}
+        {!isAssignmentsListPage && !isStudent && grade && this.renderGrades()}
+        {!isAssignmentsListPage && activity && this.renderActivity()}
+
+        {isAssignmentsListPage &&  this.applyFiltersbutton()}
+        {this.state.filtersModal && this.modalFilters()}
         <div className="SearchFilter__space" ref={this.space}/>
 
         {!isStudent && date && this.renderDate()}
