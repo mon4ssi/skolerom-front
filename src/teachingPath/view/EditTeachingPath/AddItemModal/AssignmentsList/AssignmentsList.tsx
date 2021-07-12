@@ -17,6 +17,10 @@ import imagePlaceholderImg from 'assets/images/list-placeholder.svg';
 import checkImg from 'assets/images/check-rounded-white-bg.svg';
 import checkFilledImg from 'assets/images/check-active.svg';
 import gradeImg from 'assets/images/grade.svg';
+import tagsImg from 'assets/images/tags.svg';
+import cogsImg from 'assets/images/cogs.svg';
+import coreImg from 'assets/images/core.svg';
+import goalsImg from 'assets/images/goals.svg';
 
 import './AssignmentsList.scss';
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
@@ -115,6 +119,9 @@ interface State {
   selectedAssignmentTitle: string;
   selectedAssignmentDescription: string;
   expand: boolean;
+  expandCore: boolean;
+  expandGoals: boolean;
+  expandSubjects: boolean;
 }
 
 @inject('assignmentListStore', 'editTeachingPathStore')
@@ -136,7 +143,10 @@ export class AssignmentsList extends Component<Props, State> {
       expand: false,
       selectedAssignmentTitle: '',
       selectedAssignmentDescription: '',
-      selectedAssignment: null
+      selectedAssignment: null,
+      expandCore: false,
+      expandGoals: false,
+      expandSubjects: false,
     };
   }
 
@@ -475,8 +485,125 @@ export class AssignmentsList extends Component<Props, State> {
     );
   }
 
+  public SelectedSubjects = () => {
+    const { selectedAssignment } = this.state;
+    const amountSubjects = selectedAssignment!.subjects ? selectedAssignment!.subjects.length : 0;
+    if (amountSubjects > 0) {
+      const visiblesubjects = selectedAssignment!.subjects!.sort((a, b) => a.id - b.id).map((subject) => {
+        const title = subject.title;
+        return <li key={subject.id}>{title}</li>;
+      });
+      return (
+        <div className="subjects">
+          <ul>
+            {visiblesubjects}
+          </ul>
+        </div>
+      );
+    }
+    return (
+      <div className="subjects" />
+    );
+  }
+
+  public SelectedGreepCore = () => {
+    const { selectedAssignment } = this.state;
+    const amountCoreElements = selectedAssignment!.grepCoreelements ? selectedAssignment!.grepCoreelements.length : 0;
+    if (amountCoreElements > 0) {
+      const visibilityCores = selectedAssignment!.grepCoreelements!.map((corelement) => {
+        const description = corelement.description;
+        return <li key={corelement.kode}>{description}</li>;
+      });
+      return (
+        <div className="greepContentList">
+          <ul>
+            {visibilityCores}
+          </ul>
+        </div>
+      );
+    }
+    return (
+      <div className="greepContentList">
+        {intl.get('activity_page.No available content')}
+      </div>
+    );
+  }
+
+  public SelectedCoreGoals = () => {
+    const { selectedAssignment } = this.state;
+    const amountGoalsElements = selectedAssignment!.grepGoals ? selectedAssignment!.grepGoals.length : 0;
+    if (amountGoalsElements > 0) {
+      const visibilityGoals = selectedAssignment!.grepGoals!.map((corelement) => {
+        const description = corelement.description;
+        return <li key={corelement.kode}>{description}</li>;
+      });
+      return (
+        <div className="greepContentList">
+          <ul>
+            {visibilityGoals}
+          </ul>
+        </div>
+      );
+    }
+    return (
+      <div className="greepContentList">
+        {intl.get('activity_page.No available content')}
+      </div>
+    );
+  }
+
+  public SelectedCoreSubjects = () => {
+    const { selectedAssignment } = this.state;
+    const amountSubjectsElements = selectedAssignment!.grepMaintopic ? selectedAssignment!.grepMaintopic.length : 0;
+    if (amountSubjectsElements > 0) {
+      const visibilityGoals = selectedAssignment!.grepMaintopic!.map((corelement) => {
+        const description = corelement.description;
+        return <li key={corelement.kode}>{description}</li>;
+      });
+      return (
+        <div className="greepContentList">
+          <ul>
+            {visibilityGoals}
+          </ul>
+        </div>
+      );
+    }
+    return (
+      <div className="greepContentList">
+        {intl.get('activity_page.No available content')}
+      </div>
+    );
+  }
+
+  public toggleDataCore = () => {
+    const { expandCore } = this.state;
+    if (expandCore) {
+      this.setState({ expandCore: false });
+    } else {
+      this.setState({ expandCore: true });
+    }
+  }
+
+  public toggleDataGoals = () => {
+    const { expandGoals } = this.state;
+    if (expandGoals) {
+      this.setState({ expandGoals: false });
+    } else {
+      this.setState({ expandGoals: true });
+    }
+  }
+
+  public toggleDataSubjects = () => {
+    const { expandSubjects } = this.state;
+    if (expandSubjects) {
+      this.setState({ expandSubjects: false });
+    } else {
+      this.setState({ expandSubjects: true });
+    }
+  }
+
   public renderInsideData = () => {
-    const { expand } = this.state;
+    const { expandCore, expandGoals, expandSubjects } = this.state;
     return (
       <div className="defaultContentModal__inside">
         <div className="listItemInside">
@@ -486,6 +613,42 @@ export class AssignmentsList extends Component<Props, State> {
           <div className="lisItemInsideText">
             <h5>{intl.get('generals.grade')}</h5>
             {this.SelectedGrades()}
+          </div>
+        </div>
+        <div className="listItemInside">
+          <div className="lisItemInsideIcon">
+            <img src={tagsImg} />
+          </div>
+          <div className="lisItemInsideText">
+            <h5>{intl.get('new assignment.Subject')}</h5>
+            {this.SelectedSubjects()}
+          </div>
+        </div>
+        <div className={`listItemInside listItemGreep ${expandCore && 'active'}`}>
+          <div className="lisItemInsideIcon">
+            <img src={coreImg} />
+          </div>
+          <div className="lisItemInsideText">
+            <h5 onClick={this.toggleDataCore}>{intl.get('new assignment.greep.core')}</h5>
+            {this.SelectedGreepCore()}
+          </div>
+        </div>
+        <div className={`listItemInside listItemGreep ${expandGoals && 'active'}`}>
+          <div className="lisItemInsideIcon">
+            <img src={goalsImg} />
+          </div>
+          <div className="lisItemInsideText">
+            <h5 onClick={this.toggleDataGoals}>{intl.get('new assignment.greep.goals')}</h5>
+            {this.SelectedCoreGoals()}
+          </div>
+        </div>
+        <div className={`listItemInside listItemGreep ${expandSubjects && 'active'}`}>
+          <div className="lisItemInsideIcon">
+            <img src={cogsImg} />
+          </div>
+          <div className="lisItemInsideText">
+            <h5 onClick={this.toggleDataSubjects}>{intl.get('new assignment.greep.subjects')}</h5>
+            {this.SelectedCoreSubjects()}
           </div>
         </div>
       </div>
@@ -544,6 +707,7 @@ export class AssignmentsList extends Component<Props, State> {
               subject
               grade
               placeholder={intl.get('assignments search.Search')}
+              isArticlesListPage
               // METHODS
               handleChangeSubject={this.handleChangeSubject}
               handleChangeGrade={this.handleChangeGrade}

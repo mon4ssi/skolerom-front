@@ -80,6 +80,11 @@ export class Subject {
   }
 }
 
+export interface GreepElementsFromBackend {
+  kode: string;
+  description: string;
+}
+
 export interface AssignmentArgs {
   id: number;
   title?: string;
@@ -112,6 +117,10 @@ export interface AssignmentArgs {
   isDistributed?: boolean;
   ownedByMe?: boolean;
   isCopy?: boolean;
+  grepCoreelements?: Array<GreepElementsFromBackend>;
+  grepGoals?: Array<GreepElementsFromBackend>;
+  grepMaintopic?: Array<GreepElementsFromBackend>;
+  grepReadingInsubject?: string;
 }
 
 export class Assignment {
@@ -148,6 +157,10 @@ export class Assignment {
   @observable protected _isPublished?: boolean;
   @observable protected _isDistributed?: boolean;
   @observable protected _isCopy?: boolean;
+  public grepCoreelements?: Array<GreepElementsFromBackend>;
+  public grepGoals?: Array<GreepElementsFromBackend>;
+  public grepMaintopic?: Array<GreepElementsFromBackend>;
+  public grepReadingInsubject?: string;
 
   constructor(args: AssignmentArgs) {
     this._id = args.id;
@@ -181,6 +194,10 @@ export class Assignment {
     this._isDistributed = args.isDistributed;
     this._ownedByMe = typeof args.ownedByMe === 'boolean' ? args.ownedByMe : false;
     this._isCopy = args.isCopy || false;
+    this.grepCoreelements = args.grepCoreelements;
+    this.grepGoals = args.grepGoals;
+    this.grepMaintopic = args.grepMaintopic;
+    this.grepReadingInsubject = args.grepReadingInsubject;
   }
 
   public isOwnedByMe(): boolean {

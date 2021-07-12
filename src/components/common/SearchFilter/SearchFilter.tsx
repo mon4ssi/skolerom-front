@@ -384,14 +384,6 @@ class SearchFilter extends Component<Props, State> {
         {!isArticlesListPage && activity && this.renderActivity()}
 
         {isArticlesListPage &&  this.applyFiltersbutton()}
-
-        {!isAssignmentsListPage && isStudent && this.renderEvaluationStatus()}
-        {!isAssignmentsListPage && isStudent && this.renderAnswerStatus()}
-        {!isAssignmentsListPage && subject && this.renderSubjects()}
-        {!isAssignmentsListPage && !isStudent && grade && this.renderGrades()}
-        {!isAssignmentsListPage && activity && this.renderActivity()}
-
-        {isAssignmentsListPage &&  this.applyFiltersbutton()}
         {this.state.filtersModal && this.modalFilters()}
         <div className="SearchFilter__space" ref={this.space}/>
 

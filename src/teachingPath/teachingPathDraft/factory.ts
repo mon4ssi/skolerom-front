@@ -117,7 +117,11 @@ const buildAssignmentItemDTO = (
   levels: item.levels,
   numberOfQuestions: item.numberOfQuestions,
   relatedArticles: item.relatedArticles,
-  featuredImage: item.featuredImage
+  featuredImage: item.featuredImage,
+  grepCoreelements: item.grepCoreelements,
+  grepGoals: item.grepGoals,
+  grepMaintopic: item.grepMaintopic,
+  grepReadingInsubject: item.grepReadingInsubject
 });
 
 const buildDomainItemDTO = (

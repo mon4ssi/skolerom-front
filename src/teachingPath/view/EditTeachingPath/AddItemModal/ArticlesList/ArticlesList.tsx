@@ -432,7 +432,9 @@ export class ArticlesList extends Component<Props, State> {
       });
       return (
         <div className="subjects">
-          {visiblesubjects}
+          <ul>
+            {visiblesubjects}
+          </ul>
         </div>
       );
     }

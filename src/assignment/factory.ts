@@ -54,6 +54,10 @@ export interface AssignmentDistributeDTO {
   defaultStartDate: string;
   grades: Array<GradeDTO>;
   subjects: Array<SubjectDTO>;
+  grep_coreelements?: Array<GreepElements>;
+  grep_goals?: Array<GreepElements>;
+  grep_maintopic?: Array<GreepElements>;
+  grep_readinginsubject?: string;
 }
 
 interface DraftAssignmentResponseDTO {
@@ -73,6 +77,10 @@ interface DraftAssignmentResponseDTO {
   levels: Array<number>;
   isChanged: boolean;
   createByContentManager?: boolean;
+  grep_coreelements?: Array<GreepElements>;
+  grep_goals?: Array<GreepElements>;
+  grep_maintopic?: Array<GreepElements>;
+  grep_readinginsubject?: string;
 }
 
 export interface TeacherAssignmentResponseDTO {
@@ -88,6 +96,10 @@ export interface TeacherAssignmentResponseDTO {
   createByContentManager?: boolean;
   isPublished?: boolean;
   isDistributed?: boolean;
+  grep_coreelements?: Array<GreepElements>;
+  grep_goals?: Array<GreepElements>;
+  grep_maintopic?: Array<GreepElements>;
+  grep_readinginsubject?: string;
 }
 
 export const buildFilterDTO = (filter: Filter): Object => {
@@ -255,6 +267,10 @@ export const buildMyAssignmentsList = (item: DraftAssignmentResponseDTO) => {
     isChanged: item.isChanged,
     levels: item.levels,
     isCreatedByContentManager: item.createByContentManager,
+    grepCoreelements: item.grep_coreelements,
+    grepGoals: item.grep_goals,
+    grepMaintopic: item.grep_maintopic,
+    grepReadingInsubject: item.grep_readinginsubject
   });
 };
 
@@ -271,7 +287,11 @@ export const buildAllAssignmentsList = (item: TeacherAssignmentResponseDTO) => (
       levels: item.levels,
       isCreatedByContentManager: item.createByContentManager,
       isPublished: item.isPublished,
-      isDistributed: item.isDistributed
+      isDistributed: item.isDistributed,
+      grepCoreelements: item.grep_coreelements,
+      grepGoals: item.grep_goals,
+      grepMaintopic: item.grep_maintopic,
+      grepReadingInsubject: item.grep_readinginsubject
     })
 );
 

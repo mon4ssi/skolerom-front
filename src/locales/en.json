@@ -557,7 +557,7 @@
       "after_distribution": "Teaching path successfully distributed!"
     },
     "title": {
-      "new_entity": "New teaching path",
+      "new_entity": "Publish teaching path",
       "new_teaching_path_draft": "New Teaching Path draft",
       "title_placeholder": "Teaching path title",
       "description_placeholder": "Describe your teaching path..."
