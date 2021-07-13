@@ -524,3 +524,40 @@ pre {
   outline-style: auto;
   outline-offset: 4px;
 }
+.maintenance .maintenance__close img {
+  border: solid 2px black;
+  width: 25px;
+  height: 25px;
+  padding: 3px;
+  border-radius: 50%;
+  filter: brightness(0)invert(1);
+  margin-right: 5px;
+}
+.maintenance .maintenance__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+.maintenance .maintenance__content {
+  max-width: 450px;
+  margin: auto;
+  color: white;
+  font-weight: 400;
+}
+.maintenance p {
+  margin: 0px;
+  color: white;
+}
+.maintenance {
+  background: #e2017b;
+  text-align: center;
+  padding-top: 15px;
+  position: relative;
+  z-index: 2;
+}
+.App.isMaintenance {
+  height: auto;
+}
