@@ -434,6 +434,7 @@
     "grade": "Klasser",
     "student_level": "Nivå",
     "visibility": "Synlegheit",
+    "visibility_description":"Velg Offentlig for å dele med alle som bruker Skolerom eller Privat for å holde det til deg selv og de du deler det med",
     "public": "Offentleg",
     "private": "Privat",
     "teacher": "Lærar: ",
@@ -446,7 +447,11 @@
     "questions_number": "{questions} spm.",
     "after_publishing": "Bra jobba, oppgåva er no publisert!",
     "review_and_submit": "Summer opp og send inn svar",
-    "after_publishing_from_teaching_path": "Oppgåva blei publisert og lagt til i læringsstien."
+    "after_publishing_from_teaching_path": "Oppgåva blei publisert og lagt til i læringsstien.",
+    "grep": {
+      "title":"Koble til læreplanen",
+      "description":"Det er nødvendig å koble til undervisningsveien når du deler publisitet. Velg de aktuelle utdanningsmålene nedenfor før publisering og distribusjon"
+    }
   },
   "distribution_page": {
     "distribute_assignment": "Distribuer oppgåve",

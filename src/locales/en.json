@@ -434,6 +434,7 @@
     "grade": "Grade",
     "student_level": "Level",
     "visibility": "Visibility",
+    "visibility_description":"Select Public to share with everyone using Skolerom or Private to keep it to yourselft and the ones you share it with",
     "public": "Public",
     "private": "Private",
     "teacher": "Teacher: ",
@@ -446,7 +447,11 @@
     "questions_number": "{questions} que.",
     "after_publishing": "Congratulations, your assignment has been published!",
     "review_and_submit": "Review and submit",
-    "after_publishing_from_teaching_path": "Assignment published successfuly and was added to teaching path."
+    "after_publishing_from_teaching_path": "Assignment published successfuly and was added to teaching path.",
+    "grep": {
+      "title":"Connect to curriculum",
+      "description":"Connecting your teaching path is required when sharing publicity. Please select the appropriate educational goals below before publishing and distribution"
+    }
   },
   "distribution_page": {
     "distribute_assignment": "Distribute assignment",

@@ -133,11 +133,6 @@ export class PublishingActions extends Component<Props> {
 
     return (
       <div className="flexBox dirColumn w50 subject">
-        <div className="flexBox">
-          <img src={tagsImg} alt="Subjects" title="Subjects"/>
-          <div className={'title'}>{intl.get('publishing_page.subject')}</div>
-        </div>
-
         <TagInputComponent
           dataid="renderSubjectInput"
           className="filterBy darkTheme"
@@ -146,6 +141,7 @@ export class PublishingActions extends Component<Props> {
           currentTags={selectedSubjects}
           orderbyid={false}
           removeTag={this.removeSubject}
+          placeholder={intl.get('publishing_page.subject')}
           listView
           temporaryTagsArray
         />
@@ -162,11 +158,6 @@ export class PublishingActions extends Component<Props> {
 
     return (
       <div className="flexBox dirColumn w50 grade">
-        <div className="flexBox">
-          <img src={gradeImg} alt={intl.get('generals.grade')} title={intl.get('generals.grade')} />
-          <div className={'title'}>{intl.get('publishing_page.grade')}</div>
-        </div>
-
         <TagInputComponent
           dataid="renderGradeInput"
           className="filterBy darkTheme"
@@ -175,6 +166,7 @@ export class PublishingActions extends Component<Props> {
           currentTags={selectedGrades}
           orderbyid={true}
           removeTag={this.removeGrade}
+          placeholder={intl.get('publishing_page.grade')}
           listView
           temporaryTagsArray
         />
@@ -236,12 +228,12 @@ export class PublishingActions extends Component<Props> {
     );
 
     return (
-      <div className="flexBox dirColumn w50 visibility">
-        <div className="flexBox">
+      <div className="visibility">
+        <div className="flexBox flex-align">
           <img src={visibilityImg} alt={intl.get('generals.visibility')} title={intl.get('generals.visibility')} />
           <div className={'title'}>{intl.get('publishing_page.visibility')}</div>
         </div>
-
+        <p>{intl.get('publishing_page.visibility_description')}</p>
         <div className="visibilityButtons flexBox">
           <button
             className={publicButtonClassnames}
@@ -276,24 +268,26 @@ export class PublishingActions extends Component<Props> {
   public render() {
     return (
       <div className="PublishingActions flexBox dirColumn">
-        <div className="infoContainer flexBox spaceBetween">
-
-          {this.renderSubjectInput()}
-
-          {this.renderGradeInput()}
-
+        <div className="infoContainer">
+          <div className="infoContainer__top">
+            {this.renderVisibility()}
+          </div>
+          <div className="infoContainer__hidden">
+            {this.renderLevelChoice()}
+          </div>
+          <div className="infoContainer__bottom">
+            <div className="infoContainer__secondTitle">
+              <h2>{intl.get('publishing_page.grep.title')}</h2>
+              <p>{intl.get('publishing_page.grep.description')}</p>
+            </div>
+            <div className="infoContainer__filters">
+              {this.renderSubjectInput()}
+              {this.renderGradeInput()}
+            </div>
+            <div className="infoContainer__body" />
+          </div>
         </div>
-
-        <div className="infoContainer flexBox spaceBetween">
-
-          {this.renderLevelChoice()}
-
-          {this.renderVisibility()}
-
-        </div>
-
       </div>
-
     );
   }
 }
