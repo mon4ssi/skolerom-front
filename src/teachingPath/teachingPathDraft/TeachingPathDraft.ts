@@ -71,6 +71,7 @@ export class DraftTeachingPath extends TeachingPath {
   public isSavingRunning: boolean = false;
   @observable public isDraftSaving: boolean = false;
   public isPublishing: boolean = false;
+  public isRunningPublishing: boolean = false;
 
   constructor(args: DraftTeachingPathArgs) {
     super(args);
@@ -168,6 +169,48 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
+  public addSubjectBySave() {
+    let myFirstSubjects: Array<Subject> | undefined = [];
+    const firstItems = this.content;
+    if (firstItems.children.length > 0) {
+      const firstItemForList = firstItems.children![0].items![0];
+      if (firstItemForList.type === 'ARTICLE') {
+        myFirstSubjects = firstItemForList.value.subjects;
+      }
+      if (firstItemForList.type === 'ASSIGNMENT') {
+        myFirstSubjects = firstItemForList.value.subjects;
+      }
+      if (typeof(myFirstSubjects) !== 'undefined') {
+        this.subjects.splice(0, this.subjects.length);
+        myFirstSubjects!.forEach((e) => {
+          this.subjects.push(e);
+        });
+      }
+    }
+  }
+
+  @action
+  public addGradesBySave() {
+    let myFirstGrades: Array<Grade> | undefined = [];
+    const firstItems = this.content;
+    if (firstItems.children.length > 0) {
+      const firstItemForList = firstItems.children![0].items![0];
+      if (firstItemForList.type === 'ARTICLE') {
+        myFirstGrades = firstItemForList.value.grades;
+      }
+      if (firstItemForList.type === 'ASSIGNMENT') {
+        myFirstGrades = firstItemForList.value.grades;
+      }
+      if (typeof(myFirstGrades) !== 'undefined') {
+        this.grades.splice(0, this.grades.length);
+        myFirstGrades!.forEach((e) => {
+          this.grades.push(e);
+        });
+      }
+    }
+  }
+
+  @action
   public async save() {
     if (!this.isSavingRunning) {
       this.isSavingRunning = true;
@@ -176,6 +219,10 @@ export class DraftTeachingPath extends TeachingPath {
           this.isDraftSaving = true;
           try {
             if (this.isPublishing) return;
+            if (!this.isRunningPublishing) {
+              this.addGradesBySave();
+              this.addSubjectBySave();
+            }
             this.setUpdatedAt(await this.repo.saveTeachingPath(this));
           } catch (error) {
             if (error instanceof AlreadyEditingTeachingPathError) {
@@ -245,12 +292,14 @@ export class DraftTeachingPath extends TeachingPath {
   @action
   public addGrade(grade: Grade) {
     this.grades.push(grade);
+    this.isRunningPublishing = true;
     this.save();
   }
 
   @action
   public addSubject(subject: Subject) {
     this.subjects.push(subject);
+    this.isRunningPublishing = true;
     this.save();
   }
 

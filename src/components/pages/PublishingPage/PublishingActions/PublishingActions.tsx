@@ -8,6 +8,9 @@ import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTe
 import { Subject, Grade } from 'assignment/Assignment';
 import tagsImg from 'assets/images/tags.svg';
 import gradeImg from 'assets/images/grade.svg';
+import checkRounded from 'assets/images/check-rounded-white-bg.svg';
+import checkActive from 'assets/images/check-active.svg';
+import goalsImg from 'assets/images/goals.svg';
 import settingsImg from 'assets/images/settings-slider.svg';
 import visibilityImg from 'assets/images/visibility.svg';
 import firstLevelImg from 'assets/images/level-1-blue.svg';
@@ -24,19 +27,29 @@ import './PublishingActions.scss';
 
 interface Props {
   store?: NewAssignmentStore | EditTeachingPathStore;
+  from?: string;
 }
 
 @observer
 export class PublishingActions extends Component<Props> {
 
   public componentDidMount() {
-    const { store } = this.props;
-    if (!store!.getAllGrades().length) {
-      store!.getGrades();
-
+    const { store, from } = this.props;
+    if (from === 'TEACHINGPATH') {
+      if (!store!.getAllGrades().length) {
+        store!.getGrades();
+      }
+      if (!store!.getAllSubjects().length) {
+        store!.getSubjects();
+      }
     }
-    if (!store!.getAllSubjects().length) {
-      store!.getSubjects();
+    if (from === 'ASSIGNMENT') {
+      if (!store!.getAllGrades().length) {
+        store!.getGrades();
+      }
+      if (!store!.getAllSubjects().length) {
+        store!.getSubjects();
+      }
     }
   }
 
@@ -125,23 +138,40 @@ export class PublishingActions extends Component<Props> {
     this.props.store!.currentEntity!.setIsPrivate(false);
   }
 
+  public compareTwoArraysReturnValueSubject = (allGrades: Array<Subject>, selectedGrades: Array<Subject>) => {
+    const arrayValue: Array<Subject> = [];
+    selectedGrades.forEach((element) => {
+      for (let i = 0; i < allGrades.length; i = i + 1) {
+        if (element.id === allGrades[i].id) {
+          arrayValue.push(element);
+        }
+      }
+    });
+    return arrayValue;
+  }
+
   public renderSubjectInput = () => {
     const { store } = this.props;
+    let myplaceholder = intl.get('publishing_page.subject');
 
     const subjects = store!.getAllSubjects().map(this.subjectToTagProp);
     const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
+    const filterSelectedSubjects = this.compareTwoArraysReturnValue(subjects, selectedSubjects);
+    if (filterSelectedSubjects.length > 0) {
+      myplaceholder = '';
+    }
 
     return (
-      <div className="flexBox dirColumn w50 subject">
+      <div className="itemsFlex subject">
         <TagInputComponent
           dataid="renderSubjectInput"
           className="filterBy darkTheme"
           tags={subjects}
           addTag={this.addSubject}
-          currentTags={selectedSubjects}
+          currentTags={filterSelectedSubjects}
           orderbyid={false}
           removeTag={this.removeSubject}
-          placeholder={intl.get('publishing_page.subject')}
+          placeholder={myplaceholder}
           listView
           temporaryTagsArray
         />
@@ -149,24 +179,41 @@ export class PublishingActions extends Component<Props> {
     );
   }
 
+  public compareTwoArraysReturnValue = (allGrades: Array<Grade>, selectedGrades: Array<Grade>) => {
+    const arrayValue: Array<Grade> = [];
+    selectedGrades.forEach((element) => {
+      for (let i = 0; i < allGrades.length; i = i + 1) {
+        if (element.id === allGrades[i].id) {
+          arrayValue.push(element);
+        }
+      }
+    });
+    return arrayValue;
+  }
+
   public renderGradeInput = () => {
     const { store } = this.props;
     const { currentEntity } = store!;
+    let myplaceholder = intl.get('publishing_page.grade');
 
     const grades = store!.getAllGrades().map(this.gradeToTagProp).sort((a, b) => a.id - b.id);
     const selectedGrades = currentEntity!.getListOfGrades().map(this.gradeToTagProp);
+    const filterSelectedGrades = this.compareTwoArraysReturnValue(grades, selectedGrades);
+    if (filterSelectedGrades.length > 0) {
+      myplaceholder = '';
+    }
 
     return (
-      <div className="flexBox dirColumn w50 grade">
+      <div className="itemsFlex grade">
         <TagInputComponent
           dataid="renderGradeInput"
           className="filterBy darkTheme"
           tags={grades}
           addTag={this.addGrade}
-          currentTags={selectedGrades}
+          currentTags={filterSelectedGrades}
           orderbyid={true}
           removeTag={this.removeGrade}
-          placeholder={intl.get('publishing_page.grade')}
+          placeholder={myplaceholder}
           listView
           temporaryTagsArray
         />
@@ -197,7 +244,7 @@ export class PublishingActions extends Component<Props> {
   }
 
   public renderLevelChoice = () => (
-    <div className="flexBox dirColumn w50 levels">
+    <div className="itemsFlex levels">
       <div className="flexBox">
         <img src={settingsImg} alt={intl.get('generals.student_level')} title={intl.get('generals.student_level')} />
         <div className={'title'}>{intl.get('publishing_page.student_level')}</div>
@@ -265,6 +312,85 @@ export class PublishingActions extends Component<Props> {
     );
   }
 
+  public renderCoreElements = () => {
+    const { store } = this.props;
+    return (
+      <div className="itemsFlex">
+        <select className="SearchFilter__select">
+          <option>Select core elements</option>
+          <option value="example">Core 1</option>
+          <option value="example 1">Core 2</option>
+          <option value="example 2">Core 3</option>
+        </select>
+      </div>
+    );
+  }
+  public renderMultiDisciplinary = () => {
+    const { store } = this.props;
+    return (
+      <div className="itemsFlex">
+        <select className="SearchFilter__select">
+          <option>Select multidisiplinary subjects</option>
+          <option value="example">Multi 1</option>
+          <option value="example 1">Multi 2</option>
+          <option value="example 2">Multi 3</option>
+        </select>
+      </div>
+    );
+  }
+  public renderReadingInSubject = () => {
+    const { store } = this.props;
+    return (
+      <div className="itemsFlex">
+        <select className="SearchFilter__select">
+          <option>Select reading in subject</option>
+          <option value="example">reading 1</option>
+          <option value="example 1">reading 2</option>
+          <option value="example 2">reading 3</option>
+        </select>
+      </div>
+    );
+  }
+  public renderTableHeader = () => {
+    const { store } = this.props;
+    return (
+      <div className="itemTables">
+        <div className="itemTablesTh">
+          <div className="itemTablesTd" />
+          <div className="itemTablesTd grade">{intl.get('new assignment.Grade')}</div>
+          <div className="itemTablesTd core">{intl.get('new assignment.greep.core')}</div>
+          <div className="itemTablesTd goals">{intl.get('new assignment.greep.goals')}</div>
+        </div>
+      </div>
+    );
+  }
+  public renderTableBody = () => {
+    const { store } = this.props;
+    const grade = '7h grade';
+    const core = 'Naturvetienskapelige praksise og tenkenmater';
+    const goals = 'Bruke og vuerdere modeller som representerer fenomener man ikke kan obserereve direkte og gjore rede for hvrfor del brukes modeller i naturfag';
+    return (
+      <div className="itemTables">
+        <div className="itemTablesTr">
+          <div className="itemTablesTd">
+            <img src={checkRounded} alt="Check" title="check" className={'checkImg'}/>
+          </div>
+          <div className="itemTablesTd grade">{grade}</div>
+          <div className="itemTablesTd core">{core}</div>
+          <div className="itemTablesTd goals">{goals}</div>
+        </div>
+        <div className="itemTablesTr">
+          <div className="itemTablesTd">
+            <img src={checkActive} alt="Check" title="check" className={'checkImg'}/>
+          </div>
+          <div className="itemTablesTd grade">{grade}</div>
+          <div className="itemTablesTd core">{core}</div>
+          <div className="itemTablesTd goals">{goals}</div>
+        </div>
+      </div>
+    );
+  }
+
   public render() {
     return (
       <div className="PublishingActions flexBox dirColumn">
@@ -283,8 +409,20 @@ export class PublishingActions extends Component<Props> {
             <div className="infoContainer__filters">
               {this.renderSubjectInput()}
               {this.renderGradeInput()}
+              {this.renderCoreElements()}
+              {this.renderMultiDisciplinary()}
+              {this.renderReadingInSubject()}
             </div>
-            <div className="infoContainer__body" />
+            <div className="infoContainer__body">
+              <div className="infoContainer__body__title">
+                <img src={goalsImg} />
+                <h3>{intl.get('new assignment.greep.goals')}</h3>
+              </div>
+              <div className="infoContainer__body__table">
+                {this.renderTableHeader()}
+                {this.renderTableBody()}
+              </div>
+            </div>
           </div>
         </div>
       </div>

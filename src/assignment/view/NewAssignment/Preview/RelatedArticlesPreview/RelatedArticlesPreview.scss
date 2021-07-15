@@ -210,6 +210,10 @@
   }
 }
 
+.NewAssignmentPreview .RelatedArticlesCard {
+  width: calc(100% / 3 - 20px);
+} 
+
 @media screen and (max-width: $screen-dimension-desktop) {
   .info {
     .grades {
@@ -233,6 +237,9 @@
   .RelatedArticlesCard {
       width: calc(100% / 4 - 20px);
   }
+  .NewAssignmentPreview .RelatedArticlesCard {
+    width: calc(100% / 3 - 20px);
+  } 
 }
 
 @media screen and (max-width: $screen-dimension-desktop-1369) {  

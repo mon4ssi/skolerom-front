@@ -91,7 +91,7 @@ class NewAssignmentComponent extends Component<Props & RouteComponentProps, Stat
     this.props.location!.pathname.includes('publish') && (
       <>
         <Header isPublishing />
-        <PublishingPage store={this.props.newAssignmentStore} />
+        <PublishingPage store={this.props.newAssignmentStore} from="ASSIGNMENT"/>
       </>
     )
   )
