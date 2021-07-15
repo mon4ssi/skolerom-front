@@ -4,7 +4,7 @@ import { debounce } from 'utils/debounce';
 import { injector } from 'Injector';
 import { ArticleService, ASSIGNMENT_SERVICE, AssignmentService } from 'assignment/service';
 import { DRAFT_TEACHING_PATH_SERVICE, DraftTeachingPathService } from 'teachingPath/teachingPathDraft/service';
-import { Article, ARTICLE_SERVICE_KEY, Grade, Subject } from 'assignment/Assignment';
+import { Article, ARTICLE_SERVICE_KEY, Grade, Subject, FilterArticlePanel } from 'assignment/Assignment';
 import { TeachingPathContainer } from 'teachingPath/teachingPathContainer/teachingPathContainer';
 import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
 import { TeachingPathItemValue, TeachingPathNodeType } from 'teachingPath/TeachingPath';
@@ -45,6 +45,7 @@ export class EditTeachingPathStore {
 
   @observable public allGrades: Array<Grade> = [];
   @observable public allSubjects: Array<Subject> = [];
+  @observable public allArticlePanelFilters: FilterArticlePanel | null = null;
 
   @observable public isAssignmentCreating: boolean = false;
 
@@ -292,6 +293,10 @@ export class EditTeachingPathStore {
     return this.currentEntity!.getIsDraftSaving();
   }
 
+  public async getFiltersArticlePanel() {
+    this.allArticlePanelFilters = await this.teachingPathService.getFiltersArticlePanel();
+  }
+
   public async getGrades() {
     this.allGrades = await this.assignmentService.getGrades();
   }
@@ -306,6 +311,10 @@ export class EditTeachingPathStore {
 
   public getAllSubjects(): Array<Subject> {
     return toJS(this.allSubjects);
+  }
+
+  public getAllArticlePanelFilters() {
+    return toJS(this.allArticlePanelFilters);
   }
 
   public clearTeachingPathContainer() {
@@ -350,5 +359,4 @@ export class EditTeachingPathStore {
   public async sendDataDomain(domain:string) {
     return this.teachingPathService.sendDataDomain(domain);
   }
-
 }

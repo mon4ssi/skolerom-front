@@ -36,6 +36,7 @@
         margin-bottom: 10px;
         margin-right: 10px;
         max-width: 48%;
+        min-width: 270px;
         .SearchFilter__select {
           margin-right: 0px;
           margin-bottom: 0px;
@@ -46,7 +47,59 @@
         }
       }
     }
-
+    &__body {
+      margin: 20px 0px;
+      &__title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        img {
+          width: 22px;
+          height: 22px;
+          margin-right: 5px;
+        }
+        h3 {
+          margin: 0px;
+          font-size: 16px;
+        }
+      }
+      &__table {       
+        .itemTablesTd {
+          flex: 1;
+          font-size: 14px;
+          &.icons {
+            width: 20px;
+            flex: none;
+            margin-right: 10px;
+            a {
+              display: block;
+              img {
+                display: block;
+                width: 20px;
+              }
+            }
+          }
+          &.grade {
+            max-width: 65px;
+            margin-right: 15px;
+          }
+        }
+        .itemTablesHeader {          
+          .itemTablesTh {
+            display: flex;
+            margin-bottom: 20px;
+          }
+        }
+        .itemTablesBody {
+          .itemTablesTr {
+            display: flex;
+            border-bottom: solid 1px #d3d9de;
+            padding-bottom: 10px;
+            padding-top: 10px;
+          }
+        } 
+      }
+    }
     &__hidden {
       display: none;
     }

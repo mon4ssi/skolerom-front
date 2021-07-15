@@ -56,6 +56,10 @@ export const buildDraftTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     levels: dto.levels,
     ownedByMe: dto.ownedByMe,
     isCopy: dto.isCopy,
+    grepCore: dto.grepCore,
+    grepSubjects: dto.grepSubjects,
+    grepReadingInSubject: dto.grepReadingInSubject,
+    grepGoals: dto.grepGoals,
   });
 
   draftTeachingPath.setContent(buildEditableNode(dto.content!, draftTeachingPath));
@@ -210,4 +214,8 @@ export const buildTeachingPathRequestDTO = (teachingPath: DraftTeachingPath) => 
   subjects: buildSubject(teachingPath.subjects),
   levels: teachingPath.levels,
   isCopy: teachingPath.isCopy,
+  grepCore: teachingPath.grepCore,
+  grepSubjects: teachingPath.grepSubjects,
+  grepReadingInSubject: teachingPath.grepReadingInSubject,
+  grepGoals: teachingPath.grepGoals,
 });

@@ -36,6 +36,10 @@ export class TeachingPathService {
     return this.teachingPathRepo.sendDataDomain(domain);
   }
 
+  public async getFiltersArticlePanel() {
+    return this.teachingPathRepo.getFiltersArticlePanel();
+  }
+
   public async finishTeachingPath(id: number) {
     return this.teachingPathRepo.finishTeachingPath(id);
   }

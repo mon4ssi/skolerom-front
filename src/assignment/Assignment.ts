@@ -80,6 +80,16 @@ export class Subject {
   }
 }
 
+export class Greep {
+  @observable public id: number;
+  @observable public title: string;
+
+  constructor(id: number, title: string) {
+    this.id = id;
+    this.title = title;
+  }
+}
+
 export interface GreepElementsFromBackend {
   kode: string;
   description: string;
@@ -552,6 +562,75 @@ export class Filter {
   @observable public isPassed?: number | null;
   @observable public isActive?: number | null;
   public showMyAssignments?: number | null;
+}
+
+export interface GradeFilter {
+  // tslint:disable-next-line: variable-name
+  grade_id?: string;
+  description?: string;
+}
+
+export interface SubjectFilter {
+  // tslint:disable-next-line: variable-name
+  subject_id?: string;
+  description?: string;
+  // tslint:disable-next-line: variable-name
+  grade_ids?: string;
+}
+
+export interface MultiFilter {
+  // tslint:disable-next-line: variable-name
+  multidisciplinay_id?: string;
+  description?: string;
+  // tslint:disable-next-line: variable-name
+  grade_ids?: string;
+  // tslint:disable-next-line: variable-name
+  subject_ids?: string;
+}
+
+export interface CoreFilter {
+  // tslint:disable-next-line: variable-name
+  core_element_id?: string;
+  description?: string;
+  // tslint:disable-next-line: variable-name
+  grade_ids?: string;
+  // tslint:disable-next-line: variable-name
+  subject_ids?: string;
+}
+
+export interface GoalsFilter {
+  // tslint:disable-next-line: variable-name
+  goal_id?: string;
+  description?: string;
+  // tslint:disable-next-line: variable-name
+  grade_ids?: string;
+  // tslint:disable-next-line: variable-name
+  subject_ids?: string;
+}
+
+export interface SourceFilter {
+  // tslint:disable-next-line: variable-name
+  source_id?: string;
+  description?: string;
+  // tslint:disable-next-line: variable-name
+  grade_ids?: string;
+  // tslint:disable-next-line: variable-name
+  subject_ids?: string;
+}
+
+export class FilterArticlePanel {
+  // tslint:disable-next-line: variable-name
+  public grade_filter?: Array<GradeFilter>;
+  // tslint:disable-next-line: variable-name
+  public subject_filter?: Array<SubjectFilter>;
+  // tslint:disable-next-line: variable-name
+  public multidisciplinay_filter?: Array<MultiFilter>;
+  // tslint:disable-next-line: variable-name
+  public core_elements_filter?: Array<CoreFilter>;
+  // tslint:disable-next-line: variable-name
+  public goals_filter?: Array<GoalsFilter>;
+  // tslint:disable-next-line: variable-name
+  public source_filter?: Array<SourceFilter>;
 }
 
 export class AssignmentList {

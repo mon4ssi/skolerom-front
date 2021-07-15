@@ -222,7 +222,8 @@
     "greep": {
       "core": "Core elements",
       "goals": "Educations goals",
-      "subjects": "Multidisciplinary subjects"
+      "subjects": "Multidisciplinary subjects",
+      "source": "Source"
     },
     "go_back": "Gå tilbake",
     "Create assignment": "Lag oppgåve",

@@ -167,6 +167,51 @@
         height: 20px;
         margin-right: 5px;
       }
+      &:focus {
+        outline-offset: 3px !important;
+      }
+    }
+  }
+  &__body {
+    padding: 10px 0px;
+    &__item {
+      margin: 10px 0px;
+      .itemFilter {
+        display: flex;
+        &__left {
+          margin-right: 10px;
+          img {
+            width: auto;
+            height: 25px;
+          }
+        }
+        &__right {
+          h3 {
+            margin-top: 2px;
+            font-size: 16px;
+            margin-bottom: 15px;
+          }
+          .flexFilter {
+            display: flex;
+            flex-wrap: wrap;
+          }
+          .itemFlexFilter {
+            font-size: 14px;
+            background: #e7ecef;
+            padding: 3px 8px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            &.active {
+              background: #0b2541;
+              color: white;
+            }
+            &:focus {
+              outline-offset: 2px;
+            }
+          }        
+        }
+      }
     }
   }
 }

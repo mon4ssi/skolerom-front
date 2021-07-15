@@ -40,6 +40,10 @@ export interface DraftTeachingPathResponseDTO {
   levels: Array<number>;
   ownedByMe?: boolean;
   isCopy: boolean;
+  grepCore?: number;
+  grepSubjects?: number;
+  grepReadingInSubject?: number;
+  grepGoals?: Array<number>;
 }
 
 export interface TeachingPathItemRequestDTO {

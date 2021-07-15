@@ -1,12 +1,13 @@
-import React, { Component, ChangeEvent } from 'react';
+import React, { Component, ChangeEvent, useState } from 'react';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 import isNaN from 'lodash/isNaN';
 
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
+import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
 import { TeachingPathNodeType } from 'teachingPath/TeachingPath';
 import { ItemContentTypeContext } from 'teachingPath/view/EditTeachingPath/ItemContentTypeContext';
-import { Article } from 'assignment/Assignment';
+import { Article, Subject, Greep, FilterArticlePanel } from 'assignment/Assignment';
 import { RelatedArticlesCard } from 'assignment/view/NewAssignment/Preview/RelatedArticlesPreview/RelatedArticlesCard';
 import { SearchFilter } from 'components/common/SearchFilter/SearchFilter';
 import { lettersNoEn } from 'utils/lettersNoEn';
@@ -81,6 +82,16 @@ interface State {
   expandGoals: boolean;
   expandSubjects: boolean;
   checkArticle: boolean;
+  grepDataFilters: FilterArticlePanel | null;
+  selectedSubjectsFilter: Array<Subject>;
+  selectedCoresFilter: Array<Greep>;
+  selectedCoresAll: Array<Greep>;
+  selectedMultiFilter: Array<Greep>;
+  selectedMultisAll: Array<Greep>;
+  selectedGoalsFilter: Array<Greep>;
+  selectedGoalsAll: Array<Greep>;
+  selectedSourceFilter: Array<Greep>;
+  selectedSourceAll: Array<Greep>;
 }
 
 @inject('editTeachingPathStore')
@@ -104,7 +115,17 @@ export class ArticlesList extends Component<Props, State> {
       expandCore: false,
       expandGoals: false,
       expandSubjects: false,
-      checkArticle: false
+      checkArticle: false,
+      grepDataFilters: null,
+      selectedSubjectsFilter: [],
+      selectedCoresAll: [],
+      selectedCoresFilter: [],
+      selectedMultisAll: [],
+      selectedMultiFilter: [],
+      selectedGoalsAll: [],
+      selectedGoalsFilter: [],
+      selectedSourceAll: [],
+      selectedSourceFilter: []
     };
   }
 
@@ -139,6 +160,10 @@ export class ArticlesList extends Component<Props, State> {
   }
 
   public async componentDidMount() {
+    const newArrayGrepCore : Array<Greep> = [];
+    const newArrayGrepMulti : Array<Greep> = [];
+    const newArrayGrepGoals : Array<Greep> = [];
+    const newArrayGrepSource : Array<Greep> = [];
     const { appliedFilters } = this.state;
     const { articlesList } = this.props.editTeachingPathStore!;
     document.addEventListener('keyup', this.handleKeyboardControl);
@@ -149,9 +174,58 @@ export class ArticlesList extends Component<Props, State> {
     this.props.editTeachingPathStore!.getArticles({ isNextPage, ...appliedFilters });
     this.props.editTeachingPathStore!.getGrades();
     this.props.editTeachingPathStore!.getSubjects();
+    await this.props.editTeachingPathStore!.getFiltersArticlePanel();
+    const dataArticles = this.props.editTeachingPathStore!.getAllArticlePanelFilters();
+    this.setState({
+      grepDataFilters : dataArticles
+    });
+    // tslint:disable-next-line: variable-name
+    dataArticles!.core_elements_filter!.forEach((element) => {
+      newArrayGrepCore.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(element.core_element_id),
+        title: element.description!
+      });
+    });
+    this.setState({
+      selectedCoresAll : newArrayGrepCore
+    });
+    // tslint:disable-next-line: variable-name
+    dataArticles!.multidisciplinay_filter!.forEach((element) => {
+      newArrayGrepMulti.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(element.multidisciplinay_id),
+        title: element.description!
+      });
+    });
+    this.setState({
+      selectedMultisAll : newArrayGrepMulti
+    });
+    // tslint:disable-next-line: variable-name
+    dataArticles!.goals_filter!.forEach((element) => {
+      newArrayGrepGoals.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(element.goal_id),
+        title: element.description!
+      });
+    });
+    this.setState({
+      selectedGoalsAll : newArrayGrepGoals
+    });
+    // tslint:disable-next-line: variable-name
+    dataArticles!.source_filter!.forEach((element) => {
+      newArrayGrepSource.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(element.source_id),
+        title: element.description!
+      });
+    });
+    this.setState({
+      selectedSourceAll : newArrayGrepSource
+    });
   }
 
-  public componentWillUnmount() {
+  public async componentWillUnmount() {
     if (!this.state.isRedirect) {
       this.props.editTeachingPathStore!.setCurrentNode(null);
     }
@@ -173,6 +247,43 @@ export class ArticlesList extends Component<Props, State> {
     if (lettersNoEn(e.currentTarget.value)) {
       this.handleChangeFilters('searchTitle', e.currentTarget.value);
     }
+  }
+
+  public handleClickGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const newArraySubject : Array<Subject> = [];
+    const value = e.currentTarget.value;
+    const GradeFilterArray = Array.from(document.getElementsByClassName('gradesFilterClass') as HTMLCollectionOf<HTMLElement>);
+    this.handleChangeFilters('grades', Number(value));
+    GradeFilterArray.forEach((e) => {
+      e.classList.remove('active');
+    });
+    e.currentTarget.classList.add('active');
+    e.currentTarget.focus();
+    this.state.grepDataFilters!.subject_filter!.forEach((element) => {
+      // tslint:disable-next-line: variable-name
+      const allSympGrades = element.grade_ids;
+      const allSympGradesLength = allSympGrades!.split(value).length;
+      if (allSympGradesLength > 1) {
+        newArraySubject.push({
+          // tslint:disable-next-line: variable-name
+          id: Number(element.subject_id),
+          title: element.description!
+        });
+      }
+    });
+    this.setState({
+      selectedSubjectsFilter : newArraySubject
+    });
+  }
+
+  public handleClickSubject = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    this.handleChangeFilters('subjects', Number(e.currentTarget.value));
+    const GradeFilterArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
+    GradeFilterArray.forEach((e) => {
+      e.classList.remove('active');
+    });
+    e.currentTarget.classList.add('active');
+    e.currentTarget.focus();
   }
 
   public addItemToNewChild = (item: Article) => {
@@ -648,6 +759,46 @@ export class ArticlesList extends Component<Props, State> {
     });
   }
 
+  public mySubjects = () => {
+    const { selectedSubjectsFilter } = this.state;
+    if (selectedSubjectsFilter.length) {
+      return selectedSubjectsFilter;
+    }
+    return this.props.editTeachingPathStore!.allSubjects;
+  }
+
+  public customCoreList = () => {
+    const { selectedCoresAll, selectedCoresFilter } = this.state;
+    if (selectedCoresFilter.length) {
+      return selectedCoresFilter;
+    }
+    return selectedCoresAll;
+  }
+
+  public customMultiList = () => {
+    const { selectedMultisAll, selectedMultiFilter } = this.state;
+    if (selectedMultiFilter.length) {
+      return selectedMultiFilter;
+    }
+    return selectedMultisAll;
+  }
+
+  public customGoalsList = () => {
+    const { selectedGoalsAll, selectedGoalsFilter } = this.state;
+    if (selectedGoalsFilter.length) {
+      return selectedGoalsFilter;
+    }
+    return selectedGoalsAll;
+  }
+
+  public customSourceList = () => {
+    const { selectedSourceAll, selectedSourceFilter } = this.state;
+    if (selectedSourceFilter.length) {
+      return selectedSourceFilter;
+    }
+    return selectedSourceAll;
+  }
+
   public render() {
     const { appliedFilters, checkArticle, selectedArticle } = this.state;
     if (checkArticle) {
@@ -679,10 +830,17 @@ export class ArticlesList extends Component<Props, State> {
               handleChangeSubject={this.handleChangeSubject}
               handleChangeGrade={this.handleChangeGrade}
               handleInputSearchQuery={this.handleChangeSearchQuery}
+              handleClickGrade={this.handleClickGrade}
+              handleClickSubject={this.handleClickSubject}
               // VALUES
               subjectFilterValue={Number(appliedFilters.subjects)}
               gradeFilterValue={Number(appliedFilters.grades)}
               searchQueryFilterValue={appliedFilters.searchTitle as string}
+              customSubjectsList={this.mySubjects()}
+              customCoreList={this.customCoreList()}
+              customMultiList={this.customMultiList()}
+              customGoalsList={this.customGoalsList()}
+              customSourceList={this.customSourceList()}
             />
 
             <div

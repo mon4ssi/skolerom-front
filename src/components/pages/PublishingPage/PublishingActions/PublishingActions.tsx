@@ -354,9 +354,9 @@ export class PublishingActions extends Component<Props> {
   public renderTableHeader = () => {
     const { store } = this.props;
     return (
-      <div className="itemTables">
+      <div className="itemTablesHeader">
         <div className="itemTablesTh">
-          <div className="itemTablesTd" />
+          <div className="itemTablesTd icons" />
           <div className="itemTablesTd grade">{intl.get('new assignment.Grade')}</div>
           <div className="itemTablesTd core">{intl.get('new assignment.greep.core')}</div>
           <div className="itemTablesTd goals">{intl.get('new assignment.greep.goals')}</div>
@@ -370,18 +370,22 @@ export class PublishingActions extends Component<Props> {
     const core = 'Naturvetienskapelige praksise og tenkenmater';
     const goals = 'Bruke og vuerdere modeller som representerer fenomener man ikke kan obserereve direkte og gjore rede for hvrfor del brukes modeller i naturfag';
     return (
-      <div className="itemTables">
+      <div className="itemTablesBody">
         <div className="itemTablesTr">
-          <div className="itemTablesTd">
-            <img src={checkRounded} alt="Check" title="check" className={'checkImg'}/>
+          <div className="itemTablesTd icons">
+            <a href="javascript:void(0)">
+              <img src={checkRounded} alt="Check" title="check" className={'checkImg'}/>
+            </a>
           </div>
           <div className="itemTablesTd grade">{grade}</div>
           <div className="itemTablesTd core">{core}</div>
           <div className="itemTablesTd goals">{goals}</div>
         </div>
         <div className="itemTablesTr">
-          <div className="itemTablesTd">
-            <img src={checkActive} alt="Check" title="check" className={'checkImg'}/>
+          <div className="itemTablesTd icons">
+            <a href="javascript:void(0)">
+              <img src={checkActive} alt="Check" title="check" className={'checkImg'}/>
+            </a>
           </div>
           <div className="itemTablesTd grade">{grade}</div>
           <div className="itemTablesTd core">{core}</div>

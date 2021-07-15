@@ -1,6 +1,9 @@
 import isNil from 'lodash/isNil';
 import isNull from 'lodash/isNull';
 import intl from 'react-intl-universal';
+import { injector } from 'Injector';
+import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteractor';
+import { Locales } from 'utils/enums';
 
 import { TeachingPath, TeachingPathItem, TeachingPathNode, TeachingPathNodeType, TeachingPathRepo } from './TeachingPath';
 import { Article, Filter, Grade, Domain } from 'assignment/Assignment';
@@ -202,6 +205,19 @@ export class TeachingPathApi implements TeachingPathRepo {
       url: `${url}`,
       featuredImage: data.image
     });
+  }
+
+  // public storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
+  // public currentLocale = this.storageInteractor.getCurrentLocale()!;
+
+  public async getFiltersArticlePanel() {
+    const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/filterarticlepanel/v1/get/`, {
+      params:
+      {
+        // lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
+      }
+    });
+    return response.data;
   }
 
   public async finishTeachingPath(id: number): Promise<void> {
