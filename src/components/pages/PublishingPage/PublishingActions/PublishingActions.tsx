@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import Select from 'react-select';
 import { observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 import classnames from 'classnames';
 
 import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
-import { Subject, Grade } from 'assignment/Assignment';
+import { Subject, Grade, FilterGrep, GreepSelectValue } from 'assignment/Assignment';
 import tagsImg from 'assets/images/tags.svg';
 import gradeImg from 'assets/images/grade.svg';
 import checkRounded from 'assets/images/check-rounded-white-bg.svg';
@@ -30,11 +31,38 @@ interface Props {
   from?: string;
 }
 
-@observer
-export class PublishingActions extends Component<Props> {
+interface State {
+  grepFiltersData: FilterGrep;
+  optionsCore: Array<GreepSelectValue>;
+  optionsMulti: Array<GreepSelectValue>;
+  optionsReading: Array<GreepSelectValue>;
+}
 
-  public componentDidMount() {
+@observer
+export class PublishingActions extends Component<Props, State> {
+
+  public state = {
+    grepFiltersData: {},
+    optionsCore: [],
+    optionsMulti: [],
+    optionsReading: []
+  };
+
+  public async componentDidMount() {
     const { store, from } = this.props;
+    const grepFiltersDataAwait = await store!.getGrepFilters();
+    this.setState({
+      grepFiltersData : grepFiltersDataAwait
+    });
+    this.setState({
+      optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
+    });
+    this.setState({
+      optionsMulti : this.renderValueOptions(grepFiltersDataAwait, 'multi')
+    });
+    this.setState({
+      optionsReading : this.renderValueOptions(grepFiltersDataAwait, 'reading')
+    });
     if (from === 'TEACHINGPATH') {
       if (!store!.getAllGrades().length) {
         store!.getGrades();
@@ -51,6 +79,38 @@ export class PublishingActions extends Component<Props> {
         store!.getSubjects();
       }
     }
+  }
+
+  public renderValueOptions = (data: FilterGrep, type: string) => {
+    const returnArray : Array<GreepSelectValue> = [];
+    if (type === 'core') {
+      data!.coreElementsFilters!.forEach((element) => {
+        returnArray.push({
+          // tslint:disable-next-line: variable-name
+          value: Number(element.id),
+          label: element.description
+        });
+      });
+    }
+    if (type === 'multi') {
+      data!.mainTopicFilters!.forEach((element) => {
+        returnArray.push({
+          // tslint:disable-next-line: variable-name
+          value: Number(element.id),
+          label: element.description
+        });
+      });
+    }
+    if (type === 'reading') {
+      data!.readingInSubjects!.forEach((element) => {
+        returnArray.push({
+          // tslint:disable-next-line: variable-name
+          value: Number(element.id),
+          label: element.name
+        });
+      });
+    }
+    return returnArray;
   }
 
   public subjectToTagProp = (subject: Subject): TagProp => ({
@@ -312,45 +372,117 @@ export class PublishingActions extends Component<Props> {
     );
   }
 
+  public handleChangeSelectCore = async (newValue: any) => {
+    const { grepFiltersData } = this.state;
+    return newValue;
+  }
+
   public renderCoreElements = () => {
-    const { store } = this.props;
+    const { optionsCore } = this.state;
+    const customStyles = {
+      menu: () => ({
+        width: '320px',
+        fontSize: '14px',
+        border: '1px solid #939fa7',
+      }),
+      control: () => ({
+        width: '320px',
+        display: 'flex',
+        borderRadius: '5px',
+        border: '1px solid #939fa7',
+        color: '#0B2541',
+        fontSize: '14px',
+        background: '#E7ECEF',
+        padding: '3px'
+      })
+    };
     return (
       <div className="itemsFlex">
-        <select className="SearchFilter__select">
-          <option>Select core elements</option>
-          <option value="example">Core 1</option>
-          <option value="example 1">Core 2</option>
-          <option value="example 2">Core 3</option>
-        </select>
+        <Select
+          width="320px"
+          styles={customStyles}
+          options={optionsCore}
+          onChange={this.handleChangeSelectCore}
+          placeholder={intl.get('assignments search.Choose Core')}
+        />
       </div>
     );
   }
+
+  public handleChangeSelectMulti = async (newValue: any) => {
+    const { grepFiltersData } = this.state;
+    return newValue;
+  }
+
   public renderMultiDisciplinary = () => {
-    const { store } = this.props;
+    const { optionsMulti } = this.state;
+    const customStyles = {
+      menu: () => ({
+        width: '320px',
+        fontSize: '14px',
+        border: '1px solid #939fa7',
+      }),
+      control: () => ({
+        width: '320px',
+        display: 'flex',
+        borderRadius: '5px',
+        border: '1px solid #939fa7',
+        color: '#0B2541',
+        fontSize: '14px',
+        background: '#E7ECEF',
+        padding: '3px'
+      })
+    };
     return (
       <div className="itemsFlex">
-        <select className="SearchFilter__select">
-          <option>Select multidisiplinary subjects</option>
-          <option value="example">Multi 1</option>
-          <option value="example 1">Multi 2</option>
-          <option value="example 2">Multi 3</option>
-        </select>
+        <Select
+          width="320px"
+          styles={customStyles}
+          options={optionsMulti}
+          onChange={this.handleChangeSelectMulti}
+          placeholder={intl.get('assignments search.Choose Multi')}
+        />
       </div>
     );
   }
+
+  public handleChangeSelectReading = async (newValue: any) => {
+    const { grepFiltersData } = this.state;
+    return newValue;
+  }
+
   public renderReadingInSubject = () => {
-    const { store } = this.props;
+    const { optionsReading } = this.state;
+    const customStyles = {
+      menu: () => ({
+        width: '320px',
+        fontSize: '14px',
+        border: '1px solid #939fa7',
+      }),
+      control: () => ({
+        width: '320px',
+        display: 'flex',
+        borderRadius: '5px',
+        border: '1px solid #939fa7',
+        color: '#0B2541',
+        fontSize: '14px',
+        background: '#E7ECEF',
+        padding: '3px'
+      })
+    };
     return (
       <div className="itemsFlex">
-        <select className="SearchFilter__select">
-          <option>Select reading in subject</option>
-          <option value="example">reading 1</option>
-          <option value="example 1">reading 2</option>
-          <option value="example 2">reading 3</option>
-        </select>
+        <Select
+          width="320px"
+          styles={customStyles}
+          options={optionsReading}
+          onChange={this.handleChangeSelectReading}
+          placeholder={intl.get('assignments search.Choose reading')}
+        />
       </div>
     );
   }
+
   public renderTableHeader = () => {
     const { store } = this.props;
     return (

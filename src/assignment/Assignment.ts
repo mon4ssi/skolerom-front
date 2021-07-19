@@ -80,6 +80,16 @@ export class Subject {
   }
 }
 
+export class GreepSelectValue {
+  @observable public value: number;
+  @observable public label: string;
+
+  constructor(value: number, label: string) {
+    this.value = value;
+    this.label = label;
+  }
+}
+
 export class Greep {
   @observable public id: number;
   @observable public title: string;
@@ -93,6 +103,34 @@ export class Greep {
 export interface GreepElementsFromBackend {
   kode: string;
   description: string;
+}
+
+export interface GrepFilters {
+  id: number;
+  name: string;
+  // tslint:disable-next-line: variable-name
+  wp_id: number;
+}
+
+export interface GrepElementFilters {
+  id: number;
+  description: string;
+  code: string;
+}
+
+export interface GrepReading {
+  id: number;
+  name: string;
+  // tslint:disable-next-line: variable-name
+  locale_id: number;
+}
+
+export class FilterGrep {
+  public subjectFilters?: Array<GrepFilters>;
+  public gradeFilters?: Array<GrepFilters>;
+  public coreElementsFilters?: Array<GrepElementFilters>;
+  public mainTopicFilters?: Array<GrepElementFilters>;
+  public readingInSubjects?: Array<GrepReading>;
 }
 
 export interface AssignmentArgs {
@@ -766,6 +804,10 @@ export interface ArticleRepo {
     order?: string,
     grades?: number,
     subjects?: number,
+    core?: number,
+    goal?: number,
+    multi?: number,
+    source?: number,
     searchTitle?: string
   }): Promise<Array<Article>>;
   getArticlesByIds(ids: Array<number>): Promise<Array<Article>>;

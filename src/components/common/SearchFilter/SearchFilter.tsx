@@ -1,4 +1,5 @@
 import React, { Component, ChangeEvent, SyntheticEvent, RefObject } from 'react';
+import Select from 'react-select';
 import intl from 'react-intl-universal';
 import { inject, observer } from 'mobx-react';
 import { ActivityFilter, BooleanFilter, SortingFilter } from 'utils/enums';
@@ -6,7 +7,7 @@ import { withResizeDetector } from 'react-resize-detector';
 import isNumber from 'lodash/isNumber';
 
 import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
-import { Grade, Subject, Greep } from 'assignment/Assignment';
+import { Grade, Subject, Greep, GreepSelectValue } from 'assignment/Assignment';
 import { sortByAlphabet } from 'utils/sortByAlphabet';
 import filterImg from 'assets/images/filter.svg';
 import filterWhiteImg from 'assets/images/filter_white.svg';
@@ -16,7 +17,7 @@ import tagsImg from 'assets/images/tags.svg';
 import cogsImg from 'assets/images/cogs.svg';
 import coreImg from 'assets/images/core.svg';
 import goalsImg from 'assets/images/goals.svg';
-
+import voiceImg from 'assets/images/voice.svg';
 import './SearchFilter.scss';
 
 const STYLE_ELEMENT_ID = 'STYLE_ELEMENT_ID';
@@ -42,6 +43,9 @@ interface Props {
 
   subjectFilterValue?: number | null;
   gradeFilterValue?: number | null;
+  coreFilterValue?: number | null;
+  goalsFilterValue?: number | null;
+
   isAnsweredFilterValue?: string | null;
   isEvaluatedFilterValue?: string | null;
   orderFilterValue?: string | null;
@@ -57,14 +61,20 @@ interface Props {
   handleChangeSubject?(e: ChangeEvent<HTMLSelectElement>): void;
   handleChangeActivity?(e: ChangeEvent<HTMLSelectElement>): void;
   handleChangeGrade?(e: ChangeEvent<HTMLSelectElement>): void;
+  handleChangeCore?(e: ChangeEvent<HTMLSelectElement>): void;
   switchNewestOldest?(e: ChangeEvent<HTMLSelectElement>): void;
   handleChangeSorting?(e: ChangeEvent<HTMLSelectElement>): void;
   handleChangeEvaluationStatus?(e: ChangeEvent<HTMLSelectElement>): void;
   handleChangeAnswerStatus?(e: ChangeEvent<HTMLSelectElement>): void;
+  handleChangeGoals?(e: ChangeEvent<HTMLSelectElement>): void;
   handleInputSearchQuery?(e: SyntheticEvent): void;
+  handleChangeSelectCore?(e: any): void;
+  handleChangeSelectGoals?(e: any): void;
 
   handleClickGrade?(e: SyntheticEvent): void;
   handleClickSubject?(e: SyntheticEvent): void;
+  handleClickMulti?(e: SyntheticEvent): void;
+  handleClickSource?(e: SyntheticEvent): void;
 }
 
 interface State {
@@ -126,6 +136,18 @@ class SearchFilter extends Component<Props, State> {
   public renderOptions = (option: Grade | Subject) => (
     <option key={option.id} value={option.id}>{option.title}</option>
   )
+
+  public renderValueOptions = (data: Array<Greep>) => {
+    const returnArray : Array<GreepSelectValue> = [];
+    data.forEach((element) => {
+      returnArray.push({
+        // tslint:disable-next-line: variable-name
+        value: Number(element.id),
+        label: element.title
+      });
+    });
+    return returnArray;
+  }
 
   public renderSubjects = () => {
     const { assignmentListStore, handleChangeSubject, customSubjectsList, subjectFilterValue } = this.props;
@@ -374,25 +396,41 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public renderFiltersCore = () => {
-    const { handleClickSubject, customCoreList } = this.props;
-    const cores = customCoreList!.sort(sortByAlphabet);
-    const visibleCores = cores.map((core) => {
-      const title = core.title;
-      return <button value={core.id} className="itemFlexFilter subjectsFilterClass" onClick={handleClickSubject} key={core.id}>{title}</button>;
-    });
+    const { handleChangeSelectCore, customCoreList } = this.props;
+    const options = this.renderValueOptions(customCoreList!.sort(sortByAlphabet));
+    const customStyles = {
+      menu: () => ({
+        width: '320px',
+        fontSize: '14px',
+        border: '1px solid #939fa7',
+      }),
+      control: () => ({
+        width: '320px',
+        display: 'flex',
+        borderRadius: '5px',
+        border: '1px solid #939fa7',
+        color: '#0B2541',
+        fontSize: '14px',
+        background: '#E7ECEF',
+      })
+    };
     return (
-      <div className="coresItems flexFilter">
-        {visibleCores}
-      </div>
+      <Select
+        width="320px"
+        styles={customStyles}
+        options={options}
+        onChange={handleChangeSelectCore}
+        placeholder={intl.get('new assignment.greep.core')}
+      />
     );
   }
 
   public renderFiltersMulti = () => {
-    const { handleClickSubject, customMultiList } = this.props;
+    const { handleClickMulti, customMultiList } = this.props;
     const cores = customMultiList!.sort(sortByAlphabet);
     const visibleCores = cores.map((core) => {
       const title = core.title;
-      return <button value={core.id} className="itemFlexFilter subjectsFilterClass" onClick={handleClickSubject} key={core.id}>{title}</button>;
+      return <button value={core.id} className="itemFlexFilter sourceFilterClass" onClick={handleClickMulti} key={core.id}>{title}</button>;
     });
     return (
       <div className="coresItems flexFilter">
@@ -402,25 +440,41 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public renderFiltersGoals = () => {
-    const { handleClickSubject, customGoalsList } = this.props;
-    const cores = customGoalsList!.sort(sortByAlphabet);
-    const visibleCores = cores.map((core) => {
-      const title = core.title;
-      return <button value={core.id} className="itemFlexFilter subjectsFilterClass" onClick={handleClickSubject} key={core.id}>{title}</button>;
-    });
+    const { handleChangeSelectGoals, goalsFilterValue, customGoalsList } = this.props;
+    const options = this.renderValueOptions(customGoalsList!.sort(sortByAlphabet));
+    const customStyles = {
+      menu: () => ({
+        width: '320px',
+        fontSize: '14px',
+        border: '1px solid #939fa7',
+      }),
+      control: () => ({
+        width: '320px',
+        display: 'flex',
+        borderRadius: '5px',
+        border: '1px solid #939fa7',
+        color: '#0B2541',
+        fontSize: '14px',
+        background: '#E7ECEF',
+      })
+    };
     return (
-      <div className="coresItems flexFilter">
-        {visibleCores}
-      </div>
+      <Select
+        width="320px"
+        styles={customStyles}
+        options={options}
+        onChange={handleChangeSelectGoals}
+        placeholder={intl.get('new assignment.greep.goals')}
+      />
     );
   }
 
   public renderFiltersSource = () => {
-    const { handleClickSubject, customSourceList } = this.props;
+    const { handleClickSource, customSourceList } = this.props;
     const cores = customSourceList!.sort(sortByAlphabet);
     const visibleCores = cores.map((core) => {
       const title = core.title;
-      return <button value={core.id} className="itemFlexFilter subjectsFilterClass" onClick={handleClickSubject} key={core.id}>{title}</button>;
+      return <button value={core.id} className="itemFlexFilter subjectsFilterClass" onClick={handleClickSource} key={core.id}>{title}</button>;
     });
     return (
       <div className="coresItems flexFilter">
@@ -509,7 +563,7 @@ class SearchFilter extends Component<Props, State> {
           <div className="FiltersModal__body__item">
             <div className="itemFilter">
               <div className="itemFilter__left">
-                <img src={cogsImg} />
+                <img src={voiceImg} />
               </div>
               <div className="itemFilter__right">
                 <h3>{intl.get('new assignment.greep.source')}</h3>

@@ -56,10 +56,10 @@ export const buildDraftTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     levels: dto.levels,
     ownedByMe: dto.ownedByMe,
     isCopy: dto.isCopy,
-    grepCore: dto.grepCore,
-    grepSubjects: dto.grepSubjects,
-    grepReadingInSubject: dto.grepReadingInSubject,
-    grepGoals: dto.grepGoals,
+    grepCoreElementsIds: dto.grepCoreElementsIds,
+    grepMainTopicsIds: dto.grepMainTopicsIds,
+    grepReadingInSubjectId: dto.grepReadingInSubjectId,
+    grepGoalsIds: dto.grepGoalsIds,
   });
 
   draftTeachingPath.setContent(buildEditableNode(dto.content!, draftTeachingPath));
@@ -214,8 +214,8 @@ export const buildTeachingPathRequestDTO = (teachingPath: DraftTeachingPath) => 
   subjects: buildSubject(teachingPath.subjects),
   levels: teachingPath.levels,
   isCopy: teachingPath.isCopy,
-  grepCore: teachingPath.grepCore,
-  grepSubjects: teachingPath.grepSubjects,
-  grepReadingInSubject: teachingPath.grepReadingInSubject,
-  grepGoals: teachingPath.grepGoals,
+  grepCoreElementsIds: teachingPath.grepCoreElementsIds,
+  grepMainTopicsIds: teachingPath.grepMainTopicsIds,
+  grepReadingInSubjectId: teachingPath.grepReadingInSubjectId,
+  grepGoalsIds: teachingPath.grepGoalsIds,
 });

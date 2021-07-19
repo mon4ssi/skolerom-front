@@ -191,6 +191,10 @@ export class EditTeachingPathStore {
           order: rest.order,
           grades: rest.grades,
           subjects: rest.subjects,
+          core: rest.core,
+          goal: rest.goal,
+          multi: rest.multi,
+          source: rest.source,
           searchTitle: rest.searchTitle,
         });
         this.articlesList = isNextPage ? this.articlesList.concat(articles) : articles;
@@ -359,4 +363,10 @@ export class EditTeachingPathStore {
   public async sendDataDomain(domain:string) {
     return this.teachingPathService.sendDataDomain(domain);
   }
+
+  @action
+  public async getGrepFilters() {
+    return this.teachingPathService.getGrepFilters();
+  }
+
 }

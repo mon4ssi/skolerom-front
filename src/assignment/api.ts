@@ -313,9 +313,13 @@ export class WPApi implements ArticleRepo {
     perPage = DEFAULT_AMOUNT_ARTICLES_PER_PAGE,
     order,
     grades,
+    core,
+    goal,
+    multi,
+    source,
     subjects,
     searchTitle
-  }: { page: number, perPage: number, order: string, grades?: number, subjects?: number, searchTitle?: string }): Promise<Array<Article>> {
+  }: { page: number, perPage: number, order: string, grades?: number, subjects?: number, searchTitle?: string, core?: number, goal?: number, multi?: number, source?: number }): Promise<Array<Article>> {
     return (
       await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/filterarticle/v1/post/`, {
         params:
@@ -325,6 +329,10 @@ export class WPApi implements ArticleRepo {
           per_page: perPage,
           student_grade_id: grades || null,
           student_subject_id: subjects || null,
+          core_id: core || null,
+          goal_id: goal || null,
+          student_disciplin_id: multi || null,
+          student_source_id: source || null,
           search_title: searchTitle || null,
           lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
         }

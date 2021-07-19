@@ -60,6 +60,7 @@
   min-width: 150px;
   background: url(../../../assets/images/arrow-down.svg) no-repeat right 10px center, $color-light-gray;
   transition: 0.3s;
+  max-width: 320px;
   cursor: pointer;
   &:hover {
     border-color: #0b2541;

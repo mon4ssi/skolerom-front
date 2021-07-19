@@ -6,7 +6,7 @@ import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteract
 import { Locales } from 'utils/enums';
 
 import { TeachingPath, TeachingPathItem, TeachingPathNode, TeachingPathNodeType, TeachingPathRepo } from './TeachingPath';
-import { Article, Filter, Grade, Domain } from 'assignment/Assignment';
+import { Article, Filter, Grade, Domain, FilterGrep } from 'assignment/Assignment';
 import { API } from '../utils/api';
 import { buildFilterDTO, GradeDTO } from 'assignment/factory';
 import { Breadcrumbs } from './teachingPathDraft/TeachingPathDraft';
@@ -74,6 +74,9 @@ export interface BreadcrumbsResponseDTO {
 }
 
 export class TeachingPathApi implements TeachingPathRepo {
+
+  public storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
+  public currentLocale = this.storageInteractor.getCurrentLocale()!;
 
   public async getAllTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
     const response = await API.get('api/teacher/teaching-paths', {
@@ -207,16 +210,18 @@ export class TeachingPathApi implements TeachingPathRepo {
     });
   }
 
-  // public storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
-  // public currentLocale = this.storageInteractor.getCurrentLocale()!;
-
   public async getFiltersArticlePanel() {
     const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/filterarticlepanel/v1/get/`, {
       params:
       {
-        // lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
+        lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
       }
     });
+    return response.data;
+  }
+
+  public async getGrepFilters(): Promise<FilterGrep>  {
+    const response = await API.get('api/teacher/teaching-paths/grep/filters');
     return response.data;
   }
 

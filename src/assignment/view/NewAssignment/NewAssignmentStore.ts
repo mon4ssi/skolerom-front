@@ -16,6 +16,7 @@ import { AssignmentContainer } from 'assignment/assignmentContainer/AssignmentCo
 import { Distribution } from 'distribution/Distribution';
 import { AttachmentContentType } from './AttachmentContentTypeContext';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
+import { TEACHING_PATH_SERVICE, TeachingPathService } from 'teachingPath/service';
 
 const statusCode204 = 204;
 const numberOfImagesForSkeleton = 12;
@@ -56,6 +57,8 @@ export class NewAssignmentStore {
   private userService: UserService = injector.get(USER_SERVICE);
 
   public currentArticlesPage: number = 1;
+
+  public teachingPathService = injector.get<TeachingPathService>(TEACHING_PATH_SERVICE);
 
   @observable public fetchingArticles: boolean = false;
   @observable public visibilityArticles: boolean = false;
@@ -556,4 +559,8 @@ export class NewAssignmentStore {
   public async assignStudentToAssignment(assignmentId:string, referralToken: string) {
     return this.distributionService.assignStudentToAssignment(assignmentId, referralToken);
   }
+  public async getGrepFilters() {
+    return this.teachingPathService.getGrepFilters();
+  }
+
 }

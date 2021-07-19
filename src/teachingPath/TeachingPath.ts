@@ -1,7 +1,7 @@
 import { computed, observable, toJS } from 'mobx';
 import intl from 'react-intl-universal';
 
-import { Grade, Subject, Article, Assignment, Domain, Filter, FilterArticlePanel } from 'assignment/Assignment';
+import { Grade, Subject, Article, Assignment, Domain, Filter, FilterArticlePanel, FilterGrep } from 'assignment/Assignment';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from './service';
 import { injector } from '../Injector';
 
@@ -20,6 +20,7 @@ export interface TeachingPathRepo {
   markAsPickedArticle(teachingPathId: number, nodeId: number, idArticle: number, levelWpId: number): Promise<void>;
   sendDataDomain(domain: string): Promise<Domain>;
   getFiltersArticlePanel(): Promise<FilterArticlePanel>;
+  getGrepFilters(): Promise<FilterGrep>;
   finishTeachingPath(id: number): Promise<void>;
   deleteTeachingPathAnswers(teachingPathId: number, answerId: number): Promise<void>;
   copyTeachingPath(id: number): Promise<number>;
@@ -176,10 +177,10 @@ export interface TeachingPathArgs {
   isDistributed?: boolean;
   ownedByMe?: boolean;
   isCopy?: boolean;
-  grepCore?: number;
-  grepSubjects?: number;
-  grepReadingInSubject?: number;
-  grepGoals?: Array<number>;
+  grepMainTopicsIds?: Array<number>;
+  grepCoreElementsIds?: Array<number>;
+  grepReadingInSubjectId?: number;
+  grepGoalsIds?: Array<number>;
 }
 
 export class TeachingPath {
@@ -216,10 +217,10 @@ export class TeachingPath {
   @observable protected _isPublished?: boolean;
   @observable protected _isDistributed?: boolean;
   @observable protected _isCopy?: boolean;
-  @observable protected _grepCore?: number;
-  @observable protected _grepSubjects?: number;
-  @observable protected _grepReadingInSubject?: number;
-  @observable protected _grepGoals?: Array<number>;
+  @observable protected _grepCoreElementsIds?: Array<number>;
+  @observable protected _grepMainTopicsIds?: Array<number>;
+  @observable protected _grepReadingInSubjectId?: number;
+  @observable protected _grepGoalsIds?: Array<number>;
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;
@@ -256,10 +257,10 @@ export class TeachingPath {
     this._ownedByMe = typeof args.ownedByMe === 'boolean' ? args.ownedByMe : false;
     this._answerId = args.answerId;
     this._isCopy = args.isCopy || false;
-    this._grepCore = args.grepCore;
-    this._grepSubjects = args.grepSubjects;
-    this._grepReadingInSubject = args.grepReadingInSubject;
-    this._grepGoals = args.grepGoals;
+    this._grepCoreElementsIds = args.grepCoreElementsIds;
+    this._grepMainTopicsIds = args.grepMainTopicsIds;
+    this._grepReadingInSubjectId = args.grepReadingInSubjectId;
+    this._grepGoalsIds = args.grepGoalsIds;
   }
 
   @computed
@@ -268,23 +269,23 @@ export class TeachingPath {
   }
 
   @computed
-  public get grepCore() {
-    return this._grepCore;
+  public get grepCoreElementsIds() {
+    return this._grepCoreElementsIds;
   }
 
   @computed
-  public get grepSubjects() {
-    return this._grepSubjects;
+  public get grepMainTopicsIds() {
+    return this._grepMainTopicsIds;
   }
 
   @computed
-  public get grepReadingInSubject() {
-    return this._grepReadingInSubject;
+  public get grepReadingInSubjectId() {
+    return this._grepReadingInSubjectId;
   }
 
   @computed
-  public get grepGoals() {
-    return this._grepGoals;
+  public get grepGoalsIds() {
+    return this._grepGoalsIds;
   }
 
   @computed
