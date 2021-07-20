@@ -369,4 +369,9 @@ export class EditTeachingPathStore {
     return this.teachingPathService.getGrepFilters();
   }
 
+  @action
+  public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsId: Array<number>) {
+    return this.teachingPathService.getGrepGoalsFilters(grepCoreElementsIds, grepMainTopicsIds, gradesIds, subjectsId);
+  }
+
 }

@@ -274,6 +274,12 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
+  public setGrepCoreElementsIds = (data: Array<number>) => {
+    this._grepCoreElementsIds = data;
+    this.save();
+  }
+
+  @action
   public setIsPrivate = (isPrivate: boolean) => {
     this._isPrivate = isPrivate;
     this.save();

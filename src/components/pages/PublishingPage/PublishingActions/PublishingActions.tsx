@@ -6,7 +6,7 @@ import classnames from 'classnames';
 
 import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
-import { Subject, Grade, FilterGrep, GreepSelectValue } from 'assignment/Assignment';
+import { Subject, Grade, FilterGrep, GreepSelectValue, GrepFilters, GoalsData } from 'assignment/Assignment';
 import tagsImg from 'assets/images/tags.svg';
 import gradeImg from 'assets/images/grade.svg';
 import checkRounded from 'assets/images/check-rounded-white-bg.svg';
@@ -36,21 +36,43 @@ interface State {
   optionsCore: Array<GreepSelectValue>;
   optionsMulti: Array<GreepSelectValue>;
   optionsReading: Array<GreepSelectValue>;
+  optionsSubjects: Array<GrepFilters>;
+  optionsGrades: Array<GrepFilters>;
+  valueCoreOptions: Array<number>;
+  valueMultiOptions: Array<number>;
+  valuereadingOptions: Array<number>;
+  valueGradesOptions: Array<number>;
+  valueSubjectsOptions: Array<number>;
+  optionsGoals: Array<GoalsData>;
+  valueGoalsOptions: Array<number>;
 }
 
 @observer
 export class PublishingActions extends Component<Props, State> {
-
-  public state = {
-    grepFiltersData: {},
-    optionsCore: [],
-    optionsMulti: [],
-    optionsReading: []
-  };
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      grepFiltersData: {},
+      optionsCore: [],
+      optionsMulti: [],
+      optionsReading: [],
+      optionsSubjects: [],
+      optionsGrades: [],
+      valueCoreOptions: [],
+      valueMultiOptions: [],
+      valuereadingOptions: [],
+      valueGradesOptions: [],
+      valueSubjectsOptions: [],
+      optionsGoals: [],
+      valueGoalsOptions: []
+    };
+  }
 
   public async componentDidMount() {
     const { store, from } = this.props;
+    const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions } = this.state;
     const grepFiltersDataAwait = await store!.getGrepFilters();
+    const grepFiltergoalssDataAwait = await store!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions);
     this.setState({
       grepFiltersData : grepFiltersDataAwait
     });
@@ -62,6 +84,12 @@ export class PublishingActions extends Component<Props, State> {
     });
     this.setState({
       optionsReading : this.renderValueOptions(grepFiltersDataAwait, 'reading')
+    });
+    this.setState({
+      optionsSubjects : this.renderValueOptionsBasics(grepFiltersDataAwait, 'subject')
+    });
+    this.setState({
+      optionsGrades : this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
     });
     if (from === 'TEACHINGPATH') {
       if (!store!.getAllGrades().length) {
@@ -79,6 +107,9 @@ export class PublishingActions extends Component<Props, State> {
         store!.getSubjects();
       }
     }
+    this.setState({
+      optionsGoals : grepFiltergoalssDataAwait
+    });
   }
 
   public renderValueOptions = (data: FilterGrep, type: string) => {
@@ -107,6 +138,31 @@ export class PublishingActions extends Component<Props, State> {
           // tslint:disable-next-line: variable-name
           value: Number(element.id),
           label: element.name
+        });
+      });
+    }
+    return returnArray;
+  }
+
+  public renderValueOptionsBasics = (data: FilterGrep, type: string) => {
+    const returnArray : Array<GrepFilters> = [];
+    if (type === 'subject') {
+      data!.subjectFilters!.forEach((element) => {
+        returnArray.push({
+          id: Number(element.id),
+          name: element.name,
+          // tslint:disable-next-line: variable-name
+          wp_id: element.wp_id
+        });
+      });
+    }
+    if (type === 'grade') {
+      data!.gradeFilters!.forEach((element) => {
+        returnArray.push({
+          id: Number(element.id),
+          name: element.name,
+          // tslint:disable-next-line: variable-name
+          wp_id: element.wp_id
         });
       });
     }
@@ -212,6 +268,7 @@ export class PublishingActions extends Component<Props, State> {
 
   public renderSubjectInput = () => {
     const { store } = this.props;
+    const { optionsSubjects, valueSubjectsOptions } = this.state;
     let myplaceholder = intl.get('publishing_page.subject');
 
     const subjects = store!.getAllSubjects().map(this.subjectToTagProp);
@@ -219,6 +276,20 @@ export class PublishingActions extends Component<Props, State> {
     const filterSelectedSubjects = this.compareTwoArraysReturnValue(subjects, selectedSubjects);
     if (filterSelectedSubjects.length > 0) {
       myplaceholder = '';
+    }
+    if (filterSelectedSubjects.length > 1) {
+      filterSelectedSubjects.forEach((element) => {
+        for (let i = 0; i < optionsSubjects.length; i = i + 1) {
+          // tslint:disable-next-line: variable-name
+          if (element.id === optionsSubjects[i].wp_id) {
+            if (!valueSubjectsOptions.includes(element.id)) {
+              if (!valueSubjectsOptions.includes(optionsSubjects[i].id)) {
+                valueSubjectsOptions.push(optionsSubjects[i].id);
+              }
+            }
+          }
+        }
+      });
     }
 
     return (
@@ -253,14 +324,26 @@ export class PublishingActions extends Component<Props, State> {
 
   public renderGradeInput = () => {
     const { store } = this.props;
+    const { optionsGrades, valueGradesOptions } = this.state;
     const { currentEntity } = store!;
     let myplaceholder = intl.get('publishing_page.grade');
-
     const grades = store!.getAllGrades().map(this.gradeToTagProp).sort((a, b) => a.id - b.id);
     const selectedGrades = currentEntity!.getListOfGrades().map(this.gradeToTagProp);
     const filterSelectedGrades = this.compareTwoArraysReturnValue(grades, selectedGrades);
     if (filterSelectedGrades.length > 0) {
       myplaceholder = '';
+    }
+    if (filterSelectedGrades.length > 1) {
+      filterSelectedGrades.forEach((element) => {
+        for (let i = 0; i < optionsGrades.length; i = i + 1) {
+          // tslint:disable-next-line: variable-name
+          if (element.id === optionsGrades[i].wp_id) {
+            if (!valueGradesOptions.includes(optionsGrades[i].id)) {
+              valueGradesOptions.push(optionsGrades[i].id);
+            }
+          }
+        }
+      });
     }
 
     return (
@@ -373,8 +456,11 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public handleChangeSelectCore = async (newValue: any) => {
-    const { grepFiltersData } = this.state;
-    return newValue;
+    const { valueCoreOptions } = this.state;
+    this.setState({
+      valueCoreOptions: [...valueCoreOptions, newValue.value]
+    });
+    // this.props.store!.currentEntity!.setGrepCoreElementsIds();
   }
 
   public renderCoreElements = () => {
@@ -410,8 +496,10 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public handleChangeSelectMulti = async (newValue: any) => {
-    const { grepFiltersData } = this.state;
-    return newValue;
+    const { valueMultiOptions } = this.state;
+    this.setState({
+      valueMultiOptions: [...valueMultiOptions, newValue.value]
+    });
   }
 
   public renderMultiDisciplinary = () => {
@@ -447,8 +535,10 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public handleChangeSelectReading = async (newValue: any) => {
-    const { grepFiltersData } = this.state;
-    return newValue;
+    const { valuereadingOptions } = this.state;
+    this.setState({
+      valuereadingOptions: [...valuereadingOptions, newValue.value]
+    });
   }
 
   public renderReadingInSubject = () => {
@@ -483,6 +573,25 @@ export class PublishingActions extends Component<Props, State> {
     );
   }
 
+  public sendTableBodyGoal = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { valueGoalsOptions } = this.state;
+    const target = e.currentTarget;
+    const value = Number(target!.value);
+    if (target.classList.contains('active')) {
+      target.classList.remove('active');
+    } else {
+      target.classList.add('active');
+    }
+    if (valueGoalsOptions.includes(value)) {
+      const index = valueGoalsOptions.indexOf(value);
+      if (index > -1) {
+        valueGoalsOptions.splice(index, 1);
+      }
+    } else {
+      valueGoalsOptions.push(value);
+    }
+  }
+
   public renderTableHeader = () => {
     const { store } = this.props;
     return (
@@ -496,33 +605,39 @@ export class PublishingActions extends Component<Props, State> {
       </div>
     );
   }
+
   public renderTableBody = () => {
-    const { store } = this.props;
-    const grade = '7h grade';
-    const core = 'Naturvetienskapelige praksise og tenkenmater';
-    const goals = 'Bruke og vuerdere modeller som representerer fenomener man ikke kan obserereve direkte og gjore rede for hvrfor del brukes modeller i naturfag';
+    const { optionsGoals } = this.state;
+    let activeVisibleGoals = false;
+    if (typeof(optionsGoals) !== 'undefined') {
+      activeVisibleGoals = true;
+    }
+    const visibleGoals = optionsGoals.map((goal) => {
+      const visibleGoalsGrade = goal!.grades!.map((grade) => {
+        const title = grade.name.split('.', 1);
+        return <span key={grade.id}>{title}</span>;
+      });
+      const visibleGoalsCore = goal!.coreElements!.map((core) => {
+        const title = core.description;
+        return <span key={core.id}>{title}</span>;
+      });
+      return (
+        <div className="itemTablesTr" key={goal!.id}>
+          <div className="itemTablesTd icons">
+            <button value={goal.id} onClick={this.sendTableBodyGoal}>
+              <img src={checkRounded} alt="Check" title="check" className={'checkImg'} />
+              <img src={checkActive} alt="Check" title="check" className={'checkImgFalse'} />
+            </button>
+          </div>
+          <div className="itemTablesTd grade">{visibleGoalsGrade} {intl.get('new assignment.grade')}</div>
+          <div className="itemTablesTd core">{visibleGoalsCore}</div>
+          <div className="itemTablesTd goals">{goal!.description}</div>
+        </div>
+      );
+    });
     return (
       <div className="itemTablesBody">
-        <div className="itemTablesTr">
-          <div className="itemTablesTd icons">
-            <a href="javascript:void(0)">
-              <img src={checkRounded} alt="Check" title="check" className={'checkImg'}/>
-            </a>
-          </div>
-          <div className="itemTablesTd grade">{grade}</div>
-          <div className="itemTablesTd core">{core}</div>
-          <div className="itemTablesTd goals">{goals}</div>
-        </div>
-        <div className="itemTablesTr">
-          <div className="itemTablesTd icons">
-            <a href="javascript:void(0)">
-              <img src={checkActive} alt="Check" title="check" className={'checkImg'}/>
-            </a>
-          </div>
-          <div className="itemTablesTd grade">{grade}</div>
-          <div className="itemTablesTd core">{core}</div>
-          <div className="itemTablesTd goals">{goals}</div>
-        </div>
+        {activeVisibleGoals && visibleGoals}
       </div>
     );
   }

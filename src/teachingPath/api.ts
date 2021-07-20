@@ -6,7 +6,7 @@ import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteract
 import { Locales } from 'utils/enums';
 
 import { TeachingPath, TeachingPathItem, TeachingPathNode, TeachingPathNodeType, TeachingPathRepo } from './TeachingPath';
-import { Article, Filter, Grade, Domain, FilterGrep } from 'assignment/Assignment';
+import { Article, Filter, Grade, Domain, FilterGrep, GoalsData } from 'assignment/Assignment';
 import { API } from '../utils/api';
 import { buildFilterDTO, GradeDTO } from 'assignment/factory';
 import { Breadcrumbs } from './teachingPathDraft/TeachingPathDraft';
@@ -223,6 +223,18 @@ export class TeachingPathApi implements TeachingPathRepo {
   public async getGrepFilters(): Promise<FilterGrep>  {
     const response = await API.get('api/teacher/teaching-paths/grep/filters');
     return response.data;
+  }
+
+  public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsId: Array<number>): Promise<Array<GoalsData>> {
+    const response = await API.get('api/teacher/teaching-paths/grep/goals', {
+      params: {
+        grepCoreElementsIds,
+        grepMainTopicsIds,
+        gradesIds,
+        subjectsId,
+      }
+    });
+    return response.data.data;
   }
 
   public async finishTeachingPath(id: number): Promise<void> {

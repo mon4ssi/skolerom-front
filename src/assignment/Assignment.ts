@@ -133,6 +133,14 @@ export class FilterGrep {
   public readingInSubjects?: Array<GrepReading>;
 }
 
+export class GoalsData {
+  public id?: number;
+  public code?: string;
+  public description?: string;
+  public coreElements?: Array<GrepElementFilters>;
+  public grades?: Array<GrepFilters>;
+}
+
 export interface AssignmentArgs {
   id: number;
   title?: string;
