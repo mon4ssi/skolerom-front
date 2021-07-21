@@ -31,6 +31,7 @@ export class EditTeachingPathStore {
   @observable public showValidationErrors: boolean = false;
   @observable public fetchingArticles: boolean = false;
   @observable public isFetchedArticlesListFinished: boolean = false;
+  @observable public isActiveButtons: boolean = false;
   @observable public hasMoreArticles: boolean = true;
   @observable public articlesList: Array<Article> = [];
   // tslint:disable-next-line: no-magic-numbers
@@ -77,6 +78,14 @@ export class EditTeachingPathStore {
 
   public getSeletedArticle() {
     return this.selectedArticle;
+  }
+
+  public setIsActiveButtons() {
+    this.isActiveButtons = true;
+  }
+
+  public setIsActiveButtonsFalse() {
+    this.isActiveButtons = false;
   }
 
   @computed

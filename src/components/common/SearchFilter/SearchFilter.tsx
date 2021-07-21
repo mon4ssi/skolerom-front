@@ -75,6 +75,7 @@ interface Props {
   handleClickSubject?(e: SyntheticEvent): void;
   handleClickMulti?(e: SyntheticEvent): void;
   handleClickSource?(e: SyntheticEvent): void;
+  handleClickReset?(e: SyntheticEvent): void;
 }
 
 interface State {
@@ -484,12 +485,12 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public modalFilters() {
-    const { filtersModal } = this.state;
+    const { handleClickReset } = this.props;
     return (
       <div className="FiltersModal">
         <div className="FiltersModal__header">
           <h5>{intl.get('edit_teaching_path.modals.search.header.title')}</h5>
-          <button>
+          <button onClick={handleClickReset}>
             <img src={resetImg} />
             <span>{intl.get('edit_teaching_path.modals.search.header.button')}</span>
           </button>

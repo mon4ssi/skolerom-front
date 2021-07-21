@@ -202,6 +202,30 @@ export class DraftAssignment extends Assignment {
   }
 
   @action
+  public setGrepCoreElementsIds = (data: Array<number>) => {
+    this._grepCoreElementsIds = data;
+    this.save();
+  }
+
+  @action
+  public setGrepMainTopicsIds = (data: Array<number>) => {
+    this._grepMainTopicsIds = data;
+    this.save();
+  }
+
+  @action
+  public setGrepGoalsIds = (data: Array<number>) => {
+    this._grepGoalsIds = data;
+    this.save();
+  }
+
+  @action
+  public setGrepReadingInSubjectId = (data: number) => {
+    this._grepReadingInSubjectId = data;
+    this.save();
+  }
+
+  @action
   public setFeaturedImage() {
     this._featuredImage = this.relatedArticles[0] && this.relatedArticles[0].images && this.relatedArticles[0].images.url;
   }

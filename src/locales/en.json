@@ -563,7 +563,8 @@
       "distribute_teaching_path": "Distribute teaching path",
       "after_saving": "Congratulations, your teaching path has been saved!",
       "after_publishing": "Congratulations, your teaching path has been published!",
-      "after_distribution": "Teaching path successfully distributed!"
+      "after_distribution": "Teaching path successfully distributed!",
+      "cant_publish": "You must complete the Curriculum section before publish"
     },
     "title": {
       "new_entity": "Publish teaching path",

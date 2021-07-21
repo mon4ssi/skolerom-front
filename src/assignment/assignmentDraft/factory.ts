@@ -37,6 +37,10 @@ export const buildDraftAssignment = (dto: DraftAssignmentResponseDTO): DraftAssi
     levels: dto.levels.map(level => level),
     ...assignmentContent,
     isCopy:dto.isCopy,
+    grepCoreElementsIds:dto.grepCoreElementsIds,
+    grepMainTopicsIds:dto.grepMainTopicsIds,
+    grepReadingInSubjectId:dto.grepReadingInSubjectId,
+    grepGoalsIds:dto.grepGoalsIds,
   });
 
   const draftAssignment = new DraftAssignment({ assignment, sessionId: dto.uuid, questionsWithError: null });

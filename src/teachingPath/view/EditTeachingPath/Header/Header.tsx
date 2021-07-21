@@ -72,6 +72,14 @@ export class HeaderComponent extends Component<Props> {
     const isPrivate = editTeachingPathStore!.teachingPathContainer!.teachingPath!.isPrivate;
     const isCopy = editTeachingPathStore!.teachingPathContainer!.teachingPath!.isCopy;
 
+    if (!editTeachingPathStore!.isActiveButtons) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('edit_teaching_path.header.cant_publish')
+      });
+      return;
+    }
+
     if (
       !isPrivate &&
       isCopy && (

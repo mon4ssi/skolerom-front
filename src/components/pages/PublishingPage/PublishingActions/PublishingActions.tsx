@@ -40,7 +40,7 @@ interface State {
   optionsGrades: Array<GrepFilters>;
   valueCoreOptions: Array<number>;
   valueMultiOptions: Array<number>;
-  valuereadingOptions: Array<number>;
+  valuereadingOptions: number;
   valueGradesOptions: Array<number>;
   valueSubjectsOptions: Array<number>;
   optionsGoals: Array<GoalsData>;
@@ -60,7 +60,7 @@ export class PublishingActions extends Component<Props, State> {
       optionsGrades: [],
       valueCoreOptions: [],
       valueMultiOptions: [],
-      valuereadingOptions: [],
+      valuereadingOptions: 0,
       valueGradesOptions: [],
       valueSubjectsOptions: [],
       optionsGoals: [],
@@ -230,6 +230,7 @@ export class PublishingActions extends Component<Props, State> {
 
   public handlePrivateOn = () => {
     this.props.store!.currentEntity!.setIsPrivate(true);
+    this.props.store!.setIsActiveButtons();
   }
 
   public handlePrivateOff = async () => {
@@ -250,7 +251,7 @@ export class PublishingActions extends Component<Props, State> {
 
       return;
     }
-
+    this.props.store!.setIsActiveButtonsFalse();
     this.props.store!.currentEntity!.setIsPrivate(false);
   }
 
@@ -456,11 +457,14 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public handleChangeSelectCore = async (newValue: any) => {
+    const { currentEntity } = this.props.store!;
     const { valueCoreOptions } = this.state;
-    this.setState({
-      valueCoreOptions: [...valueCoreOptions, newValue.value]
-    });
-    // this.props.store!.currentEntity!.setGrepCoreElementsIds();
+    if (!valueCoreOptions.includes(newValue.value)) {
+      this.setState({
+        valueCoreOptions: [...valueCoreOptions, newValue.value]
+      });
+      currentEntity!.setGrepCoreElementsIds([newValue.value]);
+    }
   }
 
   public renderCoreElements = () => {
@@ -496,10 +500,14 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public handleChangeSelectMulti = async (newValue: any) => {
+    const { currentEntity } = this.props.store!;
     const { valueMultiOptions } = this.state;
-    this.setState({
-      valueMultiOptions: [...valueMultiOptions, newValue.value]
-    });
+    if (!valueMultiOptions.includes(newValue.value)) {
+      this.setState({
+        valueMultiOptions: [...valueMultiOptions, newValue.value]
+      });
+      currentEntity!.setGrepMainTopicsIds([newValue.value]);
+    }
   }
 
   public renderMultiDisciplinary = () => {
@@ -535,10 +543,12 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public handleChangeSelectReading = async (newValue: any) => {
+    const { currentEntity } = this.props.store!;
     const { valuereadingOptions } = this.state;
     this.setState({
-      valuereadingOptions: [...valuereadingOptions, newValue.value]
+      valuereadingOptions: newValue.value
     });
+    currentEntity!.setGrepReadingInSubjectId(newValue.value);
   }
 
   public renderReadingInSubject = () => {
@@ -575,6 +585,7 @@ export class PublishingActions extends Component<Props, State> {
 
   public sendTableBodyGoal = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { valueGoalsOptions } = this.state;
+    const { currentEntity } = this.props.store!;
     const target = e.currentTarget;
     const value = Number(target!.value);
     if (target.classList.contains('active')) {
@@ -589,6 +600,12 @@ export class PublishingActions extends Component<Props, State> {
       }
     } else {
       valueGoalsOptions.push(value);
+    }
+    currentEntity!.setGrepGoalsIds(valueGoalsOptions);
+    if (valueGoalsOptions.length > 1) {
+      this.props.store!.setIsActiveButtons();
+    } else {
+      this.props.store!.setIsActiveButtonsFalse();
     }
   }
 

@@ -563,7 +563,8 @@
       "distribute_teaching_path": "Distribuer læringssti",
       "after_saving": "Bra jobbet, læringsstien er lagra!",
       "after_publishing": "Bra jobba, læringsstien er publisert!",
-      "after_distribution": "Læringsstien har blitt distribuert!"
+      "after_distribution": "Læringsstien har blitt distribuert!",
+      "cant_publish": "Du må fullføre læreplandelen før du publiserer"
     },
     "title": {
       "new_entity": "Ny læringssti",

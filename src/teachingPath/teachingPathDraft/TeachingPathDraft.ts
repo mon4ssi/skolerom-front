@@ -280,6 +280,24 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
+  public setGrepMainTopicsIds = (data: Array<number>) => {
+    this._grepMainTopicsIds = data;
+    this.save();
+  }
+
+  @action
+  public setGrepGoalsIds = (data: Array<number>) => {
+    this._grepGoalsIds = data;
+    this.save();
+  }
+
+  @action
+  public setGrepReadingInSubjectId = (data: number) => {
+    this._grepReadingInSubjectId = data;
+    this.save();
+  }
+
+  @action
   public setIsPrivate = (isPrivate: boolean) => {
     this._isPrivate = isPrivate;
     this.save();

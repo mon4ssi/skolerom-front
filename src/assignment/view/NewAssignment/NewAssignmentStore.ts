@@ -62,6 +62,7 @@ export class NewAssignmentStore {
 
   @observable public fetchingArticles: boolean = false;
   @observable public visibilityArticles: boolean = false;
+  @observable public isActiveButtons: boolean = false;
   @observable public fetchingAttachments: boolean = false;
   @observable public visibilityAttachments: boolean = false;
   @observable public showValidationErrors: boolean = false;
@@ -98,6 +99,14 @@ export class NewAssignmentStore {
   @computed
   public get ifSearchValueIsNumber() {
     return !isNaN(Number(this.searchValue.charAt(0)));
+  }
+
+  public setIsActiveButtons() {
+    this.isActiveButtons = true;
+  }
+
+  public setIsActiveButtonsFalse() {
+    this.isActiveButtons = false;
   }
 
   @computed
