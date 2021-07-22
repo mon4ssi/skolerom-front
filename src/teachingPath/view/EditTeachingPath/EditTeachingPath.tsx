@@ -40,7 +40,6 @@ class EditTeachingPathComponent extends Component<Props & RouteComponentProps, S
     const { getTeachingPathForEditing, isAssignmentCreating, getDraftForeignTeachingPath } = editTeachingPathStore!;
 
     this.props.editTeachingPathStore!.getArticles({});
-    await this.props.editTeachingPathStore!.getFiltersArticlePanel();
     const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
     headerArray[0].style.display = 'none';
 

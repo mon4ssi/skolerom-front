@@ -104,10 +104,20 @@ class LocalizedApp extends Component<Props> {
   )
 
   public maintenanceRender = async () => {
-    const MyMaintenanceMode = await this.props.loginStore!.getMaintenance_mode();
-    if (MyMaintenanceMode) {
-      this.textMaintenance();
-      this.valueDate();
+    const mydata = await this.props.loginStore!.getMaintenance_data();
+    if (mydata.maintenance_mode) {
+      this.setState({ isDataText: mydata.maintenance_msg });
+      const MyStartTime = mydata.start_time;
+      const MyEndTime = mydata.end_time;
+      const MyStartTimeValue = this.changeNewdate(MyStartTime);
+      const MyEndTimeValue = this.changeNewdate(MyEndTime);
+      const date = new Date();
+      const exactlyHour = date.getTime();
+      if (MyStartTimeValue <= exactlyHour &&  exactlyHour <= MyEndTimeValue) {
+        this.setState({ isMaintenance: true });
+      } else {
+        this.setState({ isMaintenance: false });
+      }
     } else {
       this.setState({ isMaintenance: false });
     }
@@ -122,21 +132,6 @@ class LocalizedApp extends Component<Props> {
     const response = new Date(year, month, day, hour, minute);
     const responseTime = response.getTime();
     return responseTime;
-  }
-
-  public valueDate = async () => {
-    const MyStartTime = await this.props.loginStore!.getMaintenance_start_time();
-    const MyEndTime = await this.props.loginStore!.getMaintenance_end_time();
-    const MyStartTimeValue = this.changeNewdate(MyStartTime);
-    const MyEndTimeValue = this.changeNewdate(MyEndTime);
-
-    const date = new Date();
-    const exactlyHour = date.getTime();
-    if (MyStartTimeValue <= exactlyHour &&  exactlyHour <= MyEndTimeValue) {
-      this.setState({ isMaintenance: true });
-    } else {
-      this.setState({ isMaintenance: false });
-    }
   }
 
   public componentDidMount() {
@@ -179,11 +174,6 @@ class LocalizedApp extends Component<Props> {
       });
 
     await loginStore!.getLocaleData();
-  }
-
-  public textMaintenance = async () => {
-    const response = await this.props.loginStore!.getMaintenance_msj();
-    this.setState({ isDataText: response });
   }
 
   public closeRenderMaintenance = () => {
