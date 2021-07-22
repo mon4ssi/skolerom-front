@@ -72,7 +72,6 @@ export class PublishingActions extends Component<Props, State> {
     const { store, from } = this.props;
     const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions } = this.state;
     const grepFiltersDataAwait = await store!.getGrepFilters();
-    const grepFiltergoalssDataAwait = await store!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions);
     this.setState({
       grepFiltersData : grepFiltersDataAwait
     });
@@ -107,6 +106,7 @@ export class PublishingActions extends Component<Props, State> {
         store!.getSubjects();
       }
     }
+    const grepFiltergoalssDataAwait = await store!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions);
     this.setState({
       optionsGoals : grepFiltergoalssDataAwait
     });
@@ -197,10 +197,9 @@ export class PublishingActions extends Component<Props, State> {
     title: grade.title,
   })
 
-  public addGrade = (id: number) => {
+  public addGrade = async (id: number) => {
     const { store } = this.props;
     const grade = store!.getAllGrades().find(grade => grade.id === id);
-
     if (grade) {
       store!.currentEntity!.addGrade(grade);
     }
@@ -459,12 +458,17 @@ export class PublishingActions extends Component<Props, State> {
   public handleChangeSelectCore = async (newValue: any) => {
     const { currentEntity } = this.props.store!;
     const { valueCoreOptions } = this.state;
+    const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions);
+    this.setState({
+      optionsGoals : grepFiltergoalssDataAwait
+    });
     if (!valueCoreOptions.includes(newValue.value)) {
       this.setState({
         valueCoreOptions: [...valueCoreOptions, newValue.value]
       });
       currentEntity!.setGrepCoreElementsIds([newValue.value]);
     }
+    this.sendValidbutton();
   }
 
   public renderCoreElements = () => {
@@ -502,12 +506,17 @@ export class PublishingActions extends Component<Props, State> {
   public handleChangeSelectMulti = async (newValue: any) => {
     const { currentEntity } = this.props.store!;
     const { valueMultiOptions } = this.state;
+    const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions);
+    this.setState({
+      optionsGoals : grepFiltergoalssDataAwait
+    });
     if (!valueMultiOptions.includes(newValue.value)) {
       this.setState({
         valueMultiOptions: [...valueMultiOptions, newValue.value]
       });
       currentEntity!.setGrepMainTopicsIds([newValue.value]);
     }
+    this.sendValidbutton();
   }
 
   public renderMultiDisciplinary = () => {
@@ -583,6 +592,15 @@ export class PublishingActions extends Component<Props, State> {
     );
   }
 
+  public sendValidbutton = () => {
+    const { valueCoreOptions, valueMultiOptions, valueGoalsOptions } = this.state;
+    if (valueGoalsOptions.length > 0 && valueCoreOptions.length > 0 && valueMultiOptions.length > 0) {
+      this.props.store!.setIsActiveButtons();
+    } else {
+      this.props.store!.setIsActiveButtonsFalse();
+    }
+  }
+
   public sendTableBodyGoal = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { valueGoalsOptions } = this.state;
     const { currentEntity } = this.props.store!;
@@ -602,11 +620,7 @@ export class PublishingActions extends Component<Props, State> {
       valueGoalsOptions.push(value);
     }
     currentEntity!.setGrepGoalsIds(valueGoalsOptions);
-    if (valueGoalsOptions.length > 1) {
-      this.props.store!.setIsActiveButtons();
-    } else {
-      this.props.store!.setIsActiveButtonsFalse();
-    }
+    this.sendValidbutton();
   }
 
   public renderTableHeader = () => {
