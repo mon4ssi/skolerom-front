@@ -380,6 +380,22 @@ export class TeachingPath {
     return toJS(this._grades);
   }
 
+  public getListOfgrepCoreElementsIds() {
+    return this._grepCoreElementsIds;
+  }
+
+  public getListOfgrepGoalsIds() {
+    return this._grepGoalsIds;
+  }
+
+  public getListOfgrepMainTopicsIds() {
+    return this._grepMainTopicsIds;
+  }
+
+  public getListOfgrepReadingInSubjectId() {
+    return this._grepReadingInSubjectId;
+  }
+
   public isOwnedByMe(): boolean {
     return this._ownedByMe;
   }

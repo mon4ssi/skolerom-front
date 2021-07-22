@@ -45,6 +45,10 @@ interface State {
   valueSubjectsOptions: Array<number>;
   optionsGoals: Array<GoalsData>;
   valueGoalsOptions: Array<number>;
+  editValueCoreOptions: Array<number> | undefined;
+  editvalueMultiOptions: Array<number> | undefined;
+  editvaluereadingOptions: number | undefined;
+  editvalueGoalsOptions: Array<number> | undefined;
 }
 
 @observer
@@ -64,7 +68,11 @@ export class PublishingActions extends Component<Props, State> {
       valueGradesOptions: [],
       valueSubjectsOptions: [],
       optionsGoals: [],
-      valueGoalsOptions: []
+      valueGoalsOptions: [],
+      editValueCoreOptions: [],
+      editvalueMultiOptions: [],
+      editvaluereadingOptions: 0,
+      editvalueGoalsOptions: []
     };
   }
 
@@ -90,6 +98,20 @@ export class PublishingActions extends Component<Props, State> {
     this.setState({
       optionsGrades : this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
     });
+
+    this.setState({
+      editValueCoreOptions : store!.currentEntity!.getListOfgrepCoreElementsIds()
+    });
+    this.setState({
+      editvalueGoalsOptions : store!.currentEntity!.getListOfgrepGoalsIds()
+    });
+    this.setState({
+      editvalueMultiOptions : store!.currentEntity!.getListOfgrepMainTopicsIds()
+    });
+    this.setState({
+      editvaluereadingOptions : store!.currentEntity!.getListOfgrepReadingInSubjectId()
+    });
+
     if (from === 'TEACHINGPATH') {
       if (!store!.getAllGrades().length) {
         store!.getGrades();
@@ -455,6 +477,18 @@ export class PublishingActions extends Component<Props, State> {
     );
   }
 
+  public searchValueInArrays = (emisor: Array<GreepSelectValue>, receptor: Array<number> | undefined) => {
+    let valueCoreElement:any = emisor[0];
+    emisor.forEach((a) => {
+      receptor!.forEach((b) => {
+        if (a.value === b) {
+          valueCoreElement = a;
+        }
+      });
+    });
+    return valueCoreElement;
+  }
+
   public handleChangeSelectCore = async (newValue: any) => {
     const { currentEntity } = this.props.store!;
     const { valueCoreOptions } = this.state;
@@ -472,7 +506,7 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public renderCoreElements = () => {
-    const { optionsCore } = this.state;
+    const { optionsCore, editValueCoreOptions, valueCoreOptions } = this.state;
     const customStyles = {
       menu: () => ({
         width: '320px',
@@ -490,6 +524,22 @@ export class PublishingActions extends Component<Props, State> {
         padding: '3px'
       })
     };
+    if (editValueCoreOptions!.length > 0) {
+      const value = this.searchValueInArrays(optionsCore, editValueCoreOptions);
+      this.props.store!.currentEntity!.setGrepCoreElementsIds([value.value]);
+      return (
+        <div className="itemsFlex">
+          <Select
+            width="320px"
+            styles={customStyles}
+            options={optionsCore}
+            onChange={this.handleChangeSelectCore}
+            value={value}
+            placeholder={intl.get('assignments search.Choose Core')}
+          />
+        </div>
+      );
+    }
     return (
       <div className="itemsFlex">
         <Select
@@ -520,7 +570,7 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public renderMultiDisciplinary = () => {
-    const { optionsMulti } = this.state;
+    const { optionsMulti, editvalueMultiOptions } = this.state;
     const customStyles = {
       menu: () => ({
         width: '320px',
@@ -538,6 +588,22 @@ export class PublishingActions extends Component<Props, State> {
         padding: '3px'
       })
     };
+    if (editvalueMultiOptions!.length > 0) {
+      const value = this.searchValueInArrays(optionsMulti, editvalueMultiOptions);
+      this.props.store!.currentEntity!.setGrepMainTopicsIds([value.value]);
+      return (
+        <div className="itemsFlex">
+          <Select
+            width="320px"
+            styles={customStyles}
+            options={optionsMulti}
+            onChange={this.handleChangeSelectCore}
+            value={value}
+            placeholder={intl.get('assignments search.Choose Core')}
+          />
+        </div>
+      );
+    }
     return (
       <div className="itemsFlex">
         <Select
@@ -560,8 +626,18 @@ export class PublishingActions extends Component<Props, State> {
     currentEntity!.setGrepReadingInSubjectId(newValue.value);
   }
 
+  public searchValueInNumbers = (emisor: Array<GreepSelectValue>, receptor: number | undefined) => {
+    let valueCoreElement:any = emisor[0];
+    emisor.forEach((a) => {
+      if (a.value === receptor) {
+        valueCoreElement = a;
+      }
+    });
+    return valueCoreElement;
+  }
+
   public renderReadingInSubject = () => {
-    const { optionsReading } = this.state;
+    const { optionsReading, editvaluereadingOptions } = this.state;
     const customStyles = {
       menu: () => ({
         width: '320px',
@@ -579,6 +655,22 @@ export class PublishingActions extends Component<Props, State> {
         padding: '3px'
       })
     };
+    if (editvaluereadingOptions! > 0) {
+      const value = this.searchValueInNumbers(optionsReading, editvaluereadingOptions);
+      this.props.store!.currentEntity!.setGrepReadingInSubjectId(value.value);
+      return (
+        <div className="itemsFlex">
+          <Select
+            width="320px"
+            styles={customStyles}
+            options={optionsReading}
+            onChange={this.handleChangeSelectCore}
+            value={value}
+            placeholder={intl.get('assignments search.Choose Core')}
+          />
+        </div>
+      );
+    }
     return (
       <div className="itemsFlex">
         <Select
@@ -593,11 +685,15 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public sendValidbutton = () => {
-    const { valueCoreOptions, valueMultiOptions, valueGoalsOptions } = this.state;
+    const { valueCoreOptions, valueMultiOptions, valueGoalsOptions, editValueCoreOptions, editvalueGoalsOptions, editvalueMultiOptions } = this.state;
     if (valueGoalsOptions.length > 0 && valueCoreOptions.length > 0 && valueMultiOptions.length > 0) {
       this.props.store!.setIsActiveButtons();
     } else {
-      this.props.store!.setIsActiveButtonsFalse();
+      if (editvalueGoalsOptions!.length > 0) {
+        this.props.store!.setIsActiveButtons();
+      } else {
+        this.props.store!.setIsActiveButtonsFalse();
+      }
     }
   }
 
@@ -638,12 +734,12 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public renderTableBody = () => {
-    const { optionsGoals } = this.state;
+    const { optionsGoals, editvalueGoalsOptions } = this.state;
     let activeVisibleGoals = false;
     if (typeof(optionsGoals) !== 'undefined') {
       activeVisibleGoals = true;
     }
-    const visibleGoals = optionsGoals.map((goal) => {
+    const visibleGoals = optionsGoals!.map((goal) => {
       const visibleGoalsGrade = goal!.grades!.map((grade) => {
         const title = grade.name.split('.', 1);
         return <span key={grade.id}>{title}</span>;
@@ -652,10 +748,16 @@ export class PublishingActions extends Component<Props, State> {
         const title = core.description;
         return <span key={core.id}>{title}</span>;
       });
+      let activeCrop = '';
+      if (editvalueGoalsOptions!.length > 0) {
+        if (editvalueGoalsOptions!.includes(Number(goal!.id))) {
+          activeCrop = 'active';
+        }
+      }
       return (
         <div className="itemTablesTr" key={goal!.id}>
           <div className="itemTablesTd icons">
-            <button value={goal.id} onClick={this.sendTableBodyGoal}>
+            <button value={goal.id} onClick={this.sendTableBodyGoal} className={activeCrop}>
               <img src={checkRounded} alt="Check" title="check" className={'checkImg'} />
               <img src={checkActive} alt="Check" title="check" className={'checkImgFalse'} />
             </button>

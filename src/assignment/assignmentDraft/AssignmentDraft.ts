@@ -225,6 +225,22 @@ export class DraftAssignment extends Assignment {
     this.save();
   }
 
+  public getListOfgrepCoreElementsIds() {
+    return this._grepCoreElementsIds;
+  }
+
+  public getListOfgrepGoalsIds() {
+    return this._grepGoalsIds;
+  }
+
+  public getListOfgrepMainTopicsIds() {
+    return this._grepMainTopicsIds;
+  }
+
+  public getListOfgrepReadingInSubjectId() {
+    return this._grepReadingInSubjectId;
+  }
+
   @action
   public setFeaturedImage() {
     this._featuredImage = this.relatedArticles[0] && this.relatedArticles[0].images && this.relatedArticles[0].images.url;
