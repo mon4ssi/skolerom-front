@@ -563,7 +563,8 @@
       "after_saving": "Bra jobbet, læringsstien er lagret!",
       "after_publishing": "Bra jobbet, læringsstien er publisert!",
       "after_distribution": "Læringsstien har blitt distribuert!",
-      "cant_publish": "Du må fullføre læreplandelen før du publiserer"
+      "cant_publish": "Du må fullføre læreplandelen før du publiserer",
+      "notdata_goals": "Det er ingen etablerte mål for disse kriteriene"
     },
     "title": {
       "new_entity": "Ny læringssti",

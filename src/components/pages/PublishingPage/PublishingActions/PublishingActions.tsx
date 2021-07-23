@@ -509,12 +509,10 @@ export class PublishingActions extends Component<Props, State> {
     const { optionsCore, editValueCoreOptions, valueCoreOptions } = this.state;
     const customStyles = {
       menu: () => ({
-        width: '320px',
         fontSize: '14px',
         border: '1px solid #939fa7',
       }),
       control: () => ({
-        width: '320px',
         display: 'flex',
         borderRadius: '5px',
         border: '1px solid #939fa7',
@@ -530,7 +528,6 @@ export class PublishingActions extends Component<Props, State> {
       return (
         <div className="itemsFlex">
           <Select
-            width="320px"
             styles={customStyles}
             options={optionsCore}
             onChange={this.handleChangeSelectCore}
@@ -543,7 +540,6 @@ export class PublishingActions extends Component<Props, State> {
     return (
       <div className="itemsFlex">
         <Select
-          width="320px"
           styles={customStyles}
           options={optionsCore}
           onChange={this.handleChangeSelectCore}
@@ -573,12 +569,10 @@ export class PublishingActions extends Component<Props, State> {
     const { optionsMulti, editvalueMultiOptions } = this.state;
     const customStyles = {
       menu: () => ({
-        width: '320px',
         fontSize: '14px',
         border: '1px solid #939fa7',
       }),
       control: () => ({
-        width: '320px',
         display: 'flex',
         borderRadius: '5px',
         border: '1px solid #939fa7',
@@ -594,7 +588,6 @@ export class PublishingActions extends Component<Props, State> {
       return (
         <div className="itemsFlex">
           <Select
-            width="320px"
             styles={customStyles}
             options={optionsMulti}
             onChange={this.handleChangeSelectCore}
@@ -607,7 +600,6 @@ export class PublishingActions extends Component<Props, State> {
     return (
       <div className="itemsFlex">
         <Select
-          width="320px"
           styles={customStyles}
           options={optionsMulti}
           onChange={this.handleChangeSelectMulti}
@@ -640,12 +632,10 @@ export class PublishingActions extends Component<Props, State> {
     const { optionsReading, editvaluereadingOptions } = this.state;
     const customStyles = {
       menu: () => ({
-        width: '320px',
         fontSize: '14px',
         border: '1px solid #939fa7',
       }),
       control: () => ({
-        width: '320px',
         display: 'flex',
         borderRadius: '5px',
         border: '1px solid #939fa7',
@@ -661,7 +651,6 @@ export class PublishingActions extends Component<Props, State> {
       return (
         <div className="itemsFlex">
           <Select
-            width="320px"
             styles={customStyles}
             options={optionsReading}
             onChange={this.handleChangeSelectCore}
@@ -674,7 +663,6 @@ export class PublishingActions extends Component<Props, State> {
     return (
       <div className="itemsFlex">
         <Select
-          width="320px"
           styles={customStyles}
           options={optionsReading}
           onChange={this.handleChangeSelectReading}
@@ -685,8 +673,8 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public sendValidbutton = () => {
-    const { valueCoreOptions, valueMultiOptions, valueGoalsOptions, editValueCoreOptions, editvalueGoalsOptions, editvalueMultiOptions } = this.state;
-    if (valueGoalsOptions.length > 0 && valueCoreOptions.length > 0 && valueMultiOptions.length > 0) {
+    const { valueGradesOptions, valueSubjectsOptions, valueGoalsOptions, editvalueGoalsOptions } = this.state;
+    if (valueGradesOptions.length > 0 && valueGoalsOptions.length > 0 && valueSubjectsOptions.length > 0) {
       this.props.store!.setIsActiveButtons();
     } else {
       if (editvalueGoalsOptions!.length > 0) {
@@ -768,6 +756,13 @@ export class PublishingActions extends Component<Props, State> {
         </div>
       );
     });
+    if (optionsGoals.length === 0) {
+      return (
+        <div className="itemTablesBody">
+          {intl.get('edit_teaching_path.header.notdata_goals')}
+        </div>
+      );
+    }
     return (
       <div className="itemTablesBody">
         {activeVisibleGoals && visibleGoals}

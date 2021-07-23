@@ -415,6 +415,13 @@ class SearchFilter extends Component<Props, State> {
         background: '#E7ECEF',
       })
     };
+    if (options.length === 0) {
+      return (
+        <div className="minimalLoading">
+          <span /><span /><span />
+        </div>
+      );
+    }
     return (
       <Select
         width="320px"
@@ -433,6 +440,13 @@ class SearchFilter extends Component<Props, State> {
       const title = core.title;
       return <button value={core.id} className="itemFlexFilter sourceFilterClass" onClick={handleClickMulti} key={core.id}>{title}</button>;
     });
+    if (cores.length === 0) {
+      return (
+        <div className="minimalLoading">
+          <span /><span /><span />
+        </div>
+      );
+    }
     return (
       <div className="coresItems flexFilter">
         {visibleCores}
@@ -459,6 +473,13 @@ class SearchFilter extends Component<Props, State> {
         background: '#E7ECEF',
       })
     };
+    if (options.length === 0) {
+      return (
+        <div className="minimalLoading">
+          <span /><span /><span />
+        </div>
+      );
+    }
     return (
       <Select
         width="320px"
@@ -477,6 +498,13 @@ class SearchFilter extends Component<Props, State> {
       const title = core.title;
       return <button value={core.id} className="itemFlexFilter subjectsFilterClass" onClick={handleClickSource} key={core.id}>{title}</button>;
     });
+    if (cores.length === 0) {
+      return (
+        <div className="minimalLoading">
+          <span /><span /><span />
+        </div>
+      );
+    }
     return (
       <div className="coresItems flexFilter">
         {visibleCores}
