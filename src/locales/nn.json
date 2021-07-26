@@ -521,6 +521,10 @@
   },
   "teaching path passing": {
     "choose one": "Vel ein",
+    "external_error": "Nettadressen er ugyldig eller kunne ikke analyseres",    
+    "errortype_101": "Nettadressen kunne ikke analyseres. Kontroller at den er en gyldig HTML-side",
+    "errortype_102": "Nettadressen kunne ikke analyseres. Kontroller at den inneholder en gyldig HTML-tittel",
+    "errortype_103": "Nettadressen kunne ikke analyseres. Kontroller at den inneholder en gyldig HTML-beskrivelse",
     "complete": {
       "title": "Læringsstien er fullført!",
       "description": "Bruk navigasjonen i botnen av sida til å gå gjennom kvart steg. Kom tilbake hit og trykk «Registrer og send inn» for å sende svaret til læraren din.",

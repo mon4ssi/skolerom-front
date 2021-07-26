@@ -707,7 +707,6 @@ export class AssignmentsList extends Component<Props, State> {
               subject
               grade
               placeholder={intl.get('assignments search.Search')}
-              isArticlesListPage
               // METHODS
               handleChangeSubject={this.handleChangeSubject}
               handleChangeGrade={this.handleChangeGrade}

@@ -141,6 +141,22 @@ export const buildFilterDTO = (filter: Filter): Object => {
     filterDTO.isAnswered = filter.isAnswered;
   }
 
+  if (filter.grepCoreElementsIds) {
+    filterDTO.grepCoreElementsIds = filter.grepCoreElementsIds;
+  }
+
+  if (filter.grepMainTopicsIds) {
+    filterDTO.grepMainTopicsIds = filter.grepMainTopicsIds;
+  }
+
+  if (filter.grepGoalsIds) {
+    filterDTO.grepGoalsIds = filter.grepGoalsIds;
+  }
+
+  if (filter.grepReadingInSubject) {
+    filterDTO.grepReadingInSubject = filter.grepReadingInSubject;
+  }
+
   if (filter.isEvaluated) {
     filterDTO.isEvaluated = filter.isEvaluated;
   }

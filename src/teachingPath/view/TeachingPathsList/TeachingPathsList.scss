@@ -38,22 +38,43 @@
       }
     }
   }
+  &.moveListBySearchFilter {
+    transition: 0.3s;
+    &.active {
+      width: calc(100% - 290px);
+      margin-left: 290px;
+      .InfoCard {
+        width: calc(20% - 15px);
+      }
+    }
+  }
 }
+
+
 
 
 @media screen and (max-width: 1800px) {
   .teachingPathsList .cardList .InfoCard {
     width: calc(20% - 15px);
   }
+  .teachingPathsList.moveListBySearchFilter.active .cardList .InfoCard {
+    width: calc(25% - 15px);
+  }
 }
 @media screen and (max-width: 1450px) {
   .teachingPathsList .cardList .InfoCard {
     width: calc(25% - 15px);
   }
+  .teachingPathsList.moveListBySearchFilter.active .cardList .InfoCard {
+    width: calc(33.33% - 15px);
+  }
 }
 @media screen and (max-width: 1200px) {
   .teachingPathsList .cardList .InfoCard {
     width: calc(33.33% - 15px);
+  }
+  .teachingPathsList.moveListBySearchFilter.active .cardList .InfoCard {
+    width: calc(50% - 15px);
   }
 }
 @media screen and (max-width: 575px) {
@@ -73,10 +94,16 @@
         }
       }
     }
-  }  
+  } 
+  .teachingPathsList.moveListBySearchFilter.active .cardList .InfoCard {
+    width: calc(100% - 50px);
+  } 
 }
 @media screen and (min-width: 576px) and (max-width: 767px) {
   .teachingPathsList .cardList .InfoCard {
+    width: calc(50% - 15px);
+  }
+  .teachingPathsList.moveListBySearchFilter.active .cardList .InfoCard {
     width: calc(50% - 15px);
   }
 }

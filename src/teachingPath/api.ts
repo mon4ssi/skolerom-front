@@ -12,6 +12,7 @@ import { buildFilterDTO, GradeDTO } from 'assignment/factory';
 import { Breadcrumbs } from './teachingPathDraft/TeachingPathDraft';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { StudentTeachingPathEvaluationNodeItem } from 'evaluation/api';
+import { CONDITIONALERROR, STATUS_SERVER_ERROR, STATUS_BADREQUEST } from 'utils/constants';
 
 export interface TeachingPathNodeItemResponseDTO {
   id: number;
@@ -200,14 +201,31 @@ export class TeachingPathApi implements TeachingPathRepo {
   }
 
   public async sendDataDomain(url: string): Promise<Domain> {
-    const { data } = await API.post('api/teacher/teaching-paths/domain', { url });
-    return new Domain({
-      id: data.id,
-      title: data.title,
-      description: data.description,
-      url: `${url}`,
-      featuredImage: data.image
-    });
+    try {
+      const { data } = await API.post('api/teacher/teaching-paths/domain', { url });
+      return new Domain({
+        id: data.id,
+        title: data.title,
+        description: data.description,
+        url: `${url}`,
+        featuredImage: data.image
+      });
+    } catch (error) {
+      if (error.response.status === STATUS_SERVER_ERROR || error.response.status === STATUS_BADREQUEST) {
+        if (error.response.data.message.code === CONDITIONALERROR) {
+          Notification.create({
+            type: NotificationTypes.ERROR,
+            title: intl.get('teaching path passing.external_error')
+          });
+        } else {
+          Notification.create({
+            type: NotificationTypes.ERROR,
+            title: intl.get(`teaching path passing.errortype_${error.response.data.message.code}`)
+          });
+        }
+      }
+      throw error;
+    }
   }
 
   public async getFiltersArticlePanel() {

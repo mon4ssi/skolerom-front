@@ -27,6 +27,8 @@ export const thirdLevel = 3;
 
 export const studentLevels = [firstLevel, secondLevel, thirdLevel];
 
+export const CONDITIONALERROR = 100;
+
 export const LOCALES_MAPPING_FOR_BACKEND = {
   [Locales.EN]: 'eng',
   [Locales.NB]: 'nob',
@@ -38,6 +40,7 @@ export const LOCALES_MAPPING_FOR_BACKEND = {
 export const STATUS_CONFLICT = 409;
 export const STATUS_FORBIDDEN = 403;
 export const STATUS_NOT_FOUND = 404;
+export const STATUS_BADREQUEST = 403;
 export const STATUS_UNAUTHORIZED = 401;
 export const STATUS_SERVER_ERROR = 500;
 export const STATUS_BACKEND_ERROR = 400;

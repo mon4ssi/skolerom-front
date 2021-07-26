@@ -196,21 +196,30 @@ export class PublishingActions extends Component<Props, State> {
     title: subject.title,
   })
 
-  public addSubject = (id: number) => {
+  public addSubject = async (id: number) => {
     const { store } = this.props;
     const subject = store!.getAllSubjects().find(subject => subject.id === id);
-
     if (subject) {
       store!.currentEntity!.addSubject(subject);
+      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions);
+      this.setState({
+        optionsGoals : grepFiltergoalssDataAwait
+      });
+      this.sendValidbutton();
     }
   }
 
-  public removeSubject = (id: number) => {
+  public removeSubject = async (id: number) => {
     const { store } = this.props;
     const subject = store!.getAllSubjects().find(subject => subject.id === id);
 
     if (subject) {
       store!.currentEntity!.removeSubject(subject);
+      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions);
+      this.setState({
+        optionsGoals : grepFiltergoalssDataAwait
+      });
+      this.sendValidbutton();
     }
   }
 
@@ -224,6 +233,11 @@ export class PublishingActions extends Component<Props, State> {
     const grade = store!.getAllGrades().find(grade => grade.id === id);
     if (grade) {
       store!.currentEntity!.addGrade(grade);
+      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions);
+      this.setState({
+        optionsGoals : grepFiltergoalssDataAwait
+      });
+      this.sendValidbutton();
     }
   }
 
@@ -240,12 +254,17 @@ export class PublishingActions extends Component<Props, State> {
     }
   }
 
-  public removeGrade = (id: number) => {
+  public removeGrade = async (id: number) => {
     const { store } = this.props;
     const grade = store!.getAllGrades().find(grade => grade.id === id);
 
     if (grade) {
       store!.currentEntity!.removeGrade(grade);
+      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions);
+      this.setState({
+        optionsGoals : grepFiltergoalssDataAwait
+      });
+      this.sendValidbutton();
     }
   }
 
@@ -272,7 +291,7 @@ export class PublishingActions extends Component<Props, State> {
 
       return;
     }
-    this.props.store!.setIsActiveButtonsFalse();
+    this.sendValidbutton();
     this.props.store!.currentEntity!.setIsPrivate(false);
   }
 
@@ -522,20 +541,22 @@ export class PublishingActions extends Component<Props, State> {
         padding: '3px'
       })
     };
-    if (editValueCoreOptions!.length > 0) {
-      const value = this.searchValueInArrays(optionsCore, editValueCoreOptions);
-      this.props.store!.currentEntity!.setGrepCoreElementsIds([value.value]);
-      return (
-        <div className="itemsFlex">
-          <Select
-            styles={customStyles}
-            options={optionsCore}
-            onChange={this.handleChangeSelectCore}
-            value={value}
-            placeholder={intl.get('assignments search.Choose Core')}
-          />
-        </div>
-      );
+    if (typeof(editValueCoreOptions) !== 'undefined') {
+      if (editValueCoreOptions!.length > 0) {
+        const value = this.searchValueInArrays(optionsCore, editValueCoreOptions);
+        this.props.store!.currentEntity!.setGrepCoreElementsIds([value.value]);
+        return (
+          <div className="itemsFlex">
+            <Select
+              styles={customStyles}
+              options={optionsCore}
+              onChange={this.handleChangeSelectCore}
+              value={value}
+              placeholder={intl.get('assignments search.Choose Core')}
+            />
+          </div>
+        );
+      }
     }
     return (
       <div className="itemsFlex">
@@ -582,20 +603,22 @@ export class PublishingActions extends Component<Props, State> {
         padding: '3px'
       })
     };
-    if (editvalueMultiOptions!.length > 0) {
-      const value = this.searchValueInArrays(optionsMulti, editvalueMultiOptions);
-      this.props.store!.currentEntity!.setGrepMainTopicsIds([value.value]);
-      return (
-        <div className="itemsFlex">
-          <Select
-            styles={customStyles}
-            options={optionsMulti}
-            onChange={this.handleChangeSelectCore}
-            value={value}
-            placeholder={intl.get('assignments search.Choose Core')}
-          />
-        </div>
-      );
+    if (typeof(editvalueMultiOptions) !== 'undefined') {
+      if (editvalueMultiOptions!.length > 0) {
+        const value = this.searchValueInArrays(optionsMulti, editvalueMultiOptions);
+        this.props.store!.currentEntity!.setGrepMainTopicsIds([value.value]);
+        return (
+          <div className="itemsFlex">
+            <Select
+              styles={customStyles}
+              options={optionsMulti}
+              onChange={this.handleChangeSelectCore}
+              value={value}
+              placeholder={intl.get('assignments search.Choose Core')}
+            />
+          </div>
+        );
+      }
     }
     return (
       <div className="itemsFlex">
@@ -645,20 +668,22 @@ export class PublishingActions extends Component<Props, State> {
         padding: '3px'
       })
     };
-    if (editvaluereadingOptions! > 0) {
-      const value = this.searchValueInNumbers(optionsReading, editvaluereadingOptions);
-      this.props.store!.currentEntity!.setGrepReadingInSubjectId(value.value);
-      return (
-        <div className="itemsFlex">
-          <Select
-            styles={customStyles}
-            options={optionsReading}
-            onChange={this.handleChangeSelectCore}
-            value={value}
-            placeholder={intl.get('assignments search.Choose Core')}
-          />
-        </div>
-      );
+    if (typeof(editvaluereadingOptions) !== 'undefined') {
+      if (editvaluereadingOptions! > 0) {
+        const value = this.searchValueInNumbers(optionsReading, editvaluereadingOptions);
+        this.props.store!.currentEntity!.setGrepReadingInSubjectId(value.value);
+        return (
+          <div className="itemsFlex">
+            <Select
+              styles={customStyles}
+              options={optionsReading}
+              onChange={this.handleChangeSelectCore}
+              value={value}
+              placeholder={intl.get('assignments search.Choose Core')}
+            />
+          </div>
+        );
+      }
     }
     return (
       <div className="itemsFlex">
@@ -677,8 +702,12 @@ export class PublishingActions extends Component<Props, State> {
     if (valueGradesOptions.length > 0 && valueGoalsOptions.length > 0 && valueSubjectsOptions.length > 0) {
       this.props.store!.setIsActiveButtons();
     } else {
-      if (editvalueGoalsOptions!.length > 0) {
-        this.props.store!.setIsActiveButtons();
+      if (typeof(editvalueGoalsOptions) !== 'undefined') {
+        if (editvalueGoalsOptions!.length > 0) {
+          this.props.store!.setIsActiveButtons();
+        } else {
+          this.props.store!.setIsActiveButtonsFalse();
+        }
       } else {
         this.props.store!.setIsActiveButtonsFalse();
       }
@@ -737,9 +766,11 @@ export class PublishingActions extends Component<Props, State> {
         return <span key={core.id}>{title}</span>;
       });
       let activeCrop = '';
-      if (editvalueGoalsOptions!.length > 0) {
-        if (editvalueGoalsOptions!.includes(Number(goal!.id))) {
-          activeCrop = 'active';
+      if (typeof(editvalueGoalsOptions) !== 'undefined') {
+        if (editvalueGoalsOptions!.length > 0) {
+          if (editvalueGoalsOptions!.includes(Number(goal!.id))) {
+            activeCrop = 'active';
+          }
         }
       }
       return (

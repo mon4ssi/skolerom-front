@@ -734,7 +734,6 @@ export class ArticlesList extends Component<Props, State> {
 
   public renderArticlesList() {
     const { articlesList, fetchingArticles, articlesForSkeletonEight } = this.props.editTeachingPathStore!;
-
     const selectedAndLoadedArticles = this.addSelectedArticles(articlesList);
 
     const allCardsMargins = 129; // Left padding of container + all right margins of card
@@ -744,7 +743,6 @@ export class ArticlesList extends Component<Props, State> {
     const cardsContainer = document.getElementsByClassName('articlesListContainer')[0];
     const skeletonCardWidth = ((cardsContainer ? cardsContainer.clientWidth : 0) - allCardsMargins) / cardsInRow;
     const skeletonCardHeight = skeletonCardWidth * cardWidthToHeightIndex;
-
     if (fetchingArticles && !articlesList.length) {
       return articlesForSkeletonEight.map((skeletonArticle, index) => (
                                        <SkeletonLoader

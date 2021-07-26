@@ -619,6 +619,10 @@ export class Filter {
   @observable public isEvaluated?: string | null;
   @observable public isPassed?: number | null;
   @observable public isActive?: number | null;
+  @observable public grepCoreElementsIds?: number | null;
+  @observable public grepMainTopicsIds?: number | null;
+  @observable public grepGoalsIds?: number | null;
+  @observable public grepReadingInSubject?: number | null;
   public showMyAssignments?: number | null;
 }
 
