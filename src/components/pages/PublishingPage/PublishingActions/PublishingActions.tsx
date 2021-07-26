@@ -78,7 +78,7 @@ export class PublishingActions extends Component<Props, State> {
 
   public async componentDidMount() {
     const { store, from } = this.props;
-    const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions } = this.state;
+    const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, editValueCoreOptions, editvalueMultiOptions } = this.state;
     const grepFiltersDataAwait = await store!.getGrepFilters();
     this.setState({
       grepFiltersData : grepFiltersDataAwait
@@ -128,7 +128,8 @@ export class PublishingActions extends Component<Props, State> {
         store!.getSubjects();
       }
     }
-    const grepFiltergoalssDataAwait = await store!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions);
+    // tslint:disable-next-line:max-line-length
+    const grepFiltergoalssDataAwait = (typeof(editValueCoreOptions) !== 'undefined') ? await store!.getGrepGoalsFilters(editValueCoreOptions!, editvalueMultiOptions!, valueGradesOptions, valueSubjectsOptions) : await store!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions);
     this.setState({
       optionsGoals : grepFiltergoalssDataAwait
     });
@@ -639,6 +640,7 @@ export class PublishingActions extends Component<Props, State> {
       valuereadingOptions: newValue.value
     });
     currentEntity!.setGrepReadingInSubjectId(newValue.value);
+    this.sendValidbutton();
   }
 
   public searchValueInNumbers = (emisor: Array<GreepSelectValue>, receptor: number | undefined) => {
@@ -698,8 +700,8 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public sendValidbutton = () => {
-    const { valueGradesOptions, valueSubjectsOptions, valueGoalsOptions, editvalueGoalsOptions } = this.state;
-    if (valueGradesOptions.length > 0 && valueGoalsOptions.length > 0 && valueSubjectsOptions.length > 0) {
+    const { valueGradesOptions, valueSubjectsOptions, valueGoalsOptions, editvalueGoalsOptions, valuereadingOptions } = this.state;
+    if (valueGradesOptions.length > 0 && valueGoalsOptions.length > 0 && valueSubjectsOptions.length > 0 && valuereadingOptions) {
       this.props.store!.setIsActiveButtons();
     } else {
       if (typeof(editvalueGoalsOptions) !== 'undefined') {
