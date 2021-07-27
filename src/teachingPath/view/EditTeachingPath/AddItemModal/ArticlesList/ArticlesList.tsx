@@ -147,6 +147,13 @@ export class ArticlesList extends Component<Props, State> {
       // tslint:disable-next-line:no-dynamic-delete
       delete filters[filterName];
     }
+    if (filterName === 'order') {
+      if (filterValue === 'asc') {
+        filters.order = filterValue;
+      } else {
+        delete filters.order;
+      }
+    }
     if (filterName === 'none') {
       this.setState({ appliedFilters: {} });
       filters = {};
@@ -276,6 +283,10 @@ export class ArticlesList extends Component<Props, State> {
     if (lettersNoEn(e.currentTarget.value)) {
       this.handleChangeFilters('searchTitle', e.currentTarget.value);
     }
+  }
+
+  public handleChangeSorting = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    this.handleChangeFilters('order', e.currentTarget.value);
   }
 
   public handleClickReset = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -1126,7 +1137,7 @@ export class ArticlesList extends Component<Props, State> {
               subject
               grade
               placeholder={intl.get('edit_teaching_path.modals.search_for_articles')}
-              popularity
+              date
               isArticlesListPage
               // METHODS
               handleChangeSubject={this.handleChangeSubject}
@@ -1141,6 +1152,7 @@ export class ArticlesList extends Component<Props, State> {
               handleChangeSelectCore={this.handleChangeSelectCore}
               handleChangeSelectGoals={this.handleChangeSelectGoals}
               handleClickReset={this.handleClickReset}
+              switchNewestOldest={this.handleChangeSorting}
 
               // VALUES
               subjectFilterValue={Number(appliedFilters.subjects)}

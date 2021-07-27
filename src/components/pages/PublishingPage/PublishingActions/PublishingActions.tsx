@@ -49,6 +49,7 @@ interface State {
   editvalueMultiOptions: Array<number> | undefined;
   editvaluereadingOptions: number | undefined;
   editvalueGoalsOptions: Array<number> | undefined;
+  isValid: boolean;
 }
 
 @observer
@@ -72,13 +73,14 @@ export class PublishingActions extends Component<Props, State> {
       editValueCoreOptions: [],
       editvalueMultiOptions: [],
       editvaluereadingOptions: 0,
-      editvalueGoalsOptions: []
+      editvalueGoalsOptions: [],
+      isValid: false
     };
   }
 
   public async componentDidMount() {
     const { store, from } = this.props;
-    const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions } = this.state;
+    const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, valuereadingOptions } = this.state;
     const grepFiltersDataAwait = await store!.getGrepFilters();
     this.setState({
       grepFiltersData : grepFiltersDataAwait
@@ -100,17 +102,73 @@ export class PublishingActions extends Component<Props, State> {
     });
 
     this.setState({
-      editValueCoreOptions : store!.currentEntity!.getListOfgrepCoreElementsIds()
+      editValueCoreOptions : store!.currentEntity!.getListOfgrepCoreElementsIds()!
     });
     this.setState({
-      editvalueGoalsOptions : store!.currentEntity!.getListOfgrepGoalsIds()
+      editvalueGoalsOptions : store!.currentEntity!.getListOfgrepGoalsIds()!
     });
     this.setState({
-      editvalueMultiOptions : store!.currentEntity!.getListOfgrepMainTopicsIds()
+      editvalueMultiOptions : store!.currentEntity!.getListOfgrepMainTopicsIds()!
     });
     this.setState({
-      editvaluereadingOptions : store!.currentEntity!.getListOfgrepReadingInSubjectId()
+      editvaluereadingOptions : store!.currentEntity!.getListOfgrepReadingInSubjectId()!
     });
+    if (store!.currentEntity!.isPrivate) {
+      this.setState(
+        { isValid: true },
+        () => {
+          this.sendValidbutton();
+        }
+      );
+    } else {
+      this.sendValidbutton();
+    }
+    if (typeof(store!.currentEntity!.getListOfgrepGoalsIds()) !== 'undefined') {
+      this.setState({
+        valueGoalsOptions: store!.currentEntity!.getListOfgrepGoalsIds()!
+      });
+    }
+    if (typeof(store!.currentEntity!.getListOfgrepCoreElementsIds()) !== 'undefined') {
+      this.setState({
+        valueCoreOptions: store!.currentEntity!.getListOfgrepCoreElementsIds()!
+      });
+    }
+    if (typeof(store!.currentEntity!.getListOfgrepMainTopicsIds()) !== 'undefined') {
+      this.setState({
+        valueMultiOptions: store!.currentEntity!.getListOfgrepMainTopicsIds()!
+      });
+    }
+    if (typeof(store!.currentEntity!.getListOfgrepReadingInSubjectId()) !== 'undefined') {
+      this.setState({
+        valuereadingOptions: store!.currentEntity!.getListOfgrepReadingInSubjectId()!
+      });
+    }
+    const selectedGrades = store!.currentEntity!.getListOfGrades().map(this.gradeToTagProp);
+    if (selectedGrades.length > 1) {
+      selectedGrades.forEach((element) => {
+        for (let i = 0; i < this.state.optionsGrades.length; i = i + 1) {
+          // tslint:disable-next-line: variable-name
+          if (element.id === this.state.optionsGrades[i].wp_id) {
+            if (!this.state.valueGradesOptions.includes(this.state.optionsGrades[i].id)) {
+              this.state.valueGradesOptions.push(this.state.optionsGrades[i].id);
+            }
+          }
+        }
+      });
+    }
+    const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
+    if (selectedSubjects.length > 1) {
+      selectedSubjects.forEach((element) => {
+        for (let i = 0; i < this.state.optionsSubjects.length; i = i + 1) {
+          // tslint:disable-next-line: variable-name
+          if (element.id === this.state.optionsSubjects[i].wp_id) {
+            if (!this.state.valueSubjectsOptions.includes(this.state.optionsSubjects[i].id)) {
+              this.state.valueSubjectsOptions.push(this.state.optionsSubjects[i].id);
+            }
+          }
+        }
+      });
+    }
 
     if (from === 'TEACHINGPATH') {
       if (!store!.getAllGrades().length) {
@@ -128,7 +186,7 @@ export class PublishingActions extends Component<Props, State> {
         store!.getSubjects();
       }
     }
-    const grepFiltergoalssDataAwait = await store!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions);
+    const grepFiltergoalssDataAwait = await store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions);
     this.setState({
       optionsGoals : grepFiltergoalssDataAwait
     });
@@ -197,29 +255,56 @@ export class PublishingActions extends Component<Props, State> {
   })
 
   public addSubject = async (id: number) => {
+    const { optionsGrades, valueSubjectsOptions } = this.state;
     const { store } = this.props;
     const subject = store!.getAllSubjects().find(subject => subject.id === id);
     if (subject) {
       store!.currentEntity!.addSubject(subject);
+      for (let i = 0; i < optionsGrades.length; i = i + 1) {
+        // tslint:disable-next-line: variable-name
+        if (subject.id === optionsGrades[i].wp_id) {
+          if (!valueSubjectsOptions.includes(optionsGrades[i].id)) {
+            valueSubjectsOptions.push(optionsGrades[i].id);
+          }
+        }
+      }
       const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions);
-      this.setState({
-        optionsGoals : grepFiltergoalssDataAwait
-      });
-      this.sendValidbutton();
+      this.setState(
+        {
+          optionsGoals : grepFiltergoalssDataAwait
+        },
+        () => {
+          this.sendValidbutton();
+        }
+      );
     }
   }
 
   public removeSubject = async (id: number) => {
+    const { optionsGrades, valueSubjectsOptions } = this.state;
     const { store } = this.props;
     const subject = store!.getAllSubjects().find(subject => subject.id === id);
 
     if (subject) {
       store!.currentEntity!.removeSubject(subject);
+      for (let i = 0; i < optionsGrades.length; i = i + 1) {
+        // tslint:disable-next-line: variable-name
+        if (subject.id === optionsGrades[i].wp_id) {
+          const index = valueSubjectsOptions.indexOf(optionsGrades[i].id);
+          if (index > -1) {
+            valueSubjectsOptions.splice(index, 1);
+          }
+        }
+      }
       const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions);
-      this.setState({
-        optionsGoals : grepFiltergoalssDataAwait
-      });
-      this.sendValidbutton();
+      this.setState(
+        {
+          optionsGoals : grepFiltergoalssDataAwait
+        },
+        () => {
+          this.sendValidbutton();
+        }
+      );
     }
   }
 
@@ -234,10 +319,14 @@ export class PublishingActions extends Component<Props, State> {
     if (grade) {
       store!.currentEntity!.addGrade(grade);
       const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions);
-      this.setState({
-        optionsGoals : grepFiltergoalssDataAwait
-      });
-      this.sendValidbutton();
+      this.setState(
+        {
+          optionsGoals : grepFiltergoalssDataAwait
+        },
+        () => {
+          this.sendValidbutton();
+        }
+      );
     }
   }
 
@@ -261,16 +350,27 @@ export class PublishingActions extends Component<Props, State> {
     if (grade) {
       store!.currentEntity!.removeGrade(grade);
       const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions);
-      this.setState({
-        optionsGoals : grepFiltergoalssDataAwait
-      });
-      this.sendValidbutton();
+      this.setState(
+        {
+          optionsGoals : grepFiltergoalssDataAwait
+        },
+        () => {
+          this.sendValidbutton();
+        }
+      );
     }
   }
 
   public handlePrivateOn = () => {
+    this.setState(
+      {
+        isValid: true
+      },
+      () => {
+        this.sendValidbutton();
+      }
+    );
     this.props.store!.currentEntity!.setIsPrivate(true);
-    this.props.store!.setIsActiveButtons();
   }
 
   public handlePrivateOff = async () => {
@@ -291,7 +391,14 @@ export class PublishingActions extends Component<Props, State> {
 
       return;
     }
-    this.sendValidbutton();
+    this.setState(
+      {
+        isValid: false
+      },
+      () => {
+        this.sendValidbutton();
+      }
+    );
     this.props.store!.currentEntity!.setIsPrivate(false);
   }
 
@@ -379,14 +486,13 @@ export class PublishingActions extends Component<Props, State> {
         for (let i = 0; i < optionsGrades.length; i = i + 1) {
           // tslint:disable-next-line: variable-name
           if (element.id === optionsGrades[i].wp_id) {
-            if (!valueGradesOptions.includes(optionsGrades[i].id)) {
-              valueGradesOptions.push(optionsGrades[i].id);
+            if (!this.state.valueGradesOptions.includes(optionsGrades[i].id)) {
+              this.state.valueGradesOptions.push(optionsGrades[i].id);
             }
           }
         }
       });
     }
-
     return (
       <div className="itemsFlex grade">
         <TagInputComponent
@@ -511,17 +617,21 @@ export class PublishingActions extends Component<Props, State> {
   public handleChangeSelectCore = async (newValue: any) => {
     const { currentEntity } = this.props.store!;
     const { valueCoreOptions } = this.state;
-    const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions);
+    const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(newValue.value, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions);
     this.setState({
       optionsGoals : grepFiltergoalssDataAwait
     });
     if (!valueCoreOptions.includes(newValue.value)) {
-      this.setState({
-        valueCoreOptions: [...valueCoreOptions, newValue.value]
-      });
+      this.setState(
+        {
+          valueCoreOptions: [...valueCoreOptions, newValue.value]
+        },
+        () => {
+          this.sendValidbutton();
+        }
+      );
       currentEntity!.setGrepCoreElementsIds([newValue.value]);
     }
-    this.sendValidbutton();
   }
 
   public renderCoreElements = () => {
@@ -573,7 +683,7 @@ export class PublishingActions extends Component<Props, State> {
   public handleChangeSelectMulti = async (newValue: any) => {
     const { currentEntity } = this.props.store!;
     const { valueMultiOptions } = this.state;
-    const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions);
+    const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, newValue.value, this.state.valueGradesOptions, this.state.valueSubjectsOptions);
     this.setState({
       optionsGoals : grepFiltergoalssDataAwait
     });
@@ -698,19 +808,22 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public sendValidbutton = () => {
-    const { valueGradesOptions, valueSubjectsOptions, valueGoalsOptions, editvalueGoalsOptions } = this.state;
-    if (valueGradesOptions.length > 0 && valueGoalsOptions.length > 0 && valueSubjectsOptions.length > 0) {
-      this.props.store!.setIsActiveButtons();
-    } else {
-      if (typeof(editvalueGoalsOptions) !== 'undefined') {
-        if (editvalueGoalsOptions!.length > 0) {
-          this.props.store!.setIsActiveButtons();
+    if (!this.state.isValid) {
+      if (this.state.valueGradesOptions.length > 0 && this.state.valueGoalsOptions.length > 0 && this.state.valuereadingOptions !== 0) {
+        this.props.store!.setIsActiveButtons();
+      } else {
+        if (typeof(this.state.editvalueGoalsOptions) !== 'undefined') {
+          if (this.state.editvalueGoalsOptions!.length > 0) {
+            this.props.store!.setIsActiveButtons();
+          } else {
+            this.props.store!.setIsActiveButtonsFalse();
+          }
         } else {
           this.props.store!.setIsActiveButtonsFalse();
         }
-      } else {
-        this.props.store!.setIsActiveButtonsFalse();
       }
+    } else {
+      this.props.store!.setIsActiveButtons();
     }
   }
 
