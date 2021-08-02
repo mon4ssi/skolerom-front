@@ -1,7 +1,7 @@
 import { computed, observable, toJS } from 'mobx';
 import intl from 'react-intl-universal';
 
-import { Grade, Subject, Article, Assignment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData } from 'assignment/Assignment';
+import { Grade, GreepElements, Subject, Article, Assignment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData } from 'assignment/Assignment';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from './service';
 import { injector } from '../Injector';
 
@@ -46,6 +46,7 @@ export type TeachingPathItemValueArgs = {
   isAnswered?: boolean;
   numberOfQuestions?: number;
   featuredImage?: string;
+  grepGoals?: Array<GreepElements>;
 };
 
 export type TeachingPathItemValue = Article | Assignment | Domain;
@@ -182,6 +183,7 @@ export interface TeachingPathArgs {
   grepCoreElementsIds?: Array<number>;
   grepReadingInSubjectId?: number;
   grepGoalsIds?: Array<number>;
+  grepGoals?: Array<GreepElements>;
 }
 
 export class TeachingPath {
@@ -222,6 +224,7 @@ export class TeachingPath {
   @observable protected _grepMainTopicsIds?: Array<number>;
   @observable protected _grepReadingInSubjectId?: number;
   @observable protected _grepGoalsIds?: Array<number>;
+  @observable protected _grepGoals?: Array<GreepElements> = [];
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;
@@ -262,6 +265,7 @@ export class TeachingPath {
     this._grepMainTopicsIds = args.grepMainTopicsIds;
     this._grepReadingInSubjectId = args.grepReadingInSubjectId;
     this._grepGoalsIds = args.grepGoalsIds;
+    this._grepGoals = args.grepGoals || [];
   }
 
   @computed
@@ -378,6 +382,10 @@ export class TeachingPath {
 
   public getListOfGrades() {
     return toJS(this._grades);
+  }
+
+  public getListOfGoals() {
+    return toJS(this._grepGoals);
   }
 
   public getListOfgrepCoreElementsIds() {

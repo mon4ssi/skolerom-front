@@ -174,13 +174,13 @@ export interface AssignmentArgs {
   ownedByMe?: boolean;
   isCopy?: boolean;
   grepCoreelements?: Array<GreepElementsFromBackend>;
-  grepGoals?: Array<GreepElementsFromBackend>;
   grepMaintopic?: Array<GreepElementsFromBackend>;
   grepReadingInsubject?: string;
   grepCoreElementsIds?: Array<number>;
   grepMainTopicsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
   grepReadingInSubjectId?: number;
+  grepGoals?: Array<GreepElements>;
 }
 
 export class Assignment {
@@ -218,9 +218,9 @@ export class Assignment {
   @observable protected _isDistributed?: boolean;
   @observable protected _isCopy?: boolean;
   public grepCoreelements?: Array<GreepElementsFromBackend>;
-  public grepGoals?: Array<GreepElementsFromBackend>;
   public grepMaintopic?: Array<GreepElementsFromBackend>;
   public grepReadingInsubject?: string;
+  public grepGoals?: Array<GreepElements>;
   public _grepCoreElementsIds?: Array<number>;
   public _grepMainTopicsIds?: Array<number>;
   public _grepGoalsIds?: Array<number>;
@@ -432,6 +432,10 @@ export class Assignment {
 
   public getListOfGrades() {
     return toJS(this._grades);
+  }
+
+  public getListOfGoals() {
+    return toJS(this.grepGoals);
   }
 }
 
@@ -977,6 +981,7 @@ export interface DomainArgs {
   grades?: Array<Grade>;
   subjects?: Array<Subject>;
   isRead?: boolean;
+  grepGoals?: Array<GreepElements>;
 }
 
 export class Domain {
@@ -988,6 +993,7 @@ export class Domain {
   public subjects?: Array<Subject>;
   public readonly featuredImage?: string;
   public isRead?: boolean;
+  public grepGoals?: Array<GreepElements>;
   constructor(args: DomainArgs) {
     this.id = args.id;
     this.title = args.title;
@@ -997,5 +1003,6 @@ export class Domain {
     this.grades = args.grades;
     this.subjects = args.subjects;
     this.isRead = args.isRead;
+    this.grepGoals = args.grepGoals;
   }
 }

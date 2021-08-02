@@ -14,6 +14,7 @@ import { Distribution } from 'distribution/Distribution';
 import { DISTRIBUTION_SERVICE, DistributionService } from 'distribution/service';
 import { USER_SERVICE, UserService } from 'user/UserService';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from 'teachingPath/service';
+import { GreepElements } from 'assignment/factory';
 
 const error400 = 400;
 
@@ -46,6 +47,7 @@ export class EditTeachingPathStore {
 
   @observable public allGrades: Array<Grade> = [];
   @observable public allSubjects: Array<Subject> = [];
+  @observable public allGoals: Array<GreepElements> = [];
   @observable public allArticlePanelFilters: FilterArticlePanel | null = null;
 
   @observable public isAssignmentCreating: boolean = false;

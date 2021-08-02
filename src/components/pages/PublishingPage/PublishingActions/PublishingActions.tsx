@@ -25,6 +25,7 @@ import { TagInputComponent, TagProp } from 'components/common/TagInput/TagInput'
 import { firstLevel, secondLevel, studentLevels } from 'utils/constants';
 
 import './PublishingActions.scss';
+import { GreepElements } from 'assignment/factory';
 
 interface Props {
   store?: NewAssignmentStore | EditTeachingPathStore;
@@ -144,29 +145,37 @@ export class PublishingActions extends Component<Props, State> {
       });
     }
     const selectedGrades = store!.currentEntity!.getListOfGrades().map(this.gradeToTagProp);
+    const arrayForGrades : Array<number> = [];
     if (selectedGrades.length > 1) {
       selectedGrades.forEach((element) => {
         for (let i = 0; i < this.state.optionsGrades.length; i = i + 1) {
           // tslint:disable-next-line: variable-name
           if (element.id === this.state.optionsGrades[i].wp_id) {
             if (!this.state.valueGradesOptions.includes(this.state.optionsGrades[i].id)) {
-              this.state.valueGradesOptions.push(this.state.optionsGrades[i].id);
+              arrayForGrades.push(this.state.optionsGrades[i].id);
             }
           }
         }
       });
+      this.setState({
+        valueGradesOptions: arrayForGrades!
+      });
     }
     const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
+    const arrayForSubjects : Array<number> = [];
     if (selectedSubjects.length > 1) {
       selectedSubjects.forEach((element) => {
         for (let i = 0; i < this.state.optionsSubjects.length; i = i + 1) {
           // tslint:disable-next-line: variable-name
           if (element.id === this.state.optionsSubjects[i].wp_id) {
             if (!this.state.valueSubjectsOptions.includes(this.state.optionsSubjects[i].id)) {
-              this.state.valueSubjectsOptions.push(this.state.optionsSubjects[i].id);
+              arrayForSubjects.push(this.state.optionsSubjects[i].id);
             }
           }
         }
+      });
+      this.setState({
+        valueSubjectsOptions: arrayForSubjects!
       });
     }
 
@@ -186,7 +195,7 @@ export class PublishingActions extends Component<Props, State> {
         store!.getSubjects();
       }
     }
-    const grepFiltergoalssDataAwait = await store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions);
+    const grepFiltergoalssDataAwait = await store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, arrayForGrades, arrayForSubjects);
     this.setState({
       optionsGoals : grepFiltergoalssDataAwait
     });
@@ -421,9 +430,12 @@ export class PublishingActions extends Component<Props, State> {
 
     const subjects = store!.getAllSubjects().map(this.subjectToTagProp);
     const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
-    const filterSelectedSubjects = this.compareTwoArraysReturnValue(subjects, selectedSubjects);
-    if (filterSelectedSubjects.length > 0) {
+    let filterSelectedSubjects = this.compareTwoArraysReturnValue(subjects, selectedSubjects);
+    if (selectedSubjects.length > 0) {
       myplaceholder = '';
+    }
+    if (filterSelectedSubjects.length === 0) {
+      filterSelectedSubjects = selectedSubjects;
     }
     if (filterSelectedSubjects.length > 1) {
       filterSelectedSubjects.forEach((element) => {
@@ -477,9 +489,12 @@ export class PublishingActions extends Component<Props, State> {
     let myplaceholder = intl.get('publishing_page.grade');
     const grades = store!.getAllGrades().map(this.gradeToTagProp).sort((a, b) => a.id - b.id);
     const selectedGrades = currentEntity!.getListOfGrades().map(this.gradeToTagProp);
-    const filterSelectedGrades = this.compareTwoArraysReturnValue(grades, selectedGrades);
-    if (filterSelectedGrades.length > 0) {
+    let filterSelectedGrades = this.compareTwoArraysReturnValue(grades, selectedGrades);
+    if (selectedGrades.length > 0) {
       myplaceholder = '';
+    }
+    if (filterSelectedGrades.length === 0) {
+      filterSelectedGrades = selectedGrades;
     }
     if (filterSelectedGrades.length > 1) {
       filterSelectedGrades.forEach((element) => {
@@ -863,8 +878,22 @@ export class PublishingActions extends Component<Props, State> {
     );
   }
 
+  public transformData = (data: Array<GreepElements>, options: Array<GoalsData>) => {
+    const returnArray : Array<number> = [];
+    data!.forEach((element) => {
+      for (let i = 0; i < options.length; i = i + 1) {
+        if (element.kode === options[i].code) {
+          returnArray.push(options[i].id!);
+        }
+      }
+    });
+    return returnArray;
+  }
+
   public renderTableBody = () => {
+    const { store } = this.props;
     const { optionsGoals, editvalueGoalsOptions } = this.state;
+    const listGoals = this.transformData(store!.currentEntity!.getListOfGoals()!, optionsGoals);
     let activeVisibleGoals = false;
     if (typeof(optionsGoals) !== 'undefined') {
       activeVisibleGoals = true;
@@ -883,6 +912,14 @@ export class PublishingActions extends Component<Props, State> {
         if (editvalueGoalsOptions!.length > 0) {
           if (editvalueGoalsOptions!.includes(Number(goal!.id))) {
             activeCrop = 'active';
+          }
+        }
+      } else {
+        if (typeof(listGoals) !== 'undefined') {
+          if (listGoals!.length > 0) {
+            if (listGoals!.includes(Number(goal!.id))) {
+              activeCrop = 'active';
+            }
           }
         }
       }

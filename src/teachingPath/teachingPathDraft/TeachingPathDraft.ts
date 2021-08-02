@@ -14,6 +14,7 @@ import { SAVE_DELAY } from 'utils/constants';
 import { Article, Grade, Subject } from 'assignment/Assignment';
 
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
+import { GreepElements } from 'assignment/factory';
 
 export const DRAFT_TEACHING_PATH_REPO = 'DRAFT_TEACHING_PATH_REPO';
 
@@ -192,6 +193,27 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
+  public async addGoalsBySave() {
+    let myFirstGoals: Array<GreepElements> | undefined = [];
+    const firstItems = this.content;
+    if (firstItems.children.length > 0) {
+      const firstItemForList = firstItems.children![0].items![0];
+      if (firstItemForList.type === 'ARTICLE') {
+        myFirstGoals = firstItemForList.value.grepGoals;
+      }
+      if (firstItemForList.type === 'ASSIGNMENT') {
+        myFirstGoals = firstItemForList.value.grepGoals;
+      }
+      if (typeof(myFirstGoals) !== 'undefined') {
+        this._grepGoals!.splice(0, this._grepGoals!.length);
+        myFirstGoals!.forEach((e) => {
+          this._grepGoals!.push(e);
+        });
+      }
+    }
+  }
+
+  @action
   public addGradesBySave() {
     let myFirstGrades: Array<Grade> | undefined = [];
     const firstItems = this.content;
@@ -226,6 +248,7 @@ export class DraftTeachingPath extends TeachingPath {
             if (!this.isRunningPublishing) {
               this.addGradesBySave();
               this.addSubjectBySave();
+              this.addGoalsBySave();
             }
             this.setUpdatedAt(await this.repo.saveTeachingPath(this));
           } catch (error) {
@@ -292,6 +315,7 @@ export class DraftTeachingPath extends TeachingPath {
   @action
   public setGrepGoalsIds = (data: Array<number>) => {
     this._grepGoalsIds = data;
+    this.isRunningPublishing = true;
     this.save();
   }
 
