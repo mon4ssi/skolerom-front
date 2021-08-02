@@ -619,9 +619,38 @@ class TeachingPathsListComponent extends Component<Props, State> {
     );
   }
 
-  public handleClickReset = () => {
-    const { isTeachingPathPreviewVisible } = this.state;
-    return isTeachingPathPreviewVisible;
+  public handleClickReset = async () => {
+    QueryStringHelper.set(this.props.history, QueryStringKeys.GRADE, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeys.SUBJECT, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeys.GREEPGOALSIDS, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeys.GREPCOREELEMENTSIDS, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeys.GREPMAINTOPICSIDS, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeys.GREPREADINGINSUBJECT, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
+
+    const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
+    GradeFilterSubjectArray.forEach((e) => {
+      e.classList.remove('active');
+    });
+    const GradeFilterGradeArray = Array.from(document.getElementsByClassName('gradesFilterClass') as HTMLCollectionOf<HTMLElement>);
+    GradeFilterGradeArray.forEach((e) => {
+      e.classList.remove('active');
+    });
+    const GradeFilterMultiArray = Array.from(document.getElementsByClassName('multiFilterClass') as HTMLCollectionOf<HTMLElement>);
+    GradeFilterMultiArray.forEach((e) => {
+      e.classList.remove('active');
+    });
+    const GradeFilterArray = Array.from(document.getElementsByClassName('sourceFilterClass') as HTMLCollectionOf<HTMLElement>);
+    GradeFilterArray.forEach((e) => {
+      e.classList.remove('active');
+    });
+    const grepFiltergoalssDataAwait = await this.props.editTeachingPathStore!.getGrepGoalsFilters([], [], [], []);
+    this.setState({
+      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait)
+    });
+    this.setState({ valueGradesOptions: [] });
+    this.setState({ valueCoreOptions: [] });
+    this.setState({ valueMultiOptions: [] });
   }
 
   public render() {

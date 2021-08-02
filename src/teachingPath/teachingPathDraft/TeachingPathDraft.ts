@@ -172,19 +172,21 @@ export class DraftTeachingPath extends TeachingPath {
   public addSubjectBySave() {
     let myFirstSubjects: Array<Subject> | undefined = [];
     const firstItems = this.content;
-    if (firstItems.children.length > 0) {
-      const firstItemForList = firstItems.children![0].items![0];
-      if (firstItemForList.type === 'ARTICLE') {
-        myFirstSubjects = firstItemForList.value.subjects;
-      }
-      if (firstItemForList.type === 'ASSIGNMENT') {
-        myFirstSubjects = firstItemForList.value.subjects;
-      }
-      if (typeof(myFirstSubjects) !== 'undefined') {
-        this.subjects.splice(0, this.subjects.length);
-        myFirstSubjects!.forEach((e) => {
-          this.subjects.push(e);
-        });
+    if (this.subjects.length === 0) {
+      if (firstItems.children.length > 0) {
+        const firstItemForList = firstItems.children![0].items![0];
+        if (firstItemForList.type === 'ARTICLE') {
+          myFirstSubjects = firstItemForList.value.subjects;
+        }
+        if (firstItemForList.type === 'ASSIGNMENT') {
+          myFirstSubjects = firstItemForList.value.subjects;
+        }
+        if (typeof(myFirstSubjects) !== 'undefined') {
+          this.subjects.splice(0, this.subjects.length);
+          myFirstSubjects!.forEach((e) => {
+            this.subjects.push(e);
+          });
+        }
       }
     }
   }
@@ -193,19 +195,21 @@ export class DraftTeachingPath extends TeachingPath {
   public addGradesBySave() {
     let myFirstGrades: Array<Grade> | undefined = [];
     const firstItems = this.content;
-    if (firstItems.children.length > 0) {
-      const firstItemForList = firstItems.children![0].items![0];
-      if (firstItemForList.type === 'ARTICLE') {
-        myFirstGrades = firstItemForList.value.grades;
-      }
-      if (firstItemForList.type === 'ASSIGNMENT') {
-        myFirstGrades = firstItemForList.value.grades;
-      }
-      if (typeof(myFirstGrades) !== 'undefined') {
-        this.grades.splice(0, this.grades.length);
-        myFirstGrades!.forEach((e) => {
-          this.grades.push(e);
-        });
+    if (this.grades.length === 0) {
+      if (firstItems.children.length > 0) {
+        const firstItemForList = firstItems.children![0].items![0];
+        if (firstItemForList.type === 'ARTICLE') {
+          myFirstGrades = firstItemForList.value.grades;
+        }
+        if (firstItemForList.type === 'ASSIGNMENT') {
+          myFirstGrades = firstItemForList.value.grades;
+        }
+        if (typeof(myFirstGrades) !== 'undefined') {
+          this.grades.splice(0, this.grades.length);
+          myFirstGrades!.forEach((e) => {
+            this.grades.push(e);
+          });
+        }
       }
     }
   }
