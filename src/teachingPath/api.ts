@@ -251,6 +251,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         gradesIds,
         subjectsId,
         orderGoalsCodes,
+        per_page: 300
       }
     });
     return response.data.data;

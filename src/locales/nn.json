@@ -223,11 +223,11 @@
   },
   "new assignment": {    
     "greep": {
-      "core": "Core elements",
-      "goals": "Educations goals",
-      "subjects": "Multidisciplinary subjects",
-      "source": "Source",
-      "reading": "Reading in Subject"
+      "core": "Reflektere og vurdere",
+      "goals": "Forberede, utføre og bearbeide",
+      "subjects": "Tolke og sammenholde",
+      "source": "Kilde",
+      "reading": "Lesing i faget"
     },
     "go_back": "Gå tilbake",
     "Create assignment": "Lag oppgåve",
