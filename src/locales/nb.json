@@ -226,7 +226,8 @@
       "core": "Core elements",
       "goals": "Educations goals",
       "subjects": "Multidisciplinary subjects",
-      "source": "Source"
+      "source": "Source",
+      "reading": "Reading in Subject"
     },
     "go_back": "Gå tilbake",
     "Create assignment": "Lag oppgave",
@@ -579,7 +580,7 @@
     "modals": {
       "add_articles": "Legg til artikler",
       "add_assignments": "Legg til oppgaver",
-      "add_domain": "Legg til Domain",
+      "add_domain": "Legg til Link",
       "create_assignment": "Lag oppgave",
       "loading": "Laster...",
       "nothing_found": "Ingenting funnet...",

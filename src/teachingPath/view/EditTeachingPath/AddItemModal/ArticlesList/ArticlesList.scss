@@ -105,3 +105,17 @@
   outline-style: auto;
   outline-offset: 3px;
 }
+.back-buttonAbs {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 31px;
+  z-index: 99999999;
+  left: 20px;
+  font-size: 15px;
+  background: white;
+  padding: 0px;
+  img {
+    margin-right: 10px;
+  }
+}

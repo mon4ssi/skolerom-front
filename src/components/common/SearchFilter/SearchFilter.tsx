@@ -845,7 +845,7 @@ class SearchFilter extends Component<Props, State> {
                   <img src={voiceImg} />
                 </div>
                 <div className="itemFilter__right">
-                  <h3>{intl.get('new assignment.greep.source')}</h3>
+                  <h3>{intl.get('new assignment.greep.reading')}</h3>
                   <div className="itemFilter__core">
                     {this.renderFilterReadingInSubject()}
                   </div>

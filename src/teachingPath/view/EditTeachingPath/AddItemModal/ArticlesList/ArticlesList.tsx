@@ -20,6 +20,7 @@ import gradeImg from 'assets/images/grade.svg';
 import cogsImg from 'assets/images/cogs.svg';
 import coreImg from 'assets/images/core.svg';
 import goalsImg from 'assets/images/goals.svg';
+import backIcon from 'assets/images/back-arrow.svg';
 
 import './ArticlesList.scss';
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
@@ -114,7 +115,7 @@ export class ArticlesList extends Component<Props, State> {
       isRedirect: false,
       greeddata: false,
       selectedArticle: null,
-      expand: false,
+      expand: true,
       expandCore: false,
       expandGoals: false,
       expandSubjects: false,
@@ -1127,6 +1128,10 @@ export class ArticlesList extends Component<Props, State> {
     return (
       <div className="addItemModal__content">
         <div className="addItemModal__left">
+          <button className="back-buttonAbs" onClick={this.closeModal}>
+            <img src={backIcon} alt="Back" />
+            {intl.get('new assignment.go_back')}
+          </button>
           {this.conditionalGreedData()}
         </div>
         <div className="addItemModal__right">

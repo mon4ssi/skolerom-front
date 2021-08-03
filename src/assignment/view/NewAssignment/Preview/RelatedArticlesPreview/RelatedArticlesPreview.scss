@@ -171,8 +171,7 @@
     }
 
     .cardDescription {
-      @include text-shrink-multiline(3);
-      display: flex;
+      @include text-shrink-multiline(3);      
       margin: 5px 0 0;
       font-size: 0.9375rem;
     }
