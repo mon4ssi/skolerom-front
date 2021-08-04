@@ -202,9 +202,32 @@ export class PublishingActions extends Component<Props, State> {
       valueStringGoalsOptions: listGoals
     });
     const grepFiltergoalssDataAwait = await store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, arrayForGrades, arrayForSubjects, listGoals);
-    this.setState({
-      optionsGoals : grepFiltergoalssDataAwait
-    });
+    this.setState(
+      {
+        optionsGoals : grepFiltergoalssDataAwait,
+      }
+    );
+    if (typeof(this.state.editvalueGoalsOptions) !== 'undefined') {
+      if (this.state.editvalueGoalsOptions!.length === 0) {
+        const newListGoals = this.transformData(store!.currentEntity!.getListOfGoals()!, grepFiltergoalssDataAwait);
+        this.setState(
+          { valueGoalsOptions: newListGoals },
+          () => {
+            store!.currentEntity!.setGrepGoalsIds(this.state.valueGoalsOptions);
+            this.sendValidbutton();
+          }
+        );
+      }
+    } else {
+      const newListGoals = this.transformData(store!.currentEntity!.getListOfGoals()!, grepFiltergoalssDataAwait);
+      this.setState(
+        { valueGoalsOptions: newListGoals },
+        () => {
+          store!.currentEntity!.setGrepGoalsIds(this.state.valueGoalsOptions);
+          this.sendValidbutton();
+        }
+      );
+    }
   }
 
   public transformDataToString = (data: Array<GreepElements>) => {
@@ -218,6 +241,10 @@ export class PublishingActions extends Component<Props, State> {
   public renderValueOptions = (data: FilterGrep, type: string) => {
     const returnArray : Array<GreepSelectValue> = [];
     if (type === 'core') {
+      returnArray.push({
+        value: 0,
+        label: intl.get('assignments search.Choose Core')
+      });
       data!.coreElementsFilters!.forEach((element) => {
         returnArray.push({
           // tslint:disable-next-line: variable-name
@@ -227,6 +254,10 @@ export class PublishingActions extends Component<Props, State> {
       });
     }
     if (type === 'multi') {
+      returnArray.push({
+        value: 0,
+        label: intl.get('assignments search.Choose Multi')
+      });
       data!.mainTopicFilters!.forEach((element) => {
         returnArray.push({
           // tslint:disable-next-line: variable-name
@@ -236,6 +267,10 @@ export class PublishingActions extends Component<Props, State> {
       });
     }
     if (type === 'reading') {
+      returnArray.push({
+        value: 0,
+        label: intl.get('assignments search.Choose reading')
+      });
       data!.readingInSubjects!.forEach((element) => {
         returnArray.push({
           // tslint:disable-next-line: variable-name
@@ -643,32 +678,62 @@ export class PublishingActions extends Component<Props, State> {
     return valueCoreElement;
   }
 
+  public searchStringValueInArrays = (emisor: Array<GreepSelectValue>, receptor: Array<number> | undefined) => {
+    let valueCoreElement = '';
+    emisor.forEach((a) => {
+      receptor!.forEach((b) => {
+        if (a.value === b) {
+          valueCoreElement = a.label;
+        }
+      });
+    });
+    return valueCoreElement;
+  }
+
   public handleChangeSelectCore = async (newValue: any) => {
     const { currentEntity } = this.props.store!;
     const { valueCoreOptions } = this.state;
-    const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(newValue.value, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
-    this.setState({
-      optionsGoals : grepFiltergoalssDataAwait
-    });
-    if (!valueCoreOptions.includes(newValue.value)) {
+    if (newValue.value !== 0) {
+      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(newValue.value, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
+      this.setState({
+        optionsGoals : grepFiltergoalssDataAwait
+      });
+      if (!valueCoreOptions.includes(newValue.value)) {
+        this.setState(
+          {
+            valueCoreOptions: [...valueCoreOptions, newValue.value]
+          },
+          () => {
+            this.sendValidbutton();
+          }
+        );
+        currentEntity!.setGrepCoreElementsIds([newValue.value]);
+      }
+    } else {
+      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters([], this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
+      this.setState({
+        optionsGoals : grepFiltergoalssDataAwait
+      });
       this.setState(
         {
-          valueCoreOptions: [...valueCoreOptions, newValue.value]
+          valueCoreOptions: []
         },
         () => {
           this.sendValidbutton();
         }
       );
-      currentEntity!.setGrepCoreElementsIds([newValue.value]);
+      currentEntity!.setGrepCoreElementsIds([]);
     }
   }
 
   public renderCoreElements = () => {
     const { optionsCore, editValueCoreOptions, valueCoreOptions } = this.state;
     const customStyles = {
-      menu: () => ({
+      option: () => ({
         fontSize: '14px',
-        border: '1px solid #939fa7',
+        padding: '5px',
+        borderBottom: '1px solid #e7ecef',
+        cursor: 'pointer'
       }),
       control: () => ({
         display: 'flex',
@@ -683,6 +748,7 @@ export class PublishingActions extends Component<Props, State> {
     if (typeof(editValueCoreOptions) !== 'undefined') {
       if (editValueCoreOptions!.length > 0) {
         const value = this.searchValueInArrays(optionsCore, editValueCoreOptions);
+        const placehol = this.searchStringValueInArrays(optionsCore, editValueCoreOptions);
         this.props.store!.currentEntity!.setGrepCoreElementsIds([value.value]);
         return (
           <div className="itemsFlex">
@@ -690,8 +756,7 @@ export class PublishingActions extends Component<Props, State> {
               styles={customStyles}
               options={optionsCore}
               onChange={this.handleChangeSelectCore}
-              value={value}
-              placeholder={intl.get('assignments search.Choose Core')}
+              placeholder={placehol}
             />
           </div>
         );
@@ -712,25 +777,43 @@ export class PublishingActions extends Component<Props, State> {
   public handleChangeSelectMulti = async (newValue: any) => {
     const { currentEntity } = this.props.store!;
     const { valueMultiOptions } = this.state;
-    const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, newValue.value, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
-    this.setState({
-      optionsGoals : grepFiltergoalssDataAwait
-    });
-    if (!valueMultiOptions.includes(newValue.value)) {
+    if (newValue.value !== 0) {
+      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, newValue.value, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
       this.setState({
-        valueMultiOptions: [...valueMultiOptions, newValue.value]
+        optionsGoals : grepFiltergoalssDataAwait
       });
-      currentEntity!.setGrepMainTopicsIds([newValue.value]);
+      if (!valueMultiOptions.includes(newValue.value)) {
+        this.setState({
+          valueMultiOptions: [...valueMultiOptions, newValue.value]
+        });
+        currentEntity!.setGrepMainTopicsIds([newValue.value]);
+      }
+      this.sendValidbutton();
+    } else {
+      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, [], this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
+      this.setState({
+        optionsGoals : grepFiltergoalssDataAwait
+      });
+      this.setState(
+        {
+          valueMultiOptions: []
+        },
+        () => {
+          this.sendValidbutton();
+        }
+      );
+      currentEntity!.setGrepCoreElementsIds([]);
     }
-    this.sendValidbutton();
   }
 
   public renderMultiDisciplinary = () => {
     const { optionsMulti, editvalueMultiOptions } = this.state;
     const customStyles = {
-      menu: () => ({
+      option: () => ({
         fontSize: '14px',
-        border: '1px solid #939fa7',
+        padding: '5px',
+        borderBottom: '1px solid #e7ecef',
+        cursor: 'pointer'
       }),
       control: () => ({
         display: 'flex',
@@ -745,15 +828,15 @@ export class PublishingActions extends Component<Props, State> {
     if (typeof(editvalueMultiOptions) !== 'undefined') {
       if (editvalueMultiOptions!.length > 0) {
         const value = this.searchValueInArrays(optionsMulti, editvalueMultiOptions);
+        const placehol = this.searchStringValueInArrays(optionsMulti, editvalueMultiOptions);
         this.props.store!.currentEntity!.setGrepMainTopicsIds([value.value]);
         return (
           <div className="itemsFlex">
             <Select
               styles={customStyles}
               options={optionsMulti}
-              onChange={this.handleChangeSelectCore}
-              value={value}
-              placeholder={intl.get('assignments search.Choose Core')}
+              onChange={this.handleChangeSelectMulti}
+              placeholder={placehol}
             />
           </div>
         );
@@ -774,10 +857,26 @@ export class PublishingActions extends Component<Props, State> {
   public handleChangeSelectReading = async (newValue: any) => {
     const { currentEntity } = this.props.store!;
     const { valuereadingOptions } = this.state;
-    this.setState({
-      valuereadingOptions: newValue.value
-    });
-    currentEntity!.setGrepReadingInSubjectId(newValue.value);
+    if (newValue !== 0) {
+      this.setState(
+        {
+          valuereadingOptions: newValue.value
+        },
+        () => {
+          this.sendValidbutton();
+        }
+      );
+      currentEntity!.setGrepReadingInSubjectId(newValue.value);
+    } else {
+      this.setState(
+        {
+          valuereadingOptions: 0
+        },
+        () => {
+          this.sendValidbutton();
+        }
+      );
+    }
   }
 
   public searchValueInNumbers = (emisor: Array<GreepSelectValue>, receptor: number | undefined) => {
@@ -790,12 +889,24 @@ export class PublishingActions extends Component<Props, State> {
     return valueCoreElement;
   }
 
+  public searchStringValueInNumbers = (emisor: Array<GreepSelectValue>, receptor: number | undefined) => {
+    let valueCoreElement = '';
+    emisor.forEach((a) => {
+      if (a.value === receptor) {
+        valueCoreElement = a.label;
+      }
+    });
+    return valueCoreElement;
+  }
+
   public renderReadingInSubject = () => {
     const { optionsReading, editvaluereadingOptions } = this.state;
     const customStyles = {
-      menu: () => ({
+      option: () => ({
         fontSize: '14px',
-        border: '1px solid #939fa7',
+        padding: '5px',
+        borderBottom: '1px solid #e7ecef',
+        cursor: 'pointer'
       }),
       control: () => ({
         display: 'flex',
@@ -810,15 +921,15 @@ export class PublishingActions extends Component<Props, State> {
     if (typeof(editvaluereadingOptions) !== 'undefined') {
       if (editvaluereadingOptions! > 0) {
         const value = this.searchValueInNumbers(optionsReading, editvaluereadingOptions);
+        const placeho = this.searchStringValueInNumbers(optionsReading, editvaluereadingOptions);
         this.props.store!.currentEntity!.setGrepReadingInSubjectId(value.value);
         return (
           <div className="itemsFlex">
             <Select
               styles={customStyles}
               options={optionsReading}
-              onChange={this.handleChangeSelectCore}
-              value={value}
-              placeholder={intl.get('assignments search.Choose Core')}
+              onChange={this.handleChangeSelectReading}
+              placeholder={placeho}
             />
           </div>
         );
@@ -927,13 +1038,25 @@ export class PublishingActions extends Component<Props, State> {
           if (editvalueGoalsOptions!.includes(Number(goal!.id))) {
             activeCrop = 'active';
           }
+          return (
+            <div className="itemTablesTr" key={goal!.id}>
+              <div className="itemTablesTd icons">
+                <button value={goal.id} onClick={this.sendTableBodyGoal} className={activeCrop}>
+                  <img src={checkRounded} alt="Check" title="check" className={'checkImg'} />
+                  <img src={checkActive} alt="Check" title="check" className={'checkImgFalse'} />
+                </button>
+              </div>
+              <div className="itemTablesTd grade">{visibleGoalsGrade} {intl.get('new assignment.grade')}</div>
+              <div className="itemTablesTd core">{visibleGoalsCore}</div>
+              <div className="itemTablesTd goals">{goal!.description}</div>
+            </div>
+          );
         }
-      } else {
-        if (typeof(listGoals) !== 'undefined') {
-          if (listGoals!.length > 0) {
-            if (listGoals!.includes(Number(goal!.id))) {
-              activeCrop = 'active';
-            }
+      }
+      if (typeof(listGoals) !== 'undefined') {
+        if (listGoals!.length > 0) {
+          if (listGoals!.includes(Number(goal!.id))) {
+            activeCrop = 'active';
           }
         }
       }

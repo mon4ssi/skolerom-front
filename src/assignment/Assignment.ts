@@ -81,7 +81,7 @@ export class Subject {
 }
 
 export class GreepSelectValue {
-  @observable public value: number;
+  @observable public value: number | string | null;
   @observable public label: string;
 
   constructor(value: number, label: string) {

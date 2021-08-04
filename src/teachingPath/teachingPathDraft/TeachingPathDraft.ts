@@ -248,8 +248,8 @@ export class DraftTeachingPath extends TeachingPath {
             if (!this.isRunningPublishing) {
               this.addGradesBySave();
               this.addSubjectBySave();
-              this.addGoalsBySave();
             }
+            this.addGoalsBySave();
             this.setUpdatedAt(await this.repo.saveTeachingPath(this));
           } catch (error) {
             if (error instanceof AlreadyEditingTeachingPathError) {

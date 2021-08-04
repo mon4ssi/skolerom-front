@@ -457,19 +457,20 @@ class SearchFilter extends Component<Props, State> {
     const { handleChangeSelectCore, customCoreList } = this.props;
     const options = this.renderValueOptions(customCoreList!.sort(sortByAlphabet));
     const customStyles = {
-      menu: () => ({
-        width: '320px',
+      option: () => ({
         fontSize: '14px',
-        border: '1px solid #939fa7',
+        padding: '5px',
+        borderBottom: '1px solid #e7ecef',
+        cursor: 'pointer'
       }),
       control: () => ({
-        width: '320px',
         display: 'flex',
         borderRadius: '5px',
         border: '1px solid #939fa7',
         color: '#0B2541',
         fontSize: '14px',
         background: '#E7ECEF',
+        padding: '3px'
       })
     };
     if (options.length === 0) {
@@ -494,19 +495,20 @@ class SearchFilter extends Component<Props, State> {
     const { handleChangeSelectCore, customCoreTPList } = this.props;
     const options = customCoreTPList!;
     const customStyles = {
-      menu: () => ({
-        width: '320px',
+      option: () => ({
         fontSize: '14px',
-        border: '1px solid #939fa7',
+        padding: '5px',
+        borderBottom: '1px solid #e7ecef',
+        cursor: 'pointer'
       }),
       control: () => ({
-        width: '320px',
         display: 'flex',
         borderRadius: '5px',
         border: '1px solid #939fa7',
         color: '#0B2541',
         fontSize: '14px',
         background: '#E7ECEF',
+        padding: '3px'
       })
     };
     if (typeof(options) !== 'undefined') {
@@ -575,19 +577,20 @@ class SearchFilter extends Component<Props, State> {
     const { handleChangeSelectGoals, goalsFilterValue, customGoalsList } = this.props;
     const options = this.renderValueOptions(customGoalsList!.sort(sortByAlphabet));
     const customStyles = {
-      menu: () => ({
-        width: '320px',
+      option: () => ({
         fontSize: '14px',
-        border: '1px solid #939fa7',
+        padding: '5px',
+        borderBottom: '1px solid #e7ecef',
+        cursor: 'pointer'
       }),
       control: () => ({
-        width: '320px',
         display: 'flex',
         borderRadius: '5px',
         border: '1px solid #939fa7',
         color: '#0B2541',
         fontSize: '14px',
         background: '#E7ECEF',
+        padding: '3px'
       })
     };
     if (options.length === 0) {
@@ -612,19 +615,20 @@ class SearchFilter extends Component<Props, State> {
     const { handleChangeSelectGoals, goalsFilterValue, customGoalsTPList } = this.props;
     const options = customGoalsTPList!;
     const customStyles = {
-      menu: () => ({
-        width: '320px',
+      option: () => ({
         fontSize: '14px',
-        border: '1px solid #939fa7',
+        padding: '5px',
+        borderBottom: '1px solid #e7ecef',
+        cursor: 'pointer'
       }),
       control: () => ({
-        width: '320px',
         display: 'flex',
         borderRadius: '5px',
         border: '1px solid #939fa7',
         color: '#0B2541',
         fontSize: '14px',
         background: '#E7ECEF',
+        padding: '3px'
       })
     };
     if (options.length === 0) {

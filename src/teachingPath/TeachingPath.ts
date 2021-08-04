@@ -21,7 +21,7 @@ export interface TeachingPathRepo {
   sendDataDomain(domain: string): Promise<Domain>;
   getFiltersArticlePanel(): Promise<FilterArticlePanel>;
   getGrepFilters(): Promise<FilterGrep>;
-  getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsId: Array<number>, orderGoalsCodes: Array<string>): Promise<Array<GoalsData>>;
+  getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>): Promise<Array<GoalsData>>;
   finishTeachingPath(id: number): Promise<void>;
   deleteTeachingPathAnswers(teachingPathId: number, answerId: number): Promise<void>;
   copyTeachingPath(id: number): Promise<number>;
