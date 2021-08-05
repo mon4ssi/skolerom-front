@@ -242,8 +242,8 @@ export class TeachingPathApi implements TeachingPathRepo {
     const response = await API.get('api/teacher/teaching-paths/grep/filters');
     return response.data;
   }
-
-  public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>): Promise<Array<GoalsData>> {
+  /* tslint:disable-next-line:max-line-length */
+  public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number): Promise<{ data: Array<GoalsData>; total_pages: number; }> {
     const response = await API.get('api/teacher/teaching-paths/grep/goals', {
       params: {
         grepCoreElementsIds,
@@ -251,10 +251,14 @@ export class TeachingPathApi implements TeachingPathRepo {
         gradesIds,
         subjectsIds,
         orderGoalsCodes,
-        per_page: 20
+        page,
+        per_page: perPage
       }
     });
-    return response.data.data;
+    return {
+      data: response.data.data,
+      total_pages: response.data.meta.pagination.total_pages
+    };
   }
 
   public async finishTeachingPath(id: number): Promise<void> {

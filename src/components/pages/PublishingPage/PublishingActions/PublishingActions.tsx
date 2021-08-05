@@ -27,6 +27,9 @@ import { firstLevel, secondLevel, studentLevels } from 'utils/constants';
 import './PublishingActions.scss';
 import { GreepElements } from 'assignment/factory';
 
+const MAGICNUMBER100 = 100;
+const MAGICNUMBER1 = 1;
+
 interface Props {
   store?: NewAssignmentStore | EditTeachingPathStore;
   from?: string;
@@ -51,6 +54,8 @@ interface State {
   editvalueMultiOptions: Array<number> | undefined;
   editvaluereadingOptions: number | undefined;
   editvalueGoalsOptions: Array<number> | undefined;
+  page: number;
+  pageCurrent: number;
   isValid: boolean;
 }
 
@@ -77,7 +82,9 @@ export class PublishingActions extends Component<Props, State> {
       editvalueMultiOptions: [],
       editvaluereadingOptions: 0,
       editvalueGoalsOptions: [],
-      isValid: false
+      isValid: false,
+      page: MAGICNUMBER1,
+      pageCurrent: MAGICNUMBER1
     };
   }
 
@@ -103,7 +110,6 @@ export class PublishingActions extends Component<Props, State> {
     this.setState({
       optionsGrades : this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
     });
-
     this.setState({
       editValueCoreOptions : store!.currentEntity!.getListOfgrepCoreElementsIds()!
     });
@@ -197,19 +203,30 @@ export class PublishingActions extends Component<Props, State> {
         store!.getSubjects();
       }
     }
-    const listGoals = this.transformDataToString(store!.currentEntity!.getListOfGoals()!);
+    let listGoals = this.transformDataToString(store!.currentEntity!.getListOfGoals()!);
+    if (listGoals.length > 0) {
+      localStorage.setItem('goals', String(listGoals));
+    } else {
+      listGoals = localStorage.getItem('goals')!.split(',');
+    }
     this.setState({
       valueStringGoalsOptions: listGoals
     });
-    const grepFiltergoalssDataAwait = await store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, arrayForGrades, arrayForSubjects, listGoals);
+    const grepFiltergoalssDataAwait = await store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, arrayForGrades, arrayForSubjects, listGoals, MAGICNUMBER100, MAGICNUMBER1);
     this.setState(
       {
-        optionsGoals : grepFiltergoalssDataAwait,
+        optionsGoals : grepFiltergoalssDataAwait.data,
+      }
+    );
+    this.setState(
+      {
+        // tslint:disable-next-line: variable-name
+        page : grepFiltergoalssDataAwait.total_pages,
       }
     );
     if (typeof(this.state.editvalueGoalsOptions) !== 'undefined') {
       if (this.state.editvalueGoalsOptions!.length === 0) {
-        const newListGoals = this.transformData(store!.currentEntity!.getListOfGoals()!, grepFiltergoalssDataAwait);
+        const newListGoals = this.transformData(store!.currentEntity!.getListOfGoals()!, grepFiltergoalssDataAwait.data);
         this.setState(
           { valueGoalsOptions: newListGoals },
           () => {
@@ -219,7 +236,7 @@ export class PublishingActions extends Component<Props, State> {
         );
       }
     } else {
-      const newListGoals = this.transformData(store!.currentEntity!.getListOfGoals()!, grepFiltergoalssDataAwait);
+      const newListGoals = this.transformData(store!.currentEntity!.getListOfGoals()!, grepFiltergoalssDataAwait.data);
       this.setState(
         { valueGoalsOptions: newListGoals },
         () => {
@@ -227,6 +244,33 @@ export class PublishingActions extends Component<Props, State> {
           this.sendValidbutton();
         }
       );
+    }
+    if (document.getElementById('publishingInfo')) {
+      document.getElementById('publishingInfo')!.addEventListener('scroll', this.handerScroll);
+    }
+  }
+
+  public handerScroll = async () => {
+    const { store } = this.props;
+    const IDHtml = document.getElementById('publishingInfo')! as HTMLElement;
+    let allOptions = this.state.optionsGoals;
+    let getNumberInThis = this.state.pageCurrent;
+    if (IDHtml.scrollHeight - Math.abs(IDHtml.scrollTop) === IDHtml.clientHeight) {
+      getNumberInThis = getNumberInThis + MAGICNUMBER1;
+      if (getNumberInThis <= this.state.page) {
+        this.setState({ pageCurrent: getNumberInThis });
+        /* tslint:disable-next-line:max-line-length */
+        const grepFiltergoalssDataAwait = await store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, getNumberInThis);
+        allOptions = allOptions.concat(grepFiltergoalssDataAwait.data);
+        this.setState(
+          {
+            optionsGoals : allOptions
+          },
+          () => {
+            this.sendValidbutton();
+          }
+        );
+      }
     }
   }
 
@@ -326,15 +370,24 @@ export class PublishingActions extends Component<Props, State> {
           }
         }
       }
-      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
+      /* tslint:disable-next-line:max-line-length */
+      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
       this.setState(
         {
-          optionsGoals : grepFiltergoalssDataAwait
+          optionsGoals : grepFiltergoalssDataAwait.data
         },
         () => {
           this.sendValidbutton();
         }
       );
+      this.setState(
+        {
+          // tslint:disable-next-line: variable-name
+          page : grepFiltergoalssDataAwait.total_pages,
+        }
+      );
+      this.comparativeGoalsValueToFilter();
+      this.setState({ pageCurrent: MAGICNUMBER1 });
     }
   }
 
@@ -354,15 +407,24 @@ export class PublishingActions extends Component<Props, State> {
           }
         }
       }
-      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
+      /* tslint:disable-next-line:max-line-length */
+      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
       this.setState(
         {
-          optionsGoals : grepFiltergoalssDataAwait
+          optionsGoals : grepFiltergoalssDataAwait.data
         },
         () => {
           this.sendValidbutton();
         }
       );
+      this.setState(
+        {
+          // tslint:disable-next-line: variable-name
+          page : grepFiltergoalssDataAwait.total_pages,
+        }
+      );
+      this.comparativeGoalsValueToFilter();
+      this.setState({ pageCurrent: MAGICNUMBER1 });
     }
   }
 
@@ -376,15 +438,24 @@ export class PublishingActions extends Component<Props, State> {
     const grade = store!.getAllGrades().find(grade => grade.id === id);
     if (grade) {
       store!.currentEntity!.addGrade(grade);
-      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
+      /* tslint:disable-next-line:max-line-length */
+      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
       this.setState(
         {
-          optionsGoals : grepFiltergoalssDataAwait
+          optionsGoals : grepFiltergoalssDataAwait.data
         },
         () => {
           this.sendValidbutton();
         }
       );
+      this.setState(
+        {
+          // tslint:disable-next-line: variable-name
+          page : grepFiltergoalssDataAwait.total_pages,
+        }
+      );
+      this.comparativeGoalsValueToFilter();
+      this.setState({ pageCurrent: MAGICNUMBER1 });
     }
   }
 
@@ -407,15 +478,24 @@ export class PublishingActions extends Component<Props, State> {
 
     if (grade) {
       store!.currentEntity!.removeGrade(grade);
-      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
+      /* tslint:disable-next-line:max-line-length */
+      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
       this.setState(
         {
-          optionsGoals : grepFiltergoalssDataAwait
+          optionsGoals : grepFiltergoalssDataAwait.data
         },
         () => {
           this.sendValidbutton();
         }
       );
+      this.setState(
+        {
+          // tslint:disable-next-line: variable-name
+          page : grepFiltergoalssDataAwait.total_pages,
+        }
+      );
+      this.comparativeGoalsValueToFilter();
+      this.setState({ pageCurrent: MAGICNUMBER1 });
     }
   }
 
@@ -694,10 +774,19 @@ export class PublishingActions extends Component<Props, State> {
     const { currentEntity } = this.props.store!;
     const { valueCoreOptions } = this.state;
     if (newValue.value !== 0) {
-      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(newValue.value, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
+      /* tslint:disable-next-line:max-line-length */
+      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(newValue.value, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
       this.setState({
-        optionsGoals : grepFiltergoalssDataAwait
+        optionsGoals : grepFiltergoalssDataAwait.data
       });
+      this.setState(
+        {
+          // tslint:disable-next-line: variable-name
+          page : grepFiltergoalssDataAwait.total_pages,
+        }
+      );
+      this.comparativeGoalsValueToFilter();
+      this.setState({ pageCurrent: MAGICNUMBER1 });
       if (!valueCoreOptions.includes(newValue.value)) {
         this.setState(
           {
@@ -710,10 +799,18 @@ export class PublishingActions extends Component<Props, State> {
         currentEntity!.setGrepCoreElementsIds([newValue.value]);
       }
     } else {
-      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters([], this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
+      /* tslint:disable-next-line:max-line-length */
+      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters([], this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
       this.setState({
-        optionsGoals : grepFiltergoalssDataAwait
+        optionsGoals : grepFiltergoalssDataAwait.data
       });
+      this.setState(
+        {
+          // tslint:disable-next-line: variable-name
+          page : grepFiltergoalssDataAwait.total_pages,
+        }
+      );
+      this.setState({ pageCurrent: MAGICNUMBER1 });
       this.setState(
         {
           valueCoreOptions: []
@@ -722,6 +819,7 @@ export class PublishingActions extends Component<Props, State> {
           this.sendValidbutton();
         }
       );
+      this.comparativeGoalsValueToFilter();
       currentEntity!.setGrepCoreElementsIds([]);
     }
   }
@@ -778,22 +876,40 @@ export class PublishingActions extends Component<Props, State> {
     const { currentEntity } = this.props.store!;
     const { valueMultiOptions } = this.state;
     if (newValue.value !== 0) {
-      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, newValue.value, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
+      /* tslint:disable-next-line:max-line-length */
+      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, newValue.value, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
       this.setState({
-        optionsGoals : grepFiltergoalssDataAwait
+        optionsGoals : grepFiltergoalssDataAwait.data
       });
-      if (!valueMultiOptions.includes(newValue.value)) {
-        this.setState({
+      this.setState(
+        {
+          // tslint:disable-next-line: variable-name
+          page : grepFiltergoalssDataAwait.total_pages,
+        }
+      );
+      this.comparativeGoalsValueToFilter();
+      this.setState({ pageCurrent: MAGICNUMBER1 });
+      this.setState(
+        {
           valueMultiOptions: [...valueMultiOptions, newValue.value]
-        });
-        currentEntity!.setGrepMainTopicsIds([newValue.value]);
-      }
-      this.sendValidbutton();
+        },
+        () => {
+          this.sendValidbutton();
+        }
+      );
+      currentEntity!.setGrepMainTopicsIds([newValue.value]);
     } else {
-      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, [], this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
+      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, [], this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
       this.setState({
-        optionsGoals : grepFiltergoalssDataAwait
+        optionsGoals : grepFiltergoalssDataAwait.data
       });
+      this.setState(
+        {
+          // tslint:disable-next-line: variable-name
+          page : grepFiltergoalssDataAwait.total_pages,
+        }
+      );
+      this.setState({ pageCurrent: MAGICNUMBER1 });
       this.setState(
         {
           valueMultiOptions: []
@@ -802,7 +918,8 @@ export class PublishingActions extends Component<Props, State> {
           this.sendValidbutton();
         }
       );
-      currentEntity!.setGrepCoreElementsIds([]);
+      this.comparativeGoalsValueToFilter();
+      currentEntity!.setGrepMainTopicsIds([]);
     }
   }
 
@@ -949,12 +1066,16 @@ export class PublishingActions extends Component<Props, State> {
 
   public sendValidbutton = () => {
     if (!this.state.isValid) {
-      if (this.state.valueGradesOptions.length > 0 && this.state.valueGoalsOptions.length > 0 && this.state.valuereadingOptions !== 0) {
+      if (this.state.valueGradesOptions.length > 0 && this.state.valueGoalsOptions.length > 0 && this.state.valuereadingOptions !== null) {
         this.props.store!.setIsActiveButtons();
       } else {
         if (typeof(this.state.editvalueGoalsOptions) !== 'undefined') {
           if (this.state.editvalueGoalsOptions!.length > 0) {
-            this.props.store!.setIsActiveButtons();
+            if (this.state.valueGradesOptions.length > 0 && this.state.valueGoalsOptions.length > 0 && this.state.valuereadingOptions !== null) {
+              this.props.store!.setIsActiveButtons();
+            } else {
+              this.props.store!.setIsActiveButtonsFalse();
+            }
           } else {
             this.props.store!.setIsActiveButtonsFalse();
           }
@@ -969,7 +1090,6 @@ export class PublishingActions extends Component<Props, State> {
 
   public sendTableBodyGoal = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { valueGoalsOptions } = this.state;
-    const { currentEntity } = this.props.store!;
     const target = e.currentTarget;
     const value = Number(target!.value);
     if (target.classList.contains('active')) {
@@ -985,8 +1105,29 @@ export class PublishingActions extends Component<Props, State> {
     } else {
       valueGoalsOptions.push(value);
     }
-    currentEntity!.setGrepGoalsIds(valueGoalsOptions);
-    this.sendValidbutton();
+    this.comparativeGoalsValueToFilter();
+  }
+
+  public comparativeGoalsValueToFilter = () => {
+    const { optionsGoals, valueGoalsOptions } = this.state;
+    const { currentEntity } = this.props.store!;
+    const returnArray : Array<number> = [];
+    optionsGoals!.forEach((element) => {
+      for (let i = 0; i < valueGoalsOptions.length; i = i + 1) {
+        if (element.id === valueGoalsOptions[i]) {
+          returnArray.push(valueGoalsOptions[i]);
+        }
+      }
+    });
+    this.setState(
+      {
+        valueGoalsOptions : returnArray
+      },
+      () => {
+        currentEntity!.setGrepGoalsIds(valueGoalsOptions);
+        this.sendValidbutton();
+      }
+    );
   }
 
   public renderTableHeader = () => {

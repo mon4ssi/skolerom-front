@@ -23,7 +23,7 @@ class PublishingPageComponent extends Component<Props> {
 
     return (
       <div className="PublishingPage flexBox spaceBetween">
-        <div className="publishingInfo">
+        <div className="publishingInfo" id="publishingInfo">
           <PublishingTitle
             currentEntity={store!.currentEntity!}
             showValidationErrors={store!.showValidationErrors}

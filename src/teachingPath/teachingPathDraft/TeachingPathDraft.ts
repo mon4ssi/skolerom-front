@@ -320,6 +320,13 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
+  public setGrepGoals = (data: Array<GreepElements>) => {
+    this._grepGoals = data;
+    this.isRunningPublishing = true;
+    this.save();
+  }
+
+  @action
   public setGrepReadingInSubjectId = (data: number) => {
     this._grepReadingInSubjectId = data;
     this.save();

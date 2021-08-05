@@ -16,7 +16,7 @@ import {
   Subject,
   TextQuestion,
 } from '../Assignment';
-import { Article } from 'assignment/Assignment';
+import { Article, GreepElements } from 'assignment/Assignment';
 import { AssertionError } from 'assert';
 import { SAVE_DELAY } from 'utils/constants';
 import { EditableContentBlock, EditableImagesContentBlock, EditableTextContentBlock, EditableVideosContentBlock } from './EditableContentBlock';
@@ -216,6 +216,11 @@ export class DraftAssignment extends Assignment {
   @action
   public setGrepGoalsIds = (data: Array<number>) => {
     this._grepGoalsIds = data;
+    this.save();
+  }
+  @action
+  public setGrepGoals = (data: Array<GreepElements>) => {
+    this.grepGoals = data;
     this.save();
   }
 

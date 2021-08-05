@@ -25,6 +25,8 @@ import listPlaceholderImg from 'assets/images/list-placeholder.svg';
 
 import './TeachingPathsList.scss';
 
+const MAGICNUMBER100 = -1;
+const MAGICNUMBER1 = 1;
 const limitSplicePathname = 4;
 const limitIndex = 2;
 
@@ -165,9 +167,9 @@ class TeachingPathsListComponent extends Component<Props, State> {
     this.setState({
       valueStringGoalsOptions: listGoals
     });
-    const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, listGoals);
+    const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, listGoals, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
-      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait)
+      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
     });
   }
 
@@ -381,9 +383,9 @@ class TeachingPathsListComponent extends Component<Props, State> {
         valueToArray = element.id;
       }
     });
-    const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, [valueToArray], valueSubjectsOptions, this.state.valueStringGoalsOptions);
+    const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, [valueToArray], valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
-      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait)
+      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
     });
   }
 
@@ -410,9 +412,9 @@ class TeachingPathsListComponent extends Component<Props, State> {
         valueToArray = element.id;
       }
     });
-    const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, [valueToArray], this.state.valueStringGoalsOptions);
+    const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, [valueToArray], this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
-      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait)
+      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
     });
   }
 
@@ -421,9 +423,9 @@ class TeachingPathsListComponent extends Component<Props, State> {
     const { editTeachingPathStore } = this.props;
     const { valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
     this.setState({ valueMultiOptions: [value] });
-    const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, [value], valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions);
+    const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, [value], valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
-      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait)
+      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
     });
     const GradeFilterArray = Array.from(document.getElementsByClassName('multiFilterClass') as HTMLCollectionOf<HTMLElement>);
     GradeFilterArray.forEach((e) => {
@@ -465,9 +467,9 @@ class TeachingPathsListComponent extends Component<Props, State> {
     const { editTeachingPathStore } = this.props;
     const { valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
     this.setState({ valueCoreOptions: [value] });
-    const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters([value], valueMultiOptions, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions);
+    const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters([value], valueMultiOptions, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
-      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait)
+      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
     });
     QueryStringHelper.set(
       this.props.history,
@@ -658,9 +660,9 @@ class TeachingPathsListComponent extends Component<Props, State> {
     GradeFilterArray.forEach((e) => {
       e.classList.remove('active');
     });
-    const grepFiltergoalssDataAwait = await this.props.editTeachingPathStore!.getGrepGoalsFilters([], [], [], [], []);
+    const grepFiltergoalssDataAwait = await this.props.editTeachingPathStore!.getGrepGoalsFilters([], [], [], [], [], MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
-      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait)
+      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
     });
     this.setState({ valueGradesOptions: [] });
     this.setState({ valueCoreOptions: [] });
