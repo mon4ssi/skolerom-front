@@ -7,7 +7,7 @@ import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTe
 import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
 import { TeachingPathNodeType } from 'teachingPath/TeachingPath';
 import { ItemContentTypeContext } from 'teachingPath/view/EditTeachingPath/ItemContentTypeContext';
-import { Article, Subject, Greep, FilterArticlePanel } from 'assignment/Assignment';
+import { Article, Subject, Greep, FilterArticlePanel, Grade } from 'assignment/Assignment';
 import { RelatedArticlesCard } from 'assignment/view/NewAssignment/Preview/RelatedArticlesPreview/RelatedArticlesCard';
 import { SearchFilter } from 'components/common/SearchFilter/SearchFilter';
 import { lettersNoEn } from 'utils/lettersNoEn';
@@ -85,9 +85,12 @@ interface State {
   checkArticle: boolean;
   activeGrepFilters: boolean;
   grepDataFilters: FilterArticlePanel | null;
+  selectedGradesFilter: Array<Grade>;
   selectedSubjectsFilter: Array<Subject>;
   selectedCoresFilter: Array<Greep>;
   selectedCoresAll: Array<Greep>;
+  selectedGradesAll: Array<Grade>;
+  selectedSubjectsAll: Array<Subject>;
   selectedMultiFilter: Array<Greep>;
   selectedMultisAll: Array<Greep>;
   selectedGoalsFilter: Array<Greep>;
@@ -122,6 +125,9 @@ export class ArticlesList extends Component<Props, State> {
       checkArticle: false,
       grepDataFilters: null,
       selectedSubjectsFilter: [],
+      selectedGradesFilter: [],
+      selectedSubjectsAll: [],
+      selectedGradesAll: [],
       selectedCoresAll: [],
       selectedCoresFilter: [],
       selectedMultisAll: [],
@@ -178,6 +184,8 @@ export class ArticlesList extends Component<Props, State> {
   }
 
   public async componentDidMount() {
+    const newArrayGrades : Array<Grade> = [];
+    const newArraySubjects : Array<Subject> = [];
     const newArrayGrepCore : Array<Greep> = [];
     const newArrayGrepMulti : Array<Greep> = [];
     const newArrayGrepGoals : Array<Greep> = [];
@@ -196,6 +204,28 @@ export class ArticlesList extends Component<Props, State> {
     const dataArticles = this.props.editTeachingPathStore!.getAllArticlePanelFilters();
     this.setState({
       grepDataFilters : dataArticles
+    });
+    // tslint:disable-next-line: variable-name
+    dataArticles!.grade_filter!.forEach((element) => {
+      newArrayGrades.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(element.grade_id),
+        title: element.description!
+      });
+    });
+    this.setState({
+      selectedGradesAll : newArrayGrades
+    });
+    // tslint:disable-next-line: variable-name
+    dataArticles!.subject_filter!.forEach((element) => {
+      newArraySubjects.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(element.subject_id),
+        title: element.description!
+      });
+    });
+    this.setState({
+      selectedSubjectsAll : newArraySubjects
     });
     // tslint:disable-next-line: variable-name
     dataArticles!.core_elements_filter!.forEach((element) => {
@@ -1073,12 +1103,20 @@ export class ArticlesList extends Component<Props, State> {
     });
   }
 
+  public customGradesList = () => {
+    const { selectedGradesAll, selectedGradesFilter } = this.state;
+    if (selectedGradesFilter.length) {
+      return selectedGradesFilter;
+    }
+    return selectedGradesAll;
+  }
+
   public mySubjects = () => {
-    const { selectedSubjectsFilter } = this.state;
+    const { selectedSubjectsAll, selectedSubjectsFilter } = this.state;
     if (selectedSubjectsFilter.length) {
       return selectedSubjectsFilter;
     }
-    return this.props.editTeachingPathStore!.allSubjects;
+    return selectedSubjectsAll;
   }
 
   public customCoreList = () => {
@@ -1165,6 +1203,7 @@ export class ArticlesList extends Component<Props, State> {
               coreFilterValue={Number(appliedFilters.core)}
               goalsFilterValue={Number(appliedFilters.goal)}
               searchQueryFilterValue={appliedFilters.searchTitle as string}
+              customGradesList={this.customGradesList()}
               customSubjectsList={this.mySubjects()}
               customCoreList={this.customCoreList()}
               customMultiList={this.customMultiList()}

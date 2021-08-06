@@ -847,7 +847,6 @@ export class PublishingActions extends Component<Props, State> {
       if (editValueCoreOptions!.length > 0) {
         const value = this.searchValueInArrays(optionsCore, editValueCoreOptions);
         const placehol = this.searchStringValueInArrays(optionsCore, editValueCoreOptions);
-        this.props.store!.currentEntity!.setGrepCoreElementsIds([value.value]);
         return (
           <div className="itemsFlex">
             <Select
@@ -946,7 +945,6 @@ export class PublishingActions extends Component<Props, State> {
       if (editvalueMultiOptions!.length > 0) {
         const value = this.searchValueInArrays(optionsMulti, editvalueMultiOptions);
         const placehol = this.searchStringValueInArrays(optionsMulti, editvalueMultiOptions);
-        this.props.store!.currentEntity!.setGrepMainTopicsIds([value.value]);
         return (
           <div className="itemsFlex">
             <Select
@@ -1039,7 +1037,6 @@ export class PublishingActions extends Component<Props, State> {
       if (editvaluereadingOptions! > 0) {
         const value = this.searchValueInNumbers(optionsReading, editvaluereadingOptions);
         const placeho = this.searchStringValueInNumbers(optionsReading, editvaluereadingOptions);
-        this.props.store!.currentEntity!.setGrepReadingInSubjectId(value.value);
         return (
           <div className="itemsFlex">
             <Select
@@ -1089,7 +1086,7 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public sendTableBodyGoal = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const { valueGoalsOptions } = this.state;
+    const { editvalueGoalsOptions, valueGoalsOptions } = this.state;
     const target = e.currentTarget;
     const value = Number(target!.value);
     if (target.classList.contains('active')) {
@@ -1121,7 +1118,8 @@ export class PublishingActions extends Component<Props, State> {
     });
     this.setState(
       {
-        valueGoalsOptions : returnArray
+        valueGoalsOptions : returnArray,
+        editvalueGoalsOptions: returnArray
       },
       () => {
         currentEntity!.setGrepGoalsIds(valueGoalsOptions);
@@ -1160,61 +1158,99 @@ export class PublishingActions extends Component<Props, State> {
     const { store } = this.props;
     const { optionsGoals, editvalueGoalsOptions } = this.state;
     const listGoals = this.transformData(store!.currentEntity!.getListOfGoals()!, optionsGoals);
+    const myOptionGoals = this.state.optionsGoals;
+    let visibleGoals;
     let activeVisibleGoals = false;
     if (typeof(optionsGoals) !== 'undefined') {
       activeVisibleGoals = true;
     }
-    const visibleGoals = optionsGoals!.map((goal) => {
-      const visibleGoalsGrade = goal!.grades!.map((grade) => {
-        const title = grade.name.split('.', 1);
-        return <span key={grade.id}>{title}</span>;
-      });
-      const visibleGoalsCore = goal!.coreElements!.map((core) => {
-        const title = core.description;
-        return <span key={core.id}>{title}</span>;
-      });
-      let activeCrop = '';
-      if (typeof(editvalueGoalsOptions) !== 'undefined') {
-        if (editvalueGoalsOptions!.length > 0) {
-          if (editvalueGoalsOptions!.includes(Number(goal!.id))) {
-            activeCrop = 'active';
+    if (typeof(listGoals) !== 'undefined') {
+      myOptionGoals!.map((goal) => {
+        if (listGoals!.length > 0) {
+          if (listGoals!.includes(Number(goal!.id))) {
+            const myGoal = goal;
+            const indexGoal = myOptionGoals.indexOf(myGoal);
+            if (indexGoal > -1) {
+              myOptionGoals.splice(indexGoal, 1);
+            }
+            myOptionGoals.unshift(myGoal);
           }
-          return (
-            <div className="itemTablesTr" key={goal!.id}>
-              <div className="itemTablesTd icons">
-                <button value={goal.id} onClick={this.sendTableBodyGoal} className={activeCrop}>
-                  <img src={checkRounded} alt="Check" title="check" className={'checkImg'} />
-                  <img src={checkActive} alt="Check" title="check" className={'checkImgFalse'} />
-                </button>
-              </div>
-              <div className="itemTablesTd grade">{visibleGoalsGrade} {intl.get('new assignment.grade')}</div>
-              <div className="itemTablesTd core">{visibleGoalsCore}</div>
-              <div className="itemTablesTd goals">{goal!.description}</div>
-            </div>
-          );
         }
-      }
-      if (typeof(listGoals) !== 'undefined') {
+      });
+      visibleGoals = myOptionGoals!.map((goal) => {
+        const visibleGoalsGrade = goal!.grades!.map((grade) => {
+          const title = grade.name.split('.', 1);
+          return <span key={grade.id}>{title}</span>;
+        });
+        const visibleGoalsCore = goal!.coreElements!.map((core) => {
+          const title = core.description;
+          return <span key={core.id}>{title}</span>;
+        });
+        let activeCrop = '';
         if (listGoals!.length > 0) {
           if (listGoals!.includes(Number(goal!.id))) {
             activeCrop = 'active';
           }
         }
-      }
-      return (
-        <div className="itemTablesTr" key={goal!.id}>
-          <div className="itemTablesTd icons">
-            <button value={goal.id} onClick={this.sendTableBodyGoal} className={activeCrop}>
-              <img src={checkRounded} alt="Check" title="check" className={'checkImg'} />
-              <img src={checkActive} alt="Check" title="check" className={'checkImgFalse'} />
-            </button>
+        return (
+          <div className="itemTablesTr" key={goal!.id}>
+            <div className="itemTablesTd icons">
+              <button value={goal.id} onClick={this.sendTableBodyGoal} className={activeCrop}>
+                <img src={checkRounded} alt="Check" title="check" className={'checkImg'} />
+                <img src={checkActive} alt="Check" title="check" className={'checkImgFalse'} />
+              </button>
+            </div>
+            <div className="itemTablesTd grade">{visibleGoalsGrade} {intl.get('new assignment.grade')}</div>
+            <div className="itemTablesTd core">{visibleGoalsCore}</div>
+            <div className="itemTablesTd goals">{goal!.description}</div>
           </div>
-          <div className="itemTablesTd grade">{visibleGoalsGrade} {intl.get('new assignment.grade')}</div>
-          <div className="itemTablesTd core">{visibleGoalsCore}</div>
-          <div className="itemTablesTd goals">{goal!.description}</div>
-        </div>
-      );
-    });
+        );
+      });
+    }
+    if (typeof(editvalueGoalsOptions) !== 'undefined') {
+      myOptionGoals!.map((goal) => {
+        if (editvalueGoalsOptions!.length > 0) {
+          if (editvalueGoalsOptions!.includes(Number(goal!.id))) {
+            const myGoal = goal;
+            const indexGoal = myOptionGoals.indexOf(myGoal);
+            if (indexGoal > -1) {
+              myOptionGoals.splice(indexGoal, 1);
+            }
+            myOptionGoals.unshift(myGoal);
+          }
+        }
+      });
+      visibleGoals = myOptionGoals!.map((goal) => {
+        const visibleGoalsGrade = goal!.grades!.map((grade) => {
+          const title = grade.name.split('.', 1);
+          return <span key={grade.id}>{title}</span>;
+        });
+        const visibleGoalsCore = goal!.coreElements!.map((core) => {
+          const title = core.description;
+          return <span key={core.id}>{title}</span>;
+        });
+        let activeCrop = '';
+        if (editvalueGoalsOptions!.length > 0) {
+          if (editvalueGoalsOptions!.includes(Number(goal!.id))) {
+            activeCrop = 'active';
+          }
+        }
+        return (
+          <div className="itemTablesTr" key={goal!.id}>
+            <div className="itemTablesTd icons">
+              <button value={goal.id} onClick={this.sendTableBodyGoal} className={activeCrop}>
+                <img src={checkRounded} alt="Check" title="check" className={'checkImg'} />
+                <img src={checkActive} alt="Check" title="check" className={'checkImgFalse'} />
+              </button>
+            </div>
+            <div className="itemTablesTd grade">{visibleGoalsGrade} {intl.get('new assignment.grade')}</div>
+            <div className="itemTablesTd core">{visibleGoalsCore}</div>
+            <div className="itemTablesTd goals">{goal!.description}</div>
+          </div>
+        );
+      });
+    }
+
     if (optionsGoals.length === 0) {
       return (
         <div className="itemTablesBody">

@@ -431,6 +431,13 @@ class SearchFilter extends Component<Props, State> {
       const title = grade.title.split('.', 1);
       return <button value={grade.id} className="itemFlexFilter gradesFilterClass" onClick={handleClickGrade} key={grade.id}>{title}{intl.get('new assignment.grade')}</button>;
     });
+    if (grades.length === 0) {
+      return (
+        <div className="minimalLoading">
+          <span /><span /><span />
+        </div>
+      );
+    }
     return (
       <div className="gradesItems flexFilter">
         {visibleGrades}
@@ -446,6 +453,13 @@ class SearchFilter extends Component<Props, State> {
       const title = subject.title.split('.', 1);
       return <button value={subject.id} className="itemFlexFilter subjectsFilterClass" onClick={handleClickSubject} key={subject.id}>{title}</button>;
     });
+    if (subjects.length === 0) {
+      return (
+        <div className="minimalLoading">
+          <span /><span /><span />
+        </div>
+      );
+    }
     return (
       <div className="subjectsItems flexFilter">
         {visibleSubjects}
