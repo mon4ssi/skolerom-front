@@ -57,6 +57,7 @@ interface State {
   page: number;
   pageCurrent: number;
   isValid: boolean;
+  loadingGoals: boolean;
 }
 
 @observer
@@ -84,7 +85,8 @@ export class PublishingActions extends Component<Props, State> {
       editvalueGoalsOptions: [],
       isValid: false,
       page: MAGICNUMBER1,
-      pageCurrent: MAGICNUMBER1
+      pageCurrent: MAGICNUMBER1,
+      loadingGoals: true
     };
   }
 
@@ -216,6 +218,15 @@ export class PublishingActions extends Component<Props, State> {
     this.setState(
       {
         optionsGoals : grepFiltergoalssDataAwait.data,
+      },
+      () => {
+        if (typeof(this.state.editvalueGoalsOptions) !== 'undefined') {
+          if (this.state.editvalueGoalsOptions!.length === 0) {
+            this.setState({
+              valueGoalsOptions: this.transformDataToStringDat(listGoals, this.state.optionsGoals)
+            });
+          }
+        }
       }
     );
     this.setState(
@@ -224,27 +235,7 @@ export class PublishingActions extends Component<Props, State> {
         page : grepFiltergoalssDataAwait.total_pages,
       }
     );
-    if (typeof(this.state.editvalueGoalsOptions) !== 'undefined') {
-      if (this.state.editvalueGoalsOptions!.length === 0) {
-        const newListGoals = this.transformData(store!.currentEntity!.getListOfGoals()!, grepFiltergoalssDataAwait.data);
-        this.setState(
-          { valueGoalsOptions: newListGoals },
-          () => {
-            store!.currentEntity!.setGrepGoalsIds(this.state.valueGoalsOptions);
-            this.sendValidbutton();
-          }
-        );
-      }
-    } else {
-      const newListGoals = this.transformData(store!.currentEntity!.getListOfGoals()!, grepFiltergoalssDataAwait.data);
-      this.setState(
-        { valueGoalsOptions: newListGoals },
-        () => {
-          store!.currentEntity!.setGrepGoalsIds(this.state.valueGoalsOptions);
-          this.sendValidbutton();
-        }
-      );
-    }
+    if (grepFiltergoalssDataAwait.data.length > 0) { this.setState({ loadingGoals : false }); }
     if (document.getElementById('publishingInfo')) {
       document.getElementById('publishingInfo')!.addEventListener('scroll', this.handerScroll);
     }
@@ -272,6 +263,18 @@ export class PublishingActions extends Component<Props, State> {
         );
       }
     }
+  }
+
+  public transformDataToStringDat = (data: Array<String>, options: Array<GoalsData>) => {
+    const returnArray : Array<number> = [];
+    data!.forEach((element) => {
+      for (let i = 0; i < options.length; i = i + 1) {
+        if (element === options[i].code) {
+          returnArray.push(options[i].id!);
+        }
+      }
+    });
+    return returnArray;
   }
 
   public transformDataToString = (data: Array<GreepElements>) => {
@@ -1118,8 +1121,7 @@ export class PublishingActions extends Component<Props, State> {
     });
     this.setState(
       {
-        valueGoalsOptions : returnArray,
-        editvalueGoalsOptions: returnArray
+        valueGoalsOptions : returnArray
       },
       () => {
         currentEntity!.setGrepGoalsIds(valueGoalsOptions);
@@ -1157,8 +1159,8 @@ export class PublishingActions extends Component<Props, State> {
   public renderTableBody = () => {
     const { store } = this.props;
     const { optionsGoals, editvalueGoalsOptions } = this.state;
-    const listGoals = this.transformData(store!.currentEntity!.getListOfGoals()!, optionsGoals);
     const myOptionGoals = this.state.optionsGoals;
+    const listGoals = this.state.valueGoalsOptions;
     let visibleGoals;
     let activeVisibleGoals = false;
     if (typeof(optionsGoals) !== 'undefined') {
@@ -1201,57 +1203,20 @@ export class PublishingActions extends Component<Props, State> {
               </button>
             </div>
             <div className="itemTablesTd grade">{visibleGoalsGrade} {intl.get('new assignment.grade')}</div>
-            <div className="itemTablesTd core">{visibleGoalsCore}</div>
+            <div className="itemTablesTd core">{/* visibleGoalsCore */}</div>
             <div className="itemTablesTd goals">{goal!.description}</div>
           </div>
         );
       });
     }
-    if (typeof(editvalueGoalsOptions) !== 'undefined') {
-      myOptionGoals!.map((goal) => {
-        if (editvalueGoalsOptions!.length > 0) {
-          if (editvalueGoalsOptions!.includes(Number(goal!.id))) {
-            const myGoal = goal;
-            const indexGoal = myOptionGoals.indexOf(myGoal);
-            if (indexGoal > -1) {
-              myOptionGoals.splice(indexGoal, 1);
-            }
-            myOptionGoals.unshift(myGoal);
-          }
-        }
-      });
-      visibleGoals = myOptionGoals!.map((goal) => {
-        const visibleGoalsGrade = goal!.grades!.map((grade) => {
-          const title = grade.name.split('.', 1);
-          return <span key={grade.id}>{title}</span>;
-        });
-        const visibleGoalsCore = goal!.coreElements!.map((core) => {
-          const title = core.description;
-          return <span key={core.id}>{title}</span>;
-        });
-        let activeCrop = '';
-        if (editvalueGoalsOptions!.length > 0) {
-          if (editvalueGoalsOptions!.includes(Number(goal!.id))) {
-            activeCrop = 'active';
-          }
-        }
-        return (
-          <div className="itemTablesTr" key={goal!.id}>
-            <div className="itemTablesTd icons">
-              <button value={goal.id} onClick={this.sendTableBodyGoal} className={activeCrop}>
-                <img src={checkRounded} alt="Check" title="check" className={'checkImg'} />
-                <img src={checkActive} alt="Check" title="check" className={'checkImgFalse'} />
-              </button>
-            </div>
-            <div className="itemTablesTd grade">{visibleGoalsGrade} {intl.get('new assignment.grade')}</div>
-            <div className="itemTablesTd core">{visibleGoalsCore}</div>
-            <div className="itemTablesTd goals">{goal!.description}</div>
-          </div>
-        );
-      });
-    }
-
     if (optionsGoals.length === 0) {
+      if (this.state.loadingGoals) {
+        return (
+          <div className="minimalLoading">
+            <span /><span /><span />
+          </div>
+        );
+      }
       return (
         <div className="itemTablesBody">
           {intl.get('edit_teaching_path.header.notdata_goals')}

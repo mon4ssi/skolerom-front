@@ -175,13 +175,16 @@ export class DraftTeachingPath extends TeachingPath {
     const firstItems = this.content;
     if (this.subjects.length === 0) {
       if (firstItems.children.length > 0) {
-        const firstItemForList = firstItems.children![0].items![0];
-        if (firstItemForList.type === 'ARTICLE') {
-          myFirstSubjects = firstItemForList.value.subjects;
-        }
-        if (firstItemForList.type === 'ASSIGNMENT') {
-          myFirstSubjects = firstItemForList.value.subjects;
-        }
+        const firstItemForList = firstItems.children;
+        firstItemForList.forEach((element) => {
+          if (element!.items![0].type === 'ARTICLE') {
+            myFirstSubjects = myFirstSubjects!.concat(element!.items![0].value.subjects!);
+          }
+          if (element!.items![0].type === 'ASSIGNMENT') {
+            myFirstSubjects = myFirstSubjects!.concat(element!.items![0].value.subjects!);
+          }
+          myFirstSubjects = myFirstSubjects!.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+        });
         if (typeof(myFirstSubjects) !== 'undefined') {
           this.subjects.splice(0, this.subjects.length);
           myFirstSubjects!.forEach((e) => {
@@ -219,13 +222,16 @@ export class DraftTeachingPath extends TeachingPath {
     const firstItems = this.content;
     if (this.grades.length === 0) {
       if (firstItems.children.length > 0) {
-        const firstItemForList = firstItems.children![0].items![0];
-        if (firstItemForList.type === 'ARTICLE') {
-          myFirstGrades = firstItemForList.value.grades;
-        }
-        if (firstItemForList.type === 'ASSIGNMENT') {
-          myFirstGrades = firstItemForList.value.grades;
-        }
+        const firstItemForList = firstItems.children!;
+        firstItemForList.forEach((element) => {
+          if (element!.items![0].type === 'ARTICLE') {
+            myFirstGrades = myFirstGrades!.concat(element!.items![0].value.grades!);
+          }
+          if (element!.items![0].type === 'ASSIGNMENT') {
+            myFirstGrades = myFirstGrades!.concat(element!.items![0].value.grades!);
+          }
+          myFirstGrades = myFirstGrades!.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+        });
         if (typeof(myFirstGrades) !== 'undefined') {
           this.grades.splice(0, this.grades.length);
           myFirstGrades!.forEach((e) => {
