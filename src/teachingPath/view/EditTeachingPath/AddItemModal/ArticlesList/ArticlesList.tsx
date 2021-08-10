@@ -755,7 +755,7 @@ export class ArticlesList extends Component<Props, State> {
     const cardsContainer = document.getElementsByClassName('articlesListContainer')[0];
     const skeletonCardWidth = ((cardsContainer ? cardsContainer.clientWidth : 0) - allCardsMargins) / cardsInRow;
     const skeletonCardHeight = skeletonCardWidth * cardWidthToHeightIndex;
-    if (fetchingArticles && !articlesList.length) {
+    if (fetchingArticles) {
       return articlesForSkeletonEight.map((skeletonArticle, index) => (
                                        <SkeletonLoader
                                          key={index}

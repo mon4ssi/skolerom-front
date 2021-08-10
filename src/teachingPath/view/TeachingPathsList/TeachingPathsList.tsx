@@ -446,7 +446,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
   public handleClickReading = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const value = Number(e.currentTarget.value);
     this.setState({ valuereadingOptions: value });
-    const GradeFilterArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
+    const GradeFilterArray = Array.from(document.getElementsByClassName('sourceFilterClass') as HTMLCollectionOf<HTMLElement>);
     GradeFilterArray.forEach((e) => {
       if (Number(e.getAttribute('value')) === value) {
         e.classList.add('active');
@@ -568,7 +568,13 @@ class TeachingPathsListComponent extends Component<Props, State> {
     const teachingPaths = teachingPathsListStore!.teachingPathsState === StoreState.LOADING ?
       teachingPathsListStore!.teachingPathsForSkeleton :
       teachingPathsListStore!.teachingPathsList;
-
+    if (teachingPaths.length === 0) {
+      return (
+        <div className="noResults emptyTeachingPaths">
+          {intl.get('edit_teaching_path.No results found')}
+        </div>
+      );
+    }
     return teachingPaths.map((item, index) => (
       teachingPathsListStore!.teachingPathsState === StoreState.LOADING ? (
         <SkeletonLoader key={index} className="InfoCard" />
@@ -677,7 +683,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
           {intl.get('teaching path search.title')}
         </h1>
         {this.renderTabNavigate()}
-
         <SearchFilter
           subject
           grade
@@ -709,6 +714,10 @@ class TeachingPathsListComponent extends Component<Props, State> {
           orderFieldFilterValue={SortingFilter.CREATION_DATE}
           orderFilterValue={QueryStringHelper.getString(this.props.history, QueryStringKeys.ORDER)}
           searchQueryFilterValue={QueryStringHelper.getString(this.props.history, QueryStringKeys.SEARCH)}
+          coreFilterValueTP={QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREPCOREELEMENTSIDS)}
+          mainFilterValueTP={QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREPMAINTOPICSIDS)}
+          goalsFilterValueTP={QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREEPGOALSIDS)}
+          readingFilterValueTP={QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREPREADINGINSUBJECT)}
         />
 
         <div className="cardList" aria-live="polite" id="List" aria-atomic="true">

@@ -46,6 +46,10 @@ interface Props {
   gradeFilterValue?: number | null;
   coreFilterValue?: number | null;
   goalsFilterValue?: number | null;
+  coreFilterValueTP?: number | null;
+  mainFilterValueTP?: number | null;
+  goalsFilterValueTP?: number | null;
+  readingFilterValueTP?: number | null;
 
   isAnsweredFilterValue?: string | null;
   isEvaluatedFilterValue?: string | null;
@@ -425,11 +429,12 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public renderFiltersGrade = () => {
-    const { assignmentListStore, handleClickGrade, customGradesList } = this.props;
+    const { assignmentListStore, handleClickGrade, customGradesList, gradeFilterValue } = this.props;
     const grades = (customGradesList || assignmentListStore!.getAllGrades()).sort(this.sortSelectors);
     const visibleGrades = grades.map((grade) => {
       const title = grade.title.split('.', 1);
-      return <button value={grade.id} className="itemFlexFilter gradesFilterClass" onClick={handleClickGrade} key={grade.id}>{title}{intl.get('new assignment.grade')}</button>;
+      const classD = (gradeFilterValue === grade.id) ? 'active' : '';
+      return <button value={grade.id} className={`itemFlexFilter gradesFilterClass ${classD}`} onClick={handleClickGrade} key={grade.id}>{title}{intl.get('new assignment.grade')}</button>;
     });
     return (
       <div className="gradesItems flexFilter">
@@ -439,12 +444,13 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public renderFiltersSubject = () => {
-    const { assignmentListStore, handleClickSubject, customSubjectsList } = this.props;
+    const { assignmentListStore, handleClickSubject, customSubjectsList, subjectFilterValue } = this.props;
     const subjects = (customSubjectsList || assignmentListStore!.getAllSubjects()).sort(sortByAlphabet);
 
     const visibleSubjects = subjects.map((subject) => {
       const title = subject.title.split('.', 1);
-      return <button value={subject.id} className="itemFlexFilter subjectsFilterClass" onClick={handleClickSubject} key={subject.id}>{title}</button>;
+      const classD = (subjectFilterValue === subject.id) ? 'active' : '';
+      return <button value={subject.id} className={`itemFlexFilter subjectsFilterClass ${classD}`} onClick={handleClickSubject} key={subject.id}>{title}</button>;
     });
     return (
       <div className="subjectsItems flexFilter">
@@ -532,11 +538,12 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public renderFiltersMulti = () => {
-    const { handleClickMulti, customMultiList } = this.props;
+    const { handleClickMulti, customMultiList, mainFilterValueTP } = this.props;
     const cores = customMultiList!.sort(sortByAlphabet);
     const visibleCores = cores.map((core) => {
       const title = core.title;
-      return <button value={core.id} className="itemFlexFilter multiFilterClass" onClick={handleClickMulti} key={core.id}>{title}</button>;
+      const classD = (mainFilterValueTP === core.id) ? 'active' : '';
+      return <button value={core.id} className={`itemFlexFilter multiFilterClass ${classD}`} onClick={handleClickMulti} key={core.id}>{title}</button>;
     });
     if (cores.length === 0) {
       return (
@@ -553,11 +560,12 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public renderFilterReadingInSubject = () => {
-    const { handleClickReading, customReadingList } = this.props;
+    const { handleClickReading, customReadingList, readingFilterValueTP } = this.props;
     const cores = customReadingList!.sort(sortByAlphabet);
     const visibleCores = cores.map((core) => {
       const title = core.title;
-      return <button value={core.id} className="itemFlexFilter sourceFilterClass" onClick={handleClickReading} key={core.id}>{title}</button>;
+      const classD = (readingFilterValueTP === core.id) ? 'active' : '';
+      return <button value={core.id} className={`itemFlexFilter sourceFilterClass ${classD}`} onClick={handleClickReading} key={core.id}>{title}</button>;
     });
     if (cores.length === 0) {
       return (

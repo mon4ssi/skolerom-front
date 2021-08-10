@@ -276,9 +276,11 @@ export class PublishingActions extends Component<Props, State> {
 
   public transformDataToString = (data: Array<GreepElements>) => {
     const returnArray : Array<string> = [];
-    data!.forEach((element) => {
-      returnArray.push(element.kode);
-    });
+    if (typeof(data) !== 'undefined') {
+      data!.forEach((element) => {
+        returnArray.push(element.kode);
+      });
+    }
     return returnArray;
   }
 
@@ -1146,13 +1148,15 @@ export class PublishingActions extends Component<Props, State> {
 
   public transformData = (data: Array<GreepElements>, options: Array<GoalsData>) => {
     const returnArray : Array<number> = [];
-    data!.forEach((element) => {
-      for (let i = 0; i < options.length; i = i + 1) {
-        if (element.kode === options[i].code) {
-          returnArray.push(options[i].id!);
+    if (typeof(data) !== 'undefined') {
+      data!.forEach((element) => {
+        for (let i = 0; i < options.length; i = i + 1) {
+          if (element.kode === options[i].code) {
+            returnArray.push(options[i].id!);
+          }
         }
-      }
-    });
+      });
+    }
     return returnArray;
   }
 
