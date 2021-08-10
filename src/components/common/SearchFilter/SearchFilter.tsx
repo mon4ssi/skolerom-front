@@ -18,6 +18,7 @@ import cogsImg from 'assets/images/cogs.svg';
 import coreImg from 'assets/images/core.svg';
 import goalsImg from 'assets/images/goals.svg';
 import voiceImg from 'assets/images/voice.svg';
+import readingImg from 'assets/images/reading-second-icon.svg';
 import './SearchFilter.scss';
 
 const STYLE_ELEMENT_ID = 'STYLE_ELEMENT_ID';
@@ -41,6 +42,7 @@ interface Props {
 
   customGradesList?: Array<Grade>;
   customSubjectsList?: Array<Subject>;
+  showSourceFilter?: boolean;
 
   subjectFilterValue?: number | null;
   gradeFilterValue?: number | null;
@@ -507,6 +509,7 @@ class SearchFilter extends Component<Props, State> {
         options={options}
         onChange={handleChangeSelectCore}
         placeholder={intl.get('new assignment.greep.core')}
+        isMulti
       />
     );
   }
@@ -547,6 +550,7 @@ class SearchFilter extends Component<Props, State> {
         options={options}
         onChange={handleChangeSelectCore}
         placeholder={intl.get('new assignment.greep.core')}
+        isMulti
       />
     );
   }
@@ -629,6 +633,7 @@ class SearchFilter extends Component<Props, State> {
         options={options}
         onChange={handleChangeSelectGoals}
         placeholder={intl.get('new assignment.greep.goals')}
+        isMulti
       />
     );
   }
@@ -667,6 +672,7 @@ class SearchFilter extends Component<Props, State> {
         options={options}
         onChange={handleChangeSelectGoals}
         placeholder={intl.get('new assignment.greep.goals')}
+        isMulti
       />
     );
   }
@@ -692,8 +698,27 @@ class SearchFilter extends Component<Props, State> {
     );
   }
 
+  public renderFiltersContentSource = () => {
+    const { showSourceFilter } = this.props;
+    return (
+      <div className="FiltersModal__body__item">
+        <div className="itemFilter">
+          <div className="itemFilter__left">
+            <img src={voiceImg} />
+          </div>
+          <div className="itemFilter__right">
+            <h3>{intl.get('new assignment.greep.source')}</h3>
+            <div className="itemFilter__core">
+              {this.renderFiltersSource()}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   public modalFilters() {
-    const { handleClickReset } = this.props;
+    const { handleClickReset, showSourceFilter } = this.props;
     return (
       <div className="FiltersModal">
         <div className="FiltersModal__header">
@@ -769,19 +794,7 @@ class SearchFilter extends Component<Props, State> {
               </div>
             </div>
           </div>
-          <div className="FiltersModal__body__item">
-            <div className="itemFilter">
-              <div className="itemFilter__left">
-                <img src={voiceImg} />
-              </div>
-              <div className="itemFilter__right">
-                <h3>{intl.get('new assignment.greep.source')}</h3>
-                <div className="itemFilter__core">
-                  {this.renderFiltersSource()}
-                </div>
-              </div>
-            </div>
-          </div>
+          {showSourceFilter && this.renderFiltersContentSource()}
         </div>
       </div>
     );
@@ -868,7 +881,7 @@ class SearchFilter extends Component<Props, State> {
             <div className="FiltersModal__body__item">
               <div className="itemFilter">
                 <div className="itemFilter__left">
-                  <img src={voiceImg} />
+                  <img src={readingImg} />
                 </div>
                 <div className="itemFilter__right">
                   <h3>{intl.get('new assignment.greep.reading')}</h3>

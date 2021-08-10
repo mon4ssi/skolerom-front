@@ -41,7 +41,6 @@ export const createQueryString = (object: QueryStringObject): string => (
 
 export const updateQueryString = (queryString: string, key: string, value?: string): string => {
   const query = parseQueryString(queryString);
-
   if (value) {
     query[key] = value;
   } else {

@@ -104,7 +104,6 @@ export interface TeacherAssignmentResponseDTO {
 
 export const buildFilterDTO = (filter: Filter): Object => {
   const filterDTO: { [key: string]: string | number } = {};
-
   if (filter.page) {
     filterDTO.page = filter.page;
   }

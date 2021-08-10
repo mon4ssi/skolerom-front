@@ -226,6 +226,10 @@ export class PublishingActions extends Component<Props, State> {
               valueGoalsOptions: this.transformDataToStringDat(listGoals, this.state.optionsGoals)
             });
           }
+        } else {
+          this.setState({
+            valueGoalsOptions: this.transformDataToStringDat(listGoals, this.state.optionsGoals)
+          });
         }
       }
     );
@@ -1139,6 +1143,7 @@ export class PublishingActions extends Component<Props, State> {
         <div className="itemTablesTh">
           <div className="itemTablesTd icons" />
           <div className="itemTablesTd grade">{intl.get('new assignment.Grade')}</div>
+          <div className="itemTablesTd subjects">{intl.get('new assignment.Subjects')}</div>
           <div className="itemTablesTd core">{intl.get('new assignment.greep.core')}</div>
           <div className="itemTablesTd goals">{intl.get('new assignment.greep.goals')}</div>
         </div>
@@ -1207,7 +1212,8 @@ export class PublishingActions extends Component<Props, State> {
               </button>
             </div>
             <div className="itemTablesTd grade">{visibleGoalsGrade} {intl.get('new assignment.grade')}</div>
-            <div className="itemTablesTd core">{/* visibleGoalsCore */}</div>
+            <div className="itemTablesTd subjects">{goal!.subject!.name}</div>
+            <div className="itemTablesTd core">{visibleGoalsCore}</div>
             <div className="itemTablesTd goals">{goal!.description}</div>
           </div>
         );

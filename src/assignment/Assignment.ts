@@ -139,6 +139,7 @@ export class GoalsData {
   public description?: string;
   public coreElements?: Array<GrepElementFilters>;
   public grades?: Array<GrepFilters>;
+  public subject?: GrepFilters;
 }
 
 export interface AssignmentArgs {
@@ -623,9 +624,9 @@ export class Filter {
   @observable public isEvaluated?: string | null;
   @observable public isPassed?: number | null;
   @observable public isActive?: number | null;
-  @observable public grepCoreElementsIds?: number | null;
+  @observable public grepCoreElementsIds?: string | number | null;
   @observable public grepMainTopicsIds?: number | null;
-  @observable public grepGoalsIds?: number | null;
+  @observable public grepGoalsIds?: string | number | null;
   @observable public grepReadingInSubject?: number | null;
   public showMyAssignments?: number | null;
 }
@@ -644,14 +645,23 @@ export interface SubjectFilter {
   grade_ids?: string;
 }
 
+export interface GradeStringObject {
+  // tslint:disable-next-line: variable-name
+  grade_id?: string;
+  // tslint:disable-next-line: variable-name
+  subjects_relations?: Array<string>;
+}
+
 export interface MultiFilter {
   // tslint:disable-next-line: variable-name
   multidisciplinay_id?: string;
   description?: string;
   // tslint:disable-next-line: variable-name
-  grade_ids?: string;
+  grade_ids?: Array<string>;
   // tslint:disable-next-line: variable-name
-  subject_ids?: string;
+  subject_ids?: Array<string>;
+  // tslint:disable-next-line: variable-name
+  grade_subjects?: Array<GradeStringObject>;
 }
 
 export interface CoreFilter {
@@ -659,9 +669,11 @@ export interface CoreFilter {
   core_element_id?: string;
   description?: string;
   // tslint:disable-next-line: variable-name
-  grade_ids?: string;
+  grade_ids?: Array<string>;
   // tslint:disable-next-line: variable-name
-  subject_ids?: string;
+  subject_ids?: Array<string>;
+  // tslint:disable-next-line: variable-name
+  grade_subjects?: Array<GradeStringObject>;
 }
 
 export interface GoalsFilter {
@@ -669,9 +681,11 @@ export interface GoalsFilter {
   goal_id?: string;
   description?: string;
   // tslint:disable-next-line: variable-name
-  grade_ids?: string;
+  grade_ids?: Array<string>;
   // tslint:disable-next-line: variable-name
-  subject_ids?: string;
+  subject_ids?: Array<string>;
+  // tslint:disable-next-line: variable-name
+  grade_subjects?: Array<GradeStringObject>;
 }
 
 export interface SourceFilter {
@@ -679,9 +693,11 @@ export interface SourceFilter {
   source_id?: string;
   description?: string;
   // tslint:disable-next-line: variable-name
-  grade_ids?: string;
+  grade_ids?: Array<string>;
   // tslint:disable-next-line: variable-name
-  subject_ids?: string;
+  subject_ids?: Array<string>;
+  // tslint:disable-next-line: variable-name
+  grade_subjects?: Array<GradeStringObject>;
 }
 
 export class FilterArticlePanel {
@@ -832,8 +848,8 @@ export interface ArticleRepo {
     order?: string,
     grades?: number,
     subjects?: number,
-    core?: number,
-    goal?: number,
+    core?: number | string,
+    goal?: number | string,
     multi?: number,
     source?: number,
     searchTitle?: string
