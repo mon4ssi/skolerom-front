@@ -104,6 +104,7 @@ interface State {
   MySelectMulti: number | null;
   MySelectSource: number | null;
   showSourceFilter: boolean;
+  userFilters: boolean;
 }
 
 @inject('editTeachingPathStore')
@@ -148,7 +149,8 @@ export class ArticlesList extends Component<Props, State> {
       MySelectSubject: null,
       MySelectMulti: null,
       MySelectSource: null,
-      showSourceFilter: false
+      showSourceFilter: false,
+      userFilters: false
     };
   }
 
@@ -177,6 +179,7 @@ export class ArticlesList extends Component<Props, State> {
     }
 
     this.setState({ appliedFilters: filters });
+    this.setState({ userFilters: true });
 
     if (filterName === 'searchTitle') {
       editTeachingPathStore!.getArticlesWithDebounce(filters);
@@ -204,7 +207,11 @@ export class ArticlesList extends Component<Props, State> {
     const { articlesList } = this.props.editTeachingPathStore!;
     document.addEventListener('keyup', this.handleKeyboardControl);
     this.refButton.current!.focus();
-
+    if (!this.props.editTeachingPathStore!.fetchingArticles) {
+      this.setState({
+        userFilters: false
+      });
+    }
     this.setState({ itemsForNewChildren: this.getAllChildrenItems() });
     const isNextPage = articlesList.length > 0;
     this.props.editTeachingPathStore!.getArticles({ isNextPage, ...appliedFilters });
@@ -403,20 +410,21 @@ export class ArticlesList extends Component<Props, State> {
           // tslint:disable-next-line: variable-name
           const allSympGrades = element.grade_ids;
           const allSympGradesLength = allSympGrades!.includes(value);
+          let allSympSubjectsLength = false;
           if (this.state.valueSubject.length > 0) {
             element.grade_subjects!.forEach((item) => {
               if (item.grade_id === value) {
                 const allSympSubjects = item.subjects_relations;
-                const allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
-                if (allSympGradesLength && allSympSubjectsLength) {
-                  newArrayCore.push({
-                    // tslint:disable-next-line: variable-name
-                    id: Number(element.core_element_id),
-                    title: element.description!
-                  });
-                }
+                allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
               }
             });
+            if (allSympGradesLength && allSympSubjectsLength) {
+              newArrayCore.push({
+                // tslint:disable-next-line: variable-name
+                id: Number(element.core_element_id),
+                title: element.description!
+              });
+            }
           } else {
             if (allSympGradesLength) {
               newArrayCore.push({
@@ -434,20 +442,21 @@ export class ArticlesList extends Component<Props, State> {
           // tslint:disable-next-line: variable-name
           const allSympGrades = element.grade_ids;
           const allSympGradesLength = allSympGrades!.includes(value);
+          let allSympSubjectsLength = false;
           if (this.state.valueSubject.length > 0) {
             element.grade_subjects!.forEach((item) => {
               if (item.grade_id === value) {
                 const allSympSubjects = item.subjects_relations;
-                const allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
-                if (allSympGradesLength && allSympSubjectsLength) {
-                  newArrayMulti.push({
-                    // tslint:disable-next-line: variable-name
-                    id: Number(element.multidisciplinay_id),
-                    title: element.description!
-                  });
-                }
+                allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
               }
             });
+            if (allSympGradesLength && allSympSubjectsLength) {
+              newArrayMulti.push({
+                // tslint:disable-next-line: variable-name
+                id: Number(element.multidisciplinay_id),
+                title: element.description!
+              });
+            }
           } else {
             if (allSympGradesLength) {
               newArrayMulti.push({
@@ -465,20 +474,21 @@ export class ArticlesList extends Component<Props, State> {
           // tslint:disable-next-line: variable-name
           const allSympGrades = element.grade_ids;
           const allSympGradesLength = allSympGrades!.includes(value);
+          let allSympSubjectsLength = false;
           if (this.state.valueSubject.length > 0) {
             element.grade_subjects!.forEach((item) => {
               if (item.grade_id === value) {
                 const allSympSubjects = item.subjects_relations;
-                const allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
-                if (allSympGradesLength && allSympSubjectsLength) {
-                  newArrayMulti.push({
-                    // tslint:disable-next-line: variable-name
-                    id: Number(element.goal_id),
-                    title: element.description!
-                  });
-                }
+                allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
               }
             });
+            if (allSympGradesLength && allSympSubjectsLength) {
+              newArrayGoals.push({
+                // tslint:disable-next-line: variable-name
+                id: Number(element.goal_id),
+                title: element.description!
+              });
+            }
           } else {
             if (allSympGradesLength) {
               newArrayGoals.push({
@@ -496,20 +506,21 @@ export class ArticlesList extends Component<Props, State> {
           // tslint:disable-next-line: variable-name
           const allSympGrades = element.grade_ids;
           const allSympGradesLength = allSympGrades!.includes(value);
+          let allSympSubjectsLength = false;
           if (this.state.valueSubject.length > 0) {
             element.grade_subjects!.forEach((item) => {
               if (item.grade_id === value) {
                 const allSympSubjects = item.subjects_relations;
-                const allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
-                if (allSympGradesLength && allSympSubjectsLength) {
-                  newArrayMulti.push({
-                    // tslint:disable-next-line: variable-name
-                    id: Number(element.source_id),
-                    title: element.description!
-                  });
-                }
+                allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
               }
             });
+            if (allSympGradesLength && allSympSubjectsLength) {
+              newArraySource.push({
+                // tslint:disable-next-line: variable-name
+                id: Number(element.source_id),
+                title: element.description!
+              });
+            }
           } else {
             if (allSympGradesLength) {
               newArraySource.push({
@@ -571,20 +582,21 @@ export class ArticlesList extends Component<Props, State> {
           // tslint:disable-next-line: variable-name
           const allSympGrades = element.subject_ids;
           const allSympGradesLength = allSympGrades!.includes(value);
+          let allSympSubjectsLength = false;
           if (this.state.valueGrade.length > 0) {
             element.grade_subjects!.forEach((item) => {
               if (item.grade_id === this.state.valueGrade) {
                 const allSympSubjects = item.subjects_relations;
-                const allSympSubjectsLength = allSympSubjects!.includes(value);
-                if (allSympGradesLength && allSympSubjectsLength) {
-                  newArrayMulti.push({
-                    // tslint:disable-next-line: variable-name
-                    id: Number(element.core_element_id),
-                    title: element.description!
-                  });
-                }
+                allSympSubjectsLength = allSympSubjects!.includes(value);
               }
             });
+            if (allSympGradesLength && allSympSubjectsLength) {
+              newArrayCore.push({
+                // tslint:disable-next-line: variable-name
+                id: Number(element.core_element_id),
+                title: element.description!
+              });
+            }
           } else {
             if (allSympGradesLength) {
               newArrayCore.push({
@@ -602,20 +614,21 @@ export class ArticlesList extends Component<Props, State> {
           // tslint:disable-next-line: variable-name
           const allSympGrades = element.subject_ids;
           const allSympGradesLength = allSympGrades!.includes(value);
+          let allSympSubjectsLength = false;
           if (this.state.valueGrade.length > 0) {
             element.grade_subjects!.forEach((item) => {
               if (item.grade_id === this.state.valueGrade) {
                 const allSympSubjects = item.subjects_relations;
-                const allSympSubjectsLength = allSympSubjects!.includes(value);
-                if (allSympGradesLength && allSympSubjectsLength) {
-                  newArrayMulti.push({
-                    // tslint:disable-next-line: variable-name
-                    id: Number(element.multidisciplinay_id),
-                    title: element.description!
-                  });
-                }
+                allSympSubjectsLength = allSympSubjects!.includes(value);
               }
             });
+            if (allSympGradesLength && allSympSubjectsLength) {
+              newArrayMulti.push({
+                // tslint:disable-next-line: variable-name
+                id: Number(element.multidisciplinay_id),
+                title: element.description!
+              });
+            }
           } else {
             if (allSympGradesLength) {
               newArrayMulti.push({
@@ -633,20 +646,21 @@ export class ArticlesList extends Component<Props, State> {
           // tslint:disable-next-line: variable-name
           const allSympGrades = element.subject_ids;
           const allSympGradesLength = allSympGrades!.includes(value);
+          let allSympSubjectsLength = false;
           if (this.state.valueGrade.length > 0) {
             element.grade_subjects!.forEach((item) => {
               if (item.grade_id === this.state.valueGrade) {
                 const allSympSubjects = item.subjects_relations;
-                const allSympSubjectsLength = allSympSubjects!.includes(value);
-                if (allSympGradesLength && allSympSubjectsLength) {
-                  newArrayMulti.push({
-                    // tslint:disable-next-line: variable-name
-                    id: Number(element.goal_id),
-                    title: element.description!
-                  });
-                }
+                allSympSubjectsLength = allSympSubjects!.includes(value);
               }
             });
+            if (allSympGradesLength && allSympSubjectsLength) {
+              newArrayGoals.push({
+                // tslint:disable-next-line: variable-name
+                id: Number(element.goal_id),
+                title: element.description!
+              });
+            }
           } else {
             if (allSympGradesLength) {
               newArrayGoals.push({
@@ -664,20 +678,21 @@ export class ArticlesList extends Component<Props, State> {
           // tslint:disable-next-line: variable-name
           const allSympGrades = element.subject_ids;
           const allSympGradesLength = allSympGrades!.includes(value);
+          let allSympSubjectsLength = false;
           if (this.state.valueGrade.length > 0) {
             element.grade_subjects!.forEach((item) => {
               if (item.grade_id === this.state.valueGrade) {
                 const allSympSubjects = item.subjects_relations;
-                const allSympSubjectsLength = allSympSubjects!.includes(value);
-                if (allSympGradesLength && allSympSubjectsLength) {
-                  newArrayMulti.push({
-                    // tslint:disable-next-line: variable-name
-                    id: Number(element.source_id),
-                    title: element.description!
-                  });
-                }
+                allSympSubjectsLength = allSympSubjects!.includes(value);
               }
             });
+            if (allSympGradesLength && allSympSubjectsLength) {
+              newArraySource.push({
+                // tslint:disable-next-line: variable-name
+                id: Number(element.source_id),
+                title: element.description!
+              });
+            }
           } else {
             if (allSympGradesLength) {
               newArraySource.push({
@@ -838,6 +853,9 @@ export class ArticlesList extends Component<Props, State> {
   public onScroll = (): void => {
     const { editTeachingPathStore } = this.props;
     const { appliedFilters } = this.state;
+    this.setState({
+      userFilters: false
+    });
 
     if (
       this.ref.current!.scrollHeight - (this.ref.current!.clientHeight * SCROLL_OFFSET) <= this.ref.current!.scrollTop &&
@@ -919,7 +937,7 @@ export class ArticlesList extends Component<Props, State> {
     const cardsContainer = document.getElementsByClassName('articlesListContainer')[0];
     const skeletonCardWidth = ((cardsContainer ? cardsContainer.clientWidth : 0) - allCardsMargins) / cardsInRow;
     const skeletonCardHeight = skeletonCardWidth * cardWidthToHeightIndex;
-    if (fetchingArticles) {
+    if (fetchingArticles && articlesList.length === 0) {
       return articlesForSkeletonEight.map((skeletonArticle, index) => (
                                        <SkeletonLoader
                                          key={index}
@@ -928,6 +946,17 @@ export class ArticlesList extends Component<Props, State> {
                                          height={skeletonCardHeight}
                                        />
                                      )
+      );
+    }
+    if (fetchingArticles && this.state.userFilters) {
+      return articlesForSkeletonEight.map((skeletonArticle, index) => (
+        <SkeletonLoader
+          key={index}
+          className="RelatedArticlesCard"
+          width={skeletonCardWidth}
+          height={skeletonCardHeight}
+        />
+      )
       );
     }
 
