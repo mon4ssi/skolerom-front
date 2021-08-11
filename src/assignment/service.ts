@@ -67,8 +67,8 @@ export class ArticleService {
     order?: string,
     grades?: number,
     subjects?: number,
-    core?: number,
-    goal?: number,
+    core?: number | string,
+    goal?: number | string,
     multi?: number,
     source?: number,
     searchTitle?: string

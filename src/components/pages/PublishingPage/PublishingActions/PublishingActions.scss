@@ -127,7 +127,10 @@
                 }
               }
             }
-          }          
+          }
+          &.subjects {
+            max-width: 150px;
+          }       
         }
         .itemTablesHeader {          
           .itemTablesTh {
@@ -279,7 +282,9 @@
     }
   }
 }
-
+.css-1wa3eu0-placeholder {
+  color: #0b2541;
+}
 @media screen and (max-width: $screen-dimension-desktop) {
   .PublishingActions {
     height: calc(100% - #{$header-height});

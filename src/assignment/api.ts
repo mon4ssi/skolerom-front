@@ -319,7 +319,7 @@ export class WPApi implements ArticleRepo {
     source,
     subjects,
     searchTitle
-  }: { page: number, perPage: number, order: string, grades?: number, subjects?: number, searchTitle?: string, core?: number, goal?: number, multi?: number, source?: number }): Promise<Array<Article>> {
+  }: { page: number, perPage: number, order: string, grades?: number, subjects?: number, searchTitle?: string, core?: number | string, goal?: number | string, multi?: number, source?: number }): Promise<Array<Article>> {
     return (
       await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/filterarticle/v1/post/`, {
         params:
