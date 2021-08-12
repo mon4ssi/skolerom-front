@@ -156,9 +156,11 @@ export class ArticlesList extends Component<Props, State> {
 
   private handleChangeFilters = async (filterName: string, filterValue: number | string) => {
     const { editTeachingPathStore } = this.props;
+    const allModal = Array.from(document.getElementsByClassName('addItemModal__right') as HTMLCollectionOf<HTMLElement>);
     editTeachingPathStore!.resetCurrentArticlesPage();
     editTeachingPathStore!.resetIsFetchedArticlesListFinished();
     let filters = { ...this.state.appliedFilters };
+    allModal[0].classList.add('loadingdata');
 
     if (!isNaN(filterValue)) {
       filters[filterName] = filterValue;
@@ -183,8 +185,10 @@ export class ArticlesList extends Component<Props, State> {
 
     if (filterName === 'searchTitle') {
       editTeachingPathStore!.getArticlesWithDebounce(filters);
+      allModal[0].classList.remove('loadingdata');
     } else {
       await editTeachingPathStore!.getArticles(filters);
+      allModal[0].classList.remove('loadingdata');
     }
   }
 
@@ -285,9 +289,18 @@ export class ArticlesList extends Component<Props, State> {
         title: element.description!
       });
     });
-    this.setState({
-      selectedSourceAll : newArrayGrepSource
-    });
+    this.setState(
+      {
+        selectedSourceAll : newArrayGrepSource
+      },
+      () => {
+        if (this.state.selectedSourceAll.length > 1) {
+          this.setState({ showSourceFilter: true });
+        } else {
+          this.setState({ showSourceFilter: false });
+        }
+      }
+    );
     this.setState({
       activeGrepFilters : true
     });
@@ -536,7 +549,9 @@ export class ArticlesList extends Component<Props, State> {
             selectedSourceFilter : newArraySource
           },
           () => {
-            if (this.state.selectedSourceFilter.length === 1 || this.state.selectedSourceFilter.length === 0) {
+            if (this.state.selectedSourceFilter.length > 1) {
+              this.setState({ showSourceFilter: true });
+            } else {
               this.setState({ showSourceFilter: false });
             }
           }
@@ -708,7 +723,9 @@ export class ArticlesList extends Component<Props, State> {
             selectedSourceFilter : newArraySource
           },
           () => {
-            if (this.state.selectedSourceFilter.length === 1 || this.state.selectedSourceFilter.length === 0) {
+            if (this.state.selectedSourceFilter.length > 1) {
+              this.setState({ showSourceFilter: true });
+            } else {
               this.setState({ showSourceFilter: false });
             }
           }
@@ -716,7 +733,7 @@ export class ArticlesList extends Component<Props, State> {
       }
     } else {
       this.setState({
-        MySelectGrade : null
+        MySelectSubject : null
       });
       if (this.state.activeGrepFilters) {
         const GradeFilterArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);

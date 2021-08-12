@@ -223,9 +223,9 @@
   },
   "new assignment": {    
     "greep": {
-      "core": "Reflektere og vurdere",
-      "goals": "Forberede, utføre og bearbeide",
-      "subjects": "Tolke og sammenholde",
+      "core": "Kjerneelementer",
+      "goals": "Kompetansemål",
+      "subjects": "Tverrfaglig tema",
       "source": "Kilde",
       "reading": "Lesing i faget"
     },
@@ -601,13 +601,13 @@
       "expand": "Utvid all",
       "search": {
         "buttons": {
-          "button_close": "Filtre",
-          "button_open": "Bruk filtre",
+          "button_close": "Filter",
+          "button_open": "Bruk filter",
           "button_change": "Endring filters"
         },
         "header": {
-          "title": "FILTRE",
-          "button": "Tilbakestill filtre"
+          "title": "FILTER",
+          "button": "Tilbakestill filter"
         }
       }
     },
