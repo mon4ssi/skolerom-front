@@ -371,6 +371,13 @@ class TeachingPathsListComponent extends Component<Props, State> {
     const { editTeachingPathStore } = this.props;
     const { optionsGrades, valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
     let value = e.currentTarget.value;
+    let valueToArray = 0;
+    optionsGrades!.forEach((element) => {
+      if (Number(element.wp_id) === Number(e.currentTarget.value)) {
+        this.setState({ valueGradesOptions: [element.id] });
+        valueToArray = element.id;
+      }
+    });
     if (this.state.myValueGrade !== Number(value)) {
       const GradeFilterArray = Array.from(document.getElementsByClassName('gradesFilterClass') as HTMLCollectionOf<HTMLElement>);
       GradeFilterArray.forEach((e) => {
@@ -391,6 +398,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
       this.setState({
         myValueGrade: null
       });
+      valueToArray = 0;
     }
     QueryStringHelper.set(
       this.props.history,
@@ -399,13 +407,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
     );
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
     this.setState({ valueGradesOptions: [] });
-    let valueToArray = 0;
-    optionsGrades!.forEach((element) => {
-      if (Number(element.wp_id) === Number(e.currentTarget.value)) {
-        this.setState({ valueGradesOptions: [element.id] });
-        valueToArray = element.id;
-      }
-    });
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, [valueToArray], valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
@@ -416,6 +417,13 @@ class TeachingPathsListComponent extends Component<Props, State> {
     const { editTeachingPathStore } = this.props;
     const { optionsSubjects, valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
     let value = e.currentTarget.value;
+    let valueToArray = 0;
+    optionsSubjects!.forEach((element) => {
+      if (Number(element.wp_id) === Number(e.currentTarget.value)) {
+        this.setState({ valueSubjectsOptions: [element.id] });
+        valueToArray = element.id;
+      }
+    });
     if (this.state.myValueSubject !== Number(value)) {
       const GradeFilterArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
       GradeFilterArray.forEach((e) => {
@@ -433,6 +441,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
       });
       e.currentTarget.focus();
       value = '';
+      valueToArray = 0;
       this.setState({
         myValueSubject: null
       });
@@ -443,13 +452,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
       Number(value) ? value : ''
     );
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
-    let valueToArray = 0;
-    optionsSubjects!.forEach((element) => {
-      if (Number(element.wp_id) === Number(e.currentTarget.value)) {
-        this.setState({ valueSubjectsOptions: [element.id] });
-        valueToArray = element.id;
-      }
-    });
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, [valueToArray], this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)

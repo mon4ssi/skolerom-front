@@ -1022,7 +1022,6 @@ export class PublishingActions extends Component<Props, State> {
           this.sendValidbutton();
         }
       );
-      currentEntity!.setGrepReadingInSubjectId(newValue.value);
     } else {
       this.setState(
         {
@@ -1033,6 +1032,7 @@ export class PublishingActions extends Component<Props, State> {
         }
       );
     }
+    currentEntity!.setGrepReadingInSubjectId(newValue.value);
   }
 
   public searchValueInNumbers = (emisor: Array<GreepSelectValue>, receptor: number | undefined) => {
