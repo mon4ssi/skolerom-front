@@ -34,9 +34,11 @@
       flex: none;
       border-left: solid 2px #d2d2d2;
       &.loadingdata {
-        background: red;
-        .itemFlexFilter {
+        .itemFilter__core {
           opacity: 0.5;
+          pointer-events: none;
+        }
+        .itemFlexFilter {
           pointer-events: none;
         }
         .css-1wrxaxw-Control {
