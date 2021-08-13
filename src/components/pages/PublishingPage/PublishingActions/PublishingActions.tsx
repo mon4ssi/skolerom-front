@@ -1198,27 +1198,36 @@ export class PublishingActions extends Component<Props, State> {
   public renderTableBody = () => {
     const { store } = this.props;
     const { optionsGoals, editvalueGoalsOptions } = this.state;
-    const myOptionGoals = this.state.optionsGoals;
     const listGoals = this.state.valueGoalsOptions;
+    const myOptionGoals = this.state.optionsGoals;
+    const goalsNotSelected: Array<GoalsData> = [];
+    let anotherGoals: Array<GoalsData> = [];
+    let realOptionsGoals: Array<GoalsData> = [];
     let visibleGoals;
     let activeVisibleGoals = false;
     if (typeof(optionsGoals) !== 'undefined') {
       activeVisibleGoals = true;
     }
     if (typeof(listGoals) !== 'undefined') {
-      myOptionGoals!.map((goal) => {
+      // step 1: frag in two arrays
+      myOptionGoals!.forEach((goal) => {
         if (listGoals!.length > 0) {
           if (listGoals!.includes(Number(goal!.id))) {
             const myGoal = goal;
-            const indexGoal = myOptionGoals.indexOf(myGoal);
-            if (indexGoal > -1) {
-              myOptionGoals.splice(indexGoal, 1);
-            }
-            myOptionGoals.unshift(myGoal);
+            anotherGoals.push(myGoal);
+          } else {
+            goalsNotSelected.push(goal);
           }
         }
       });
-      visibleGoals = myOptionGoals!.map((goal) => {
+      // step 2: reOrder goals from array
+      if (anotherGoals.length > 0) {
+        anotherGoals = anotherGoals!.sort((a, b) => (a!.grades![0].id > b!.grades![0].id) ? 1 : (b!.grades![0].id > a!.grades![0].id) ? -1 : 0);
+      }
+      // step 3: concat goals from new array
+      realOptionsGoals = anotherGoals.concat(goalsNotSelected);
+      // step 4: print goals
+      visibleGoals = realOptionsGoals!.map((goal) => {
         const visibleGoalsGrade = goal!.grades!.map((grade) => {
           const title = grade.name.split('.', 1);
           return <span key={grade.id}>{title}</span>;
