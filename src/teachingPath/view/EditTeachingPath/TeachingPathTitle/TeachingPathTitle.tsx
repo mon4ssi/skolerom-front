@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react';
 import { EditTeachingPathStore } from '../EditTeachingPathStore';
 
 import { lettersNoEn } from 'utils/lettersNoEn';
-import { MAX_TITLE_LENGTH, MAX_DESCRIPTION_LENGTH } from 'utils/constants';
+import { MAX_TITLE_LENGTH, MAX_DESCRIPTION_LENGTH, MAX_DESCRIPTION_LENGTH_500 } from 'utils/constants';
 
 import './TeachingPathTitle.scss';
 
@@ -67,7 +67,7 @@ export class TeachingPathTitle extends Component<Props> {
         placeholder={intl.get('edit_teaching_path.title.description_placeholder')}
         value={currentTeachingPath!.description}
         onChange={this.setDescription}
-        maxLength={MAX_DESCRIPTION_LENGTH}
+        maxLength={MAX_DESCRIPTION_LENGTH_500}
         readOnly={readOnly}
         aria-labelledby="DescriptionInputTextArea"
       />

@@ -6,7 +6,7 @@ import TextAreaAutosize from 'react-textarea-autosize';
 import { DraftAssignment } from 'assignment/assignmentDraft/AssignmentDraft';
 import { CreationElements, NewAssignmentStore } from '../NewAssignmentStore';
 import { lettersNoEn } from 'utils/lettersNoEn';
-import { MAX_DESCRIPTION_LENGTH, MAX_TITLE_LENGTH } from 'utils/constants';
+import { MAX_DESCRIPTION_LENGTH, MAX_DESCRIPTION_LENGTH_500, MAX_TITLE_LENGTH } from 'utils/constants';
 
 import './AssignmentTitle.scss';
 
@@ -88,7 +88,7 @@ export class AssignmentTitle extends Component<Props> {
             value={assignment.description}
             onChange={this.setAssignmentDescription}
             inputRef={this.setDescriptionRef}
-            maxLength={MAX_DESCRIPTION_LENGTH}
+            maxLength={MAX_DESCRIPTION_LENGTH_500}
             aria-labelledby="DescriptionInputTextArea"
           />
         </div>

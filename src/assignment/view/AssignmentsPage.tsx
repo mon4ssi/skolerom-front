@@ -120,9 +120,16 @@ const AssignmentsPageRouter = () => (
   </Switch>
 );
 
+interface State {
+  myValueGrade: number | null;
+  myValueSubject: number | null;
+  myValueMulti: number | null;
+  myValueReading: number | null;
+}
+
 @inject('assignmentListStore', 'newAssignmentStore')
 @observer
-class AssignmentsPageWrapper extends Component<Props> {
+class AssignmentsPageWrapper extends Component<Props, State> {
   public tabNavigationLinks = [
     {
       name: 'All assignments',
@@ -141,7 +148,15 @@ class AssignmentsPageWrapper extends Component<Props> {
         url: '/teacher/assignments/favorites'
       }*/
   ];
-
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      myValueGrade: null,
+      myValueSubject: null,
+      myValueMulti: null,
+      myValueReading: null,
+    };
+  }
   private handleChangeGrade = (e: ChangeEvent<HTMLSelectElement>) => {
     QueryStringHelper.set(
       this.props.history,
@@ -165,6 +180,10 @@ class AssignmentsPageWrapper extends Component<Props> {
     QueryStringHelper.set(this.props.history, QueryStringKeys.ORDER_FIELD, orderField);
     QueryStringHelper.set(this.props.history, QueryStringKeys.ORDER, order);
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
+  }
+
+  private handleClickGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { assignmentListStore } = this.props;
   }
 
   private handleChangeIsAnswered = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -237,10 +256,11 @@ class AssignmentsPageWrapper extends Component<Props> {
         <SearchFilter
           isStudent={isStudent}
           subject
-          grade
           popularity
           isAssignmentsPathPage
+          isAssignmentsListPage
           placeholder={intl.get('assignments search.Search for assignments')}
+
           // METHODS
           handleChangeSubject={this.handleChangeSubject}
           handleChangeGrade={this.handleChangeGrade}
@@ -248,6 +268,7 @@ class AssignmentsPageWrapper extends Component<Props> {
           handleChangeSorting={this.handleChangeSorting}
           handleChangeAnswerStatus={this.handleChangeIsAnswered}
           handleChangeEvaluationStatus={this.handleChangeIsEvaluated}
+          handleClickGrade={this.handleClickGrade}
           // VALUES
           gradeFilterValue={QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GRADE)}
           activityFilterValue={QueryStringHelper.getNumber(this.props.history, QueryStringKeys.ACTIVITY)}
@@ -282,7 +303,7 @@ class AssignmentsPageWrapper extends Component<Props> {
   }
 
   public render() {
-    const classes = classNames('AssignmentsPage', {
+    const classes = classNames('AssignmentsPage moveListBySearchFilter ', {
       AssignmentsPage_noTabs: !this.hasTabNavigation()
     });
 

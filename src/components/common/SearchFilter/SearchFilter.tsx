@@ -95,6 +95,7 @@ interface State {
   filtersModal: boolean;
   filtersModalTp: boolean;
   filtersisUsed: boolean;
+  filtersModalAssignment: boolean;
 }
 
 @inject('assignmentListStore')
@@ -109,7 +110,8 @@ class SearchFilter extends Component<Props, State> {
     displayWidthBreakpoint: 0,
     filtersModal: false,
     filtersModalTp: false,
-    filtersisUsed: false
+    filtersisUsed: false,
+    filtersModalAssignment: false,
   };
 
   public componentDidMount() {
@@ -380,6 +382,30 @@ class SearchFilter extends Component<Props, State> {
     moveListBySearchFilter[0].classList.remove('active');
   }
 
+  public openFiltersModalAssignment = () => {
+    const { filtersModalAssignment } = this.state;
+    const moveListBySearchFilter = Array.from(document.getElementsByClassName('moveListBySearchFilter') as HTMLCollectionOf<HTMLElement>);
+    if (filtersModalAssignment) {
+      this.setState({
+        filtersModalAssignment: false
+      });
+      moveListBySearchFilter[0].classList.remove('active');
+    } else {
+      this.setState({
+        filtersModalAssignment: true
+      });
+      moveListBySearchFilter[0].classList.add('active');
+    }
+  }
+
+  public closeFiltersModalAssignment = () => {
+    this.setState({
+      filtersModalAssignment: false
+    });
+    const moveListBySearchFilter = Array.from(document.getElementsByClassName('moveListBySearchFilter') as HTMLCollectionOf<HTMLElement>);
+    moveListBySearchFilter[0].classList.remove('active');
+  }
+
   public applyFiltersbutton() {
     const { filtersModal, filtersisUsed } = this.state;
     let buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_close');
@@ -424,6 +450,31 @@ class SearchFilter extends Component<Props, State> {
     return (
       <div className="SearchFilter__link">
         <a href="javascript:void(0)" className={buttonClass} onClick={this.openFiltersModalTp}>
+          <img src={imgFilter} /> {buttonTxt}
+        </a>
+      </div>
+    );
+  }
+
+  public applyFiltersbuttonAssignments() {
+    const { filtersModal, filtersisUsed } = this.state;
+    let buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_close');
+    let buttonClass = 'closehandler';
+    let imgFilter = filterImg;
+    if (filtersModal) {
+      buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_open');
+      buttonClass = 'openhandler';
+      imgFilter = filterWhiteImg;
+    } else {
+      if (filtersisUsed) {
+        buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_change');
+        buttonClass = 'openhandler';
+        imgFilter = filterWhiteImg;
+      }
+    }
+    return (
+      <div className="SearchFilter__link">
+        <a href="javascript:void(0)" className={buttonClass} onClick={this.openFiltersModalAssignment}>
           <img src={imgFilter} /> {buttonTxt}
         </a>
       </div>
@@ -898,6 +949,52 @@ class SearchFilter extends Component<Props, State> {
     );
   }
 
+  public modalFiltersAssignments() {
+    const { handleClickReset } = this.props;
+    return (
+      <div className="fixedsModal">
+        <div className="FiltersModal">
+          <div className="FiltersModal__header">
+            <h5>{intl.get('edit_teaching_path.modals.search.header.title')}</h5>
+            <button onClick={handleClickReset}>
+              <img src={resetImg} />
+              <span>{intl.get('edit_teaching_path.modals.search.header.button')}</span>
+            </button>
+          </div>
+          <div className="FiltersModal__body">
+            <div className="FiltersModal__body__item">
+              <div className="itemFilter">
+                <div className="itemFilter__left">
+                  <img src={gradeImg} />
+                </div>
+                <div className="itemFilter__right">
+                  <h3>{intl.get('generals.grade')}</h3>
+                  <div className="itemFilter__core">
+                    {this.renderFiltersGrade()}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="FiltersModal__body__item">
+              <div className="itemFilter">
+                <div className="itemFilter__left">
+                  <img src={tagsImg} />
+                </div>
+                <div className="itemFilter__right">
+                  <h3>{intl.get('new assignment.Subject')}</h3>
+                  <div className="itemFilter__core">
+                    {this.renderFiltersSubject()}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="filtersModalBackground" onClick={this.closeFiltersModalAssignment} />
+      </div>
+    );
+  }
+
   public render() {
     const {
       isStudent,
@@ -911,7 +1008,8 @@ class SearchFilter extends Component<Props, State> {
       activity,
       orderFieldFilterValue,
       isArticlesListPage,
-      isStudentTpPage
+      isStudentTpPage,
+      isAssignmentsListPage
     } = this.props;
     let myValue : any;
     const searchQueryValue = searchQueryFilterValue || '';
@@ -925,7 +1023,7 @@ class SearchFilter extends Component<Props, State> {
       <div className="SearchFilter" aria-controls="List" ref={this.container}>
         {!isArticlesListPage && !isStudentTpPage && isStudent && this.renderEvaluationStatus()}
         {!isArticlesListPage && !isStudentTpPage && isStudent && this.renderAnswerStatus()}
-        {!isArticlesListPage && !isStudentTpPage && subject && this.renderSubjects()}
+        {!isArticlesListPage && !isStudentTpPage && isStudent && subject && this.renderSubjects()}
         {!isArticlesListPage && !isStudentTpPage && !isStudent && grade && this.renderGrades()}
         {!isArticlesListPage && !isStudentTpPage && activity && this.renderActivity()}
 
@@ -933,6 +1031,9 @@ class SearchFilter extends Component<Props, State> {
         {isArticlesListPage &&  this.applyFiltersbutton()}
         {this.state.filtersModal && this.modalFilters()}
         {this.state.filtersModalTp && this.modalFiltersTp()}
+
+        {isAssignmentsListPage && !isStudent && this.applyFiltersbuttonAssignments()}
+        {this.state.filtersModalAssignment && this.modalFiltersAssignments()}
 
         <div className="SearchFilter__space" ref={this.space}/>
 
