@@ -429,16 +429,18 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   )
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
+    const classDivPath = (event.composedPath()[0] as Element).className;
     const htmlPathArea = String(event.composedPath()[0]);
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
+    const qlEditorText = 'ql-editor';
     if (event.key === 'Escape') {
       this.setState({
         modalVisible: Modals.NONE,
       });
       this.setState({ isModalKeyboard: false });
     }
-    if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
+    if (htmlPathArea !== htmlText && htmlPathArea !== inputText && classDivPath !== qlEditorText) {
       if ((event.shiftKey && event.key === 'R') || (event.shiftKey && event.key === 'r')) {
         window.open(`${process.env.REACT_APP_WP_URL}/artikler/`, '_blank');
       }
