@@ -406,7 +406,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
       Number(value) ? value : ''
     );
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
-    this.setState({ valueGradesOptions: [] });
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, [valueToArray], valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)

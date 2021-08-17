@@ -159,7 +159,6 @@ export class EditTeachingPathStore {
   public getTeachingPathForEditing = async (id: number) => {
     const teachingPath = await this.draftTeachingPathService.getDraftTeachingPathById(id);
     this.buildTeachingPathContainer(teachingPath);
-
     return toJS(this.currentEntity!);
   }
 

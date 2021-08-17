@@ -606,6 +606,47 @@ class SearchFilter extends Component<Props, State> {
     );
   }
 
+  public renderFiltersCoreAssignments = () => {
+    const { handleChangeSelectCore, customCoreTPList } = this.props;
+    const options = customCoreTPList!;
+    const customStyles = {
+      option: () => ({
+        fontSize: '14px',
+        padding: '5px',
+        borderBottom: '1px solid #e7ecef',
+        cursor: 'pointer'
+      }),
+      control: () => ({
+        display: 'flex',
+        borderRadius: '5px',
+        border: '1px solid #939fa7',
+        color: '#0B2541',
+        fontSize: '14px',
+        background: '#E7ECEF',
+        padding: '3px'
+      })
+    };
+    if (typeof(options) !== 'undefined') {
+      if (options.length === 0) {
+        return (
+          <div className="minimalLoading">
+            <span /><span /><span />
+          </div>
+        );
+      }
+    }
+    return (
+      <Select
+        width="320px"
+        styles={customStyles}
+        options={options}
+        onChange={handleChangeSelectCore}
+        placeholder={intl.get('new assignment.greep.core')}
+        isMulti
+      />
+    );
+  }
+
   public renderFiltersMulti = () => {
     const { handleClickMulti, customMultiList, mainFilterValueTP } = this.props;
     const cores = customMultiList!.sort(sortByAlphabet);
@@ -917,18 +958,18 @@ class SearchFilter extends Component<Props, State> {
               </div>
             </div>
             <div className="FiltersModal__body__item">
-            <div className="itemFilter">
-              <div className="itemFilter__left">
-                <img src={goalsImg} />
-              </div>
-              <div className="itemFilter__right">
-                <h3>{intl.get('new assignment.greep.goals')}</h3>
-                <div className="itemFilter__core">
-                  {this.renderFiltersGoalsTP()}
+              <div className="itemFilter">
+                <div className="itemFilter__left">
+                  <img src={goalsImg} />
+                </div>
+                <div className="itemFilter__right">
+                  <h3>{intl.get('new assignment.greep.goals')}</h3>
+                  <div className="itemFilter__core">
+                    {this.renderFiltersGoalsTP()}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
             <div className="FiltersModal__body__item">
               <div className="itemFilter">
                 <div className="itemFilter__left">
@@ -984,6 +1025,58 @@ class SearchFilter extends Component<Props, State> {
                   <h3>{intl.get('new assignment.Subject')}</h3>
                   <div className="itemFilter__core">
                     {this.renderFiltersSubject()}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="FiltersModal__body__item">
+              <div className="itemFilter">
+                <div className="itemFilter__left">
+                  <img src={coreImg} />
+                </div>
+                <div className="itemFilter__right">
+                  <h3>{intl.get('new assignment.greep.core')}</h3>
+                  <div className="itemFilter__core">
+                    {this.renderFiltersCoreAssignments()}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="FiltersModal__body__item">
+              <div className="itemFilter">
+                <div className="itemFilter__left">
+                  <img src={cogsImg} />
+                </div>
+                <div className="itemFilter__right">
+                  <h3>{intl.get('new assignment.greep.subjects')}</h3>
+                  <div className="itemFilter__core">
+                    {this.renderFiltersMulti()}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="FiltersModal__body__item">
+              <div className="itemFilter">
+                <div className="itemFilter__left">
+                  <img src={goalsImg} />
+                </div>
+                <div className="itemFilter__right">
+                  <h3>{intl.get('new assignment.greep.goals')}</h3>
+                  <div className="itemFilter__core">
+                    {this.renderFiltersGoalsTP()}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="FiltersModal__body__item">
+              <div className="itemFilter">
+                <div className="itemFilter__left">
+                  <img src={readingImg} />
+                </div>
+                <div className="itemFilter__right">
+                  <h3>{intl.get('new assignment.greep.reading')}</h3>
+                  <div className="itemFilter__core">
+                    {this.renderFilterReadingInSubject()}
                   </div>
                 </div>
               </div>

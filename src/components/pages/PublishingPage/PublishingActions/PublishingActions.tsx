@@ -135,9 +135,11 @@ export class PublishingActions extends Component<Props, State> {
       this.sendValidbutton();
     }
     if (typeof(store!.currentEntity!.getListOfgrepGoalsIds()) !== 'undefined') {
-      this.setState({
-        valueGoalsOptions: store!.currentEntity!.getListOfgrepGoalsIds()!
-      });
+      this.setState(
+        {
+          valueGoalsOptions: store!.currentEntity!.getListOfgrepGoalsIds()!
+        }
+      );
     }
     if (typeof(store!.currentEntity!.getListOfgrepCoreElementsIds()) !== 'undefined') {
       this.setState({
@@ -209,7 +211,9 @@ export class PublishingActions extends Component<Props, State> {
     if (listGoals.length > 0) {
       localStorage.setItem('goals', String(listGoals));
     } else {
-      listGoals = localStorage.getItem('goals')!.split(',');
+      if (localStorage.getItem('goals')) {
+        listGoals = localStorage.getItem('goals')!.split(',');
+      }
     }
     this.setState({
       valueStringGoalsOptions: listGoals
@@ -222,14 +226,24 @@ export class PublishingActions extends Component<Props, State> {
       () => {
         if (typeof(this.state.editvalueGoalsOptions) !== 'undefined') {
           if (this.state.editvalueGoalsOptions!.length === 0) {
-            this.setState({
-              valueGoalsOptions: this.transformDataToStringDat(listGoals, this.state.optionsGoals)
-            });
+            this.setState(
+              {
+                valueGoalsOptions: this.transformDataToStringDat(listGoals, this.state.optionsGoals)
+              },
+              () => {
+                this.comparativeGoalsValueToFilter();
+              }
+            );
           }
         } else {
-          this.setState({
-            valueGoalsOptions: this.transformDataToStringDat(listGoals, this.state.optionsGoals)
-          });
+          this.setState(
+            {
+              valueGoalsOptions: this.transformDataToStringDat(listGoals, this.state.optionsGoals)
+            },
+            () => {
+              this.comparativeGoalsValueToFilter();
+            }
+          );
         }
       }
     );
