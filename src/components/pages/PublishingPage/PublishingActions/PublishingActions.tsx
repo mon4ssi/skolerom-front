@@ -190,6 +190,7 @@ export class PublishingActions extends Component<Props, State> {
         valueSubjectsOptions: arrayForSubjects!
       });
     }
+    let listGoals: Array<string> = [];
 
     if (from === 'TEACHINGPATH') {
       if (!store!.getAllGrades().length) {
@@ -198,6 +199,7 @@ export class PublishingActions extends Component<Props, State> {
       if (!store!.getAllSubjects().length) {
         store!.getSubjects();
       }
+      listGoals = this.transformDataToString(store!.currentEntity!.getListOfGoals()!);
     }
     if (from === 'ASSIGNMENT') {
       if (!store!.getAllGrades().length) {
@@ -206,8 +208,10 @@ export class PublishingActions extends Component<Props, State> {
       if (!store!.getAllSubjects().length) {
         store!.getSubjects();
       }
+      if (store!.getGoalsByArticle()) {
+        listGoals = store!.getGoalsByArticle().split(',');
+      }
     }
-    let listGoals = this.transformDataToString(store!.currentEntity!.getListOfGoals()!);
     if (listGoals.length > 0) {
       localStorage.setItem('goals', String(listGoals));
     } else {
@@ -300,6 +304,16 @@ export class PublishingActions extends Component<Props, State> {
     data!.forEach((element) => {
       returnArray.push(element.kode);
     });
+    return returnArray;
+  }
+
+  public transformDataToStringOrString = (data: Array<GreepElements>) => {
+    const returnArray : Array<string> = [];
+    if (data.length > 0) {
+      data!.forEach((element) => {
+        returnArray.push(element.kode);
+      });
+    }
     return returnArray;
   }
 

@@ -90,6 +90,10 @@ export class EditTeachingPathStore {
     this.isActiveButtons = false;
   }
 
+  public getGoalsByArticle() {
+    return '';
+  }
+
   @computed
   public get currentEntity() {
     return this.teachingPathContainer && this.teachingPathContainer.teachingPath;

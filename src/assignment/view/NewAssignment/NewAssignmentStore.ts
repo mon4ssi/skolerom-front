@@ -3,7 +3,7 @@ import isUndefined from 'lodash/isUndefined';
 import isNull from 'lodash/isNull';
 
 import { injector } from 'Injector';
-import { Assignment, Article, ARTICLE_SERVICE_KEY, Attachment, Grade, QuestionAttachment, QuestionType, Subject, } from 'assignment/Assignment';
+import { Assignment, Article, ARTICLE_SERVICE_KEY, Attachment, Grade, QuestionAttachment, QuestionType, Subject, GreepElements } from 'assignment/Assignment';
 import { DraftAssignment, EditableImageChoiceQuestion, EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
 import { ArticleService, ASSIGNMENT_SERVICE, AssignmentService } from 'assignment/service';
 import { DRAFT_ASSIGNMENT_SERVICE, DraftAssignmentService } from 'assignment/assignmentDraft/service';
@@ -458,6 +458,22 @@ export class NewAssignmentStore {
 
   public async getSubjects() {
     this.allSubjects = await this.assignmentService.getSubjects();
+  }
+
+  public getGoalsByArticle() {
+    const arrayGoals :Array<String> = [];
+    if (this.currentEntity!.relatedArticles.length > 0) {
+      this.currentEntity!.relatedArticles.forEach((element) => {
+        if (element.grepGoals!.length > 0) {
+          element.grepGoals!.forEach((e) => {
+            if (!arrayGoals.includes(e.kode)) {
+              arrayGoals.push(e.kode);
+            }
+          });
+        }
+      });
+    }
+    return String(arrayGoals);
   }
 
   public async createAssignmentWithArticle(

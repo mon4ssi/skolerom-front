@@ -140,7 +140,7 @@ export class AssignmentsList extends Component<Props, State> {
       removingItems: [],
       isRedirect: false,
       greeddata: false,
-      expand: false,
+      expand: true,
       selectedAssignmentTitle: '',
       selectedAssignmentDescription: '',
       selectedAssignment: null,
