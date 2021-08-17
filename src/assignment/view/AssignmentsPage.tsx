@@ -42,7 +42,6 @@ interface Props extends RouteComponentProps {
   isContentManager?: boolean;
   newAssignmentStore?: NewAssignmentStore;
   assignmentListStore?: AssignmentListStore;
-  editTeachingPathStore?: EditTeachingPathStore;
 }
 
 const currentUserRole = JSON.parse(localStorage.getItem('USER_DATA') || '{}').role;
@@ -254,7 +253,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
   }
 
   private handleClickSubject = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const { editTeachingPathStore } = this.props;
+    const { newAssignmentStore } = this.props;
     const { optionsSubjects, valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
     const value = e.currentTarget.value;
     let valueToArray = 0;
@@ -284,7 +283,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       });
     }
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
-    const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, [valueToArray], this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
+    const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, [valueToArray], this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
     });
