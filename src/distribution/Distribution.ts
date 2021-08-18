@@ -16,6 +16,48 @@ export interface DistributionRepo {
   assignStudentToTeachingPath: (teachingPathId: string, referralToken: string) => Promise<string>;
 }
 
+interface SchoolArgs {
+  groupApiId : string;
+  name: string;
+  parent: string;
+  address: string;
+}
+
+export class School {
+
+  protected readonly _groupApiId : string;
+  protected readonly _name: string;
+  protected readonly _parent: string;
+  protected readonly _address: string;
+
+  constructor(args: SchoolArgs) {
+    this._groupApiId = args.groupApiId;
+    this._name = args.name;
+    this._parent = args.parent;
+    this._address = args.address;
+  }
+
+  @computed
+  public get groupApiId() {
+    return this._groupApiId;
+  }
+
+  @computed
+  public get name() {
+    return this._name;
+  }
+
+  @computed
+  public get parent() {
+    return this._parent;
+  }
+
+  @computed
+  public get address() {
+    return this._address;
+  }
+}
+
 interface GrepDataArgs {
   displayName: string;
   code: string;
@@ -48,7 +90,7 @@ interface LevelArgs {
   graduation: number;
 }
 
-interface DistributionStudentArgs {
+export interface DistributionStudentArgs {
   id: number;
   name: string;
   startDate: Date | null;
@@ -125,6 +167,7 @@ export class DistributionStudent {
 interface DistributionGroupArgs {
   id: number;
   groupName: string;
+  school: SchoolArgs | null;
   grepData: GrepDataArgs | null;
   startDate: Date | null;
   endDate: Date | null;
@@ -136,6 +179,7 @@ export class DistributionGroup {
   protected _assignedStudents: Array<DistributionStudent>;
   protected readonly _id: number;
   protected readonly _name: string;
+  protected readonly _school: School | null;
   protected readonly _grepData: GrepData | null;
   @observable protected _startDate: Date | null;
   @observable protected _endDate: Date | null;
@@ -145,6 +189,7 @@ export class DistributionGroup {
   constructor(args: DistributionGroupArgs) {
     this._id = args.id;
     this._name = args.groupName;
+    this._school = args.school && new School(args.school);
     this._grepData = args.grepData && new GrepData(args.grepData);
     this._startDate = args.startDate;
     this._endDate = args.endDate && getYearMonthDayDate(new Date(args.endDate));
@@ -167,6 +212,11 @@ export class DistributionGroup {
   @computed
   public get name() {
     return this._name;
+  }
+
+  @computed
+  public get school() {
+    return this._school;
   }
 
   @computed

@@ -1,7 +1,7 @@
 import { computed, observable, toJS } from 'mobx';
 import intl from 'react-intl-universal';
 
-import { Grade, Subject, Article, Assignment, Filter } from 'assignment/Assignment';
+import { Grade, Subject, Article, Assignment, Domain, Filter } from 'assignment/Assignment';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from './service';
 import { injector } from '../Injector';
 
@@ -18,6 +18,7 @@ export interface TeachingPathRepo {
   getTeachingPathById(id: number): Promise<TeachingPath>;
   getCurrentNode(teachingPathId: number, nodeId: number): Promise<TeachingPathNode>;
   markAsPickedArticle(teachingPathId: number, nodeId: number, idArticle: number, levelWpId: number): Promise<void>;
+  sendDataDomain(domain: string): Promise<Domain>;
   finishTeachingPath(id: number): Promise<void>;
   deleteTeachingPathAnswers(teachingPathId: number, answerId: number): Promise<void>;
   copyTeachingPath(id: number): Promise<number>;
@@ -26,7 +27,8 @@ export interface TeachingPathRepo {
 export enum TeachingPathNodeType {
   Root = 'ROOT',
   Article = 'ARTICLE',
-  Assignment = 'ASSIGNMENT'
+  Assignment = 'ASSIGNMENT',
+  Domain = 'DOMAIN'
 }
 
 export type TeachingPathItemValueArgs = {
@@ -43,7 +45,7 @@ export type TeachingPathItemValueArgs = {
   featuredImage?: string;
 };
 
-export type TeachingPathItemValue = Article | Assignment;
+export type TeachingPathItemValue = Article | Assignment | Domain;
 
 export interface TeachingPathItemArgs {
   type: TeachingPathNodeType;
@@ -57,9 +59,16 @@ export class TeachingPathItem {
 
   constructor(args: TeachingPathItemArgs) {
     this._type = args.type;
-    this._value = args.type === TeachingPathNodeType.Article ?
-      new Article(args.value) :
-      new Assignment(args.value);
+    this._value = new Article(args.value);
+    if (args.type === TeachingPathNodeType.Article) {
+      this._value = new Article(args.value);
+    }
+    if (args.type === TeachingPathNodeType.Assignment) {
+      this._value = new Assignment(args.value);
+    }
+    if (args.type === TeachingPathNodeType.Domain) {
+      this._value = new Domain(args.value);
+    }
   }
 
   @computed

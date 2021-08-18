@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
+import { validDomain } from 'utils/validDomain';
+import { lettersNoEn } from 'utils/lettersNoEn';
 import intl from 'react-intl-universal';
 
 import { ItemContentTypeContext } from '../../ItemContentTypeContext';
-import { EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
+import { TeachingPathNodeType } from 'teachingPath/TeachingPath';
+import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
 import { EditTeachingPathStore } from '../../EditTeachingPathStore';
 import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
 
@@ -13,6 +16,7 @@ import addAssignemntImg from 'assets/images/add-assignment.svg';
 import createAssignmentImg from 'assets/images/create-assignment.svg';
 
 import './AddingButtons.scss';
+import { Domain } from 'domain';
 
 interface Props extends RouteComponentProps {
   node?: EditableTeachingPathNode;
@@ -26,6 +30,13 @@ interface Props extends RouteComponentProps {
 class AddingButtonsContainer extends Component<Props> {
 
   public static contextType = ItemContentTypeContext;
+  public state = {
+    modalDomain : false,
+    disabledbutton : true,
+    loading : true,
+    valueInputDomain: '',
+    itemsForNewChildren: []
+  };
 
   private openArticlesList = (event: React.MouseEvent<HTMLDivElement>) => {
     const { editTeachingPathStore, node } = this.props;
@@ -57,6 +68,94 @@ class AddingButtonsContainer extends Component<Props> {
     });
   }
 
+  private openDomainModal = () => {
+    this.setState({
+      modalDomain: true
+    });
+  }
+
+  private closeDomainModal = () => {
+    if (this.state.loading) {
+      this.setState({
+        modalDomain: false
+      });
+    }
+  }
+
+  private handleChangeNewQuestion = (e:  React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ valueInputDomain: e.target.value });
+    if (validDomain(e.target.value)) {
+      this.setState({ disabledbutton: false });
+    } else {
+      this.setState({ disabledbutton: true });
+    }
+  }
+
+  private sendDomain = async () => {
+    const { editTeachingPathStore, node } = this.props;
+    editTeachingPathStore!.setCurrentNode(node!);
+    this.setState({ loading: false });
+    this.setState({ disabledbutton: true });
+    const response = await editTeachingPathStore!.sendDataDomain(this.state.valueInputDomain);
+    this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
+    const newChildren = this.state.itemsForNewChildren.map(
+      item => editTeachingPathStore!.createNewNode(
+        item,
+        TeachingPathNodeType.Domain
+      )
+    );
+    newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
+  }
+
+  private renderModalDomain = () => {
+    const { disabledbutton } = this.state;
+    return (
+      <div className="modalDomain">
+        <div className="modalDomain__background" onClick={this.closeDomainModal} />
+        <div className="modalDomain__content">
+          <div className="modalDomain__context">
+            <div className="modalDomain__form">
+              <div className="modalDomain__input">
+                <img src={addArticleImg} alt="add-article" />
+                <input
+                  className="newTextQuestionInput"
+                  placeholder={intl.get('new assignment.type_or_paste')}
+                  value={this.state.valueInputDomain}
+                  onChange={this.handleChangeNewQuestion}
+                  aria-required="true"
+                  aria-invalid="false"
+                  autoFocus={true}
+                />
+              </div>
+              <div className="modalDomain__button">
+                <button
+                  className="btn"
+                  onClick={this.sendDomain}
+                  title={intl.get('new assignment.add_link')}
+                  disabled={disabledbutton}
+                >
+                  {intl.get('new assignment.add_link')}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  private renderButtonDomain = () => {
+    const { disabledbutton } = this.state;
+    return (
+    <div className="addingButton" onClick={this.openDomainModal}>
+      <button title={intl.get('edit_teaching_path.modals.add_domain')}>
+        <img src={addArticleImg} alt="add-article" />
+        {intl.get('edit_teaching_path.modals.add_domain')}
+      </button>
+    </div>
+    );
+  }
+
   public render() {
     return (
       <div className="AddingButtons flexBox dirColumn">
@@ -69,6 +168,8 @@ class AddingButtonsContainer extends Component<Props> {
             {intl.get('edit_teaching_path.modals.add_articles')}
           </button>
         </div>
+        {/* {this.renderButtonDomain()} */}
+        {this.state.modalDomain && this.renderModalDomain()}
         <div
           className="addingButton"
           onClick={this.openAssignmentsList}

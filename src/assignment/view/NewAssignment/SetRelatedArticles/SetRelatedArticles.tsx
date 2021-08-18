@@ -60,6 +60,7 @@ export class SetRelatedArticles extends Component<Props> {
             className="filterBy articlesList hideInput"
             tags={articles}
             currentTags={selectedArticles}
+            orderbyid={false}
             removeTag={this.removeArticle}
             listView
             noOpenOnFocus

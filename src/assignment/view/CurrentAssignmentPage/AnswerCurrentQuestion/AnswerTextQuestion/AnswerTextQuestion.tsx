@@ -12,10 +12,11 @@ interface Props {
 }
 
 export class AnswerTextQuestion extends Component<Props> {
-  public handleChangeAnswer = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (lettersNoEn(event.target.value)) {
+  public handleChangeAnswer = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    /*if (lettersNoEn(event.target.value)) {
       this.props.answer.setValue(event.target.value);
-    }
+    }*/
+    this.props.answer.setValue(event.target.value);
   }
 
   public render() {
@@ -31,7 +32,7 @@ export class AnswerTextQuestion extends Component<Props> {
 
           <AnswerMappingContentBlock question={question}/>
 
-          <input
+          <textarea
             readOnly={readOnly}
             autoFocus={true}
             value={answer.value as string}

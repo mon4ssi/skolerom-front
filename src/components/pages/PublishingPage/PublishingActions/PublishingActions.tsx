@@ -144,6 +144,7 @@ export class PublishingActions extends Component<Props> {
           tags={subjects}
           addTag={this.addSubject}
           currentTags={selectedSubjects}
+          orderbyid={false}
           removeTag={this.removeSubject}
           listView
           temporaryTagsArray
@@ -172,6 +173,7 @@ export class PublishingActions extends Component<Props> {
           tags={grades}
           addTag={this.addGrade}
           currentTags={selectedGrades}
+          orderbyid={true}
           removeTag={this.removeGrade}
           listView
           temporaryTagsArray

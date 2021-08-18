@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { observer } from 'mobx-react';
 import classnames from 'classnames';
 import Lightbox from 'react-image-lightbox';
@@ -48,7 +48,7 @@ interface ImageOptionState {
 
 @observer
 class ImageOption extends Component<ImageOptionProps, ImageOptionState> {
-
+  private refInput = createRef<HTMLButtonElement>();
   public state = {
     isLightBoxOpen: false,
   };
@@ -87,6 +87,12 @@ class ImageOption extends Component<ImageOptionProps, ImageOptionState> {
       return option.isRight ? 'inputRight' : (isValueSelected && !option.isRight) ? 'inputWrong' : '';
     }
   }
+  public async componentDidMount() {
+    if (this.refInput.current) {
+      const focusCurrentOption = Array.from(document.getElementsByClassName('ImagenfocusCurrentOption') as HTMLCollectionOf<HTMLElement>);
+      focusCurrentOption[0].focus();
+    }
+  }
 
   public render() {
     const { option, answer, light, isEvaluationStyle, readOnly } = this.props;
@@ -118,7 +124,7 @@ class ImageOption extends Component<ImageOptionProps, ImageOptionState> {
         <div className={optionTitleStyle}>
           {option.title}
         </div>
-        <button className={imageOptionTickClassNames} onClick={this.setIsRight} title="Check">
+        <button className={`ImagenfocusCurrentOption ${imageOptionTickClassNames}`} onClick={this.setIsRight} title="Check" ref={this.refInput}>
           <img
             className="ImageOption__buttonImage"
             src={isValueSelected ? select : selectBlueGray}

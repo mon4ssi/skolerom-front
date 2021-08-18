@@ -3,7 +3,7 @@
   "assignment": "oppgaven",
   "teaching path": "læringssti",
   "login_page": {
-    "Log in to Temabok": "Logg inn på Skolerommet",
+    "Log in to Temabok": "Logg inn på Skolerom",
     "Log in with Feide": "Logg inn via Feide",
     "Feide": "Feide",
     "Or": "Eller",
@@ -12,7 +12,7 @@
     "Password": "Passord",
     "Log in": "Logg inn",
     "Forgot password": "Glemt passordet?",
-    "Log in to Skolerom": "Logg inn på Skolerommet",
+    "Log in to Skolerom": "Logg inn på Skolerom",
     "Copy url": "Kopier url",
     "not permission": "Beklager, du har ikke tilgang til denne plattformen. Kontakt organisasjonen din for å få tilgang"
   },
@@ -55,6 +55,9 @@
   },
   "header": {
     "change_font_size": "Endre skriftstørrelse",
+    "contact_menu": "Kontakt oss",
+    "about_menu": "Hva er skolerom.no?",
+    "logg_in": "Logg inn med Feide",
     "Articles": "Artikler",
     "Article": "Artikkel",
     "teacher_room": "Lærerrom",
@@ -209,6 +212,11 @@
     "Nothing": "Søket ditt ga ingen resultater",
     "not for you": "Oppgaven er ikke tildelt deg",
     "copy": "Kopi av oppgaven er opprettet"
+  },  
+  "spanicon": {
+    "DOMAIN": "Domain.com",
+    "ARTICLE": "Article",
+    "ASSIGNMENT": "Assignment"
   },
   "new assignment": {
     "go_back": "Gå tilbake",
@@ -248,7 +256,9 @@
     "stock_videos": "Videoarkiv",
     "Nothing to see yet": "Ingenting å se ennå!",
     "Preview assignment here": "Forhåndsvis oppgaven her når du har lagt til det første spørsmålet.",
-    "Question": "Spørsmål",
+    "Question": "Spørsmål",    
+    "type_or_paste": "Skriv eller lim inn lenken",
+    "add_link": "Legg til lenke",
     "Enter a question": "Skriv inn et spørsmål",
     "enter_a_description": "Legg til beskrivelse",
     "chose_an_images": "Velg bilder",
@@ -387,6 +397,7 @@
   },
   "current_assignment_page": {
     "Assignment overview": "Oppgaveoversikt",
+    "readNotArticles": "Det er nødvendig å lese alle artiklene for å fullføre oppgaven",
     "Exit": "Gå tilbake",
     "Exit assignment": "Avslutt oppgave",
     "Click to view full size version of images": "Klikk for å se fullversjon av bilder",
@@ -547,6 +558,7 @@
     "modals": {
       "add_articles": "Legg til artikler",
       "add_assignments": "Legg til oppgaver",
+      "add_domain": "Legg til Domain",
       "create_assignment": "Lag oppgave",
       "loading": "Laster...",
       "nothing_found": "Ingenting funnet...",
@@ -634,6 +646,8 @@
     "edit": "Rediger sti",
     "delete": "Slett sti",
     "close": "Lukk artikkelvisning",
+    "close_maintenance": "Lukk melding",
+    "maintenance": "Scheduled maintenance today between 4pm and 7pm. The System can be unresponsive in this period",
     "close_assignment": "Lukk oppgave vinduet",
     "selected_assignment": "Velg oppgave",
     "unselected_assignment": "Velg oppgave",

@@ -20,6 +20,7 @@ import question from 'assets/images/questions.svg';
 import './AppHeader.scss';
 import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
+import loginBtnIcon from 'assets/images/login-btn-icon.svg';
 
 interface HeaderNavigationLink {
   name: string;
@@ -140,6 +141,7 @@ enum Modals {
 interface HeaderState {
   modalVisible: Modals;
   isModalKeyboard: boolean;
+  isMobileModalOpen: boolean;
 }
 
 @inject('loginStore', 'uiStore')
@@ -147,7 +149,8 @@ interface HeaderState {
 class AppHeader extends Component<HeaderProps, HeaderState> {
   public readonly state: HeaderState = {
     modalVisible: Modals.NONE,
-    isModalKeyboard: false
+    isModalKeyboard: false,
+    isMobileModalOpen: false
   };
 
   private renderUserModalIfNeeded() {
@@ -416,7 +419,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         <div className="AppHeader__submenuWrapper">
           <ul className="AppHeader__submenu">
             <li className="AppHeader__dropdownItem">
-              <a href="https://skolerom.no/support" title={intl.get('header.title.Help')} target="_blank">{intl.get('generals.support')}</a>
+              <a href="https://skolerom.no/support-skolerom" title={intl.get('header.title.Help')} target="_blank">{intl.get('generals.support')}</a>
             </li>
             {this.props.loginStore!.currentUser && this.dropDownKeyboard()}
           </ul>
@@ -553,6 +556,66 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     }
   }
 
+  public showMobileModal = () => {
+    if (!this.state.isMobileModalOpen) {
+      this.setState({ isMobileModalOpen: true });
+    } else {
+      this.setState({ isMobileModalOpen: false });
+    }
+  }
+
+  public renderMobileButton = () => {
+    if (this.props.loginStore!.currentUser) {
+      return (
+        <button
+          className="AppHeader__block AppHeader__button AppHeader__block_mobile AppHeader__userMenuButton"
+          onClick={this.showUserModal}
+          title="user menu"
+        >
+          <img src={verticalDots} alt="user menu"/>
+        </button>
+      );
+    }
+    return (
+      <button
+        className="AppHeader__block AppHeader__button AppHeader__block_mobile AppHeader__userMenuButton"
+        onClick={this.showMobileModal}
+        title="user menu"
+      >
+        <img src={verticalDots} alt="user menu"/>
+      </button>
+    );
+  }
+
+  public renderItemsNotLogin = () => (
+    <ul className="singleListElements">
+      <li>
+        <a href={`${process.env.REACT_APP_WP_URL}/kontakt-oss/`}>{intl.get('header.contact_menu')}</a>
+      </li>
+      <li>
+        <a href={`${process.env.REACT_APP_WP_URL}/hva-er-skolerom-no/`}>{intl.get('header.about_menu')}</a>
+      </li>
+      <li>
+        <a href={`${process.env.REACT_APP_BASE_URL}/api/dataporten/auth`} className="BtnFinal">
+          <img src={loginBtnIcon} />
+          <p>{intl.get('header.logg_in')}</p>
+        </a>
+      </li>
+    </ul>
+  )
+
+  public renderLineMobileButton = () => (
+    <div className="singleFlexElements AppHeader__block">
+      {this.renderItemsNotLogin()}
+    </div>
+  )
+
+  public renderModalMobileButton = () => (
+    <div className="singleElements">
+      {this.renderItemsNotLogin()}
+    </div>
+  )
+
   public render() {
     const { loginStore, fromAssignmentPassing, fromTeachingPathPassing } = this.props;
     const currentUser = loginStore!.currentUser;
@@ -560,6 +623,11 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     const redirectLink = currentUser
         ? '/activity'
       : '#';
+
+    let ifLogin = true;
+    if (this.props.loginStore!.currentUser) {
+      ifLogin = false;
+    }
 
     return (
       <header className="AppHeader">
@@ -575,11 +643,12 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
             </div>
           </NavLink>
         </div>
-        {!fromAssignmentPassing && !fromTeachingPathPassing && this.renderNavigation()}
-        {!isStudent && fromAssignmentPassing && this.renderCopyButton('assignment list.Copy assignment')}
-        {!isStudent && fromTeachingPathPassing && this.renderCopyButton('teaching_paths_list.copy')}
+        {this.props.loginStore!.currentUser && !fromAssignmentPassing && !fromTeachingPathPassing && this.renderNavigation()}
+        {this.props.loginStore!.currentUser && !isStudent && fromAssignmentPassing && this.renderCopyButton('assignment list.Copy assignment')}
+        {this.props.loginStore!.currentUser && !isStudent && fromTeachingPathPassing && this.renderCopyButton('teaching_paths_list.copy')}
+        {ifLogin && this.renderLineMobileButton()}
 
-        {this.renderBurgerButton()}
+        {this.props.loginStore!.currentUser &&  this.renderBurgerButton()}
         <div className="AppHeader__block AppHeader__block_mobile">
           <NavLink to={redirectLink} onClick={this.handleLogoClick}>
             <img src={logoImage} alt="logo mobile"/>
@@ -587,15 +656,10 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         </div>
         <div className={'AppHeader__block_mobile AppHeader__block'}>
           {this.renderQuestionTab()}
-          <button
-            className="AppHeader__block AppHeader__button AppHeader__block_mobile AppHeader__userMenuButton"
-            onClick={this.showUserModal}
-            title="user menu"
-          >
-            <img src={verticalDots} alt="user menu"/>
-          </button>
+          {this.renderMobileButton()}
+          {this.state.isMobileModalOpen && this.renderModalMobileButton()}
         </div>
-        {this.state.isModalKeyboard && this.renderKeyboardModal()}
+        {this.props.loginStore!.currentUser && this.state.isModalKeyboard && this.renderKeyboardModal()}
       </header>
     );
   }

@@ -55,6 +55,9 @@
   },
   "header": {
     "change_font_size": "Change font size",
+    "contact_menu": "Contact",
+    "about_menu": "About Skoleroom",
+    "logg_in": "Log with Feide",
     "Articles": "Articles",
     "Article":  "Article",
     "teacher_room": "Teacher's Room",
@@ -210,6 +213,11 @@
     "not for you": "Assignment not assigned to you",
     "copy": "Copy of assignment is successfully created"
   },
+  "spanicon": {
+    "DOMAIN": "Domain.com",
+    "ARTICLE": "Article",
+    "ASSIGNMENT": "Assignment"
+  },
   "new assignment": {
     "go_back": "Go back",
     "Create assignment": "Create assignment",
@@ -249,6 +257,8 @@
     "Nothing to see yet": "Nothing to see yet!",
     "Preview assignment here": "Preview assignment here when you’ve added your first question.",
     "Question": "Question",
+    "type_or_paste": "Type or paste link",
+    "add_link": "Add link",
     "Enter a question": "Enter a question",
     "enter_a_description": "Enter a description",
     "chose_an_images": "Choose the images",
@@ -387,6 +397,7 @@
   },
   "current_assignment_page": {
     "Assignment overview": "Assignment overview",
+    "readNotArticles": "It is necessary to read all the articles to complete the assignment",
     "Exit": "Exit",
     "Exit assignment": "Exit assignment",
     "Click to view full size version of images": "Click to view full size version of images",
@@ -547,6 +558,7 @@
     },
     "modals": {
       "add_articles": "Add articles",
+      "add_domain": "Add domain",
       "add_assignments": "Add assignments",
       "create_assignment": "Create assignment",
       "loading": "Laster...",
@@ -635,6 +647,8 @@
     "edit": "Edith Path",
     "delete": "Delete Path",
     "close": "Close",
+    "close_maintenance": "Close",
+    "maintenance": "Scheduled maintenance today between 4pm and 7pm. The System can be unresponsive in this period",
     "close_assignment": "Close",
     "selected_assignment": "Select assignment",
     "unselected_assignment": "UnSelect assignment",

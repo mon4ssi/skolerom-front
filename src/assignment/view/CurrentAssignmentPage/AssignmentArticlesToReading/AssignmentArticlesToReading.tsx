@@ -10,6 +10,7 @@ import checkActive from 'assets/images/check-active-green.svg';
 
 import { CurrentQuestionaryStore } from '../CurrentQuestionaryStore';
 import { InfoCard } from 'components/common/InfoCard/InfoCard';
+import { Loader } from 'components/common/Loader/Loader';
 import { Article } from 'assignment/Assignment';
 import { ReadingArticle } from 'components/pages/ReadingArticle/ReadingArticle';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
@@ -40,8 +41,12 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
     currentArticleChildren: [],
     attachedArticleId: -1,
     shownArticleId: null,
-    shownArticleLevelId: -1
+    shownArticleLevelId: -1,
+    allArticlesRead: 0,
+    allArticles: 0
   };
+
+  public refArticle = React.createRef<HTMLDivElement>();
 
   public openArticle = (article: Article) => () => {
     const { title, id, levels, correspondingLevelArticleId } = article;
@@ -77,6 +82,10 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
     const levels = article.levels && article.levels.length && article.levels![0].childArticles!.length ? article.levels![0].childArticles!.map(
       (article: Article) => Number(article.levels![0].slug.split('-')[1])
     ) : [Number(article.levels![0].slug.split('-')[1])];
+    this.state.allArticles += 1;
+    if (article.isRead) {
+      this.state.allArticlesRead += 1;
+    }
     return (
       <div
         className={`AssignmentArticlesToReading__card ${article.isRead && 'cardBorder' } ${readOnly && 'AssignmentArticlesToReading__defaultCursor'}`}
@@ -113,6 +122,15 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
     this.setState({ shownArticleLevelId: levelId });
   }
 
+  public sendValidArticlesRead() {
+    const { currentQuestionaryStore } = this.props;
+    if (this.state.allArticlesRead > 0) {
+      if (this.state.allArticles === this.state.allArticlesRead) {
+        currentQuestionaryStore!.allArticlesread = true;
+      }
+    }
+  }
+
   public renderContent = () => {
     const {
       isShowArticle,
@@ -120,8 +138,8 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
       currentArticleChildren,
       shownArticleId
     } = this.state;
-    const { currentQuestionaryStore } = this.props;
 
+    const { currentQuestionaryStore } = this.props;
     if (isShowArticle) {
       return (
         <ReadingArticle
@@ -134,14 +152,18 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
         />
       );
     }
-    return (
-      <>
-        <span className="AssignmentArticlesToReading__title">{intl.get('assignment preview.Assignment articles')}</span>
-        <div className="AssignmentArticlesToReading__articles">
-          {currentQuestionaryStore!.relatedAllArticles.map(this.renderArticlesCards)}
-        </div>
-      </>
-    );
+    if (currentQuestionaryStore!.isLoadingArticles) {
+      return (
+        <>
+          <span className="AssignmentArticlesToReading__title">{intl.get('assignment preview.Assignment articles')}</span>
+          <div className="AssignmentArticlesToReading__articles" ref={this.refArticle}>
+            {currentQuestionaryStore!.relatedAllArticles.map(this.renderArticlesCards)}
+            {this.sendValidArticlesRead()}
+          </div>
+        </>
+      );
+    }
+    return (<div className={'loading'}><Loader /></div>);
   }
 
   public render() {

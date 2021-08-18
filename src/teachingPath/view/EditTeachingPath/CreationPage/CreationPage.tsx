@@ -136,6 +136,10 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       ) : [Number(item.value.levels[0].slug.split('-')[1])] : [];
 
     const withoutBottomVerticalLine = readOnly && (this.props.node.children.length === 0);
+    let imagenType = articleImg;
+    if (item.type === TeachingPathNodeType.Article) { imagenType = articleImg; }
+    if (item.type === TeachingPathNodeType.Assignment) { imagenType = assignmentImg; }
+    if (item.type === TeachingPathNodeType.Article) { imagenType = articleImg; }
 
     return (
         <div className={containerClassNames} key={`${item.id}-${index}`}>
@@ -144,7 +148,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
             withButtons={!readOnly}
             id={item.value.id}
             type={item.type}
-            icon={item.type === TeachingPathNodeType.Article ? articleImg : assignmentImg}
+            icon={imagenType}
             title={item.value.title}
             description={item.value.excerpt || item.value.description}
             img={image}

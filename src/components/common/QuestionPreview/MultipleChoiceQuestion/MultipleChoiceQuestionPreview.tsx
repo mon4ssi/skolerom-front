@@ -64,8 +64,9 @@ class RenderOption extends Component<RenderOptionProps>{
     }
   }
   public async componentDidMount() {
-    if (this.refInput.current && !this.props.isStudentView) {
-      this.refInput.current!.focus();
+    if (this.refInput.current && !this.props.readOnly) {
+      const focusCurrentOption = Array.from(document.getElementsByClassName('focusCurrentOption') as HTMLCollectionOf<HTMLElement>);
+      focusCurrentOption[0].focus();
     }
   }
 
@@ -82,7 +83,7 @@ class RenderOption extends Component<RenderOptionProps>{
     });
 
     return (
-      <a href="javascript:void(0)" className={`Option ${this.calculateIsRightStyle()} ${isStudentView && 'light'}`} onClick={this.setIsRight} ref={this.refInput}>
+      <a href="javascript:void(0)" className={`Option focusCurrentOption ${this.calculateIsRightStyle()} ${isStudentView && 'light'}`} onClick={this.setIsRight} ref={this.refInput}>
         <div className={inputClassNames}>
           {option.title}
         </div>

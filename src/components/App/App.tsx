@@ -42,6 +42,7 @@ import { ActivityStore } from 'activity/ActivityStore';
 import { UserType } from 'user/User';
 import { QuestionaryTeachingPathStore } from 'teachingPath/questionaryTeachingPath/questionaryTeachingPathStore';
 import { RedirectPage } from 'user/view/RedirectPage';
+import closeImg from 'assets/images/close.svg';
 
 import { DEFAULT_LOCALE, GENERAL_MOBILE_WIDTH, TABLET_WIDTH } from 'utils/constants';
 import { Locales } from 'utils/enums';
@@ -55,6 +56,8 @@ const CurrentAssignmentPageView = (props: any) => <CurrentAssignmentPage {...pro
 
 // tslint:disable-next-line: no-any
 const ViewTeachingPath = (props: any) => <EditTeachingPath {...props} readOnly />;
+const loadDataMaintenance = 30000;
+const SECOND = 2;
 
 interface Props {
   uiStore?: UIStore;
@@ -82,7 +85,10 @@ const emptyRouteStyle = {
 @observer
 class LocalizedApp extends Component<Props> {
   public state = {
-    isLocalesLoaded: false
+    isLocalesLoaded: false,
+    isMaintenance : false,
+    isMaintenanceClose : true,
+    isDataText : ''
   };
 
   private renderEmptyRoute = (path: string) => (
@@ -97,8 +103,51 @@ class LocalizedApp extends Component<Props> {
     </Route>
   )
 
+  public maintenanceRender = async () => {
+    const MyMaintenanceMode = await this.props.loginStore!.getMaintenance_mode();
+    if (MyMaintenanceMode) {
+      this.textMaintenance();
+      this.valueDate();
+    } else {
+      this.setState({ isMaintenance: false });
+    }
+  }
+
+  public changeNewdate = (valueConverseDate: string) => {
+    const year = parseFloat(valueConverseDate.split('-')[0].split('/')[0]);
+    const month = parseFloat(valueConverseDate.split('-')[0].split('/')[1]) - 1;
+    const day = parseFloat(valueConverseDate.split('-')[0].split('/')[SECOND]);
+    const hour = parseFloat(valueConverseDate.split('-')[1].split(':')[0]);
+    const minute = parseFloat(valueConverseDate.split('-')[1].split(':')[1]);
+    const response = new Date(year, month, day, hour, minute);
+    const responseTime = response.getTime();
+    return responseTime;
+  }
+
+  public valueDate = async () => {
+    const MyStartTime = await this.props.loginStore!.getMaintenance_start_time();
+    const MyEndTime = await this.props.loginStore!.getMaintenance_end_time();
+    const MyStartTimeValue = this.changeNewdate(MyStartTime);
+    const MyEndTimeValue = this.changeNewdate(MyEndTime);
+
+    const date = new Date();
+    const exactlyHour = date.getTime();
+    if (MyStartTimeValue <= exactlyHour &&  exactlyHour <= MyEndTimeValue) {
+      this.setState({ isMaintenance: true });
+    } else {
+      this.setState({ isMaintenance: false });
+    }
+  }
+
   public componentDidMount() {
     this.loadLocales();
+    this.maintenanceRender();
+    window.setInterval(
+      () => {
+        this.maintenanceRender();
+      },
+      loadDataMaintenance,
+    );
   }
 
   public loadLocales = async () => {
@@ -132,8 +181,30 @@ class LocalizedApp extends Component<Props> {
     await loginStore!.getLocaleData();
   }
 
+  public textMaintenance = async () => {
+    const response = await this.props.loginStore!.getMaintenance_msj();
+    this.setState({ isDataText: response });
+  }
+
+  public closeRenderMaintenance = () => {
+    this.setState({ isMaintenance: false });
+    this.setState({ isMaintenanceClose: false });
+  }
+
+  public renderMaintenance = () => (
+    <div className="maintenance">
+      <div className="maintenance__content" id="maintenance__content">
+        {this.state.isDataText}
+      </div>
+      <div className="maintenance__close" onClick={this.closeRenderMaintenance}>
+        <img src={closeImg} />
+        <p>{intl.get('generals.close_maintenance')}</p>
+      </div>
+    </div>
+  )
+
   public render() {
-    const { isLocalesLoaded } = this.state;
+    const { isMaintenance, isLocalesLoaded } = this.state;
     const { loginStore } = this.props;
 
     if (!isLocalesLoaded) {
@@ -250,7 +321,8 @@ class LocalizedApp extends Component<Props> {
 
     return (
       <BrowserRouter>
-        <div className="App flexBox fw500">
+        <div className={`App flexBox fw500 ${isMaintenance ? 'isMaintenance' : ''}`}>
+          {this.state.isMaintenance && this.state.isMaintenanceClose && this.renderMaintenance()}
           <AppHeader />
 
           <div className="App__view" id="view">

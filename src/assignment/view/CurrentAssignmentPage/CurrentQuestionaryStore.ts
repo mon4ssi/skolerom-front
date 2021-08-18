@@ -25,9 +25,11 @@ export class CurrentQuestionaryStore {
   @observable public answers: Array<Answer> = [];
   @observable public showValidationErrors: boolean = false;
   @observable public currentQuestionIndex: number = 0;
+  @observable public isLoadingArticles: boolean = false;
   public isArrowsTooltipVisible: boolean = true;
   @observable public isStartedAssignment: boolean = false;
   @observable public relatedArticles: Array<Article> = [];
+  public allArticlesread: boolean = false;
 
   public async createQuestionaryByAssignmentId(id: number, redirectData?: RedirectData) {
     this.isLoading = true;
@@ -138,8 +140,8 @@ export class CurrentQuestionaryStore {
     try {
       const ids = this.assignment!.relatedArticles.map(i => i.id);
       if (ids && ids.length > 0) {
+        this.isLoadingArticles = false;
         const articles = await this.articleService.getArticlesByIds(ids);
-
         const allArticles = this.assignment!.relatedArticles.map((article) => {
           const fullArticles = articles.find(item => item.id === article.id);
           return {
@@ -149,6 +151,7 @@ export class CurrentQuestionaryStore {
             isRead: article.isRead
           };
         });
+        this.isLoadingArticles = true;
         return this.relatedArticles = allArticles;
       }
       return this.relatedArticles = [];
