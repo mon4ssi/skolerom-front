@@ -105,6 +105,8 @@ interface State {
   MySelectSource: number | null;
   showSourceFilter: boolean;
   userFilters: boolean;
+  myValueCore: Array<any>;
+  goalValueFilter: Array<any>;
 }
 
 @inject('editTeachingPathStore')
@@ -150,7 +152,9 @@ export class ArticlesList extends Component<Props, State> {
       MySelectMulti: null,
       MySelectSource: null,
       showSourceFilter: false,
-      userFilters: false
+      userFilters: false,
+      myValueCore: [],
+      goalValueFilter: []
     };
   }
 
@@ -327,6 +331,7 @@ export class ArticlesList extends Component<Props, State> {
         singleString = (index === 0) ? String(e.value) : `${singleString},${String(e.value)}`;
       });
     }
+    this.setState({ myValueCore: newValue });
     this.handleChangeFilters('core', singleString);
   }
 
@@ -345,6 +350,7 @@ export class ArticlesList extends Component<Props, State> {
         singleString = (index === 0) ? String(e.value) : `${singleString},${String(e.value)}`;
       });
     }
+    this.setState({ goalValueFilter : newValue });
     this.handleChangeFilters('goal', singleString);
   }
 
@@ -1385,6 +1391,8 @@ export class ArticlesList extends Component<Props, State> {
               gradeFilterValue={Number(appliedFilters.grades)}
               coreFilterValue={Number(appliedFilters.core)}
               goalsFilterValue={Number(appliedFilters.goal)}
+              coreValueFilter={this.state.myValueCore}
+              goalValueFilter={this.state.goalValueFilter}
               searchQueryFilterValue={appliedFilters.searchTitle as string}
               customGradesList={this.customGradesList()}
               customSubjectsList={this.mySubjects()}

@@ -61,6 +61,20 @@
         }
       }
 
+      &.loadingdata {
+        .itemFilter__core {
+          opacity: 0.5;
+          pointer-events: none;
+        }
+        .itemFlexFilter {
+          pointer-events: none;
+        }
+        .css-1wrxaxw-Control {
+          opacity: 0.4;
+          pointer-events: none;
+        }
+      }
+
       .SearchFilter {
         box-shadow: 0 0 7px -2px rgba(186, 186, 186, 1);
 

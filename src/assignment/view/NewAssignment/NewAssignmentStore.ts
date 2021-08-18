@@ -3,7 +3,7 @@ import isUndefined from 'lodash/isUndefined';
 import isNull from 'lodash/isNull';
 
 import { injector } from 'Injector';
-import { Assignment, Article, ARTICLE_SERVICE_KEY, Attachment, Grade, QuestionAttachment, QuestionType, Subject, GreepElements } from 'assignment/Assignment';
+import { Assignment, Article, ARTICLE_SERVICE_KEY, Attachment, Grade, QuestionAttachment, QuestionType, Subject, GreepElements, FilterArticlePanel } from 'assignment/Assignment';
 import { DraftAssignment, EditableImageChoiceQuestion, EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
 import { ArticleService, ASSIGNMENT_SERVICE, AssignmentService } from 'assignment/service';
 import { DRAFT_ASSIGNMENT_SERVICE, DraftAssignmentService } from 'assignment/assignmentDraft/service';
@@ -80,6 +80,7 @@ export class NewAssignmentStore {
   @observable public searchValue: string = '';
   @observable public storedAssignment: Assignment | null = null;
   @observable public highlightingItem: CreationElementsType | undefined;
+  @observable public allArticlePanelFilters: FilterArticlePanel | null = null;
 
   public arrayForImagesSkeleton = new Array(numberOfImagesForSkeleton).fill('imageSkeletonLoader');
   public arrayForVideosSkeleton = new Array(numberOfVideosForSkeleton).fill('videoSkeletonLoader');
@@ -579,6 +580,14 @@ export class NewAssignmentStore {
 
   public setAssignmentIdToLocalStorage(assignmentId: string) {
     this.userService.setAssignmentId(assignmentId);
+  }
+
+  public getAllArticlePanelFilters() {
+    return toJS(this.allArticlePanelFilters);
+  }
+
+  public async getFiltersArticlePanel() {
+    this.allArticlePanelFilters = await this.teachingPathService.getFiltersArticlePanel();
   }
 
   public async assignStudentToAssignment(assignmentId:string, referralToken: string) {

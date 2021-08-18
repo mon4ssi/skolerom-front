@@ -62,6 +62,8 @@ interface State {
   myValueSubject: number | null;
   myValueMulti: number | null;
   myValueReading: number | null;
+  myValueCore: Array<any>;
+  goalValueFilter: Array<any>;
 }
 
 @inject('teachingPathsListStore', 'editTeachingPathStore')
@@ -123,6 +125,8 @@ class TeachingPathsListComponent extends Component<Props, State> {
       myValueSubject: null,
       myValueMulti: null,
       myValueReading: null,
+      myValueCore: [],
+      goalValueFilter: [],
     };
   }
 
@@ -542,6 +546,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
     const ArrayValue: Array<number> = [];
     const { editTeachingPathStore } = this.props;
     const { valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
+    this.setState({ myValueCore: newValue });
     newValue.forEach((e) => {
       ArrayValue.push(e.value);
     });
@@ -570,6 +575,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
       ArrayValue.push(e.value);
     });
     this.setState({ valueGoalsOptions: ArrayValue });
+    this.setState({ goalValueFilter: newValue });
     let singleString : string = '';
     if (newValue.length > 0) {
       newValue.forEach((e, index) => {
@@ -812,6 +818,8 @@ class TeachingPathsListComponent extends Component<Props, State> {
           mainFilterValueTP={QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREPMAINTOPICSIDS)}
           goalsFilterValueTP={QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREEPGOALSIDS)}
           readingFilterValueTP={QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREPREADINGINSUBJECT)}
+          coreValueFilter={this.state.myValueCore}
+          goalValueFilter={this.state.goalValueFilter}
         />
 
         <div className="cardList" aria-live="polite" id="List" aria-atomic="true">

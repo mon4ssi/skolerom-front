@@ -747,6 +747,22 @@ export class AssignmentList {
     this.filter.subject = subjectID;
   }
 
+  public setFiltersMultiID(multiID: number | null) {
+    this.filter.grepMainTopicsIds = multiID;
+  }
+
+  public setFiltersCoreID(coreID: string | number | null) {
+    this.filter.grepCoreElementsIds = coreID;
+  }
+
+  public setFiltersGoalID(goalID: string | number | null) {
+    this.filter.grepGoalsIds = goalID;
+  }
+
+  public setFiltersReadingID(readingID: number | null) {
+    this.filter.grepReadingInSubject = readingID;
+  }
+
   public setFiltersIsEvaluated(status: string | null) {
     this.filter.isEvaluated = status;
   }

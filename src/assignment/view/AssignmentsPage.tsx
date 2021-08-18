@@ -129,6 +129,8 @@ interface State {
   myValueSubject: number | null;
   myValueMulti: number | null;
   myValueReading: number | null;
+  myValueCore: Array<any>;
+  goalValueFilter: Array<any>;
   customCoreList: Array<GreepSelectValue>;
   grepFiltersData: FilterGrep;
   optionsCore: Array<GreepSelectValue>;
@@ -174,6 +176,8 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       myValueSubject: null,
       myValueMulti: null,
       myValueReading: null,
+      myValueCore: [],
+      goalValueFilter: [],
       customCoreList: [],
       grepFiltersData: {},
       optionsCore: [],
@@ -226,7 +230,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
         valueToArray = element.id;
       }
     });
-    if (this.state.myValueGrade) {
+    if (this.state.myValueGrade === Number(e.currentTarget.value)) {
       QueryStringHelper.set(
         this.props.history,
         QueryStringKeys.GRADE,
@@ -263,7 +267,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
         valueToArray = element.id;
       }
     });
-    if (this.state.myValueSubject) {
+    if (this.state.myValueSubject === Number(e.currentTarget.value)) {
       QueryStringHelper.set(
         this.props.history,
         QueryStringKeys.SUBJECT,
@@ -346,6 +350,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     const ArrayValue: Array<number> = [];
     const { newAssignmentStore } = this.props;
     const { valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
+    this.setState({ myValueCore: newValue });
     newValue.forEach((e) => {
       ArrayValue.push(e.value);
     });
@@ -380,6 +385,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
         singleString = (index === 0) ? String(e.value) : `${singleString},${String(e.value)}`;
       });
     }
+    this.setState({ goalValueFilter: newValue });
     QueryStringHelper.set(
       this.props.history,
       QueryStringKeys.GREEPGOALSIDS,
@@ -647,6 +653,9 @@ class AssignmentsPageWrapper extends Component<Props, State> {
           orderFieldFilterValue={isStudent ? SortingFilter.DEADLINE : SortingFilter.CREATION_DATE}
           orderFilterValue={QueryStringHelper.getString(this.props.history, QueryStringKeys.ORDER)}
           searchQueryFilterValue={QueryStringHelper.getString(this.props.history, QueryStringKeys.SEARCH)}
+          coreValueFilter={this.state.myValueCore}
+          goalValueFilter={this.state.goalValueFilter}
+
           mainFilterValueTP={QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREPMAINTOPICSIDS)}
           readingFilterValueTP={QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREPREADINGINSUBJECT)}
         />

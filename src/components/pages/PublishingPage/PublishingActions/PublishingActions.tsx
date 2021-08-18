@@ -1239,13 +1239,11 @@ export class PublishingActions extends Component<Props, State> {
     if (typeof(listGoals) !== 'undefined') {
       // step 1: frag in two arrays
       myOptionGoals!.forEach((goal) => {
-        if (listGoals!.length > 0) {
-          if (listGoals!.includes(Number(goal!.id))) {
-            const myGoal = goal;
-            anotherGoals.push(myGoal);
-          } else {
-            goalsNotSelected.push(goal);
-          }
+        if (listGoals!.includes(Number(goal!.id))) {
+          const myGoal = goal;
+          anotherGoals.push(myGoal);
+        } else {
+          goalsNotSelected.push(goal);
         }
       });
       // step 2: reOrder goals from array
