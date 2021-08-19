@@ -146,6 +146,7 @@ interface State {
   valueSubjectsOptions: Array<number>;
   valueGoalsOptions: Array<number>;
   valueStringGoalsOptions: Array<string>;
+  filtersisUsed: boolean;
 }
 
 @inject('assignmentListStore', 'newAssignmentStore')
@@ -192,7 +193,8 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       valueGradesOptions: [],
       valueSubjectsOptions: [],
       valueGoalsOptions: [],
-      valueStringGoalsOptions: []
+      valueStringGoalsOptions: [],
+      filtersisUsed: false,
     };
   }
   private handleChangeGrade = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -239,6 +241,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       this.setState({
         myValueGrade : null
       });
+      this.setState({ filtersisUsed: false });
     } else {
       QueryStringHelper.set(
         this.props.history,
@@ -248,6 +251,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       this.setState({
         myValueGrade : Number(e.currentTarget.value)
       });
+      this.setState({ filtersisUsed: true });
     }
     const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, [valueToArray], valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
@@ -276,6 +280,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       this.setState({
         myValueSubject : null
       });
+      this.setState({ filtersisUsed: false });
     } else {
       QueryStringHelper.set(
         this.props.history,
@@ -285,6 +290,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       this.setState({
         myValueSubject : Number(e.currentTarget.value)
       });
+      this.setState({ filtersisUsed: true });
     }
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
     const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, [valueToArray], this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
@@ -305,6 +311,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       this.setState({
         myValueMulti : null
       });
+      this.setState({ filtersisUsed: false });
     } else {
       QueryStringHelper.set(
         this.props.history,
@@ -314,6 +321,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       this.setState({
         myValueMulti : Number(e.currentTarget.value)
       });
+      this.setState({ filtersisUsed: true });
     }
     this.setState({ valueMultiOptions: [Number(e.currentTarget.value)] });
     const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(valueCoreOptions, [Number(e.currentTarget.value)], valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
@@ -333,6 +341,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       this.setState({
         myValueReading : null
       });
+      this.setState({ filtersisUsed: false });
     } else {
       QueryStringHelper.set(
         this.props.history,
@@ -342,6 +351,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       this.setState({
         myValueReading : Number(e.currentTarget.value)
       });
+      this.setState({ filtersisUsed: true });
     }
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
   }
@@ -354,6 +364,11 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     newValue.forEach((e) => {
       ArrayValue.push(e.value);
     });
+    if (newValue.length === 0) {
+      this.setState({ filtersisUsed: false });
+    } else {
+      this.setState({ filtersisUsed: true });
+    }
     this.setState({ valueCoreOptions: ArrayValue });
     const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(ArrayValue, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
@@ -379,6 +394,11 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       ArrayValue.push(e.value);
     });
     this.setState({ valueGoalsOptions: ArrayValue });
+    if (newValue.length === 0) {
+      this.setState({ filtersisUsed: false });
+    } else {
+      this.setState({ filtersisUsed: true });
+    }
     let singleString : string = '';
     if (newValue.length > 0) {
       newValue.forEach((e, index) => {
@@ -519,9 +539,31 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     return returnArray;
   }
 
+  public fetchTeachingPaths() {
+    const { filter } = this.props.assignmentListStore!;
+
+    filter.page = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.PAGE, 1);
+    filter.grade = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GRADE);
+    filter.subject = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.SUBJECT);
+    filter.grepCoreElementsIds = QueryStringHelper.getString(this.props.history, QueryStringKeys.GREPCOREELEMENTSIDS);
+    filter.grepMainTopicsIds = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREPMAINTOPICSIDS);
+    filter.grepGoalsIds = QueryStringHelper.getString(this.props.history, QueryStringKeys.GREEPGOALSIDS);
+    filter.grepReadingInSubject = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREPREADINGINSUBJECT);
+    filter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeys.SEARCH);
+    filter.order = QueryStringHelper.getString(this.props.history, QueryStringKeys.ORDER, SortingFilter.DESC);
+    filter.orderField = SortingFilter.CREATION_DATE;
+
+    if (filter.subject || filter.grade || filter.grepCoreElementsIds || filter.grepMainTopicsIds || filter.grepGoalsIds || filter.grepReadingInSubject) {
+      this.setState({ filtersisUsed: true });
+    } else {
+      this.setState({ filtersisUsed: false });
+    }
+  }
+
   public async componentDidMount() {
     const { newAssignmentStore } = this.props;
     const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions } = this.state;
+    this.fetchTeachingPaths();
     const grepFiltersDataAwait = await newAssignmentStore!.getGrepFilters();
     this.setState({
       grepFiltersData : grepFiltersDataAwait
@@ -583,6 +625,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     this.setState({ valueGradesOptions: [] });
     this.setState({ valueCoreOptions: [] });
     this.setState({ valueMultiOptions: [] });
+    this.setState({ filtersisUsed: false });
   }
 
   public createAssignment = async () => {
@@ -630,6 +673,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
           customMultiList={this.state.optionsMulti}
           customReadingList={this.state.optionsReading}
           customGoalsTPList={this.state.optionsGoals}
+          filtersisUsed={this.state.filtersisUsed}
           // METHODS
           handleChangeSubject={this.handleChangeSubject}
           handleChangeGrade={this.handleChangeGrade}

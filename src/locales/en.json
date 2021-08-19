@@ -635,7 +635,8 @@
     "Step overview": "Step overview",
     "Submit": "Submit Teaching Path",
     "no_title": "No title",
-    "No results found": "No results found"
+    "No results found": "No results found",
+    "no_options": "No options"
   },
   "students_list": {
     "title":"Students",

@@ -44,6 +44,7 @@ interface Props {
   customGradesList?: Array<Grade>;
   customSubjectsList?: Array<Subject>;
   showSourceFilter?: boolean;
+  filtersisUsed?: boolean;
 
   subjectFilterValue?: number | null;
   gradeFilterValue?: number | null;
@@ -98,7 +99,6 @@ interface State {
   displayWidthBreakpoint: number;
   filtersModal: boolean;
   filtersModalTp: boolean;
-  filtersisUsed: boolean;
   filtersModalAssignment: boolean;
   filtersAssignment: boolean;
 }
@@ -115,7 +115,6 @@ class SearchFilter extends Component<Props, State> {
     displayWidthBreakpoint: 0,
     filtersModal: false,
     filtersModalTp: false,
-    filtersisUsed: false,
     filtersModalAssignment: false,
     filtersAssignment: false,
   };
@@ -144,7 +143,6 @@ class SearchFilter extends Component<Props, State> {
         }
       }
     }
-
     window.addEventListener('resize', this.handleResize);
     this.createOrUpdateStyleElement(0); // needed here to reset style from previous SearchFilter
     this.handleResize();
@@ -432,7 +430,7 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public applyFiltersbutton() {
-    const { filtersModal, filtersisUsed } = this.state;
+    const { filtersModal } = this.state;
     let buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_close');
     let buttonClass = 'closehandler';
     let imgFilter = filterImg;
@@ -441,7 +439,7 @@ class SearchFilter extends Component<Props, State> {
       buttonClass = 'openhandler';
       imgFilter = filterWhiteImg;
     } else {
-      if (filtersisUsed) {
+      if (this.props.filtersisUsed) {
         buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_change');
         buttonClass = 'openhandler';
         imgFilter = filterWhiteImg;
@@ -457,23 +455,23 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public applyFiltersTeachingPathbutton() {
-    const { filtersModal, filtersisUsed } = this.state;
+    const { filtersModalTp } = this.state;
     let buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_close');
     let buttonClass = 'closehandler';
     let imgFilter = filterImg;
-    if (filtersModal) {
+    if (filtersModalTp) {
       buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_open');
       buttonClass = 'openhandler';
       imgFilter = filterWhiteImg;
     } else {
-      if (filtersisUsed) {
+      if (this.props.filtersisUsed) {
         buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_change');
         buttonClass = 'openhandler';
         imgFilter = filterWhiteImg;
       }
     }
     return (
-      <div className="SearchFilter__link">
+      <div className="SearchFilter__link TpButton">
         <a href="javascript:void(0)" className={buttonClass} onClick={this.openFiltersModalTp}>
           <img src={imgFilter} /> {buttonTxt}
         </a>
@@ -482,16 +480,16 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public applyFiltersbuttonAssignments() {
-    const { filtersModal, filtersisUsed } = this.state;
+    const { filtersModalAssignment } = this.state;
     let buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_close');
     let buttonClass = 'closehandler';
     let imgFilter = filterImg;
-    if (filtersModal) {
+    if (filtersModalAssignment) {
       buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_open');
       buttonClass = 'openhandler';
       imgFilter = filterWhiteImg;
     } else {
-      if (filtersisUsed) {
+      if (this.props.filtersisUsed) {
         buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_change');
         buttonClass = 'openhandler';
         imgFilter = filterWhiteImg;
@@ -507,7 +505,7 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public applyFiltersbuttonFilterAssignments() {
-    const { filtersAssignment, filtersisUsed } = this.state;
+    const { filtersAssignment } = this.state;
     let buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_close');
     let buttonClass = 'closehandler';
     let imgFilter = filterImg;
@@ -516,7 +514,7 @@ class SearchFilter extends Component<Props, State> {
       buttonClass = 'openhandler';
       imgFilter = filterWhiteImg;
     } else {
-      if (filtersisUsed) {
+      if (this.props.filtersisUsed) {
         buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_change');
         buttonClass = 'openhandler';
         imgFilter = filterWhiteImg;
@@ -603,9 +601,18 @@ class SearchFilter extends Component<Props, State> {
         </div>
       );
     }
+    const NoOptionsMessage = () => {
+      const { coreValueFilter } = this.props;
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
+        </div>
+      );
+    };
     return (
       <Select
         width="320px"
+        components={{ NoOptionsMessage }}
         styles={customStyles}
         options={options}
         onChange={handleChangeSelectCore}
@@ -645,9 +652,18 @@ class SearchFilter extends Component<Props, State> {
         );
       }
     }
+    const NoOptionsMessage = () => {
+      const { coreValueFilter } = this.props;
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
+        </div>
+      );
+    };
     return (
       <Select
         width="320px"
+        components={{ NoOptionsMessage }}
         styles={customStyles}
         options={options}
         onChange={handleChangeSelectCore}
@@ -687,9 +703,18 @@ class SearchFilter extends Component<Props, State> {
         );
       }
     }
+    const NoOptionsMessage = () => {
+      const { coreValueFilter } = this.props;
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
+        </div>
+      );
+    };
     return (
       <Select
         width="320px"
+        components={{ NoOptionsMessage }}
         styles={customStyles}
         options={options}
         onChange={handleChangeSelectCore}
@@ -771,9 +796,18 @@ class SearchFilter extends Component<Props, State> {
         </div>
       );
     }
+    const NoOptionsMessage = () => {
+      const { coreValueFilter } = this.props;
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
+        </div>
+      );
+    };
     return (
       <Select
         width="320px"
+        components={{ NoOptionsMessage }}
         styles={customStyles}
         options={options}
         onChange={handleChangeSelectGoals}
@@ -811,9 +845,18 @@ class SearchFilter extends Component<Props, State> {
         </p>
       );
     }
+    const NoOptionsMessage = () => {
+      const { coreValueFilter } = this.props;
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
+        </div>
+      );
+    };
     return (
       <Select
         width="320px"
+        components={{ NoOptionsMessage }}
         styles={customStyles}
         options={options}
         onChange={handleChangeSelectGoals}

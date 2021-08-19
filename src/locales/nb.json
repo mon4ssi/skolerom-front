@@ -588,11 +588,11 @@
       "all_assignments": "Alle oppgaver",
       "my_assignments": "Mine oppgaver",
       "articles": "Artikler",
-      "articles_title": "Artikler Information",
-      "articles_default": "Select an item to view its detailed information",
+      "articles_title": "Artikkel informasjon",
+      "articles_default": "Velg en artikkel for mer informasjon",
       "articles_read": "Read Artikler",
-      "assignments_title": "Oppgaver Information",
-      "assignments_default": "Select an item to view its detailed information",
+      "assignments_title": "Oppgave informasjon",
+      "assignments_default": "Velg en artikkel for mer informasjon",
       "assignments_read": "Read Oppgaver",
       "assignmetns": "Oppgaver",
       "assignments_selected": "{number} oppgaver valgt",
@@ -634,7 +634,8 @@
     "Step overview": "Oversikt over stien",
     "Submit": "Registrer læringssti",
     "no_title": "Uten tittel",
-    "No results found": "Søket ditt ga ingen resultater"
+    "No results found": "Søket ditt ga ingen resultater",
+    "no_options": "Ingen treff"
   },
   "students_list": {
     "title":"Elever",

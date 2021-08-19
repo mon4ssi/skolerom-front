@@ -107,6 +107,7 @@ interface State {
   userFilters: boolean;
   myValueCore: Array<any>;
   goalValueFilter: Array<any>;
+  filtersisUsed: boolean;
 }
 
 @inject('editTeachingPathStore')
@@ -154,7 +155,8 @@ export class ArticlesList extends Component<Props, State> {
       showSourceFilter: false,
       userFilters: false,
       myValueCore: [],
-      goalValueFilter: []
+      goalValueFilter: [],
+      filtersisUsed: false,
     };
   }
 
@@ -333,6 +335,11 @@ export class ArticlesList extends Component<Props, State> {
     }
     this.setState({ myValueCore: newValue });
     this.handleChangeFilters('core', singleString);
+    if (newValue.length === 0) {
+      this.setState({ filtersisUsed: false });
+    } else {
+      this.setState({ filtersisUsed: true });
+    }
   }
 
   public handleChangeCore = async (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -352,6 +359,11 @@ export class ArticlesList extends Component<Props, State> {
     }
     this.setState({ goalValueFilter : newValue });
     this.handleChangeFilters('goal', singleString);
+    if (newValue.length === 0) {
+      this.setState({ filtersisUsed: false });
+    } else {
+      this.setState({ filtersisUsed: true });
+    }
   }
 
   public handleChangeSubject = async (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -386,6 +398,7 @@ export class ArticlesList extends Component<Props, State> {
     GradeFilterArray.forEach((e) => {
       e.classList.remove('active');
     });
+    this.setState({ filtersisUsed: false });
   }
 
   public handleClickGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -407,6 +420,7 @@ export class ArticlesList extends Component<Props, State> {
         });
         e.currentTarget.classList.add('active');
         e.currentTarget.focus();
+        this.setState({ filtersisUsed: true });
         this.state.grepDataFilters!.subject_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
           const allSympGrades = element.grade_ids;
@@ -568,6 +582,7 @@ export class ArticlesList extends Component<Props, State> {
         MySelectGrade : null
       });
       if (this.state.activeGrepFilters) {
+        this.setState({ filtersisUsed: true });
         const GradeFilterArray = Array.from(document.getElementsByClassName('gradesFilterClass') as HTMLCollectionOf<HTMLElement>);
         this.handleChangeFilters('grades', '');
         GradeFilterArray.forEach((e) => {
@@ -599,6 +614,7 @@ export class ArticlesList extends Component<Props, State> {
         this.setState({
           valueSubject: value
         });
+        this.setState({ filtersisUsed: true });
         this.state.grepDataFilters!.core_elements_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
           const allSympGrades = element.subject_ids;
@@ -742,6 +758,7 @@ export class ArticlesList extends Component<Props, State> {
         MySelectSubject : null
       });
       if (this.state.activeGrepFilters) {
+        this.setState({ filtersisUsed: false });
         const GradeFilterArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
         this.handleChangeFilters('subjects', '');
         GradeFilterArray.forEach((e) => {
@@ -759,6 +776,7 @@ export class ArticlesList extends Component<Props, State> {
         MySelectMulti : Number(value)
       });
       this.handleChangeFilters('multi', Number(value));
+      this.setState({ filtersisUsed: true });
       const GradeFilterArray = Array.from(document.getElementsByClassName('multiFilterClass') as HTMLCollectionOf<HTMLElement>);
       GradeFilterArray.forEach((e) => {
         e.classList.remove('active');
@@ -770,6 +788,7 @@ export class ArticlesList extends Component<Props, State> {
         MySelectMulti : null
       });
       this.handleChangeFilters('multi', '');
+      this.setState({ filtersisUsed: false });
       const GradeFilterArray = Array.from(document.getElementsByClassName('multiFilterClass') as HTMLCollectionOf<HTMLElement>);
       GradeFilterArray.forEach((e) => {
         e.classList.remove('active');
@@ -789,6 +808,7 @@ export class ArticlesList extends Component<Props, State> {
       GradeFilterArray.forEach((e) => {
         e.classList.remove('active');
       });
+      this.setState({ filtersisUsed: true });
       e.currentTarget.classList.add('active');
       e.currentTarget.focus();
     } else {
@@ -796,6 +816,7 @@ export class ArticlesList extends Component<Props, State> {
         MySelectSource : null
       });
       this.handleChangeFilters('source', '');
+      this.setState({ filtersisUsed: false });
       const GradeFilterArray = Array.from(document.getElementsByClassName('sourceFilterClass') as HTMLCollectionOf<HTMLElement>);
       GradeFilterArray.forEach((e) => {
         e.classList.remove('active');
@@ -1370,6 +1391,7 @@ export class ArticlesList extends Component<Props, State> {
               placeholder={intl.get('edit_teaching_path.modals.search_for_articles')}
               date
               isArticlesListPage
+              filtersisUsed={this.state.filtersisUsed}
               // METHODS
               handleChangeSubject={this.handleChangeSubject}
               handleChangeGrade={this.handleChangeGrade}

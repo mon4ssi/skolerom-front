@@ -21,6 +21,7 @@ import tagsImg from 'assets/images/tags.svg';
 import cogsImg from 'assets/images/cogs.svg';
 import coreImg from 'assets/images/core.svg';
 import goalsImg from 'assets/images/goals.svg';
+import backIcon from 'assets/images/back-arrow.svg';
 
 import './AssignmentsList.scss';
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
@@ -144,6 +145,7 @@ interface State {
   coreValueFilter: Array<any>;
   goalValueFilter: Array<any>;
   valueStringGoalsOptions: Array<string>;
+  filtersisUsed: boolean;
 }
 
 @inject('assignmentListStore', 'editTeachingPathStore')
@@ -189,6 +191,7 @@ export class AssignmentsList extends Component<Props, State> {
       coreValueFilter: [],
       goalValueFilter: [],
       valueStringGoalsOptions: [],
+      filtersisUsed: false,
     };
   }
 
@@ -294,6 +297,13 @@ export class AssignmentsList extends Component<Props, State> {
   public async componentDidMount() {
     const { editTeachingPathStore } = this.props;
     const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions } = this.state;
+    this.props.assignmentListStore!.clearMyAssignmentsList();
+    this.props.assignmentListStore!.setTypeOfAssignmentsList('all');
+    this.setState({ itemsForNewChildren: this.getAllChildrenItems() });
+    this.props.assignmentListStore!.setFromTeachingPath(true);
+    this.props.assignmentListStore!.setFiltersForTeachingPath();
+    document.addEventListener('keyup', this.handleKeyboardControl);
+    this.refButton.current!.focus();
     const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFilters();
     this.setState({
       grepFiltersData : grepFiltersDataAwait
@@ -321,13 +331,6 @@ export class AssignmentsList extends Component<Props, State> {
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
     });
-    this.props.assignmentListStore!.clearMyAssignmentsList();
-    this.props.assignmentListStore!.setTypeOfAssignmentsList('all');
-    this.setState({ itemsForNewChildren: this.getAllChildrenItems() });
-    this.props.assignmentListStore!.setFromTeachingPath(true);
-    this.props.assignmentListStore!.setFiltersForTeachingPath();
-    document.addEventListener('keyup', this.handleKeyboardControl);
-    this.refButton.current!.focus();
   }
 
   public componentWillUnmount() {
@@ -611,11 +614,13 @@ export class AssignmentsList extends Component<Props, State> {
       this.setState({
         myValueSubject : Number(value)
       });
+      this.setState({ filtersisUsed: true });
     } else {
       assignmentListStore!.setFiltersSubjectID(null);
       this.setState({
         myValueSubject : null
       });
+      this.setState({ filtersisUsed: false });
     }
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, [valueToArray], this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
@@ -655,11 +660,13 @@ export class AssignmentsList extends Component<Props, State> {
       this.setState({
         myValueGrade : Number(value)
       });
+      this.setState({ filtersisUsed: true });
     } else {
       assignmentListStore!.setFiltersGradeID(null);
       this.setState({
         myValueGrade : null
       });
+      this.setState({ filtersisUsed: false });
     }
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, [valueToArray], valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
@@ -676,11 +683,13 @@ export class AssignmentsList extends Component<Props, State> {
       this.setState({
         myValueMulti : Number(value)
       });
+      this.setState({ filtersisUsed: true });
     } else {
       assignmentListStore!.setFiltersMultiID(null);
       this.setState({
         myValueMulti : null
       });
+      this.setState({ filtersisUsed: false });
     }
     this.setState({ valueMultiOptions: [Number(e.currentTarget.value)] });
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, [Number(e.currentTarget.value)], valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
@@ -697,11 +706,13 @@ export class AssignmentsList extends Component<Props, State> {
       this.setState({
         myValueReading : Number(value)
       });
+      this.setState({ filtersisUsed: true });
     } else {
       assignmentListStore!.setFiltersReadingID(null);
       this.setState({
         myValueReading : null
       });
+      this.setState({ filtersisUsed: false });
     }
   }
 
@@ -719,7 +730,8 @@ export class AssignmentsList extends Component<Props, State> {
       myValueGrade : null,
       myValueSubject : null,
       coreValueFilter : [],
-      goalValueFilter : []
+      goalValueFilter : [],
+      filtersisUsed: false,
     });
   }
 
@@ -730,6 +742,11 @@ export class AssignmentsList extends Component<Props, State> {
     newValue.forEach((e) => {
       ArrayValue.push(e.value);
     });
+    if (newValue.length === 0) {
+      this.setState({ filtersisUsed: false });
+    } else {
+      this.setState({ filtersisUsed: true });
+    }
     this.setState({ valueCoreOptions: ArrayValue });
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(ArrayValue, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
@@ -752,6 +769,11 @@ export class AssignmentsList extends Component<Props, State> {
       newValue.forEach((e, index) => {
         singleString = (index === 0) ? String(e.value) : `${singleString},${String(e.value)}`;
       });
+    }
+    if (newValue.length === 0) {
+      this.setState({ filtersisUsed: false });
+    } else {
+      this.setState({ filtersisUsed: true });
     }
     assignmentListStore!.setFiltersGoalID(singleString);
     this.setState({ goalValueFilter : newValue });
@@ -1015,6 +1037,10 @@ export class AssignmentsList extends Component<Props, State> {
     return (
       <div className="addItemModal__content">
         <div className="addItemModal__left">
+          <button className="back-buttonAbs" onClick={this.closeModal}>
+            <img src={backIcon} alt="Back" />
+            {intl.get('new assignment.go_back')}
+          </button>
           {this.conditionalGreedData()}
         </div>
         <div className="addItemModal__right">
@@ -1028,6 +1054,7 @@ export class AssignmentsList extends Component<Props, State> {
               customGoalsTPList={this.state.optionsGoals}
               customMultiList={this.state.optionsMulti}
               customReadingList={this.state.optionsReading}
+              filtersisUsed={this.state.filtersisUsed}
               // METHODS
               handleChangeSubject={this.handleChangeSubject}
               handleChangeGrade={this.handleChangeGrade}

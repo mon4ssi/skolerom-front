@@ -398,6 +398,7 @@ export class PublishingActions extends Component<Props, State> {
     const subject = store!.getAllSubjects().find(subject => subject.id === id);
     if (subject) {
       store!.currentEntity!.addSubject(subject);
+      this.setState({ loadingGoals : true });
       for (let i = 0; i < optionsSubjects.length; i = i + 1) {
         // tslint:disable-next-line: variable-name
         if (subject.id === optionsSubjects[i].wp_id) {
@@ -423,6 +424,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          loadingGoals: false
         }
       );
       this.comparativeGoalsValueToFilter();
@@ -437,6 +439,7 @@ export class PublishingActions extends Component<Props, State> {
     const arrayValueSubjects = this.state.valueSubjectsOptions;
     if (subject) {
       store!.currentEntity!.removeSubject(subject);
+      this.setState({ loadingGoals : true });
       for (let i = 0; i < optionsSubjects.length; i = i + 1) {
         // tslint:disable-next-line: variable-name
         if (subject.id === optionsSubjects[i].wp_id) {
@@ -463,6 +466,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          loadingGoals: false
         }
       );
       this.comparativeGoalsValueToFilter();
@@ -482,6 +486,7 @@ export class PublishingActions extends Component<Props, State> {
     const grade = store!.getAllGrades().find(grade => grade.id === id);
     if (grade) {
       store!.currentEntity!.addGrade(grade);
+      this.setState({ loadingGoals : true });
       for (let i = 0; i < optionsGrades.length; i = i + 1) {
         // tslint:disable-next-line: variable-name
         if (grade.id === optionsGrades[i].wp_id) {
@@ -507,6 +512,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          loadingGoals: false
         }
       );
       this.comparativeGoalsValueToFilter();
@@ -535,6 +541,7 @@ export class PublishingActions extends Component<Props, State> {
 
     if (grade) {
       store!.currentEntity!.removeGrade(grade);
+      this.setState({ loadingGoals : true });
       for (let i = 0; i < optionsGrades.length; i = i + 1) {
         // tslint:disable-next-line: variable-name
         if (grade.id === optionsGrades[i].wp_id) {
@@ -561,6 +568,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          loadingGoals: false
         }
       );
       this.comparativeGoalsValueToFilter();
@@ -843,6 +851,7 @@ export class PublishingActions extends Component<Props, State> {
     const { currentEntity } = this.props.store!;
     const { valueCoreOptions } = this.state;
     if (newValue.value !== 0) {
+      this.setState({ loadingGoals : true });
       /* tslint:disable-next-line:max-line-length */
       const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(newValue.value, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
       this.setState({
@@ -852,6 +861,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          loadingGoals: false
         }
       );
       this.comparativeGoalsValueToFilter();
@@ -868,6 +878,7 @@ export class PublishingActions extends Component<Props, State> {
         currentEntity!.setGrepCoreElementsIds([newValue.value]);
       }
     } else {
+      this.setState({ loadingGoals : true });
       /* tslint:disable-next-line:max-line-length */
       const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters([], this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
       this.setState({
@@ -877,6 +888,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          loadingGoals: false
         }
       );
       this.setState({ pageCurrent: MAGICNUMBER1 });
@@ -944,6 +956,7 @@ export class PublishingActions extends Component<Props, State> {
     const { currentEntity } = this.props.store!;
     const { valueMultiOptions } = this.state;
     if (newValue.value !== 0) {
+      this.setState({ loadingGoals : true });
       /* tslint:disable-next-line:max-line-length */
       const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, newValue.value, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
       this.setState({
@@ -953,6 +966,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          loadingGoals : false
         }
       );
       this.comparativeGoalsValueToFilter();
@@ -967,6 +981,7 @@ export class PublishingActions extends Component<Props, State> {
       );
       currentEntity!.setGrepMainTopicsIds([newValue.value]);
     } else {
+      this.setState({ loadingGoals : true });
       const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, [], this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
       this.setState({
         optionsGoals : grepFiltergoalssDataAwait.data
@@ -975,6 +990,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          loadingGoals : false
         }
       );
       this.setState({ pageCurrent: MAGICNUMBER1 });
@@ -1284,14 +1300,14 @@ export class PublishingActions extends Component<Props, State> {
         );
       });
     }
+    if (this.state.loadingGoals) {
+      return (
+        <div className="minimalLoading">
+          <span /><span /><span />
+        </div>
+      );
+    }
     if (optionsGoals.length === 0) {
-      if (this.state.loadingGoals) {
-        return (
-          <div className="minimalLoading">
-            <span /><span /><span />
-          </div>
-        );
-      }
       return (
         <div className="itemTablesBody">
           {intl.get('edit_teaching_path.header.notdata_goals')}

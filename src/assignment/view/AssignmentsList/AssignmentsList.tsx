@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import intl from 'react-intl-universal';
 
 import { Assignment } from 'assignment/Assignment';
 import { AssignmentListStore } from './AssignmentListStore';
@@ -51,7 +52,13 @@ class AssignmentsList extends Component<Props> {
 
   public render() {
     const { assignments } = this.props;
-
+    if (assignments.length === 0) {
+      return (
+        <div className="noResults emptyTeachingPaths">
+          {intl.get('edit_teaching_path.No results found')}
+        </div>
+      );
+    }
     return <ul className="MyList" id="List" aria-live="polite">{assignments.map(this.renderListItem)}</ul>;
   }
 }

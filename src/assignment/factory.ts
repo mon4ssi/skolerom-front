@@ -96,10 +96,10 @@ export interface TeacherAssignmentResponseDTO {
   createByContentManager?: boolean;
   isPublished?: boolean;
   isDistributed?: boolean;
-  grep_coreelements?: Array<GreepElements>;
-  grep_goals?: Array<GreepElements>;
-  grep_maintopic?: Array<GreepElements>;
-  grep_readinginsubject?: string;
+  grepCoreelements?: Array<GreepElements>;
+  grepGoals?: Array<GreepElements>;
+  grepMaintopic?: Array<GreepElements>;
+  grepReadinginsubject?: string;
 }
 
 export const buildFilterDTO = (filter: Filter): Object => {
@@ -303,10 +303,10 @@ export const buildAllAssignmentsList = (item: TeacherAssignmentResponseDTO) => (
       isCreatedByContentManager: item.createByContentManager,
       isPublished: item.isPublished,
       isDistributed: item.isDistributed,
-      grepCoreelements: item.grep_coreelements,
-      grepGoals: item.grep_goals,
-      grepMaintopic: item.grep_maintopic,
-      grepReadingInsubject: item.grep_readinginsubject
+      grepCoreelements: item.grepCoreelements,
+      grepGoals: item.grepGoals,
+      grepMaintopic: item.grepMaintopic,
+      grepReadingInsubject: item.grepReadinginsubject
     })
 );
 
