@@ -169,21 +169,31 @@ export class DraftTeachingPath extends TeachingPath {
     }
   }
 
+  public anySubjects(butSubjects: Array<Subject>, node: EditableTeachingPathNode) {
+    let returnArray : Array<Subject> = butSubjects;
+    node!.items!.forEach((e) => {
+      if (typeof(e.value.subjects) !== 'undefined') {
+        returnArray = returnArray!.concat(e.value.subjects!);
+      }
+    });
+    if (node!.children!.length > 0) {
+      node!.children!.forEach((element) => {
+        returnArray = this.anySubjects(returnArray, element);
+      });
+    }
+    returnArray = returnArray!.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+    return returnArray;
+  }
+
   @action
   public addSubjectBySave() {
-    let myFirstSubjects: Array<Subject> | undefined = [];
+    let myFirstSubjects: Array<Subject> = [];
     const firstItems = this.content;
     if (this.subjects.length === 0) {
       if (firstItems.children.length > 0) {
         const firstItemForList = firstItems.children;
         firstItemForList.forEach((element) => {
-          if (element!.items![0].type === 'ARTICLE') {
-            myFirstSubjects = myFirstSubjects!.concat(element!.items![0].value.subjects!);
-          }
-          if (element!.items![0].type === 'ASSIGNMENT') {
-            myFirstSubjects = myFirstSubjects!.concat(element!.items![0].value.subjects!);
-          }
-          myFirstSubjects = myFirstSubjects!.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+          myFirstSubjects = this.anySubjects(myFirstSubjects, element);
         });
         if (typeof(myFirstSubjects) !== 'undefined') {
           this.subjects.splice(0, this.subjects.length);
@@ -195,18 +205,31 @@ export class DraftTeachingPath extends TeachingPath {
     }
   }
 
+  public anyGoals(butGoals: Array<GreepElements>, node: EditableTeachingPathNode) {
+    let returnArray : Array<GreepElements> = butGoals;
+    node!.items!.forEach((e) => {
+      if (typeof(e.value.grades) !== 'undefined') {
+        returnArray = returnArray!.concat(e.value.grepGoals!);
+      }
+    });
+    if (node!.children!.length > 0) {
+      node!.children!.forEach((element) => {
+        returnArray = this.anyGoals(returnArray, element);
+      });
+    }
+    returnArray = returnArray!.filter((v, i, a) => a.findIndex(t => (t === v)) === i);
+    return returnArray;
+  }
+
   @action
   public async addGoalsBySave() {
-    let myFirstGoals: Array<GreepElements> | undefined = [];
+    let myFirstGoals: Array<GreepElements> = [];
     const firstItems = this.content;
     if (firstItems.children.length > 0) {
-      const firstItemForList = firstItems.children![0].items![0];
-      if (firstItemForList.type === 'ARTICLE') {
-        myFirstGoals = firstItemForList.value.grepGoals;
-      }
-      if (firstItemForList.type === 'ASSIGNMENT') {
-        myFirstGoals = firstItemForList.value.grepGoals;
-      }
+      const firstItemForList = firstItems.children;
+      firstItemForList.forEach((element) => {
+        myFirstGoals = this.anyGoals(myFirstGoals, element);
+      });
       if (typeof(myFirstGoals) !== 'undefined') {
         this._grepGoals!.splice(0, this._grepGoals!.length);
         myFirstGoals!.forEach((e) => {
@@ -216,21 +239,31 @@ export class DraftTeachingPath extends TeachingPath {
     }
   }
 
+  public anyGrades(butGrades: Array<Grade>, node: EditableTeachingPathNode) {
+    let returnArray : Array<Grade> = butGrades;
+    node!.items!.forEach((e) => {
+      if (typeof(e.value.grades) !== 'undefined') {
+        returnArray = returnArray!.concat(e.value.grades!);
+      }
+    });
+    if (node!.children!.length > 0) {
+      node!.children!.forEach((element) => {
+        returnArray = this.anyGrades(returnArray, element);
+      });
+    }
+    returnArray = returnArray!.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+    return returnArray;
+  }
+
   @action
   public addGradesBySave() {
-    let myFirstGrades: Array<Grade> | undefined = [];
+    let myFirstGrades: Array<Grade> = [];
     const firstItems = this.content;
     if (this.grades.length === 0) {
       if (firstItems.children.length > 0) {
-        const firstItemForList = firstItems.children!;
+        const firstItemForList = firstItems.children;
         firstItemForList.forEach((element) => {
-          if (element!.items![0].type === 'ARTICLE') {
-            myFirstGrades = myFirstGrades!.concat(element!.items![0].value.grades!);
-          }
-          if (element!.items![0].type === 'ASSIGNMENT') {
-            myFirstGrades = myFirstGrades!.concat(element!.items![0].value.grades!);
-          }
-          myFirstGrades = myFirstGrades!.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+          myFirstGrades = this.anyGrades(myFirstGrades, element);
         });
         if (typeof(myFirstGrades) !== 'undefined') {
           this.grades.splice(0, this.grades.length);

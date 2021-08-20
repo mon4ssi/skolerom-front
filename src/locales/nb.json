@@ -16,6 +16,9 @@
     "Copy url": "Kopier url",
     "not permission": "Beklager, du har ikke tilgang til denne plattformen. Kontakt organisasjonen din for å få tilgang"
   },
+  "assignments_page": {
+    "no_results": "Ingen resultater"
+  },
   "answers": {
     "Answers": "Besvarelser",
     "Not evaluated": "Ikke evaluert",

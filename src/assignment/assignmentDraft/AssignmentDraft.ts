@@ -203,19 +203,19 @@ export class DraftAssignment extends Assignment {
 
   @action
   public setGrepCoreElementsIds = (data: Array<number>) => {
-    this._grepCoreElementsIds = data;
+    this.grepCoreElementsIds = data;
     this.save();
   }
 
   @action
   public setGrepMainTopicsIds = (data: Array<number>) => {
-    this._grepMainTopicsIds = data;
+    this.grepMainTopicsIds = data;
     this.save();
   }
 
   @action
   public setGrepGoalsIds = (data: Array<number>) => {
-    this._grepGoalsIds = data;
+    this.grepGoalsIds = data;
     this.save();
   }
   @action
@@ -226,24 +226,24 @@ export class DraftAssignment extends Assignment {
 
   @action
   public setGrepReadingInSubjectId = (data: number) => {
-    this._grepReadingInSubjectId = data;
+    this.grepReadingInSubjectId = data;
     this.save();
   }
 
   public getListOfgrepCoreElementsIds() {
-    return this._grepCoreElementsIds;
+    return this.grepCoreElementsIds;
   }
 
   public getListOfgrepGoalsIds() {
-    return this._grepGoalsIds;
+    return this.grepGoalsIds;
   }
 
   public getListOfgrepMainTopicsIds() {
-    return this._grepMainTopicsIds;
+    return this.grepMainTopicsIds;
   }
 
   public getListOfgrepReadingInSubjectId() {
-    return this._grepReadingInSubjectId;
+    return this.grepReadingInSubjectId;
   }
 
   @action

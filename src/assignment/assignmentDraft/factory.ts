@@ -197,8 +197,8 @@ export const buildDraftAssignmentDTO = (
   levels: draftAssignment.levels,
   assignmentContent: buildAssignmentDTO(draftAssignment),
   isCopy: draftAssignment.isCopy,
-  grepCoreElementsIds: draftAssignment._grepCoreElementsIds,
-  grepGoalsIds: draftAssignment._grepGoalsIds,
-  grepMainTopicsIds: draftAssignment._grepMainTopicsIds,
-  grepReadingInSubjectId: draftAssignment._grepReadingInSubjectId,
+  grepCoreElementsIds: draftAssignment.grepCoreElementsIds,
+  grepGoalsIds: draftAssignment.grepGoalsIds,
+  grepMainTopicsIds: draftAssignment.grepMainTopicsIds,
+  grepReadingInSubjectId: draftAssignment.grepReadingInSubjectId,
 });

@@ -41,22 +41,25 @@ export class DomainTeachingPath extends Component<Props, State> {
 
   public renderCards = () => {
     const { questionaryTeachingPathStore } = this.props;
-    return questionaryTeachingPathStore!.currentDomainList.map((item) => {
-      const passedStyle = item.isRead ? 'passedStyle' : '';
-      return (
-        <div className={passedStyle} key={item.id} role="region" aria-live="polite" aria-atomic="true">
-          <InfoCard
-            icon={reading}
-            title={item.title}
-            type="DOMAIN"
-            grades={item.grades}
-            description={item.description}
-            img={(item.featuredImage) ? item.featuredImage : listPlaceholderImg}
-            urldomain={item.url}
-            onClick={this.chooseCard(item)}
-          />
-        </div>
-      );
+    const length = questionaryTeachingPathStore!.currentDomainList.length;
+    return questionaryTeachingPathStore!.currentDomainList.map((item, index) => {
+      if (index === length - 1) {
+        const passedStyle = item.isRead ? 'passedStyle' : '';
+        return (
+          <div className={passedStyle} key={item.id} role="region" aria-live="polite" aria-atomic="true">
+            <InfoCard
+              icon={reading}
+              title={item.title}
+              type="DOMAIN"
+              grades={item.grades}
+              description={item.description}
+              img={(item.featuredImage) ? item.featuredImage : listPlaceholderImg}
+              urldomain={item.url}
+              onClick={this.chooseCard(item)}
+            />
+          </div>
+        );
+      }
     }
     );
   }

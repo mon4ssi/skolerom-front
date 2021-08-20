@@ -16,6 +16,9 @@
     "Copy url": "Copy url",
     "not permission": "Sorry, you don't have access to this platform. Please contact your organization to gain access"
   },
+  "assignments_page": {
+    "no_results": "No results found"
+  },
   "answers": {
     "Answers": "Answers",
     "Not evaluated": "Not evaluated",

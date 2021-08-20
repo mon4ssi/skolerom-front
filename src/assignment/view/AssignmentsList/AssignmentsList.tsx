@@ -55,7 +55,7 @@ class AssignmentsList extends Component<Props> {
     if (assignments.length === 0) {
       return (
         <div className="noResults emptyTeachingPaths">
-          {intl.get('edit_teaching_path.No results found')}
+          {intl.get('assignments_page.no_results')}
         </div>
       );
     }
