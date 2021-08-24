@@ -22,6 +22,10 @@ export interface NewDraftAssignmentResponseDTO {
   uuid: string;
   assignmentContent: string;
   isCopy: boolean;
+  grepCoreElementsIds?: Array<number>;
+  grepMainTopicsIds?: Array<number>;
+  grepGoalsIds?: Array<number>;
+  grepReadingInSubjectId?: number;
 }
 
 export interface DraftAssignmentRequestDTO {
@@ -36,6 +40,10 @@ export interface DraftAssignmentRequestDTO {
   grades: Array<Grade>;
   levels: Array<number>;
   isCopy?: boolean;
+  grepCoreElementsIds?: Array<number>;
+  grepMainTopicsIds?: Array<number>;
+  grepGoalsIds?: Array<number>;
+  grepReadingInSubjectId?: number;
 }
 
 export class DraftAssignmentApi implements DraftAssignmentRepo {

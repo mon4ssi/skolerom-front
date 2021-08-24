@@ -60,5 +60,9 @@ export enum QueryStringKeys {
   PAGE = 'page',
   ACTIVITY = 'activity',
   IS_ANSWERED = 'isAnswered',
-  IS_EVALUATED = 'isEvaluated'
+  IS_EVALUATED = 'isEvaluated',
+  GREPCOREELEMENTSIDS = 'grepCoreElementsIds',
+  GREPMAINTOPICSIDS = 'grepMainTopicsIds',
+  GREEPGOALSIDS = 'grepGoalsIds',
+  GREPREADINGINSUBJECT = 'grepReadingInSubject',
 }

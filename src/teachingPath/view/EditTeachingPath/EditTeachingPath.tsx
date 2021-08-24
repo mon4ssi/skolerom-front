@@ -87,7 +87,7 @@ class EditTeachingPathComponent extends Component<Props & RouteComponentProps, S
     this.props.location!.pathname.includes('publish') && (
       <>
         <Header isPublishing />
-        <PublishingPage store={this.props.editTeachingPathStore} />
+        <PublishingPage store={this.props.editTeachingPathStore} from="TEACHINGPATH"/>
       </>
     )
   )

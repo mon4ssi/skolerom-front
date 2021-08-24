@@ -315,9 +315,11 @@ class HeaderWrapper extends Component<Props> {
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
     const { isCreation, isDistribution, isPublishing, newAssignmentStore } = this.props;
+    const classDivPath = (event.composedPath()[0] as Element).className;
     const htmlPathArea = String(event.composedPath()[0]);
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
+    const qlEditorText = 'ql-editor';
     if (event.key === 'Escape') {
       if (!newAssignmentStore!.visibilityArticles) {
         if (!newAssignmentStore!.visibilityAttachments) {
@@ -325,7 +327,7 @@ class HeaderWrapper extends Component<Props> {
         }
       }
     }
-    if ((htmlPathArea !== htmlText) && (htmlPathArea !== inputText)) {
+    if (htmlPathArea !== htmlText && htmlPathArea !== inputText && classDivPath !== qlEditorText) {
       if ((event.shiftKey && event.key === 'S') || (event.shiftKey && event.key === 's')) {
         if (!newAssignmentStore!.visibilityArticles) {
           if (!newAssignmentStore!.visibilityAttachments) {

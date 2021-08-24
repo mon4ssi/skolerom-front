@@ -146,6 +146,11 @@ export class LoginStore {
     });
   }
 
+  public async getMaintenance_data() {
+    const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/maintenance/v1/status`);
+    return response.data;
+  }
+  /*
   public async getMaintenance_mode() {
     const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/maintenance/v1/status`);
     return response.data.maintenance_mode;
@@ -164,5 +169,5 @@ export class LoginStore {
   public async getMaintenance_end_time() {
     const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/maintenance/v1/status`);
     return response.data.end_time;
-  }
+  }*/
 }

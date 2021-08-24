@@ -67,6 +67,10 @@ export class ArticleService {
     order?: string,
     grades?: number,
     subjects?: number,
+    core?: number | string,
+    goal?: number | string,
+    multi?: number,
+    source?: number,
     searchTitle?: string
   }): Promise<Array<Article>> {
     return this.articleRepo.getArticles(params);

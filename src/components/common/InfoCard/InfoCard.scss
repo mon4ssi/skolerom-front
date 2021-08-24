@@ -71,7 +71,6 @@
     .cardTitle {
       flex: 1 1;
       min-width: 0;
-      margin-top: 10px;
       .noTitle {
         color: #939FA7;
       }
@@ -229,7 +228,7 @@
       height: 23px;
       justify-content: space-between;
       align-items: center;
-
+      margin-bottom: 5px;
       img {
         width: 20px;
         height: 20px;
@@ -294,9 +293,6 @@
         margin-left: 0;
         font-weight: 300;
       }
-    }
-    .gradesLineInside div:last-child {
-        margin-right: 5px;
     }
     .gradesLineInside div:last-child:after {
         display: none;

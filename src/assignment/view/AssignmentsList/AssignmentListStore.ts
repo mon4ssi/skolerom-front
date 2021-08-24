@@ -204,6 +204,20 @@ export class AssignmentListStore {
       this.getAssignmentsList();
   }
 
+  public setFiltersMultiID(multiID: number | null) {
+    this.clearMyAssignmentsList();
+    this.assignmentList.setFiltersMultiID(multiID);
+    this.assignmentList.setFiltersPage(1);
+    this.getAssignmentsList();
+  }
+
+  public setFiltersReadingID(readingID: number | null) {
+    this.clearMyAssignmentsList();
+    this.assignmentList.setFiltersReadingID(readingID);
+    this.assignmentList.setFiltersPage(1);
+    this.getAssignmentsList();
+  }
+
   public setFiltersIsEvaluated(status: string | null) {
     this.assignmentList.setFiltersIsEvaluated(status);
     this.assignmentList.setFiltersPage(1);
@@ -214,6 +228,20 @@ export class AssignmentListStore {
     this.assignmentList.setFiltersIsAnswered(status);
     this.assignmentList.setFiltersPage(1);
     this.getStudentAssignmentList();
+  }
+
+  public setFiltersCoreID(coreID: string | number | null) {
+    this.clearMyAssignmentsList();
+    this.assignmentList.setFiltersCoreID(coreID);
+    this.assignmentList.setFiltersPage(1);
+    this.getAssignmentsList();
+  }
+
+  public setFiltersGoalID(goalID: string | number | null) {
+    this.clearMyAssignmentsList();
+    this.assignmentList.setFiltersGoalID(goalID);
+    this.assignmentList.setFiltersPage(1);
+    this.getAssignmentsList();
   }
 
   public async setFiltersSearchQuery(searchQuery: string) {

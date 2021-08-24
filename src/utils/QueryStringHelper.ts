@@ -3,7 +3,7 @@ import isNaN from 'lodash/isNaN';
 import { updateQueryString, parseQueryString } from './queryString';
 import { History } from 'history';
 
-export function set(history: History, key: string, value: string | number): void {
+export function set(history: History, key: string, value: string | number | Array<number>): void {
   const newQueryString = updateQueryString(history.location.search, key, value.toString());
   history.push(`${history.location.pathname}${newQueryString}`, { ...history.location.state });
 }

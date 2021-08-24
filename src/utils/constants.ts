@@ -12,6 +12,7 @@ export const SLIDER_WIDGET_TIME_TIL_NEXT_SLIDE = 7000;
 export const MAX_TITLE_LENGTH = 60;
 export const MAX_DESCRIPTION_LENGTH = 255;
 export const MAX_DESCRIPTION_LENGTH_MAX = 700;
+export const MAX_DESCRIPTION_LENGTH_500 = 500;
 
 export const DEFAULT_LOCALE = Locales.NB;
 
@@ -39,8 +40,7 @@ export const LOCALES_MAPPING_FOR_BACKEND = {
 
 export const STATUS_CONFLICT = 409;
 export const STATUS_NOT_FOUND = 404;
-export const STATUS_FORBIDDEN = 403;
-export const STATUS_BADREQUEST = 402;
+export const STATUS_BADREQUEST = 403;
 export const STATUS_UNAUTHORIZED = 401;
 export const STATUS_SERVER_ERROR = 500;
 export const STATUS_BACKEND_ERROR = 400;

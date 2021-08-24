@@ -1,9 +1,12 @@
 import isNil from 'lodash/isNil';
 import isNull from 'lodash/isNull';
 import intl from 'react-intl-universal';
+import { injector } from 'Injector';
+import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteractor';
+import { Locales } from 'utils/enums';
 
 import { TeachingPath, TeachingPathItem, TeachingPathNode, TeachingPathNodeType, TeachingPathRepo } from './TeachingPath';
-import { Article, Filter, Grade, Domain } from 'assignment/Assignment';
+import { Article, Filter, Grade, Domain, FilterGrep, GoalsData } from 'assignment/Assignment';
 import { API } from '../utils/api';
 import { buildFilterDTO, GradeDTO } from 'assignment/factory';
 import { Breadcrumbs } from './teachingPathDraft/TeachingPathDraft';
@@ -72,6 +75,9 @@ export interface BreadcrumbsResponseDTO {
 }
 
 export class TeachingPathApi implements TeachingPathRepo {
+
+  public storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
+  public currentLocale = this.storageInteractor.getCurrentLocale()!;
 
   public async getAllTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
     const response = await API.get('api/teacher/teaching-paths', {
@@ -220,6 +226,39 @@ export class TeachingPathApi implements TeachingPathRepo {
       }
       throw error;
     }
+  }
+
+  public async getFiltersArticlePanel() {
+    const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/filterarticlepanel/v1/get/`, {
+      params:
+      {
+        lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
+      }
+    });
+    return response.data;
+  }
+
+  public async getGrepFilters(): Promise<FilterGrep>  {
+    const response = await API.get('api/teacher/teaching-paths/grep/filters');
+    return response.data;
+  }
+  /* tslint:disable-next-line:max-line-length */
+  public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number): Promise<{ data: Array<GoalsData>; total_pages: number; }> {
+    const response = await API.get('api/teacher/teaching-paths/grep/goals', {
+      params: {
+        grepCoreElementsIds,
+        grepMainTopicsIds,
+        gradesIds,
+        subjectsIds,
+        orderGoalsCodes,
+        page,
+        per_page: perPage
+      }
+    });
+    return {
+      data: response.data.data,
+      total_pages: response.data.meta.pagination.total_pages
+    };
   }
 
   public async finishTeachingPath(id: number): Promise<void> {

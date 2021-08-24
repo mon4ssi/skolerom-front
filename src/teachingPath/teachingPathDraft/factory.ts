@@ -56,6 +56,10 @@ export const buildDraftTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     levels: dto.levels,
     ownedByMe: dto.ownedByMe,
     isCopy: dto.isCopy,
+    grepCoreElementsIds: dto.grepCoreElementsIds,
+    grepMainTopicsIds: dto.grepMainTopicsIds,
+    grepReadingInSubjectId: dto.grepReadingInSubjectId,
+    grepGoalsIds: dto.grepGoalsIds,
   });
 
   draftTeachingPath.setContent(buildEditableNode(dto.content!, draftTeachingPath));
@@ -102,6 +106,9 @@ const buildArticleItemDTO = (
   url: item.url,
   images: item.images,
   levels: item.levels,
+  grepCoreelements: item.grepCoreelements,
+  grepGoals: item.grepGoals,
+  grepMaintopic: item.grepMaintopic
 });
 
 const buildAssignmentItemDTO = (
@@ -114,7 +121,11 @@ const buildAssignmentItemDTO = (
   levels: item.levels,
   numberOfQuestions: item.numberOfQuestions,
   relatedArticles: item.relatedArticles,
-  featuredImage: item.featuredImage
+  featuredImage: item.featuredImage,
+  grepCoreelements: item.grepCoreelements,
+  grepGoals: item.grepGoals,
+  grepMaintopic: item.grepMaintopic,
+  grepReadingInsubject: item.grepReadingInsubject
 });
 
 const buildDomainItemDTO = (
@@ -209,4 +220,8 @@ export const buildTeachingPathRequestDTO = (teachingPath: DraftTeachingPath) => 
   subjects: buildSubject(teachingPath.subjects),
   levels: teachingPath.levels,
   isCopy: teachingPath.isCopy,
+  grepCoreElementsIds: teachingPath.grepCoreElementsIds,
+  grepMainTopicsIds: teachingPath.grepMainTopicsIds,
+  grepReadingInSubjectId: teachingPath.grepReadingInSubjectId,
+  grepGoalsIds: teachingPath.grepGoalsIds,
 });

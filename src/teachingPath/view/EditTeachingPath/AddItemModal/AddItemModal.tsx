@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import onClickOutside from 'react-onclickoutside';
 import isNull from 'lodash/isNull';
+import intl from 'react-intl-universal';
 
 import { ItemContentTypeContext } from '../ItemContentTypeContext';
 import { AssignmentsList } from './AssignmentsList/AssignmentsList';
@@ -10,7 +11,6 @@ import './AddItemModal.scss';
 
 class AddItemComponent extends Component {
   public static contextType = ItemContentTypeContext;
-
   public renderModalContent = () => {
     const { contentType } = this.context;
     switch (contentType) {
@@ -26,7 +26,6 @@ class AddItemComponent extends Component {
   public handleClickOutside = () => {
     this.context.changeContentType(null);
   }
-
   public render() {
     return (
         <div className="addItemModal">
@@ -43,7 +42,6 @@ export class AddItemModal extends Component {
 
   public render() {
     const { contentType } = this.context;
-
     return !isNull(contentType) && (
       <div className="addItemModalBackground flexBox paymenth">
         <AddItemModalComponent />

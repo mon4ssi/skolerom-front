@@ -5,25 +5,47 @@
   background: #E7ECEF;
 
   .articlesListHeader {
-    width: 100%;
-    height: 60px;
-    min-height: 60px;
-    padding: 0 20px 0 20px;
+    width: calc(100% - 40px);
+    background: #FFF;
+    border-radius: 8px;
+    box-shadow: 0 2px 2px 0 #d3d9de;
+    border: 1px solid #D3D9DE;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     
-    div {
-      margin: 20px 20px 20px 0;
+    div {      
       font-size: 1rem;
       font-weight: 500;
-      text-transform: uppercase;
       color: #e2017b;
       font-weight: 500;
       cursor: pointer;
+      button {
+        background: transparent;
+      }
+    }
+    &__left {
+      display: flex;
+      align-items: center;
+      p {
+        margin: 0px;
+        margin-right: 25px;
+        color: #e2017b;
+      }
+      a {
+        color: #0b2541;
+      }
     }
 
     img {
       cursor: pointer;
-      width: 35px;
-      height: 60px;
+      width: 33px;
+      height: 45px;
+      position: relative;
+      top: 1px;
     }
   }
 
@@ -38,11 +60,13 @@
     flex-wrap: wrap;
     // justify-content: space-between;
     margin-top: 20px;
-    padding: 0 20px 0 20px;
+    padding: 0 10px 0 10px;
     overflow: auto;
 
     .RelatedArticlesCard {
       margin: 10px 13px 10px 0;
+      margin-right: 10px;
+      margin-left: 10px;
     }
 
     .noResults {
@@ -74,5 +98,24 @@
       border: 1px solid #D3D9DE;
       border-radius: 5px;
     }
+  }
+}
+.ArticlesList .articlesListHeader__left a:focus {
+  outline: black;
+  outline-style: auto;
+  outline-offset: 3px;
+}
+.back-buttonAbs {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 31px;
+  z-index: 99999999;
+  left: 20px;
+  font-size: 15px;
+  background: white;
+  padding: 0px;
+  img {
+    margin-right: 10px;
   }
 }

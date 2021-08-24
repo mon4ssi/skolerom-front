@@ -72,6 +72,14 @@ export class HeaderComponent extends Component<Props> {
     const isPrivate = editTeachingPathStore!.teachingPathContainer!.teachingPath!.isPrivate;
     const isCopy = editTeachingPathStore!.teachingPathContainer!.teachingPath!.isCopy;
 
+    if (!editTeachingPathStore!.isActiveButtons) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('edit_teaching_path.header.cant_publish')
+      });
+      return;
+    }
+
     if (
       !isPrivate &&
       isCopy && (
@@ -236,9 +244,11 @@ export class HeaderComponent extends Component<Props> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
+    const classDivPath = (event.composedPath()[0] as Element).className;
     const htmlPathArea = String(event.composedPath()[0]);
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
+    const qlEditorText = 'ql-editor';
     const { isCreation, isDistribution, isPublishing } = this.props;
     if (event.key === 'Escape') {
       if ((htmlPathArea !== htmlText) && (htmlPathArea !== inputText)) {
@@ -247,34 +257,36 @@ export class HeaderComponent extends Component<Props> {
         }
       }
     }
-    if ((event.shiftKey && event.key === 'S') || (event.shiftKey && event.key === 's')) {
-      if ((htmlPathArea !== htmlText) && (htmlPathArea !== inputText)) {
-        if (isCreation) {
-          if (!this.isDisabledSaveButton()) {
-            this.onSave();
+    if (htmlPathArea !== htmlText && htmlPathArea !== inputText && classDivPath !== qlEditorText) {
+      if ((event.shiftKey && event.key === 'S') || (event.shiftKey && event.key === 's')) {
+        if ((htmlPathArea !== htmlText) && (htmlPathArea !== inputText)) {
+          if (isCreation) {
+            if (!this.isDisabledSaveButton()) {
+              this.onSave();
+            }
           }
         }
       }
-    }
-    if ((event.shiftKey && event.key === 'P') || (event.shiftKey && event.key === 'p')) {
-      if ((htmlPathArea !== htmlText) && (htmlPathArea !== inputText)) {
-        if (isPublishing) {
-          if (!this.isDisabledPublishButton()) {
-            this.ref.current!.click();
+      if ((event.shiftKey && event.key === 'P') || (event.shiftKey && event.key === 'p')) {
+        if ((htmlPathArea !== htmlText) && (htmlPathArea !== inputText)) {
+          if (isPublishing) {
+            if (!this.isDisabledPublishButton()) {
+              this.ref.current!.click();
+            }
           }
         }
       }
-    }
-    if ((event.shiftKey && event.key === 'D') || (event.shiftKey && event.key === 'd')) {
-      if ((htmlPathArea !== htmlText) && (htmlPathArea !== inputText)) {
-        if (isPublishing) {
-          if (!this.isDisabledPublishButton()) {
-            this.refGoDistribution.current!.click();
+      if ((event.shiftKey && event.key === 'D') || (event.shiftKey && event.key === 'd')) {
+        if ((htmlPathArea !== htmlText) && (htmlPathArea !== inputText)) {
+          if (isPublishing) {
+            if (!this.isDisabledPublishButton()) {
+              this.refGoDistribution.current!.click();
+            }
           }
-        }
-        if (isDistribution) {
-          if (!this.isDisabledPublishButton()) {
-            this.refFinalDistribution.current!.click();
+          if (isDistribution) {
+            if (!this.isDisabledPublishButton()) {
+              this.refFinalDistribution.current!.click();
+            }
           }
         }
       }

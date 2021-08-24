@@ -157,10 +157,12 @@ class Sidebar extends Component<Props> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
+    const classDivPath = (event.composedPath()[0] as Element).className;
     const htmlPathArea = String(event.composedPath()[0]);
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
-    if (htmlPathArea !== htmlText && htmlPathArea !== inputText) {
+    const qlEditorText = 'ql-editor';
+    if (htmlPathArea !== htmlText && htmlPathArea !== inputText && classDivPath !== qlEditorText) {
       if ((event.shiftKey && event.key === 'T') || (event.shiftKey && event.key === 't')) {
         window.location.href = '/teaching-paths/';
       }

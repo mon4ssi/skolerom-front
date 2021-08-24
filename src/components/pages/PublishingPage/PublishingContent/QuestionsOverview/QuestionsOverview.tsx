@@ -61,23 +61,6 @@ export class QuestionsOverview extends Component<Props> {
 
         {localeKey === EditEntityLocaleKeys.NEW_ASSIGNMENT && this.renderQuestions()}
 
-        <div className="gradesSubjectsContainer">
-          <p className="title">
-            {intl.get('publishing_page.grade')}
-          </p>
-          <div className="gradesSubjects flexBox">
-            {currentEntity!.grades.map(this.renderGradeSubject)}
-          </div>
-        </div>
-
-        <div className="gradesSubjectsContainer">
-          <p className="title">
-          {intl.get('publishing_page.subject')}
-          </p>
-          <div className="gradesSubjects flexBox">
-            {currentEntity!.subjects.map(this.renderGradeSubject)}
-          </div>
-        </div>
       </div>
     );
   }

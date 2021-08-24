@@ -12,24 +12,25 @@ import './PublishingPage.scss';
 
 interface Props extends RouteComponentProps<{id: string}> {
   store?: NewAssignmentStore | EditTeachingPathStore;
+  from?: string;
 }
 
 @observer
 class PublishingPageComponent extends Component<Props> {
 
   public render() {
-    const { store } = this.props;
+    const { store, from } = this.props;
 
     return (
       <div className="PublishingPage flexBox spaceBetween">
-        <div className="publishingInfo w50">
+        <div className="publishingInfo" id="publishingInfo">
           <PublishingTitle
             currentEntity={store!.currentEntity!}
             showValidationErrors={store!.showValidationErrors}
             localeKey={store!.localeKey}
           />
 
-          <PublishingActions store={store} />
+          <PublishingActions store={store} from={from}/>
         </div>
 
         <PublishingContent store={store} />

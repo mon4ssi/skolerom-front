@@ -36,6 +36,18 @@ export class TeachingPathService {
     return this.teachingPathRepo.sendDataDomain(domain);
   }
 
+  public async getFiltersArticlePanel() {
+    return this.teachingPathRepo.getFiltersArticlePanel();
+  }
+
+  public async getGrepFilters() {
+    return this.teachingPathRepo.getGrepFilters();
+  }
+
+  public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number) {
+    return this.teachingPathRepo.getGrepGoalsFilters(grepCoreElementsIds, grepMainTopicsIds, gradesIds, subjectsIds, orderGoalsCodes, perPage, page);
+  }
+
   public async finishTeachingPath(id: number) {
     return this.teachingPathRepo.finishTeachingPath(id);
   }

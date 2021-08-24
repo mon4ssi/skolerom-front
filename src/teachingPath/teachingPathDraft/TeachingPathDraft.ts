@@ -14,6 +14,7 @@ import { SAVE_DELAY } from 'utils/constants';
 import { Article, Grade, Subject } from 'assignment/Assignment';
 
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
+import { GreepElements } from 'assignment/factory';
 
 export const DRAFT_TEACHING_PATH_REPO = 'DRAFT_TEACHING_PATH_REPO';
 
@@ -71,6 +72,7 @@ export class DraftTeachingPath extends TeachingPath {
   public isSavingRunning: boolean = false;
   @observable public isDraftSaving: boolean = false;
   public isPublishing: boolean = false;
+  public isRunningPublishing: boolean = false;
 
   constructor(args: DraftTeachingPathArgs) {
     super(args);
@@ -167,6 +169,112 @@ export class DraftTeachingPath extends TeachingPath {
     }
   }
 
+  public anySubjects(butSubjects: Array<Subject>, node: EditableTeachingPathNode) {
+    let returnArray : Array<Subject> = butSubjects;
+    node!.items!.forEach((e) => {
+      if (typeof(e.value.subjects) !== 'undefined') {
+        returnArray = returnArray!.concat(e.value.subjects!);
+      }
+    });
+    if (node!.children!.length > 0) {
+      node!.children!.forEach((element) => {
+        returnArray = this.anySubjects(returnArray, element);
+      });
+    }
+    returnArray = returnArray!.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+    return returnArray;
+  }
+
+  @action
+  public addSubjectBySave() {
+    let myFirstSubjects: Array<Subject> = [];
+    const firstItems = this.content;
+    if (this.subjects.length === 0) {
+      if (firstItems.children.length > 0) {
+        const firstItemForList = firstItems.children;
+        firstItemForList.forEach((element) => {
+          myFirstSubjects = this.anySubjects(myFirstSubjects, element);
+        });
+        if (typeof(myFirstSubjects) !== 'undefined') {
+          this.subjects.splice(0, this.subjects.length);
+          myFirstSubjects!.forEach((e) => {
+            this.subjects.push(e);
+          });
+        }
+      }
+    }
+  }
+
+  public anyGoals(butGoals: Array<GreepElements>, node: EditableTeachingPathNode) {
+    let returnArray : Array<GreepElements> = butGoals;
+    node!.items!.forEach((e) => {
+      if (typeof(e.value.grades) !== 'undefined') {
+        returnArray = returnArray!.concat(e.value.grepGoals!);
+      }
+    });
+    if (node!.children!.length > 0) {
+      node!.children!.forEach((element) => {
+        returnArray = this.anyGoals(returnArray, element);
+      });
+    }
+    returnArray = returnArray!.filter((v, i, a) => a.findIndex(t => (t === v)) === i);
+    return returnArray;
+  }
+
+  @action
+  public async addGoalsBySave() {
+    let myFirstGoals: Array<GreepElements> = [];
+    const firstItems = this.content;
+    if (firstItems.children.length > 0) {
+      const firstItemForList = firstItems.children;
+      firstItemForList.forEach((element) => {
+        myFirstGoals = this.anyGoals(myFirstGoals, element);
+      });
+      if (typeof(myFirstGoals) !== 'undefined') {
+        this._grepGoals!.splice(0, this._grepGoals!.length);
+        myFirstGoals!.forEach((e) => {
+          this._grepGoals!.push(e);
+        });
+      }
+    }
+  }
+
+  public anyGrades(butGrades: Array<Grade>, node: EditableTeachingPathNode) {
+    let returnArray : Array<Grade> = butGrades;
+    node!.items!.forEach((e) => {
+      if (typeof(e.value.grades) !== 'undefined') {
+        returnArray = returnArray!.concat(e.value.grades!);
+      }
+    });
+    if (node!.children!.length > 0) {
+      node!.children!.forEach((element) => {
+        returnArray = this.anyGrades(returnArray, element);
+      });
+    }
+    returnArray = returnArray!.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+    return returnArray;
+  }
+
+  @action
+  public addGradesBySave() {
+    let myFirstGrades: Array<Grade> = [];
+    const firstItems = this.content;
+    if (this.grades.length === 0) {
+      if (firstItems.children.length > 0) {
+        const firstItemForList = firstItems.children;
+        firstItemForList.forEach((element) => {
+          myFirstGrades = this.anyGrades(myFirstGrades, element);
+        });
+        if (typeof(myFirstGrades) !== 'undefined') {
+          this.grades.splice(0, this.grades.length);
+          myFirstGrades!.forEach((e) => {
+            this.grades.push(e);
+          });
+        }
+      }
+    }
+  }
+
   @action
   public async save() {
     if (!this.isSavingRunning) {
@@ -176,6 +284,11 @@ export class DraftTeachingPath extends TeachingPath {
           this.isDraftSaving = true;
           try {
             if (this.isPublishing) return;
+            if (!this.isRunningPublishing) {
+              this.addGradesBySave();
+              this.addSubjectBySave();
+            }
+            this.addGoalsBySave();
             this.setUpdatedAt(await this.repo.saveTeachingPath(this));
           } catch (error) {
             if (error instanceof AlreadyEditingTeachingPathError) {
@@ -227,6 +340,38 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
+  public setGrepCoreElementsIds = (data: Array<number>) => {
+    this._grepCoreElementsIds = data;
+    this.save();
+  }
+
+  @action
+  public setGrepMainTopicsIds = (data: Array<number>) => {
+    this._grepMainTopicsIds = data;
+    this.save();
+  }
+
+  @action
+  public setGrepGoalsIds = (data: Array<number>) => {
+    this._grepGoalsIds = data;
+    this.isRunningPublishing = true;
+    this.save();
+  }
+
+  @action
+  public setGrepGoals = (data: Array<GreepElements>) => {
+    this._grepGoals = data;
+    this.isRunningPublishing = true;
+    this.save();
+  }
+
+  @action
+  public setGrepReadingInSubjectId = (data: number) => {
+    this._grepReadingInSubjectId = data;
+    this.save();
+  }
+
+  @action
   public setIsPrivate = (isPrivate: boolean) => {
     this._isPrivate = isPrivate;
     this.save();
@@ -245,12 +390,14 @@ export class DraftTeachingPath extends TeachingPath {
   @action
   public addGrade(grade: Grade) {
     this.grades.push(grade);
+    this.isRunningPublishing = true;
     this.save();
   }
 
   @action
   public addSubject(subject: Subject) {
     this.subjects.push(subject);
+    this.isRunningPublishing = true;
     this.save();
   }
 

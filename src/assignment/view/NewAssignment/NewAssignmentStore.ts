@@ -3,7 +3,7 @@ import isUndefined from 'lodash/isUndefined';
 import isNull from 'lodash/isNull';
 
 import { injector } from 'Injector';
-import { Assignment, Article, ARTICLE_SERVICE_KEY, Attachment, Grade, QuestionAttachment, QuestionType, Subject, } from 'assignment/Assignment';
+import { Assignment, Article, ARTICLE_SERVICE_KEY, Attachment, Grade, QuestionAttachment, QuestionType, Subject, GreepElements, FilterArticlePanel } from 'assignment/Assignment';
 import { DraftAssignment, EditableImageChoiceQuestion, EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
 import { ArticleService, ASSIGNMENT_SERVICE, AssignmentService } from 'assignment/service';
 import { DRAFT_ASSIGNMENT_SERVICE, DraftAssignmentService } from 'assignment/assignmentDraft/service';
@@ -16,6 +16,7 @@ import { AssignmentContainer } from 'assignment/assignmentContainer/AssignmentCo
 import { Distribution } from 'distribution/Distribution';
 import { AttachmentContentType } from './AttachmentContentTypeContext';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
+import { TEACHING_PATH_SERVICE, TeachingPathService } from 'teachingPath/service';
 
 const statusCode204 = 204;
 const numberOfImagesForSkeleton = 12;
@@ -57,8 +58,11 @@ export class NewAssignmentStore {
 
   public currentArticlesPage: number = 1;
 
+  public teachingPathService = injector.get<TeachingPathService>(TEACHING_PATH_SERVICE);
+
   @observable public fetchingArticles: boolean = false;
   @observable public visibilityArticles: boolean = false;
+  @observable public isActiveButtons: boolean = false;
   @observable public fetchingAttachments: boolean = false;
   @observable public visibilityAttachments: boolean = false;
   @observable public showValidationErrors: boolean = false;
@@ -76,6 +80,7 @@ export class NewAssignmentStore {
   @observable public searchValue: string = '';
   @observable public storedAssignment: Assignment | null = null;
   @observable public highlightingItem: CreationElementsType | undefined;
+  @observable public allArticlePanelFilters: FilterArticlePanel | null = null;
 
   public arrayForImagesSkeleton = new Array(numberOfImagesForSkeleton).fill('imageSkeletonLoader');
   public arrayForVideosSkeleton = new Array(numberOfVideosForSkeleton).fill('videoSkeletonLoader');
@@ -95,6 +100,14 @@ export class NewAssignmentStore {
   @computed
   public get ifSearchValueIsNumber() {
     return !isNaN(Number(this.searchValue.charAt(0)));
+  }
+
+  public setIsActiveButtons() {
+    this.isActiveButtons = true;
+  }
+
+  public setIsActiveButtonsFalse() {
+    this.isActiveButtons = false;
   }
 
   @computed
@@ -448,6 +461,22 @@ export class NewAssignmentStore {
     this.allSubjects = await this.assignmentService.getSubjects();
   }
 
+  public getGoalsByArticle() {
+    const arrayGoals :Array<String> = [];
+    if (this.currentEntity!.relatedArticles.length > 0) {
+      this.currentEntity!.relatedArticles.forEach((element) => {
+        if (element.grepGoals!.length > 0) {
+          element.grepGoals!.forEach((e) => {
+            if (!arrayGoals.includes(e.kode)) {
+              arrayGoals.push(e.kode);
+            }
+          });
+        }
+      });
+    }
+    return String(arrayGoals);
+  }
+
   public async createAssignmentWithArticle(
     postID: number
   ): Promise<{ isFinish: boolean; isCreated: boolean }> {
@@ -553,7 +582,22 @@ export class NewAssignmentStore {
     this.userService.setAssignmentId(assignmentId);
   }
 
+  public getAllArticlePanelFilters() {
+    return toJS(this.allArticlePanelFilters);
+  }
+
+  public async getFiltersArticlePanel() {
+    this.allArticlePanelFilters = await this.teachingPathService.getFiltersArticlePanel();
+  }
+
   public async assignStudentToAssignment(assignmentId:string, referralToken: string) {
     return this.distributionService.assignStudentToAssignment(assignmentId, referralToken);
   }
+  public async getGrepFilters() {
+    return this.teachingPathService.getGrepFilters();
+  }
+  public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number) {
+    return this.teachingPathService.getGrepGoalsFilters(grepCoreElementsIds, grepMainTopicsIds, gradesIds, subjectsIds, orderGoalsCodes, perPage, page);
+  }
+
 }

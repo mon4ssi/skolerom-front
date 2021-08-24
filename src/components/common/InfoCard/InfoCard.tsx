@@ -93,7 +93,6 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
         <div className="flexBox gradesLine">
           <div className="flexBox gradesLineInside">
             {visibleGrades}
-            {amountOfGrades > twoGrades && amountOfGrades !== threeGrades && <div>{intl.get('assignment list.Others')}</div>}
           </div>
           <p>{intl.get('new assignment.grade')}</p>
         </div>

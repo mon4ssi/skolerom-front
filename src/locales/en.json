@@ -16,6 +16,9 @@
     "Copy url": "Copy url",
     "not permission": "Sorry, you don't have access to this platform. Please contact your organization to gain access"
   },
+  "assignments_page": {
+    "no_results": "No results found"
+  },
   "answers": {
     "Answers": "Answers",
     "Not evaluated": "Not evaluated",
@@ -167,8 +170,11 @@
   },
   "assignments search": {
     "title": "Assignments",
-    "Choose subject": "Choose subject",
-    "Choose grade": "Choose grade",
+    "Choose subject": "Select subject",
+    "Choose grade": "Select grade",
+    "Choose Core": "Select core elements",
+    "Choose Multi": "Select Main Topics",
+    "Choose reading": "Select reading in Subject",
     "Class": "Class",
     "Popularity": "Popularity",
     "Search for assignments": "Search for assignments...",
@@ -219,6 +225,13 @@
     "ASSIGNMENT": "Assignment"
   },
   "new assignment": {
+    "greep": {
+      "core": "Core elements",
+      "goals": "Educations goals",
+      "subjects": "Multidisciplinary subjects",
+      "source": "Source",
+      "reading": "Reading in Subject"
+    },
     "go_back": "Go back",
     "Create assignment": "Create assignment",
     "publish": "Publish",
@@ -429,6 +442,7 @@
     "grade": "Grade",
     "student_level": "Level",
     "visibility": "Visibility",
+    "visibility_description":"Select Public to share with everyone using Skolerom or Private to keep it to yourselft and the ones you share it with",
     "public": "Public",
     "private": "Private",
     "teacher": "Teacher: ",
@@ -441,7 +455,11 @@
     "questions_number": "{questions} que.",
     "after_publishing": "Congratulations, your assignment has been published!",
     "review_and_submit": "Review and submit",
-    "after_publishing_from_teaching_path": "Assignment published successfuly and was added to teaching path."
+    "after_publishing_from_teaching_path": "Assignment published successfuly and was added to teaching path.",
+    "grep": {
+      "title":"Connect to curriculum",
+      "description":"Connecting your teaching path is required when sharing publicity. Please select the appropriate educational goals below before publishing and distribution"
+    }
   },
   "distribution_page": {
     "distribute_assignment": "Distribute assignment",
@@ -553,10 +571,12 @@
       "distribute_teaching_path": "Distribute teaching path",
       "after_saving": "Congratulations, your teaching path has been saved!",
       "after_publishing": "Congratulations, your teaching path has been published!",
-      "after_distribution": "Teaching path successfully distributed!"
+      "after_distribution": "Teaching path successfully distributed!",
+      "cant_publish": "You must complete the Curriculum section before publish",
+      "notdata_goals": "There are no established goals for these criteria"
     },
     "title": {
-      "new_entity": "New teaching path",
+      "new_entity": "Publish teaching path",
       "new_teaching_path_draft": "New Teaching Path draft",
       "title_placeholder": "Teaching path title",
       "description_placeholder": "Describe your teaching path..."
@@ -571,8 +591,28 @@
       "articles_selected": "{number} articles selected",
       "all_assignments": "All assignments",
       "my_assignments": "My assignments",
+      "articles": "Articles",
+      "articles_title": "Article Information",
+      "articles_default": "Select an item to view its detailed information",
+      "articles_read": "Read article",
+      "assignments_title": "Assignments Information",
+      "assignments_default": "Select an item to view its detailed information",
+      "assignmetns_read": "Read assignment",
+      "assignmetns": "Assignments",
       "assignments_selected": "{number} assignments selected",
-      "search_for_articles": "Search for articles..."
+      "search_for_articles": "Search for articles...",
+      "expand": "Expand all",      
+      "search": {
+        "buttons": {
+          "button_close": "Filters",
+          "button_open": "Apply filters",
+          "button_change": "Change filters"
+        },
+        "header": {
+          "title": "FILTERS",
+          "button": "Reset filters"
+        }
+      }
     },
     "validation": {
       "title_words_count": "Title cannot be empty",
@@ -598,7 +638,8 @@
     "Step overview": "Step overview",
     "Submit": "Submit Teaching Path",
     "no_title": "No title",
-    "No results found": "No results found"
+    "No results found": "No results found",
+    "no_options": "No options"
   },
   "students_list": {
     "title":"Students",

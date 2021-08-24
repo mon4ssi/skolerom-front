@@ -81,12 +81,15 @@ export class ReadingArticle extends Component<Props, State> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
-    const path = event.composedPath().length;
+    const classDivPath = (event.composedPath()[0] as Element).className;
     const htmlPathArea = String(event.composedPath()[0]);
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
-    if (event.shiftKey && event.key === 'F' || event.shiftKey && event.key === 'f') {
-      this.props.finishReading(this.state.graduation!);
+    const qlEditorText = 'ql-editor';
+    if (htmlPathArea !== htmlText && htmlPathArea !== inputText && classDivPath !== qlEditorText) {
+      if (event.shiftKey && event.key === 'F' || event.shiftKey && event.key === 'f') {
+        this.props.finishReading(this.state.graduation!);
+      }
     }
   }
 

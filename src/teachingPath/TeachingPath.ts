@@ -1,7 +1,7 @@
 import { computed, observable, toJS } from 'mobx';
 import intl from 'react-intl-universal';
 
-import { Grade, Subject, Article, Assignment, Domain, Filter } from 'assignment/Assignment';
+import { Grade, GreepElements, Subject, Article, Assignment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData } from 'assignment/Assignment';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from './service';
 import { injector } from '../Injector';
 
@@ -19,6 +19,10 @@ export interface TeachingPathRepo {
   getCurrentNode(teachingPathId: number, nodeId: number): Promise<TeachingPathNode>;
   markAsPickedArticle(teachingPathId: number, nodeId: number, idArticle: number, levelWpId: number): Promise<void>;
   sendDataDomain(domain: string): Promise<Domain>;
+  getFiltersArticlePanel(): Promise<FilterArticlePanel>;
+  getGrepFilters(): Promise<FilterGrep>;
+  /* tslint:disable-next-line:max-line-length */
+  getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number): Promise<{ data: Array<GoalsData>, total_pages: number; }>;
   finishTeachingPath(id: number): Promise<void>;
   deleteTeachingPathAnswers(teachingPathId: number, answerId: number): Promise<void>;
   copyTeachingPath(id: number): Promise<number>;
@@ -43,6 +47,7 @@ export type TeachingPathItemValueArgs = {
   isAnswered?: boolean;
   numberOfQuestions?: number;
   featuredImage?: string;
+  grepGoals?: Array<GreepElements>;
 };
 
 export type TeachingPathItemValue = Article | Assignment | Domain;
@@ -175,6 +180,11 @@ export interface TeachingPathArgs {
   isDistributed?: boolean;
   ownedByMe?: boolean;
   isCopy?: boolean;
+  grepMainTopicsIds?: Array<number>;
+  grepCoreElementsIds?: Array<number>;
+  grepReadingInSubjectId?: number;
+  grepGoalsIds?: Array<number>;
+  grepGoals?: Array<GreepElements>;
 }
 
 export class TeachingPath {
@@ -211,6 +221,11 @@ export class TeachingPath {
   @observable protected _isPublished?: boolean;
   @observable protected _isDistributed?: boolean;
   @observable protected _isCopy?: boolean;
+  @observable protected _grepCoreElementsIds?: Array<number>;
+  @observable protected _grepMainTopicsIds?: Array<number>;
+  @observable protected _grepReadingInSubjectId?: number;
+  @observable protected _grepGoalsIds?: Array<number>;
+  @observable protected _grepGoals?: Array<GreepElements> = [];
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;
@@ -247,11 +262,36 @@ export class TeachingPath {
     this._ownedByMe = typeof args.ownedByMe === 'boolean' ? args.ownedByMe : false;
     this._answerId = args.answerId;
     this._isCopy = args.isCopy || false;
+    this._grepCoreElementsIds = args.grepCoreElementsIds;
+    this._grepMainTopicsIds = args.grepMainTopicsIds;
+    this._grepReadingInSubjectId = args.grepReadingInSubjectId;
+    this._grepGoalsIds = args.grepGoalsIds;
+    this._grepGoals = args.grepGoals || [];
   }
 
   @computed
   public get id() {
     return this._id;
+  }
+
+  @computed
+  public get grepCoreElementsIds() {
+    return this._grepCoreElementsIds;
+  }
+
+  @computed
+  public get grepMainTopicsIds() {
+    return this._grepMainTopicsIds;
+  }
+
+  @computed
+  public get grepReadingInSubjectId() {
+    return this._grepReadingInSubjectId;
+  }
+
+  @computed
+  public get grepGoalsIds() {
+    return this._grepGoalsIds;
   }
 
   @computed
@@ -343,6 +383,26 @@ export class TeachingPath {
 
   public getListOfGrades() {
     return toJS(this._grades);
+  }
+
+  public getListOfGoals() {
+    return toJS(this._grepGoals);
+  }
+
+  public getListOfgrepCoreElementsIds() {
+    return this._grepCoreElementsIds;
+  }
+
+  public getListOfgrepGoalsIds() {
+    return this._grepGoalsIds;
+  }
+
+  public getListOfgrepMainTopicsIds() {
+    return this._grepMainTopicsIds;
+  }
+
+  public getListOfgrepReadingInSubjectId() {
+    return this._grepReadingInSubjectId;
   }
 
   public isOwnedByMe(): boolean {
