@@ -5,6 +5,7 @@ import { injector } from 'Injector';
 
 import { debounce } from 'utils/debounce';
 import { DEBOUNCE_TIME } from 'utils/constants';
+import { Filter } from 'assignment/Assignment';
 import { UserType } from 'user/User';
 import { SortingFilter, StoreState } from 'utils/enums';
 import { Notification, NotificationTypes } from '../../../components/common/Notification/Notification';
@@ -46,6 +47,17 @@ export class TeachingPathsListStore {
         await this.listTeachingPaths.getAllTeachingPathsList() :
         await this.listTeachingPaths.getMyTeachingPathsList();
     }
+    this.teachingPathList = response.teachingPathsList;
+    this.paginationTotalPages = response.total_pages;
+
+    this.teachingPathsState = StoreState.PENDING;
+  }
+
+  @action
+  public async getTeachingPathDistributeList(filter: Filter) {
+    this.teachingPathsState = StoreState.LOADING;
+    this.listTeachingPaths.setFiltersPerPage(TEACHING_PATHS_PER_PAGE_IN_LIST);
+    const response = await this.listTeachingPaths.getTeachingPathDistributes(filter);
     this.teachingPathList = response.teachingPathsList;
     this.paginationTotalPages = response.total_pages;
 

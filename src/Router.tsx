@@ -32,6 +32,10 @@ const EvaluationPageRoutes = () => (
         component={AssignmentDistributeList}
       />
       <Route
+        path="/evaluation/teaching-paths"
+        component={AssignmentDistributeList}
+      />
+      <Route
         path="/*"
         component={Page404}
       />

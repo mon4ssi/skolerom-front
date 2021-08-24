@@ -40,6 +40,10 @@ export class TeachingPathService {
     return this.teachingPathRepo.getFiltersArticlePanel();
   }
 
+  public async getTeachingPathDistributes(filter: Filter) {
+    return this.teachingPathRepo.getTeachingPathDistributes(filter);
+  }
+
   public async getGrepFilters() {
     return this.teachingPathRepo.getGrepFilters();
   }

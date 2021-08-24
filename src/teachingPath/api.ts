@@ -238,6 +238,17 @@ export class TeachingPathApi implements TeachingPathRepo {
     return response.data;
   }
 
+  public async getTeachingPathDistributes(filter: Filter): Promise<{
+    teachingPathsList: Array<TeachingPath>,
+    total_pages: number;
+  }> {
+    const response = (await API.get('api/teacher/assignments/distributes', { params: filter })).data;
+    return {
+      teachingPathsList: response.data,
+      total_pages: response.meta.pagination.total_pages,
+    };
+  }
+
   public async getGrepFilters(): Promise<FilterGrep>  {
     const response = await API.get('api/teacher/teaching-paths/grep/filters');
     return response.data;

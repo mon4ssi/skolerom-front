@@ -18,11 +18,10 @@ const tabNavigationData = {
       name: 'Assignments',
       url: '/evaluation/assignments',
     },
-   /* {
+    {
       name: 'Teaching paths',
       url: '/evaluation/teaching-paths',
-      isDisabled: true,
-    }*/
+    }
   ],
   sourceTranslation: 'evaluation_page',
 };
