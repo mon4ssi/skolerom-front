@@ -1240,7 +1240,7 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public renderTableBody = () => {
-    const { store } = this.props;
+    const { store, from } = this.props;
     const { optionsGoals, editvalueGoalsOptions } = this.state;
     const listGoals = this.state.valueGoalsOptions;
     const myOptionGoals = this.state.optionsGoals;
@@ -1322,6 +1322,8 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public render() {
+    const { store, from } = this.props;
+    const descriptionText = (this.state.isValid) ? intl.get('publishing_page.grep.description_privado') : (from === 'TEACHINGPATH') ? intl.get('publishing_page.grep.description') : intl.get('publishing_page.grep.descrption_assignment');
     return (
       <div className="PublishingActions flexBox dirColumn">
         <div className="infoContainer">
@@ -1334,7 +1336,7 @@ export class PublishingActions extends Component<Props, State> {
           <div className="infoContainer__bottom">
             <div className="infoContainer__secondTitle">
               <h2>{intl.get('publishing_page.grep.title')}</h2>
-              <p>{intl.get('publishing_page.grep.description')}</p>
+              <p>{descriptionText}</p>
             </div>
             <div className="infoContainer__filters">
               {this.renderSubjectInput()}

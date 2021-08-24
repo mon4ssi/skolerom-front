@@ -434,7 +434,7 @@ class SearchFilter extends Component<Props, State> {
     let buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_close');
     let buttonClass = 'closehandler';
     let imgFilter = filterImg;
-    if (filtersModal) {
+    /*if (filtersModal) {
       buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_open');
       buttonClass = 'openhandler';
       imgFilter = filterWhiteImg;
@@ -444,6 +444,11 @@ class SearchFilter extends Component<Props, State> {
         buttonClass = 'openhandler';
         imgFilter = filterWhiteImg;
       }
+    }*/
+    if (this.props.filtersisUsed) {
+      buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_change');
+      buttonClass = 'openhandler';
+      imgFilter = filterWhiteImg;
     }
     return (
       <div className="SearchFilter__link">
@@ -459,7 +464,7 @@ class SearchFilter extends Component<Props, State> {
     let buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_close');
     let buttonClass = 'closehandler';
     let imgFilter = filterImg;
-    if (filtersModalTp) {
+    /*if (filtersModalTp) {
       buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_open');
       buttonClass = 'openhandler';
       imgFilter = filterWhiteImg;
@@ -469,6 +474,11 @@ class SearchFilter extends Component<Props, State> {
         buttonClass = 'openhandler';
         imgFilter = filterWhiteImg;
       }
+    }*/
+    if (this.props.filtersisUsed) {
+      buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_change');
+      buttonClass = 'openhandler';
+      imgFilter = filterWhiteImg;
     }
     return (
       <div className="SearchFilter__link TpButton">
@@ -484,7 +494,7 @@ class SearchFilter extends Component<Props, State> {
     let buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_close');
     let buttonClass = 'closehandler';
     let imgFilter = filterImg;
-    if (filtersModalAssignment) {
+    /*if (filtersModalAssignment) {
       buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_open');
       buttonClass = 'openhandler';
       imgFilter = filterWhiteImg;
@@ -494,6 +504,11 @@ class SearchFilter extends Component<Props, State> {
         buttonClass = 'openhandler';
         imgFilter = filterWhiteImg;
       }
+    }*/
+    if (this.props.filtersisUsed) {
+      buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_change');
+      buttonClass = 'openhandler';
+      imgFilter = filterWhiteImg;
     }
     return (
       <div className="SearchFilter__link">
@@ -509,7 +524,7 @@ class SearchFilter extends Component<Props, State> {
     let buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_close');
     let buttonClass = 'closehandler';
     let imgFilter = filterImg;
-    if (filtersAssignment) {
+    /*if (filtersAssignment) {
       buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_open');
       buttonClass = 'openhandler';
       imgFilter = filterWhiteImg;
@@ -519,6 +534,11 @@ class SearchFilter extends Component<Props, State> {
         buttonClass = 'openhandler';
         imgFilter = filterWhiteImg;
       }
+    }*/
+    if (this.props.filtersisUsed) {
+      buttonTxt = intl.get('edit_teaching_path.modals.search.buttons.button_change');
+      buttonClass = 'openhandler';
+      imgFilter = filterWhiteImg;
     }
     return (
       <div className="SearchFilter__link">

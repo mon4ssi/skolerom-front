@@ -998,7 +998,7 @@ export class AssignmentsList extends Component<Props, State> {
     const { selectedAssignmentTitle, selectedAssignmentDescription, expand } = this.state;
     return (
       <div className="defaultContentModal">
-        <h2>{intl.get('edit_teaching_path.modals.articles_title')}</h2>
+        <h2>{intl.get('edit_teaching_path.modals.assignments_title')}</h2>
         <div className="defaultContentModal__content">
           <h3>{selectedAssignmentTitle}</h3>
           <p>{selectedAssignmentDescription}</p>
