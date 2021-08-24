@@ -160,10 +160,10 @@ class TeachingPathsListComponent extends Component<Props, State> {
   public async componentDidMount() {
     const { editTeachingPathStore } = this.props;
     const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions } = this.state;
-    const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFilters();
     this.setCurrentTab();
     this.fetchTeachingPaths();
     this.unregisterListener = this.props.history.listen(this.locationUpdateListener);
+    const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFilters();
     document.addEventListener('keyup', this.handleKeyboardControl);
     this.setState({
       grepFiltersData : grepFiltersDataAwait
