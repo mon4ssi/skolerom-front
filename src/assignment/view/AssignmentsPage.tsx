@@ -130,6 +130,7 @@ interface State {
   myValueMulti: number | null;
   myValueReading: number | null;
   myValueCore: Array<any>;
+  myValueGoal: Array<any>;
   goalValueFilter: Array<any>;
   customCoreList: Array<GreepSelectValue>;
   grepFiltersData: FilterGrep;
@@ -178,6 +179,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       myValueMulti: null,
       myValueReading: null,
       myValueCore: [],
+      myValueGoal: [],
       goalValueFilter: [],
       customCoreList: [],
       grepFiltersData: {},
@@ -238,10 +240,18 @@ class AssignmentsPageWrapper extends Component<Props, State> {
         QueryStringKeys.GRADE,
         ''
       );
-      this.setState({
-        myValueGrade : null
-      });
-      this.setState({ filtersisUsed: false });
+      this.setState(
+        {
+          myValueGrade : null
+        },
+        () => {
+          if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+            this.setState({ filtersisUsed: true });
+          } else {
+            this.setState({ filtersisUsed: false });
+          }
+        }
+      );
     } else {
       QueryStringHelper.set(
         this.props.history,
@@ -277,10 +287,18 @@ class AssignmentsPageWrapper extends Component<Props, State> {
         QueryStringKeys.SUBJECT,
         ''
       );
-      this.setState({
-        myValueSubject : null
-      });
-      this.setState({ filtersisUsed: false });
+      this.setState(
+        {
+          myValueSubject : null
+        },
+        () => {
+          if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+            this.setState({ filtersisUsed: true });
+          } else {
+            this.setState({ filtersisUsed: false });
+          }
+        }
+      );
     } else {
       QueryStringHelper.set(
         this.props.history,
@@ -308,10 +326,18 @@ class AssignmentsPageWrapper extends Component<Props, State> {
         QueryStringKeys.GREPMAINTOPICSIDS,
         ''
       );
-      this.setState({
-        myValueMulti : null
-      });
-      this.setState({ filtersisUsed: false });
+      this.setState(
+        {
+          myValueMulti : null
+        },
+        () => {
+          if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+            this.setState({ filtersisUsed: true });
+          } else {
+            this.setState({ filtersisUsed: false });
+          }
+        }
+      );
     } else {
       QueryStringHelper.set(
         this.props.history,
@@ -338,10 +364,18 @@ class AssignmentsPageWrapper extends Component<Props, State> {
         QueryStringKeys.GREPREADINGINSUBJECT,
         ''
       );
-      this.setState({
-        myValueReading : null
-      });
-      this.setState({ filtersisUsed: false });
+      this.setState(
+        {
+          myValueReading : null
+        },
+        () => {
+          if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+            this.setState({ filtersisUsed: true });
+          } else {
+            this.setState({ filtersisUsed: false });
+          }
+        }
+      );
     } else {
       QueryStringHelper.set(
         this.props.history,
@@ -360,15 +394,21 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     const ArrayValue: Array<number> = [];
     const { newAssignmentStore } = this.props;
     const { valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
-    this.setState({ myValueCore: newValue });
+    this.setState(
+      {
+        myValueCore : newValue
+      },
+      () => {
+        if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+          this.setState({ filtersisUsed: true });
+        } else {
+          this.setState({ filtersisUsed: false });
+        }
+      }
+    );
     newValue.forEach((e) => {
       ArrayValue.push(e.value);
     });
-    if (newValue.length === 0) {
-      this.setState({ filtersisUsed: false });
-    } else {
-      this.setState({ filtersisUsed: true });
-    }
     this.setState({ valueCoreOptions: ArrayValue });
     const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(ArrayValue, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
@@ -390,15 +430,22 @@ class AssignmentsPageWrapper extends Component<Props, State> {
 
   private handleChangeSelectGoals = async (newValue: Array<any>) => {
     const ArrayValue: Array<number> = [];
+    this.setState(
+      {
+        myValueGoal : newValue
+      },
+      () => {
+        if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+          this.setState({ filtersisUsed: true });
+        } else {
+          this.setState({ filtersisUsed: false });
+        }
+      }
+    );
     newValue.forEach((e) => {
       ArrayValue.push(e.value);
     });
     this.setState({ valueGoalsOptions: ArrayValue });
-    if (newValue.length === 0) {
-      this.setState({ filtersisUsed: false });
-    } else {
-      this.setState({ filtersisUsed: true });
-    }
     let singleString : string = '';
     if (newValue.length > 0) {
       newValue.forEach((e, index) => {

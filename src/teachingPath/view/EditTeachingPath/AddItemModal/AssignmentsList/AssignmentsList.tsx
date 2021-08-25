@@ -129,6 +129,8 @@ interface State {
   myValueGrade: number | null;
   myValueMulti: number | null;
   myValueReading: number | null;
+  myValueCore: Array<any>;
+  myValueGoal: Array<any>;
   optionsCore: Array<GreepSelectValue>;
   optionsMulti: Array<Greep>;
   optionsReading: Array<Greep>;
@@ -175,6 +177,8 @@ export class AssignmentsList extends Component<Props, State> {
       myValueGrade: null,
       myValueMulti: null,
       myValueReading: null,
+      myValueCore: [],
+      myValueGoal: [],
       optionsCore: [],
       optionsMulti: [],
       optionsReading: [],
@@ -614,13 +618,11 @@ export class AssignmentsList extends Component<Props, State> {
       this.setState({
         myValueSubject : Number(value)
       });
-      this.setState({ filtersisUsed: true });
     } else {
       assignmentListStore!.setFiltersSubjectID(null);
       this.setState({
         myValueSubject : null
       });
-      this.setState({ filtersisUsed: false });
     }
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, [valueToArray], this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
@@ -663,10 +665,18 @@ export class AssignmentsList extends Component<Props, State> {
       this.setState({ filtersisUsed: true });
     } else {
       assignmentListStore!.setFiltersGradeID(null);
-      this.setState({
-        myValueGrade : null
-      });
-      this.setState({ filtersisUsed: false });
+      this.setState(
+        {
+          myValueGrade : null
+        },
+        () => {
+          if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+            this.setState({ filtersisUsed: true });
+          } else {
+            this.setState({ filtersisUsed: false });
+          }
+        }
+      );
     }
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, [valueToArray], valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
@@ -686,10 +696,18 @@ export class AssignmentsList extends Component<Props, State> {
       this.setState({ filtersisUsed: true });
     } else {
       assignmentListStore!.setFiltersMultiID(null);
-      this.setState({
-        myValueMulti : null
-      });
-      this.setState({ filtersisUsed: false });
+      this.setState(
+        {
+          myValueMulti : null
+        },
+        () => {
+          if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+            this.setState({ filtersisUsed: true });
+          } else {
+            this.setState({ filtersisUsed: false });
+          }
+        }
+      );
     }
     this.setState({ valueMultiOptions: [Number(e.currentTarget.value)] });
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, [Number(e.currentTarget.value)], valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
@@ -709,10 +727,18 @@ export class AssignmentsList extends Component<Props, State> {
       this.setState({ filtersisUsed: true });
     } else {
       assignmentListStore!.setFiltersReadingID(null);
-      this.setState({
-        myValueReading : null
-      });
-      this.setState({ filtersisUsed: false });
+      this.setState(
+        {
+          myValueReading : null
+        },
+        () => {
+          if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+            this.setState({ filtersisUsed: true });
+          } else {
+            this.setState({ filtersisUsed: false });
+          }
+        }
+      );
     }
   }
 
@@ -742,11 +768,18 @@ export class AssignmentsList extends Component<Props, State> {
     newValue.forEach((e) => {
       ArrayValue.push(e.value);
     });
-    if (newValue.length === 0) {
-      this.setState({ filtersisUsed: false });
-    } else {
-      this.setState({ filtersisUsed: true });
-    }
+    this.setState(
+      {
+        myValueCore : newValue
+      },
+      () => {
+        if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+          this.setState({ filtersisUsed: true });
+        } else {
+          this.setState({ filtersisUsed: false });
+        }
+      }
+    );
     this.setState({ valueCoreOptions: ArrayValue });
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(ArrayValue, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
@@ -765,15 +798,22 @@ export class AssignmentsList extends Component<Props, State> {
   public handleChangeSelectGoals = async (newValue: Array<any>) => {
     const { assignmentListStore } = this.props;
     let singleString : string = '';
+    this.setState(
+      {
+        myValueGoal : newValue
+      },
+      () => {
+        if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+          this.setState({ filtersisUsed: true });
+        } else {
+          this.setState({ filtersisUsed: false });
+        }
+      }
+    );
     if (newValue.length > 0) {
       newValue.forEach((e, index) => {
         singleString = (index === 0) ? String(e.value) : `${singleString},${String(e.value)}`;
       });
-    }
-    if (newValue.length === 0) {
-      this.setState({ filtersisUsed: false });
-    } else {
-      this.setState({ filtersisUsed: true });
     }
     assignmentListStore!.setFiltersGoalID(singleString);
     this.setState({ goalValueFilter : newValue });

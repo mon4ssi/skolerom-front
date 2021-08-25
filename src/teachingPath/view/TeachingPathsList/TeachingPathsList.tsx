@@ -400,7 +400,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
       this.setState({
         myValueGrade: Number(value)
       });
-      this.setState({ filtersisUsed: true });
     } else {
       const GradeFilterArray = Array.from(document.getElementsByClassName('gradesFilterClass') as HTMLCollectionOf<HTMLElement>);
       GradeFilterArray.forEach((e) => {
@@ -412,7 +411,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
         myValueGrade: null
       });
       valueToArray = 0;
-      this.setState({ filtersisUsed: false });
     }
     QueryStringHelper.set(
       this.props.history,
@@ -447,7 +445,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
       this.setState({
         myValueSubject: Number(value)
       });
-      this.setState({ filtersisUsed: true });
     } else {
       const GradeFilterArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
       GradeFilterArray.forEach((e) => {
@@ -459,7 +456,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
       this.setState({
         myValueSubject: null
       });
-      this.setState({ filtersisUsed: false });
     }
     QueryStringHelper.set(
       this.props.history,
@@ -492,7 +488,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
       this.setState({
         myValueMulti: Number(value)
       });
-      this.setState({ filtersisUsed: true });
     } else {
       const GradeFilterArray = Array.from(document.getElementsByClassName('multiFilterClass') as HTMLCollectionOf<HTMLElement>);
       GradeFilterArray.forEach((e) => {
@@ -503,7 +498,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
       this.setState({
         myValueMulti: null
       });
-      this.setState({ filtersisUsed: false });
     }
 
     this.setState({ valueMultiOptions: [Number(value)] });
@@ -537,7 +531,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
       this.setState({
         myValueReading: Number(value)
       });
-      this.setState({ filtersisUsed: true });
     } else {
       const GradeFilterArray = Array.from(document.getElementsByClassName('sourceFilterClass') as HTMLCollectionOf<HTMLElement>);
       GradeFilterArray.forEach((e) => {
@@ -548,7 +541,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
       this.setState({
         myValueReading: null
       });
-      this.setState({ filtersisUsed: false });
     }
     QueryStringHelper.set(
       this.props.history,
@@ -567,11 +559,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
       ArrayValue.push(e.value);
     });
     this.setState({ valueCoreOptions: ArrayValue });
-    if (newValue.length === 0) {
-      this.setState({ filtersisUsed: false });
-    } else {
-      this.setState({ filtersisUsed: true });
-    }
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(ArrayValue, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
@@ -595,11 +582,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
     newValue.forEach((e) => {
       ArrayValue.push(e.value);
     });
-    if (newValue.length === 0) {
-      this.setState({ filtersisUsed: false });
-    } else {
-      this.setState({ filtersisUsed: true });
-    }
     this.setState({ valueGoalsOptions: ArrayValue });
     this.setState({ goalValueFilter: newValue });
     let singleString : string = '';

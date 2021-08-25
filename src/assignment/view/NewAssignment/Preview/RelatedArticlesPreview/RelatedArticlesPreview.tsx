@@ -56,12 +56,13 @@ interface State {
   selectedSourceAll: Array<Greep>;
   valueGrade: string;
   valueSubject: string;
-  MySelectGrade: number | null;
-  MySelectSubject: number | null;
-  MySelectMulti: number | null;
-  MySelectSource: number | null;
+  MySelectGrade: Array<number> | null;
+  MySelectSubject: Array<number> | null;
+  MySelectMulti: Array<number> | null;
+  MySelectSource: Array<number> | null;
   showSourceFilter: boolean;
   userFilters: boolean;
+  filtersisUsed: boolean;
   myValueCore: Array<any>;
   goalValueFilter: Array<any>;
 }
@@ -101,12 +102,13 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       valueGrade: '',
       valueSubject: '',
       activeGrepFilters: false,
-      MySelectGrade: null,
-      MySelectSubject: null,
-      MySelectMulti: null,
-      MySelectSource: null,
+      MySelectGrade: [],
+      MySelectSubject: [],
+      MySelectMulti: [],
+      MySelectSource: [],
       showSourceFilter: false,
       userFilters: false,
+      filtersisUsed: false,
       myValueCore: [],
       goalValueFilter: []
     };
@@ -147,9 +149,13 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       this.setState({ appliedFilters: {} });
       filters = {};
     }
-
     this.setState({ appliedFilters: filters });
     this.setState({ userFilters: true });
+    if (filters.subjects || filters.grades || filters.core || filters.multi || filters.goal || filters.source) {
+      this.setState({ filtersisUsed: true });
+    } else {
+      this.setState({ filtersisUsed: false });
+    }
     if (filterName === 'searchTitle') {
       newAssignmentStore!.getArticlesWithDebounce(filters);
       allModal[0].classList.remove('loadingdata');
@@ -461,18 +467,11 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     const newArrayGoals : Array<Greep> = [];
     const newArraySource : Array<Greep> = [];
     const value = e.currentTarget.value;
-    if (this.state.MySelectGrade !== Number(value)) {
-      this.setState({
-        MySelectGrade : Number(value)
-      });
+    const valueSelectedGrades = this.state.MySelectGrade;
+    if (!valueSelectedGrades!.includes(Number(value))) {
+      valueSelectedGrades!.push(Number(value));
       if (this.state.activeGrepFilters) {
-        const GradeFilterArray = Array.from(document.getElementsByClassName('gradesFilterClass') as HTMLCollectionOf<HTMLElement>);
-        this.handleChangeFilters('grades', Number(value));
-        GradeFilterArray.forEach((e) => {
-          e.classList.remove('active');
-        });
         e.currentTarget.classList.add('active');
-        e.currentTarget.focus();
         this.state.grepDataFilters!.subject_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
           const allSympGrades = element.grade_ids;
@@ -630,38 +629,32 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         );
       }
     } else {
-      this.setState({
-        MySelectGrade : null
-      });
+      const indexSelected = valueSelectedGrades!.indexOf(Number(value));
+      if (indexSelected > -1) {
+        valueSelectedGrades!.splice(indexSelected, 1);
+      }
       if (this.state.activeGrepFilters) {
-        const GradeFilterArray = Array.from(document.getElementsByClassName('gradesFilterClass') as HTMLCollectionOf<HTMLElement>);
-        this.handleChangeFilters('grades', '');
-        GradeFilterArray.forEach((e) => {
-          e.classList.remove('active');
-        });
+        e.currentTarget.classList.remove('active');
         e.currentTarget.focus();
       }
     }
+    this.handleChangeFilters('grades', String(valueSelectedGrades));
+    this.setState({
+      MySelectGrade : valueSelectedGrades
+    });
   }
 
   public handleClickSubject = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const value = e.currentTarget.value;
     const newArrayCore : Array<Greep> = [];
     const newArrayMulti : Array<Greep> = [];
     const newArrayGoals : Array<Greep> = [];
     const newArraySource : Array<Greep> = [];
-    if (this.state.MySelectSubject !== Number(value)) {
-      this.setState({
-        MySelectSubject : Number(value)
-      });
+    const value = e.currentTarget.value;
+    const valueSelectedSubject = this.state.MySelectSubject;
+    if (!valueSelectedSubject!.includes(Number(value))) {
+      valueSelectedSubject!.push(Number(value));
       if (this.state.activeGrepFilters) {
-        this.handleChangeFilters('subjects', Number(value));
-        const GradeFilterArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
-        GradeFilterArray.forEach((e) => {
-          e.classList.remove('active');
-        });
         e.currentTarget.classList.add('active');
-        e.currentTarget.focus();
         this.setState({
           valueSubject: value
         });
@@ -804,70 +797,56 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         );
       }
     } else {
-      this.setState({
-        MySelectSubject : null
-      });
+      const indexSelected = valueSelectedSubject!.indexOf(Number(value));
+      if (indexSelected > -1) {
+        valueSelectedSubject!.splice(indexSelected, 1);
+      }
       if (this.state.activeGrepFilters) {
-        const GradeFilterArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
-        this.handleChangeFilters('subjects', '');
-        GradeFilterArray.forEach((e) => {
-          e.classList.remove('active');
-        });
-        e.currentTarget.focus();
+        e.currentTarget.classList.remove('active');
       }
     }
+    this.handleChangeFilters('subjects', String(valueSelectedSubject));
+    this.setState({
+      MySelectSubject : valueSelectedSubject
+    });
   }
 
   public handleClickMulti = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const value = e.currentTarget.value;
-    if (this.state.MySelectMulti !== Number(value)) {
-      this.setState({
-        MySelectMulti : Number(value)
-      });
-      this.handleChangeFilters('multi', Number(value));
-      const GradeFilterArray = Array.from(document.getElementsByClassName('multiFilterClass') as HTMLCollectionOf<HTMLElement>);
-      GradeFilterArray.forEach((e) => {
-        e.classList.remove('active');
-      });
+    const valueSelectedMulti = this.state.MySelectMulti;
+    if (!valueSelectedMulti!.includes(Number(value))) {
+      valueSelectedMulti!.push(Number(value));
       e.currentTarget.classList.add('active');
-      e.currentTarget.focus();
     } else {
-      this.setState({
-        MySelectMulti : null
-      });
-      this.handleChangeFilters('multi', '');
-      const GradeFilterArray = Array.from(document.getElementsByClassName('multiFilterClass') as HTMLCollectionOf<HTMLElement>);
-      GradeFilterArray.forEach((e) => {
-        e.classList.remove('active');
-      });
-      e.currentTarget.focus();
+      const indexSelected = valueSelectedMulti!.indexOf(Number(value));
+      if (indexSelected > -1) {
+        valueSelectedMulti!.splice(indexSelected, 1);
+      }
+      e.currentTarget.classList.remove('active');
     }
+    this.handleChangeFilters('multi', String(valueSelectedMulti));
+    this.setState({
+      MySelectMulti : valueSelectedMulti
+    });
   }
 
   public handleClickSource = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const value = e.currentTarget.value;
-    if (this.state.MySelectSource !== Number(value)) {
-      this.setState({
-        MySelectSource : Number(value)
-      });
+    const valueSelectedSource = this.state.MySelectSource;
+    if (!valueSelectedSource!.includes(Number(value))) {
       this.handleChangeFilters('source', Number(value));
-      const GradeFilterArray = Array.from(document.getElementsByClassName('sourceFilterClass') as HTMLCollectionOf<HTMLElement>);
-      GradeFilterArray.forEach((e) => {
-        e.classList.remove('active');
-      });
       e.currentTarget.classList.add('active');
-      e.currentTarget.focus();
     } else {
-      this.setState({
-        MySelectSource : null
-      });
-      this.handleChangeFilters('source', '');
-      const GradeFilterArray = Array.from(document.getElementsByClassName('sourceFilterClass') as HTMLCollectionOf<HTMLElement>);
-      GradeFilterArray.forEach((e) => {
-        e.classList.remove('active');
-      });
-      e.currentTarget.focus();
+      const indexSelected = valueSelectedSource!.indexOf(Number(value));
+      if (indexSelected > -1) {
+        valueSelectedSource!.splice(indexSelected, 1);
+      }
+      e.currentTarget.classList.remove('active');
     }
+    this.setState({
+      MySelectSource : valueSelectedSource
+    });
+    this.handleChangeFilters('source', String(valueSelectedSource));
   }
 
   public handleChangeSelectGoals = async (newValue: Array<any>) => {
@@ -1261,6 +1240,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
                   date
                   placeholder={intl.get('assignments search.Search')}
                   isArticlesListPage
+                  filtersisUsed={this.state.filtersisUsed}
                   // METHODS
                   handleChangeSubject={this.handleChangeSubject}
                   handleChangeGrade={this.handleChangeGrade}
@@ -1275,10 +1255,10 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
                   handleClickReset={this.handleClickReset}
                   showSourceFilter={this.state.showSourceFilter}
                   // VALUES
-                  subjectFilterValue={Number(this.state.appliedFilters.subjects)}
-                  gradeFilterValue={Number(this.state.appliedFilters.grades)}
-                  coreFilterValue={Number(this.state.appliedFilters.core)}
-                  goalsFilterValue={Number(this.state.appliedFilters.goal)}
+                  // subjectFilterValue={Number(this.state.appliedFilters.subjects)}
+                  // gradeFilterValue={Number(this.state.appliedFilters.grades)}
+                  // coreFilterValue={Number(this.state.appliedFilters.core)}
+                  // goalsFilterValue={Number(this.state.appliedFilters.goal)}
                   coreValueFilter={this.state.myValueCore}
                   goalValueFilter={this.state.goalValueFilter}
                   searchQueryFilterValue={this.state.appliedFilters.searchTitle as string}
