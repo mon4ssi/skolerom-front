@@ -221,6 +221,16 @@
     }
   }
 }
+.FiltersModal__backgroundside {
+  position: fixed;
+  top: 0px;
+  left: 500px;
+  width: calc(100% - 500px);
+  height: 100%;
+  background: transparent;
+  z-index: -1;
+  cursor: pointer;
+}
 .fixedsModal .FiltersModal {
   top: 78px;
   height: calc(100% - 78px);

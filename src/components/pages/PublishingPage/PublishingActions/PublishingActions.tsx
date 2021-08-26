@@ -217,6 +217,9 @@ export class PublishingActions extends Component<Props, State> {
     } else {
       if (localStorage.getItem('goals')) {
         listGoals = localStorage.getItem('goals')!.split(',');
+        if (selectedGrades.length === 0 && selectedSubjects.length === 0) {
+          listGoals = [''];
+        }
       }
     }
     this.setState({

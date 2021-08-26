@@ -136,6 +136,31 @@
             margin-bottom: 5px;
           }
         }
+        .subjects {
+          font-size: 14px;
+          color: black;
+          li {
+            color: black;
+            margin-bottom: 5px;
+            position: relative;
+            padding-left: 10px;
+            &:before {
+              content: '';
+              margin-right: 5px;
+              width: 5px;
+              height: 1px;
+              background: black;
+              display: inline-block;
+              vertical-align: middle;
+              position: absolute;
+              left: 0px;
+              top: 9px;
+            }
+            &::first-letter {
+              text-transform: uppercase;
+            }
+          }
+        }
         .greepContentList {
           font-size: 14px;
           color: black;
