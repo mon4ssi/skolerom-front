@@ -247,7 +247,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       });
     });
     this.setState({
-      selectedGoalsAll : newArrayGrepGoals
+      selectedGoalsAll : newArrayGrepGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
     });
     // tslint:disable-next-line: variable-name
     dataArticles!.source_filter!.forEach((element) => {
@@ -584,7 +584,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
           }
         });
         this.setState({
-          selectedGoalsFilter : newArrayGoals
+          selectedGoalsFilter : newArrayGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
         });
         this.state.grepDataFilters!.source_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
@@ -752,7 +752,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
           }
         });
         this.setState({
-          selectedGoalsFilter : newArrayGoals
+          selectedGoalsFilter : newArrayGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
         });
         this.state.grepDataFilters!.source_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name

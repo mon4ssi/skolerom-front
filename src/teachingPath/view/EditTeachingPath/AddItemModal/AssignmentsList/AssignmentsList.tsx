@@ -635,7 +635,7 @@ export class AssignmentsList extends Component<Props, State> {
         }
       });
     });
-    this.assigValueData(String(valueGradesOptions), String(valueSelectedSubjects));
+    this.assigValueData(String(this.state.myValueGrade), String(valueSelectedSubjects));
     assignmentListStore!.setFiltersSubjectID(String(valueSelectedSubjects));
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueToArray, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
@@ -688,7 +688,7 @@ export class AssignmentsList extends Component<Props, State> {
     this.setState({
       myValueGrade: valueSelectedGrades
     });
-    this.assigValueData(String(valueSelectedGrades), String(valueSubjectsOptions));
+    this.assigValueData(String(valueSelectedGrades), String(this.state.myValueSubject));
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueToArray, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)

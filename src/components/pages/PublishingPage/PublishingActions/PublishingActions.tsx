@@ -458,6 +458,9 @@ export class PublishingActions extends Component<Props, State> {
       this.setState({
         optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
       });
+      this.setState({
+        optionsMulti : this.renderValueOptions(grepFiltersDataAwait, 'multi')
+      });
     }
   }
 
@@ -517,6 +520,9 @@ export class PublishingActions extends Component<Props, State> {
       });
       this.setState({
         optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
+      });
+      this.setState({
+        optionsMulti : this.renderValueOptions(grepFiltersDataAwait, 'multi')
       });
     }
   }
@@ -581,6 +587,9 @@ export class PublishingActions extends Component<Props, State> {
       });
       this.setState({
         optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
+      });
+      this.setState({
+        optionsMulti : this.renderValueOptions(grepFiltersDataAwait, 'multi')
       });
     }
   }
@@ -655,6 +664,9 @@ export class PublishingActions extends Component<Props, State> {
       });
       this.setState({
         optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
+      });
+      this.setState({
+        optionsMulti : this.renderValueOptions(grepFiltersDataAwait, 'multi')
       });
     }
   }
