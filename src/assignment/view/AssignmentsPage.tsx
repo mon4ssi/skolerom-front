@@ -260,10 +260,10 @@ class AssignmentsPageWrapper extends Component<Props, State> {
         }
       });
     });
-    this.assigValueData(String(valueToArray), String(valueSubjectsOptions));
+    this.assigValueData(String(valueSelectedGrades), String(valueSubjectsOptions));
     const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueToArray, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
-      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
+      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
   }
@@ -305,10 +305,10 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       });
     });
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
-    this.assigValueData(String(valueGradesOptions), String(valueToArray));
+    this.assigValueData(String(valueGradesOptions), String(valueSelectedSubjects));
     const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueToArray, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
-      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
+      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
   }
 
@@ -339,7 +339,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     );
     const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(valueCoreOptions, valueSelectedMulti, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
-      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
+      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
   }
@@ -395,7 +395,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     this.setState({ valueCoreOptions: ArrayValue });
     const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(ArrayValue, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
-      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
+      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
     let singleString : string = '';
     if (newValue.length > 0) {
@@ -617,15 +617,17 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     const { newAssignmentStore } = this.props;
     const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions } = this.state;
     this.fetchTeachingPaths();
-    this.assigValueData('', '');
-    const listGoals = [''];
-    this.setState({
-      valueStringGoalsOptions: listGoals
-    });
-    const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, listGoals, MAGICNUMBER100, MAGICNUMBER1);
-    this.setState({
-      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
-    });
+    if (!this.props.isStudent) {
+      this.assigValueData('', '');
+      const listGoals = [''];
+      this.setState({
+        valueStringGoalsOptions: listGoals
+      });
+      const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, listGoals, MAGICNUMBER100, MAGICNUMBER1);
+      this.setState({
+        optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
+      });
+    }
   }
 
   public handleClickReset = async () => {
@@ -655,7 +657,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     });
     const grepFiltergoalssDataAwait = await this.props.newAssignmentStore!.getGrepGoalsFilters([], [], [], [], [], MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
-      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
+      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
     this.setState({ valueGradesOptions: [] });
     this.setState({ valueCoreOptions: [] });

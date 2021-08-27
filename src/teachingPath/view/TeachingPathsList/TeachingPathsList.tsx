@@ -187,15 +187,17 @@ class TeachingPathsListComponent extends Component<Props, State> {
     this.fetchTeachingPaths();
     this.unregisterListener = this.props.history.listen(this.locationUpdateListener);
     document.addEventListener('keyup', this.handleKeyboardControl);
-    this.assigValueData('', '');
-    const listGoals = [''];
-    this.setState({
-      valueStringGoalsOptions: listGoals
-    });
-    const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, listGoals, MAGICNUMBER100, MAGICNUMBER1);
-    this.setState({
-      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
-    });
+    if (this.props.isNotStudent) {
+      this.assigValueData('', '');
+      const listGoals = [''];
+      this.setState({
+        valueStringGoalsOptions: listGoals
+      });
+      const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, listGoals, MAGICNUMBER100, MAGICNUMBER1);
+      this.setState({
+        optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
+      });
+    }
   }
 
   public transformDataToString = (data: Array<GreepElements>) => {
@@ -417,10 +419,10 @@ class TeachingPathsListComponent extends Component<Props, State> {
       String(valueSelectedGrades)
     );
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
-    this.assigValueData(String(valueToArray), String(valueSubjectsOptions));
+    this.assigValueData(String(valueSelectedGrades), String(valueSubjectsOptions));
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueToArray, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
-      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
+      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
   }
 
@@ -457,10 +459,10 @@ class TeachingPathsListComponent extends Component<Props, State> {
       String(valueSelectedSubjects)
     );
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
-    this.assigValueData(String(valueGradesOptions), String(valueToArray));
+    this.assigValueData(String(valueGradesOptions), String(valueSelectedSubjects));
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueToArray, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
-      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
+      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
   }
 
@@ -484,7 +486,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
     });
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueSelectedMulti, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
-      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
+      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
     QueryStringHelper.set(
       this.props.history,
@@ -527,7 +529,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
     this.setState({ valueCoreOptions: ArrayValue });
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(ArrayValue, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
-      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
+      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
     let singleString : string = '';
     if (newValue.length > 0) {
@@ -742,7 +744,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
     });
     const grepFiltergoalssDataAwait = await this.props.editTeachingPathStore!.getGrepGoalsFilters([], [], [], [], [], MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
-      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
+      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
     this.setState({ valueGradesOptions: [] });
     this.setState({ valueCoreOptions: [] });
