@@ -125,10 +125,10 @@ interface State {
   expandCore: boolean;
   expandGoals: boolean;
   expandSubjects: boolean;
-  myValueSubject: number | null;
-  myValueGrade: number | null;
-  myValueMulti: number | null;
-  myValueReading: number | null;
+  myValueGrade: Array<number>;
+  myValueSubject: Array<number>;
+  myValueMulti: Array<number>;
+  myValueReading: Array<number>;
   myValueCore: Array<any>;
   myValueGoal: Array<any>;
   optionsCore: Array<GreepSelectValue>;
@@ -173,10 +173,10 @@ export class AssignmentsList extends Component<Props, State> {
       expandCore: false,
       expandGoals: false,
       expandSubjects: false,
-      myValueSubject: null,
-      myValueGrade: null,
-      myValueMulti: null,
-      myValueReading: null,
+      myValueSubject: [],
+      myValueGrade: [],
+      myValueMulti: [],
+      myValueReading: [],
       myValueCore: [],
       myValueGoal: [],
       optionsCore: [],
@@ -298,17 +298,9 @@ export class AssignmentsList extends Component<Props, State> {
     return returnArray;
   }
 
-  public async componentDidMount() {
+  public async assigValueData(grades: string, subjects: string) {
     const { editTeachingPathStore } = this.props;
-    const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions } = this.state;
-    this.props.assignmentListStore!.clearMyAssignmentsList();
-    this.props.assignmentListStore!.setTypeOfAssignmentsList('all');
-    this.setState({ itemsForNewChildren: this.getAllChildrenItems() });
-    this.props.assignmentListStore!.setFromTeachingPath(true);
-    this.props.assignmentListStore!.setFiltersForTeachingPath();
-    document.addEventListener('keyup', this.handleKeyboardControl);
-    this.refButton.current!.focus();
-    const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFilters();
+    const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFilters(grades, subjects);
     this.setState({
       grepFiltersData : grepFiltersDataAwait
     });
@@ -327,6 +319,19 @@ export class AssignmentsList extends Component<Props, State> {
     this.setState({
       optionsGrades : this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
     });
+  }
+
+  public async componentDidMount() {
+    const { editTeachingPathStore } = this.props;
+    const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions } = this.state;
+    this.props.assignmentListStore!.clearMyAssignmentsList();
+    this.props.assignmentListStore!.setTypeOfAssignmentsList('all');
+    this.setState({ itemsForNewChildren: this.getAllChildrenItems() });
+    this.props.assignmentListStore!.setFromTeachingPath(true);
+    this.props.assignmentListStore!.setFiltersForTeachingPath();
+    document.addEventListener('keyup', this.handleKeyboardControl);
+    this.refButton.current!.focus();
+    this.assigValueData('', '');
     const listGoals = [''];
     this.setState({
       valueStringGoalsOptions: listGoals
@@ -600,31 +605,39 @@ export class AssignmentsList extends Component<Props, State> {
   }
 
   public handleClickSubject = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const value = e.currentTarget.value;
     const { assignmentListStore, editTeachingPathStore } = this.props;
     const { optionsSubjects, valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
-    let valueToArray = 0;
-    optionsSubjects!.forEach((element) => {
-      if (Number(element.wp_id) === Number(e.currentTarget.value)) {
-        this.setState({ valueSubjectsOptions: [element.id] });
-        valueToArray = element.id;
-      }
-    });
-    if (this.state.myValueSubject !== Number(value)) {
-      const currentGrade = assignmentListStore!
-        .getAllSubjects()
-        .find(subject => subject.id === Number(value));
-      assignmentListStore!.setFiltersSubjectID(currentGrade ? currentGrade.id : null);
-      this.setState({
-        myValueSubject : Number(value)
-      });
+    const valueSelectedSubjects = this.state.myValueSubject;
+    const value = e.currentTarget.value;
+    const valueToArray: Array<number> = [];
+    if (!valueSelectedSubjects!.includes(Number(value))) {
+      valueSelectedSubjects!.push(Number(value));
+      this.setState({ filtersisUsed: true });
     } else {
-      assignmentListStore!.setFiltersSubjectID(null);
-      this.setState({
-        myValueSubject : null
-      });
+      if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+        this.setState({ filtersisUsed: true });
+      } else {
+        this.setState({ filtersisUsed: false });
+      }
+      const indexSelected = valueSelectedSubjects!.indexOf(Number(value));
+      if (indexSelected > -1) {
+        valueSelectedSubjects!.splice(indexSelected, 1);
+      }
     }
-    const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, [valueToArray], this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
+    this.setState({
+      myValueSubject: valueSelectedSubjects
+    });
+    optionsSubjects!.forEach((element) => {
+      valueSelectedSubjects.forEach((el) => {
+        if (Number(element.wp_id) === Number(el)) {
+          valueToArray.push(element.id);
+          this.setState({ valueSubjectsOptions: valueToArray });
+        }
+      });
+    });
+    this.assigValueData(String(valueGradesOptions), String(valueToArray));
+    assignmentListStore!.setFiltersSubjectID(String(valueSelectedSubjects));
+    const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueToArray, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
     });
@@ -644,72 +657,65 @@ export class AssignmentsList extends Component<Props, State> {
   }
 
   public handleClickGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const value = e.currentTarget.value;
     const { assignmentListStore, editTeachingPathStore } = this.props;
     const { optionsGrades, valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
-    let valueToArray = 0;
-    optionsGrades!.forEach((element) => {
-      if (Number(element.wp_id) === Number(e.currentTarget.value)) {
-        this.setState({ valueGradesOptions: [element.id] });
-        valueToArray = element.id;
-      }
-    });
-    if (this.state.myValueGrade !== Number(value)) {
-      const currentGrade = assignmentListStore!
-        .getAllGrades()
-        .find(grade => grade.id === Number(value));
-      assignmentListStore!.setFiltersGradeID(currentGrade ? currentGrade.id : null);
-      this.setState({
-        myValueGrade : Number(value)
-      });
+    const valueSelectedGrades = this.state.myValueSubject;
+    const value = e.currentTarget.value;
+    const valueToArray: Array<number> = [];
+    if (!valueSelectedGrades!.includes(Number(value))) {
+      valueSelectedGrades!.push(Number(value));
       this.setState({ filtersisUsed: true });
     } else {
-      assignmentListStore!.setFiltersGradeID(null);
-      this.setState(
-        {
-          myValueGrade : null
-        },
-        () => {
-          if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
-            this.setState({ filtersisUsed: true });
-          } else {
-            this.setState({ filtersisUsed: false });
-          }
-        }
-      );
+      if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+        this.setState({ filtersisUsed: true });
+      } else {
+        this.setState({ filtersisUsed: false });
+      }
+      const indexSelected = valueSelectedGrades!.indexOf(Number(value));
+      if (indexSelected > -1) {
+        valueSelectedGrades!.splice(indexSelected, 1);
+      }
     }
-    const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, [valueToArray], valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
+    optionsGrades!.forEach((element) => {
+      valueSelectedGrades.forEach((el) => {
+        if (Number(element.wp_id) === Number(el)) {
+          valueToArray.push(element.id);
+          this.setState({ valueGradesOptions: valueToArray });
+        }
+      });
+    });
+    assignmentListStore!.setFiltersGradeID(String(valueSelectedGrades));
+    this.setState({
+      myValueGrade: valueSelectedGrades
+    });
+    this.assigValueData(String(valueToArray), String(valueSubjectsOptions));
+    const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueToArray, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
     });
   }
 
   public handleClickMulti = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const value = e.currentTarget.value;
     const { assignmentListStore, editTeachingPathStore } = this.props;
     const { valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
-    if (Number(value) !== this.state.myValueMulti) {
-      assignmentListStore!.setFiltersMultiID(Number(value));
-      this.setState({
-        myValueMulti : Number(value)
-      });
+    const valueSelectedMulti = this.state.myValueMulti;
+    const value = e.currentTarget.value;
+    if (!valueSelectedMulti!.includes(Number(value))) {
+      valueSelectedMulti!.push(Number(value));
       this.setState({ filtersisUsed: true });
     } else {
-      assignmentListStore!.setFiltersMultiID(null);
-      this.setState(
-        {
-          myValueMulti : null
-        },
-        () => {
-          if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
-            this.setState({ filtersisUsed: true });
-          } else {
-            this.setState({ filtersisUsed: false });
-          }
-        }
-      );
+      const indexSelected = valueSelectedMulti!.indexOf(Number(value));
+      if (indexSelected > -1) {
+        valueSelectedMulti!.splice(indexSelected, 1);
+      }
+      if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+        this.setState({ filtersisUsed: true });
+      } else {
+        this.setState({ filtersisUsed: false });
+      }
     }
-    this.setState({ valueMultiOptions: [Number(e.currentTarget.value)] });
+    assignmentListStore!.setFiltersMultiID(String(valueSelectedMulti));
+    this.setState({ valueMultiOptions: valueSelectedMulti });
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, [Number(e.currentTarget.value)], valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data)
@@ -718,28 +724,24 @@ export class AssignmentsList extends Component<Props, State> {
 
   public handleClickReading = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const value = e.currentTarget.value;
+    const valueSelectedReading = this.state.myValueReading;
     const { assignmentListStore } = this.props;
-    if (Number(value) !== this.state.myValueReading) {
-      assignmentListStore!.setFiltersReadingID(Number(value));
-      this.setState({
-        myValueReading : Number(value)
-      });
+    this.setState({ valuereadingOptions: Number(value) });
+    if (!valueSelectedReading!.includes(Number(value))) {
+      valueSelectedReading!.push(Number(value));
       this.setState({ filtersisUsed: true });
     } else {
-      assignmentListStore!.setFiltersReadingID(null);
-      this.setState(
-        {
-          myValueReading : null
-        },
-        () => {
-          if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
-            this.setState({ filtersisUsed: true });
-          } else {
-            this.setState({ filtersisUsed: false });
-          }
-        }
-      );
+      const indexSelected = valueSelectedReading!.indexOf(Number(value));
+      if (indexSelected > -1) {
+        valueSelectedReading!.splice(indexSelected, 1);
+      }
+      if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+        this.setState({ filtersisUsed: true });
+      } else {
+        this.setState({ filtersisUsed: false });
+      }
     }
+    assignmentListStore!.setFiltersReadingID(String(valueSelectedReading));
   }
 
   public handleClickReset = async () => {
@@ -751,10 +753,10 @@ export class AssignmentsList extends Component<Props, State> {
     assignmentListStore!.setFiltersCoreID(null);
     assignmentListStore!.setFiltersGoalID(null);
     this.setState({
-      myValueMulti : null,
-      myValueReading : null,
-      myValueGrade : null,
-      myValueSubject : null,
+      myValueMulti : [],
+      myValueReading : [],
+      myValueGrade : [],
+      myValueSubject : [],
       coreValueFilter : [],
       goalValueFilter : [],
       filtersisUsed: false,
@@ -1107,11 +1109,11 @@ export class AssignmentsList extends Component<Props, State> {
               handleChangeSelectGoals={this.handleChangeSelectGoals}
               handleClickReset={this.handleClickReset}
               // VALUES
-              subjectFilterValue={assignmentListStore!.subjectFilterValue}
-              gradeFilterValue={assignmentListStore!.gradeFilterValue}
+              defaultValueSubjectFilter={String(assignmentListStore!.subjectFilterValue)}
+              defaultValueGradeFilter={String(assignmentListStore!.gradeFilterValue)}
               searchQueryFilterValue={assignmentListStore!.searchQueryFilterValue}
-              mainFilterValueTP={this.state.myValueMulti}
-              readingFilterValueTP={this.state.myValueReading}
+              defaultValueMainFilter={String(this.state.myValueMulti)}
+              defaultValueReadingFilter={String(this.state.myValueReading)}
               coreValueFilter={this.state.coreValueFilter}
               goalValueFilter={this.state.goalValueFilter}
             />

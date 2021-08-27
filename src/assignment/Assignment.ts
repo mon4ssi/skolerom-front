@@ -617,17 +617,17 @@ export class Filter {
   @observable public isPublished?: number | null;
   @observable public order?: string | null;
   @observable public orderField?: string | null;
-  @observable public grade?: number | null;
-  @observable public subject?: number | null;
+  @observable public grade?: string | number | null;
+  @observable public subject?:  string | number | null;
   @observable public isAnswered?: string | null;
   @observable public searchQuery?: string | null;
   @observable public isEvaluated?: string | null;
   @observable public isPassed?: number | null;
   @observable public isActive?: number | null;
   @observable public grepCoreElementsIds?: string | number | null;
-  @observable public grepMainTopicsIds?: number | null;
+  @observable public grepMainTopicsIds?: string | number | null;
   @observable public grepGoalsIds?: string | number | null;
-  @observable public grepReadingInSubject?: number | null;
+  @observable public grepReadingInSubject?: string | number | null;
   public showMyAssignments?: number | null;
 }
 
@@ -739,15 +739,15 @@ export class AssignmentList {
     this.filter.orderField = orderField;
   }
 
-  public setFiltersGradeID(gradeID: number | null) {
+  public setFiltersGradeID(gradeID: string | number | null) {
     this.filter.grade = gradeID;
   }
 
-  public setFiltersSubjectID(subjectID: number | null) {
+  public setFiltersSubjectID(subjectID: string | number | null) {
     this.filter.subject = subjectID;
   }
 
-  public setFiltersMultiID(multiID: number | null) {
+  public setFiltersMultiID(multiID: string | number | null) {
     this.filter.grepMainTopicsIds = multiID;
   }
 
@@ -759,7 +759,7 @@ export class AssignmentList {
     this.filter.grepGoalsIds = goalID;
   }
 
-  public setFiltersReadingID(readingID: number | null) {
+  public setFiltersReadingID(readingID: string | number | null) {
     this.filter.grepReadingInSubject = readingID;
   }
 

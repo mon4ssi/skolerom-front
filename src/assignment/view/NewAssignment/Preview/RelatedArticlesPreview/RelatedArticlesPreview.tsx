@@ -56,10 +56,10 @@ interface State {
   selectedSourceAll: Array<Greep>;
   valueGrade: string;
   valueSubject: string;
-  MySelectGrade: Array<number> | null;
-  MySelectSubject: Array<number> | null;
-  MySelectMulti: Array<number> | null;
-  MySelectSource: Array<number> | null;
+  MySelectGrade: Array<number>;
+  MySelectSubject: Array<number>;
+  MySelectMulti: Array<number>;
+  MySelectSource: Array<number>;
   showSourceFilter: boolean;
   userFilters: boolean;
   filtersisUsed: boolean;
@@ -1257,8 +1257,10 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
                   // VALUES
                   // subjectFilterValue={Number(this.state.appliedFilters.subjects)}
                   // gradeFilterValue={Number(this.state.appliedFilters.grades)}
-                  // coreFilterValue={Number(this.state.appliedFilters.core)}
-                  // goalsFilterValue={Number(this.state.appliedFilters.goal)}
+                  coreFilterValue={Number(this.state.appliedFilters.core)}
+                  goalsFilterValue={Number(this.state.appliedFilters.goal)}
+                  defaultValueGradeFilter={String(this.state.appliedFilters.grades)}
+                  defaultValueSubjectFilter={String(this.state.appliedFilters.subjects)}
                   coreValueFilter={this.state.myValueCore}
                   goalValueFilter={this.state.goalValueFilter}
                   searchQueryFilterValue={this.state.appliedFilters.searchTitle as string}

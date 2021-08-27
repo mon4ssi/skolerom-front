@@ -379,8 +379,8 @@ export class EditTeachingPathStore {
   }
 
   @action
-  public async getGrepFilters() {
-    return this.teachingPathService.getGrepFilters();
+  public async getGrepFilters(grades: string, subjects: string) {
+    return this.teachingPathService.getGrepFilters(grades, subjects);
   }
 
   @action

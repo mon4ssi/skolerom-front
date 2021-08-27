@@ -93,7 +93,17 @@ export class PublishingActions extends Component<Props, State> {
   public async componentDidMount() {
     const { store, from } = this.props;
     const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, valuereadingOptions } = this.state;
-    const grepFiltersDataAwait = await store!.getGrepFilters();
+    const selectedGrades = store!.currentEntity!.getListOfGrades().map(this.gradeToTagProp);
+    const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
+    const arraySelectedIdsGrades: Array<number> = [];
+    const arraySelectedIdsSubjects: Array<number> = [];
+    selectedGrades.forEach((ee) => {
+      arraySelectedIdsGrades.push(Number(ee.id));
+    });
+    selectedSubjects.forEach((ee) => {
+      arraySelectedIdsSubjects.push(Number(ee.id));
+    });
+    const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
     this.setState({
       grepFiltersData : grepFiltersDataAwait
     });
@@ -156,7 +166,6 @@ export class PublishingActions extends Component<Props, State> {
         valuereadingOptions: store!.currentEntity!.getListOfgrepReadingInSubjectId()!
       });
     }
-    const selectedGrades = store!.currentEntity!.getListOfGrades().map(this.gradeToTagProp);
     const arrayForGrades : Array<number> = [];
     if (selectedGrades.length > 0) {
       selectedGrades.forEach((element) => {
@@ -173,7 +182,6 @@ export class PublishingActions extends Component<Props, State> {
         valueGradesOptions: arrayForGrades!
       });
     }
-    const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
     const arrayForSubjects : Array<number> = [];
     if (selectedSubjects.length > 0) {
       selectedSubjects.forEach((element) => {
@@ -432,6 +440,24 @@ export class PublishingActions extends Component<Props, State> {
       );
       this.comparativeGoalsValueToFilter();
       this.setState({ pageCurrent: MAGICNUMBER1 });
+      // updatedata
+      const selectedGrades = store!.currentEntity!.getListOfGrades().map(this.gradeToTagProp);
+      const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
+      const arraySelectedIdsGrades: Array<number> = [];
+      const arraySelectedIdsSubjects: Array<number> = [];
+      selectedGrades.forEach((ee) => {
+        arraySelectedIdsGrades.push(Number(ee.id));
+      });
+      selectedSubjects.forEach((ee) => {
+        arraySelectedIdsSubjects.push(Number(ee.id));
+      });
+      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
+      this.setState({
+        grepFiltersData : grepFiltersDataAwait
+      });
+      this.setState({
+        optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
+      });
     }
   }
 
@@ -474,6 +500,24 @@ export class PublishingActions extends Component<Props, State> {
       );
       this.comparativeGoalsValueToFilter();
       this.setState({ pageCurrent: MAGICNUMBER1 });
+      // updatedata
+      const selectedGrades = store!.currentEntity!.getListOfGrades().map(this.gradeToTagProp);
+      const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
+      const arraySelectedIdsGrades: Array<number> = [];
+      const arraySelectedIdsSubjects: Array<number> = [];
+      selectedGrades.forEach((ee) => {
+        arraySelectedIdsGrades.push(Number(ee.id));
+      });
+      selectedSubjects.forEach((ee) => {
+        arraySelectedIdsSubjects.push(Number(ee.id));
+      });
+      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
+      this.setState({
+        grepFiltersData : grepFiltersDataAwait
+      });
+      this.setState({
+        optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
+      });
     }
   }
 
@@ -520,6 +564,24 @@ export class PublishingActions extends Component<Props, State> {
       );
       this.comparativeGoalsValueToFilter();
       this.setState({ pageCurrent: MAGICNUMBER1 });
+      // updatedata
+      const selectedGrades = store!.currentEntity!.getListOfGrades().map(this.gradeToTagProp);
+      const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
+      const arraySelectedIdsGrades: Array<number> = [];
+      const arraySelectedIdsSubjects: Array<number> = [];
+      selectedGrades.forEach((ee) => {
+        arraySelectedIdsGrades.push(Number(ee.id));
+      });
+      selectedSubjects.forEach((ee) => {
+        arraySelectedIdsSubjects.push(Number(ee.id));
+      });
+      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
+      this.setState({
+        grepFiltersData : grepFiltersDataAwait
+      });
+      this.setState({
+        optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
+      });
     }
   }
 
@@ -576,6 +638,24 @@ export class PublishingActions extends Component<Props, State> {
       );
       this.comparativeGoalsValueToFilter();
       this.setState({ pageCurrent: MAGICNUMBER1 });
+      // updatedata
+      const selectedGrades = store!.currentEntity!.getListOfGrades().map(this.gradeToTagProp);
+      const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
+      const arraySelectedIdsGrades: Array<number> = [];
+      const arraySelectedIdsSubjects: Array<number> = [];
+      selectedGrades.forEach((ee) => {
+        arraySelectedIdsGrades.push(Number(ee.id));
+      });
+      selectedSubjects.forEach((ee) => {
+        arraySelectedIdsSubjects.push(Number(ee.id));
+      });
+      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
+      this.setState({
+        grepFiltersData : grepFiltersDataAwait
+      });
+      this.setState({
+        optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
+      });
     }
   }
 

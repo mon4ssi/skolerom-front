@@ -1369,8 +1369,11 @@ export class ArticlesList extends Component<Props, State> {
               // VALUES
               // subjectFilterValue={Number(appliedFilters.subjects)}
               // gradeFilterValue={Number(appliedFilters.grades)}
-              // coreFilterValue={Number(appliedFilters.core)}
-              // goalsFilterValue={Number(appliedFilters.goal)}
+              coreFilterValue={Number(appliedFilters.core)}
+              goalsFilterValue={Number(appliedFilters.goal)}
+              defaultValueGradeFilter={String(appliedFilters.grades)}
+              defaultValueSubjectFilter={String(appliedFilters.subjects)}
+
               coreValueFilter={this.state.myValueCore}
               goalValueFilter={this.state.goalValueFilter}
               searchQueryFilterValue={appliedFilters.searchTitle as string}
