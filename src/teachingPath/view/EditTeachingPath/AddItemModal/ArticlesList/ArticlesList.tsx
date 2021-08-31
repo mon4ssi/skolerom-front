@@ -108,6 +108,8 @@ interface State {
   myValueCore: Array<any>;
   goalValueFilter: Array<any>;
   filtersisUsed: boolean;
+  filtersAjaxLoading: boolean;
+  filtersAjaxLoadingGoals: boolean;
 }
 
 @inject('editTeachingPathStore')
@@ -157,6 +159,8 @@ export class ArticlesList extends Component<Props, State> {
       myValueCore: [],
       goalValueFilter: [],
       filtersisUsed: false,
+      filtersAjaxLoading: false,
+      filtersAjaxLoadingGoals: false
     };
   }
 
@@ -231,6 +235,8 @@ export class ArticlesList extends Component<Props, State> {
     this.props.editTeachingPathStore!.getArticles({ isNextPage, ...appliedFilters });
     this.props.editTeachingPathStore!.getGrades();
     this.props.editTeachingPathStore!.getSubjects();
+    this.setState({ filtersAjaxLoading: true });
+    this.setState({ filtersAjaxLoadingGoals: true });
     await this.props.editTeachingPathStore!.getFiltersArticlePanel();
     const dataArticles = this.props.editTeachingPathStore!.getAllArticlePanelFilters();
     this.setState({
@@ -289,7 +295,7 @@ export class ArticlesList extends Component<Props, State> {
       });
     });
     this.setState({
-      selectedGoalsAll : newArrayGrepGoals
+      selectedGoalsAll : newArrayGrepGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
     });
     // tslint:disable-next-line: variable-name
     dataArticles!.source_filter!.forEach((element) => {
@@ -314,6 +320,8 @@ export class ArticlesList extends Component<Props, State> {
     this.setState({
       activeGrepFilters : true
     });
+    this.setState({ filtersAjaxLoading: false });
+    this.setState({ filtersAjaxLoadingGoals: false });
   }
 
   public async componentWillUnmount() {
@@ -402,8 +410,9 @@ export class ArticlesList extends Component<Props, State> {
     const newArrayGoals : Array<Greep> = [];
     const newArraySource : Array<Greep> = [];
     const value = e.currentTarget.value;
-    const valueSelectedGrades = this.state.MySelectGrade;
-    if (!valueSelectedGrades!.includes(Number(value))) {
+    // const valueSelectedGrades = this.state.MySelectGrade;
+    let valueSelectedGrades: Array<number> = [];
+    if (!this.state.MySelectGrade!.includes(Number(value))) {
       valueSelectedGrades!.push(Number(value));
       if (this.state.activeGrepFilters) {
         e.currentTarget.classList.add('active');
@@ -519,7 +528,7 @@ export class ArticlesList extends Component<Props, State> {
           }
         });
         this.setState({
-          selectedGoalsFilter : newArrayGoals
+          selectedGoalsFilter : newArrayGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
         });
         this.state.grepDataFilters!.source_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
@@ -564,10 +573,11 @@ export class ArticlesList extends Component<Props, State> {
         );
       }
     } else {
-      const indexSelected = valueSelectedGrades!.indexOf(Number(value));
+      /*const indexSelected = valueSelectedGrades!.indexOf(Number(value));
       if (indexSelected > -1) {
         valueSelectedGrades!.splice(indexSelected, 1);
-      }
+      }*/
+      valueSelectedGrades = [];
       if (this.state.activeGrepFilters) {
         e.currentTarget.classList.remove('active');
       }
@@ -686,7 +696,7 @@ export class ArticlesList extends Component<Props, State> {
           }
         });
         this.setState({
-          selectedGoalsFilter : newArrayGoals
+          selectedGoalsFilter : newArrayGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
         });
         this.state.grepDataFilters!.source_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
@@ -1350,6 +1360,8 @@ export class ArticlesList extends Component<Props, State> {
               date
               isArticlesListPage
               filtersisUsed={this.state.filtersisUsed}
+              filtersAjaxLoading={this.state.filtersAjaxLoading}
+              filtersAjaxLoadingGoals={this.state.filtersAjaxLoadingGoals}
               // METHODS
               handleChangeSubject={this.handleChangeSubject}
               handleChangeGrade={this.handleChangeGrade}

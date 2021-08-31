@@ -302,7 +302,7 @@
     "Write your answer here": "Skriv svaret her...",
     "Settings": "Innstillinger",
     "Related article": "Relatert artikkel",
-    "Subject": "fag",
+    "Subject": "Fag",
     "Visibility": "Synlighet",
     "Public": "Offentlig",
     "Private": "Privat",
@@ -312,7 +312,7 @@
     "Distribute to students": "Send til elevene",
     "Assign to class": "Tildel til klassen / elevene",
     "Distribute with link": "Distribuer med lenke",
-    "Subjects": "fag",
+    "Subjects": "Fag",
     "Grade": "Klasser",
     "Student level": "Elevens spor",
     "question": "spørsmål",
@@ -704,7 +704,7 @@
       "MULTIPLE_CHOICE": "Flervalgsspørsmål",
       "IMAGE_CHOICE": "Bildevalg spørsmål"
     },
-    "grade": "Velg fag",
+    "grade": "Klassetrinn",
     "student_level": "Velg elevnivå",
     "visibility": "visibility"
   },

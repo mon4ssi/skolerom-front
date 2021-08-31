@@ -103,7 +103,7 @@ export class PublishingActions extends Component<Props, State> {
     selectedSubjects.forEach((ee) => {
       arraySelectedIdsSubjects.push(Number(ee.id));
     });
-    const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
+    const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects), '');
     this.setState({
       grepFiltersData : grepFiltersDataAwait
     });
@@ -451,7 +451,7 @@ export class PublishingActions extends Component<Props, State> {
       selectedSubjects.forEach((ee) => {
         arraySelectedIdsSubjects.push(Number(ee.id));
       });
-      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
+      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects), '');
       this.setState({
         grepFiltersData : grepFiltersDataAwait
       });
@@ -511,7 +511,7 @@ export class PublishingActions extends Component<Props, State> {
       selectedSubjects.forEach((ee) => {
         arraySelectedIdsSubjects.push(Number(ee.id));
       });
-      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
+      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects), '');
       this.setState({
         grepFiltersData : grepFiltersDataAwait
       });
@@ -575,7 +575,7 @@ export class PublishingActions extends Component<Props, State> {
       selectedSubjects.forEach((ee) => {
         arraySelectedIdsSubjects.push(Number(ee.id));
       });
-      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
+      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects), '');
       this.setState({
         grepFiltersData : grepFiltersDataAwait
       });
@@ -649,7 +649,7 @@ export class PublishingActions extends Component<Props, State> {
       selectedSubjects.forEach((ee) => {
         arraySelectedIdsSubjects.push(Number(ee.id));
       });
-      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
+      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects), '');
       this.setState({
         grepFiltersData : grepFiltersDataAwait
       });
@@ -1007,6 +1007,14 @@ export class PublishingActions extends Component<Props, State> {
         padding: '3px'
       })
     };
+    const NoOptionsMessage = () => {
+      const { optionsCore } = this.state;
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
+        </div>
+      );
+    };
     if (typeof(editValueCoreOptions) !== 'undefined') {
       if (editValueCoreOptions!.length > 0) {
         const value = this.searchValueInArrays(optionsCore, editValueCoreOptions);
@@ -1014,6 +1022,7 @@ export class PublishingActions extends Component<Props, State> {
         return (
           <div className="itemsFlex">
             <Select
+              components={{ NoOptionsMessage }}
               styles={customStyles}
               options={optionsCore}
               onChange={this.handleChangeSelectCore}
@@ -1026,6 +1035,7 @@ export class PublishingActions extends Component<Props, State> {
     return (
       <div className="itemsFlex">
         <Select
+          components={{ NoOptionsMessage }}
           styles={customStyles}
           options={optionsCore}
           onChange={this.handleChangeSelectCore}
@@ -1109,6 +1119,14 @@ export class PublishingActions extends Component<Props, State> {
         padding: '3px'
       })
     };
+    const NoOptionsMessage = () => {
+      const { optionsCore } = this.state;
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
+        </div>
+      );
+    };
     if (typeof(editvalueMultiOptions) !== 'undefined') {
       if (editvalueMultiOptions!.length > 0) {
         const value = this.searchValueInArrays(optionsMulti, editvalueMultiOptions);
@@ -1116,6 +1134,7 @@ export class PublishingActions extends Component<Props, State> {
         return (
           <div className="itemsFlex">
             <Select
+              components={{ NoOptionsMessage }}
               styles={customStyles}
               options={optionsMulti}
               onChange={this.handleChangeSelectMulti}
@@ -1128,6 +1147,7 @@ export class PublishingActions extends Component<Props, State> {
     return (
       <div className="itemsFlex">
         <Select
+          components={{ NoOptionsMessage }}
           styles={customStyles}
           options={optionsMulti}
           onChange={this.handleChangeSelectMulti}
@@ -1201,6 +1221,14 @@ export class PublishingActions extends Component<Props, State> {
         padding: '3px'
       })
     };
+    const NoOptionsMessage = () => {
+      const { optionsCore } = this.state;
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
+        </div>
+      );
+    };
     if (typeof(editvaluereadingOptions) !== 'undefined') {
       if (editvaluereadingOptions! > 0) {
         const value = this.searchValueInNumbers(optionsReading, editvaluereadingOptions);
@@ -1208,6 +1236,7 @@ export class PublishingActions extends Component<Props, State> {
         return (
           <div className="itemsFlex">
             <Select
+              components={{ NoOptionsMessage }}
               styles={customStyles}
               options={optionsReading}
               onChange={this.handleChangeSelectReading}
@@ -1220,6 +1249,7 @@ export class PublishingActions extends Component<Props, State> {
     return (
       <div className="itemsFlex">
         <Select
+          components={{ NoOptionsMessage }}
           styles={customStyles}
           options={optionsReading}
           onChange={this.handleChangeSelectReading}

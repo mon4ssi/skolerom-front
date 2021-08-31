@@ -45,6 +45,8 @@ interface Props {
   customSubjectsList?: Array<Subject>;
   showSourceFilter?: boolean;
   filtersisUsed?: boolean;
+  filtersAjaxLoading?: boolean;
+  filtersAjaxLoadingGoals?: boolean;
 
   subjectFilterValue?: string | number | null;
   gradeFilterValue?: string | number | null;
@@ -600,10 +602,17 @@ class SearchFilter extends Component<Props, State> {
         padding: '3px'
       })
     };
-    if (options.length === 0) {
+    if (this.props.filtersAjaxLoading) {
       return (
         <div className="minimalLoading">
           <span /><span /><span />
+        </div>
+      );
+    }
+    if (options.length === 0) {
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
         </div>
       );
     }
@@ -649,11 +658,18 @@ class SearchFilter extends Component<Props, State> {
         padding: '3px'
       })
     };
+    if (this.props.filtersAjaxLoading) {
+      return (
+        <div className="minimalLoading">
+          <span /><span /><span />
+        </div>
+      );
+    }
     if (typeof(options) !== 'undefined') {
       if (options.length === 0) {
         return (
-          <div className="minimalLoading">
-            <span /><span /><span />
+          <div className="centerMin">
+            {intl.get('edit_teaching_path.no_options')}
           </div>
         );
       }
@@ -700,11 +716,18 @@ class SearchFilter extends Component<Props, State> {
         padding: '3px'
       })
     };
+    if (this.props.filtersAjaxLoading) {
+      return (
+        <div className="minimalLoading">
+          <span /><span /><span />
+        </div>
+      );
+    }
     if (typeof(options) !== 'undefined') {
       if (options.length === 0) {
         return (
-          <div className="minimalLoading">
-            <span /><span /><span />
+          <div className="centerMin">
+            {intl.get('edit_teaching_path.no_options')}
           </div>
         );
       }
@@ -740,10 +763,17 @@ class SearchFilter extends Component<Props, State> {
       const classD = (arrayDefaults.includes(String(core.id))) ? 'active' : '';
       return <button value={core.id} className={`itemFlexFilter multiFilterClass ${classD}`} onClick={handleClickMulti} key={core.id}>{title}</button>;
     });
-    if (cores.length === 0) {
+    if (this.props.filtersAjaxLoading) {
       return (
         <div className="minimalLoading">
           <span /><span /><span />
+        </div>
+      );
+    }
+    if (cores.length === 0) {
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
         </div>
       );
     }
@@ -763,10 +793,17 @@ class SearchFilter extends Component<Props, State> {
       const classD = (arrayDefaults.includes(String(core.id))) ? 'active' : '';
       return <button value={core.id} className={`itemFlexFilter sourceFilterClass ${classD}`} onClick={handleClickReading} key={core.id}>{title}</button>;
     });
-    if (cores.length === 0) {
+    if (this.props.filtersAjaxLoading) {
       return (
         <div className="minimalLoading">
           <span /><span /><span />
+        </div>
+      );
+    }
+    if (cores.length === 0) {
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
         </div>
       );
     }
@@ -797,11 +834,18 @@ class SearchFilter extends Component<Props, State> {
         padding: '3px'
       })
     };
-    if (options.length === 0) {
+    if (this.props.filtersAjaxLoadingGoals) {
       return (
         <div className="minimalLoading">
           <span /><span /><span />
         </div>
+      );
+    }
+    if (options.length === 0) {
+      return (
+        <p className="NotData">
+          {intl.get('edit_teaching_path.header.notdata_goals')}
+        </p>
       );
     }
     const NoOptionsMessage = () => {
@@ -846,6 +890,13 @@ class SearchFilter extends Component<Props, State> {
         padding: '3px'
       })
     };
+    if (this.props.filtersAjaxLoadingGoals) {
+      return (
+        <div className="minimalLoading">
+          <span /><span /><span />
+        </div>
+      );
+    }
     if (options.length === 0) {
       return (
         <p className="NotData">
@@ -882,10 +933,17 @@ class SearchFilter extends Component<Props, State> {
       const title = core.title;
       return <button value={core.id} className="itemFlexFilter subjectsFilterClass" onClick={handleClickSource} key={core.id}>{title}</button>;
     });
-    if (cores.length === 0) {
+    if (this.props.filtersAjaxLoading) {
       return (
         <div className="minimalLoading">
           <span /><span /><span />
+        </div>
+      );
+    }
+    if (cores.length === 0) {
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
         </div>
       );
     }
@@ -918,7 +976,7 @@ class SearchFilter extends Component<Props, State> {
   public modalFilters() {
     const { handleClickReset, showSourceFilter } = this.props;
     return (
-      <div className="FiltersModal">
+      <div className="FiltersModal articleAssigModal">
         <div className="FiltersModal__header">
           <h5>{intl.get('edit_teaching_path.modals.search.header.title')}</h5>
           <button onClick={handleClickReset}>
@@ -1198,7 +1256,7 @@ class SearchFilter extends Component<Props, State> {
   public filtersAssignments() {
     const { handleClickReset } = this.props;
     return (
-      <div className="FiltersModal">
+      <div className="FiltersModal articleAssig">
         <div className="FiltersModal__header">
           <h5>{intl.get('edit_teaching_path.modals.search.header.title')}</h5>
           <button onClick={handleClickReset}>
