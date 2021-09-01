@@ -243,7 +243,7 @@ export class PublishingActions extends Component<Props, State> {
           if (this.state.editvalueGoalsOptions!.length === 0) {
             this.setState(
               {
-                valueGoalsOptions: this.transformDataToStringDat(listGoals, this.state.optionsGoals)
+                valueGoalsOptions: this.transformDataToStringDat(listGoals, this.state.optionsGoals).sort((a, b) => a - b)
               },
               () => {
                 this.comparativeGoalsValueToFilter();
@@ -253,7 +253,7 @@ export class PublishingActions extends Component<Props, State> {
         } else {
           this.setState(
             {
-              valueGoalsOptions: this.transformDataToStringDat(listGoals, this.state.optionsGoals)
+              valueGoalsOptions: this.transformDataToStringDat(listGoals, this.state.optionsGoals).sort((a, b) => a - b)
             },
             () => {
               this.comparativeGoalsValueToFilter();
@@ -303,7 +303,9 @@ export class PublishingActions extends Component<Props, State> {
     data!.forEach((element) => {
       for (let i = 0; i < options.length; i = i + 1) {
         if (element === options[i].code) {
-          returnArray.push(options[i].id!);
+          if (!returnArray.includes(options[i].id!)) {
+            returnArray.push(options[i].id!);
+          }
         }
       }
     });

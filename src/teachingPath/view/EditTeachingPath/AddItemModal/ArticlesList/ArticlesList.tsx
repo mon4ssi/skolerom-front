@@ -401,6 +401,10 @@ export class ArticlesList extends Component<Props, State> {
       e.classList.remove('active');
     });
     this.setState({ filtersisUsed: false });
+    this.setState({ MySelectGrade: [] });
+    this.setState({ MySelectSubject: [] });
+    this.setState({ MySelectMulti: [] });
+    this.setState({ MySelectSource: [] });
   }
 
   public handleClickGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {

@@ -646,13 +646,9 @@ export class AssignmentsList extends Component<Props, State> {
         }
       });
     });
-<<<<<<< HEAD
-    this.assigValueData(String(this.state.myValueGrade), String(valueSelectedSubjects));
-=======
     this.setState({ filtersAjaxLoading: true });
     this.assigValueData(String(this.state.myValueGrade), String(valueSelectedSubjects));
     this.setState({ filtersAjaxLoading: false });
->>>>>>> 8b351e221e2af2e84c4cf6e48cb89fcbc456c8d0
     assignmentListStore!.setFiltersSubjectID(String(valueSelectedSubjects));
     this.setState({ filtersAjaxLoadingGoals: true });
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueToArray, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
@@ -708,15 +704,11 @@ export class AssignmentsList extends Component<Props, State> {
     this.setState({
       myValueGrade: valueSelectedGrades
     });
-<<<<<<< HEAD
-    this.assigValueData(String(valueSelectedGrades), String(this.state.myValueSubject));
-=======
     this.setState({ filtersAjaxLoading: true });
     this.assigValueData(String(valueSelectedGrades), String(valueSubjectsOptions));
     this.setState({ filtersAjaxLoading: false });
     assignmentListStore!.setFiltersGradeID(String(valueSelectedGrades));
     this.setState({ filtersAjaxLoadingGoals: true });
->>>>>>> 8b351e221e2af2e84c4cf6e48cb89fcbc456c8d0
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueToArray, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
