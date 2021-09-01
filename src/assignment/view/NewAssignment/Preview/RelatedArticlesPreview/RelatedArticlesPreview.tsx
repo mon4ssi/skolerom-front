@@ -63,6 +63,8 @@ interface State {
   showSourceFilter: boolean;
   userFilters: boolean;
   filtersisUsed: boolean;
+  filtersAjaxLoading: boolean;
+  filtersAjaxLoadingGoals: boolean;
   myValueCore: Array<any>;
   goalValueFilter: Array<any>;
 }
@@ -109,6 +111,8 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       showSourceFilter: false,
       userFilters: false,
       filtersisUsed: false,
+      filtersAjaxLoading: false,
+      filtersAjaxLoadingGoals: false,
       myValueCore: [],
       goalValueFilter: []
     };
@@ -185,6 +189,8 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
 
     const isNextPage = newAssignmentStore!.allArticles.length > 0;
     document.addEventListener('keyup', this.handleKeyboardControl);
+    this.setState({ filtersAjaxLoading: true });
+    this.setState({ filtersAjaxLoadingGoals: true });
     await newAssignmentStore!.getArticles({ isNextPage, ...appliedFilters });
     await newAssignmentStore!.getGrades();
     await newAssignmentStore!.getSubjects();
@@ -272,6 +278,8 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     this.setState({
       activeGrepFilters : true
     });
+    this.setState({ filtersAjaxLoading: false });
+    this.setState({ filtersAjaxLoadingGoals: false });
   }
 
   public componentWillUnmount() {
@@ -467,8 +475,9 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     const newArrayGoals : Array<Greep> = [];
     const newArraySource : Array<Greep> = [];
     const value = e.currentTarget.value;
-    const valueSelectedGrades = this.state.MySelectGrade;
-    if (!valueSelectedGrades!.includes(Number(value))) {
+    // const valueSelectedGrades = this.state.MySelectGrade;
+    let valueSelectedGrades: Array<number> = [];
+    if (!this.state.MySelectGrade!.includes(Number(value))) {
       valueSelectedGrades!.push(Number(value));
       if (this.state.activeGrepFilters) {
         e.currentTarget.classList.add('active');
@@ -629,13 +638,17 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         );
       }
     } else {
-      const indexSelected = valueSelectedGrades!.indexOf(Number(value));
+      /*const indexSelected = valueSelectedGrades!.indexOf(Number(value));
       if (indexSelected > -1) {
         valueSelectedGrades!.splice(indexSelected, 1);
       }
       if (this.state.activeGrepFilters) {
         e.currentTarget.classList.remove('active');
         e.currentTarget.focus();
+      }*/
+      valueSelectedGrades = [];
+      if (this.state.activeGrepFilters) {
+        e.currentTarget.classList.remove('active');
       }
     }
     this.handleChangeFilters('grades', String(valueSelectedGrades));
@@ -1241,6 +1254,8 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
                   placeholder={intl.get('assignments search.Search')}
                   isArticlesListPage
                   filtersisUsed={this.state.filtersisUsed}
+                  filtersAjaxLoading={this.state.filtersAjaxLoading}
+                  filtersAjaxLoadingGoals={this.state.filtersAjaxLoadingGoals}
                   // METHODS
                   handleChangeSubject={this.handleChangeSubject}
                   handleChangeGrade={this.handleChangeGrade}

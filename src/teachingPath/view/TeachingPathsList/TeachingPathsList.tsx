@@ -29,6 +29,7 @@ const MAGICNUMBER100 = -1;
 const MAGICNUMBER1 = 1;
 const limitSplicePathname = 4;
 const limitIndex = 2;
+const SOURCE = 'TEACHING_PATH';
 
 interface Props extends RouteComponentProps {
   readOnly?: boolean;
@@ -65,6 +66,8 @@ interface State {
   myValueCore: Array<any>;
   goalValueFilter: Array<any>;
   filtersisUsed: boolean;
+  filtersAjaxLoading: boolean;
+  filtersAjaxLoadingGoals: boolean;
 }
 
 @inject('teachingPathsListStore', 'editTeachingPathStore')
@@ -129,6 +132,8 @@ class TeachingPathsListComponent extends Component<Props, State> {
       myValueCore: [],
       goalValueFilter: [],
       filtersisUsed: false,
+      filtersAjaxLoading: false,
+      filtersAjaxLoadingGoals: false
     };
   }
 
@@ -159,7 +164,8 @@ class TeachingPathsListComponent extends Component<Props, State> {
 
   public async assigValueData(grades: string, subjects: string) {
     const { editTeachingPathStore } = this.props;
-    const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFilters(grades, subjects);
+    this.setState({ filtersAjaxLoading: true });
+    const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFilters(grades, subjects, SOURCE);
     this.setState({
       grepFiltersData : grepFiltersDataAwait
     });
@@ -178,6 +184,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
     this.setState({
       optionsGrades : this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
     });
+    this.setState({ filtersAjaxLoading: false });
   }
 
   public async componentDidMount() {
@@ -193,10 +200,12 @@ class TeachingPathsListComponent extends Component<Props, State> {
       this.setState({
         valueStringGoalsOptions: listGoals
       });
+      this.setState({ filtersAjaxLoadingGoals: true });
       const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, listGoals, MAGICNUMBER100, MAGICNUMBER1);
       this.setState({
         optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
       });
+      this.setState({ filtersAjaxLoadingGoals: false });
     }
   }
 
@@ -389,18 +398,20 @@ class TeachingPathsListComponent extends Component<Props, State> {
   public handleClickGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const { editTeachingPathStore } = this.props;
     const { optionsGrades, valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
-    const valueSelectedGrades = this.state.myValueGrade;
+    // const valueSelectedGrades = this.state.myValueGrade;
+    let valueSelectedGrades: Array<number> = [];
     const value = e.currentTarget.value;
     const valueToArray: Array<number> = [];
-    if (!valueSelectedGrades!.includes(Number(value))) {
+    if (!this.state.myValueGrade!.includes(Number(value))) {
       e.currentTarget.classList.add('active');
-      valueSelectedGrades!.push(Number(value));
+      valueSelectedGrades = [Number(value)];
     } else {
       e.currentTarget.classList.remove('active');
-      const indexSelected = valueSelectedGrades!.indexOf(Number(value));
+      valueSelectedGrades = [];
+      /*const indexSelected = valueSelectedGrades!.indexOf(Number(value));
       if (indexSelected > -1) {
         valueSelectedGrades!.splice(indexSelected, 1);
-      }
+      }*/
     }
     this.setState({
       myValueGrade: valueSelectedGrades
@@ -420,10 +431,15 @@ class TeachingPathsListComponent extends Component<Props, State> {
     );
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
     this.assigValueData(String(valueSelectedGrades), String(this.state.myValueSubject));
+<<<<<<< HEAD
+=======
+    this.setState({ filtersAjaxLoadingGoals: true });
+>>>>>>> 8b351e221e2af2e84c4cf6e48cb89fcbc456c8d0
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueToArray, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
+    this.setState({ filtersAjaxLoadingGoals: false });
   }
 
   public handleClickSubject = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -460,10 +476,15 @@ class TeachingPathsListComponent extends Component<Props, State> {
     );
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
     this.assigValueData(String(this.state.myValueGrade), String(valueSelectedSubjects));
+<<<<<<< HEAD
+=======
+    this.setState({ filtersAjaxLoadingGoals: true });
+>>>>>>> 8b351e221e2af2e84c4cf6e48cb89fcbc456c8d0
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueToArray, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
+    this.setState({ filtersAjaxLoadingGoals: false });
   }
 
   public handleClickMulti = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -484,10 +505,12 @@ class TeachingPathsListComponent extends Component<Props, State> {
     this.setState({
       myValueMulti: valueSelectedMulti
     });
+    this.setState({ filtersAjaxLoadingGoals: true });
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueSelectedMulti, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
+    this.setState({ filtersAjaxLoadingGoals: false });
     QueryStringHelper.set(
       this.props.history,
       QueryStringKeys.GREPMAINTOPICSIDS,
@@ -527,10 +550,12 @@ class TeachingPathsListComponent extends Component<Props, State> {
       ArrayValue.push(e.value);
     });
     this.setState({ valueCoreOptions: ArrayValue });
+    this.setState({ filtersAjaxLoadingGoals: true });
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(ArrayValue, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
+    this.setState({ filtersAjaxLoadingGoals: false });
     let singleString : string = '';
     if (newValue.length > 0) {
       newValue.forEach((e, index) => {
@@ -725,6 +750,17 @@ class TeachingPathsListComponent extends Component<Props, State> {
     QueryStringHelper.set(this.props.history, QueryStringKeys.GREPMAINTOPICSIDS, '');
     QueryStringHelper.set(this.props.history, QueryStringKeys.GREPREADINGINSUBJECT, '');
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
+    this.setState({ valueGradesOptions: [] });
+    this.setState({ valueSubjectsOptions: [] });
+    this.setState({ valueCoreOptions: [] });
+    this.setState({ valueMultiOptions: [] });
+    this.setState({ valuereadingOptions: 0 });
+    this.setState({ filtersisUsed: false });
+    this.setState({ myValueGrade: [] });
+    this.setState({ myValueSubject: [] });
+    this.setState({ myValueCore: [] });
+    this.setState({ myValueMulti: [] });
+    this.setState({ myValueReading: [] });
 
     const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
     GradeFilterSubjectArray.forEach((e) => {
@@ -746,10 +782,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
-    this.setState({ valueGradesOptions: [] });
-    this.setState({ valueCoreOptions: [] });
-    this.setState({ valueMultiOptions: [] });
-    this.setState({ filtersisUsed: false });
   }
 
   public render() {
@@ -772,6 +804,8 @@ class TeachingPathsListComponent extends Component<Props, State> {
           customMultiList={this.state.optionsMulti}
           customReadingList={this.state.optionsReading}
           filtersisUsed={this.state.filtersisUsed}
+          filtersAjaxLoading={this.state.filtersAjaxLoading}
+          filtersAjaxLoadingGoals={this.state.filtersAjaxLoadingGoals}
           // METHODS
           handleChangeSubject={this.handleChangeSubject}
           handleChangeGrade={this.handleChangeGrade}

@@ -20,7 +20,7 @@ export interface TeachingPathRepo {
   markAsPickedArticle(teachingPathId: number, nodeId: number, idArticle: number, levelWpId: number): Promise<void>;
   sendDataDomain(domain: string): Promise<Domain>;
   getFiltersArticlePanel(): Promise<FilterArticlePanel>;
-  getGrepFilters(grades: string, subjects: string): Promise<FilterGrep>;
+  getGrepFilters(grades: string, subjects: string, source: string): Promise<FilterGrep>;
   /* tslint:disable-next-line:max-line-length */
   getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number): Promise<{ data: Array<GoalsData>, total_pages: number; }>;
   finishTeachingPath(id: number): Promise<void>;
