@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import debounce from 'lodash/debounce';
 
 import { TeachingPathsListStore } from './TeachingPathsListStore';
-import { GrepElementFilters, FilterGrep, GreepSelectValue, GrepFilters, GoalsData, Greep, GreepElements } from 'assignment/Assignment';
+import { GrepElementFilters, FilterGrep, GreepSelectValue, GrepFilters, GoalsData, Greep, GreepElements, Subject } from 'assignment/Assignment';
 import { InfoCard } from 'components/common/InfoCard/InfoCard';
 import { TabNavigation } from 'components/common/TabNavigation/TabNavigation';
 import { SearchFilter } from 'components/common/SearchFilter/SearchFilter';
@@ -65,6 +65,7 @@ interface State {
   myValueReading: Array<number>;
   myValueCore: Array<any>;
   goalValueFilter: Array<any>;
+  subjectsArrayFilter: Array<Subject>;
   filtersisUsed: boolean;
   filtersAjaxLoading: boolean;
   filtersAjaxLoadingGoals: boolean;
@@ -130,6 +131,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
       myValueMulti: [],
       myValueReading: [],
       myValueCore: [],
+      subjectsArrayFilter: [],
       goalValueFilter: [],
       filtersisUsed: false,
       filtersAjaxLoading: false,
@@ -178,13 +180,50 @@ class TeachingPathsListComponent extends Component<Props, State> {
     this.setState({
       optionsReading : this.renderValueOptionsNumbers(grepFiltersDataAwait, 'reading')
     });
-    this.setState({
-      optionsSubjects : this.renderValueOptionsBasics(grepFiltersDataAwait, 'subject')
-    });
+    this.setState(
+      {
+        optionsSubjects : this.renderValueOptionsBasics(grepFiltersDataAwait, 'subject')
+      },
+      () => {
+        this.setState(
+          {
+            subjectsArrayFilter: this.renderDataSubjects(this.state.optionsSubjects)
+          },
+          () => {
+            const ArrayValue : Array<number> = [];
+            this.state.subjectsArrayFilter!.forEach((element) => {
+              this.state.myValueSubject.forEach((el) => {
+                if (Number(element.id) === Number(el)) {
+                  ArrayValue.push(element.id);
+                }
+              });
+            });
+            this.setState({ myValueSubject: ArrayValue });
+            QueryStringHelper.set(
+              this.props.history,
+              QueryStringKeys.SUBJECT,
+              String(ArrayValue)
+            );
+          }
+        );
+      }
+    );
     this.setState({
       optionsGrades : this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
     });
     this.setState({ filtersAjaxLoading: false });
+  }
+
+  public renderDataSubjects = (data: Array<GrepFilters>) => {
+    const returnArray : Array<Subject> = [];
+    data!.forEach((element) => {
+      returnArray.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(element.wp_id),
+        title: element.name
+      });
+    });
+    return returnArray;
   }
 
   public async componentDidMount() {
@@ -772,10 +811,13 @@ class TeachingPathsListComponent extends Component<Props, State> {
     GradeFilterArray.forEach((e) => {
       e.classList.remove('active');
     });
+    this.assigValueData('', '');
+    this.setState({ filtersAjaxLoadingGoals: true });
     const grepFiltergoalssDataAwait = await this.props.editTeachingPathStore!.getGrepGoalsFilters([], [], [], [], [], MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
+    this.setState({ filtersAjaxLoadingGoals: false });
   }
 
   public render() {
@@ -793,6 +835,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
           isTeachingPathPage
           isStudentTpPage={this.props.isNotStudent}
           placeholder={intl.get('teaching path search.Search for teaching paths')}
+          customSubjectsList={this.state.subjectsArrayFilter}
           customCoreTPList={this.state.optionsCore}
           customGoalsTPList={this.state.optionsGoals}
           customMultiList={this.state.optionsMulti}
@@ -820,7 +863,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
           orderFieldFilterValue={SortingFilter.CREATION_DATE}
           orderFilterValue={QueryStringHelper.getString(this.props.history, QueryStringKeys.ORDER)}
           searchQueryFilterValue={QueryStringHelper.getString(this.props.history, QueryStringKeys.SEARCH)}
-          coreFilterValueTP={QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREPCOREELEMENTSIDS)}
+          coreFilterValueTP={QueryStringHelper.getString(this.props.history, QueryStringKeys.GREPCOREELEMENTSIDS)}
           defaultValueMainFilter={QueryStringHelper.getString(this.props.history, QueryStringKeys.GREPMAINTOPICSIDS)}
           goalsFilterValueTP={QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREEPGOALSIDS)}
           defaultValueReadingFilter={QueryStringHelper.getString(this.props.history, QueryStringKeys.GREPREADINGINSUBJECT)}

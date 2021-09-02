@@ -12,7 +12,11 @@
   flex-wrap: wrap;
   box-sizing: padding-box;
   min-height: fit-content;
-
+  
+  .centerMin {
+    text-align: left;
+    font-size: 16px;
+  }
   select:focus > option:checked { // TODO use BEM here
     font-weight: bold !important;
   }
@@ -119,10 +123,6 @@
   }
 }
 
-.centerMin {
-  text-align: center;
-  font-size: 16px;
-}
 
 .SearchFilter__search__submit {
   background: url(../../../assets/images/search.svg) no-repeat right center;

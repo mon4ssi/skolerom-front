@@ -50,9 +50,9 @@ interface Props {
 
   subjectFilterValue?: string | number | null;
   gradeFilterValue?: string | number | null;
-  coreFilterValue?: number | null;
+  coreFilterValue?: string | number | null;
   goalsFilterValue?: number | null;
-  coreFilterValueTP?: number | null;
+  coreFilterValueTP?: string |number | null;
   mainFilterValueTP?: string | number | null;
   goalsFilterValueTP?: number | null;
   readingFilterValueTP?: string | number | null;

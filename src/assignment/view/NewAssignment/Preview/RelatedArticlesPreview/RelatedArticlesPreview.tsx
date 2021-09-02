@@ -449,6 +449,8 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
   }
 
   public handleClickReset = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const newArrayGrepCore : Array<Greep> = [];
+    const newArrayGrepMulti : Array<Greep> = [];
     this.handleChangeFilters('none', 0);
     const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
     GradeFilterSubjectArray.forEach((e) => {
@@ -466,6 +468,37 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     GradeFilterArray.forEach((e) => {
       e.classList.remove('active');
     });
+    this.setState({ MySelectGrade: [] });
+    this.setState({ MySelectSubject: [] });
+    this.setState({ MySelectMulti: [] });
+    this.setState({ MySelectSource: [] });
+    this.setState({ myValueCore: [] });
+    this.setState({ filtersAjaxLoading: true });
+    this.setState({ filtersAjaxLoadingGoals: true });
+    await this.props.newAssignmentStore!.getFiltersArticlePanel();
+    const dataArticles = this.props.newAssignmentStore!.getAllArticlePanelFilters();
+    // tslint:disable-next-line: variable-name
+    dataArticles!.core_elements_filter!.forEach((element) => {
+      newArrayGrepCore.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(element.core_element_id),
+        title: element.description!
+      });
+    });
+    // tslint:disable-next-line: variable-name
+    dataArticles!.multidisciplinay_filter!.forEach((element) => {
+      newArrayGrepMulti.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(element.multidisciplinay_id),
+        title: element.description!
+      });
+    });
+    this.setState({
+      selectedCoresAll : newArrayGrepCore,
+      selectedMultisAll : newArrayGrepMulti
+    });
+    this.setState({ filtersAjaxLoading: false });
+    this.setState({ filtersAjaxLoadingGoals: false });
   }
 
   public handleClickGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {

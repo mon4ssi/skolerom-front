@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 
 import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
 import { SearchFilter } from 'components/common/SearchFilter/SearchFilter';
-import { Assignment, GreepSelectValue, FilterGrep, Greep, GrepFilters, GoalsData } from 'assignment/Assignment';
+import { Assignment, GreepSelectValue, FilterGrep, Greep, GrepFilters, GoalsData, Subject } from 'assignment/Assignment';
 import { EditTeachingPathStore } from '../../EditTeachingPathStore';
 import { ItemContentTypeContext } from '../../ItemContentTypeContext';
 import { TeachingPathNodeType } from 'teachingPath/TeachingPath';
@@ -147,6 +147,7 @@ interface State {
   grepFiltersData: FilterGrep;
   coreValueFilter: Array<any>;
   goalValueFilter: Array<any>;
+  subjectsArrayFilter: Array<Subject>;
   valueStringGoalsOptions: Array<string>;
   filtersisUsed: boolean;
   filtersAjaxLoading: boolean;
@@ -197,6 +198,7 @@ export class AssignmentsList extends Component<Props, State> {
       grepFiltersData: {},
       coreValueFilter: [],
       goalValueFilter: [],
+      subjectsArrayFilter: [],
       valueStringGoalsOptions: [],
       filtersisUsed: false,
       filtersAjaxLoading: false,
@@ -304,7 +306,7 @@ export class AssignmentsList extends Component<Props, State> {
   }
 
   public async assigValueData(grades: string, subjects: string) {
-    const { editTeachingPathStore } = this.props;
+    const { editTeachingPathStore, assignmentListStore } = this.props;
     this.setState({ filtersAjaxLoading: true });
     const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFilters(grades, subjects, SOURCE);
     this.setState({
@@ -319,13 +321,46 @@ export class AssignmentsList extends Component<Props, State> {
     this.setState({
       optionsReading : this.renderValueOptionsNumbers(grepFiltersDataAwait, 'reading')
     });
-    this.setState({
-      optionsSubjects : this.renderValueOptionsBasics(grepFiltersDataAwait, 'subject')
-    });
+    this.setState(
+      {
+        optionsSubjects : this.renderValueOptionsBasics(grepFiltersDataAwait, 'subject')
+      },
+      () => {
+        this.setState(
+          {
+            subjectsArrayFilter: this.renderDataSubjects(this.state.optionsSubjects)
+          },
+          () => {
+            const ArrayValue : Array<number> = [];
+            this.state.subjectsArrayFilter!.forEach((element) => {
+              this.state.myValueSubject.forEach((el) => {
+                if (Number(element.id) === Number(el)) {
+                  ArrayValue.push(element.id);
+                }
+              });
+            });
+            this.setState({ myValueSubject: ArrayValue });
+            assignmentListStore!.setFiltersSubjectID(String(this.state.myValueSubject));
+          }
+        );
+      }
+    );
     this.setState({
       optionsGrades : this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
     });
     this.setState({ filtersAjaxLoading: false });
+  }
+
+  public renderDataSubjects = (data: Array<GrepFilters>) => {
+    const returnArray : Array<Subject> = [];
+    data!.forEach((element) => {
+      returnArray.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(element.wp_id),
+        title: element.name
+      });
+    });
+    return returnArray;
   }
 
   public async componentDidMount() {
@@ -807,6 +842,7 @@ export class AssignmentsList extends Component<Props, State> {
     );
     this.setState({ valueCoreOptions: ArrayValue });
     this.setState({ filtersAjaxLoadingGoals: true });
+    this.assigValueData('', '');
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(ArrayValue, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
@@ -1124,6 +1160,7 @@ export class AssignmentsList extends Component<Props, State> {
               filtersisUsed={this.state.filtersisUsed}
               filtersAjaxLoading={this.state.filtersAjaxLoading}
               filtersAjaxLoadingGoals={this.state.filtersAjaxLoadingGoals}
+              customSubjectsList={this.state.subjectsArrayFilter}
               // METHODS
               handleChangeSubject={this.handleChangeSubject}
               handleChangeGrade={this.handleChangeGrade}

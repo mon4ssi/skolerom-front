@@ -437,6 +437,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          valueGoalsOptions : [],
           loadingGoals: false
         }
       );
@@ -500,6 +501,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          valueGoalsOptions : [],
           loadingGoals: false
         }
       );
@@ -567,6 +569,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          valueGoalsOptions : [],
           loadingGoals: false
         }
       );
@@ -644,6 +647,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          valueGoalsOptions : [],
           loadingGoals: false
         }
       );
@@ -958,6 +962,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          valueGoalsOptions : [],
           loadingGoals: false
         }
       );
@@ -985,6 +990,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          valueGoalsOptions : [],
           loadingGoals: false
         }
       );
@@ -1073,6 +1079,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          valueGoalsOptions : [],
           loadingGoals : false
         }
       );
@@ -1097,6 +1104,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          valueGoalsOptions : [],
           loadingGoals : false
         }
       );
@@ -1466,8 +1474,8 @@ export class PublishingActions extends Component<Props, State> {
               <p>{descriptionText}</p>
             </div>
             <div className="infoContainer__filters">
-              {this.renderSubjectInput()}
               {this.renderGradeInput()}
+              {this.renderSubjectInput()}
               {this.renderCoreElements()}
               {this.renderMultiDisciplinary()}
               {this.renderReadingInSubject()}

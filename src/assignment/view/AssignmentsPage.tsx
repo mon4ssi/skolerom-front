@@ -9,7 +9,7 @@ import classNames from 'classnames';
 
 import { TabNavigation } from 'components/common/TabNavigation/TabNavigation';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
-import { GreepSelectValue, FilterGrep, Greep, GrepFilters, GoalsData } from 'assignment/Assignment';
+import { GreepSelectValue, FilterGrep, Greep, GrepFilters, GoalsData, Subject } from 'assignment/Assignment';
 import { SearchFilter } from 'components/common/SearchFilter/SearchFilter';
 import { MyAssignments } from './tabs/MyAssignments/MyAssignments';
 import { StudentAssignments } from './tabs/StudentAssignments/StudentAssignments';
@@ -148,6 +148,7 @@ interface State {
   valueSubjectsOptions: Array<number>;
   valueGoalsOptions: Array<number>;
   valueStringGoalsOptions: Array<string>;
+  subjectsArrayFilter: Array<Subject>;
   filtersisUsed: boolean;
   filtersAjaxLoading: boolean;
   filtersAjaxLoadingGoals: boolean;
@@ -199,6 +200,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       valueSubjectsOptions: [],
       valueGoalsOptions: [],
       valueStringGoalsOptions: [],
+      subjectsArrayFilter: [],
       filtersisUsed: false,
       filtersAjaxLoading: false,
       filtersAjaxLoadingGoals: false
@@ -621,13 +623,50 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     this.setState({
       optionsReading : this.renderValueOptionsNumbers(grepFiltersDataAwait, 'reading')
     });
-    this.setState({
-      optionsSubjects : this.renderValueOptionsBasics(grepFiltersDataAwait, 'subject')
-    });
+    this.setState(
+      {
+        optionsSubjects : this.renderValueOptionsBasics(grepFiltersDataAwait, 'subject')
+      },
+      () => {
+        this.setState(
+          {
+            subjectsArrayFilter: this.renderDataSubjects(this.state.optionsSubjects)
+          },
+          () => {
+            const ArrayValue : Array<number> = [];
+            this.state.subjectsArrayFilter!.forEach((element) => {
+              this.state.myValueSubject.forEach((el) => {
+                if (Number(element.id) === Number(el)) {
+                  ArrayValue.push(element.id);
+                }
+              });
+            });
+            this.setState({ myValueSubject: ArrayValue });
+            QueryStringHelper.set(
+              this.props.history,
+              QueryStringKeys.SUBJECT,
+              String(ArrayValue)
+            );
+          }
+        );
+      }
+    );
     this.setState({
       optionsGrades : this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
     });
     this.setState({ filtersAjaxLoading: false });
+  }
+
+  public renderDataSubjects = (data: Array<GrepFilters>) => {
+    const returnArray : Array<Subject> = [];
+    data!.forEach((element) => {
+      returnArray.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(element.wp_id),
+        title: element.name
+      });
+    });
+    return returnArray;
   }
 
   public async componentDidMount() {
@@ -688,10 +727,13 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     GradeFilterArray.forEach((e) => {
       e.classList.remove('active');
     });
+    this.assigValueData('', '');
+    this.setState({ filtersAjaxLoadingGoals: true });
     const grepFiltergoalssDataAwait = await this.props.newAssignmentStore!.getGrepGoalsFilters([], [], [], [], [], MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
+    this.setState({ filtersAjaxLoadingGoals: false });
   }
 
   public createAssignment = async () => {
@@ -735,6 +777,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
           isAssignmentsPathPage
           isAssignmentsListPage
           placeholder={intl.get('assignments search.Search for assignments')}
+          customSubjectsList={this.state.subjectsArrayFilter}
           customCoreTPList={this.state.optionsCore}
           customMultiList={this.state.optionsMulti}
           customReadingList={this.state.optionsReading}
