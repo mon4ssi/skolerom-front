@@ -600,6 +600,14 @@ class SearchFilter extends Component<Props, State> {
         fontSize: '14px',
         background: '#E7ECEF',
         padding: '3px'
+      }),
+      multiValue: () => ({
+        fontSize: '16px',
+        display: 'flex',
+        borderRadius: '5px',
+        background: 'rgb(230, 230, 230)',
+        marginRight: '3px',
+        marginBottom: '3px'
       })
     };
     if (this.props.filtersAjaxLoading) {
@@ -633,6 +641,7 @@ class SearchFilter extends Component<Props, State> {
         onChange={handleChangeSelectCore}
         placeholder={intl.get('new assignment.greep.core')}
         defaultValue={coreValueFilter}
+        isClearable={false}
         isMulti
       />
     );
@@ -656,6 +665,14 @@ class SearchFilter extends Component<Props, State> {
         fontSize: '14px',
         background: '#E7ECEF',
         padding: '3px'
+      }),
+      multiValue: () => ({
+        fontSize: '16px',
+        display: 'flex',
+        borderRadius: '5px',
+        background: 'rgb(230, 230, 230)',
+        marginRight: '3px',
+        marginBottom: '3px'
       })
     };
     if (this.props.filtersAjaxLoading) {
@@ -691,6 +708,7 @@ class SearchFilter extends Component<Props, State> {
         onChange={handleChangeSelectCore}
         placeholder={intl.get('new assignment.greep.core')}
         defaultValue={coreValueFilter}
+        isClearable={false}
         isMulti
       />
     );
@@ -714,6 +732,14 @@ class SearchFilter extends Component<Props, State> {
         fontSize: '14px',
         background: '#E7ECEF',
         padding: '3px'
+      }),
+      multiValue: () => ({
+        fontSize: '16px',
+        display: 'flex',
+        borderRadius: '5px',
+        background: 'rgb(230, 230, 230)',
+        marginRight: '3px',
+        marginBottom: '3px'
       })
     };
     if (this.props.filtersAjaxLoading) {
@@ -750,6 +776,7 @@ class SearchFilter extends Component<Props, State> {
         placeholder={intl.get('new assignment.greep.core')}
         defaultValue={coreValueFilter}
         isMulti
+        isClearable={false}
       />
     );
   }
@@ -832,6 +859,14 @@ class SearchFilter extends Component<Props, State> {
         fontSize: '14px',
         background: '#E7ECEF',
         padding: '3px'
+      }),
+      multiValue: () => ({
+        fontSize: '16px',
+        display: 'flex',
+        borderRadius: '5px',
+        background: 'rgb(230, 230, 230)',
+        marginRight: '3px',
+        marginBottom: '3px'
       })
     };
     if (this.props.filtersAjaxLoadingGoals) {
@@ -866,6 +901,7 @@ class SearchFilter extends Component<Props, State> {
         placeholder={intl.get('new assignment.greep.goals')}
         defaultValue={goalValueFilter}
         isMulti
+        isClearable={false}
       />
     );
   }
@@ -888,6 +924,14 @@ class SearchFilter extends Component<Props, State> {
         fontSize: '14px',
         background: '#E7ECEF',
         padding: '3px'
+      }),
+      multiValue: () => ({
+        fontSize: '16px',
+        display: 'flex',
+        borderRadius: '5px',
+        background: 'rgb(230, 230, 230)',
+        marginRight: '3px',
+        marginBottom: '3px'
       })
     };
     if (this.props.filtersAjaxLoadingGoals) {
@@ -922,6 +966,7 @@ class SearchFilter extends Component<Props, State> {
         placeholder={intl.get('new assignment.greep.goals')}
         defaultValue={goalValueFilter}
         isMulti
+        isClearable={false}
       />
     );
   }
