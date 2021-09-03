@@ -54,7 +54,7 @@ interface Props {
   goalsFilterValue?: number | null;
   coreFilterValueTP?: string |number | null;
   mainFilterValueTP?: string | number | null;
-  goalsFilterValueTP?: number | null;
+  goalsFilterValueTP?: string | number | null;
   readingFilterValueTP?: string | number | null;
 
   defaultValueGradeFilter?: string | null;
@@ -607,7 +607,8 @@ class SearchFilter extends Component<Props, State> {
         borderRadius: '5px',
         background: 'rgb(230, 230, 230)',
         marginRight: '3px',
-        marginBottom: '3px'
+        marginBottom: '3px',
+        width: '100%'
       })
     };
     if (this.props.filtersAjaxLoading) {
@@ -672,7 +673,8 @@ class SearchFilter extends Component<Props, State> {
         borderRadius: '5px',
         background: 'rgb(230, 230, 230)',
         marginRight: '3px',
-        marginBottom: '3px'
+        marginBottom: '3px',
+        width: '100%'
       })
     };
     if (this.props.filtersAjaxLoading) {
@@ -739,7 +741,8 @@ class SearchFilter extends Component<Props, State> {
         borderRadius: '5px',
         background: 'rgb(230, 230, 230)',
         marginRight: '3px',
-        marginBottom: '3px'
+        marginBottom: '3px',
+        width: '100%'
       })
     };
     if (this.props.filtersAjaxLoading) {
@@ -866,7 +869,8 @@ class SearchFilter extends Component<Props, State> {
         borderRadius: '5px',
         background: 'rgb(230, 230, 230)',
         marginRight: '3px',
-        marginBottom: '3px'
+        marginBottom: '3px',
+        width: '100%'
       })
     };
     if (this.props.filtersAjaxLoadingGoals) {
@@ -931,7 +935,8 @@ class SearchFilter extends Component<Props, State> {
         borderRadius: '5px',
         background: 'rgb(230, 230, 230)',
         marginRight: '3px',
-        marginBottom: '3px'
+        marginBottom: '3px',
+        width: '100%'
       })
     };
     if (this.props.filtersAjaxLoadingGoals) {

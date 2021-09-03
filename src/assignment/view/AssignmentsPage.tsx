@@ -710,6 +710,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     this.setState({ myValueCore: [] });
     this.setState({ myValueMulti: [] });
     this.setState({ myValueReading: [] });
+    this.setState({ goalValueFilter: [] });
 
     const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
     GradeFilterSubjectArray.forEach((e) => {
@@ -808,6 +809,8 @@ class AssignmentsPageWrapper extends Component<Props, State> {
           orderFieldFilterValue={isStudent ? SortingFilter.DEADLINE : SortingFilter.CREATION_DATE}
           orderFilterValue={QueryStringHelper.getString(this.props.history, QueryStringKeys.ORDER)}
           searchQueryFilterValue={QueryStringHelper.getString(this.props.history, QueryStringKeys.SEARCH)}
+          coreFilterValueTP={QueryStringHelper.getString(this.props.history, QueryStringKeys.GREPCOREELEMENTSIDS)}
+          goalsFilterValueTP={QueryStringHelper.getString(this.props.history, QueryStringKeys.GREEPGOALSIDS)}
           coreValueFilter={this.state.myValueCore}
           goalValueFilter={this.state.goalValueFilter}
 

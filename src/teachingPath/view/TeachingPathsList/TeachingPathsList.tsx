@@ -794,6 +794,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
     this.setState({ myValueCore: [] });
     this.setState({ myValueMulti: [] });
     this.setState({ myValueReading: [] });
+    this.setState({ goalValueFilter: [] });
 
     const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
     GradeFilterSubjectArray.forEach((e) => {
@@ -865,7 +866,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
           searchQueryFilterValue={QueryStringHelper.getString(this.props.history, QueryStringKeys.SEARCH)}
           coreFilterValueTP={QueryStringHelper.getString(this.props.history, QueryStringKeys.GREPCOREELEMENTSIDS)}
           defaultValueMainFilter={QueryStringHelper.getString(this.props.history, QueryStringKeys.GREPMAINTOPICSIDS)}
-          goalsFilterValueTP={QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREEPGOALSIDS)}
+          goalsFilterValueTP={QueryStringHelper.getString(this.props.history, QueryStringKeys.GREEPGOALSIDS)}
           defaultValueReadingFilter={QueryStringHelper.getString(this.props.history, QueryStringKeys.GREPREADINGINSUBJECT)}
           coreValueFilter={this.state.myValueCore}
           goalValueFilter={this.state.goalValueFilter}

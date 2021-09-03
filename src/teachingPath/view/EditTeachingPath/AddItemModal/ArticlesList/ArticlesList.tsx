@@ -410,6 +410,7 @@ export class ArticlesList extends Component<Props, State> {
     this.setState({ MySelectMulti: [] });
     this.setState({ MySelectSource: [] });
     this.setState({ myValueCore: [] });
+    this.setState({ goalValueFilter: [] });
     this.setState({ filtersAjaxLoading: true });
     this.setState({ filtersAjaxLoadingGoals: true });
     await this.props.editTeachingPathStore!.getFiltersArticlePanel();

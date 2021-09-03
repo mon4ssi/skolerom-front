@@ -819,6 +819,13 @@ export class AssignmentsList extends Component<Props, State> {
       goalValueFilter : [],
       filtersisUsed: false,
     });
+    this.assigValueData('', '');
+    this.setState({ filtersAjaxLoadingGoals: true });
+    const grepFiltergoalssDataAwait = await this.props.editTeachingPathStore!.getGrepGoalsFilters([], [], [], [], [], MAGICNUMBER100, MAGICNUMBER1);
+    this.setState({
+      optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
+    });
+    this.setState({ filtersAjaxLoadingGoals: false });
   }
 
   public handleChangeSelectCore = async (newValue: Array<any>) => {
@@ -842,7 +849,6 @@ export class AssignmentsList extends Component<Props, State> {
     );
     this.setState({ valueCoreOptions: ArrayValue });
     this.setState({ filtersAjaxLoadingGoals: true });
-    this.assigValueData('', '');
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(ArrayValue, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
