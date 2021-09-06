@@ -18,6 +18,7 @@ import secondLevelImg from 'assets/images/level-2-blue.svg';
 import thirdLevelImg from 'assets/images/level-3-blue.svg';
 import placeholderImg from 'assets/images/list-placeholder.svg';
 import placeholderDomainImg from 'assets/images/addLink_placeholder.png';
+import refresh from 'assets/images/refresh.svg';
 
 import './InfoCard.scss';
 
@@ -71,13 +72,24 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
   public renderActionButtons = () => (
     <div className="actionButtons flexBox">
       {/* <img src={dragImg} alt="drag" /> */}
-      <button onClick={this.handleClickDelete} title={intl.get('generals.delete')}>
-        <img
-          src={trashImg}
-          alt={intl.get('generals.delete')}
-          title={intl.get('generals.delete')}
-        />
-      </button>
+      <div className="actionButtonsItem refreshButtonsItem">
+        <button onClick={this.handleClickDelete} title={intl.get('generals.edit')}>
+          <img
+            src={refresh}
+            alt={intl.get('generals.edit')}
+            title={intl.get('generals.edit')}
+          />
+        </button>
+      </div>
+      <div className="actionButtonsItem">
+        <button onClick={this.handleClickDelete} title={intl.get('generals.delete')}>
+          <img
+            src={trashImg}
+            alt={intl.get('generals.delete')}
+            title={intl.get('generals.delete')}
+          />
+        </button>
+      </div>
     </div>
   )
 

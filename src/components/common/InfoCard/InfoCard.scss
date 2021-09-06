@@ -52,6 +52,23 @@
         margin-left: 5px;
       }
     }
+    .actionButtonsItem {
+      &.refreshButtonsItem {
+        width: 36px;
+        text-align: center;
+        button {
+          background: white;
+          border: solid 1px #728089;
+          border-radius: 50%;
+          width: 26px;
+          height: 26px;
+          img {
+            width: 15px;
+            height: 15px;
+          }
+        }
+      }
+    }
   }
 
   .cardImage {
