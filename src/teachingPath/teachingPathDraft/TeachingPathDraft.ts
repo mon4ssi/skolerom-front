@@ -208,7 +208,7 @@ export class DraftTeachingPath extends TeachingPath {
   public anyGoals(butGoals: Array<GreepElements>, node: EditableTeachingPathNode) {
     let returnArray : Array<GreepElements> = butGoals;
     node!.items!.forEach((e) => {
-      if (typeof(e.value.grades) !== 'undefined') {
+      if (typeof(e.value.grepGoals) !== 'undefined') {
         returnArray = returnArray!.concat(e.value.grepGoals!);
       }
     });
