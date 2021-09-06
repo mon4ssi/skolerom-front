@@ -608,7 +608,7 @@ class SearchFilter extends Component<Props, State> {
         background: 'rgb(230, 230, 230)',
         marginRight: '3px',
         marginBottom: '3px',
-        width: '100%'
+        maxWidth: '100%'
       })
     };
     if (this.props.filtersAjaxLoading) {
@@ -674,7 +674,7 @@ class SearchFilter extends Component<Props, State> {
         background: 'rgb(230, 230, 230)',
         marginRight: '3px',
         marginBottom: '3px',
-        width: '100%'
+        maxWidth: '100%'
       })
     };
     if (this.props.filtersAjaxLoading) {
@@ -742,7 +742,7 @@ class SearchFilter extends Component<Props, State> {
         background: 'rgb(230, 230, 230)',
         marginRight: '3px',
         marginBottom: '3px',
-        width: '100%'
+        maxWidth: '100%'
       })
     };
     if (this.props.filtersAjaxLoading) {
@@ -870,7 +870,7 @@ class SearchFilter extends Component<Props, State> {
         background: 'rgb(230, 230, 230)',
         marginRight: '3px',
         marginBottom: '3px',
-        width: '100%'
+        maxWidth: '100%'
       })
     };
     if (this.props.filtersAjaxLoadingGoals) {
@@ -936,7 +936,7 @@ class SearchFilter extends Component<Props, State> {
         background: 'rgb(230, 230, 230)',
         marginRight: '3px',
         marginBottom: '3px',
-        width: '100%'
+        maxWidth: '100%'
       })
     };
     if (this.props.filtersAjaxLoadingGoals) {
