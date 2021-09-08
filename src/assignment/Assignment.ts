@@ -652,7 +652,6 @@ export interface GradeStringObject {
   subjects_relations?: Array<string>;
 }
 
-// 
 export interface MultidisciplinayGradeSubjectFilter {
   // tslint:disable-next-line: variable-name
   subject_id?: string;
@@ -674,14 +673,11 @@ export interface MultiFilter {
   // tslint:disable-next-line: variable-name
   grade_ids?: Array<MultidisciplinayGradeFilter>;
 }
-// 
 
-// 
 export interface CoreElementGradeFilter {
   // tslint:disable-next-line: variable-name
   grade_id?: string;
   subject_ids?: Array<string>;
- 
 }
 
 export interface CoreFilter {
@@ -691,15 +687,12 @@ export interface CoreFilter {
   // tslint:disable-next-line: variable-name
   grade_ids?: Array<CoreElementGradeFilter>;
 }
-// 
-// 
 
 export interface GoalsGradeSubjectCoreElementsFilter {
   // tslint:disable-next-line: variable-name
   core_element_id?: string;
   // tslint:disable-next-line: variable-name
   main_topic_ids?: Array<string>;
- 
 }
 
 export interface GoalsGradeSubjectFilter {
@@ -707,7 +700,6 @@ export interface GoalsGradeSubjectFilter {
   subject_id?: string;
   // tslint:disable-next-line: variable-name
   core_element_ids?: Array<GoalsGradeSubjectCoreElementsFilter>;
- 
 }
 
 export interface GoalsGradeFilter {
@@ -715,7 +707,6 @@ export interface GoalsGradeFilter {
   grade_id?: string;
   // tslint:disable-next-line: variable-name
   subject_ids?: Array<GoalsGradeSubjectFilter>;
- 
 }
 
 export interface GoalsFilter {
@@ -724,7 +715,6 @@ export interface GoalsFilter {
   description?: string;
   // tslint:disable-next-line: variable-name
   grade_ids?: Array<GoalsGradeFilter>;
- 
 }
 
 export interface SourceFilter {
@@ -734,7 +724,6 @@ export interface SourceFilter {
   name?: string;
   // tslint:disable-next-line: variable-name
   slug?: string;
-  
 }
 
 export class FilterArticlePanel {

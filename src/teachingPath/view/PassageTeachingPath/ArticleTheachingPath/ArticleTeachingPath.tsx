@@ -49,7 +49,6 @@ export class ArticleTeachingPath extends Component<Props, State> {
   }
 
   public chooseCard = (article: Article) => () => {
-    
     const { id, levels, correspondingLevelArticleId } = article;
 
     const articleChildren = levels![0].childArticles!;

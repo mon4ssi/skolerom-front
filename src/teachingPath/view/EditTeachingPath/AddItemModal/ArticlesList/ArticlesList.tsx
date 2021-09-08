@@ -7,7 +7,7 @@ import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTe
 import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
 import { TeachingPathNodeType } from 'teachingPath/TeachingPath';
 import { ItemContentTypeContext } from 'teachingPath/view/EditTeachingPath/ItemContentTypeContext';
-import { Article, Subject, Greep, FilterArticlePanel, Grade , CoreElementGradeFilter,MultidisciplinayGradeFilter, GoalsGradeFilter } from 'assignment/Assignment';
+import { Article, Subject, Greep, FilterArticlePanel, Grade , CoreElementGradeFilter, MultidisciplinayGradeFilter, GoalsGradeFilter } from 'assignment/Assignment';
 import { RelatedArticlesCard } from 'assignment/view/NewAssignment/Preview/RelatedArticlesPreview/RelatedArticlesCard';
 import { SearchFilter } from 'components/common/SearchFilter/SearchFilter';
 import { lettersNoEn } from 'utils/lettersNoEn';
@@ -164,8 +164,8 @@ export class ArticlesList extends Component<Props, State> {
     };
   }
 
-  private handleChangeFilters = async (filterName: string, filterValue: number | string) => {
-    
+  public handleChangeFilters = async (filterName: string, filterValue: number | string) => {
+
     const { editTeachingPathStore } = this.props;
     const allModal = Array.from(document.getElementsByClassName('addItemModal__right') as HTMLCollectionOf<HTMLElement>);
     editTeachingPathStore!.resetCurrentArticlesPage();
@@ -207,7 +207,7 @@ export class ArticlesList extends Component<Props, State> {
     }
   }
 
-  private getAllChildrenItems = () => {
+  public getAllChildrenItems = () => {
     const { currentNode } = this.props.editTeachingPathStore!;
 
     return currentNode!.children
@@ -215,7 +215,7 @@ export class ArticlesList extends Component<Props, State> {
       .flat() as Array<Article>;
   }
 
-  private getSubjectFromDataArticles = (dataArticles: any) => {
+  public getSubjectFromDataArticles = (dataArticles: any) => {
     const newArraySubjects : Array<Subject> = [];
     dataArticles!.subject_filter!.forEach((element: any) => { // subjeeeect filterr
       newArraySubjects.push({
@@ -229,7 +229,7 @@ export class ArticlesList extends Component<Props, State> {
 
   public async componentDidMount() {
     const newArrayGrades : Array<Grade> = [];
-    var newArraySubjects : Array<Subject> = [];
+    const newArraySubjects : Array<Subject> = [];
     const newArrayGrepCore : Array<Greep> = [];
     const newArrayGrepMulti : Array<Greep> = [];
     const newArrayGrepGoals : Array<Greep> = [];
@@ -252,11 +252,11 @@ export class ArticlesList extends Component<Props, State> {
     this.setState({ filtersAjaxLoadingGoals: true });
     await this.props.editTeachingPathStore!.getFiltersArticlePanel();
     const dataArticles = this.props.editTeachingPathStore!.getAllArticlePanelFilters();
-    console.log(dataArticles);
+
     this.setState({
       grepDataFilters : dataArticles
     });
-    
+
     // tslint:disable-next-line: variable-name
     dataArticles!.grade_filter!.forEach((element) => {
       newArrayGrades.push({
@@ -269,12 +269,12 @@ export class ArticlesList extends Component<Props, State> {
       selectedGradesAll : newArrayGrades
     });
     // tslint:disable-next-line: variable-name
-    
+
     newArraySubjects = this.getSubjectFromDataArticles(dataArticles);
     this.setState({
       selectedSubjectsAll : newArraySubjects
     });
-    
+
     // tslint:disable-next-line: variable-name
     dataArticles!.core_elements_filter!.forEach((element) => {
       newArrayGrepCore.push({
@@ -286,7 +286,6 @@ export class ArticlesList extends Component<Props, State> {
     this.setState({
       selectedCoresAll : newArrayGrepCore
     });
-    
 
     // tslint:disable-next-line: variable-name
     dataArticles!.multidisciplinay_filter!.forEach((element) => {
@@ -299,7 +298,6 @@ export class ArticlesList extends Component<Props, State> {
     this.setState({
       selectedMultisAll : newArrayGrepMulti
     });
-    
 
     // tslint:disable-next-line: variable-name
     dataArticles!.goals_filter!.forEach((element) => {
@@ -312,7 +310,6 @@ export class ArticlesList extends Component<Props, State> {
     this.setState({
       selectedGoalsAll : newArrayGrepGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
     });
-    
 
     // tslint:disable-next-line: variable-name
     dataArticles!.source_filter!.forEach((element) => {
@@ -322,7 +319,7 @@ export class ArticlesList extends Component<Props, State> {
         title: element.name!
       });
     });
-    
+
     this.setState(
       {
         selectedSourceAll : newArrayGrepSource
@@ -338,14 +335,8 @@ export class ArticlesList extends Component<Props, State> {
     this.setState({
       activeGrepFilters : true
     });
-    
-
     this.setState({ filtersAjaxLoading: false });
-    
-
     this.setState({ filtersAjaxLoadingGoals: false });
-    
-
   }
 
   public async componentWillUnmount() {
@@ -463,7 +454,7 @@ export class ArticlesList extends Component<Props, State> {
     this.setState({ filtersAjaxLoadingGoals: false });
   }
 
-  private resetSubjectFilter() {
+  public resetSubjectFilter() {
     const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
     GradeFilterSubjectArray.forEach((e) => {
       e.classList.remove('active');
@@ -473,34 +464,33 @@ export class ArticlesList extends Component<Props, State> {
     });
   }
 
-  private getAllSubjectsFromFilter() {
-    return this.state.grepDataFilters!.subject_filter!.map(function(subject){
-      return {
-        // tslint:disable-next-line: variable-name
+  public getAllSubjectsFromFilter() {
+    return this.state.grepDataFilters!.subject_filter!.map(subject =>
+      ({
         id: Number(subject.subject_id),
         title: subject.description!
-      };
-    });
+      })
+    );
   }
-  
-  private fillAllSubjects() {
+
+  public fillAllSubjects() {
     this.setState({
       selectedSubjectsFilter : this.getAllSubjectsFromFilter()
     });
   }
- 
-  private updateSubjectFilterFromGrade(gradeId: string) {
+
+  public updateSubjectFilterFromGrade(gradeId: string) {
 
     const newArraySubject : Array<Subject> = [];
 
     this.state.grepDataFilters!.subject_filter!.forEach((element) => {
       // tslint:disable-next-line: variable-name
-      
+
       const allSympGrades = element.grade_ids;
-      console.log(element.grade_ids);
+
       const allSympGradesLength = allSympGrades!.length;
       if (allSympGradesLength > 1) {
-        if(allSympGrades!.includes(gradeId)){
+        if (allSympGrades!.includes(gradeId)) {
 
           newArraySubject.push({
             // tslint:disable-next-line: variable-name
@@ -520,17 +510,15 @@ export class ArticlesList extends Component<Props, State> {
     });
   }
 
-  private updateCoreElementsFilterFromGrade(gradeId: string) {
+  public updateCoreElementsFilterFromGrade(gradeId: string) {
 
     const newArrayCore : Array<Greep> = [];
 
     this.state.grepDataFilters!.core_elements_filter!.forEach((element) => {
-          
+
       // tslint:disable-next-line: variable-name
-      const allSympGrades = element.grade_ids!.map(function(grade){
-        return grade.grade_id;
-      });
-      
+      const allSympGrades = element.grade_ids!.map(grade => grade.grade_id);
+
       const allSympGradesLength = allSympGrades!.includes(gradeId);
       let allSympSubjectsLength = false;
       if (this.state.valueSubject.length > 0) {
@@ -562,24 +550,20 @@ export class ArticlesList extends Component<Props, State> {
     });
   }
 
-  private updateMainTopicFilterFromGrade(gradeId: string) {
+  public updateMainTopicFilterFromGrade(gradeId: string) {
 
     const newArrayMulti : Array<Greep> = [];
 
     this.state.grepDataFilters!.multidisciplinay_filter!.forEach((element) => {
       // tslint:disable-next-line: variable-name
-      const allSympGrades = element.grade_ids!.map(function(grade){
-        return grade.grade_id;
-      });
-      
+      const allSympGrades = element.grade_ids!.map(grade => grade.grade_id);
+
       const allSympGradesLength = allSympGrades!.includes(gradeId);
       let allSympSubjectsLength = false;
       if (this.state.valueSubject.length > 0) {
         element.grade_ids!.forEach((grade) => {
           if (grade.grade_id === gradeId) {
-            const allSympSubjects = grade.subject_ids!.map(function(subject){
-              return subject.subject_id;
-            });
+            const allSympSubjects = grade.subject_ids!.map(subject => subject.subject_id);
             allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
           }
         });
@@ -605,24 +589,20 @@ export class ArticlesList extends Component<Props, State> {
     });
   }
 
-  private udpateGoalsFilterFromGrade(gradeId: string) {
+  public udpateGoalsFilterFromGrade(gradeId: string) {
 
     const newArrayGoals : Array<Greep> = [];
 
     this.state.grepDataFilters!.goals_filter!.forEach((element) => {
       // tslint:disable-next-line: variable-name
-      const allSympGrades = element.grade_ids!.map(function(grade){
-        return grade.grade_id;
-      });
-      
+      const allSympGrades = element.grade_ids!.map(grade => grade.grade_id);
+
       const allSympGradesLength = allSympGrades!.includes(gradeId);
       let allSympSubjectsLength = false;
       if (this.state.valueSubject.length > 0) {
         element.grade_ids!.forEach((grade) => {
           if (grade.grade_id === gradeId) {
-            const allSympSubjects = grade.subject_ids!.map(function(subject){
-              return subject.subject_id;
-            });
+            const allSympSubjects = grade.subject_ids!.map(subject => subject.subject_id);
             allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
           }
         });
@@ -648,9 +628,9 @@ export class ArticlesList extends Component<Props, State> {
     });
   }
 
-  private updateSourceFilterFromGrade(gradeId: string) {
+  public updateSourceFilterFromGrade(gradeId: string) {
     const newArraySource : Array<Greep> = [];
-    // 
+    //
         // this.state.grepDataFilters!.source_filter!.forEach((element) => {
         //   // tslint:disable-next-line: variable-name
         //   const allSympGrades = element.grade_ids;
@@ -692,11 +672,11 @@ export class ArticlesList extends Component<Props, State> {
         //     }
         //   }
         // );
-        // 
+        //
   }
 
   public handleClickGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    
+
     const value = e.currentTarget.value;
     // const valueSelectedGrades = this.state.MySelectGrade;
     let valueSelectedGrades: Array<number> = [];
@@ -710,14 +690,12 @@ export class ArticlesList extends Component<Props, State> {
         this.updateCoreElementsFilterFromGrade(value);
 
         this.updateMainTopicFilterFromGrade(value);
-     
+
         this.udpateGoalsFilterFromGrade(value);
 
         this.updateSourceFilterFromGrade(value);
 
         this.resetSubjectFilter();
-
-
       }
     } else {
       /*const indexSelected = valueSelectedGrades!.indexOf(Number(value));
@@ -741,7 +719,7 @@ export class ArticlesList extends Component<Props, State> {
 
   public handleClickSubject = (e: React.MouseEvent<HTMLButtonElement>) => {
     const newArrayCore : Array<Greep> = [];
-    const newArrayMulti : Array<Greep> = [];  
+    const newArrayMulti : Array<Greep> = [];
     const newArrayGoals : Array<Greep> = [];
     const newArraySource : Array<Greep> = [];
     const value: string = e.currentTarget.value;
@@ -756,19 +734,15 @@ export class ArticlesList extends Component<Props, State> {
         this.state.grepDataFilters!.core_elements_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
           const allSympGrades: Array<string> = [];
-          element.grade_ids!.forEach(grade => {
-            grade.subject_ids!.forEach(subject_id => {
-              allSympGrades.push(subject_id);
-            });
-          });;
+          element.grade_ids!.forEach(grade =>
+            grade.subject_ids!.forEach(subjecId => allSympGrades.push(subjecId))
+          );
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueGrade.length > 0) {
             element.grade_ids!.forEach((grade) => {
               if (grade.grade_id === this.state.valueGrade) {
-                const allSympSubjects = grade.subject_ids!.map(function(subject_id){
-                  return subject_id
-                });
+                const allSympSubjects = grade.subject_ids;
                 allSympSubjectsLength = allSympSubjects!.includes(value);
               }
             });
@@ -792,18 +766,16 @@ export class ArticlesList extends Component<Props, State> {
         this.setState({
           selectedCoresFilter : newArrayCore
         });
-        
+
         this.state.grepDataFilters!.multidisciplinay_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
           const allSympGrades: Array<string> = [];
-          
-          element.grade_ids!.forEach(function(grade){
-            grade.subject_ids!.forEach(function(subject){ 
+
+          element.grade_ids!.forEach((grade) => {
+            grade.subject_ids!.forEach((subject) => {
               allSympGrades.push(subject.subject_id!);
             });
           });
-          
- 
 
           const allSympGradesLength = allSympGrades!.includes(value);
 
@@ -811,9 +783,7 @@ export class ArticlesList extends Component<Props, State> {
           if (this.state.valueGrade.length > 0) {
             element.grade_ids!.forEach((grade) => {
               if (grade.grade_id === this.state.valueGrade) {
-                const allSympSubjects = grade.subject_ids!.map(function(subject){
-                  return subject.subject_id;
-                });
+                const allSympSubjects = grade.subject_ids!.map(subject => subject.subject_id);
                 allSympSubjectsLength = allSympSubjects!.includes(value);
               }
             });
@@ -840,26 +810,21 @@ export class ArticlesList extends Component<Props, State> {
         this.state.grepDataFilters!.goals_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
           const allSympGrades : Array<string> = [];
-          
-          element.grade_ids!.forEach(function(grade){
-            grade.subject_ids!.forEach(function(subject){
+
+          element.grade_ids!.forEach((grade) => {
+            grade.subject_ids!.forEach((subject) => {
               allSympGrades.push(subject.subject_id!);
             });
-          });;
+          });
 
           const allSympGradesLength = allSympGrades!.includes(value);
-
-
-
           let allSympSubjectsLength = false;
           const allSympSubjects : Array<string> = [];
 
           if (this.state.valueGrade.length > 0) {
             element.grade_ids!.forEach((grade) => {
               if (grade.grade_id === this.state.valueGrade) {
-                const allSympSubjects = grade.subject_ids!.map(function(subject){
-                  return subject.subject_id;
-                });
+                const allSympSubjects = grade.subject_ids!.map(subject => subject.subject_id);
                 allSympSubjectsLength = allSympSubjects!.includes(value);
               }
             });
@@ -883,7 +848,7 @@ export class ArticlesList extends Component<Props, State> {
         this.setState({
           selectedGoalsFilter : newArrayGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
         });
-        // 
+        //
         // this.state.grepDataFilters!.source_filter!.forEach((element) => {
         //   // tslint:disable-next-line: variable-name
         //   const allSympGrades = element.subject_ids;
@@ -913,7 +878,7 @@ export class ArticlesList extends Component<Props, State> {
         //     }
         //   }
         // });
-        // 
+        //
         this.setState(
           {
             selectedSourceFilter : newArraySource
@@ -1528,7 +1493,6 @@ export class ArticlesList extends Component<Props, State> {
       );
     }
 
-   
     return (
       <div className="addItemModal__content">
         <div className="addItemModal__left">

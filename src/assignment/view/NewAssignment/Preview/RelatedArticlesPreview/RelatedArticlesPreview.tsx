@@ -535,9 +535,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         });
         this.state.grepDataFilters!.core_elements_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
-          const allSympGrades = element.grade_ids!.map(function(grade){
-            return grade.grade_id;
-          });
+          const allSympGrades = element.grade_ids!.map(grade => grade.grade_id);
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueSubject.length > 0) {
@@ -571,18 +569,16 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
           // tslint:disable-next-line: variable-name
           const allSympGrades : Array<string> = [];
           element.grade_ids!.forEach((grade) => {
-            grade.subject_ids!.forEach(subject => {
-              allSympGrades.push(subject.subject_id!);
-            });
+            grade.subject_ids!.forEach(subject =>
+              allSympGrades.push(subject.subject_id!)
+            );
           });
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueSubject.length > 0) {
             element.grade_ids!.forEach((grade) => {
               if (grade.grade_id === value) {
-                const allSympSubjects = grade.subject_ids!.map(function(subject){
-                    return subject.subject_id;
-                });
+                const allSympSubjects = grade.subject_ids!.map(subject => subject.subject_id);
                 allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
               }
             });
@@ -608,17 +604,13 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         });
         this.state.grepDataFilters!.goals_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
-          const allSympGrades = element.grade_ids!.map(function(grade){
-            return grade.grade_id;
-          });
+          const allSympGrades = element.grade_ids!.map(grade => grade.grade_id);
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueSubject.length > 0) {
             element.grade_ids!.forEach((grade) => {
               if (grade.grade_id === value) {
-                const allSympSubjects = grade.subject_ids!.map(function(subject){
-                  return subject.subject_id;
-                });
+                const allSympSubjects = grade.subject_ids!.map(subject => subject.subject_id);
                 allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
               }
             });
@@ -721,9 +713,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         this.state.grepDataFilters!.core_elements_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
           const allSympGrades: Array<string> = [];
-          element.grade_ids!.forEach(grade => {
-            grade.subject_ids!.forEach(subject_id => allSympGrades.push(subject_id))
-          });;
+          element.grade_ids!.forEach(grade => grade.subject_ids!.forEach(subjectId => allSympGrades.push(subjectId)));
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueGrade.length > 0) {
@@ -755,20 +745,18 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         });
         this.state.grepDataFilters!.multidisciplinay_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
-          const allSympGrades: Array<string> = []; 
+          const allSympGrades: Array<string> = [];
           element.grade_ids!.forEach((grade) => {
             grade.subject_ids!.forEach((subject) => {
               allSympGrades.push(subject.subject_id!);
-            })
+            });
           });
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueGrade.length > 0) {
             element.grade_ids!.forEach((grade) => {
               if (grade.grade_id === this.state.valueGrade) {
-                const allSympSubjects = grade.subject_ids!.map(function(subject){
-                  return subject.subject_id;
-                });
+                const allSympSubjects = grade.subject_ids!.map(subject => subject.subject_id);
                 allSympSubjectsLength = allSympSubjects!.includes(value);
               }
             });
@@ -798,16 +786,14 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
           element.grade_ids!.forEach((grade) => {
             grade.subject_ids!.forEach((subject) => {
               allSympGrades.push(subject.subject_id!);
-            })
+            });
           });
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueGrade.length > 0) {
             element.grade_ids!.forEach((grade) => {
               if (grade.grade_id === this.state.valueGrade) {
-                const allSympSubjects = grade.subject_ids!.map(subject => {
-                  return subject.subject_id;
-                });
+                const allSympSubjects = grade.subject_ids!.map(subject => subject.subject_id);
                 allSympSubjectsLength = allSympSubjects!.includes(value);
               }
             });
