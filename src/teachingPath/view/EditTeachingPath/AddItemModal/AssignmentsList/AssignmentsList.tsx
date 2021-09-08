@@ -339,7 +339,9 @@ export class AssignmentsList extends Component<Props, State> {
               });
             });
             this.setState({ myValueSubject: ArrayValue });
-            assignmentListStore!.setFiltersSubjectID(String(this.state.myValueSubject));
+            if (grades !== '' && subjects !== '') {
+              assignmentListStore!.setFiltersSubjectID(String(this.state.myValueSubject));
+            }
           }
         );
       }
