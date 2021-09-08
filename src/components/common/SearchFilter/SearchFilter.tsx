@@ -788,7 +788,8 @@ class SearchFilter extends Component<Props, State> {
     const { handleClickMulti, customMultiList, mainFilterValueTP, defaultValueMainFilter } = this.props;
     const cores = customMultiList!.sort(sortByAlphabet);
     const arrayDefaults = (defaultValueMainFilter) ? defaultValueMainFilter.split(',') : [];
-    const visibleCores = cores.map((core) => {
+
+    const visibleCores = cores.map((core, idx) => {
       const title = core.title;
       const classD = (arrayDefaults.includes(String(core.id))) ? 'active' : '';
       return <button value={core.id} className={`itemFlexFilter multiFilterClass ${classD}`} onClick={handleClickMulti} key={core.id}>{title}</button>;
