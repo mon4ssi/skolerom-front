@@ -34,6 +34,9 @@ export class EditTeachingPathStore {
   @observable public isFetchedArticlesListFinished: boolean = false;
   @observable public isActiveButtons: boolean = false;
   @observable public hasMoreArticles: boolean = true;
+  @observable public isEditArticles: boolean = false;
+  @observable public isEditAssignments: boolean = false;
+  @observable public isEditDomain: boolean = false;
   @observable public articlesList: Array<Article> = [];
   // tslint:disable-next-line: no-magic-numbers
   @observable public articlesForSkeleton: Array<Article> = new Array(6).fill(new Article({ id: 0, title: '' }));
@@ -92,6 +95,42 @@ export class EditTeachingPathStore {
 
   public getGoalsByArticle() {
     return '';
+  }
+
+  public returnIsEditAssignments() {
+    return this.isEditAssignments;
+  }
+
+  public trueIsEditAssignments() {
+    this.isEditAssignments = true;
+  }
+
+  public falseIsEditAssignments() {
+    this.isEditAssignments = false;
+  }
+
+  public returnIsEditArticles() {
+    return this.isEditArticles;
+  }
+
+  public trueIsEditArticles() {
+    this.isEditArticles = true;
+  }
+
+  public falseIsEditArticles() {
+    this.isEditArticles = false;
+  }
+
+  public returnIsEditDomain() {
+    return this.isEditDomain;
+  }
+
+  public trueIsEditDomain() {
+    this.isEditDomain = true;
+  }
+
+  public falseIsEditDomain() {
+    this.isEditDomain = false;
   }
 
   @computed

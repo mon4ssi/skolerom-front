@@ -6,8 +6,10 @@ import intl from 'react-intl-universal';
 import { ItemContentTypeContext } from '../ItemContentTypeContext';
 import { AssignmentsList } from './AssignmentsList/AssignmentsList';
 import { ArticlesList } from './ArticlesList/ArticlesList';
+import { DomainModal } from './DomainModal/DomainModal';
 
 import './AddItemModal.scss';
+const num2 = 2;
 
 class AddItemComponent extends Component {
   public static contextType = ItemContentTypeContext;
@@ -18,6 +20,8 @@ class AddItemComponent extends Component {
         return <ArticlesList />;
       case 1:
         return <AssignmentsList />;
+      case num2:
+        return <DomainModal />;
       default:
         return;
     }
@@ -27,8 +31,10 @@ class AddItemComponent extends Component {
     this.context.changeContentType(null);
   }
   public render() {
+    const { contentType } = this.context;
+    const classN = `addItemModal background_${contentType}`;
     return (
-        <div className="addItemModal">
+        <div className={classN}>
           {this.renderModalContent()}
         </div>
     );

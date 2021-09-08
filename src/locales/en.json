@@ -627,7 +627,8 @@
       "delete_item": "Are you sure you want to delete this {item}?",
       "merge_paths": "Are you sure you want to merge these paths?",
       "unmerge_path": "Are you sure you want to unmerge this path?",
-      "unable_to_merge": "You can't merge articles and assignments!"
+      "unable_to_merge": "You can't merge articles and assignments!",
+      "neccesary_edit": "In this momment only edit selected article, please remove article selection and select new article"
     },
     "paths": {
       "main_teaching_path_title": "Teaching path",

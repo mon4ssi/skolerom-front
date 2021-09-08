@@ -11,6 +11,7 @@ import { TeachingPathNodeType } from 'teachingPath/TeachingPath';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 import { StoreState } from 'utils/enums';
 import { lettersNoEn } from 'utils/lettersNoEn';
+import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 
 import closeImg from 'assets/images/close-rounded-black.svg';
 import imagePlaceholderImg from 'assets/images/list-placeholder.svg';
@@ -42,7 +43,6 @@ class AssignmentItem extends Component<AssignmentProps> {
 
   public isAssignmentSelected = () => {
     const { assignment, allItems } = this.props;
-
     return !!allItems.find(
       item => item.id === assignment.id
     );
@@ -146,6 +146,8 @@ interface State {
   goalValueFilter: Array<any>;
   valueStringGoalsOptions: Array<string>;
   filtersisUsed: boolean;
+  isEdit: boolean;
+  isEditSingle: boolean;
 }
 
 @inject('assignmentListStore', 'editTeachingPathStore')
@@ -192,11 +194,18 @@ export class AssignmentsList extends Component<Props, State> {
       goalValueFilter: [],
       valueStringGoalsOptions: [],
       filtersisUsed: false,
+      isEdit: this.props.editTeachingPathStore!.returnIsEditAssignments()!,
+      isEditSingle: false,
     };
   }
 
   private getAllChildrenItems = () => {
     const { currentNode } = this.props.editTeachingPathStore!;
+    if (this.props.editTeachingPathStore!.returnIsEditAssignments()!) {
+      return currentNode!.items!
+      .map((item => item.value))
+      .flat() as Array<Assignment>;
+    }
     return currentNode!.children
       .map(child => child.items!.map(item => item.value))
       .flat() as Array<Assignment>;
@@ -349,15 +358,30 @@ export class AssignmentsList extends Component<Props, State> {
     const ifAddingItemIsSaved = !!currentNode!.children.filter(
       child => child.items!.find(el => el.value.id === item.id)
     ).length;
-
-    if (ifAddingItemIsSaved) {
-      this.setState({ removingItems: this.state.removingItems.filter((el: Assignment) => el.id !== item.id) });
+    if (this.state.isEdit) {
+      if (this.state.isEditSingle) {
+        this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, item] });
+        this.setState({ greeddata: true });
+        this.setState({ selectedAssignmentTitle: item.title });
+        this.setState({ selectedAssignmentDescription: item.description });
+        this.setState({ selectedAssignment: item });
+        this.setState({ isEditSingle: false });
+      } else {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('edit_teaching_path.notifications.neccesary_edit')
+        });
+      }
+    } else {
+      if (ifAddingItemIsSaved) {
+        this.setState({ removingItems: this.state.removingItems.filter((el: Assignment) => el.id !== item.id) });
+      }
+      this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, item] });
+      this.setState({ greeddata: true });
+      this.setState({ selectedAssignmentTitle: item.title });
+      this.setState({ selectedAssignmentDescription: item.description });
+      this.setState({ selectedAssignment: item });
     }
-    this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, item] });
-    this.setState({ greeddata: true });
-    this.setState({ selectedAssignmentTitle: item.title });
-    this.setState({ selectedAssignmentDescription: item.description });
-    this.setState({ selectedAssignment: item });
   }
 
   public removeItemFromNewChild = async (item: Assignment) => {
@@ -369,6 +393,9 @@ export class AssignmentsList extends Component<Props, State> {
 
     if (ifRemovableItemIsSaved) {
       this.setState({ removingItems: [...this.state.removingItems, item] });
+    }
+    if (this.state.isEdit) {
+      this.setState({ isEditSingle: true });
     }
 
     this.setState((state) => {
@@ -404,36 +431,48 @@ export class AssignmentsList extends Component<Props, State> {
   public closeModal = () => {
     const { editTeachingPathStore, } = this.props;
     const { itemsForNewChildren } = this.state;
-    if (itemsForNewChildren.length) {
-      const newChildren = itemsForNewChildren.map(
-        item => editTeachingPathStore!.createNewNode(
-          item,
-          TeachingPathNodeType.Assignment
-        )
-      );
-      newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
-      editTeachingPathStore!.currentNode!.children.forEach(
-        (child) => {
-          this.state.removingItems.forEach(
-            (item: Assignment) => {
-              if (child.items!.filter(el => el.value.id === item.id)) {
-                child.removeItem(item.id);
-              }
-            }
-          );
-          if (!child.items!.length) {
-            editTeachingPathStore!.currentNode!.removeChild(child);
-          }
-        }
-      );
+    if (this.state.isEdit) {
+      if (itemsForNewChildren.length) {
+        editTeachingPathStore!.currentNode!.editItem(itemsForNewChildren[0]);
+        editTeachingPathStore!.currentEntity!.save();
+        this.context.changeContentType(null);
+        editTeachingPathStore!.setCurrentNode(null);
+      } else {
+        editTeachingPathStore!.currentEntity!.save();
+        this.context.changeContentType(null);
+        editTeachingPathStore!.setCurrentNode(null);
+      }
+      editTeachingPathStore!.falseIsEditAssignments();
     } else {
-      editTeachingPathStore!.currentNode!.setChildren([]);
+      if (itemsForNewChildren.length) {
+        const newChildren = itemsForNewChildren.map(
+          item => editTeachingPathStore!.createNewNode(
+            item,
+            TeachingPathNodeType.Assignment
+          )
+        );
+        newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
+        editTeachingPathStore!.currentNode!.children.forEach(
+          (child) => {
+            this.state.removingItems.forEach(
+              (item: Assignment) => {
+                if (child.items!.filter(el => el.value.id === item.id)) {
+                  child.removeItem(item.id);
+                }
+              }
+            );
+            if (!child.items!.length) {
+              editTeachingPathStore!.currentNode!.removeChild(child);
+            }
+          }
+        );
+      } else {
+        editTeachingPathStore!.currentNode!.setChildren([]);
+      }
+      editTeachingPathStore!.currentEntity!.save();
+      this.context.changeContentType(null);
+      editTeachingPathStore!.setCurrentNode(null);
     }
-
-    editTeachingPathStore!.currentEntity!.save();
-
-    this.context.changeContentType(null);
-    editTeachingPathStore!.setCurrentNode(null);
   }
 
   public onChangePage = (newSelectedPage: { selected: number }) => {
@@ -476,6 +515,37 @@ export class AssignmentsList extends Component<Props, State> {
 
   public renderHeader = () => {
     const { currentTab } = this.state;
+    if (this.state.isEdit) {
+      return (
+        <div className="assignmentsListHeader flexBox spaceBetween" tabIndex={0}>
+          <div className="assignmentsListHeader__left">
+            <button
+              className={`buttonDev ${currentTab === 'all' ? 'selectedTab' : null}`}
+              onClick={this.selectAllAssignmentsTab}
+              title={intl.get('edit_teaching_path.modals.all_assignments')}
+            >
+              {intl.get('edit_teaching_path.modals.all_assignments')}
+            </button>
+            <button
+              className={`buttonDev ${currentTab === 'my' ? 'selectedTab' : null}`}
+              onClick={this.selectMyAssignmentsTab}
+              title={intl.get('edit_teaching_path.modals.my_assignments')}
+            >
+              {intl.get('edit_teaching_path.modals.my_assignments')}
+            </button>
+          </div>
+          <div className="assignmentsListHeader__right">
+            <button ref={this.refButton} onClick={this.closeModal} title={intl.get('generals.close_assignment')}>
+              <img
+                src={closeImg}
+                alt={intl.get('generals.close_assignment')}
+                title={intl.get('generals.close_assignment')}
+              />
+            </button>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="assignmentsListHeader flexBox spaceBetween" tabIndex={0}>
         <div className="assignmentsListHeader__left">

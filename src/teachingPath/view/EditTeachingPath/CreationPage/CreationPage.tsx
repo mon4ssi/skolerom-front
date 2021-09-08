@@ -23,6 +23,9 @@ import { MAX_TITLE_LENGTH } from 'utils/constants';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { Article } from 'assignment/Assignment';
 import { Loader } from 'components/common/Loader/Loader';
+import { AssignmentsList } from '../AddItemModal/AssignmentsList/AssignmentsList';
+import { ArticlesList } from '../AddItemModal/ArticlesList/ArticlesList';
+import { ItemContentTypeContext } from '../ItemContentTypeContext';
 
 import articleImg from 'assets/images/article-eye.svg';
 import assignmentImg from 'assets/images/assignment.svg';
@@ -39,6 +42,7 @@ const leftIndent = 160;
 
 const minNumberOfTitleCols = 20;
 const maxNumberOfTitleCols = 50;
+const num2 = 2;
 
 interface NodeContentProps {
   editTeachingPathStore?: EditTeachingPathStore;
@@ -57,10 +61,11 @@ interface NodeContentState {
 @inject('editTeachingPathStore')
 @observer
 class NodeContent extends Component<NodeContentProps, NodeContentState> {
-
+  public static contextType = ItemContentTypeContext;
   public titleRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
   public state = {
-    numberOfTitleCols: 20
+    numberOfTitleCols: 20,
+    EditDomain: false
   };
 
   public componentDidMount() {
@@ -160,6 +165,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
             grades={item.value.grades}
             numberOfQuestions={item.value.numberOfQuestions}
             onDelete={this.handleDeleteItem}
+            onEdit={this.handleEditItem}
             levels={levels}
           />
           {!withoutBottomVerticalLine && <div className="bottomVerticalLine" style={{ left: leftIndent }}/>}
@@ -193,6 +199,29 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       if (deleteConfirm) {
         node.removeItem(itemId);
       }
+    }
+  }
+
+  public handleEditItem = async (itemId: number, type: string) => {
+    const { editTeachingPathStore, node, parentNode } = this.props;
+    editTeachingPathStore!.setCurrentNode(node!);
+    this.context.changeContentType(null);
+    switch (type) {
+      case 'ARTICLE':
+        editTeachingPathStore!.trueIsEditArticles();
+        this.context.changeContentType(0);
+        break;
+      case 'ASSIGNMENT':
+        editTeachingPathStore!.trueIsEditAssignments();
+        this.context.changeContentType(1);
+        break;
+      case 'DOMAIN':
+        editTeachingPathStore!.trueIsEditDomain();
+        this.context.changeContentType(num2);
+        break;
+      default :
+        this.context.changeContentType(null);
+        break;
     }
   }
 

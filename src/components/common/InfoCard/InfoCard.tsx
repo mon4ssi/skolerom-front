@@ -46,6 +46,7 @@ interface Props {
   isDistributed?: boolean;
   onClick?(id: number, view?: string): void;
   onDelete?(itemId: number): void;
+  onEdit?(itemId: number, type: string): void;
   setActiveTooltip?(): void;
   deleteTeachingPath?(): void;
   copyTeachingPath?(id: number): void;
@@ -56,6 +57,11 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
   private handleClickDelete = (event: React.SyntheticEvent<HTMLButtonElement>) => {
     event.preventDefault();
     this.props.onDelete!(this.props.id!);
+  }
+
+  public handleEditClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    this.props.onEdit!(this.props.id!, this.props.type!);
   }
 
   public renderGrade = (grade: Grade) => {
@@ -73,7 +79,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
     <div className="actionButtons flexBox">
       {/* <img src={dragImg} alt="drag" /> */}
       <div className="actionButtonsItem refreshButtonsItem">
-        <button onClick={this.handleClickDelete} title={intl.get('generals.edit')}>
+        <button onClick={this.handleEditClick} title={intl.get('generals.edit')}>
           <img
             src={refresh}
             alt={intl.get('generals.edit')}
@@ -87,6 +93,21 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
             src={trashImg}
             alt={intl.get('generals.delete')}
             title={intl.get('generals.delete')}
+          />
+        </button>
+      </div>
+    </div>
+  )
+
+  public renderDomainButtons = () => (
+    <div className="actionButtons flexBox">
+      {/* <img src={dragImg} alt="drag" /> */}
+      <div className="actionButtonsItem refreshButtonsItem">
+        <button onClick={this.handleEditClick} title={intl.get('generals.edit')}>
+          <img
+            src={refresh}
+            alt={intl.get('generals.edit')}
+            title={intl.get('generals.edit')}
           />
         </button>
       </div>
@@ -301,6 +322,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
     return (
       <div className={infoCardClassNames} onClick={this.onCardClick} data-id={this.props.id}>
         {!isDomain && withButtons && this.renderActionButtons()}
+        {isDomain && this.renderDomainButtons()}
         <button title={title}>
           <img src={img || placeholderImgDefault} alt={title} title={title} className="cardImage"/>
         </button>
