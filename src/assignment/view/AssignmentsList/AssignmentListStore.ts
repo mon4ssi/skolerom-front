@@ -58,9 +58,9 @@ export class AssignmentListStore {
     const response = this.typeOfAssignmentsList === 'all' ?
       await this.assignmentList.getAllAssignmentsList() :
       await this.assignmentList.getMyAssignmentsList();
-
     if (this.fromTeachingPath) {
-      this.myAssignments = this.myAssignments.concat(response.myAssignments);
+      // this.myAssignments = this.myAssignments.concat(response.myAssignments);
+      this.myAssignments = response.myAssignments;
       if (!response.myAssignments.length) {
         this.isFetchedAssignmentsListFinished = true;
       }
