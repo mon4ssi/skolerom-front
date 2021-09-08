@@ -43,7 +43,6 @@ class AssignmentItem extends Component<AssignmentProps> {
 
   public isAssignmentSelected = () => {
     const { assignment, allItems } = this.props;
-
     return !!allItems.find(
       item => item.id === assignment.id
     );
@@ -367,6 +366,7 @@ export class AssignmentsList extends Component<Props, State> {
     const { editTeachingPathStore } = this.props;
     const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions } = this.state;
     this.props.assignmentListStore!.clearMyAssignmentsList();
+    this.props.assignmentListStore!.myAssignments = [];
     this.props.assignmentListStore!.setTypeOfAssignmentsList('all');
     this.setState({ itemsForNewChildren: this.getAllChildrenItems() });
     this.props.assignmentListStore!.setFromTeachingPath(true);
@@ -583,7 +583,6 @@ export class AssignmentsList extends Component<Props, State> {
   public renderAssignmentsList = () => {
     const { assignmentListStore } = this.props;
     const assignmentsList = assignmentListStore!.getAllMyAssignments();
-
     if (assignmentListStore!.assignmentsState === StoreState.PENDING && !assignmentsList.length) {
       return (
         <div className="noResults" id="List" aria-live="polite" aria-atomic="true">
