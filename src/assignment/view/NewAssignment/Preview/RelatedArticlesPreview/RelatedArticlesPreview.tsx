@@ -237,7 +237,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     dataArticles!.multidisciplinay_filter!.forEach((element) => {
       newArrayGrepMulti.push({
         // tslint:disable-next-line: variable-name
-        id: Number(element.multidisciplinay_id),
+        id: Number(element.main_topic_id),
         title: element.description!
       });
     });
@@ -259,8 +259,8 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     dataArticles!.source_filter!.forEach((element) => {
       newArrayGrepSource.push({
         // tslint:disable-next-line: variable-name
-        id: Number(element.source_id),
-        title: element.description!
+        id: Number(element.term_id),
+        title: element.name!
       });
     });
     this.setState(
@@ -490,7 +490,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     dataArticles!.multidisciplinay_filter!.forEach((element) => {
       newArrayGrepMulti.push({
         // tslint:disable-next-line: variable-name
-        id: Number(element.multidisciplinay_id),
+        id: Number(element.main_topic_id),
         title: element.description!
       });
     });
@@ -518,7 +518,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         this.state.grepDataFilters!.subject_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
           const allSympGrades = element.grade_ids;
-          const allSympGradesLength = allSympGrades!.split(value).length;
+          const allSympGradesLength = allSympGrades!.length;
           if (allSympGradesLength > 1) {
             newArraySubject.push({
               // tslint:disable-next-line: variable-name
@@ -535,13 +535,15 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         });
         this.state.grepDataFilters!.core_elements_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
-          const allSympGrades = element.grade_ids;
+          const allSympGrades = element.grade_ids!.map(function(grade){
+            return grade.grade_id;
+          });
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueSubject.length > 0) {
-            element.grade_subjects!.forEach((item) => {
-              if (item.grade_id === value) {
-                const allSympSubjects = item.subjects_relations;
+            element.grade_ids!.forEach((grade) => {
+              if (grade.grade_id === value) {
+                const allSympSubjects = grade.subject_ids;
                 allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
               }
             });
@@ -567,20 +569,27 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         });
         this.state.grepDataFilters!.multidisciplinay_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
-          const allSympGrades = element.grade_ids;
+          const allSympGrades : Array<string> = [];
+          element.grade_ids!.forEach((grade) => {
+            grade.subject_ids!.forEach(subject => {
+              allSympGrades.push(subject.subject_id!);
+            });
+          });
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueSubject.length > 0) {
-            element.grade_subjects!.forEach((item) => {
-              if (item.grade_id === value) {
-                const allSympSubjects = item.subjects_relations;
+            element.grade_ids!.forEach((grade) => {
+              if (grade.grade_id === value) {
+                const allSympSubjects = grade.subject_ids!.map(function(subject){
+                    return subject.subject_id;
+                });
                 allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
               }
             });
             if (allSympGradesLength && allSympSubjectsLength) {
               newArrayMulti.push({
                 // tslint:disable-next-line: variable-name
-                id: Number(element.multidisciplinay_id),
+                id: Number(element.main_topic_id),
                 title: element.description!
               });
             }
@@ -588,7 +597,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
             if (allSympGradesLength) {
               newArrayMulti.push({
                 // tslint:disable-next-line: variable-name
-                id: Number(element.multidisciplinay_id),
+                id: Number(element.main_topic_id),
                 title: element.description!
               });
             }
@@ -599,13 +608,17 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         });
         this.state.grepDataFilters!.goals_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
-          const allSympGrades = element.grade_ids;
+          const allSympGrades = element.grade_ids!.map(function(grade){
+            return grade.grade_id;
+          });
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueSubject.length > 0) {
-            element.grade_subjects!.forEach((item) => {
-              if (item.grade_id === value) {
-                const allSympSubjects = item.subjects_relations;
+            element.grade_ids!.forEach((grade) => {
+              if (grade.grade_id === value) {
+                const allSympSubjects = grade.subject_ids!.map(function(subject){
+                  return subject.subject_id;
+                });
                 allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
               }
             });
@@ -629,35 +642,35 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         this.setState({
           selectedGoalsFilter : newArrayGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
         });
-        this.state.grepDataFilters!.source_filter!.forEach((element) => {
-          // tslint:disable-next-line: variable-name
-          const allSympGrades = element.grade_ids;
-          const allSympGradesLength = allSympGrades!.includes(value);
-          let allSympSubjectsLength = false;
-          if (this.state.valueSubject.length > 0) {
-            element.grade_subjects!.forEach((item) => {
-              if (item.grade_id === value) {
-                const allSympSubjects = item.subjects_relations;
-                allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
-              }
-            });
-            if (allSympGradesLength && allSympSubjectsLength) {
-              newArraySource.push({
-                // tslint:disable-next-line: variable-name
-                id: Number(element.source_id),
-                title: element.description!
-              });
-            }
-          } else {
-            if (allSympGradesLength) {
-              newArraySource.push({
-                // tslint:disable-next-line: variable-name
-                id: Number(element.source_id),
-                title: element.description!
-              });
-            }
-          }
-        });
+        // this.state.grepDataFilters!.source_filter!.forEach((element) => {
+        //   // tslint:disable-next-line: variable-name
+        //   const allSympGrades = element.grade_ids;
+        //   const allSympGradesLength = allSympGrades!.includes(value);
+        //   let allSympSubjectsLength = false;
+        //   if (this.state.valueSubject.length > 0) {
+        //     element.grade_subjects!.forEach((item) => {
+        //       if (item.grade_id === value) {
+        //         const allSympSubjects = item.subjects_relations;
+        //         allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
+        //       }
+        //     });
+        //     if (allSympGradesLength && allSympSubjectsLength) {
+        //       newArraySource.push({
+        //         // tslint:disable-next-line: variable-name
+        //         id: Number(element.source_id),
+        //         title: element.description!
+        //       });
+        //     }
+        //   } else {
+        //     if (allSympGradesLength) {
+        //       newArraySource.push({
+        //         // tslint:disable-next-line: variable-name
+        //         id: Number(element.source_id),
+        //         title: element.description!
+        //       });
+        //     }
+        //   }
+        // });
         this.setState(
           {
             selectedSourceFilter : newArraySource
@@ -707,13 +720,16 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         });
         this.state.grepDataFilters!.core_elements_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
-          const allSympGrades = element.subject_ids;
+          const allSympGrades: Array<string> = [];
+          element.grade_ids!.forEach(grade => {
+            grade.subject_ids!.forEach(subject_id => allSympGrades.push(subject_id))
+          });;
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueGrade.length > 0) {
-            element.grade_subjects!.forEach((item) => {
-              if (item.grade_id === this.state.valueGrade) {
-                const allSympSubjects = item.subjects_relations;
+            element.grade_ids!.forEach((grade) => {
+              if (grade.grade_id === this.state.valueGrade) {
+                const allSympSubjects = grade.subject_ids;
                 allSympSubjectsLength = allSympSubjects!.includes(value);
               }
             });
@@ -739,20 +755,27 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         });
         this.state.grepDataFilters!.multidisciplinay_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
-          const allSympGrades = element.subject_ids;
+          const allSympGrades: Array<string> = []; 
+          element.grade_ids!.forEach((grade) => {
+            grade.subject_ids!.forEach((subject) => {
+              allSympGrades.push(subject.subject_id!);
+            })
+          });
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueGrade.length > 0) {
-            element.grade_subjects!.forEach((item) => {
-              if (item.grade_id === this.state.valueGrade) {
-                const allSympSubjects = item.subjects_relations;
+            element.grade_ids!.forEach((grade) => {
+              if (grade.grade_id === this.state.valueGrade) {
+                const allSympSubjects = grade.subject_ids!.map(function(subject){
+                  return subject.subject_id;
+                });
                 allSympSubjectsLength = allSympSubjects!.includes(value);
               }
             });
             if (allSympGradesLength && allSympSubjectsLength) {
               newArrayMulti.push({
                 // tslint:disable-next-line: variable-name
-                id: Number(element.multidisciplinay_id),
+                id: Number(element.main_topic_id),
                 title: element.description!
               });
             }
@@ -760,7 +783,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
             if (allSympGradesLength) {
               newArrayMulti.push({
                 // tslint:disable-next-line: variable-name
-                id: Number(element.multidisciplinay_id),
+                id: Number(element.main_topic_id),
                 title: element.description!
               });
             }
@@ -771,13 +794,20 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         });
         this.state.grepDataFilters!.goals_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
-          const allSympGrades = element.subject_ids;
+          const allSympGrades : Array<string> = [];
+          element.grade_ids!.forEach((grade) => {
+            grade.subject_ids!.forEach((subject) => {
+              allSympGrades.push(subject.subject_id!);
+            })
+          });
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueGrade.length > 0) {
-            element.grade_subjects!.forEach((item) => {
-              if (item.grade_id === this.state.valueGrade) {
-                const allSympSubjects = item.subjects_relations;
+            element.grade_ids!.forEach((grade) => {
+              if (grade.grade_id === this.state.valueGrade) {
+                const allSympSubjects = grade.subject_ids!.map(subject => {
+                  return subject.subject_id;
+                });
                 allSympSubjectsLength = allSympSubjects!.includes(value);
               }
             });
@@ -801,35 +831,35 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         this.setState({
           selectedGoalsFilter : newArrayGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
         });
-        this.state.grepDataFilters!.source_filter!.forEach((element) => {
-          // tslint:disable-next-line: variable-name
-          const allSympGrades = element.subject_ids;
-          const allSympGradesLength = allSympGrades!.includes(value);
-          let allSympSubjectsLength = false;
-          if (this.state.valueGrade.length > 0) {
-            element.grade_subjects!.forEach((item) => {
-              if (item.grade_id === this.state.valueGrade) {
-                const allSympSubjects = item.subjects_relations;
-                allSympSubjectsLength = allSympSubjects!.includes(value);
-              }
-            });
-            if (allSympGradesLength && allSympSubjectsLength) {
-              newArraySource.push({
-                // tslint:disable-next-line: variable-name
-                id: Number(element.source_id),
-                title: element.description!
-              });
-            }
-          } else {
-            if (allSympGradesLength) {
-              newArraySource.push({
-                // tslint:disable-next-line: variable-name
-                id: Number(element.source_id),
-                title: element.description!
-              });
-            }
-          }
-        });
+        // this.state.grepDataFilters!.source_filter!.forEach((element) => {
+        //   // tslint:disable-next-line: variable-name
+        //   const allSympGrades = element.subject_ids;
+        //   const allSympGradesLength = allSympGrades!.includes(value);
+        //   let allSympSubjectsLength = false;
+        //   if (this.state.valueGrade.length > 0) {
+        //     element.grade_subjects!.forEach((item) => {
+        //       if (item.grade_id === this.state.valueGrade) {
+        //         const allSympSubjects = item.subjects_relations;
+        //         allSympSubjectsLength = allSympSubjects!.includes(value);
+        //       }
+        //     });
+        //     if (allSympGradesLength && allSympSubjectsLength) {
+        //       newArraySource.push({
+        //         // tslint:disable-next-line: variable-name
+        //         id: Number(element.source_id),
+        //         title: element.description!
+        //       });
+        //     }
+        //   } else {
+        //     if (allSympGradesLength) {
+        //       newArraySource.push({
+        //         // tslint:disable-next-line: variable-name
+        //         id: Number(element.source_id),
+        //         title: element.description!
+        //       });
+        //     }
+        //   }
+        // });
         this.setState(
           {
             selectedSourceFilter : newArraySource
