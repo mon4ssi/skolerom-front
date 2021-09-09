@@ -63,4 +63,8 @@ export class TeachingPathService {
   public async deleteTeachingPathAnswers(teachingPathId: number, answerId: number) {
     return this.teachingPathRepo.deleteTeachingPathAnswers(teachingPathId, answerId);
   }
+
+  public async getTeachingPathListOfStudentInList(studentId: number, filter: Filter) {
+    return this.teachingPathRepo.getTeachingPathListOfStudentInList(studentId, filter);
+  }
 }

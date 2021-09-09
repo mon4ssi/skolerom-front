@@ -65,6 +65,15 @@ export class TeachingPathsListStore {
   }
 
   @action
+  public async getTeachingPathListOfStudentInList(studentId: number, filter: Filter) {
+    this.teachingPathsState = StoreState.LOADING;
+    const response = await this.listTeachingPaths.getTeachingPathListOfStudentInList(studentId);
+    this.teachingPathList = response.teachingPathsList;
+    this.paginationTotalPages = response.total_pages;
+    this.teachingPathsState = StoreState.PENDING;
+  }
+
+  @action
   public async copyEntity(id: number): Promise<number> {
     try {
       const copyId = await this.listTeachingPaths.copyTeachingPath(id);

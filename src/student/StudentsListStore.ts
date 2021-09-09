@@ -5,6 +5,7 @@ import { injector } from 'Injector';
 import { STUDENT_SERVICE, StudentService } from 'student/service';
 import { Student, StudentsList, StudentLevel } from 'user/student/Student';
 import { AssignmentList, Assignment, Grade, Subject } from 'assignment/Assignment';
+import { TeachingPath, TeachingPathsList } from 'teachingPath/TeachingPath';
 import { USER_SERVICE, UserService } from 'user/UserService';
 
 import { debounce } from 'utils/debounce';
@@ -20,6 +21,7 @@ export class StudentsListStore {
   private studentService: StudentService = injector.get(STUDENT_SERVICE);
   private studentsListService = new StudentsList();
   private assignmentsListService: AssignmentList = new AssignmentList();
+  private TeachingPathsListService: TeachingPathsList = new TeachingPathsList();
 
   @observable public studentsListState: StoreState = StoreState.PENDING;
   @observable public studentsList: Array<Student> = [];
@@ -28,7 +30,9 @@ export class StudentsListStore {
   @observable public currentStudent: Student | null = null;
 
   @observable public assignmentsListState: StoreState = StoreState.PENDING;
+  @observable public teachingPathListState: StoreState = StoreState.PENDING;
   @observable public assignmentsList: Array<Assignment> = [];
+  @observable public teachingpathList: Array<TeachingPath> = [];
   @observable public assignmentsListForSkeleton: Array<Assignment> = new Array(ASSIGNMENTS_PER_PAGE).fill(new Assignment({ id: 0 }));
   @observable public paginationTotalPages: number = 0;
 
@@ -38,6 +42,7 @@ export class StudentsListStore {
 
   public studentsDebounceWrapper = debounce(this.getStudentsList, DEBOUNCE_TIME);
   public assignmentsDebounceWrapper = debounce(this.getAssignmentsList, DEBOUNCE_TIME);
+  public teachingPathDebounceWrapper = debounce(this.getTeachingPathList, DEBOUNCE_TIME);
 
   @computed
   public get filter() {
@@ -47,6 +52,11 @@ export class StudentsListStore {
   @computed
   public get currentAssignmentListPage(): number {
     return !isNil(this.assignmentsListService.filter.page) ? this.assignmentsListService.filter.page : 1;
+  }
+
+  @computed
+  public get currentTeachingpathListPage(): number {
+    return !isNil(this.TeachingPathsListService.filter.page) ? this.TeachingPathsListService.filter.page : 1;
   }
 
   @action
@@ -98,15 +108,28 @@ export class StudentsListStore {
   }
 
   @action
+  public clearTeachingPathList() {
+    this.teachingpathList = [];
+  }
+
+  @action
   public async getAssignmentsList() {
     this.assignmentsListState = StoreState.LOADING;
-    this.assignmentsListService.setFiltersPerPage(ASSIGNMENTS_PER_PAGE);
+    this.TeachingPathsListService.setFiltersPerPage(ASSIGNMENTS_PER_PAGE);
     const response = await this.assignmentsListService.getAssignmentListOfStudentInList(this.currentStudent!.id);
-
     this.assignmentsList = response.myAssignments;
     this.paginationTotalPages = response.total_pages;
-
     this.assignmentsListState = StoreState.PENDING;
+  }
+
+  @action
+  public async getTeachingPathList() {
+    this.teachingPathListState = StoreState.LOADING;
+    this.assignmentsListService.setFiltersPerPage(ASSIGNMENTS_PER_PAGE);
+    const response = await this.TeachingPathsListService.getTeachingPathListOfStudentInList(this.currentStudent!.id);
+    this.teachingpathList = response.teachingPathsList;
+    this.paginationTotalPages = response.total_pages;
+    this.teachingPathListState = StoreState.PENDING;
   }
 
   public setFiltersIsEvaluated(isEvaluated: string | null) {
@@ -133,6 +156,20 @@ export class StudentsListStore {
     this.assignmentsList = this.assignmentsList.concat(response.myAssignments);
     this.paginationTotalPages = response.total_pages;
     this.assignmentsListState = StoreState.PENDING;
+  }
+
+  public async setTeachingPathFiltersPage(number: number) {
+    if (this.paginationTotalPages === this.currentTeachingpathListPage) {
+      return null;
+    }
+    this.TeachingPathsListService.setFiltersPage(number);
+    this.teachingPathListState = StoreState.LOADING;
+    this.TeachingPathsListService.setFiltersPerPage(ASSIGNMENTS_PER_PAGE);
+    const response = await this.TeachingPathsListService.getTeachingPathListOfStudentInList(this.currentStudent!.id);
+
+    this.teachingpathList = this.teachingpathList.concat(response.teachingPathsList);
+    this.paginationTotalPages = response.total_pages;
+    this.teachingPathListState = StoreState.PENDING;
   }
 
   public async setAssignmentsFiltersSearchQuery(searchQuery: string) {

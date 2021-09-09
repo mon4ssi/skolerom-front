@@ -242,7 +242,7 @@ export class TeachingPathApi implements TeachingPathRepo {
     teachingPathsList: Array<TeachingPath>,
     total_pages: number;
   }> {
-    const response = (await API.get('api/teacher/assignments/distributes', { params: filter })).data;
+    const response = (await API.get('api/teacher/teaching-paths/distributes', { params: filter })).data;
     return {
       teachingPathsList: response.data,
       total_pages: response.meta.pagination.total_pages,
@@ -270,6 +270,26 @@ export class TeachingPathApi implements TeachingPathRepo {
       data: response.data.data,
       total_pages: response.data.meta.pagination.total_pages
     };
+  }
+
+  public async getTeachingPathListOfStudentInList(studentId: number, filter: Filter) {
+    try {
+      const response = await API.get('api/teacher/students/teaching-paths', {
+        params: {
+          studentId,
+          ...buildFilterDTO(filter)
+        }
+      });
+      return {
+        teachingPathsList: response.data,
+        total_pages: response.data.meta.pagination.total_pages
+      };
+    } catch {
+      return {
+        teachingPathsList: [],
+        total_pages: 0
+      };
+    }
   }
 
   public async finishTeachingPath(id: number): Promise<void> {
