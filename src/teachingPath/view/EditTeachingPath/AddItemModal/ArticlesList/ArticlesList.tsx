@@ -229,7 +229,7 @@ export class ArticlesList extends Component<Props, State> {
 
   public async componentDidMount() {
     const newArrayGrades : Array<Grade> = [];
-    const newArraySubjects : Array<Subject> = [];
+    let newArraySubjects : Array<Subject> = [];
     const newArrayGrepCore : Array<Greep> = [];
     const newArrayGrepMulti : Array<Greep> = [];
     const newArrayGrepGoals : Array<Greep> = [];
