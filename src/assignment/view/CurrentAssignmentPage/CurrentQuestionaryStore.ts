@@ -1,8 +1,10 @@
 import { action, computed, observable, reaction, toJS } from 'mobx';
+import { Route, Switch, Redirect, withRouter, RouteComponentProps, useHistory, Router } from 'react-router-dom';
 import intl from 'react-intl-universal';
 import { injector } from 'Injector';
 
 import { QUESTIONARY_SERVICE, QuestionaryService } from 'assignment/questionary/service';
+import { LocationState } from 'assignment/view/CurrentAssignmentPage/CurrentAssignmentPage';
 import { Article, ARTICLE_SERVICE_KEY, Assignment, Question } from 'assignment/Assignment';
 import { Answer, Questionary, RedirectData } from 'assignment/questionary/Questionary';
 import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteractor';
@@ -30,7 +32,6 @@ export class CurrentQuestionaryStore {
   @observable public isStartedAssignment: boolean = false;
   @observable public relatedArticles: Array<Article> = [];
   public allArticlesread: boolean = false;
-
   public async createQuestionaryByAssignmentId(id: number, redirectData?: RedirectData) {
     this.isLoading = true;
     const questionary = redirectData !== undefined

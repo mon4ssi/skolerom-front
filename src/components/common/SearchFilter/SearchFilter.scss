@@ -12,7 +12,11 @@
   flex-wrap: wrap;
   box-sizing: padding-box;
   min-height: fit-content;
-
+  
+  .centerMin {
+    text-align: left;
+    font-size: 16px;
+  }
   select:focus > option:checked { // TODO use BEM here
     font-weight: bold !important;
   }
@@ -119,6 +123,7 @@
   }
 }
 
+
 .SearchFilter__search__submit {
   background: url(../../../assets/images/search.svg) no-repeat right center;
   background-position: 7px 6px;
@@ -220,6 +225,16 @@
       }
     }
   }
+}
+.FiltersModal__backgroundside {
+  position: fixed;
+  top: 0px;
+  left: 500px;
+  width: calc(100% - 500px);
+  height: 100%;
+  background: transparent;
+  z-index: -1;
+  cursor: pointer;
 }
 .fixedsModal .FiltersModal {
   top: 78px;

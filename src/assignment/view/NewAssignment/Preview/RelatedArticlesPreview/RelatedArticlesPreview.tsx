@@ -56,12 +56,15 @@ interface State {
   selectedSourceAll: Array<Greep>;
   valueGrade: string;
   valueSubject: string;
-  MySelectGrade: number | null;
-  MySelectSubject: number | null;
-  MySelectMulti: number | null;
-  MySelectSource: number | null;
+  MySelectGrade: Array<number>;
+  MySelectSubject: Array<number>;
+  MySelectMulti: Array<number>;
+  MySelectSource: Array<number>;
   showSourceFilter: boolean;
   userFilters: boolean;
+  filtersisUsed: boolean;
+  filtersAjaxLoading: boolean;
+  filtersAjaxLoadingGoals: boolean;
   myValueCore: Array<any>;
   goalValueFilter: Array<any>;
 }
@@ -101,12 +104,15 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       valueGrade: '',
       valueSubject: '',
       activeGrepFilters: false,
-      MySelectGrade: null,
-      MySelectSubject: null,
-      MySelectMulti: null,
-      MySelectSource: null,
+      MySelectGrade: [],
+      MySelectSubject: [],
+      MySelectMulti: [],
+      MySelectSource: [],
       showSourceFilter: false,
       userFilters: false,
+      filtersisUsed: false,
+      filtersAjaxLoading: false,
+      filtersAjaxLoadingGoals: false,
       myValueCore: [],
       goalValueFilter: []
     };
@@ -147,9 +153,13 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       this.setState({ appliedFilters: {} });
       filters = {};
     }
-
     this.setState({ appliedFilters: filters });
     this.setState({ userFilters: true });
+    if (filters.subjects || filters.grades || filters.core || filters.multi || filters.goal || filters.source) {
+      this.setState({ filtersisUsed: true });
+    } else {
+      this.setState({ filtersisUsed: false });
+    }
     if (filterName === 'searchTitle') {
       newAssignmentStore!.getArticlesWithDebounce(filters);
       allModal[0].classList.remove('loadingdata');
@@ -179,6 +189,8 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
 
     const isNextPage = newAssignmentStore!.allArticles.length > 0;
     document.addEventListener('keyup', this.handleKeyboardControl);
+    this.setState({ filtersAjaxLoading: true });
+    this.setState({ filtersAjaxLoadingGoals: true });
     await newAssignmentStore!.getArticles({ isNextPage, ...appliedFilters });
     await newAssignmentStore!.getGrades();
     await newAssignmentStore!.getSubjects();
@@ -225,7 +237,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     dataArticles!.multidisciplinay_filter!.forEach((element) => {
       newArrayGrepMulti.push({
         // tslint:disable-next-line: variable-name
-        id: Number(element.multidisciplinay_id),
+        id: Number(element.main_topic_id),
         title: element.description!
       });
     });
@@ -241,14 +253,14 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       });
     });
     this.setState({
-      selectedGoalsAll : newArrayGrepGoals
+      selectedGoalsAll : newArrayGrepGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
     });
     // tslint:disable-next-line: variable-name
     dataArticles!.source_filter!.forEach((element) => {
       newArrayGrepSource.push({
         // tslint:disable-next-line: variable-name
-        id: Number(element.source_id),
-        title: element.description!
+        id: Number(element.term_id),
+        title: element.name!
       });
     });
     this.setState(
@@ -266,6 +278,8 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     this.setState({
       activeGrepFilters : true
     });
+    this.setState({ filtersAjaxLoading: false });
+    this.setState({ filtersAjaxLoadingGoals: false });
   }
 
   public componentWillUnmount() {
@@ -435,6 +449,8 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
   }
 
   public handleClickReset = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const newArrayGrepCore : Array<Greep> = [];
+    const newArrayGrepMulti : Array<Greep> = [];
     this.handleChangeFilters('none', 0);
     const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
     GradeFilterSubjectArray.forEach((e) => {
@@ -452,6 +468,38 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     GradeFilterArray.forEach((e) => {
       e.classList.remove('active');
     });
+    this.setState({ MySelectGrade: [] });
+    this.setState({ MySelectSubject: [] });
+    this.setState({ MySelectMulti: [] });
+    this.setState({ MySelectSource: [] });
+    this.setState({ myValueCore: [] });
+    this.setState({ goalValueFilter: [] });
+    this.setState({ filtersAjaxLoading: true });
+    this.setState({ filtersAjaxLoadingGoals: true });
+    await this.props.newAssignmentStore!.getFiltersArticlePanel();
+    const dataArticles = this.props.newAssignmentStore!.getAllArticlePanelFilters();
+    // tslint:disable-next-line: variable-name
+    dataArticles!.core_elements_filter!.forEach((element) => {
+      newArrayGrepCore.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(element.core_element_id),
+        title: element.description!
+      });
+    });
+    // tslint:disable-next-line: variable-name
+    dataArticles!.multidisciplinay_filter!.forEach((element) => {
+      newArrayGrepMulti.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(element.main_topic_id),
+        title: element.description!
+      });
+    });
+    this.setState({
+      selectedCoresAll : newArrayGrepCore,
+      selectedMultisAll : newArrayGrepMulti
+    });
+    this.setState({ filtersAjaxLoading: false });
+    this.setState({ filtersAjaxLoadingGoals: false });
   }
 
   public handleClickGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -461,22 +509,16 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     const newArrayGoals : Array<Greep> = [];
     const newArraySource : Array<Greep> = [];
     const value = e.currentTarget.value;
-    if (this.state.MySelectGrade !== Number(value)) {
-      this.setState({
-        MySelectGrade : Number(value)
-      });
+    // const valueSelectedGrades = this.state.MySelectGrade;
+    let valueSelectedGrades: Array<number> = [];
+    if (!this.state.MySelectGrade!.includes(Number(value))) {
+      valueSelectedGrades!.push(Number(value));
       if (this.state.activeGrepFilters) {
-        const GradeFilterArray = Array.from(document.getElementsByClassName('gradesFilterClass') as HTMLCollectionOf<HTMLElement>);
-        this.handleChangeFilters('grades', Number(value));
-        GradeFilterArray.forEach((e) => {
-          e.classList.remove('active');
-        });
         e.currentTarget.classList.add('active');
-        e.currentTarget.focus();
         this.state.grepDataFilters!.subject_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
           const allSympGrades = element.grade_ids;
-          const allSympGradesLength = allSympGrades!.split(value).length;
+          const allSympGradesLength = allSympGrades!.length;
           if (allSympGradesLength > 1) {
             newArraySubject.push({
               // tslint:disable-next-line: variable-name
@@ -493,13 +535,13 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         });
         this.state.grepDataFilters!.core_elements_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
-          const allSympGrades = element.grade_ids;
+          const allSympGrades = element.grade_ids!.map(grade => grade.grade_id);
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueSubject.length > 0) {
-            element.grade_subjects!.forEach((item) => {
-              if (item.grade_id === value) {
-                const allSympSubjects = item.subjects_relations;
+            element.grade_ids!.forEach((grade) => {
+              if (grade.grade_id === value) {
+                const allSympSubjects = grade.subject_ids;
                 allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
               }
             });
@@ -525,20 +567,25 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         });
         this.state.grepDataFilters!.multidisciplinay_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
-          const allSympGrades = element.grade_ids;
+          const allSympGrades : Array<string> = [];
+          element.grade_ids!.forEach((grade) => {
+            grade.subject_ids!.forEach(subject =>
+              allSympGrades.push(subject.subject_id!)
+            );
+          });
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueSubject.length > 0) {
-            element.grade_subjects!.forEach((item) => {
-              if (item.grade_id === value) {
-                const allSympSubjects = item.subjects_relations;
+            element.grade_ids!.forEach((grade) => {
+              if (grade.grade_id === value) {
+                const allSympSubjects = grade.subject_ids!.map(subject => subject.subject_id);
                 allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
               }
             });
             if (allSympGradesLength && allSympSubjectsLength) {
               newArrayMulti.push({
                 // tslint:disable-next-line: variable-name
-                id: Number(element.multidisciplinay_id),
+                id: Number(element.main_topic_id),
                 title: element.description!
               });
             }
@@ -546,7 +593,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
             if (allSympGradesLength) {
               newArrayMulti.push({
                 // tslint:disable-next-line: variable-name
-                id: Number(element.multidisciplinay_id),
+                id: Number(element.main_topic_id),
                 title: element.description!
               });
             }
@@ -557,13 +604,13 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         });
         this.state.grepDataFilters!.goals_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
-          const allSympGrades = element.grade_ids;
+          const allSympGrades = element.grade_ids!.map(grade => grade.grade_id);
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueSubject.length > 0) {
-            element.grade_subjects!.forEach((item) => {
-              if (item.grade_id === value) {
-                const allSympSubjects = item.subjects_relations;
+            element.grade_ids!.forEach((grade) => {
+              if (grade.grade_id === value) {
+                const allSympSubjects = grade.subject_ids!.map(subject => subject.subject_id);
                 allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
               }
             });
@@ -585,37 +632,37 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
           }
         });
         this.setState({
-          selectedGoalsFilter : newArrayGoals
+          selectedGoalsFilter : newArrayGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
         });
-        this.state.grepDataFilters!.source_filter!.forEach((element) => {
-          // tslint:disable-next-line: variable-name
-          const allSympGrades = element.grade_ids;
-          const allSympGradesLength = allSympGrades!.includes(value);
-          let allSympSubjectsLength = false;
-          if (this.state.valueSubject.length > 0) {
-            element.grade_subjects!.forEach((item) => {
-              if (item.grade_id === value) {
-                const allSympSubjects = item.subjects_relations;
-                allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
-              }
-            });
-            if (allSympGradesLength && allSympSubjectsLength) {
-              newArraySource.push({
-                // tslint:disable-next-line: variable-name
-                id: Number(element.source_id),
-                title: element.description!
-              });
-            }
-          } else {
-            if (allSympGradesLength) {
-              newArraySource.push({
-                // tslint:disable-next-line: variable-name
-                id: Number(element.source_id),
-                title: element.description!
-              });
-            }
-          }
-        });
+        // this.state.grepDataFilters!.source_filter!.forEach((element) => {
+        //   // tslint:disable-next-line: variable-name
+        //   const allSympGrades = element.grade_ids;
+        //   const allSympGradesLength = allSympGrades!.includes(value);
+        //   let allSympSubjectsLength = false;
+        //   if (this.state.valueSubject.length > 0) {
+        //     element.grade_subjects!.forEach((item) => {
+        //       if (item.grade_id === value) {
+        //         const allSympSubjects = item.subjects_relations;
+        //         allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
+        //       }
+        //     });
+        //     if (allSympGradesLength && allSympSubjectsLength) {
+        //       newArraySource.push({
+        //         // tslint:disable-next-line: variable-name
+        //         id: Number(element.source_id),
+        //         title: element.description!
+        //       });
+        //     }
+        //   } else {
+        //     if (allSympGradesLength) {
+        //       newArraySource.push({
+        //         // tslint:disable-next-line: variable-name
+        //         id: Number(element.source_id),
+        //         title: element.description!
+        //       });
+        //     }
+        //   }
+        // });
         this.setState(
           {
             selectedSourceFilter : newArraySource
@@ -630,50 +677,49 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         );
       }
     } else {
-      this.setState({
-        MySelectGrade : null
-      });
+      /*const indexSelected = valueSelectedGrades!.indexOf(Number(value));
+      if (indexSelected > -1) {
+        valueSelectedGrades!.splice(indexSelected, 1);
+      }
       if (this.state.activeGrepFilters) {
-        const GradeFilterArray = Array.from(document.getElementsByClassName('gradesFilterClass') as HTMLCollectionOf<HTMLElement>);
-        this.handleChangeFilters('grades', '');
-        GradeFilterArray.forEach((e) => {
-          e.classList.remove('active');
-        });
+        e.currentTarget.classList.remove('active');
         e.currentTarget.focus();
+      }*/
+      valueSelectedGrades = [];
+      if (this.state.activeGrepFilters) {
+        e.currentTarget.classList.remove('active');
       }
     }
+    this.handleChangeFilters('grades', String(valueSelectedGrades));
+    this.setState({
+      MySelectGrade : valueSelectedGrades
+    });
   }
 
   public handleClickSubject = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const value = e.currentTarget.value;
     const newArrayCore : Array<Greep> = [];
     const newArrayMulti : Array<Greep> = [];
     const newArrayGoals : Array<Greep> = [];
     const newArraySource : Array<Greep> = [];
-    if (this.state.MySelectSubject !== Number(value)) {
-      this.setState({
-        MySelectSubject : Number(value)
-      });
+    const value = e.currentTarget.value;
+    const valueSelectedSubject = this.state.MySelectSubject;
+    if (!valueSelectedSubject!.includes(Number(value))) {
+      valueSelectedSubject!.push(Number(value));
       if (this.state.activeGrepFilters) {
-        this.handleChangeFilters('subjects', Number(value));
-        const GradeFilterArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
-        GradeFilterArray.forEach((e) => {
-          e.classList.remove('active');
-        });
         e.currentTarget.classList.add('active');
-        e.currentTarget.focus();
         this.setState({
           valueSubject: value
         });
         this.state.grepDataFilters!.core_elements_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
-          const allSympGrades = element.subject_ids;
+          const allSympGrades: Array<string> = [];
+          element.grade_ids!.forEach(grade => grade.subject_ids!.forEach(subjectId => allSympGrades.push(subjectId)));
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueGrade.length > 0) {
-            element.grade_subjects!.forEach((item) => {
-              if (item.grade_id === this.state.valueGrade) {
-                const allSympSubjects = item.subjects_relations;
+            element.grade_ids!.forEach((grade) => {
+              if (grade.grade_id === this.state.valueGrade) {
+                const allSympSubjects = grade.subject_ids;
                 allSympSubjectsLength = allSympSubjects!.includes(value);
               }
             });
@@ -699,20 +745,25 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         });
         this.state.grepDataFilters!.multidisciplinay_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
-          const allSympGrades = element.subject_ids;
+          const allSympGrades: Array<string> = [];
+          element.grade_ids!.forEach((grade) => {
+            grade.subject_ids!.forEach((subject) => {
+              allSympGrades.push(subject.subject_id!);
+            });
+          });
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueGrade.length > 0) {
-            element.grade_subjects!.forEach((item) => {
-              if (item.grade_id === this.state.valueGrade) {
-                const allSympSubjects = item.subjects_relations;
+            element.grade_ids!.forEach((grade) => {
+              if (grade.grade_id === this.state.valueGrade) {
+                const allSympSubjects = grade.subject_ids!.map(subject => subject.subject_id);
                 allSympSubjectsLength = allSympSubjects!.includes(value);
               }
             });
             if (allSympGradesLength && allSympSubjectsLength) {
               newArrayMulti.push({
                 // tslint:disable-next-line: variable-name
-                id: Number(element.multidisciplinay_id),
+                id: Number(element.main_topic_id),
                 title: element.description!
               });
             }
@@ -720,7 +771,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
             if (allSympGradesLength) {
               newArrayMulti.push({
                 // tslint:disable-next-line: variable-name
-                id: Number(element.multidisciplinay_id),
+                id: Number(element.main_topic_id),
                 title: element.description!
               });
             }
@@ -731,13 +782,18 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         });
         this.state.grepDataFilters!.goals_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
-          const allSympGrades = element.subject_ids;
+          const allSympGrades : Array<string> = [];
+          element.grade_ids!.forEach((grade) => {
+            grade.subject_ids!.forEach((subject) => {
+              allSympGrades.push(subject.subject_id!);
+            });
+          });
           const allSympGradesLength = allSympGrades!.includes(value);
           let allSympSubjectsLength = false;
           if (this.state.valueGrade.length > 0) {
-            element.grade_subjects!.forEach((item) => {
-              if (item.grade_id === this.state.valueGrade) {
-                const allSympSubjects = item.subjects_relations;
+            element.grade_ids!.forEach((grade) => {
+              if (grade.grade_id === this.state.valueGrade) {
+                const allSympSubjects = grade.subject_ids!.map(subject => subject.subject_id);
                 allSympSubjectsLength = allSympSubjects!.includes(value);
               }
             });
@@ -759,37 +815,37 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
           }
         });
         this.setState({
-          selectedGoalsFilter : newArrayGoals
+          selectedGoalsFilter : newArrayGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
         });
-        this.state.grepDataFilters!.source_filter!.forEach((element) => {
-          // tslint:disable-next-line: variable-name
-          const allSympGrades = element.subject_ids;
-          const allSympGradesLength = allSympGrades!.includes(value);
-          let allSympSubjectsLength = false;
-          if (this.state.valueGrade.length > 0) {
-            element.grade_subjects!.forEach((item) => {
-              if (item.grade_id === this.state.valueGrade) {
-                const allSympSubjects = item.subjects_relations;
-                allSympSubjectsLength = allSympSubjects!.includes(value);
-              }
-            });
-            if (allSympGradesLength && allSympSubjectsLength) {
-              newArraySource.push({
-                // tslint:disable-next-line: variable-name
-                id: Number(element.source_id),
-                title: element.description!
-              });
-            }
-          } else {
-            if (allSympGradesLength) {
-              newArraySource.push({
-                // tslint:disable-next-line: variable-name
-                id: Number(element.source_id),
-                title: element.description!
-              });
-            }
-          }
-        });
+        // this.state.grepDataFilters!.source_filter!.forEach((element) => {
+        //   // tslint:disable-next-line: variable-name
+        //   const allSympGrades = element.subject_ids;
+        //   const allSympGradesLength = allSympGrades!.includes(value);
+        //   let allSympSubjectsLength = false;
+        //   if (this.state.valueGrade.length > 0) {
+        //     element.grade_subjects!.forEach((item) => {
+        //       if (item.grade_id === this.state.valueGrade) {
+        //         const allSympSubjects = item.subjects_relations;
+        //         allSympSubjectsLength = allSympSubjects!.includes(value);
+        //       }
+        //     });
+        //     if (allSympGradesLength && allSympSubjectsLength) {
+        //       newArraySource.push({
+        //         // tslint:disable-next-line: variable-name
+        //         id: Number(element.source_id),
+        //         title: element.description!
+        //       });
+        //     }
+        //   } else {
+        //     if (allSympGradesLength) {
+        //       newArraySource.push({
+        //         // tslint:disable-next-line: variable-name
+        //         id: Number(element.source_id),
+        //         title: element.description!
+        //       });
+        //     }
+        //   }
+        // });
         this.setState(
           {
             selectedSourceFilter : newArraySource
@@ -804,70 +860,56 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         );
       }
     } else {
-      this.setState({
-        MySelectSubject : null
-      });
+      const indexSelected = valueSelectedSubject!.indexOf(Number(value));
+      if (indexSelected > -1) {
+        valueSelectedSubject!.splice(indexSelected, 1);
+      }
       if (this.state.activeGrepFilters) {
-        const GradeFilterArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
-        this.handleChangeFilters('subjects', '');
-        GradeFilterArray.forEach((e) => {
-          e.classList.remove('active');
-        });
-        e.currentTarget.focus();
+        e.currentTarget.classList.remove('active');
       }
     }
+    this.handleChangeFilters('subjects', String(valueSelectedSubject));
+    this.setState({
+      MySelectSubject : valueSelectedSubject
+    });
   }
 
   public handleClickMulti = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const value = e.currentTarget.value;
-    if (this.state.MySelectMulti !== Number(value)) {
-      this.setState({
-        MySelectMulti : Number(value)
-      });
-      this.handleChangeFilters('multi', Number(value));
-      const GradeFilterArray = Array.from(document.getElementsByClassName('multiFilterClass') as HTMLCollectionOf<HTMLElement>);
-      GradeFilterArray.forEach((e) => {
-        e.classList.remove('active');
-      });
+    const valueSelectedMulti = this.state.MySelectMulti;
+    if (!valueSelectedMulti!.includes(Number(value))) {
+      valueSelectedMulti!.push(Number(value));
       e.currentTarget.classList.add('active');
-      e.currentTarget.focus();
     } else {
-      this.setState({
-        MySelectMulti : null
-      });
-      this.handleChangeFilters('multi', '');
-      const GradeFilterArray = Array.from(document.getElementsByClassName('multiFilterClass') as HTMLCollectionOf<HTMLElement>);
-      GradeFilterArray.forEach((e) => {
-        e.classList.remove('active');
-      });
-      e.currentTarget.focus();
+      const indexSelected = valueSelectedMulti!.indexOf(Number(value));
+      if (indexSelected > -1) {
+        valueSelectedMulti!.splice(indexSelected, 1);
+      }
+      e.currentTarget.classList.remove('active');
     }
+    this.handleChangeFilters('multi', String(valueSelectedMulti));
+    this.setState({
+      MySelectMulti : valueSelectedMulti
+    });
   }
 
   public handleClickSource = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const value = e.currentTarget.value;
-    if (this.state.MySelectSource !== Number(value)) {
-      this.setState({
-        MySelectSource : Number(value)
-      });
+    const valueSelectedSource = this.state.MySelectSource;
+    if (!valueSelectedSource!.includes(Number(value))) {
       this.handleChangeFilters('source', Number(value));
-      const GradeFilterArray = Array.from(document.getElementsByClassName('sourceFilterClass') as HTMLCollectionOf<HTMLElement>);
-      GradeFilterArray.forEach((e) => {
-        e.classList.remove('active');
-      });
       e.currentTarget.classList.add('active');
-      e.currentTarget.focus();
     } else {
-      this.setState({
-        MySelectSource : null
-      });
-      this.handleChangeFilters('source', '');
-      const GradeFilterArray = Array.from(document.getElementsByClassName('sourceFilterClass') as HTMLCollectionOf<HTMLElement>);
-      GradeFilterArray.forEach((e) => {
-        e.classList.remove('active');
-      });
-      e.currentTarget.focus();
+      const indexSelected = valueSelectedSource!.indexOf(Number(value));
+      if (indexSelected > -1) {
+        valueSelectedSource!.splice(indexSelected, 1);
+      }
+      e.currentTarget.classList.remove('active');
     }
+    this.setState({
+      MySelectSource : valueSelectedSource
+    });
+    this.handleChangeFilters('source', String(valueSelectedSource));
   }
 
   public handleChangeSelectGoals = async (newValue: Array<any>) => {
@@ -1261,6 +1303,9 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
                   date
                   placeholder={intl.get('assignments search.Search')}
                   isArticlesListPage
+                  filtersisUsed={this.state.filtersisUsed}
+                  filtersAjaxLoading={this.state.filtersAjaxLoading}
+                  filtersAjaxLoadingGoals={this.state.filtersAjaxLoadingGoals}
                   // METHODS
                   handleChangeSubject={this.handleChangeSubject}
                   handleChangeGrade={this.handleChangeGrade}
@@ -1275,10 +1320,12 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
                   handleClickReset={this.handleClickReset}
                   showSourceFilter={this.state.showSourceFilter}
                   // VALUES
-                  subjectFilterValue={Number(this.state.appliedFilters.subjects)}
-                  gradeFilterValue={Number(this.state.appliedFilters.grades)}
+                  // subjectFilterValue={Number(this.state.appliedFilters.subjects)}
+                  // gradeFilterValue={Number(this.state.appliedFilters.grades)}
                   coreFilterValue={Number(this.state.appliedFilters.core)}
                   goalsFilterValue={Number(this.state.appliedFilters.goal)}
+                  defaultValueGradeFilter={String(this.state.appliedFilters.grades)}
+                  defaultValueSubjectFilter={String(this.state.appliedFilters.subjects)}
                   coreValueFilter={this.state.myValueCore}
                   goalValueFilter={this.state.goalValueFilter}
                   searchQueryFilterValue={this.state.appliedFilters.searchTitle as string}
