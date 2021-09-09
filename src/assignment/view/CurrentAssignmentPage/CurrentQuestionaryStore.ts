@@ -34,11 +34,6 @@ export class CurrentQuestionaryStore {
   public allArticlesread: boolean = false;
   public async createQuestionaryByAssignmentId(id: number, redirectData?: RedirectData) {
     this.isLoading = true;
-    try {
-      await this.questionaryService.getNewQuestionaryByAssignmentId(id);
-    } catch (e) {
-      window.location.href = '/assignments';
-    }
     const questionary = redirectData !== undefined
     ? await this.questionaryService.getNewQuestionaryByAssignmentIdFromTeachingPath(id, redirectData)
     : await this.questionaryService.getNewQuestionaryByAssignmentId(id);
