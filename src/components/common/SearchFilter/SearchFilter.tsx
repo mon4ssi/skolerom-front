@@ -585,6 +585,7 @@ class SearchFilter extends Component<Props, State> {
   public renderFiltersCore = () => {
     const { handleChangeSelectCore, customCoreList, coreValueFilter } = this.props;
     const options = this.renderValueOptions(customCoreList!.sort(sortByAlphabet));
+
     const customStyles = {
       option: () => ({
         fontSize: '14px',
@@ -848,6 +849,7 @@ class SearchFilter extends Component<Props, State> {
   public renderFiltersGoals = () => {
     const { handleChangeSelectGoals, goalValueFilter, customGoalsList } = this.props;
     const options = this.renderValueOptions(customGoalsList!.sort(sortByAlphabet));
+
     const customStyles = {
       option: () => ({
         fontSize: '14px',
