@@ -49,15 +49,6 @@ class StudentTeachingPaths extends Component<Props> {
     );
   }
 
-  public handleChangeEvaluationStatus = (e: ChangeEvent<HTMLSelectElement>) => {
-    e.preventDefault();
-    const value = e.currentTarget.value;
-
-    this.props.studentsListStore!.setFiltersIsEvaluatedTP(
-      value === BooleanFilter.FALSE || value === BooleanFilter.TRUE ? value : null
-    );
-  }
-
   public handleChangeSearchQuery = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (lettersNoEn(e.target.value)) {
@@ -97,17 +88,6 @@ class StudentTeachingPaths extends Component<Props> {
       <option>{intl.get('assignments search.Answer status')}</option>
       <option value={BooleanFilter.TRUE}>{intl.get('assignments search.Answered')}</option>
       <option value={BooleanFilter.FALSE}>{intl.get('assignments search.Not answered')}</option>
-    </select>
-  )
-
-  public renderEvaluationStatus = () => (
-    <select
-      className="StudentAssignments__select"
-      onChange={this.handleChangeEvaluationStatus}
-    >
-      <option>{intl.get('assignments search.Evaluation status')}</option>
-      <option value={BooleanFilter.TRUE}>{intl.get('assignments search.Evaluated')}</option>
-      <option value={BooleanFilter.FALSE}>{intl.get('assignments search.Not evaluated')}</option>
     </select>
   )
 
@@ -161,7 +141,6 @@ class StudentTeachingPaths extends Component<Props> {
         {this.renderSearchField()}
         <div className="StudentAssignments__selectBlock">
           {this.renderAnswerStatus()}
-          {this.renderEvaluationStatus()}
           {this.renderSorting()}
         </div>
       </div>
