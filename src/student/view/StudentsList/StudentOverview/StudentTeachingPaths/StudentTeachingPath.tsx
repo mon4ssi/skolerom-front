@@ -8,11 +8,11 @@ import { Assignment } from 'assignment/Assignment';
 
 import clockImg from 'assets/images/rounded-clock.svg';
 import editImg from 'assets/images/edit.svg';
-
-import './StudentAssignment.scss';
+import { TeachingPath } from 'teachingPath/TeachingPath';
+import './StudentTeachingPath.scss';
 
 interface StudentAssignmentProps {
-  assignment: Assignment;
+  assignment: TeachingPath;
   locale: string;
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
@@ -37,11 +37,11 @@ export const StudentAssignment = (props: StudentAssignmentProps) => {
     `${intl.get('answers.Due in')} ${dueDate}`;
 
   const deadlineClasses = classNames('StudentAssignment__deadline', {
-    StudentAssignment__deadline_grey: assignment.isEvaluated,
-    StudentAssignment__deadline_purple: !assignment.isEvaluated && isPassedDeadline,
+    StudentAssignment__deadline_grey: assignment.isAnswered,
+    StudentAssignment__deadline_purple: !assignment.isAnswered && isPassedDeadline,
   });
   const deadlineImageClasses = classNames('StudentAssignment__deadlineImage', {
-    StudentAssignment__deadlineImage_grey: !assignment.isEvaluated
+    StudentAssignment__deadlineImage_grey: !assignment.isAnswered
   });
   const evaluationStatusClasses = classNames('StudentAssignment__evaluationStatus', {
     StudentAssignment__evaluationStatus_evaluate: (isNull(assignment.mark) && isNull(assignment.isPassed)) && assignment.isAnswered,

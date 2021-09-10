@@ -6,6 +6,7 @@ import { StudentOverviewHeader } from '../StudentOverviewHeader/StudentOverviewH
 import { StudentsListStore } from 'student/StudentsListStore';
 import { StudentAssignment } from './StudentTeachingPath';
 import { Assignment } from 'assignment/Assignment';
+import { InfoCard } from 'components/common/InfoCard/InfoCard';
 
 import { lettersNoEn } from 'utils/lettersNoEn';
 import { BooleanFilter, SortingFilter, StoreState } from 'utils/enums';
@@ -14,6 +15,8 @@ import './StudentTeachingPaths.scss';
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
 import { UIStore } from 'locales/UIStore';
 import { TeachingPath } from 'teachingPath/TeachingPath';
+import teachingPathIcon from 'assets/images/teaching-path.svg';
+import listPlaceholderImg from 'assets/images/list-placeholder.svg';
 
 interface Props extends RouteComponentProps {
   studentsListStore?: StudentsListStore;
@@ -119,24 +122,34 @@ class StudentTeachingPaths extends Component<Props> {
     </select>
   )
 
+  public onClickTeachingPath = (id: number, view: string) => {
+    const { history } = this.props;
+    history.push(`/teaching-paths/answers/${id}?answer=`);
+  }
+
   public renderTP = (item: TeachingPath, index: number) => {
     const { studentsListStore, history, uiStore } = this.props;
     const locale = studentsListStore!.getCurrentLocale();
+    const indesPlus = index + 1;
 
-    const handleClickAssignment = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClickTP = (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
       if (!item.isAnswered) {
         return;
       }
-      uiStore!.setCurrentActiveTab('assignment');
-      history.push(`/assignments/answers/${item.id}`);
+      history.push(`/teaching-paths/answers/${item.id}?answer=${indesPlus}`);
     };
 
-    return studentsListStore!.assignmentsListState === StoreState.LOADING ? (
+    return studentsListStore!.teachingPathListState === StoreState.LOADING ? (
       <SkeletonLoader key={index} className="StudentAssignment__skeleton" />
     ) : (
       <div className="StudentAssignments__item">
-        miau
+        <StudentAssignment
+          key={item.id}
+          assignment={item}
+          onClick={handleClickTP}
+          locale={locale}
+        />
       </div>
     );
   }
