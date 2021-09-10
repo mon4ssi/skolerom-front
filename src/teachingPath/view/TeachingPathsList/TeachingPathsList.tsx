@@ -199,11 +199,13 @@ class TeachingPathsListComponent extends Component<Props, State> {
               });
             });
             this.setState({ myValueSubject: ArrayValue });
-            QueryStringHelper.set(
-              this.props.history,
-              QueryStringKeys.SUBJECT,
-              String(ArrayValue)
-            );
+            if (grades !== '' && subjects !== '') {
+              QueryStringHelper.set(
+                this.props.history,
+                QueryStringKeys.SUBJECT,
+                String(ArrayValue)
+              );
+            }
           }
         );
       }
