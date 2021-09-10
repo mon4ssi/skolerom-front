@@ -498,6 +498,19 @@ export class TeachingPathsList {
     this.filter.page = number;
   }
 
+  public setFiltersIsAnswered(status: string | null) {
+    this.filter.isAnswered = status;
+  }
+
+  public setFiltersIsEvaluated(status: string | null) {
+    this.filter.isEvaluated = status;
+  }
+
+  public setFiltersSorting(orderField: string, order: string) {
+    this.filter.order = order;
+    this.filter.orderField = orderField;
+  }
+
   public setFiltersSubjectID(id: number | null) {
     this.filter.subject = id;
   }

@@ -281,7 +281,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         }
       });
       return {
-        teachingPathsList: response.data,
+        teachingPathsList: response.data.data,
         total_pages: response.data.meta.pagination.total_pages
       };
     } catch {

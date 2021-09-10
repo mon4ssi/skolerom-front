@@ -4,7 +4,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { StudentOverviewHeader } from '../StudentOverviewHeader/StudentOverviewHeader';
 import { StudentsListStore } from 'student/StudentsListStore';
-// import { StudentAssignment } from './StudentTeachingPaths';
+import { StudentAssignment } from './StudentTeachingPath';
 import { Assignment } from 'assignment/Assignment';
 
 import { lettersNoEn } from 'utils/lettersNoEn';
@@ -13,6 +13,7 @@ import { BooleanFilter, SortingFilter, StoreState } from 'utils/enums';
 import './StudentTeachingPaths.scss';
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
 import { UIStore } from 'locales/UIStore';
+import { TeachingPath } from 'teachingPath/TeachingPath';
 
 interface Props extends RouteComponentProps {
   studentsListStore?: StudentsListStore;
@@ -27,20 +28,20 @@ class StudentTeachingPaths extends Component<Props> {
   public async componentDidMount() {
     const { studentsListStore } = this.props;
 
-    studentsListStore!.setAssignmentsFilterSorting(SortingFilter.DEADLINE, SortingFilter.ASC);
+    studentsListStore!.setTeachingPathFilterSorting(SortingFilter.DEADLINE, SortingFilter.ASC);
   }
 
   public componentWillUnmount() {
     const { studentsListStore } = this.props;
 
-    studentsListStore!.resetFilters();
+    studentsListStore!.resetFiltersTp();
   }
 
   public handleChangeAnswerStatus = (e: ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault();
     const value = e.currentTarget.value;
 
-    this.props.studentsListStore!.setFiltersIsAnswered(
+    this.props.studentsListStore!.setFiltersIsAnsweredTP(
       value === BooleanFilter.FALSE || value === BooleanFilter.TRUE ? value : null
     );
   }
@@ -49,7 +50,7 @@ class StudentTeachingPaths extends Component<Props> {
     e.preventDefault();
     const value = e.currentTarget.value;
 
-    this.props.studentsListStore!.setFiltersIsEvaluated(
+    this.props.studentsListStore!.setFiltersIsEvaluatedTP(
       value === BooleanFilter.FALSE || value === BooleanFilter.TRUE ? value : null
     );
   }
@@ -57,7 +58,7 @@ class StudentTeachingPaths extends Component<Props> {
   public handleChangeSearchQuery = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (lettersNoEn(e.target.value)) {
-      this.props.studentsListStore!.setAssignmentsFiltersSearchQuery(
+      this.props.studentsListStore!.setTeachingPathFiltersSearchQuery(
         e.currentTarget.value
       );
     }
@@ -67,7 +68,7 @@ class StudentTeachingPaths extends Component<Props> {
     e.preventDefault();
 
     const [orderField, order] = e.currentTarget.value.split(' ');
-    this.props.studentsListStore!.setAssignmentsFilterSorting(
+    this.props.studentsListStore!.setTeachingPathFilterSorting(
       orderField,
       order
     );
@@ -118,17 +119,17 @@ class StudentTeachingPaths extends Component<Props> {
     </select>
   )
 
-  public renderAssignment = (assignment: Assignment, index: number) => {
+  public renderTP = (item: TeachingPath, index: number) => {
     const { studentsListStore, history, uiStore } = this.props;
     const locale = studentsListStore!.getCurrentLocale();
 
     const handleClickAssignment = (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
-      if (!assignment.isAnswered) {
+      if (!item.isAnswered) {
         return;
       }
       uiStore!.setCurrentActiveTab('assignment');
-      history.push(`/assignments/answers/${assignment.id}`);
+      history.push(`/assignments/answers/${item.id}`);
     };
 
     return studentsListStore!.assignmentsListState === StoreState.LOADING ? (
@@ -167,8 +168,7 @@ class StudentTeachingPaths extends Component<Props> {
     const {
       studentsListStore
     } = this.props;
-    const { currentStudent, assignmentsList, assignmentsListForSkeleton, assignmentsListState } = studentsListStore!;
-
+    const { currentStudent, teachingpathList, teachingpathListForSkeleton, teachingPathListState } = studentsListStore!;
     return (
       <div className="StudentAssignments">
         <div className="StudentAssignments__header">
@@ -182,11 +182,11 @@ class StudentTeachingPaths extends Component<Props> {
         {this.renderFilterPanel()}
 
         <div
-          className={assignmentsListState === StoreState.LOADING ? 'StudentAssignments__skeletonList' : 'StudentAssignments__list'}
+          className={teachingPathListState === StoreState.LOADING ? 'StudentAssignments__skeletonList' : 'StudentAssignments__list'}
           ref={this.ref}
           onScroll={this.onScroll}
         >
-          {(assignmentsListState === StoreState.PENDING ? assignmentsList : assignmentsListForSkeleton).map(this.renderAssignment)}
+          {(teachingPathListState === StoreState.PENDING ? teachingpathList : teachingpathListForSkeleton).map(this.renderTP)}
         </div>
       </div>
     );

@@ -13,6 +13,7 @@ import { DEBOUNCE_TIME } from 'utils/constants';
 import { Locales, StoreState } from 'utils/enums';
 
 const ASSIGNMENTS_PER_PAGE = 10;
+const TP_PER_PAGE = 10;
 const STUDENTS_PER_PAGE = 8;
 
 export class StudentsListStore {
@@ -34,6 +35,7 @@ export class StudentsListStore {
   @observable public assignmentsList: Array<Assignment> = [];
   @observable public teachingpathList: Array<TeachingPath> = [];
   @observable public assignmentsListForSkeleton: Array<Assignment> = new Array(ASSIGNMENTS_PER_PAGE).fill(new Assignment({ id: 0 }));
+  @observable public teachingpathListForSkeleton: Array<TeachingPath> = new Array(TP_PER_PAGE).fill(new TeachingPath({ id: 0, title: '' }));
   @observable public paginationTotalPages: number = 0;
 
   @observable public gradesList: Array<Grade> = [];
@@ -144,6 +146,18 @@ export class StudentsListStore {
     this.getAssignmentsList();
   }
 
+  public setFiltersIsAnsweredTP(status: string | null) {
+    this.TeachingPathsListService.setFiltersIsAnswered(status);
+    this.TeachingPathsListService.setFiltersPage(1);
+    this.getTeachingPathList();
+  }
+
+  public setFiltersIsEvaluatedTP(isEvaluated: string | null) {
+    this.TeachingPathsListService.setFiltersIsEvaluated(isEvaluated);
+    this.TeachingPathsListService.setFiltersPage(1);
+    this.getAssignmentsList();
+  }
+
   public async setAssignmentsFiltersPage(number: number) {
     if (this.paginationTotalPages === this.currentAssignmentListPage) {
       return null;
@@ -178,10 +192,22 @@ export class StudentsListStore {
     this.assignmentsDebounceWrapper();
   }
 
+  public async setTeachingPathFiltersSearchQuery(searchQuery: string) {
+    this.TeachingPathsListService.setFiltersSearchQuery(searchQuery);
+    this.TeachingPathsListService.setFiltersPage(1);
+    this.assignmentsDebounceWrapper();
+  }
+
   public async setAssignmentsFilterSorting(orderField: string, order: string) {
     this.assignmentsListService.setFiltersSorting(orderField, order);
     this.assignmentsListService.setFiltersPage(1);
     this.getAssignmentsList();
+  }
+
+  public async setTeachingPathFilterSorting(orderField: string, order: string) {
+    this.TeachingPathsListService.setFiltersSorting(orderField, order);
+    this.TeachingPathsListService.setFiltersPage(1);
+    this.getTeachingPathList();
   }
 
   public async getStudentAdditionalData() {
@@ -200,5 +226,12 @@ export class StudentsListStore {
     this.assignmentsListService.setFiltersIsAnswered(null);
     this.assignmentsListService.setFiltersIsEvaluated(null);
     this.assignmentsListService.setFiltersSearchQuery('');
+  }
+
+  public resetFiltersTp() {
+    this.TeachingPathsListService.setFiltersPage(0);
+    this.TeachingPathsListService.setFiltersIsAnswered(null);
+    this.TeachingPathsListService.setFiltersIsEvaluated(null);
+    this.TeachingPathsListService.setFiltersSearchQuery('');
   }
 }
