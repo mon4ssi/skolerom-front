@@ -401,6 +401,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         article={article}
         handleArticle={this.handleArticle(article.id)}
         isCheckedArticle={this.isCheckedArticle(article.id)}
+        toSelectArticle={this.handleArticle(article.id)}
       />
     ) : (
         <SkeletonLoader

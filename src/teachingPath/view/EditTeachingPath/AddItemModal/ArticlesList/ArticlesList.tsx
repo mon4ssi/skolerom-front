@@ -31,6 +31,7 @@ interface ArticleItemProps {
   article: Article;
   addItem: (item: Article) => void;
   removeItem: (item: Article) => void;
+  toSelectArticle: (item: Article) => void;
   allItems: Array<Article>;
 }
 
@@ -54,6 +55,12 @@ class ArticleItem extends Component<ArticleItemProps> {
       addItem(article);
   }
 
+  public toSelectArticle = () => {
+    const { toSelectArticle, article } = this.props;
+
+    toSelectArticle(article);
+  }
+
   public render() {
     const { article } = this.props;
 
@@ -62,6 +69,7 @@ class ArticleItem extends Component<ArticleItemProps> {
         article={article}
         isCheckedArticle={this.isArticleSelected()}
         handleArticle={this.handleSelectArticle}
+        toSelectArticle={this.toSelectArticle}
       />
     );
   }
@@ -535,8 +543,9 @@ export class ArticlesList extends Component<Props, State> {
 
       const allSympGrades = element.grade_ids;
 
-      const allSympGradesLength = allSympGrades!.length;
-      if (allSympGradesLength > 1) {
+      const allSympGradesLength = allSympGrades!.includes(gradeId);
+
+      if (allSympGradesLength) {
         if (allSympGrades!.includes(gradeId)) {
 
           newArraySubject.push({
@@ -744,7 +753,7 @@ export class ArticlesList extends Component<Props, State> {
   }
 
   public handleClickGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
-
+    this.handleClickReset(e);
     const value = e.currentTarget.value;
     // const valueSelectedGrades = this.state.MySelectGrade;
     let valueSelectedGrades: Array<number> = [];
@@ -816,8 +825,64 @@ export class ArticlesList extends Component<Props, State> {
     return found;
   }
 
-  public handleClickSubject = (e: React.MouseEvent<HTMLButtonElement>) => {
+  public updateCoreElementsFilterFromSubject(subjectId: string) {
+    const valueSelectedSubject = this.state.MySelectSubject;
     const newArrayCore: Array<Greep> = [];
+
+    this.state.grepDataFilters!.core_elements_filter!.forEach((element) => {
+      // tslint:disable-next-line: variable-name
+      const allSympSubjects: Array<string> = [];
+
+      element.grade_ids!.forEach(grade =>
+        grade.subject_ids!.forEach(subjecId => allSympSubjects.push(subjecId))
+      );
+
+      let allSympSubjectsLength = false;
+      if (valueSelectedSubject!.length > 0) {
+        valueSelectedSubject!.forEach((subjectId) => {
+          if (allSympSubjects!.includes(subjectId.toString())) {
+            allSympSubjectsLength = true;
+          }
+        });
+      } else {
+        allSympSubjectsLength = true;
+      }
+
+      let allSympGradesLength = false;
+
+      if (this.state.valueGrade.length > 0) {
+
+        element.grade_ids!.forEach((grade) => {
+          if (grade.grade_id === this.state.valueGrade) {
+            allSympGradesLength = true;
+          }
+        });
+
+        if (allSympGradesLength && allSympSubjectsLength) {
+          newArrayCore.push({
+            // tslint:disable-next-line: variable-name
+            id: Number(element.core_element_id),
+            title: element.description!
+          });
+        }
+      } else {
+        if (allSympSubjectsLength) {
+          newArrayCore.push({
+            // tslint:disable-next-line: variable-name
+            id: Number(element.core_element_id),
+            title: element.description!
+          });
+        }
+      }
+    });
+    this.setState({
+      selectedCoresFilter: newArrayCore,
+      selectedCoresAll: newArrayCore
+    });
+  }
+
+  public handleClickSubject = (e: React.MouseEvent<HTMLButtonElement>) => {
+
     const newArrayMulti: Array<Greep> = [];
     const newArrayGoals: Array<Greep> = [];
     const newArraySource: Array<Greep> = [];
@@ -830,49 +895,14 @@ export class ArticlesList extends Component<Props, State> {
         this.setState({
           valueSubject: value
         });
-        this.state.grepDataFilters!.core_elements_filter!.forEach((element) => {
-          // tslint:disable-next-line: variable-name
-          const allSympGrades: Array<string> = [];
-          element.grade_ids!.forEach(grade =>
-            grade.subject_ids!.forEach(subjecId => allSympGrades.push(subjecId))
-          );
-          let allSympGradesLength = false;
-          if (this.state.valueGrade.length > 0) {
-            let allSympSubjectsLength = false;
-            element.grade_ids!.forEach((grade) => {
-              if (grade.grade_id === this.state.valueGrade) {
-                allSympGradesLength = true;
-                const allSympSubjects = grade.subject_ids;
-                // allSympSubjectsLength = allSympSubjects!.includes(value);
-                // aqui
-
-                valueSelectedSubject!.forEach((subject) => {
-                  if (allSympSubjects!.includes(subject.toString())) {
-                    allSympSubjectsLength = true;
-                  }
-                });
-              }
-            });
-            if (allSympGradesLength && allSympSubjectsLength) {
-              newArrayCore.push({
-                // tslint:disable-next-line: variable-name
-                id: Number(element.core_element_id),
-                title: element.description!
-              });
-            }
-          } else {
-            if (allSympGradesLength) {
-              newArrayCore.push({
-                // tslint:disable-next-line: variable-name
-                id: Number(element.core_element_id),
-                title: element.description!
-              });
-            }
+        this.setState(
+          {
+            MySelectSubject: valueSelectedSubject
+          },
+          () => {
+            this.updateCoreElementsFilterFromSubject(value);
           }
-        });
-        this.setState({
-          selectedCoresFilter: newArrayCore
-        });
+        );
 
         this.state.grepDataFilters!.multidisciplinay_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
@@ -1016,9 +1046,7 @@ export class ArticlesList extends Component<Props, State> {
       }
     }
     this.handleChangeFilters('subjects', String(valueSelectedSubject));
-    this.setState({
-      MySelectSubject: valueSelectedSubject
-    });
+
   }
 
   public updateMainTopicFilterFromCoreElements(selectCoreElements: Array<any>) {
@@ -1283,6 +1311,7 @@ export class ArticlesList extends Component<Props, State> {
   }
 
   public addItemToNewChild = (item: Article) => {
+
     const { currentNode } = this.props.editTeachingPathStore!;
     const ifAddingItemIsSaved = !!currentNode!.children.filter(
       child => child.items!.find(el => el.value.id === item.id)
@@ -1294,6 +1323,14 @@ export class ArticlesList extends Component<Props, State> {
     this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, item] });
     this.setState({ greeddata: true });
     this.setState({ selectedArticle: item });
+  }
+
+  public toSelectArticle = (article: Article) => {
+    this.setState({
+      greeddata: true,
+      selectedArticle: article
+    });
+
   }
 
   public removeItemFromNewChild = async (item: Article) => {
@@ -1405,6 +1442,7 @@ export class ArticlesList extends Component<Props, State> {
       allItems={this.state.itemsForNewChildren}
       addItem={this.addItemToNewChild}
       removeItem={this.removeItemFromNewChild}
+      toSelectArticle={this.toSelectArticle}
     />
   )
 
@@ -1566,6 +1604,7 @@ export class ArticlesList extends Component<Props, State> {
 
   public SelectedGreepCore = () => {
     const { selectedArticle } = this.state;
+
     const amountCoreElements = selectedArticle!.grepCoreelements ? selectedArticle!.grepCoreelements.length : 0;
     if (amountCoreElements > 0) {
       const visibilityCores = selectedArticle!.grepCoreelements!.map((corelement) => {
