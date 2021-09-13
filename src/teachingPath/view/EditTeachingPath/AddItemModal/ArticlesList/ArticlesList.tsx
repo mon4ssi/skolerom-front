@@ -174,45 +174,45 @@ export class ArticlesList extends Component<Props, State> {
 
   public handleChangeFilters = async (filterName: string, filterValue: number | string) => {
 
-    // const { editTeachingPathStore } = this.props;
-    // const allModal = Array.from(document.getElementsByClassName('addItemModal__right') as HTMLCollectionOf<HTMLElement>);
-    // editTeachingPathStore!.resetCurrentArticlesPage();
-    // editTeachingPathStore!.resetIsFetchedArticlesListFinished();
-    // let filters = { ...this.state.appliedFilters };
-    // allModal[0].classList.add('loadingdata');
+    const { editTeachingPathStore } = this.props;
+    const allModal = Array.from(document.getElementsByClassName('addItemModal__right') as HTMLCollectionOf<HTMLElement>);
+    editTeachingPathStore!.resetCurrentArticlesPage();
+    editTeachingPathStore!.resetIsFetchedArticlesListFinished();
+    let filters = { ...this.state.appliedFilters };
+    allModal[0].classList.add('loadingdata');
 
-    // if (!isNaN(filterValue)) {
-    //   filters[filterName] = filterValue;
-    // } else {
-    //   // tslint:disable-next-line:no-dynamic-delete
-    //   delete filters[filterName];
-    // }
-    // if (filterName === 'order') {
-    //   if (filterValue === 'asc') {
-    //     filters.order = filterValue;
-    //   } else {
-    //     delete filters.order;
-    //   }
-    // }
-    // if (filterName === 'none') {
-    //   this.setState({ appliedFilters: {} });
-    //   filters = {};
-    // }
+    if (!isNaN(filterValue)) {
+      filters[filterName] = filterValue;
+    } else {
+      // tslint:disable-next-line:no-dynamic-delete
+      delete filters[filterName];
+    }
+    if (filterName === 'order') {
+      if (filterValue === 'asc') {
+        filters.order = filterValue;
+      } else {
+        delete filters.order;
+      }
+    }
+    if (filterName === 'none') {
+      this.setState({ appliedFilters: {} });
+      filters = {};
+    }
 
-    // this.setState({ appliedFilters: filters });
-    // this.setState({ userFilters: true });
-    // if (filters.subjects || filters.grades || filters.core || filters.multi || filters.goal || filters.source) {
-    //   this.setState({ filtersisUsed: true });
-    // } else {
-    //   this.setState({ filtersisUsed: false });
-    // }
-    // if (filterName === 'searchTitle') {
-    //   editTeachingPathStore!.getArticlesWithDebounce(filters);
-    //   allModal[0].classList.remove('loadingdata');
-    // } else {
-    //   await editTeachingPathStore!.getArticles(filters);
-    //   allModal[0].classList.remove('loadingdata');
-    // }
+    this.setState({ appliedFilters: filters });
+    this.setState({ userFilters: true });
+    if (filters.subjects || filters.grades || filters.core || filters.multi || filters.goal || filters.source) {
+      this.setState({ filtersisUsed: true });
+    } else {
+      this.setState({ filtersisUsed: false });
+    }
+    if (filterName === 'searchTitle') {
+      editTeachingPathStore!.getArticlesWithDebounce(filters);
+      allModal[0].classList.remove('loadingdata');
+    } else {
+      await editTeachingPathStore!.getArticles(filters);
+      allModal[0].classList.remove('loadingdata');
+    }
   }
 
   public getAllChildrenItems = () => {
@@ -513,7 +513,7 @@ export class ArticlesList extends Component<Props, State> {
 
   public customReset = async (targets: Array<string>) => {
 
-    this.handleChangeFilters('none', 0);
+    // this.handleChangeFilters('none', 0);
 
     this.setState({ filtersAjaxLoading: true });
     this.setState({ filtersAjaxLoadingGoals: true });
