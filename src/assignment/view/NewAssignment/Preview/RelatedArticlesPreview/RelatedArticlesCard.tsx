@@ -24,6 +24,7 @@ interface Props {
   isCheckedArticle: boolean;
 
   handleArticle(): void;
+  toSelectArticle(): void;
 }
 
 export const RelatedArticlesCard = (props: Props) => {
@@ -89,10 +90,10 @@ export const RelatedArticlesCard = (props: Props) => {
   };
 
   return (
-    <div className={'RelatedArticlesCard'} onClick={props.handleArticle}>
+    <div className={'RelatedArticlesCard'} onClick={props.toSelectArticle}>
       <div className="image">
         {renderImageArticle()}
-        <button className="check" title="check">
+        <button className="check" title="check" onClick={props.handleArticle}>
           <img src={props.isCheckedArticle ? checkActiveGreen : checkRounded} alt="Check" title="check" className={'checkImg'}/>
         </button>
       </div>

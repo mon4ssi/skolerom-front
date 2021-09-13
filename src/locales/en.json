@@ -458,7 +458,9 @@
     "after_publishing_from_teaching_path": "Assignment published successfuly and was added to teaching path.",
     "grep": {
       "title":"Connect to curriculum",
-      "description":"Connecting your teaching path is required when sharing publicity. Please select the appropriate educational goals below before publishing and distribution"
+      "description":"Connecting your teaching path is required when sharing publicity. Please select the appropriate educational goals below before publishing and distribution",
+      "descrption_assignment":"Connecting your teaching path is required when sharing publicity. Please select the appropriate educational goals below before publishing and distribution",
+      "description_privado":"Linking to the curriculum is only necessary when you publish publicly, but you are welcome to link the content to relevant competence goals below if desired."
     }
   },
   "distribution_page": {

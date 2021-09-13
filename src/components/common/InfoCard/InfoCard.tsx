@@ -232,8 +232,8 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
     const tooltipImageSrc = (!isNull(idActiveCard) && idActiveCard === id) ? moreHover : more;
 
     return (
-      <div className={`withTooltip ${!withTooltip && 'withoutTooltip'}`}>
-        {this.renderDefaultIcons()}
+      <div className={`withTooltip AbsolutePosition ${!withTooltip && 'withoutTooltip'}`}>
+        {/* this.renderDefaultIcons() */}
         {withTooltip && <button className="OptionMsj" data-msj={intl.get('activity_page.options')} onClick={this.handleTooltipVisible} ><img src={tooltipImageSrc} alt="info-icon" /></button>}
         {(!isNull(idActiveCard) && idActiveCard === id) && this.renderTooltip()}
       </div>
@@ -333,7 +333,6 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
               <div className="cardTitle">
                 <p className={`${!title && 'noTitle'}`}>{title ? title : intl.get('edit_teaching_path.no_title')}</p>
               </div>
-              {isTeachingPath && this.renderTeachingPathIcons()}
             </div>
 
             {this.renderDescription()}
@@ -342,6 +341,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
             {this.renderGrades()}
             {this.renderNumberOfQuestions()}
           </div>
+          {isTeachingPath && this.renderTeachingPathIcons()}
         </div>
       </div>
     );
