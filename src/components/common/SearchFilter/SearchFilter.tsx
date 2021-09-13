@@ -634,6 +634,7 @@ class SearchFilter extends Component<Props, State> {
         </div>
       );
     };
+    console.log(coreValueFilter);
     return (
       <Select
         width="320px"
@@ -643,7 +644,7 @@ class SearchFilter extends Component<Props, State> {
         onChange={handleChangeSelectCore}
         placeholder={intl.get('new assignment.greep.core')}
         defaultValue={coreValueFilter}
-        isClearable={false}
+        isClearable={true}
         isMulti
       />
     );
