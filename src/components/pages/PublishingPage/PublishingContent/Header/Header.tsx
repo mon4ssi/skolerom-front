@@ -76,10 +76,10 @@ export class Header extends Component<Props> {
 
           {store!.localeKey === EditEntityLocaleKeys.NEW_ASSIGNMENT && this.renderQuestionsInfo()}
 
-          {/*<div>*/}
-            {/*<img src={levelImage} alt="level" />*/}
-            {/*intl.get('publishing_page.level_number', { level: getStudentLevelsRange(currentEntity!.levels) })*/}
-          {/*</div>*/}
+          <div>
+            <img src={levelImage} alt="level" />
+            {intl.get('publishing_page.level_number', { level: getStudentLevelsRange(currentEntity!.levels) })}
+          </div>
         </div>
       </div>
     );

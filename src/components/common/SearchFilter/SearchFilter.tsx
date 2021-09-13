@@ -45,22 +45,15 @@ interface Props {
   customSubjectsList?: Array<Subject>;
   showSourceFilter?: boolean;
   filtersisUsed?: boolean;
-  filtersAjaxLoading?: boolean;
-  filtersAjaxLoadingGoals?: boolean;
 
-  subjectFilterValue?: string | number | null;
-  gradeFilterValue?: string | number | null;
-  coreFilterValue?: string | number | null;
+  subjectFilterValue?: number | null;
+  gradeFilterValue?: number | null;
+  coreFilterValue?: number | null;
   goalsFilterValue?: number | null;
-  coreFilterValueTP?: string |number | null;
-  mainFilterValueTP?: string | number | null;
-  goalsFilterValueTP?: string | number | null;
-  readingFilterValueTP?: string | number | null;
-
-  defaultValueGradeFilter?: string | null;
-  defaultValueSubjectFilter?: string | null;
-  defaultValueMainFilter?: string | null;
-  defaultValueReadingFilter?: string | null;
+  coreFilterValueTP?: number | null;
+  mainFilterValueTP?: number | null;
+  goalsFilterValueTP?: number | null;
+  readingFilterValueTP?: number | null;
 
   isAnsweredFilterValue?: string | null;
   isEvaluatedFilterValue?: string | null;
@@ -537,12 +530,11 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public renderFiltersGrade = () => {
-    const { assignmentListStore, handleClickGrade, customGradesList, gradeFilterValue, defaultValueGradeFilter } = this.props;
+    const { assignmentListStore, handleClickGrade, customGradesList, gradeFilterValue } = this.props;
     const grades = (customGradesList || assignmentListStore!.getAllGrades()).sort(this.sortSelectors);
-    const arrayDefaults = (defaultValueGradeFilter) ? defaultValueGradeFilter.split(',') : [];
     const visibleGrades = grades.map((grade) => {
       const title = grade.title.split('.', 1);
-      const classD = (arrayDefaults.includes(String(grade.id))) ? 'active' : '';
+      const classD = (gradeFilterValue === grade.id) ? 'active' : '';
       return <button value={grade.id} className={`itemFlexFilter gradesFilterClass ${classD}`} onClick={handleClickGrade} key={grade.id}>{title}{intl.get('new assignment.grade')}</button>;
     });
     if (grades.length === 0) {
@@ -560,12 +552,12 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public renderFiltersSubject = () => {
-    const { assignmentListStore, handleClickSubject, customSubjectsList, subjectFilterValue, defaultValueSubjectFilter } = this.props;
+    const { assignmentListStore, handleClickSubject, customSubjectsList, subjectFilterValue } = this.props;
     const subjects = (customSubjectsList || assignmentListStore!.getAllSubjects()).sort(sortByAlphabet);
-    const arrayDefaults = (defaultValueSubjectFilter) ? defaultValueSubjectFilter.split(',') : [];
+
     const visibleSubjects = subjects.map((subject) => {
       const title = subject.title.split('.', 1);
-      const classD = (arrayDefaults.includes(String(subject.id))) ? 'active' : '';
+      const classD = (subjectFilterValue === subject.id) ? 'active' : '';
       return <button value={subject.id} className={`itemFlexFilter subjectsFilterClass ${classD}`} onClick={handleClickSubject} key={subject.id}>{title}</button>;
     });
     if (subjects.length === 0) {
@@ -585,7 +577,6 @@ class SearchFilter extends Component<Props, State> {
   public renderFiltersCore = () => {
     const { handleChangeSelectCore, customCoreList, coreValueFilter } = this.props;
     const options = this.renderValueOptions(customCoreList!.sort(sortByAlphabet));
-
     const customStyles = {
       option: () => ({
         fontSize: '14px',
@@ -601,28 +592,12 @@ class SearchFilter extends Component<Props, State> {
         fontSize: '14px',
         background: '#E7ECEF',
         padding: '3px'
-      }),
-      multiValue: () => ({
-        fontSize: '16px',
-        display: 'flex',
-        borderRadius: '5px',
-        background: 'rgb(230, 230, 230)',
-        marginRight: '3px',
-        marginBottom: '3px',
-        maxWidth: '100%'
       })
     };
-    if (this.props.filtersAjaxLoading) {
+    if (options.length === 0) {
       return (
         <div className="minimalLoading">
           <span /><span /><span />
-        </div>
-      );
-    }
-    if (options.length === 0) {
-      return (
-        <div className="centerMin">
-          {intl.get('edit_teaching_path.no_options')}
         </div>
       );
     }
@@ -643,7 +618,6 @@ class SearchFilter extends Component<Props, State> {
         onChange={handleChangeSelectCore}
         placeholder={intl.get('new assignment.greep.core')}
         defaultValue={coreValueFilter}
-        isClearable={false}
         isMulti
       />
     );
@@ -667,29 +641,13 @@ class SearchFilter extends Component<Props, State> {
         fontSize: '14px',
         background: '#E7ECEF',
         padding: '3px'
-      }),
-      multiValue: () => ({
-        fontSize: '16px',
-        display: 'flex',
-        borderRadius: '5px',
-        background: 'rgb(230, 230, 230)',
-        marginRight: '3px',
-        marginBottom: '3px',
-        maxWidth: '100%'
       })
     };
-    if (this.props.filtersAjaxLoading) {
-      return (
-        <div className="minimalLoading">
-          <span /><span /><span />
-        </div>
-      );
-    }
     if (typeof(options) !== 'undefined') {
       if (options.length === 0) {
         return (
-          <div className="centerMin">
-            {intl.get('edit_teaching_path.no_options')}
+          <div className="minimalLoading">
+            <span /><span /><span />
           </div>
         );
       }
@@ -711,7 +669,6 @@ class SearchFilter extends Component<Props, State> {
         onChange={handleChangeSelectCore}
         placeholder={intl.get('new assignment.greep.core')}
         defaultValue={coreValueFilter}
-        isClearable={false}
         isMulti
       />
     );
@@ -735,29 +692,13 @@ class SearchFilter extends Component<Props, State> {
         fontSize: '14px',
         background: '#E7ECEF',
         padding: '3px'
-      }),
-      multiValue: () => ({
-        fontSize: '16px',
-        display: 'flex',
-        borderRadius: '5px',
-        background: 'rgb(230, 230, 230)',
-        marginRight: '3px',
-        marginBottom: '3px',
-        maxWidth: '100%'
       })
     };
-    if (this.props.filtersAjaxLoading) {
-      return (
-        <div className="minimalLoading">
-          <span /><span /><span />
-        </div>
-      );
-    }
     if (typeof(options) !== 'undefined') {
       if (options.length === 0) {
         return (
-          <div className="centerMin">
-            {intl.get('edit_teaching_path.no_options')}
+          <div className="minimalLoading">
+            <span /><span /><span />
           </div>
         );
       }
@@ -780,32 +721,22 @@ class SearchFilter extends Component<Props, State> {
         placeholder={intl.get('new assignment.greep.core')}
         defaultValue={coreValueFilter}
         isMulti
-        isClearable={false}
       />
     );
   }
 
   public renderFiltersMulti = () => {
-    const { handleClickMulti, customMultiList, mainFilterValueTP, defaultValueMainFilter } = this.props;
+    const { handleClickMulti, customMultiList, mainFilterValueTP } = this.props;
     const cores = customMultiList!.sort(sortByAlphabet);
-    const arrayDefaults = (defaultValueMainFilter) ? defaultValueMainFilter.split(',') : [];
-
-    const visibleCores = cores.map((core, idx) => {
+    const visibleCores = cores.map((core) => {
       const title = core.title;
-      const classD = (arrayDefaults.includes(String(core.id))) ? 'active' : '';
+      const classD = (mainFilterValueTP === core.id) ? 'active' : '';
       return <button value={core.id} className={`itemFlexFilter multiFilterClass ${classD}`} onClick={handleClickMulti} key={core.id}>{title}</button>;
     });
-    if (this.props.filtersAjaxLoading) {
+    if (cores.length === 0) {
       return (
         <div className="minimalLoading">
           <span /><span /><span />
-        </div>
-      );
-    }
-    if (cores.length === 0) {
-      return (
-        <div className="centerMin">
-          {intl.get('edit_teaching_path.no_options')}
         </div>
       );
     }
@@ -817,25 +748,17 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public renderFilterReadingInSubject = () => {
-    const { handleClickReading, customReadingList, readingFilterValueTP, defaultValueReadingFilter } = this.props;
+    const { handleClickReading, customReadingList, readingFilterValueTP } = this.props;
     const cores = customReadingList!.sort(sortByAlphabet);
-    const arrayDefaults = (defaultValueReadingFilter) ? defaultValueReadingFilter.split(',') : [];
     const visibleCores = cores.map((core) => {
       const title = core.title;
-      const classD = (arrayDefaults.includes(String(core.id))) ? 'active' : '';
+      const classD = (readingFilterValueTP === core.id) ? 'active' : '';
       return <button value={core.id} className={`itemFlexFilter sourceFilterClass ${classD}`} onClick={handleClickReading} key={core.id}>{title}</button>;
     });
-    if (this.props.filtersAjaxLoading) {
+    if (cores.length === 0) {
       return (
         <div className="minimalLoading">
           <span /><span /><span />
-        </div>
-      );
-    }
-    if (cores.length === 0) {
-      return (
-        <div className="centerMin">
-          {intl.get('edit_teaching_path.no_options')}
         </div>
       );
     }
@@ -849,7 +772,6 @@ class SearchFilter extends Component<Props, State> {
   public renderFiltersGoals = () => {
     const { handleChangeSelectGoals, goalValueFilter, customGoalsList } = this.props;
     const options = this.renderValueOptions(customGoalsList!.sort(sortByAlphabet));
-
     const customStyles = {
       option: () => ({
         fontSize: '14px',
@@ -865,29 +787,13 @@ class SearchFilter extends Component<Props, State> {
         fontSize: '14px',
         background: '#E7ECEF',
         padding: '3px'
-      }),
-      multiValue: () => ({
-        fontSize: '16px',
-        display: 'flex',
-        borderRadius: '5px',
-        background: 'rgb(230, 230, 230)',
-        marginRight: '3px',
-        marginBottom: '3px',
-        maxWidth: '100%'
       })
     };
-    if (this.props.filtersAjaxLoadingGoals) {
+    if (options.length === 0) {
       return (
         <div className="minimalLoading">
           <span /><span /><span />
         </div>
-      );
-    }
-    if (options.length === 0) {
-      return (
-        <p className="NotData">
-          {intl.get('edit_teaching_path.header.notdata_goals')}
-        </p>
       );
     }
     const NoOptionsMessage = () => {
@@ -908,7 +814,6 @@ class SearchFilter extends Component<Props, State> {
         placeholder={intl.get('new assignment.greep.goals')}
         defaultValue={goalValueFilter}
         isMulti
-        isClearable={false}
       />
     );
   }
@@ -931,24 +836,8 @@ class SearchFilter extends Component<Props, State> {
         fontSize: '14px',
         background: '#E7ECEF',
         padding: '3px'
-      }),
-      multiValue: () => ({
-        fontSize: '16px',
-        display: 'flex',
-        borderRadius: '5px',
-        background: 'rgb(230, 230, 230)',
-        marginRight: '3px',
-        marginBottom: '3px',
-        maxWidth: '100%'
       })
     };
-    if (this.props.filtersAjaxLoadingGoals) {
-      return (
-        <div className="minimalLoading">
-          <span /><span /><span />
-        </div>
-      );
-    }
     if (options.length === 0) {
       return (
         <p className="NotData">
@@ -974,7 +863,6 @@ class SearchFilter extends Component<Props, State> {
         placeholder={intl.get('new assignment.greep.goals')}
         defaultValue={goalValueFilter}
         isMulti
-        isClearable={false}
       />
     );
   }
@@ -986,17 +874,10 @@ class SearchFilter extends Component<Props, State> {
       const title = core.title;
       return <button value={core.id} className="itemFlexFilter subjectsFilterClass" onClick={handleClickSource} key={core.id}>{title}</button>;
     });
-    if (this.props.filtersAjaxLoading) {
+    if (cores.length === 0) {
       return (
         <div className="minimalLoading">
           <span /><span /><span />
-        </div>
-      );
-    }
-    if (cores.length === 0) {
-      return (
-        <div className="centerMin">
-          {intl.get('edit_teaching_path.no_options')}
         </div>
       );
     }
@@ -1029,7 +910,7 @@ class SearchFilter extends Component<Props, State> {
   public modalFilters() {
     const { handleClickReset, showSourceFilter } = this.props;
     return (
-      <div className="FiltersModal articleAssigModal">
+      <div className="FiltersModal">
         <div className="FiltersModal__header">
           <h5>{intl.get('edit_teaching_path.modals.search.header.title')}</h5>
           <button onClick={handleClickReset}>
@@ -1105,7 +986,6 @@ class SearchFilter extends Component<Props, State> {
           </div>
           {showSourceFilter && this.renderFiltersContentSource()}
         </div>
-        <div className="FiltersModal__backgroundside" onClick={this.closeFiltersModal} />
       </div>
     );
   }
@@ -1113,7 +993,7 @@ class SearchFilter extends Component<Props, State> {
   public modalFiltersTp() {
     const { handleClickReset } = this.props;
     return (
-      <div className="fixedsModal TPFiltersMain">
+      <div className="fixedsModal">
         <div className="FiltersModal">
           <div className="FiltersModal__header">
             <h5>{intl.get('edit_teaching_path.modals.search.header.title')}</h5>
@@ -1309,7 +1189,7 @@ class SearchFilter extends Component<Props, State> {
   public filtersAssignments() {
     const { handleClickReset } = this.props;
     return (
-      <div className="FiltersModal articleAssig">
+      <div className="FiltersModal">
         <div className="FiltersModal__header">
           <h5>{intl.get('edit_teaching_path.modals.search.header.title')}</h5>
           <button onClick={handleClickReset}>
@@ -1397,7 +1277,6 @@ class SearchFilter extends Component<Props, State> {
               </div>
             </div>
         </div>
-        <div className="FiltersModal__backgroundside assigFiltersModal" onClick={this.closeFiltersAssignments} />
       </div>
     );
   }

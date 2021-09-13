@@ -58,6 +58,7 @@ export class AssignmentListStore {
     const response = this.typeOfAssignmentsList === 'all' ?
       await this.assignmentList.getAllAssignmentsList() :
       await this.assignmentList.getMyAssignmentsList();
+
     if (this.fromTeachingPath) {
       this.myAssignments = this.myAssignments.concat(response.myAssignments);
       if (!response.myAssignments.length) {
@@ -187,14 +188,14 @@ export class AssignmentListStore {
       this.getAssignmentsList();
   }
 
-  public setFiltersGradeID(gradeID: string | number | null) {
+  public setFiltersGradeID(gradeID: number | null) {
     this.clearMyAssignmentsList();
     this.assignmentList.setFiltersGradeID(gradeID);
     this.assignmentList.setFiltersPage(1);
     this.getAssignmentsList();
   }
 
-  public async setFiltersSubjectID(subjectID: string | number | null) {
+  public async setFiltersSubjectID(subjectID: number | null) {
     this.clearMyAssignmentsList();
     this.assignmentList.setFiltersSubjectID(subjectID);
     this.assignmentList.setFiltersPage(1);
@@ -203,14 +204,14 @@ export class AssignmentListStore {
       this.getAssignmentsList();
   }
 
-  public setFiltersMultiID(multiID: string | number | null) {
+  public setFiltersMultiID(multiID: number | null) {
     this.clearMyAssignmentsList();
     this.assignmentList.setFiltersMultiID(multiID);
     this.assignmentList.setFiltersPage(1);
     this.getAssignmentsList();
   }
 
-  public setFiltersReadingID(readingID: string | number | null) {
+  public setFiltersReadingID(readingID: number | null) {
     this.clearMyAssignmentsList();
     this.assignmentList.setFiltersReadingID(readingID);
     this.assignmentList.setFiltersPage(1);

@@ -617,17 +617,17 @@ export class Filter {
   @observable public isPublished?: number | null;
   @observable public order?: string | null;
   @observable public orderField?: string | null;
-  @observable public grade?: string | number | null;
-  @observable public subject?:  string | number | null;
+  @observable public grade?: number | null;
+  @observable public subject?: number | null;
   @observable public isAnswered?: string | null;
   @observable public searchQuery?: string | null;
   @observable public isEvaluated?: string | null;
   @observable public isPassed?: number | null;
   @observable public isActive?: number | null;
   @observable public grepCoreElementsIds?: string | number | null;
-  @observable public grepMainTopicsIds?: string | number | null;
+  @observable public grepMainTopicsIds?: number | null;
   @observable public grepGoalsIds?: string | number | null;
-  @observable public grepReadingInSubject?: string | number | null;
+  @observable public grepReadingInSubject?: number | null;
   public showMyAssignments?: number | null;
 }
 
@@ -642,7 +642,7 @@ export interface SubjectFilter {
   subject_id?: string;
   description?: string;
   // tslint:disable-next-line: variable-name
-  grade_ids?: Array<string>;
+  grade_ids?: string;
 }
 
 export interface GradeStringObject {
@@ -652,32 +652,16 @@ export interface GradeStringObject {
   subjects_relations?: Array<string>;
 }
 
-export interface MultidisciplinayGradeSubjectFilter {
-  // tslint:disable-next-line: variable-name
-  subject_id?: string;
-  core_elments_ids?: Array<string>;
-
-}
-
-export interface MultidisciplinayGradeFilter {
-  // tslint:disable-next-line: variable-name
-  grade_id?: string;
-  subject_ids?: Array<MultidisciplinayGradeSubjectFilter>;
-
-}
-
 export interface MultiFilter {
   // tslint:disable-next-line: variable-name
-  main_topic_id?: string;
+  multidisciplinay_id?: string;
   description?: string;
   // tslint:disable-next-line: variable-name
-  grade_ids?: Array<MultidisciplinayGradeFilter>;
-}
-
-export interface CoreElementGradeFilter {
+  grade_ids?: Array<string>;
   // tslint:disable-next-line: variable-name
-  grade_id?: string;
   subject_ids?: Array<string>;
+  // tslint:disable-next-line: variable-name
+  grade_subjects?: Array<GradeStringObject>;
 }
 
 export interface CoreFilter {
@@ -685,28 +669,11 @@ export interface CoreFilter {
   core_element_id?: string;
   description?: string;
   // tslint:disable-next-line: variable-name
-  grade_ids?: Array<CoreElementGradeFilter>;
-}
-
-export interface GoalsGradeSubjectCoreElementsFilter {
+  grade_ids?: Array<string>;
   // tslint:disable-next-line: variable-name
-  core_element_id?: string;
+  subject_ids?: Array<string>;
   // tslint:disable-next-line: variable-name
-  main_topic_ids?: Array<string>;
-}
-
-export interface GoalsGradeSubjectFilter {
-  // tslint:disable-next-line: variable-name
-  subject_id?: string;
-  // tslint:disable-next-line: variable-name
-  core_element_ids?: Array<GoalsGradeSubjectCoreElementsFilter>;
-}
-
-export interface GoalsGradeFilter {
-  // tslint:disable-next-line: variable-name
-  grade_id?: string;
-  // tslint:disable-next-line: variable-name
-  subject_ids?: Array<GoalsGradeSubjectFilter>;
+  grade_subjects?: Array<GradeStringObject>;
 }
 
 export interface GoalsFilter {
@@ -714,16 +681,23 @@ export interface GoalsFilter {
   goal_id?: string;
   description?: string;
   // tslint:disable-next-line: variable-name
-  grade_ids?: Array<GoalsGradeFilter>;
+  grade_ids?: Array<string>;
+  // tslint:disable-next-line: variable-name
+  subject_ids?: Array<string>;
+  // tslint:disable-next-line: variable-name
+  grade_subjects?: Array<GradeStringObject>;
 }
 
 export interface SourceFilter {
   // tslint:disable-next-line: variable-name
-  term_id?: string;
+  source_id?: string;
+  description?: string;
   // tslint:disable-next-line: variable-name
-  name?: string;
+  grade_ids?: Array<string>;
   // tslint:disable-next-line: variable-name
-  slug?: string;
+  subject_ids?: Array<string>;
+  // tslint:disable-next-line: variable-name
+  grade_subjects?: Array<GradeStringObject>;
 }
 
 export class FilterArticlePanel {
@@ -765,15 +739,15 @@ export class AssignmentList {
     this.filter.orderField = orderField;
   }
 
-  public setFiltersGradeID(gradeID: string | number | null) {
+  public setFiltersGradeID(gradeID: number | null) {
     this.filter.grade = gradeID;
   }
 
-  public setFiltersSubjectID(subjectID: string | number | null) {
+  public setFiltersSubjectID(subjectID: number | null) {
     this.filter.subject = subjectID;
   }
 
-  public setFiltersMultiID(multiID: string | number | null) {
+  public setFiltersMultiID(multiID: number | null) {
     this.filter.grepMainTopicsIds = multiID;
   }
 
@@ -785,7 +759,7 @@ export class AssignmentList {
     this.filter.grepGoalsIds = goalID;
   }
 
-  public setFiltersReadingID(readingID: string | number | null) {
+  public setFiltersReadingID(readingID: number | null) {
     this.filter.grepReadingInSubject = readingID;
   }
 
