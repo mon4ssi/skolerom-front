@@ -511,7 +511,6 @@ export class ArticlesList extends Component<Props, State> {
     this.setState({ filtersAjaxLoadingGoals: false });
   }
 
-
   public customReset = async (targets: Array<string>) => {
 
     this.handleChangeFilters('none', 0);
@@ -528,7 +527,6 @@ export class ArticlesList extends Component<Props, State> {
     this.setState({ goalValueFilter: [] });
     this.setState({ filtersAjaxLoading: true });
     this.setState({ filtersAjaxLoadingGoals: true });
-
 
     targets.forEach((target) => {
 
@@ -568,7 +566,6 @@ export class ArticlesList extends Component<Props, State> {
           MySelectSubject: []
         });
       } else if (target === 'coreElements') {
-        console.log("sadasdsadjlksajdlksajd");
         this.setState({
           selectedCoresAll: [],
           selectedCoresFilter: [],
@@ -590,7 +587,6 @@ export class ArticlesList extends Component<Props, State> {
     });
     this.setState({ filtersAjaxLoading: false });
     this.setState({ filtersAjaxLoadingGoals: false });
-
 
     // const dataCores = this.state.selectedCoresAll;
     // const dataCoresFilter = this.state.selectedGoalsFilter;
@@ -1013,7 +1009,6 @@ export class ArticlesList extends Component<Props, State> {
         allSympSubjectsLength = valueSelectedSubject!.length > 0 ? allSympSubjectsLength : true;
 
         if (allSympGradesLength && allSympSubjectsLength) {
-          // console.log(true);
           newArrayCore.push({
             // tslint:disable-next-line: variable-name
             id: Number(element.core_element_id),
@@ -1022,8 +1017,6 @@ export class ArticlesList extends Component<Props, State> {
         }
       } else {
         if (allSympSubjectsLength) {
-          // console.log(true);
-
           newArrayCore.push({
             // tslint:disable-next-line: variable-name
             id: Number(element.core_element_id),
@@ -1055,7 +1048,6 @@ export class ArticlesList extends Component<Props, State> {
             valueSubject: value
           }
         );
-
 
         this.state.grepDataFilters!.multidisciplinay_filter!.forEach((element) => {
           // tslint:disable-next-line: variable-name
@@ -1196,8 +1188,6 @@ export class ArticlesList extends Component<Props, State> {
       }
       if (this.state.activeGrepFilters) {
         e.currentTarget.classList.remove('active');
-        console.log(valueSelectedSubject);
-
       }
 
     }
@@ -1239,24 +1229,19 @@ export class ArticlesList extends Component<Props, State> {
         // grade validation
         element.grade_ids!.forEach((grade) => {
 
-          console.log("===");
           if (grade.grade_id === this.state.valueGrade) {
             allSympGradesLength = true;
-            console.log(grade.grade_id);
 
             // subject validation
             const allSympSubjects = grade.subject_ids!;
             allSympSubjects!.forEach((subject) => {
               if (this.state.MySelectSubject!.includes(Number(subject.subject_id))) {
-                console.log(subject.subject_id);
-
                 allSympSubjectsLength = true;
 
                 // coreElement validation
                 const allSympCoreElements = subject.core_elments_ids;
                 allSympCoreElements!.forEach((coreElementId) => {
                   if (selectCoreElements!.map(selectCoreElement => selectCoreElement.value.toString()).includes(coreElementId)) {
-                    console.log(coreElementId);
                     allSympCoreElementsLength = true;
                   }
                 });
@@ -1270,10 +1255,6 @@ export class ArticlesList extends Component<Props, State> {
 
         if (allSympGradesLength && allSympSubjectsLength && allSympCoreElementsLength) {
 
-
-          console.log("Main Topic: " + element.description);
-
-          console.log("");
           newArrayMulti.push({
             // tslint:disable-next-line: variable-name
             id: Number(element.main_topic_id),

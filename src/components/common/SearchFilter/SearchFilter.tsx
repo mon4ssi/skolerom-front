@@ -634,7 +634,6 @@ class SearchFilter extends Component<Props, State> {
         </div>
       );
     };
-    console.log(coreValueFilter);
     return (
       <Select
         width="320px"
