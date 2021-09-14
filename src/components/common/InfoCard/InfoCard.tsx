@@ -34,6 +34,7 @@ interface Props {
   title: string;
   description?: string;
   img?: string;
+  url?: string;
   urldomain?: string;
   grades?: Array<Grade>;
   numberOfQuestions?: number;
@@ -45,6 +46,7 @@ interface Props {
   isPublished?: boolean;
   isDistributed?: boolean;
   onClick?(id: number, view?: string): void;
+  onCLickImg?(url?: string): void;
   onDelete?(itemId: number): void;
   onEdit?(itemId: number, type: string): void;
   setActiveTooltip?(): void;
@@ -132,6 +134,14 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
       );
     }
     return null;
+  }
+
+  public onCardImgClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const { onCLickImg, url } = this.props;
+    event.preventDefault();
+    if (onCLickImg) {
+      onCLickImg(url);
+    }
   }
 
   public onCardClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -324,7 +334,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
         {!isDomain && withButtons && this.renderActionButtons()}
         {isDomain && this.renderDomainButtons()}
         <button title={title}>
-          <img src={img || placeholderImgDefault} alt={title} title={title} className="cardImage"/>
+          <img src={img || placeholderImgDefault} alt={title} title={title} className="cardImage" onClick={this.onCardImgClick}/>
         </button>
         <div className="cardInfo flexBox dirColumn spaceBetween">
           <div>

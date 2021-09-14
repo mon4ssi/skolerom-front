@@ -143,10 +143,18 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     const withoutBottomVerticalLine = readOnly && (this.props.node.children.length === 0);
     let imagenType = articleImg;
     let urldomain = '';
-    if (item.type === TeachingPathNodeType.Article) { imagenType = articleImg; }
-    if (item.type === TeachingPathNodeType.Assignment) { imagenType = assignmentImg; }
+    let urlBasic = '';
+    if (item.type === TeachingPathNodeType.Article) {
+      imagenType = articleImg;
+      urlBasic = item.value.url;
+    }
+    if (item.type === TeachingPathNodeType.Assignment) {
+      imagenType = assignmentImg;
+      urlBasic = `${process.env.REACT_APP_BASE_URL}/assignments/view/${item.value.id}`;
+    }
     if (item.type === TeachingPathNodeType.Domain) {
       imagenType = domainImg;
+      urlBasic = item.value.url;
       urldomain = item.value.url;
     }
 
@@ -161,12 +169,14 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
             title={item.value.title}
             description={item.value.excerpt || item.value.description}
             img={image}
+            url={urlBasic}
             urldomain={urldomain}
             grades={item.value.grades}
             numberOfQuestions={item.value.numberOfQuestions}
             onDelete={this.handleDeleteItem}
             onEdit={this.handleEditItem}
             levels={levels}
+            onCLickImg={this.onCLickImg}
           />
           {!withoutBottomVerticalLine && <div className="bottomVerticalLine" style={{ left: leftIndent }}/>}
         </div>
@@ -200,6 +210,10 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         node.removeItem(itemId);
       }
     }
+  }
+
+  public onCLickImg = async(url: string) => {
+    window.open(`${url}`, '_blank');
   }
 
   public handleEditItem = async (itemId: number, type: string) => {
