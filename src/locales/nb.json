@@ -78,7 +78,7 @@
     "Back": "Tilbake",
     "selected": "valgt",
     "Log in": "Logg inn",
-    "About skolerom": "Om skolerom",
+    "About skolerom": "Hva er Skolerom?",
     "School": "Skoleartikler",
     "Library": "Biblioteket",
     "teacher": "Lærer",
@@ -171,7 +171,7 @@
   "assignments search": {
     "title": "Oppgaver",
     "Choose subject": "velg fag",
-    "Choose grade": "velg trinn",
+    "Choose grade": "Velg trinn",
     "Choose Core": "Velg kjerneelementer",
     "Choose Multi": "Velg tverrfaglig tema",
     "Choose reading": "Velg lesing i faget",
@@ -346,7 +346,7 @@
     "validation": {
       "title_words_count": "Tittelen kan ikke være tom.",
       "description_words_count": "Beskrivelsen kan ikke være tom",
-      "required_grades_and_subjects": "Vennligst velg trinn og fag!",
+      "required_grades_and_subjects": "Vennligst Velg trinn og fag!",
       "number_of_questions": "Legg til minst ett spørsmål for å fortsette.",
       "question": {
         "required_title": "Alle spørsmål må ha en tittel.",
@@ -585,7 +585,7 @@
     "modals": {
       "add_articles": "Legg til artikler",
       "add_assignments": "Legg til oppgaver",
-      "add_domain": "Legg til Link",
+      "add_domain": "Legg til lenke",
       "create_assignment": "Lag oppgave",
       "loading": "Laster...",
       "nothing_found": "Ingenting funnet...",

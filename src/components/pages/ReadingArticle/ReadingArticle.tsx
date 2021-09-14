@@ -17,6 +17,7 @@ interface Props {
   closeArticle(): void;
   finishReading(graduation: number): void;
   handleChangeLevel?(levelId: number): void;
+  notFinish?: boolean;
 }
 
 interface State {
@@ -118,12 +119,24 @@ export class ReadingArticle extends Component<Props, State> {
       graduation: 2
     });
   }
+  
+  public finishButton = () => {
+    const { notFinish } = this.props;
+    return (
+      <div className="ReadingArticle__finishButton">
+        <CreateButton
+          children={intl.get('assignment preview.Finish reading article')}
+          onClick={this.finishReading}
+          title={intl.get('assignment preview.Finish reading article')}
+        />
+      </div>
+    );
+  }
 
   public render() {
     const { closeArticle, titleCurrentArticle, shownArticleId } = this.props;
     const { newArticleId } = this.state;
-    const articleId = isNull(newArticleId) ? shownArticleId : newArticleId;
-
+    const articleId = isNull(newArticleId) ? shownArticleId : newArticleId;    
     return (
       <div className="ReadingArticle">
         <div className="ReadingArticle__headerWrapper">
@@ -136,14 +149,7 @@ export class ReadingArticle extends Component<Props, State> {
             </button>
 
             {this.renderLevels()}
-
-            <div className="ReadingArticle__finishButton">
-              <CreateButton
-                children={intl.get('assignment preview.Finish reading article')}
-                onClick={this.finishReading}
-                title={intl.get('assignment preview.Finish reading article')}
-              />
-            </div>
+            {this.props.notFinish && this.finishButton()}
           </div>
         </div>
 

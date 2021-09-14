@@ -2031,6 +2031,7 @@ export class ArticlesList extends Component<Props, State> {
           shownArticleId={selectedArticle!.correspondingLevelArticleId || selectedArticle!.wpId || selectedArticle!.id}
           closeArticle={this.closeArticleReading}
           finishReading={this.finishReading}
+          notFinish={false}
         />
       );
     }

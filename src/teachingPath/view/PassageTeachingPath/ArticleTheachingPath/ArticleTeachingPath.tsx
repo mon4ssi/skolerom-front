@@ -108,6 +108,7 @@ export class ArticleTeachingPath extends Component<Props, State> {
           closeArticle={this.closeArticleReading}
           finishReading={this.finishReading}
           handleChangeLevel={this.handleChangeLevel}
+          notFinish={true}
         />
       );
     }

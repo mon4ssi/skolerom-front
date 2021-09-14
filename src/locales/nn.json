@@ -78,7 +78,7 @@
     "Back": "Tilbake",
     "selected": "valt",
     "Log in": "Logg inn",
-    "About skolerom": "Om skolerom",
+    "About skolerom": "Hva er Skolerom?",
     "School": "Skoleartikler",
     "Library": "Biblioteket",
     "teacher": " Lærar",
@@ -171,7 +171,7 @@
   "assignments search": {
     "title": "Uppgifter",
     "Choose subject": "velg fag",
-    "Choose grade": "velg trinn",
+    "Choose grade": "Velg trinn",
     "Choose Core": "Velg kjerneelementer",
     "Choose Multi": "Velg tverrfaglig tema",
     "Choose reading": "Velg lesing i faget",
@@ -586,7 +586,7 @@
     "modals": {
       "add_articles": "Legg til artiklar",
       "add_assignments": "Legg til oppgåver",      
-      "add_domain": "Legg til Link",
+      "add_domain": "Legg til lenke",
       "create_assignment": "Lag oppgåve",
       "loading": "Lastar...",
       "nothing_found": "Ingenting funne...",

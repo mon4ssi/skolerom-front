@@ -1270,7 +1270,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     </div>
   )
 
-  public render() {
+  public myRender() {
     const { newAssignmentStore } = this.props;
     const { checkArticle, selectedArticle } = this.state;
     const selectedArticles = newAssignmentStore!.currentEntity!.getListOfArticles().map(this.articleToTagProp);
@@ -1281,79 +1281,89 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
           shownArticleId={selectedArticle!.correspondingLevelArticleId || selectedArticle!.wpId || selectedArticle!.id}
           closeArticle={this.closeArticleReading}
           finishReading={this.finishReading}
+          notFinish={false}
         />
       );
     }
     return (
-      <div className={'RelatedArticlesPreview'}>
-        <div className="RelatedArticlesPreview__content">
-          <div className="RelatedArticlesPreview__left">
-            <button className="back-buttonAbs" onClick={this.closePanel}>
-              <img src={backIcon} alt="Back" />
-              {intl.get('new assignment.go_back')}
-            </button>
-            {this.conditionalGreedData()}
-          </div>
-          <div className="RelatedArticlesPreview__right">
-            <div className="wrapperArticles">
-              <div className="content filtersContent">
-                {this.renderHeader()}
-                <SearchFilter
-                  subject
-                  grade
-                  date
-                  placeholder={intl.get('assignments search.Search')}
-                  isArticlesListPage
-                  filtersisUsed={this.state.filtersisUsed}
-                  filtersAjaxLoading={this.state.filtersAjaxLoading}
-                  filtersAjaxLoadingGoals={this.state.filtersAjaxLoadingGoals}
-                  // METHODS
-                  handleChangeSubject={this.handleChangeSubject}
-                  handleChangeGrade={this.handleChangeGrade}
-                  switchNewestOldest={this.switchNewestOldest}
-                  handleInputSearchQuery={this.handleChangeSearchQuery}
-                  handleClickGrade={this.handleClickGrade}
-                  handleClickSubject={this.handleClickSubject}
-                  handleClickMulti={this.handleClickMulti}
-                  handleClickSource={this.handleClickSource}
-                  handleChangeSelectCore={this.handleChangeSelectCore}
-                  handleChangeSelectGoals={this.handleChangeSelectGoals}
-                  handleClickReset={this.handleClickReset}
-                  showSourceFilter={this.state.showSourceFilter}
-                  // VALUES
-                  // subjectFilterValue={Number(this.state.appliedFilters.subjects)}
-                  // gradeFilterValue={Number(this.state.appliedFilters.grades)}
-                  coreFilterValue={Number(this.state.appliedFilters.core)}
-                  goalsFilterValue={Number(this.state.appliedFilters.goal)}
-                  defaultValueGradeFilter={String(this.state.appliedFilters.grades)}
-                  defaultValueSubjectFilter={String(this.state.appliedFilters.subjects)}
-                  coreValueFilter={this.state.myValueCore}
-                  goalValueFilter={this.state.goalValueFilter}
-                  searchQueryFilterValue={this.state.appliedFilters.searchTitle as string}
-                  customGradesList={this.customGradesList()}
-                  customSubjectsList={this.mySubjects()}
-                  customCoreList={this.customCoreList()}
-                  customMultiList={this.customMultiList()}
-                  customGoalsList={this.customGoalsList()}
-                  customSourceList={this.customSourceList()}
-                />
+      <div className="RelatedArticlesPreview__content">
+        <div className="RelatedArticlesPreview__left">
+          <button className="back-buttonAbs" onClick={this.closePanel}>
+            <img src={backIcon} alt="Back" />
+            {intl.get('new assignment.go_back')}
+          </button>
+          {this.conditionalGreedData()}
+        </div>
+        <div className="RelatedArticlesPreview__right">
+          <div className="wrapperArticles">
+            <div className="content filtersContent">
+              {this.renderHeader()}
+              <SearchFilter
+                subject
+                grade
+                date
+                placeholder={intl.get('assignments search.Search')}
+                isArticlesListPage
+                filtersisUsed={this.state.filtersisUsed}
+                filtersAjaxLoading={this.state.filtersAjaxLoading}
+                filtersAjaxLoadingGoals={this.state.filtersAjaxLoadingGoals}
+                // METHODS
+                handleChangeSubject={this.handleChangeSubject}
+                handleChangeGrade={this.handleChangeGrade}
+                switchNewestOldest={this.switchNewestOldest}
+                handleInputSearchQuery={this.handleChangeSearchQuery}
+                handleClickGrade={this.handleClickGrade}
+                handleClickSubject={this.handleClickSubject}
+                handleClickMulti={this.handleClickMulti}
+                handleClickSource={this.handleClickSource}
+                handleChangeSelectCore={this.handleChangeSelectCore}
+                handleChangeSelectGoals={this.handleChangeSelectGoals}
+                handleClickReset={this.handleClickReset}
+                showSourceFilter={this.state.showSourceFilter}
+                // VALUES
+                // subjectFilterValue={Number(this.state.appliedFilters.subjects)}
+                // gradeFilterValue={Number(this.state.appliedFilters.grades)}
+                coreFilterValue={Number(this.state.appliedFilters.core)}
+                goalsFilterValue={Number(this.state.appliedFilters.goal)}
+                defaultValueGradeFilter={String(this.state.appliedFilters.grades)}
+                defaultValueSubjectFilter={String(this.state.appliedFilters.subjects)}
+                coreValueFilter={this.state.myValueCore}
+                goalValueFilter={this.state.goalValueFilter}
+                searchQueryFilterValue={this.state.appliedFilters.searchTitle as string}
+                customGradesList={this.customGradesList()}
+                customSubjectsList={this.mySubjects()}
+                customCoreList={this.customCoreList()}
+                customMultiList={this.customMultiList()}
+                customGoalsList={this.customGoalsList()}
+                customSourceList={this.customSourceList()}
+              />
 
-                <div className="cards" ref={this.ref} onScroll={this.onScroll}>
-                  {this.renderCards()}
-                </div>
-
-              </div>
-
-              <div className={'selectedArticles'}>
-                <div className={'counter'}>{selectedArticles.length} {intl.get('new assignment.articles selected')}</div>
-                <CreateButton onClick={this.closePanel} disabled={selectedArticles.length === 0} title={intl.get('new assignment.Set as related articles')}>
-                  {intl.get('new assignment.Set as related articles')}
-                </CreateButton>
+              <div className="cards" ref={this.ref} onScroll={this.onScroll}>
+                {this.renderCards()}
               </div>
 
             </div>
+
+            <div className={'selectedArticles'}>
+              <div className={'counter'}>{selectedArticles.length} {intl.get('new assignment.articles selected')}</div>
+              <CreateButton onClick={this.closePanel} disabled={selectedArticles.length === 0} title={intl.get('new assignment.Set as related articles')}>
+                {intl.get('new assignment.Set as related articles')}
+              </CreateButton>
+            </div>
+
           </div>
         </div>
+      </div>
+    );
+  }
+
+  public render() {
+    const { newAssignmentStore } = this.props;
+    const { checkArticle, selectedArticle } = this.state;
+    const selectedArticles = newAssignmentStore!.currentEntity!.getListOfArticles().map(this.articleToTagProp);    
+    return (
+      <div className={'RelatedArticlesPreview'}>
+        {this.myRender()}
       </div>
     );
   }
