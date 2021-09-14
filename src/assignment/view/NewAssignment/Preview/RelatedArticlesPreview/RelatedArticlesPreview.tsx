@@ -1360,7 +1360,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
   public render() {
     const { newAssignmentStore } = this.props;
     const { checkArticle, selectedArticle } = this.state;
-    const selectedArticles = newAssignmentStore!.currentEntity!.getListOfArticles().map(this.articleToTagProp);    
+    const selectedArticles = newAssignmentStore!.currentEntity!.getListOfArticles().map(this.articleToTagProp);
     return (
       <div className={'RelatedArticlesPreview'}>
         {this.myRender()}
