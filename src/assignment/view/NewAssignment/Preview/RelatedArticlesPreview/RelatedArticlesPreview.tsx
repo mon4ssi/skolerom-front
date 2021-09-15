@@ -330,6 +330,13 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     }
   }
 
+  public toSelectArticle = (article: Article) => () => {
+    this.setState({
+      greeddata: true,
+      selectedArticle: article
+    });
+  }
+
   public sortSelectedCards = (cardA: TagProp): number => {
     const { newAssignmentStore } = this.props;
     if (this.state.isSortedByDate) {
@@ -401,7 +408,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         article={article}
         handleArticle={this.handleArticle(article.id)}
         isCheckedArticle={this.isCheckedArticle(article.id)}
-        toSelectArticle={this.handleArticle(article.id)}
+        toSelectArticle={this.toSelectArticle(article)}
       />
     ) : (
         <SkeletonLoader
