@@ -150,7 +150,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     }
     if (item.type === TeachingPathNodeType.Assignment) {
       imagenType = assignmentImg;
-      urlBasic = `${process.env.REACT_APP_BASE_URL}/assignments/view/${item.value.id}`;
+      urlBasic = `/assignments/view/${item.value.id}`;
     }
     if (item.type === TeachingPathNodeType.Domain) {
       imagenType = domainImg;
