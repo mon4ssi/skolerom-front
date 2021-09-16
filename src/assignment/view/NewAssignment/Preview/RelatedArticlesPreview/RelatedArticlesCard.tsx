@@ -15,6 +15,8 @@ import secondLevelImg from 'assets/images/level-2-blue.svg';
 import thirdLevelImg from 'assets/images/level-3-blue.svg';
 
 import './RelatedArticlesPreview.scss';
+import classnames from 'classnames';
+import is from 'date-fns/esm/locale/is/index.js';
 
 const twoGrades = 2;
 const threeGrades = 3;
@@ -22,7 +24,6 @@ const threeGrades = 3;
 interface Props {
   article: Article;
   isCheckedArticle: boolean;
-
   handleArticle(): void;
   toSelectArticle(): void;
 }
@@ -90,7 +91,7 @@ export const RelatedArticlesCard = (props: Props) => {
   };
 
   return (
-    <div className={'RelatedArticlesCard'} onClick={props.toSelectArticle}>
+    <div className="RelatedArticlesCard" id={`relatedarticle_${article.id}`} onClick={props.toSelectArticle}>
       <div className="image">
         {renderImageArticle()}
         <button className="check" title="check" onClick={props.handleArticle}>

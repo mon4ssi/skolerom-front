@@ -596,14 +596,15 @@
       "articles": "Artikler",
       "articles_title": "Artikkelinformasjon",
       "articles_default": "Velg en artikkel for mer informasjon",
-      "articles_read": "Read Artikler",
+      "articles_read": "Les artikkel",
       "assignments_title": "Oppgaveinformasjon",
       "assignments_default": "Velg en oppgaver for mer informasjon",
-      "assignments_read": "Read Oppgaver",
+      "assignments_read": "Les artikkel",
       "assignmetns": "Oppgaver",
       "assignments_selected": "{number} oppgåver valde",
       "search_for_articles": "Søk etter artiklar...",
-      "expand": "Utvid all",
+      "expand": "Utvid alle",
+      "expandclose": "Lukk alle",
       "search": {
         "buttons": {
           "button_close": "Filter",

@@ -173,9 +173,9 @@ export class AssignmentsList extends Component<Props, State> {
       selectedAssignmentTitle: '',
       selectedAssignmentDescription: '',
       selectedAssignment: null,
-      expandCore: false,
-      expandGoals: false,
-      expandSubjects: false,
+      expandCore: true,
+      expandGoals: true,
+      expandSubjects: true,
       myValueSubject: [],
       myValueGrade: [],
       myValueMulti: [],
@@ -550,7 +550,7 @@ export class AssignmentsList extends Component<Props, State> {
           >
             {intl.get('edit_teaching_path.modals.my_assignments')}
           </button>
-          <a href="javascript:void(0)" onClick={this.redirectAssigment}>{intl.get('edit_teaching_path.modals.articles')}</a>
+          {/* <a href="javascript:void(0)" onClick={this.redirectAssigment}>{intl.get('edit_teaching_path.modals.articles')}</a> */}
         </div>
         <div className="assignmentsListHeader__right">
           <button ref={this.refButton} onClick={this.closeModal} title={intl.get('generals.close_assignment')}>
@@ -1106,6 +1106,7 @@ export class AssignmentsList extends Component<Props, State> {
 
   public renderInformationContent = () => {
     const { selectedAssignmentTitle, selectedAssignmentDescription, expand } = this.state;
+    const textexpand = expand ? intl.get('edit_teaching_path.modals.expandclose') : intl.get('edit_teaching_path.modals.expand');
     return (
       <div className="defaultContentModal">
         <h2>{intl.get('edit_teaching_path.modals.assignments_title')}</h2>
@@ -1114,7 +1115,7 @@ export class AssignmentsList extends Component<Props, State> {
           <p>{selectedAssignmentDescription}</p>
         </div>
         <div className="defaultContentModal__expand">
-          <div className={`expandContent ${expand && 'active'}`} onClick={this.toggleData}>{intl.get('edit_teaching_path.modals.expand')}</div>
+          <div className={`expandContent ${expand && 'active'}`} onClick={this.toggleData}>{textexpand}</div>
           {expand && this.renderInsideData()}
         </div>
       </div>

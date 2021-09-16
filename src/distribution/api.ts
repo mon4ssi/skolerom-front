@@ -87,7 +87,6 @@ export class DistributionApi implements DistributionRepo {
 
   public async getTeachingPathDistributionData(id: number) {
     const groupsResponse: AxiosResponse<DistributionResponseDTO> = await API.get(`/api/teacher/teaching-paths/${id}/distribute`);
-
     return buildDistribution(groupsResponse.data, id);
   }
 

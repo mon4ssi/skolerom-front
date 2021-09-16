@@ -287,6 +287,21 @@
 .NewAssignmentPreview .RelatedArticlesCard {
   width: calc(100% / 5 - 20px);
 } 
+.RelatedArticlesCard.selectedArticle {
+  position: relative;
+}
+.RelatedArticlesCard.selectedArticle:before {
+  content: '';
+  position: absolute;
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  pointer-events: none;
+  border: solid 2px;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  border-radius: 10px;
+}
 
 @media screen and (max-width: $screen-dimension-desktop) {
   .info {

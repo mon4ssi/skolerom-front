@@ -84,9 +84,9 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       greeddata: false,
       selectedArticle: null,
       expand: true,
-      expandCore: false,
-      expandGoals: false,
-      expandSubjects: false,
+      expandCore: true,
+      expandGoals: true,
+      expandSubjects: true,
       checkArticle: false,
       grepDataFilters: null,
       selectedSubjectsFilter: [],
@@ -335,6 +335,14 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       greeddata: true,
       selectedArticle: article
     });
+    const RelatedArticlesCard = Array.from(document.getElementsByClassName('RelatedArticlesCard') as HTMLCollectionOf<HTMLElement>);
+    RelatedArticlesCard.forEach((e) => {
+      e.classList.remove('selectedArticle');
+    });
+    const rootDiv = document.getElementById(`relatedarticle_${article.id}`);
+    if (typeof(rootDiv) !== 'undefined') {
+      rootDiv!.classList.add('selectedArticle');
+    }
   }
 
   public sortSelectedCards = (cardA: TagProp): number => {
@@ -1168,6 +1176,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
 
   public renderInformationContent = () => {
     const { selectedArticle, expand } = this.state;
+    const textexpand = expand ? intl.get('edit_teaching_path.modals.expandclose') : intl.get('edit_teaching_path.modals.expand');
     if (selectedArticle) {
       return (
         <div className="defaultContentModal" data-id={selectedArticle!.id}>
@@ -1178,7 +1187,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
             <a href="javascript:void(0)" className="CreateButton" onClick={this.openArticleReading}>{intl.get('edit_teaching_path.modals.articles_read')}</a>
           </div>
           <div className="defaultContentModal__expand">
-            <div className={`expandContent ${expand && 'active'}`} onClick={this.toggleData}>{intl.get('edit_teaching_path.modals.expand')}</div>
+            <div className={`expandContent ${expand && 'active'}`} onClick={this.toggleData}>{textexpand}</div>
             {expand && this.renderInsideData()}
           </div>
         </div>

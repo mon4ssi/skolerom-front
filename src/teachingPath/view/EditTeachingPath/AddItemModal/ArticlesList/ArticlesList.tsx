@@ -47,6 +47,18 @@ class ArticleItem extends Component<ArticleItemProps> {
     );
   }
 
+  public isSelectedArticle = () => {
+    const { article } = this.props;
+    const RelatedArticlesCard = Array.from(document.getElementsByClassName('RelatedArticlesCard') as HTMLCollectionOf<HTMLElement>);
+    RelatedArticlesCard.forEach((e) => {
+      e.classList.remove('selectedArticle');
+    });
+    const rootDiv = document.getElementById(`relatedarticle_${article.id}`);
+    if (typeof(rootDiv) !== 'undefined') {
+      rootDiv!.classList.add('selectedArticle');
+    }
+  }
+
   public handleSelectArticle = () => {
     const { article, addItem, removeItem } = this.props;
 
@@ -54,16 +66,14 @@ class ArticleItem extends Component<ArticleItemProps> {
       removeItem(article) :
       addItem(article);
   }
-
   public toSelectArticle = () => {
     const { toSelectArticle, article } = this.props;
-
+    this.isSelectedArticle();
     toSelectArticle(article);
   }
 
   public render() {
     const { article } = this.props;
-
     return (
       <RelatedArticlesCard
         article={article}
@@ -138,9 +148,9 @@ export class ArticlesList extends Component<Props, State> {
       greeddata: false,
       selectedArticle: null,
       expand: true,
-      expandCore: false,
-      expandGoals: false,
-      expandSubjects: false,
+      expandCore: true,
+      expandGoals: true,
+      expandSubjects: true,
       checkArticle: false,
       grepDataFilters: null,
       selectedSubjectsFilter: [],
@@ -1587,7 +1597,7 @@ export class ArticlesList extends Component<Props, State> {
     <div className="articlesListHeader flexBox spaceBetween" tabIndex={0}>
       <div className="articlesListHeader__left">
         <p className="active">{intl.get('edit_teaching_path.modals.articles')}</p>
-        <a href="javascript:void(0)" onClick={this.redirectAssigment}>{intl.get('edit_teaching_path.modals.assignmetns')}</a>
+        {/* <a href="javascript:void(0)" onClick={this.redirectAssigment}>{intl.get('edit_teaching_path.modals.assignmetns')}</a> */}
       </div>
       <div className="articlesListHeader__right">
         <button ref={this.refButton} onClick={this.closeModal} title={intl.get('generals.close')}>
@@ -1920,6 +1930,7 @@ export class ArticlesList extends Component<Props, State> {
 
   public renderInformationContent = () => {
     const { selectedArticle, expand } = this.state;
+    const textexpand = expand ? intl.get('edit_teaching_path.modals.expandclose') : intl.get('edit_teaching_path.modals.expand');
     return (
       <div className="defaultContentModal" data-id={selectedArticle!.id}>
         <h2>{intl.get('edit_teaching_path.modals.articles_title')}</h2>
@@ -1929,7 +1940,7 @@ export class ArticlesList extends Component<Props, State> {
           <a href="javascript:void(0)" className="CreateButton" onClick={this.openArticleReading}>{intl.get('edit_teaching_path.modals.articles_read')}</a>
         </div>
         <div className="defaultContentModal__expand">
-          <div className={`expandContent ${expand && 'active'}`} onClick={this.toggleData}>{intl.get('edit_teaching_path.modals.expand')}</div>
+          <div className={`expandContent ${expand && 'active'}`} onClick={this.toggleData}>{textexpand}</div>
           {expand && this.renderInsideData()}
         </div>
       </div>

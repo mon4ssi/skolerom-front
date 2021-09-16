@@ -603,7 +603,8 @@
       "assignmetns": "Assignments",
       "assignments_selected": "{number} assignments selected",
       "search_for_articles": "Search for articles...",
-      "expand": "Expand all",      
+      "expand": "Expand all",
+      "expandclose": "Close all",
       "search": {
         "buttons": {
           "button_close": "Filters",
