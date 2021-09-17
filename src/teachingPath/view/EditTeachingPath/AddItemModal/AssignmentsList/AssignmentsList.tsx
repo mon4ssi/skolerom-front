@@ -427,7 +427,7 @@ export class AssignmentsList extends Component<Props, State> {
       } else {
         Notification.create({
           type: NotificationTypes.ERROR,
-          title: intl.get('edit_teaching_path.notifications.neccesary_edit')
+          title: intl.get('edit_teaching_path.notifications.neccesary_edit_asignment')
         });
       }
     } else {

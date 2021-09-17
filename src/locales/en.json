@@ -631,7 +631,8 @@
       "merge_paths": "Are you sure you want to merge these paths?",
       "unmerge_path": "Are you sure you want to unmerge this path?",
       "unable_to_merge": "You can't merge articles and assignments!",
-      "neccesary_edit": "In this momment only edit selected article, please remove article selection and select new article"
+      "neccesary_edit": "Please unselect the current article, and then select the new one",
+      "neccesary_edit_asignment": "Please unselect the current assignment, and then select the new one"
     },
     "paths": {
       "main_teaching_path_title": "Teaching path",

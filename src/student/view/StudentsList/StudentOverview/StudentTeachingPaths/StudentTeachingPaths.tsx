@@ -31,7 +31,7 @@ class StudentTeachingPaths extends Component<Props> {
   public async componentDidMount() {
     const { studentsListStore } = this.props;
 
-    studentsListStore!.setTeachingPathFilterSorting(SortingFilter.DEADLINE, SortingFilter.ASC);
+    studentsListStore!.setTeachingPathFilterSorting(SortingFilter.DEADLINE, SortingFilter.DESC);
   }
 
   public componentWillUnmount() {
@@ -93,11 +93,11 @@ class StudentTeachingPaths extends Component<Props> {
 
   public renderSorting = () => (
     <select onChange={this.handleChangeSorting} className="StudentAssignments__select">
-      <option value={`${SortingFilter.DEADLINE} ${SortingFilter.ASC}`}>
-        {intl.get('assignments search.Sort by deadline')} ({intl.get('assignments search.due_first').toLowerCase()})
-      </option>
       <option value={`${SortingFilter.DEADLINE} ${SortingFilter.DESC}`}>
         {intl.get('assignments search.Sort by deadline')} ({intl.get('assignments search.due_last').toLowerCase()})
+      </option>
+      <option value={`${SortingFilter.DEADLINE} ${SortingFilter.ASC}`}>
+        {intl.get('assignments search.Sort by deadline')} ({intl.get('assignments search.due_first').toLowerCase()})
       </option>
     </select>
   )
@@ -110,7 +110,7 @@ class StudentTeachingPaths extends Component<Props> {
   public renderTP = (item: TeachingPath, index: number) => {
     const { studentsListStore, history, uiStore } = this.props;
     const locale = studentsListStore!.getCurrentLocale();
-    const indesPlus = index + 1;
+    const indesPlus = item.answerId;
 
     const handleClickTP = (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
