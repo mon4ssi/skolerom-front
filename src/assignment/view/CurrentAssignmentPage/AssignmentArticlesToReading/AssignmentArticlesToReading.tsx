@@ -151,6 +151,7 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
           closeArticle={this.closeArticle}
           finishReading={this.finishReading}
           handleChangeLevel={this.handleChangeLevel}
+          notFinish={true}
         />
       );
     }

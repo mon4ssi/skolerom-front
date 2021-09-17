@@ -20,7 +20,6 @@ export class DistributionService {
 
   public async getTeachingPathDistributionData(id: number) {
     this.distribution = await this.distributionRepo.getTeachingPathDistributionData(id);
-
     return this.getDistribution();
   }
 

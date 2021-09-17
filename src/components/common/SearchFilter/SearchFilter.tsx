@@ -45,6 +45,8 @@ interface Props {
   customSubjectsList?: Array<Subject>;
   showSourceFilter?: boolean;
   filtersisUsed?: boolean;
+  filtersAjaxLoading?: boolean;
+  filtersAjaxLoadingGoals?: boolean;
 
   subjectFilterValue?: number | null;
   gradeFilterValue?: number | null;
@@ -618,6 +620,7 @@ class SearchFilter extends Component<Props, State> {
         onChange={handleChangeSelectCore}
         placeholder={intl.get('new assignment.greep.core')}
         defaultValue={coreValueFilter}
+        isClearable={true}
         isMulti
       />
     );

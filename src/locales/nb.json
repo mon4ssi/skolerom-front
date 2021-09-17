@@ -78,7 +78,7 @@
     "Back": "Tilbake",
     "selected": "valgt",
     "Log in": "Logg inn",
-    "About skolerom": "Om skolerom",
+    "About skolerom": "Hva er Skolerom?",
     "School": "Skoleartikler",
     "Library": "Biblioteket",
     "teacher": "Lærer",
@@ -171,15 +171,15 @@
   "assignments search": {
     "title": "Oppgaver",
     "Choose subject": "velg fag",
-    "Choose grade": "velg trinn",
-    "Choose Core": "velg reflektere",
-    "Choose Multi": "velg tolke og sammenholde",
-    "Choose reading": "velg lesing i faget",
-    "Class": "Trinn",
+    "Choose grade": "Velg trinn",
+    "Choose Core": "Velg kjerneelementer",
+    "Choose Multi": "Velg tverrfaglig tema",
+    "Choose reading": "Velg lesing i faget",
+    "Class": "trinn",
     "Popularity": "Popularitet",
     "Search for assignments": "Søk etter oppgaver...",
     "Search": "Søk...",
-    "Grade": "Trinn",
+    "Grade": "trinn",
     "Newest": "Nyeste",
     "Latest": "Siste",
     "Earliest": "Nyeste",
@@ -346,7 +346,7 @@
     "validation": {
       "title_words_count": "Tittelen kan ikke være tom.",
       "description_words_count": "Beskrivelsen kan ikke være tom",
-      "required_grades_and_subjects": "Vennligst velg trinn og fag!",
+      "required_grades_and_subjects": "Vennligst Velg trinn og fag!",
       "number_of_questions": "Legg til minst ett spørsmål for å fortsette.",
       "question": {
         "required_title": "Alle spørsmål må ha en tittel.",
@@ -437,11 +437,11 @@
   },
   "publishing_page": {
     "publish_assignment": "Publiser oppgave",
-    "subject": "Fag",
-    "grade": "Trinn",
+    "subject": "fag",
+    "grade": "trinn",
     "student_level": "Nivå",
     "visibility": "Synlighet",
-    "visibility_description":"Velg Offentlig for å dele med alle som bruker Skolerom eller Privat for å holde det til deg selv og de du deler det med",
+    "visibility_description":"Velg offentlig dersom du vil dele innholdet med alle Skoleroms brukere, eller privat hvis du vil begrense det til deg selv og de du velger å dele det med senere.",
     "public": "Offentlig",
     "private": "Privat",
     "teacher": "Lærer: ",
@@ -457,7 +457,9 @@
     "after_publishing_from_teaching_path": "Oppgaven ble publisert og lagt til i læringsstien.",
     "grep": {
       "title":"Koble til læreplanen",
-      "description":"Det er nødvendig å koble til undervisningsveien når du deler publisitet. Velg de aktuelle utdanningsmålene nedenfor før publisering og distribusjon"
+      "description":"Når du deler offentlig må du koble læringsstien til læreplanen. Velg relevante kompetansemål her under før publisering og distribusjon.",
+      "descrption_assignment":"Når du deler offentlig må du koble oppgaven til læreplanen. Velg relevante kompetansemål her under før publisering og distribusjon.",
+      "description_privado":"Kobling til læreplanen er kun nødvendig når du publiserer offentlig, men du kan gjerne koble innholdet til relevante kompetansemål her under hvis ønskelig."
     }
   },
   "distribution_page": {
@@ -583,7 +585,7 @@
     "modals": {
       "add_articles": "Legg til artikler",
       "add_assignments": "Legg til oppgaver",
-      "add_domain": "Legg til Link",
+      "add_domain": "Legg til lenke",
       "create_assignment": "Lag oppgave",
       "loading": "Laster...",
       "nothing_found": "Ingenting funnet...",
@@ -591,21 +593,22 @@
       "all_assignments": "Alle oppgaver",
       "my_assignments": "Mine oppgaver",
       "articles": "Artikler",
-      "articles_title": "Artikkel informasjon",
+      "articles_title": "Artikkelinformasjon",
       "articles_default": "Velg en artikkel for mer informasjon",
-      "articles_read": "Read Artikler",
-      "assignments_title": "Oppgave informasjon",
-      "assignments_default": "Velg en artikkel for mer informasjon",
-      "assignments_read": "Read Oppgaver",
+      "articles_read": "Les artikkel",
+      "assignments_title": "Oppgaveinformasjon",
+      "assignments_default": "Velg en oppgaver for mer informasjon ",
+      "assignments_read": "Les artikkel",
       "assignmetns": "Oppgaver",
       "assignments_selected": "{number} oppgaver valgt",
       "search_for_articles": "Søk etter artikler...",
-      "expand": "Utvid all",
+      "expand": "Utvid alle",
+      "expandclose": "Lukk alle",
       "search": {
         "buttons": {
           "button_close": "Filter",
           "button_open": "Bruk filter",
-          "button_change": "Endring filters"
+          "button_change": "Endre filter"
         },
         "header": {
           "title": "FILTER",
@@ -626,8 +629,7 @@
       "delete_item": "Er du sikker på at du vil slette {item}?",
       "merge_paths": "Er du sikker på at du vil slå sammen stiene?",
       "unmerge_path": "Er du sikker på at du vil slette stien?",
-      "unable_to_merge": "Du kan ikke slå sammen artikler og oppgaver!",
-      "neccesary_edit": "I denne delen redigerer du bare den valgte artikkelen. Fjern artikkelen og velg ny artikkel"
+      "unable_to_merge": "Du kan ikke slå sammen artikler og oppgaver!"
     },
     "paths": {
       "main_teaching_path_title": "Læringssti",
@@ -703,7 +705,7 @@
       "MULTIPLE_CHOICE": "Flervalgsspørsmål",
       "IMAGE_CHOICE": "Bildevalg spørsmål"
     },
-    "grade": "Velg fag",
+    "grade": "Klassetrinn",
     "student_level": "Velg elevnivå",
     "visibility": "visibility"
   },

@@ -186,6 +186,7 @@
   margin-bottom: 20px;
   cursor: pointer;
   transition: 0.5s;
+  max-height: 306px;
   &:hover {
     box-shadow: 0 8px 10px #00000061;
   }
@@ -287,6 +288,21 @@
 .NewAssignmentPreview .RelatedArticlesCard {
   width: calc(100% / 5 - 20px);
 } 
+.RelatedArticlesCard.selectedArticle {
+  position: relative;
+}
+.RelatedArticlesCard.selectedArticle:before {
+  content: '';
+  position: absolute;
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  pointer-events: none;
+  border: solid 2px;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  border-radius: 10px;
+}
 
 @media screen and (max-width: $screen-dimension-desktop) {
   .info {
