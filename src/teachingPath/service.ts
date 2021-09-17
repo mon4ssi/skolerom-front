@@ -44,8 +44,8 @@ export class TeachingPathService {
     return this.teachingPathRepo.getTeachingPathDistributes(filter);
   }
 
-  public async getGrepFilters() {
-    return this.teachingPathRepo.getGrepFilters();
+  public async getGrepFilters(grades: string, subjects: string, source: string) {
+    return this.teachingPathRepo.getGrepFilters(grades, subjects, source);
   }
 
   public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number) {

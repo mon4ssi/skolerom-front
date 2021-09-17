@@ -93,7 +93,17 @@ export class PublishingActions extends Component<Props, State> {
   public async componentDidMount() {
     const { store, from } = this.props;
     const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, valuereadingOptions } = this.state;
-    const grepFiltersDataAwait = await store!.getGrepFilters();
+    const selectedGrades = store!.currentEntity!.getListOfGrades().map(this.gradeToTagProp);
+    const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
+    const arraySelectedIdsGrades: Array<number> = [];
+    const arraySelectedIdsSubjects: Array<number> = [];
+    selectedGrades.forEach((ee) => {
+      arraySelectedIdsGrades.push(Number(ee.id));
+    });
+    selectedSubjects.forEach((ee) => {
+      arraySelectedIdsSubjects.push(Number(ee.id));
+    });
+    const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects), '');
     this.setState({
       grepFiltersData : grepFiltersDataAwait
     });
@@ -156,7 +166,6 @@ export class PublishingActions extends Component<Props, State> {
         valuereadingOptions: store!.currentEntity!.getListOfgrepReadingInSubjectId()!
       });
     }
-    const selectedGrades = store!.currentEntity!.getListOfGrades().map(this.gradeToTagProp);
     const arrayForGrades : Array<number> = [];
     if (selectedGrades.length > 0) {
       selectedGrades.forEach((element) => {
@@ -173,7 +182,6 @@ export class PublishingActions extends Component<Props, State> {
         valueGradesOptions: arrayForGrades!
       });
     }
-    const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
     const arrayForSubjects : Array<number> = [];
     if (selectedSubjects.length > 0) {
       selectedSubjects.forEach((element) => {
@@ -217,6 +225,9 @@ export class PublishingActions extends Component<Props, State> {
     } else {
       if (localStorage.getItem('goals')) {
         listGoals = localStorage.getItem('goals')!.split(',');
+        if (selectedGrades.length === 0 && selectedSubjects.length === 0) {
+          listGoals = [''];
+        }
       }
     }
     this.setState({
@@ -232,7 +243,7 @@ export class PublishingActions extends Component<Props, State> {
           if (this.state.editvalueGoalsOptions!.length === 0) {
             this.setState(
               {
-                valueGoalsOptions: this.transformDataToStringDat(listGoals, this.state.optionsGoals)
+                valueGoalsOptions: this.transformDataToStringDat(listGoals, this.state.optionsGoals).sort((a, b) => a - b)
               },
               () => {
                 this.comparativeGoalsValueToFilter();
@@ -242,7 +253,7 @@ export class PublishingActions extends Component<Props, State> {
         } else {
           this.setState(
             {
-              valueGoalsOptions: this.transformDataToStringDat(listGoals, this.state.optionsGoals)
+              valueGoalsOptions: this.transformDataToStringDat(listGoals, this.state.optionsGoals).sort((a, b) => a - b)
             },
             () => {
               this.comparativeGoalsValueToFilter();
@@ -292,7 +303,9 @@ export class PublishingActions extends Component<Props, State> {
     data!.forEach((element) => {
       for (let i = 0; i < options.length; i = i + 1) {
         if (element === options[i].code) {
-          returnArray.push(options[i].id!);
+          if (!returnArray.includes(options[i].id!)) {
+            returnArray.push(options[i].id!);
+          }
         }
       }
     });
@@ -424,11 +437,33 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          // valueGoalsOptions : [],
           loadingGoals: false
         }
       );
       this.comparativeGoalsValueToFilter();
       this.setState({ pageCurrent: MAGICNUMBER1 });
+      // updatedata
+      const selectedGrades = store!.currentEntity!.getListOfGrades().map(this.gradeToTagProp);
+      const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
+      const arraySelectedIdsGrades: Array<number> = [];
+      const arraySelectedIdsSubjects: Array<number> = [];
+      selectedGrades.forEach((ee) => {
+        arraySelectedIdsGrades.push(Number(ee.id));
+      });
+      selectedSubjects.forEach((ee) => {
+        arraySelectedIdsSubjects.push(Number(ee.id));
+      });
+      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects), '');
+      this.setState({
+        grepFiltersData : grepFiltersDataAwait
+      });
+      this.setState({
+        optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
+      });
+      this.setState({
+        optionsMulti : this.renderValueOptions(grepFiltersDataAwait, 'multi')
+      });
     }
   }
 
@@ -466,11 +501,33 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          // valueGoalsOptions : [],
           loadingGoals: false
         }
       );
       this.comparativeGoalsValueToFilter();
       this.setState({ pageCurrent: MAGICNUMBER1 });
+      // updatedata
+      const selectedGrades = store!.currentEntity!.getListOfGrades().map(this.gradeToTagProp);
+      const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
+      const arraySelectedIdsGrades: Array<number> = [];
+      const arraySelectedIdsSubjects: Array<number> = [];
+      selectedGrades.forEach((ee) => {
+        arraySelectedIdsGrades.push(Number(ee.id));
+      });
+      selectedSubjects.forEach((ee) => {
+        arraySelectedIdsSubjects.push(Number(ee.id));
+      });
+      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects), '');
+      this.setState({
+        grepFiltersData : grepFiltersDataAwait
+      });
+      this.setState({
+        optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
+      });
+      this.setState({
+        optionsMulti : this.renderValueOptions(grepFiltersDataAwait, 'multi')
+      });
     }
   }
 
@@ -512,9 +569,31 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          // valueGoalsOptions : [],
           loadingGoals: false
         }
       );
+      // updatedata
+      const selectedGrades = store!.currentEntity!.getListOfGrades().map(this.gradeToTagProp);
+      const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
+      const arraySelectedIdsGrades: Array<number> = [];
+      const arraySelectedIdsSubjects: Array<number> = [];
+      selectedGrades.forEach((ee) => {
+        arraySelectedIdsGrades.push(Number(ee.id));
+      });
+      selectedSubjects.forEach((ee) => {
+        arraySelectedIdsSubjects.push(Number(ee.id));
+      });
+      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects), '');
+      this.setState({
+        grepFiltersData : grepFiltersDataAwait
+      });
+      this.setState({
+        optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
+      });
+      this.setState({
+        optionsMulti : this.renderValueOptions(grepFiltersDataAwait, 'multi')
+      });
       this.comparativeGoalsValueToFilter();
       this.setState({ pageCurrent: MAGICNUMBER1 });
     }
@@ -568,11 +647,33 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          // valueGoalsOptions : [],
           loadingGoals: false
         }
       );
       this.comparativeGoalsValueToFilter();
       this.setState({ pageCurrent: MAGICNUMBER1 });
+      // updatedata
+      const selectedGrades = store!.currentEntity!.getListOfGrades().map(this.gradeToTagProp);
+      const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
+      const arraySelectedIdsGrades: Array<number> = [];
+      const arraySelectedIdsSubjects: Array<number> = [];
+      selectedGrades.forEach((ee) => {
+        arraySelectedIdsGrades.push(Number(ee.id));
+      });
+      selectedSubjects.forEach((ee) => {
+        arraySelectedIdsSubjects.push(Number(ee.id));
+      });
+      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects), '');
+      this.setState({
+        grepFiltersData : grepFiltersDataAwait
+      });
+      this.setState({
+        optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
+      });
+      this.setState({
+        optionsMulti : this.renderValueOptions(grepFiltersDataAwait, 'multi')
+      });
     }
   }
 
@@ -861,6 +962,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          // valueGoalsOptions : [],
           loadingGoals: false
         }
       );
@@ -888,6 +990,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          // valueGoalsOptions : [],
           loadingGoals: false
         }
       );
@@ -924,6 +1027,14 @@ export class PublishingActions extends Component<Props, State> {
         padding: '3px'
       })
     };
+    const NoOptionsMessage = () => {
+      const { optionsCore } = this.state;
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
+        </div>
+      );
+    };
     if (typeof(editValueCoreOptions) !== 'undefined') {
       if (editValueCoreOptions!.length > 0) {
         const value = this.searchValueInArrays(optionsCore, editValueCoreOptions);
@@ -931,6 +1042,7 @@ export class PublishingActions extends Component<Props, State> {
         return (
           <div className="itemsFlex">
             <Select
+              components={{ NoOptionsMessage }}
               styles={customStyles}
               options={optionsCore}
               onChange={this.handleChangeSelectCore}
@@ -943,6 +1055,7 @@ export class PublishingActions extends Component<Props, State> {
     return (
       <div className="itemsFlex">
         <Select
+          components={{ NoOptionsMessage }}
           styles={customStyles}
           options={optionsCore}
           onChange={this.handleChangeSelectCore}
@@ -966,6 +1079,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          // valueGoalsOptions : [],
           loadingGoals : false
         }
       );
@@ -990,6 +1104,7 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page : grepFiltergoalssDataAwait.total_pages,
+          // valueGoalsOptions : [],
           loadingGoals : false
         }
       );
@@ -1026,6 +1141,14 @@ export class PublishingActions extends Component<Props, State> {
         padding: '3px'
       })
     };
+    const NoOptionsMessage = () => {
+      const { optionsCore } = this.state;
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
+        </div>
+      );
+    };
     if (typeof(editvalueMultiOptions) !== 'undefined') {
       if (editvalueMultiOptions!.length > 0) {
         const value = this.searchValueInArrays(optionsMulti, editvalueMultiOptions);
@@ -1033,6 +1156,7 @@ export class PublishingActions extends Component<Props, State> {
         return (
           <div className="itemsFlex">
             <Select
+              components={{ NoOptionsMessage }}
               styles={customStyles}
               options={optionsMulti}
               onChange={this.handleChangeSelectMulti}
@@ -1045,6 +1169,7 @@ export class PublishingActions extends Component<Props, State> {
     return (
       <div className="itemsFlex">
         <Select
+          components={{ NoOptionsMessage }}
           styles={customStyles}
           options={optionsMulti}
           onChange={this.handleChangeSelectMulti}
@@ -1118,6 +1243,14 @@ export class PublishingActions extends Component<Props, State> {
         padding: '3px'
       })
     };
+    const NoOptionsMessage = () => {
+      const { optionsCore } = this.state;
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
+        </div>
+      );
+    };
     if (typeof(editvaluereadingOptions) !== 'undefined') {
       if (editvaluereadingOptions! > 0) {
         const value = this.searchValueInNumbers(optionsReading, editvaluereadingOptions);
@@ -1125,6 +1258,7 @@ export class PublishingActions extends Component<Props, State> {
         return (
           <div className="itemsFlex">
             <Select
+              components={{ NoOptionsMessage }}
               styles={customStyles}
               options={optionsReading}
               onChange={this.handleChangeSelectReading}
@@ -1137,6 +1271,7 @@ export class PublishingActions extends Component<Props, State> {
     return (
       <div className="itemsFlex">
         <Select
+          components={{ NoOptionsMessage }}
           styles={customStyles}
           options={optionsReading}
           onChange={this.handleChangeSelectReading}
@@ -1240,7 +1375,7 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public renderTableBody = () => {
-    const { store } = this.props;
+    const { store, from } = this.props;
     const { optionsGoals, editvalueGoalsOptions } = this.state;
     const listGoals = this.state.valueGoalsOptions;
     const myOptionGoals = this.state.optionsGoals;
@@ -1322,6 +1457,8 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public render() {
+    const { store, from } = this.props;
+    const descriptionText = (this.state.isValid) ? intl.get('publishing_page.grep.description_privado') : (from === 'TEACHINGPATH') ? intl.get('publishing_page.grep.description') : intl.get('publishing_page.grep.descrption_assignment');
     return (
       <div className="PublishingActions flexBox dirColumn">
         <div className="infoContainer">
@@ -1334,11 +1471,11 @@ export class PublishingActions extends Component<Props, State> {
           <div className="infoContainer__bottom">
             <div className="infoContainer__secondTitle">
               <h2>{intl.get('publishing_page.grep.title')}</h2>
-              <p>{intl.get('publishing_page.grep.description')}</p>
+              <p>{descriptionText}</p>
             </div>
             <div className="infoContainer__filters">
-              {this.renderSubjectInput()}
               {this.renderGradeInput()}
+              {this.renderSubjectInput()}
               {this.renderCoreElements()}
               {this.renderMultiDisciplinary()}
               {this.renderReadingInSubject()}

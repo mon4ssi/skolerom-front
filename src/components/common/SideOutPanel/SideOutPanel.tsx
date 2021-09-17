@@ -145,7 +145,7 @@ class SideOutPanelComponent extends Component<Props & RouteComponentProps> {
         </div>
 
         <div className={'answerButton'}>
-          <CreateButton  onClick={this.answerEntity} title={buttonTitle} >
+          <CreateButton disabled={isPassedDeadline} onClick={this.answerEntity} title={buttonTitle} >
             {buttonTitle}
           </CreateButton>
         </div>

@@ -629,7 +629,8 @@
       "delete_item": "Er du sikker på at du vil slette {item}?",
       "merge_paths": "Er du sikker på at du vil slå sammen stiene?",
       "unmerge_path": "Er du sikker på at du vil slette stien?",
-      "unable_to_merge": "Du kan ikke slå sammen artikler og oppgaver!"
+      "unable_to_merge": "Du kan ikke slå sammen artikler og oppgaver!",
+      "neccesary_edit": "I denne delen redigerer du bare den valgte artikkelen. Fjern artikkelen og velg ny artikkel"
     },
     "paths": {
       "main_teaching_path_title": "Læringssti",

@@ -249,8 +249,14 @@ export class TeachingPathApi implements TeachingPathRepo {
     };
   }
 
-  public async getGrepFilters(): Promise<FilterGrep>  {
-    const response = await API.get('api/teacher/teaching-paths/grep/filters');
+  public async getGrepFilters(grades: string, subjects: string, source: string): Promise<FilterGrep>  {
+    const response = await API.get('api/teacher/teaching-paths/grep/filters', {
+      params: {
+        grades,
+        subjects,
+        source
+      }
+    });
     return response.data;
   }
   /* tslint:disable-next-line:max-line-length */

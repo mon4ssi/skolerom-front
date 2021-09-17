@@ -25,6 +25,8 @@ import backIcon from 'assets/images/back-arrow.svg';
 import './ArticlesList.scss';
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
 import { SCROLL_OFFSET } from 'utils/constants';
+import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
+
 const showDelay = 500;
 interface ArticleItemProps {
   editTeachingPathStore?: EditTeachingPathStore;
@@ -33,6 +35,7 @@ interface ArticleItemProps {
   removeItem: (item: Article) => void;
   toSelectArticle: (item: Article) => void;
   allItems: Array<Article>;
+  isEdit?: boolean;
 }
 
 @inject('editTeachingPathStore')
@@ -128,6 +131,8 @@ interface State {
   filtersisUsed: boolean;
   filtersAjaxLoading: boolean;
   filtersAjaxLoadingGoals: boolean;
+  isEdit: boolean;
+  isEditSingle: boolean;
 }
 
 @inject('editTeachingPathStore')
@@ -178,7 +183,9 @@ export class ArticlesList extends Component<Props, State> {
       goalValueFilter: [],
       filtersisUsed: false,
       filtersAjaxLoading: false,
-      filtersAjaxLoadingGoals: false
+      filtersAjaxLoadingGoals: false,
+      isEdit: this.props.editTeachingPathStore!.returnIsEditArticles()!,
+      isEditSingle: false,
     };
   }
 
@@ -227,7 +234,11 @@ export class ArticlesList extends Component<Props, State> {
 
   public getAllChildrenItems = () => {
     const { currentNode } = this.props.editTeachingPathStore!;
-
+    if (this.state.isEdit) {
+      return currentNode!.items!
+      .map((item => item.value))
+      .flat() as Array<Article>;
+    }
     return currentNode!.children
       .map(child => child.items!.map(item => item.value))
       .flat() as Array<Article>;
@@ -1492,13 +1503,26 @@ export class ArticlesList extends Component<Props, State> {
     const ifAddingItemIsSaved = !!currentNode!.children.filter(
       child => child.items!.find(el => el.value.id === item.id)
     ).length;
-
-    if (ifAddingItemIsSaved) {
-      this.setState({ removingItems: this.state.removingItems.filter((el: Article) => el.id !== item.id) });
+    if (this.state.isEdit) {
+      if (this.state.isEditSingle) {
+        this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, item] });
+        this.setState({ greeddata: true });
+        this.setState({ selectedArticle: item });
+        this.setState({ isEditSingle: false });
+      } else {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('edit_teaching_path.notifications.neccesary_edit')
+        });
+      }
+    } else {
+      if (ifAddingItemIsSaved) {
+        this.setState({ removingItems: this.state.removingItems.filter((el: Article) => el.id !== item.id) });
+      }
+      this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, item] });
+      this.setState({ greeddata: true });
+      this.setState({ selectedArticle: item });
     }
-    this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, item] });
-    this.setState({ greeddata: true });
-    this.setState({ selectedArticle: item });
   }
 
   public toSelectArticle = (article: Article) => {
@@ -1519,6 +1543,9 @@ export class ArticlesList extends Component<Props, State> {
     if (ifRemovableItemIsSaved) {
       this.setState({ removingItems: [...this.state.removingItems, item] });
     }
+    if (this.state.isEdit) {
+      this.setState({ isEditSingle: true });
+    }
 
     this.setState((state) => {
       const itemsForNewChildren = state.itemsForNewChildren.filter(
@@ -1531,37 +1558,50 @@ export class ArticlesList extends Component<Props, State> {
   public closeModal = () => {
     const { editTeachingPathStore, } = this.props;
     const { itemsForNewChildren } = this.state;
-
-    if (itemsForNewChildren.length) {
-      const newChildren = itemsForNewChildren.map(
-        item => editTeachingPathStore!.createNewNode(
-          item,
-          TeachingPathNodeType.Article
-        )
-      );
-      newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
-      editTeachingPathStore!.currentNode!.children.forEach(
-        (child) => {
-          this.state.removingItems.forEach(
-            (item: Article) => {
-              if (child.items!.filter(el => el.value.id === item.id)) {
-                child.removeItem(item.id);
-              }
-            }
-          );
-          if (!child.items!.length) {
-            editTeachingPathStore!.currentNode!.removeChild(child);
-          }
-        }
-      );
+    if (this.state.isEdit) {
+      if (itemsForNewChildren.length) {
+        editTeachingPathStore!.currentNode!.editItem(itemsForNewChildren[0]);
+        editTeachingPathStore!.currentEntity!.save();
+        this.context.changeContentType(null);
+        editTeachingPathStore!.setCurrentNode(null);
+      } else {
+        editTeachingPathStore!.currentEntity!.save();
+        this.context.changeContentType(null);
+        editTeachingPathStore!.setCurrentNode(null);
+      }
+      editTeachingPathStore!.falseIsEditArticles();
     } else {
-      editTeachingPathStore!.currentNode!.setChildren([]);
+      if (itemsForNewChildren.length) {
+        const newChildren = itemsForNewChildren.map(
+          item => editTeachingPathStore!.createNewNode(
+            item,
+            TeachingPathNodeType.Article
+          )
+        );
+        newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
+        editTeachingPathStore!.currentNode!.children.forEach(
+          (child) => {
+            this.state.removingItems.forEach(
+              (item: Article) => {
+                if (child.items!.filter(el => el.value.id === item.id)) {
+                  child.removeItem(item.id);
+                }
+              }
+            );
+            if (!child.items!.length) {
+              editTeachingPathStore!.currentNode!.removeChild(child);
+            }
+          }
+        );
+      } else {
+        editTeachingPathStore!.currentNode!.setChildren([]);
+      }
+
+      editTeachingPathStore!.currentEntity!.save();
+
+      this.context.changeContentType(null);
+      editTeachingPathStore!.setCurrentNode(null);
     }
-
-    editTeachingPathStore!.currentEntity!.save();
-
-    this.context.changeContentType(null);
-    editTeachingPathStore!.setCurrentNode(null);
   }
 
   public onScroll = (): void => {
@@ -1593,23 +1633,43 @@ export class ArticlesList extends Component<Props, State> {
     );
   }
 
-  public renderHeader = () => (
-    <div className="articlesListHeader flexBox spaceBetween" tabIndex={0}>
-      <div className="articlesListHeader__left">
-        <p className="active">{intl.get('edit_teaching_path.modals.articles')}</p>
-        {/* <a href="javascript:void(0)" onClick={this.redirectAssigment}>{intl.get('edit_teaching_path.modals.assignmetns')}</a> */}
+  public renderHeader = () => {
+    if (this.state.isEdit) {
+      return (
+        <div className="articlesListHeader flexBox spaceBetween" tabIndex={0}>
+          <div className="articlesListHeader__left">
+            <p className="active">{intl.get('edit_teaching_path.modals.articles')}</p>
+          </div>
+          <div className="articlesListHeader__right">
+            <button ref={this.refButton} onClick={this.closeModal} title={intl.get('generals.close')}>
+              <img
+                src={closeImg}
+                alt={intl.get('generals.close')}
+                title={intl.get('generals.close')}
+              />
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div className="articlesListHeader flexBox spaceBetween" tabIndex={0}>
+        <div className="articlesListHeader__left">
+          <p className="active">{intl.get('edit_teaching_path.modals.articles')}</p>
+          {/* <a href="javascript:void(0)" onClick={this.redirectAssigment}>{intl.get('edit_teaching_path.modals.assignmetns')}</a> */}
+        </div>
+        <div className="articlesListHeader__right">
+          <button ref={this.refButton} onClick={this.closeModal} title={intl.get('generals.close')}>
+            <img
+              src={closeImg}
+              alt={intl.get('generals.close')}
+              title={intl.get('generals.close')}
+            />
+          </button>
+        </div>
       </div>
-      <div className="articlesListHeader__right">
-        <button ref={this.refButton} onClick={this.closeModal} title={intl.get('generals.close')}>
-          <img
-            src={closeImg}
-            alt={intl.get('generals.close')}
-            title={intl.get('generals.close')}
-          />
-        </button>
-      </div>
-    </div>
-  )
+    );
+  }
 
   public renderArticle = (article: Article, index: number) => (
     <ArticleItem
