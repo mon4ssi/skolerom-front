@@ -16,7 +16,7 @@ import './TeachingPathDistributeList.scss';
 
 const ITEMS_PER_PAGE = 8;
 const DEFAULT_ORDER_FIELD = 'deadline';
-const DEFAULT_ORDER = 'asc';
+const DEFAULT_ORDER = 'desc';
 const DEBOUNCE_TIME = 500;
 
 interface ITeachingPathDistributeListProps {

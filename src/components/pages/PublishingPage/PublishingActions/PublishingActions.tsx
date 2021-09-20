@@ -207,7 +207,9 @@ export class PublishingActions extends Component<Props, State> {
       if (!store!.getAllSubjects().length) {
         store!.getSubjects();
       }
-      listGoals = this.transformDataToString(store!.currentEntity!.getListOfGoals()!);
+      if (store!.currentEntity!.getListOfGoals()) {
+        listGoals = this.transformDataToString(store!.currentEntity!.getListOfGoals()!);
+      }
     }
     if (from === 'ASSIGNMENT') {
       if (!store!.getAllGrades().length) {
