@@ -207,7 +207,7 @@ export class PublishingActions extends Component<Props, State> {
       if (!store!.getAllSubjects().length) {
         store!.getSubjects();
       }
-      if (store!.currentEntity!.getListOfGoals()) {
+      if (typeof(store!.currentEntity!.getListOfGoals()) !== 'undefined') {
         listGoals = this.transformDataToString(store!.currentEntity!.getListOfGoals()!);
       }
     }
@@ -218,7 +218,7 @@ export class PublishingActions extends Component<Props, State> {
       if (!store!.getAllSubjects().length) {
         store!.getSubjects();
       }
-      if (store!.getGoalsByArticle()) {
+      if (typeof(store!.getGoalsByArticle()) !== 'undefined') {
         listGoals = store!.getGoalsByArticle().split(',');
       }
     }
@@ -317,7 +317,9 @@ export class PublishingActions extends Component<Props, State> {
   public transformDataToString = (data: Array<GreepElements>) => {
     const returnArray : Array<string> = [];
     data!.forEach((element) => {
-      returnArray.push(element.kode);
+      if (typeof(element) !== 'undefined') {
+        returnArray.push(element.kode);
+      }
     });
     return returnArray;
   }
@@ -326,7 +328,9 @@ export class PublishingActions extends Component<Props, State> {
     const returnArray : Array<string> = [];
     if (data.length > 0) {
       data!.forEach((element) => {
-        returnArray.push(element.kode);
+        if (typeof(element) !== 'undefined') {
+          returnArray.push(element.kode);
+        }
       });
     }
     return returnArray;
