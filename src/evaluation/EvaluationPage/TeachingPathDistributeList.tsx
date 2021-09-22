@@ -15,6 +15,7 @@ import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader'
 import './TeachingPathDistributeList.scss';
 
 const ITEMS_PER_PAGE = 8;
+const MAGIC_VEINTE = 20;
 const DEFAULT_ORDER_FIELD = 'deadline';
 const DEFAULT_ORDER = 'desc';
 const DEBOUNCE_TIME = 500;
@@ -79,7 +80,7 @@ class TeachingPathDistributeList extends Component<ITeachingPathDistributeListPr
   public fetchDistributes() {
     const { filter } = this.props.teachingPathsListStore!;
 
-    filter.per_page = ITEMS_PER_PAGE;
+    filter.per_page = MAGIC_VEINTE;
     filter.page = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.PAGE);
     filter.grade = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GRADE);
     filter.subject = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.SUBJECT);

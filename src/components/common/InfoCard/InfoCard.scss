@@ -293,7 +293,7 @@
     }
 
     .cardDescription {
-      @include text-shrink-multiline(2);
+      @include text-shrink-multiline(3);
       margin-top: 4px;
       font-size: 0.9375rem;
       font-weight: 300;

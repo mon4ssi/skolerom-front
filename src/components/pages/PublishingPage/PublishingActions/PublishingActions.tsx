@@ -162,9 +162,14 @@ export class PublishingActions extends Component<Props, State> {
       });
     }
     if (typeof(store!.currentEntity!.getListOfgrepReadingInSubjectId()) !== 'undefined') {
-      this.setState({
-        valuereadingOptions: store!.currentEntity!.getListOfgrepReadingInSubjectId()!
-      });
+      this.setState(
+        {
+          valuereadingOptions: store!.currentEntity!.getListOfgrepReadingInSubjectId()!
+        },
+        () => {
+          this.sendValidbutton();
+        }
+      );
     }
     const arrayForGrades : Array<number> = [];
     if (selectedGrades.length > 0) {

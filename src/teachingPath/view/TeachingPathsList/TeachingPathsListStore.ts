@@ -11,7 +11,7 @@ import { SortingFilter, StoreState } from 'utils/enums';
 import { Notification, NotificationTypes } from '../../../components/common/Notification/Notification';
 import intl from 'react-intl-universal';
 
-const TEACHING_PATHS_PER_PAGE_IN_LIST = 12;
+const TEACHING_PATHS_PER_PAGE_IN_LIST = 20;
 
 export class TeachingPathsListStore {
 

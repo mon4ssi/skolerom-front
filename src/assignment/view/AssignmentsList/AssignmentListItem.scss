@@ -30,6 +30,13 @@ $image-height: 60px;
       padding-right: 48px;
     }
   }
+  &:last-child {
+    .AssignmentListItem__more {
+      &:before, &:after {
+        display: none !important;
+      }
+    }
+  }
 }
 
 .AssignmentListItem__block {

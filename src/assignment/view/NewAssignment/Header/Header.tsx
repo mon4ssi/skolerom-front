@@ -82,6 +82,14 @@ class HeaderWrapper extends Component<Props> {
     const isPrivate = newAssignmentStore!.assignmentContainer!.assignment!.isPrivate;
     const isCopy = newAssignmentStore!.assignmentContainer!.assignment!.isCopy;
 
+    if (!newAssignmentStore!.isActiveButtons) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('edit_teaching_path.header.cant_publish')
+      });
+      return;
+    }
+
     if (
       !isPrivate &&
       isCopy &&

@@ -96,6 +96,20 @@
     .assignmentItem {
       @extend .skeletonAssignmentItem;
       background: #FFF;
+      &.selectedItem {
+        position: relative;
+        &:before {
+          content: '';
+          position: absolute;
+          width: calc(100% - 2px);
+          height: calc(100% - 2px);
+          pointer-events: none;
+          border-radius: 5px;
+          border: solid 2px;
+          left: 0px;
+          top: 0px;      
+        }
+      }
 
       .itemImg {
         width: 90px;

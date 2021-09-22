@@ -16,8 +16,9 @@
     justify-content: start;
     padding-top: 5px;
     transition: 0.3s;
+    padding-left: 5px;
     .InfoCard {
-      width: calc(16.68% - 15px);
+      width: calc(20% - 15px);
       min-height: 300px;
       margin-bottom: 20px;
       margin-right: 14px;
@@ -30,7 +31,7 @@
       }
 
       .cardDescription {
-        @include text-shrink-multiline(1);
+        @include text-shrink-multiline(3);
         margin-top: 10px;
       }
 
@@ -53,7 +54,7 @@
       width: calc(100% - 290px);
       margin-left: 290px;
       .InfoCard {
-        width: calc(20% - 15px);
+        width: calc(25% - 15px);
       }
     }
   }

@@ -15,12 +15,20 @@
         height: 350px;
     }
     .TeachingPathDistributeItem {
-        width: calc(16.68% - 15px);
-        min-height: 300px;
+        width: calc(20% - 15px);
+        min-height: 265px;
         margin-bottom: 20px;
         margin-right: 14px;
         .InfoCard {
             width: 100%;
+            min-height: auto;
+            height: 265px;
+            button {
+                height: 175px !important;
+            }
+            .cardInfo {
+                min-height: 76px;
+            }
         }
     }
 }

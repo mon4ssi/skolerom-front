@@ -35,6 +35,7 @@ interface AssignmentProps {
   assignment: Assignment;
   addItem: (item: Assignment) => void;
   removeItem: (item: Assignment) => void;
+  toSelectItem: (item: Assignment) => void;
   allItems: Array<Assignment>;
 }
 
@@ -47,6 +48,23 @@ class AssignmentItem extends Component<AssignmentProps> {
     return !!allItems.find(
       item => item.id === assignment.id
     );
+  }
+
+  public isSelectedItem = () => {
+    const { assignment } = this.props;
+    const assignmentItem  = Array.from(document.getElementsByClassName('assignmentItem') as HTMLCollectionOf<HTMLElement>);
+    assignmentItem.forEach((e) => {
+      e.classList.remove('selectedItem');
+    });
+    const rootDiv = document.getElementById(`assignmentItem_${assignment.id}`);
+    if (typeof(rootDiv) !== 'undefined') {
+      rootDiv!.classList.add('selectedItem');
+    }
+  }
+  public toSelectItem = () => {
+    const { toSelectItem, assignment } = this.props;
+    this.isSelectedItem();
+    toSelectItem(assignment);
   }
 
   public handleSelectAssignment = () => {
@@ -65,11 +83,11 @@ class AssignmentItem extends Component<AssignmentProps> {
       null;
 
     return (
-      <a
-        href="javascript:void(0)"
+      <div
         key={assignment.id}
         className="assignmentItem flexBox spaceBetween"
-        onClick={this.handleSelectAssignment}
+        id={`assignmentItem_${assignment.id}`}
+        onClick={this.toSelectItem}
       >
         <div className="flexBox alignCenter w50" style={{ flex: 1 }}>
           <img
@@ -90,15 +108,15 @@ class AssignmentItem extends Component<AssignmentProps> {
             {assignment.numberOfQuestions}{' '}
             {assignment.numberOfQuestions === 1 ? intl.get('assignment list.question') : intl.get('assignment list.questions')}
           </div>
-          <div className="itemIsSelected">
+          <a href="javascript:void(0)" className="itemIsSelected" onClick={this.handleSelectAssignment}>
             <img
               src={this.isAssignmentSelected() ? checkFilledImg : checkImg}
               alt={this.isAssignmentSelected() ? intl.get('generals.unselected_assignment') : intl.get('generals.selected_assignment')}
               title={this.isAssignmentSelected() ? intl.get('generals.unselected_assignment') : intl.get('generals.selected_assignment')}
             />
-          </div>
+          </a>
         </div>
-      </a>
+      </div>
     );
   }
 }
@@ -435,11 +453,21 @@ export class AssignmentsList extends Component<Props, State> {
         this.setState({ removingItems: this.state.removingItems.filter((el: Assignment) => el.id !== item.id) });
       }
       this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, item] });
-      this.setState({ greeddata: true });
+      /*this.setState({ greeddata: true });
       this.setState({ selectedAssignmentTitle: item.title });
       this.setState({ selectedAssignmentDescription: item.description });
-      this.setState({ selectedAssignment: item });
+      this.setState({ selectedAssignment: item });*/
     }
+  }
+
+  public toSelectItem = (item: Assignment) => {
+    this.setState({
+      greeddata: true,
+      selectedAssignmentTitle: item.title,
+      selectedAssignmentDescription: item.description,
+      selectedAssignment: item
+    });
+
   }
 
   public removeItemFromNewChild = async (item: Assignment) => {
@@ -648,6 +676,7 @@ export class AssignmentsList extends Component<Props, State> {
           allItems={this.state.itemsForNewChildren}
           addItem={this.addItemToNewChild}
           removeItem={this.removeItemFromNewChild}
+          toSelectItem={this.toSelectItem}
         />
       )
     );
