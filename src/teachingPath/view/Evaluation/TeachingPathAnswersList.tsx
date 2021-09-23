@@ -19,9 +19,6 @@ export class TeachingPathAnswersList extends Component<Props> {
 
     return (
       <div>
-        <h1 className="generalTitle">
-          {intl.get('evaluation_page.Teaching paths')}
-        </h1>
         <AnswersList store={teachingPathEvaluationStore!} />
       </div>
     );
