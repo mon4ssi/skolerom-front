@@ -575,6 +575,7 @@
       "after_publishing": "Congratulations, your teaching path has been published!",
       "after_distribution": "Teaching path successfully distributed!",
       "cant_publish": "You must complete the Curriculum section before publish",
+      "cant_publish_goals": "You can't post because you don't have the complete goals",
       "notdata_goals": "There are no established goals for these criteria"
     },
     "title": {

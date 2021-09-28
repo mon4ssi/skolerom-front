@@ -575,6 +575,7 @@
       "after_publishing": "Bra jobba, læringsstien er publisert!",
       "after_distribution": "Læringsstien har blitt distribuert!",
       "cant_publish": "Du må fullføre læreplandelen før du publiserer",
+      "cant_publish_goals": "Du kan ikke legge ut fordi du ikke har de fullstendige målene",
       "notdata_goals": "Det er ingen etablerte mål for disse kriteriene"
     },
     "title": {
