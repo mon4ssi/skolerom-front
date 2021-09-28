@@ -117,7 +117,7 @@ class StudentTeachingPaths extends Component<Props> {
       if (!item.isAnswered) {
         return;
       }
-      history.push(`/teaching-paths/answers/${item.id}?answer=${indesPlus}`);
+      history.push(`/teaching-paths/answers/${item.id}?answer=${indesPlus}&?isstudent`);
     };
 
     return studentsListStore!.teachingPathListState === StoreState.LOADING ? (

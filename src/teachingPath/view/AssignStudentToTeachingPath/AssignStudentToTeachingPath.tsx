@@ -40,8 +40,7 @@ export class AssignStudentToTeachingPath extends Component<Props, State> {
         type: response ? NotificationTypes.ERROR : NotificationTypes.SUCCESS,
         title: response || intl.get('distribution_page.teaching_path_is_assigned_to_user')
       });
-      this.setState({ path: '/teaching-paths' });
-
+      this.setState({ path: `/teaching-path/${teachingPathId}` });
     } else if (currentUser && currentUser.type === 'TEACHER') {
       this.setState({ path: '/teaching-paths/all' });
 

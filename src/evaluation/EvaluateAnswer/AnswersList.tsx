@@ -142,13 +142,33 @@ class AnswersList extends Component<AssignmentAnswerListProps & RouteComponentPr
   public renderBreadcrumbs = () => {
     const { store } = this.props;
     const isAssingment = this.props.history.location.pathname.includes('/assignments');
+    const isStudentRedirect = this.props.history.location.search.includes('isstudent');
+    const title = (isStudentRedirect) ? intl.get('evaluation_page.students') : intl.get('evaluation_page.title');
+
+    if (isStudentRedirect) {
+      return (
+        <div className="AnswerList__breadcrumbs">
+          <ul>
+            <li>
+              <Link to="/students/my">
+                {title}
+              </Link>
+            </li>
+            <li className="separator">/</li>
+            <li className="item">
+              <p>{intl.get('evaluation_page.Assignments')}</p>
+            </li>
+          </ul>
+        </div>
+      );
+    }
     if (isAssingment) {
       return (
         <div className="AnswerList__breadcrumbs">
           <ul>
             <li>
               <Link to="/evaluation/assignments">
-                {intl.get('evaluation_page.title')}
+                {title}
               </Link>
             </li>
             <li className="separator">/</li>
@@ -164,7 +184,7 @@ class AnswersList extends Component<AssignmentAnswerListProps & RouteComponentPr
         <ul>
           <li>
             <Link to="/evaluation/teaching-paths">
-              {intl.get('evaluation_page.title')}
+            {title}
             </Link>
           </li>
           <li className="separator">/</li>

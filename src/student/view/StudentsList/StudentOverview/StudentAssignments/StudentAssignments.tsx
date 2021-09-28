@@ -128,7 +128,7 @@ class StudentAssignments extends Component<Props> {
         return;
       }
       uiStore!.setCurrentActiveTab('assignment');
-      history.push(`/assignments/answers/${assignment.id}?answer=${indesPlus}`);
+      history.push(`/assignments/answers/${assignment.id}?answer=${indesPlus}&?isstudent`);
     };
 
     return studentsListStore!.assignmentsListState === StoreState.LOADING ? (
