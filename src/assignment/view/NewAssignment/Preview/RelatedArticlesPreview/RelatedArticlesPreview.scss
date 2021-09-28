@@ -294,14 +294,14 @@
 .RelatedArticlesCard.selectedArticle:before {
   content: '';
   position: absolute;
-  width: calc(100% - 2px);
-  height: calc(100% - 2px);
+  width: calc(100% - 1px);
+  height: calc(100% - 1px);
   pointer-events: none;
-  border: solid 2px;
+  border: solid 1px;
   top: 0;
   left: 0;
   z-index: 2;
-  border-radius: 10px;
+  border-radius: 6px;
 }
 
 @media screen and (max-width: $screen-dimension-desktop) {

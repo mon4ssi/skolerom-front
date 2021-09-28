@@ -34,8 +34,6 @@
     min-width: 0;
     a {
       transition: 0.3s;
-      font-weight: 600;
-      font-size: 17px;
       &:hover {
         color: #E2017B;   
       }
@@ -44,7 +42,7 @@
       }
     }
     &.helpNavigation {
-      margin-left: 65px;
+      margin-left: 50px;
       margin-right: 10px;
       .AppHeader__dropdown::after {
         display: none !important;

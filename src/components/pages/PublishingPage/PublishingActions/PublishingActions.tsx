@@ -29,6 +29,7 @@ import { GreepElements } from 'assignment/factory';
 
 const MAGICNUMBER100 = 100;
 const MAGICNUMBER1 = 1;
+const SETTIMEOUT = 1000;
 
 interface Props {
   store?: NewAssignmentStore | EditTeachingPathStore;
@@ -415,6 +416,12 @@ export class PublishingActions extends Component<Props, State> {
     title: subject.title,
   })
 
+  public filterGrepGoals = async (coreoptions: Array<number>, multioptions: Array<number>, gradeoptions: Array<number>, subjectsoptions: Array<number>, goalsoptions: Array<string>) => {
+    await new Promise(resolve => setTimeout(resolve, SETTIMEOUT));
+    const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(coreoptions, multioptions, gradeoptions, subjectsoptions, goalsoptions, MAGICNUMBER100, MAGICNUMBER1);
+    return grepFiltergoalssDataAwait;
+  }
+
   public addSubject = async (id: number) => {
     const { optionsSubjects, valueSubjectsOptions } = this.state;
     const { store } = this.props;
@@ -435,7 +442,7 @@ export class PublishingActions extends Component<Props, State> {
         valueSubjectsOptions : arrayValueSubjects
       });
       /* tslint:disable-next-line:max-line-length */
-      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, arrayValueSubjects, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
+      const grepFiltergoalssDataAwait = await this.filterGrepGoals(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, arrayValueSubjects, this.state.valueStringGoalsOptions);
       this.setState(
         {
           optionsGoals : grepFiltergoalssDataAwait.data
@@ -499,7 +506,7 @@ export class PublishingActions extends Component<Props, State> {
         valueSubjectsOptions : arrayValueSubjects
       });
       /* tslint:disable-next-line:max-line-length */
-      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, arrayValueSubjects, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
+      const grepFiltergoalssDataAwait = await this.filterGrepGoals(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, arrayValueSubjects, this.state.valueStringGoalsOptions);
       this.setState(
         {
           optionsGoals : grepFiltergoalssDataAwait.data
@@ -567,7 +574,7 @@ export class PublishingActions extends Component<Props, State> {
         valueGradesOptions : arrayValueGrades
       });
       /* tslint:disable-next-line:max-line-length */
-      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, arrayValueGrades, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
+      const grepFiltergoalssDataAwait = await this.filterGrepGoals(this.state.valueCoreOptions, this.state.valueMultiOptions, arrayValueGrades, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
       this.setState(
         {
           optionsGoals : grepFiltergoalssDataAwait.data
@@ -645,7 +652,7 @@ export class PublishingActions extends Component<Props, State> {
         valueGradesOptions : arrayValueGrades
       });
       /* tslint:disable-next-line:max-line-length */
-      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, arrayValueGrades, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
+      const grepFiltergoalssDataAwait = await this.filterGrepGoals(this.state.valueCoreOptions, this.state.valueMultiOptions, arrayValueGrades, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
       this.setState(
         {
           optionsGoals : grepFiltergoalssDataAwait.data
@@ -965,7 +972,7 @@ export class PublishingActions extends Component<Props, State> {
     if (newValue.value !== 0) {
       this.setState({ loadingGoals : true });
       /* tslint:disable-next-line:max-line-length */
-      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(newValue.value, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
+      const grepFiltergoalssDataAwait = await this.filterGrepGoals(newValue.value, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
       this.setState({
         optionsGoals : grepFiltergoalssDataAwait.data
       });
@@ -993,7 +1000,7 @@ export class PublishingActions extends Component<Props, State> {
     } else {
       this.setState({ loadingGoals : true });
       /* tslint:disable-next-line:max-line-length */
-      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters([], this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
+      const grepFiltergoalssDataAwait = await this.filterGrepGoals([], this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
       this.setState({
         optionsGoals : grepFiltergoalssDataAwait.data
       });
@@ -1082,7 +1089,7 @@ export class PublishingActions extends Component<Props, State> {
     if (newValue.value !== 0) {
       this.setState({ loadingGoals : true });
       /* tslint:disable-next-line:max-line-length */
-      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, newValue.value, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
+      const grepFiltergoalssDataAwait = await this.filterGrepGoals(this.state.valueCoreOptions, newValue.value, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
       this.setState({
         optionsGoals : grepFiltergoalssDataAwait.data
       });
@@ -1107,7 +1114,7 @@ export class PublishingActions extends Component<Props, State> {
       currentEntity!.setGrepMainTopicsIds([newValue.value]);
     } else {
       this.setState({ loadingGoals : true });
-      const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(this.state.valueCoreOptions, [], this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
+      const grepFiltergoalssDataAwait = await this.filterGrepGoals(this.state.valueCoreOptions, [], this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
       this.setState({
         optionsGoals : grepFiltergoalssDataAwait.data
       });
