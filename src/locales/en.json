@@ -227,7 +227,7 @@
   "new assignment": {
     "greep": {
       "core": "Core elements",
-      "goals": "Educations goals",
+      "goals": "Educational goals",
       "subjects": "Multidisciplinary subjects",
       "source": "Source",
       "reading": "Reading in Subject"
@@ -575,7 +575,7 @@
       "after_publishing": "Congratulations, your teaching path has been published!",
       "after_distribution": "Teaching path successfully distributed!",
       "cant_publish": "You must complete the Curriculum section before publish",
-      "cant_publish_goals": "You can't post because you don't have the complete goals",
+      "cant_publish_goals": "You can't publish because no educational goals are available",
       "notdata_goals": "There are no established goals for these criteria"
     },
     "title": {

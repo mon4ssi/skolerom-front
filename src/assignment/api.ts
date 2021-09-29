@@ -321,7 +321,7 @@ export class WPApi implements ArticleRepo {
     searchTitle
   }: { page: number, perPage: number, order: string, grades?: number, subjects?: number, searchTitle?: string, core?: number | string, goal?: number | string, multi?: number, source?: number }): Promise<Array<Article>> {
     return (
-      await API.get(`${process.env.REACT_APP_WP_URL_API}/api/filterarticle/v1/post/`, {
+      await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/filterarticle/v1/post/`, {
         params:
         {
           page,
@@ -338,7 +338,7 @@ export class WPApi implements ArticleRepo {
         }
       },
       )
-    ).data.data.map(buildArticle);
+    ).data.map(buildArticle);
   }
 
   public async getArticlesByIds(ids: Array<number>): Promise<Array<Article>> {
