@@ -370,7 +370,8 @@
     "No results found": "Søket ditt ga ingen resultater",
     "articles selected": "artikler valgt",
     "Image caption": "Bildetekst",
-    "grade": ". trinn",
+    "grade": " trinn",
+    "indicadorgrade": ".",
     "go_back_to_teaching_path": "Oppgaven ble ikke publisert og vil ikke bli lagt til i læringsstien. Er du sikker på at du vil tilbake til læringsstien?",
     "specify": "Spesifiser 1 eller flere relaterte artikler for å få forslag til bilder, PDF-er, videoer og lyd.",
     "no_title": "Uten tittel"
@@ -457,6 +458,7 @@
     "after_publishing_from_teaching_path": "Oppgaven ble publisert og lagt til i læringsstien.",
     "grep": {
       "title":"Koble til læreplanen",
+      "title_private":"Velg trinn og fag",
       "description":"Når du deler offentlig må du koble læringsstien til læreplanen. Velg relevante kompetansemål her under før publisering og distribusjon.",
       "descrption_assignment":"Når du deler offentlig må du koble oppgaven til læreplanen. Velg relevante kompetansemål her under før publisering og distribusjon.",
       "description_privado":"Kobling til læreplanen er kun nødvendig når du publiserer offentlig, men du kan gjerne koble innholdet til relevante kompetansemål her under hvis ønskelig."

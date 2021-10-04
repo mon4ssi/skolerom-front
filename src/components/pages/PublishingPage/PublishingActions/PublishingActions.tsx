@@ -58,6 +58,7 @@ interface State {
   page: number;
   pageCurrent: number;
   isValid: boolean;
+  isValidPrivate: boolean;
   loadingGoals: boolean;
 }
 
@@ -85,6 +86,7 @@ export class PublishingActions extends Component<Props, State> {
       editvaluereadingOptions: 0,
       editvalueGoalsOptions: [],
       isValid: false,
+      isValidPrivate: true,
       page: MAGICNUMBER1,
       pageCurrent: MAGICNUMBER1,
       loadingGoals: true
@@ -162,13 +164,21 @@ export class PublishingActions extends Component<Props, State> {
     });
     if (store!.currentEntity!.isPrivate) {
       this.setState(
-        { isValid: true },
+        {
+          isValid: true,
+          isValidPrivate: true
+        },
         () => {
           this.sendValidbutton();
         }
       );
     } else {
       this.sendValidbutton();
+      this.setState(
+        {
+          isValidPrivate: false
+        }
+      );
     }
     if (typeof(store!.currentEntity!.getListOfgrepGoalsIds()) !== 'undefined') {
       this.setState(
@@ -691,7 +701,8 @@ export class PublishingActions extends Component<Props, State> {
   public handlePrivateOn = () => {
     this.setState(
       {
-        isValid: true
+        isValid: true,
+        isValidPrivate: true
       },
       () => {
         this.sendValidbutton();
@@ -720,7 +731,8 @@ export class PublishingActions extends Component<Props, State> {
     }
     this.setState(
       {
-        isValid: false
+        isValid: false,
+        isValidPrivate: false
       },
       () => {
         this.sendValidbutton();
@@ -1391,12 +1403,12 @@ export class PublishingActions extends Component<Props, State> {
 
   public sendValidbutton = () => {
     if (!this.state.isValid) {
-      if (this.state.valueGradesOptions.length > 0 && this.state.valueGoalsOptions.length > 0 && this.state.valuereadingOptions !== null && this.state.valuereadingOptions === 0) {
+      if (this.state.valueGradesOptions.length > 0 && this.state.valueGoalsOptions.length > 0 && this.state.valuereadingOptions !== null && this.state.valuereadingOptions !== 0) {
         this.props.store!.setIsActiveButtons();
       } else {
         if (typeof(this.state.editvalueGoalsOptions) !== 'undefined') {
           if (this.state.editvalueGoalsOptions!.length > 0) {
-            if (this.state.valueGradesOptions.length > 0 && this.state.valueGoalsOptions.length > 0 && this.state.valuereadingOptions !== null && this.state.valuereadingOptions === 0) {
+            if (this.state.valueGradesOptions.length > 0 && this.state.valueGoalsOptions.length > 0 && this.state.valuereadingOptions !== null && this.state.valuereadingOptions !== 0) {
               this.props.store!.setIsActiveButtons();
             } else {
               this.props.store!.setIsActiveButtonsFalse();
@@ -1564,8 +1576,22 @@ export class PublishingActions extends Component<Props, State> {
     );
   }
 
+  public renderGoals = () => (
+    <div className="infoContainer__body">
+      <div className="infoContainer__body__title">
+        <img src={goalsImg} />
+        <h3>{intl.get('new assignment.greep.goals')}</h3>
+      </div>
+      <div className="infoContainer__body__table">
+        {this.renderTableHeader()}
+        {this.renderTableBody()}
+      </div>
+    </div>
+  )
+
   public render() {
     const { store, from } = this.props;
+    const titleSimple = (this.state.isValidPrivate) ? intl.get('publishing_page.grep.title_private') : intl.get('publishing_page.grep.title') ;
     const descriptionText = (this.state.isValid) ? intl.get('publishing_page.grep.description_privado') : (from === 'TEACHINGPATH') ? intl.get('publishing_page.grep.description') : intl.get('publishing_page.grep.descrption_assignment');
     return (
       <div className="PublishingActions flexBox dirColumn">
@@ -1578,26 +1604,17 @@ export class PublishingActions extends Component<Props, State> {
           </div>
           <div className="infoContainer__bottom">
             <div className="infoContainer__secondTitle">
-              <h2>{intl.get('publishing_page.grep.title')}</h2>
-              <p>{descriptionText}</p>
+              <h2>{titleSimple}</h2>
+              <p>{!this.state.isValidPrivate && descriptionText}</p>
             </div>
             <div className="infoContainer__filters">
               {this.renderGradeInput()}
               {this.renderSubjectInput()}
-              {this.renderCoreElements()}
-              {this.renderMultiDisciplinary()}
-              {this.renderReadingInSubject()}
+              {!this.state.isValidPrivate && this.renderCoreElements()}
+              {!this.state.isValidPrivate && this.renderMultiDisciplinary()}
+              {!this.state.isValidPrivate && this.renderReadingInSubject()}
             </div>
-            <div className="infoContainer__body">
-              <div className="infoContainer__body__title">
-                <img src={goalsImg} />
-                <h3>{intl.get('new assignment.greep.goals')}</h3>
-              </div>
-              <div className="infoContainer__body__table">
-                {this.renderTableHeader()}
-                {this.renderTableBody()}
-              </div>
-            </div>
+            {!this.state.isValidPrivate && this.renderGoals()}
           </div>
         </div>
       </div>
