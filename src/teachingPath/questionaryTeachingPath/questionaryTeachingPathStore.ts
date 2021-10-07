@@ -290,6 +290,24 @@ export class QuestionaryTeachingPathStore {
   }
 
   @action
+  public calculateCurrentNodePreview = (type: TeachingPathNodeType | undefined) => {
+
+    switch (type) {
+      case TeachingPathNodeType.Article:
+        this.setCurrentDisplayedElement(TeachingPathNodeType.Article);
+        break;
+      case TeachingPathNodeType.Assignment:
+        this.setCurrentDisplayedElement(TeachingPathNodeType.Assignment);
+        break;
+      case TeachingPathNodeType.Domain:
+        this.setCurrentDisplayedElement(TeachingPathNodeType.Domain);
+        break;
+      default:
+        this.setCurrentDisplayedElement(SubmitNodeType.Submit);
+    }
+  }
+
+  @action
   public onClickArticleOrAssignmentItem = async (idNode: number) => {
     await this.calculateCurrentNode(this.teachingPathId!, idNode);
 

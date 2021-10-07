@@ -71,10 +71,10 @@ export class HeaderComponent extends Component<Props> {
     const tpTitle = editTeachingPathStore!.teachingPathContainer!.teachingPath!.title;
     const isPrivate = editTeachingPathStore!.teachingPathContainer!.teachingPath!.isPrivate;
     const isCopy = editTeachingPathStore!.teachingPathContainer!.teachingPath!.isCopy;
-    const grepGoals = editTeachingPathStore!.teachingPathContainer!.teachingPath.grepGoalsIds;
-    const msj = (grepGoals!.length === 0) ? intl.get('edit_teaching_path.header.cant_publish_goals') : intl.get('edit_teaching_path.header.cant_publish');
 
     if (!editTeachingPathStore!.isActiveButtons) {
+      const grepGoals = editTeachingPathStore!.teachingPathContainer!.teachingPath.grepGoalsIds;
+      const msj = (grepGoals!.length === 0) ? intl.get('edit_teaching_path.header.cant_publish_goals') : intl.get('edit_teaching_path.header.cant_publish');
       Notification.create({
         type: NotificationTypes.ERROR,
         title: msj

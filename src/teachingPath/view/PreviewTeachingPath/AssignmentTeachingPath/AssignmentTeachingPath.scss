@@ -1,0 +1,38 @@
+.articleTeachingPath {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    max-height: 100%;
+    padding-top: 20px;
+  
+    .chooseOne {
+      color: #E2017B;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+  
+    .title {
+      font-weight: 500;
+      font-size: 2.25rem;
+      margin: 20px 0;
+    }
+  
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      justify-content: center;
+  
+      .passedStyle {
+        .InfoCard {
+          box-shadow: 0 0 7px 0 #0A7B24;
+        }
+      }
+  
+      .InfoCard {
+        margin: 10px;
+      }
+    }
+  }
+  

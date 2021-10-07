@@ -25,6 +25,7 @@ import { NewAssignment } from 'assignment/view/NewAssignment/NewAssignment';
 import { CurrentAssignmentPage } from 'assignment/view/CurrentAssignmentPage/CurrentAssignmentPage';
 import { CreateNewAssignmentFromArticle } from 'assignment/view/CreateNewAssignmentFromArticle/CreateNewAssignmentFromArticle';
 import { PassageTeachingPath } from 'teachingPath/view/PassageTeachingPath/PassageTeachingPath';
+import { PreviewTeachingPath } from 'teachingPath/view/PreviewTeachingPath/PreviewTeachingPath';
 import { EditTeachingPath } from 'teachingPath/view/EditTeachingPath/EditTeachingPath';
 import { ConfirmationPage } from 'components/pages/DistributionPage/ConfirmationPage/ConfirmationPage';
 
@@ -225,6 +226,11 @@ class LocalizedApp extends Component<Props> {
           component={CurrentAssignmentPageView}
         />
 
+        <Route
+          path="/teaching-path/preview/:id"
+          component={PreviewTeachingPath}
+        />
+
         <Route path="/login" component={LoginPage} />
         <Route path="/logout" component={LogOutPage} />
         <Route path="/dataporten" component={FeideCodeGetter} />
@@ -256,6 +262,11 @@ class LocalizedApp extends Component<Props> {
         <Route
           path="/teaching-paths/view/:id"
           component={ViewTeachingPath}
+        />
+
+        <Route
+          path="/teaching-path/preview/:id"
+          component={PreviewTeachingPath}
         />
 
         <Route
