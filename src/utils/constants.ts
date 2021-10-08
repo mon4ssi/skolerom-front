@@ -13,7 +13,6 @@ export const MAX_TITLE_LENGTH = 60;
 export const MAX_DESCRIPTION_LENGTH = 255;
 export const MAX_DESCRIPTION_LENGTH_500 = 500;
 export const MAX_DESCRIPTION_LENGTH_MAX = 700;
-export const MAX_DESCRIPTION_LENGTH_500 = 500;
 
 export const DEFAULT_LOCALE = Locales.NB;
 
