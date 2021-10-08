@@ -10,13 +10,15 @@ import { TeachingPathNodeType } from 'teachingPath/TeachingPath';
 import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
 import { EditTeachingPathStore } from '../../EditTeachingPathStore';
 import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
+import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 
 import addArticleImg from 'assets/images/add-article.svg';
 import addAssignemntImg from 'assets/images/add-assignment.svg';
 import createAssignmentImg from 'assets/images/create-assignment.svg';
+import addDomainImg from 'assets/images/app-window-link.svg';
+import linkImg from 'assets/images/link.svg';
 
 import './AddingButtons.scss';
-import { Domain } from 'domain';
 
 interface Props extends RouteComponentProps {
   node?: EditableTeachingPathNode;
@@ -72,6 +74,7 @@ class AddingButtonsContainer extends Component<Props> {
     this.setState({
       modalDomain: true
     });
+    document.addEventListener('keyup', this.handleKeyboardControl);
   }
 
   private closeDomainModal = () => {
@@ -79,7 +82,15 @@ class AddingButtonsContainer extends Component<Props> {
       this.setState({
         modalDomain: false
       });
+      document.removeEventListener('keyup', this.handleKeyboardControl);
     }
+  }
+
+  private validUrlPath = (value: string) => {
+    if (value.split('//').length > 1) {
+      return value;
+    }
+    return `https://${value}`;
   }
 
   private handleChangeNewQuestion = (e:  React.ChangeEvent<HTMLInputElement>) => {
@@ -91,20 +102,41 @@ class AddingButtonsContainer extends Component<Props> {
     }
   }
 
+  private handleKeyboardControl = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      if (!this.state.disabledbutton) {
+        this.sendDomain();
+      }
+    }
+    if (event.key === 'Escape') {
+      this.closeDomainModal();
+    }
+  }
+
   private sendDomain = async () => {
+    const { disabledbutton } = this.state;
     const { editTeachingPathStore, node } = this.props;
-    editTeachingPathStore!.setCurrentNode(node!);
-    this.setState({ loading: false });
-    this.setState({ disabledbutton: true });
-    const response = await editTeachingPathStore!.sendDataDomain(this.state.valueInputDomain);
-    this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
-    const newChildren = this.state.itemsForNewChildren.map(
-      item => editTeachingPathStore!.createNewNode(
-        item,
-        TeachingPathNodeType.Domain
-      )
-    );
-    newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
+    if (!disabledbutton) {
+      const response = await editTeachingPathStore!.sendDataDomain(this.validUrlPath(this.state.valueInputDomain));
+      editTeachingPathStore!.setCurrentNode(node!);
+      this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
+      const newChildren = this.state.itemsForNewChildren.map(
+        item => editTeachingPathStore!.createNewNode(
+          item,
+          TeachingPathNodeType.Domain
+        )
+      );
+      newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
+      editTeachingPathStore!.currentEntity!.save();
+
+      this.context.changeContentType(null);
+      editTeachingPathStore!.setCurrentNode(null);
+    } else {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('teaching path passing.external_error')
+      });
+    }
   }
 
   private renderModalDomain = () => {
@@ -116,7 +148,7 @@ class AddingButtonsContainer extends Component<Props> {
           <div className="modalDomain__context">
             <div className="modalDomain__form">
               <div className="modalDomain__input">
-                <img src={addArticleImg} alt="add-article" />
+                <img src={linkImg} alt="add-domain" />
                 <input
                   className="newTextQuestionInput"
                   placeholder={intl.get('new assignment.type_or_paste')}
@@ -132,7 +164,6 @@ class AddingButtonsContainer extends Component<Props> {
                   className="btn"
                   onClick={this.sendDomain}
                   title={intl.get('new assignment.add_link')}
-                  disabled={disabledbutton}
                 >
                   {intl.get('new assignment.add_link')}
                 </button>
@@ -149,7 +180,7 @@ class AddingButtonsContainer extends Component<Props> {
     return (
     <div className="addingButton" onClick={this.openDomainModal}>
       <button title={intl.get('edit_teaching_path.modals.add_domain')}>
-        <img src={addArticleImg} alt="add-article" />
+        <img src={addDomainImg} alt="add-article" />
         {intl.get('edit_teaching_path.modals.add_domain')}
       </button>
     </div>
@@ -168,7 +199,7 @@ class AddingButtonsContainer extends Component<Props> {
             {intl.get('edit_teaching_path.modals.add_articles')}
           </button>
         </div>
-        {/* {this.renderButtonDomain()} */}
+        {this.renderButtonDomain()}
         {this.state.modalDomain && this.renderModalDomain()}
         <div
           className="addingButton"

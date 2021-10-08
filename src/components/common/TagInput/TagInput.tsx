@@ -31,6 +31,7 @@ interface Props {
   autoFocus?: boolean;
   listView?: boolean;
   tags: Array<TagProp>;
+  placeholder?: string;
   removeTag?: (id: number) => void;
   addTag?: (id: number) => void;
   currentTags: Array<TagProp>;
@@ -207,7 +208,7 @@ class TagInputWrapper extends Component<Props, State> {
   }
 
   public render() {
-    const { dataid, className, autoFocus, currentTags, orderbyid } = this.props;
+    const { dataid, className, autoFocus, placeholder, currentTags, orderbyid } = this.props;
     const { tagInput } = this.state;
 
     return (
@@ -229,6 +230,7 @@ class TagInputWrapper extends Component<Props, State> {
           aria-labelledby={dataid}
           aria-required="true"
           aria-invalid="false"
+          placeholder={placeholder}
         />
 
         {this.renderVisibleTags()}

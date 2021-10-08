@@ -1,8 +1,10 @@
 import { action, computed, observable, reaction, toJS } from 'mobx';
+import { Route, Switch, Redirect, withRouter, RouteComponentProps, useHistory, Router } from 'react-router-dom';
 import intl from 'react-intl-universal';
 import { injector } from 'Injector';
 
 import { QUESTIONARY_SERVICE, QuestionaryService } from 'assignment/questionary/service';
+import { LocationState } from 'assignment/view/CurrentAssignmentPage/CurrentAssignmentPage';
 import { Article, ARTICLE_SERVICE_KEY, Assignment, Question } from 'assignment/Assignment';
 import { Answer, Questionary, RedirectData } from 'assignment/questionary/Questionary';
 import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteractor';
@@ -126,8 +128,11 @@ export class CurrentQuestionaryStore {
     });
     article!.isRead = true;
     this.relatedArticles.splice(indexArticle, 1, article!);
-    this.currentQuestionary!.isQuestionaryChanged = true;
-    this.setCurrentQuestion(0);
+    const readArticles = this.relatedArticles.filter(article => article.isRead);
+    if (this.relatedArticles.length === readArticles.length) {
+      this.currentQuestionary!.isQuestionaryChanged = true;
+      this.setCurrentQuestion(0);
+    }
   }
 
   @action

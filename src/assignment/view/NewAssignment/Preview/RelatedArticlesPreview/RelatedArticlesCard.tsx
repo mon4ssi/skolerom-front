@@ -8,12 +8,15 @@ import { ArticleLevels } from 'utils/enums';
 
 import checkRounded from 'assets/images/check-rounded-white-bg.svg';
 import checkActive from 'assets/images/check-active.svg';
+import checkActiveGreen from 'assets/images/green_check.svg';
 import listPlaceholderImg from 'assets/images/list-placeholder.svg';
 import firstLevelImg from 'assets/images/level-1-blue.svg';
 import secondLevelImg from 'assets/images/level-2-blue.svg';
 import thirdLevelImg from 'assets/images/level-3-blue.svg';
 
 import './RelatedArticlesPreview.scss';
+import classnames from 'classnames';
+import is from 'date-fns/esm/locale/is/index.js';
 
 const twoGrades = 2;
 const threeGrades = 3;
@@ -21,8 +24,8 @@ const threeGrades = 3;
 interface Props {
   article: Article;
   isCheckedArticle: boolean;
-
   handleArticle(): void;
+  toSelectArticle(): void;
 }
 
 export const RelatedArticlesCard = (props: Props) => {
@@ -88,11 +91,11 @@ export const RelatedArticlesCard = (props: Props) => {
   };
 
   return (
-    <div className={'RelatedArticlesCard'} onClick={props.handleArticle}>
+    <div className="RelatedArticlesCard" id={`relatedarticle_${article.id}`} onClick={props.toSelectArticle}>
       <div className="image">
         {renderImageArticle()}
-        <button className="check" title="check">
-          <img src={props.isCheckedArticle ? checkActive : checkRounded} alt="Check" title="check" className={'checkImg'}/>
+        <button className="check" title="check" onClick={props.handleArticle}>
+          <img src={props.isCheckedArticle ? checkActiveGreen : checkRounded} alt="Check" title="check" className={'checkImg'}/>
         </button>
       </div>
       <div className="info">
@@ -103,11 +106,6 @@ export const RelatedArticlesCard = (props: Props) => {
           <div className="cardDescription fw300">
             {article.excerpt}
           </div>
-        </div>
-
-        <div>
-          {article.levels && article.levels.length ? renderLevels() : null}
-          {renderGrades()}
         </div>
       </div>
     </div>

@@ -30,6 +30,13 @@ $image-height: 60px;
       padding-right: 48px;
     }
   }
+  &:last-child {
+    .AssignmentListItem__more {
+      &:before, &:after {
+        display: none !important;
+      }
+    }
+  }
 }
 
 .AssignmentListItem__block {
@@ -121,7 +128,6 @@ $image-height: 60px;
 .AssignmentListItem__questions {
   @include text-shrink;
   color: $color-purple;
-  margin-right: 20px;
   font-size: 0.9375rem;
   min-width: 0;
 }

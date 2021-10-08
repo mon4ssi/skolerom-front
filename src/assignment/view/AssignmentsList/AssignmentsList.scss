@@ -2,7 +2,7 @@
 
 .MyList {
   margin-top: 20px;
-
+  
   .listItemWrapper {
     .listItem {
       height: 61px;
@@ -213,7 +213,15 @@
     }
   }
 }
-
+.noResults.emptyTeachingPaths {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 300;
+  height: 100%;
+}
 @media screen and (max-width: $screen-dimension-desktop) {
   .mob-container {
     font-size: 0.9375rem;

@@ -80,6 +80,68 @@ export class Subject {
   }
 }
 
+export class GreepSelectValue {
+  @observable public value: number | string | null;
+  @observable public label: string;
+
+  constructor(value: number, label: string) {
+    this.value = value;
+    this.label = label;
+  }
+}
+
+export class Greep {
+  @observable public id: number;
+  @observable public title: string;
+
+  constructor(id: number, title: string) {
+    this.id = id;
+    this.title = title;
+  }
+}
+
+export interface GreepElementsFromBackend {
+  kode: string;
+  description: string;
+}
+
+export interface GrepFilters {
+  id: number;
+  name: string;
+  // tslint:disable-next-line: variable-name
+  wp_id: number;
+}
+
+export interface GrepElementFilters {
+  id: number;
+  description: string;
+  code: string;
+}
+
+export interface GrepReading {
+  id: number;
+  name: string;
+  // tslint:disable-next-line: variable-name
+  locale_id: number;
+}
+
+export class FilterGrep {
+  public subjectFilters?: Array<GrepFilters>;
+  public gradeFilters?: Array<GrepFilters>;
+  public coreElementsFilters?: Array<GrepElementFilters>;
+  public mainTopicFilters?: Array<GrepElementFilters>;
+  public readingInSubjects?: Array<GrepReading>;
+}
+
+export class GoalsData {
+  public id?: number;
+  public code?: string;
+  public description?: string;
+  public coreElements?: Array<GrepElementFilters>;
+  public grades?: Array<GrepFilters>;
+  public subject?: GrepFilters;
+}
+
 export interface AssignmentArgs {
   id: number;
   title?: string;
@@ -112,6 +174,14 @@ export interface AssignmentArgs {
   isDistributed?: boolean;
   ownedByMe?: boolean;
   isCopy?: boolean;
+  grepCoreelements?: Array<GreepElementsFromBackend>;
+  grepMaintopic?: Array<GreepElementsFromBackend>;
+  grepReadingInsubject?: string;
+  grepCoreElementsIds?: Array<number>;
+  grepMainTopicsIds?: Array<number>;
+  grepGoalsIds?: Array<number>;
+  grepReadingInSubjectId?: number;
+  grepGoals?: Array<GreepElements>;
 }
 
 export class Assignment {
@@ -148,6 +218,14 @@ export class Assignment {
   @observable protected _isPublished?: boolean;
   @observable protected _isDistributed?: boolean;
   @observable protected _isCopy?: boolean;
+  public grepCoreelements?: Array<GreepElementsFromBackend>;
+  public grepMaintopic?: Array<GreepElementsFromBackend>;
+  public grepReadingInsubject?: string;
+  public grepGoals?: Array<GreepElements>;
+  public grepCoreElementsIds?: Array<number>;
+  public grepMainTopicsIds?: Array<number>;
+  public grepGoalsIds?: Array<number>;
+  public grepReadingInSubjectId?: number;
 
   constructor(args: AssignmentArgs) {
     this._id = args.id;
@@ -181,6 +259,14 @@ export class Assignment {
     this._isDistributed = args.isDistributed;
     this._ownedByMe = typeof args.ownedByMe === 'boolean' ? args.ownedByMe : false;
     this._isCopy = args.isCopy || false;
+    this.grepCoreelements = args.grepCoreelements;
+    this.grepGoals = args.grepGoals;
+    this.grepMaintopic = args.grepMaintopic;
+    this.grepReadingInsubject = args.grepReadingInsubject;
+    this.grepCoreElementsIds = args.grepCoreElementsIds;
+    this.grepMainTopicsIds = args.grepMainTopicsIds;
+    this.grepGoalsIds = args.grepGoalsIds;
+    this.grepReadingInSubjectId = args.grepReadingInSubjectId;
   }
 
   public isOwnedByMe(): boolean {
@@ -347,6 +433,10 @@ export class Assignment {
 
   public getListOfGrades() {
     return toJS(this._grades);
+  }
+
+  public getListOfGoals() {
+    return toJS(this.grepGoals);
   }
 }
 
@@ -527,14 +617,128 @@ export class Filter {
   @observable public isPublished?: number | null;
   @observable public order?: string | null;
   @observable public orderField?: string | null;
-  @observable public grade?: number | null;
-  @observable public subject?: number | null;
+  @observable public grade?: string | number | null;
+  @observable public subject?:  string | number | null;
   @observable public isAnswered?: string | null;
   @observable public searchQuery?: string | null;
   @observable public isEvaluated?: string | null;
   @observable public isPassed?: number | null;
   @observable public isActive?: number | null;
+  @observable public grepCoreElementsIds?: string | number | null;
+  @observable public grepMainTopicsIds?: string | number | null;
+  @observable public grepGoalsIds?: string | number | null;
+  @observable public grepReadingInSubject?: string | number | null;
   public showMyAssignments?: number | null;
+}
+
+export interface GradeFilter {
+  // tslint:disable-next-line: variable-name
+  grade_id?: string;
+  description?: string;
+}
+
+export interface SubjectFilter {
+  // tslint:disable-next-line: variable-name
+  subject_id?: string;
+  description?: string;
+  // tslint:disable-next-line: variable-name
+  grade_ids?: Array<string>;
+}
+
+export interface GradeStringObject {
+  // tslint:disable-next-line: variable-name
+  grade_id?: string;
+  // tslint:disable-next-line: variable-name
+  subjects_relations?: Array<string>;
+}
+
+export interface MultidisciplinayGradeSubjectFilter {
+  // tslint:disable-next-line: variable-name
+  subject_id?: string;
+  core_elments_ids?: Array<string>;
+
+}
+
+export interface MultidisciplinayGradeFilter {
+  // tslint:disable-next-line: variable-name
+  grade_id?: string;
+  subject_ids?: Array<MultidisciplinayGradeSubjectFilter>;
+
+}
+
+export interface MultiFilter {
+  // tslint:disable-next-line: variable-name
+  main_topic_id?: string;
+  description?: string;
+  // tslint:disable-next-line: variable-name
+  grade_ids?: Array<MultidisciplinayGradeFilter>;
+}
+
+export interface CoreElementGradeFilter {
+  // tslint:disable-next-line: variable-name
+  grade_id?: string;
+  subject_ids?: Array<string>;
+}
+
+export interface CoreFilter {
+  // tslint:disable-next-line: variable-name
+  core_element_id?: string;
+  description?: string;
+  // tslint:disable-next-line: variable-name
+  grade_ids?: Array<CoreElementGradeFilter>;
+}
+
+export interface GoalsGradeSubjectCoreElementsFilter {
+  // tslint:disable-next-line: variable-name
+  core_element_id?: string;
+  // tslint:disable-next-line: variable-name
+  main_topic_ids?: Array<string>;
+}
+
+export interface GoalsGradeSubjectFilter {
+  // tslint:disable-next-line: variable-name
+  subject_id?: string;
+  // tslint:disable-next-line: variable-name
+  core_element_ids?: Array<GoalsGradeSubjectCoreElementsFilter>;
+}
+
+export interface GoalsGradeFilter {
+  // tslint:disable-next-line: variable-name
+  grade_id?: string;
+  // tslint:disable-next-line: variable-name
+  subject_ids?: Array<GoalsGradeSubjectFilter>;
+}
+
+export interface GoalsFilter {
+  // tslint:disable-next-line: variable-name
+  goal_id?: string;
+  description?: string;
+  // tslint:disable-next-line: variable-name
+  grade_ids?: Array<GoalsGradeFilter>;
+}
+
+export interface SourceFilter {
+  // tslint:disable-next-line: variable-name
+  term_id?: string;
+  // tslint:disable-next-line: variable-name
+  name?: string;
+  // tslint:disable-next-line: variable-name
+  slug?: string;
+}
+
+export class FilterArticlePanel {
+  // tslint:disable-next-line: variable-name
+  public grade_filter?: Array<GradeFilter>;
+  // tslint:disable-next-line: variable-name
+  public subject_filter?: Array<SubjectFilter>;
+  // tslint:disable-next-line: variable-name
+  public multidisciplinay_filter?: Array<MultiFilter>;
+  // tslint:disable-next-line: variable-name
+  public core_elements_filter?: Array<CoreFilter>;
+  // tslint:disable-next-line: variable-name
+  public goals_filter?: Array<GoalsFilter>;
+  // tslint:disable-next-line: variable-name
+  public source_filter?: Array<SourceFilter>;
 }
 
 export class AssignmentList {
@@ -561,12 +765,28 @@ export class AssignmentList {
     this.filter.orderField = orderField;
   }
 
-  public setFiltersGradeID(gradeID: number | null) {
+  public setFiltersGradeID(gradeID: string | number | null) {
     this.filter.grade = gradeID;
   }
 
-  public setFiltersSubjectID(subjectID: number | null) {
+  public setFiltersSubjectID(subjectID: string | number | null) {
     this.filter.subject = subjectID;
+  }
+
+  public setFiltersMultiID(multiID: string | number | null) {
+    this.filter.grepMainTopicsIds = multiID;
+  }
+
+  public setFiltersCoreID(coreID: string | number | null) {
+    this.filter.grepCoreElementsIds = coreID;
+  }
+
+  public setFiltersGoalID(goalID: string | number | null) {
+    this.filter.grepGoalsIds = goalID;
+  }
+
+  public setFiltersReadingID(readingID: string | number | null) {
+    this.filter.grepReadingInSubject = readingID;
   }
 
   public setFiltersIsEvaluated(status: string | null) {
@@ -670,6 +890,10 @@ export interface ArticleRepo {
     order?: string,
     grades?: number,
     subjects?: number,
+    core?: number | string,
+    goal?: number | string,
+    multi?: number,
+    source?: number,
     searchTitle?: string
   }): Promise<Array<Article>>;
   getArticlesByIds(ids: Array<number>): Promise<Array<Article>>;
@@ -744,6 +968,11 @@ export interface ReadLevel {
   level: number;
 }
 
+export interface GreepElements {
+  kode: string;
+  description: string;
+}
+
 export interface ArticleArgs {
   id: number;
   title: string;
@@ -758,6 +987,9 @@ export interface ArticleArgs {
   correspondingLevelArticleId?: number | null;
   isSelected?: boolean;
   readLevel?: ReadLevel;
+  grepCoreelements?: Array<GreepElements>;
+  grepGoals?: Array<GreepElements>;
+  grepMaintopic?: Array<GreepElements>;
 }
 
 export class Article {
@@ -774,6 +1006,9 @@ export class Article {
   public correspondingLevelArticleId?: number | null;
   public isSelected?: boolean;
   public readLevel?: ReadLevel;
+  public grepCoreelements?: Array<GreepElements>;
+  public grepGoals?: Array<GreepElements>;
+  public grepMaintopic?: Array<GreepElements>;
 
   constructor(args: ArticleArgs) {
     this.id = args.id;
@@ -789,6 +1024,9 @@ export class Article {
     this.correspondingLevelArticleId = args.correspondingLevelArticleId;
     this.isSelected = args.isSelected;
     this.readLevel = args.readLevel;
+    this.grepCoreelements = args.grepCoreelements;
+    this.grepGoals = args.grepGoals;
+    this.grepMaintopic = args.grepMaintopic;
   }
 }
 
@@ -797,21 +1035,32 @@ export interface DomainArgs {
   title: string;
   url?: string;
   description?: string;
-  image?: string;
+  featuredImage?: string;
+  grades?: Array<Grade>;
+  subjects?: Array<Subject>;
+  isRead?: boolean;
+  grepGoals?: Array<GreepElements>;
 }
 
 export class Domain {
   public id: number;
   public readonly title: string;
-  public readonly url?: string;
   public readonly description?: string;
-  public readonly image?: string;
-
+  public readonly url?: string;
+  public grades?: Array<Grade>;
+  public subjects?: Array<Subject>;
+  public readonly featuredImage?: string;
+  public isRead?: boolean;
+  public grepGoals?: Array<GreepElements>;
   constructor(args: DomainArgs) {
     this.id = args.id;
     this.title = args.title;
-    this.url = args.url;
     this.description = args.description;
-    this.image = args.image;
+    this.url = args.url;
+    this.featuredImage = args.featuredImage;
+    this.grades = args.grades;
+    this.subjects = args.subjects;
+    this.isRead = args.isRead;
+    this.grepGoals = args.grepGoals;
   }
 }

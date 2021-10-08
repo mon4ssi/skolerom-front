@@ -244,7 +244,6 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
 
     let currentPage;
     let questionId;
-
     if (this.state.showCover) {
       currentPage = ContentType.COVER;
       questionId = null;

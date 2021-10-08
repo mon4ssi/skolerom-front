@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-
+import intl from 'react-intl-universal';
 import { TeachingPathEvaluationStore } from 'teachingPath/evaluationDraft/TeachingPathEvaluationStore';
 
 import './TeachingPathAnswersList.scss';
@@ -18,7 +18,12 @@ export class TeachingPathAnswersList extends Component<Props> {
     const { teachingPathEvaluationStore } = this.props;
 
     return (
-      <AnswersList store={teachingPathEvaluationStore!} />
+      <div>
+        <h1 className="generalTitle">
+          {intl.get('evaluation_page.Teaching paths')}
+        </h1>
+        <AnswersList store={teachingPathEvaluationStore!} />
+      </div>
     );
   }
 }

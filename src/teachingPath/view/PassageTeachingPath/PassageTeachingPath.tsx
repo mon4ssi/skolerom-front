@@ -11,6 +11,7 @@ import { TeachingPathNodeType } from '../../TeachingPath';
 import { ArticleTeachingPath } from './ArticleTheachingPath/ArticleTeachingPath';
 import { QuestionaryTeachingPathStore, SubmitNodeType } from '../../questionaryTeachingPath/questionaryTeachingPathStore';
 import { AssignmentTeachingPath } from './AssignmentTeachingPath/AssignmentTeachingPath';
+import { DomainTeachingPath } from './DomainTeachingPath/DomainTeachingpath';
 import { LocationState } from 'assignment/view/CurrentAssignmentPage/CurrentAssignmentPage';
 import { SubmitTeachingPath } from 'assignment/view/SubmitTeachingPath/SubmitTeachingPath';
 import { Article, Assignment } from 'assignment/Assignment';
@@ -121,6 +122,29 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
         return questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Article);
       case TeachingPathNodeType.Assignment:
         return questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Assignment);
+      case TeachingPathNodeType.Domain:
+        return questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Domain);
+      default:
+        return questionaryTeachingPathStore!.setCurrentDisplayedElement(SubmitNodeType.Submit);
+    }
+  }
+
+  public finishReadingDomain = async () => {
+    const { questionaryTeachingPathStore } = this.props;
+    questionaryTeachingPathStore!.setFetchingDataStatus(true);
+    await questionaryTeachingPathStore!.getCurrentNode(
+      questionaryTeachingPathStore!.teachingPathId!,
+      questionaryTeachingPathStore!.pickedItemDomain!.idNode
+    );
+    const type = questionaryTeachingPathStore!.childrenType;
+    questionaryTeachingPathStore!.setFetchingDataStatus(false);
+    switch (type) {
+      case TeachingPathNodeType.Article:
+        return questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Article);
+      case TeachingPathNodeType.Assignment:
+        return questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Assignment);
+      case TeachingPathNodeType.Domain:
+        return questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Domain);
       default:
         return questionaryTeachingPathStore!.setCurrentDisplayedElement(SubmitNodeType.Submit);
     }
@@ -159,6 +183,8 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
         return <ArticleTeachingPath finishReading={this.finishReading} />;
       case TeachingPathNodeType.Assignment:
         return <AssignmentTeachingPath />;
+      case TeachingPathNodeType.Domain:
+        return <DomainTeachingPath finishReading={this.finishReadingDomain} />;
       default:
         return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers}/>;
     }

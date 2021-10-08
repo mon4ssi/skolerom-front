@@ -8,6 +8,7 @@ import { StudentsListPage } from 'student/view/StudentsListPage';
 import { UserType } from 'user/User';
 import { EvaluationPage } from 'evaluation/EvaluationPage/EvaluationPage';
 import { AssignmentDistributeList } from 'evaluation/EvaluationPage/AssignmentDistributeList';
+import { TeachingPathDistributeList } from 'evaluation/EvaluationPage/TeachingPathDistributeList';
 import { Page404 } from './components/pages/Page404/Page404';
 
 const AssignmentsPageComponent = () => <AssignmentsPage isStudent />;
@@ -30,6 +31,10 @@ const EvaluationPageRoutes = () => (
       <Route
         path="/evaluation/assignments"
         component={AssignmentDistributeList}
+      />
+      <Route
+        path="/evaluation/teaching-paths"
+        component={TeachingPathDistributeList}
       />
       <Route
         path="/*"

@@ -1,7 +1,7 @@
 import { computed, observable, toJS } from 'mobx';
 import intl from 'react-intl-universal';
 
-import { Grade, Subject, Article, Assignment, Domain, Filter } from 'assignment/Assignment';
+import { Grade, GreepElements, Subject, Article, Assignment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData } from 'assignment/Assignment';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from './service';
 import { injector } from '../Injector';
 
@@ -13,12 +13,18 @@ export const TEACHING_PATH_REPO = 'TEACHING_PATH_REPO';
 
 export interface TeachingPathRepo {
   getAllTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
+  getTeachingPathDistributes(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
+  getTeachingPathListOfStudentInList(studentId: number, filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
   getMyTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
   getStudentTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
   getTeachingPathById(id: number): Promise<TeachingPath>;
   getCurrentNode(teachingPathId: number, nodeId: number): Promise<TeachingPathNode>;
   markAsPickedArticle(teachingPathId: number, nodeId: number, idArticle: number, levelWpId: number): Promise<void>;
   sendDataDomain(domain: string): Promise<Domain>;
+  getFiltersArticlePanel(): Promise<FilterArticlePanel>;
+  getGrepFilters(grades: string, subjects: string, source: string): Promise<FilterGrep>;
+  /* tslint:disable-next-line:max-line-length */
+  getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number): Promise<{ data: Array<GoalsData>, total_pages: number; }>;
   finishTeachingPath(id: number): Promise<void>;
   deleteTeachingPathAnswers(teachingPathId: number, answerId: number): Promise<void>;
   copyTeachingPath(id: number): Promise<number>;
@@ -43,6 +49,7 @@ export type TeachingPathItemValueArgs = {
   isAnswered?: boolean;
   numberOfQuestions?: number;
   featuredImage?: string;
+  grepGoals?: Array<GreepElements>;
 };
 
 export type TeachingPathItemValue = Article | Assignment | Domain;
@@ -159,6 +166,7 @@ export interface TeachingPathArgs {
   view?: string;
   levels?: Array<number>;
   featuredImage?: string;
+  url?: string;
   answerId?: number;
   isPassed?: boolean | null;
   mark?: number | null;
@@ -174,6 +182,11 @@ export interface TeachingPathArgs {
   isDistributed?: boolean;
   ownedByMe?: boolean;
   isCopy?: boolean;
+  grepMainTopicsIds?: Array<number>;
+  grepCoreElementsIds?: Array<number>;
+  grepReadingInSubjectId?: number;
+  grepGoalsIds?: Array<number>;
+  grepGoals?: Array<GreepElements>;
 }
 
 export class TeachingPath {
@@ -195,6 +208,7 @@ export class TeachingPath {
   @observable protected _levels: Array<number>;
   @observable protected _view: string;
   @observable protected _featuredImage?: string;
+  @observable protected _url?: string;
   @observable protected _answerId?: number;
   @observable protected _isPassed?: boolean | null;
   @observable protected _mark?: number | null;
@@ -209,6 +223,11 @@ export class TeachingPath {
   @observable protected _isPublished?: boolean;
   @observable protected _isDistributed?: boolean;
   @observable protected _isCopy?: boolean;
+  @observable protected _grepCoreElementsIds?: Array<number>;
+  @observable protected _grepMainTopicsIds?: Array<number>;
+  @observable protected _grepReadingInSubjectId?: number;
+  @observable protected _grepGoalsIds?: Array<number>;
+  @observable protected _grepGoals?: Array<GreepElements> = [];
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;
@@ -227,6 +246,7 @@ export class TeachingPath {
     this._view = args.view || 'edit';
     this._levels = args.levels || [secondLevel];
     this._featuredImage = args.featuredImage;
+    this._url = args.url;
     this._answerId = args.answerId;
     this._comment = args.comment;
     this._mark = args.mark;
@@ -244,11 +264,36 @@ export class TeachingPath {
     this._ownedByMe = typeof args.ownedByMe === 'boolean' ? args.ownedByMe : false;
     this._answerId = args.answerId;
     this._isCopy = args.isCopy || false;
+    this._grepCoreElementsIds = args.grepCoreElementsIds;
+    this._grepMainTopicsIds = args.grepMainTopicsIds;
+    this._grepReadingInSubjectId = args.grepReadingInSubjectId;
+    this._grepGoalsIds = args.grepGoalsIds;
+    this._grepGoals = args.grepGoals || [];
   }
 
   @computed
   public get id() {
     return this._id;
+  }
+
+  @computed
+  public get grepCoreElementsIds() {
+    return this._grepCoreElementsIds;
+  }
+
+  @computed
+  public get grepMainTopicsIds() {
+    return this._grepMainTopicsIds;
+  }
+
+  @computed
+  public get grepReadingInSubjectId() {
+    return this._grepReadingInSubjectId;
+  }
+
+  @computed
+  public get grepGoalsIds() {
+    return this._grepGoalsIds;
   }
 
   @computed
@@ -259,6 +304,11 @@ export class TeachingPath {
   @computed
   public get featuredImage() {
     return this._featuredImage;
+  }
+
+  @computed
+  public get url() {
+    return this._url;
   }
 
   @computed
@@ -337,6 +387,26 @@ export class TeachingPath {
     return toJS(this._grades);
   }
 
+  public getListOfGoals() {
+    return toJS(this._grepGoals);
+  }
+
+  public getListOfgrepCoreElementsIds() {
+    return this._grepCoreElementsIds;
+  }
+
+  public getListOfgrepGoalsIds() {
+    return this._grepGoalsIds;
+  }
+
+  public getListOfgrepMainTopicsIds() {
+    return this._grepMainTopicsIds;
+  }
+
+  public getListOfgrepReadingInSubjectId() {
+    return this._grepReadingInSubjectId;
+  }
+
   public isOwnedByMe(): boolean {
     return this._ownedByMe;
   }
@@ -408,6 +478,14 @@ export class TeachingPathsList {
     return this.teachingPathService.getStudentTeachingPathsList(this.filter);
   }
 
+  public async getTeachingPathDistributes(filter: Filter) {
+    return this.teachingPathService.getTeachingPathDistributes(filter);
+  }
+
+  public async getTeachingPathListOfStudentInList(studentId: number) {
+    return this.teachingPathService.getTeachingPathListOfStudentInList(studentId, this.filter);
+  }
+
   public async getTeachingPathById(id: number) {
     return this.teachingPathService.getTeachingPathById(id);
   }
@@ -418,6 +496,19 @@ export class TeachingPathsList {
 
   public setFiltersPage(number: number) {
     this.filter.page = number;
+  }
+
+  public setFiltersIsAnswered(status: string | null) {
+    this.filter.isAnswered = status;
+  }
+
+  public setFiltersIsEvaluated(status: string | null) {
+    this.filter.isEvaluated = status;
+  }
+
+  public setFiltersSorting(orderField: string, order: string) {
+    this.filter.order = order;
+    this.filter.orderField = orderField;
   }
 
   public setFiltersSubjectID(id: number | null) {

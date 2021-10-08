@@ -2,13 +2,30 @@
 
 .RelatedArticlesPreview {
   display: flex;
-  height: 100%;
-  position: absolute;
-  background: white;
+  height: calc(100% - 80px);
+  position: fixed;
   width: 100%;
   z-index: 1;
   padding: 0;
-
+  top: 80px;
+  left: 0;
+  background: #e7ecef;
+  &__content {
+    display: flex;
+    width: 100%;
+  }
+  &__left {
+    padding: 20px 25px;
+    flex: none;
+    width: 500px;
+    height: 100%;
+    overflow-y: scroll;
+  }
+  &__right {
+    width: calc(100% - 500px);
+    flex: none;
+    border-left: 2px solid #d2d2d2;
+  }
   .wrapperArticles {
     display: flex;
     flex-direction: column;
@@ -44,6 +61,20 @@
         }
       }
 
+      &.loadingdata {
+        .itemFilter__core {
+          opacity: 0.5;
+          pointer-events: none;
+        }
+        .itemFlexFilter {
+          pointer-events: none;
+        }
+        .css-1wrxaxw-Control {
+          opacity: 0.4;
+          pointer-events: none;
+        }
+      }
+
       .SearchFilter {
         box-shadow: 0 0 7px -2px rgba(186, 186, 186, 1);
 
@@ -57,13 +88,9 @@
         display: flex;
         width: calc(100% + 9px);
         flex-wrap: wrap;
-        height: auto;
-        overflow: auto;
         margin: 20px 0 10px -10px;
-
-        :nth-child(3n) {
-          margin-right: 0 !important;
-        }
+        height: calc(100vh - 350px);
+        overflow-y: scroll;
 
         .noResults {
           display: flex;
@@ -101,16 +128,65 @@
     }
   }
 }
+.NewAssignment {
+  .main {
+    z-index: 21;
+  }
+  .articlesListHeader {
+    width: 100%;
+    background: #FFF;
+    border-radius: 8px;
+    box-shadow: 0 2px 2px 0 #d3d9de;
+    border: 1px solid #D3D9DE;
+    padding-left: 20px;
+    padding-right: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    
+    div {      
+      font-size: 1rem;
+      font-weight: 500;
+      color: #e2017b;
+      font-weight: 500;
+      cursor: pointer;
+      button {
+        background: transparent;
+      }
+    }
+    &__left {
+      display: flex;
+      align-items: center;
+      p {
+        margin: 0px;
+        margin-right: 25px;
+        color: #e2017b;
+      }
+      a {
+        color: #0b2541;
+      }
+    }
+  
+    img {
+      cursor: pointer;
+      width: 33px;
+      height: 45px;
+      position: relative;
+      top: 1px;
+    }
+  }
+}
 
 .RelatedArticlesCard {
   display: flex;
-  width: calc(100% / 3 - 20px);
+  width: calc(100% / 5 - 20px);
   flex-direction: column;
   border-radius: 6px;
   box-shadow: 0 0 13px -4px rgba(87, 87, 87, 1);
   margin: 5px 10px;
+  margin-bottom: 20px;
   cursor: pointer;
   transition: 0.5s;
+  max-height: 306px;
   &:hover {
     box-shadow: 0 8px 10px #00000061;
   }
@@ -171,8 +247,7 @@
     }
 
     .cardDescription {
-      @include text-shrink-multiline(3);
-      display: flex;
+      @include text-shrink-multiline(3);      
       margin: 5px 0 0;
       font-size: 0.9375rem;
     }
@@ -210,6 +285,25 @@
   }
 }
 
+.NewAssignmentPreview .RelatedArticlesCard {
+  width: calc(100% / 5 - 20px);
+} 
+.RelatedArticlesCard.selectedArticle {
+  position: relative;
+}
+.RelatedArticlesCard.selectedArticle:before {
+  content: '';
+  position: absolute;
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  pointer-events: none;
+  border: solid 2px;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  border-radius: 10px;
+}
+
 @media screen and (max-width: $screen-dimension-desktop) {
   .info {
     .grades {
@@ -230,6 +324,21 @@
   .RelatedArticlesPreview .wrapperArticles .content .cards :nth-child(3n) {
     margin-right: 10px !important;
   }
+  .RelatedArticlesCard {
+      width: calc(100% / 4 - 20px);
+  }
+  .NewAssignmentPreview .RelatedArticlesCard {
+    width: calc(100% / 4 - 20px);
+  } 
+}
+
+@media screen and (max-width: $screen-dimension-desktop-1369) {  
+  .RelatedArticlesCard {
+      width: calc(100% / 3 - 20px);
+  }
+}
+
+@media screen and (max-width: $screen-dimension-tablet-xl) {  
   .RelatedArticlesCard {
       width: calc(100% / 2 - 20px);
   }

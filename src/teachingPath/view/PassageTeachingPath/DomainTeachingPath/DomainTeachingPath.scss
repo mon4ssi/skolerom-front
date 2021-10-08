@@ -1,0 +1,85 @@
+.articleTeachingPath {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  
+    .chooseOne {
+      color: #E2017B;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+  
+    .title {
+      font-weight: bold;
+      font-size: 1.875rem;
+      margin: 20px 0;
+    }
+  
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      height: inherit;
+      overflow: auto;
+  
+      .passedStyle {
+        .InfoCard {
+          box-shadow: 0 0 7px 0 #0A7B24;
+        }
+      }
+  
+      .InfoCard {
+        margin: 10px;
+      }
+    }
+  }
+  
+  .visibleArticle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background: white;
+    width: 100%;
+    height: 100%;
+  
+    .headerArticle {
+      box-sizing: border-box;
+      width: 100%;
+      background-color: #ffffff;
+      height: 80px;
+      border-top: 10px solid #e2017b;
+      padding: 0 20px;
+      border-bottom: 1px solid #e4e9ed;
+      display: flex;
+      justify-content: space-between;
+      position: fixed;
+      top: 0;
+  
+      .back {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+  
+        span {
+          margin: 0 7px;
+          color: #939fa7;
+          font-weight: bold;
+        }
+      }
+  
+      .finish {
+        display: flex;
+        align-items: center;
+      }
+    }
+  
+    .inlineArticle {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+      padding-top: 80px;
+    }
+  }
+  

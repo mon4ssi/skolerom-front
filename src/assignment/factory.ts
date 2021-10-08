@@ -38,6 +38,11 @@ export interface GradeDTO {
   name: string;
 }
 
+export interface GreepElements {
+  kode: string;
+  description: string;
+}
+
 export interface AssignmentDistributeDTO {
   id: number;
   title: string;
@@ -49,6 +54,10 @@ export interface AssignmentDistributeDTO {
   defaultStartDate: string;
   grades: Array<GradeDTO>;
   subjects: Array<SubjectDTO>;
+  grep_coreelements?: Array<GreepElements>;
+  grep_goals?: Array<GreepElements>;
+  grep_maintopic?: Array<GreepElements>;
+  grep_readinginsubject?: string;
 }
 
 interface DraftAssignmentResponseDTO {
@@ -68,6 +77,10 @@ interface DraftAssignmentResponseDTO {
   levels: Array<number>;
   isChanged: boolean;
   createByContentManager?: boolean;
+  grep_coreelements?: Array<GreepElements>;
+  grep_goals?: Array<GreepElements>;
+  grep_maintopic?: Array<GreepElements>;
+  grep_readinginsubject?: string;
 }
 
 export interface TeacherAssignmentResponseDTO {
@@ -83,11 +96,14 @@ export interface TeacherAssignmentResponseDTO {
   createByContentManager?: boolean;
   isPublished?: boolean;
   isDistributed?: boolean;
+  grepCoreelements?: Array<GreepElements>;
+  grepGoals?: Array<GreepElements>;
+  grepMaintopic?: Array<GreepElements>;
+  grepReadinginsubject?: string;
 }
 
 export const buildFilterDTO = (filter: Filter): Object => {
   const filterDTO: { [key: string]: string | number } = {};
-
   if (filter.page) {
     filterDTO.page = filter.page;
   }
@@ -122,6 +138,22 @@ export const buildFilterDTO = (filter: Filter): Object => {
 
   if (filter.isAnswered) {
     filterDTO.isAnswered = filter.isAnswered;
+  }
+
+  if (filter.grepCoreElementsIds) {
+    filterDTO.grepCoreElementsIds = filter.grepCoreElementsIds;
+  }
+
+  if (filter.grepMainTopicsIds) {
+    filterDTO.grepMainTopicsIds = filter.grepMainTopicsIds;
+  }
+
+  if (filter.grepGoalsIds) {
+    filterDTO.grepGoalsIds = filter.grepGoalsIds;
+  }
+
+  if (filter.grepReadingInSubject) {
+    filterDTO.grepReadingInSubject = filter.grepReadingInSubject;
   }
 
   if (filter.isEvaluated) {
@@ -250,6 +282,10 @@ export const buildMyAssignmentsList = (item: DraftAssignmentResponseDTO) => {
     isChanged: item.isChanged,
     levels: item.levels,
     isCreatedByContentManager: item.createByContentManager,
+    grepCoreelements: item.grep_coreelements,
+    grepGoals: item.grep_goals,
+    grepMaintopic: item.grep_maintopic,
+    grepReadingInsubject: item.grep_readinginsubject
   });
 };
 
@@ -266,7 +302,11 @@ export const buildAllAssignmentsList = (item: TeacherAssignmentResponseDTO) => (
       levels: item.levels,
       isCreatedByContentManager: item.createByContentManager,
       isPublished: item.isPublished,
-      isDistributed: item.isDistributed
+      isDistributed: item.isDistributed,
+      grepCoreelements: item.grepCoreelements,
+      grepGoals: item.grepGoals,
+      grepMaintopic: item.grepMaintopic,
+      grepReadingInsubject: item.grepReadinginsubject
     })
 );
 
@@ -302,6 +342,9 @@ export const buildArticle = (item: ArticleDTO) => (
     },
     grades: item.student_grade.map(grade => buildGrade(grade)) || [],
     subjects: item.student_subject.map(subject => buildSubject(subject)) || [],
+    grepCoreelements: item.grep_coreelements,
+    grepGoals: item.grep_goals,
+    grepMaintopic: item.grep_maintopic,
     levels: item.student_level.length && item.student_level[0] ?
     [
       buildArticleLevel(item.student_level)
@@ -313,6 +356,7 @@ export const buildArticle = (item: ArticleDTO) => (
       })
     ] :
                     [],
+
   })
 );
 

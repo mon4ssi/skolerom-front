@@ -10,6 +10,8 @@ import { QuestionDTO, TeacherAssignmentByIdResponseDTO } from '../api';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import intl from 'react-intl-universal';
 
+const SETTIMEOUT = 500;
+
 export interface RevisionDTO {
   id: number;
   title: string;
@@ -85,6 +87,12 @@ export class QuestionaryApi implements QuestionaryRepo {
           title: intl.get('assignment list.not for you')
         });
       }
+      setTimeout(
+        () => {
+          window.location.href = '/assignments/';
+        },
+        SETTIMEOUT,
+      );
       throw error;
     }
   }

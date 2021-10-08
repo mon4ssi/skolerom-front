@@ -4,7 +4,7 @@ import { debounce } from 'utils/debounce';
 import { injector } from 'Injector';
 import { ArticleService, ASSIGNMENT_SERVICE, AssignmentService } from 'assignment/service';
 import { DRAFT_TEACHING_PATH_SERVICE, DraftTeachingPathService } from 'teachingPath/teachingPathDraft/service';
-import { Article, ARTICLE_SERVICE_KEY, Grade, Subject } from 'assignment/Assignment';
+import { Article, ARTICLE_SERVICE_KEY, Grade, Subject, FilterArticlePanel } from 'assignment/Assignment';
 import { TeachingPathContainer } from 'teachingPath/teachingPathContainer/teachingPathContainer';
 import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
 import { TeachingPathItemValue, TeachingPathNodeType } from 'teachingPath/TeachingPath';
@@ -14,6 +14,7 @@ import { Distribution } from 'distribution/Distribution';
 import { DISTRIBUTION_SERVICE, DistributionService } from 'distribution/service';
 import { USER_SERVICE, UserService } from 'user/UserService';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from 'teachingPath/service';
+import { GreepElements } from 'assignment/factory';
 
 const error400 = 400;
 
@@ -31,17 +32,26 @@ export class EditTeachingPathStore {
   @observable public showValidationErrors: boolean = false;
   @observable public fetchingArticles: boolean = false;
   @observable public isFetchedArticlesListFinished: boolean = false;
+  @observable public isActiveButtons: boolean = false;
   @observable public hasMoreArticles: boolean = true;
+  @observable public isEditArticles: boolean = false;
+  @observable public isEditAssignments: boolean = false;
+  @observable public isEditDomain: boolean = false;
   @observable public articlesList: Array<Article> = [];
   // tslint:disable-next-line: no-magic-numbers
   @observable public articlesForSkeleton: Array<Article> = new Array(6).fill(new Article({ id: 0, title: '' }));
+  // tslint:disable-next-line: no-magic-numbers
+  @observable public articlesForSkeletonEight: Array<Article> = new Array(8).fill(new Article({ id: 0, title: '' }));
   @observable public usedArticles: Array<Article> = [];
+  @observable public selectedArticle: Article | null = null;
   @observable public teachingPathContainer: TeachingPathContainer | null = null;
   @observable public currentNode: EditableTeachingPathNode | null = null;
   @observable public searchValue: string = '';
 
   @observable public allGrades: Array<Grade> = [];
   @observable public allSubjects: Array<Subject> = [];
+  @observable public allGoals: Array<GreepElements> = [];
+  @observable public allArticlePanelFilters: FilterArticlePanel | null = null;
 
   @observable public isAssignmentCreating: boolean = false;
 
@@ -64,6 +74,63 @@ export class EditTeachingPathStore {
 
   public getUpdatedAt() {
     return this.currentEntity!.updatedAt;
+  }
+
+  @action
+  public postSeletedArticle = (item: Article | null) => {
+    this.selectedArticle = item;
+  }
+
+  public getSeletedArticle() {
+    return this.selectedArticle;
+  }
+
+  public setIsActiveButtons() {
+    this.isActiveButtons = true;
+  }
+
+  public setIsActiveButtonsFalse() {
+    this.isActiveButtons = false;
+  }
+
+  public getGoalsByArticle() {
+    return '';
+  }
+
+  public returnIsEditAssignments() {
+    return this.isEditAssignments;
+  }
+
+  public trueIsEditAssignments() {
+    this.isEditAssignments = true;
+  }
+
+  public falseIsEditAssignments() {
+    this.isEditAssignments = false;
+  }
+
+  public returnIsEditArticles() {
+    return this.isEditArticles;
+  }
+
+  public trueIsEditArticles() {
+    this.isEditArticles = true;
+  }
+
+  public falseIsEditArticles() {
+    this.isEditArticles = false;
+  }
+
+  public returnIsEditDomain() {
+    return this.isEditDomain;
+  }
+
+  public trueIsEditDomain() {
+    this.isEditDomain = true;
+  }
+
+  public falseIsEditDomain() {
+    this.isEditDomain = false;
   }
 
   @computed
@@ -135,7 +202,6 @@ export class EditTeachingPathStore {
   public getTeachingPathForEditing = async (id: number) => {
     const teachingPath = await this.draftTeachingPathService.getDraftTeachingPathById(id);
     this.buildTeachingPathContainer(teachingPath);
-
     return toJS(this.currentEntity!);
   }
 
@@ -178,9 +244,12 @@ export class EditTeachingPathStore {
           order: rest.order,
           grades: rest.grades,
           subjects: rest.subjects,
+          core: rest.core,
+          goal: rest.goal,
+          multi: rest.multi,
+          source: rest.source,
           searchTitle: rest.searchTitle,
         });
-
         this.articlesList = isNextPage ? this.articlesList.concat(articles) : articles;
         if (articles.length < perPage) {
           this.isFetchedArticlesListFinished = true;
@@ -281,6 +350,10 @@ export class EditTeachingPathStore {
     return this.currentEntity!.getIsDraftSaving();
   }
 
+  public async getFiltersArticlePanel() {
+    this.allArticlePanelFilters = await this.teachingPathService.getFiltersArticlePanel();
+  }
+
   public async getGrades() {
     this.allGrades = await this.assignmentService.getGrades();
   }
@@ -295,6 +368,10 @@ export class EditTeachingPathStore {
 
   public getAllSubjects(): Array<Subject> {
     return toJS(this.allSubjects);
+  }
+
+  public getAllArticlePanelFilters() {
+    return toJS(this.allArticlePanelFilters);
   }
 
   public clearTeachingPathContainer() {
@@ -338,6 +415,16 @@ export class EditTeachingPathStore {
   @action
   public async sendDataDomain(domain:string) {
     return this.teachingPathService.sendDataDomain(domain);
+  }
+
+  @action
+  public async getGrepFilters(grades: string, subjects: string, source: string) {
+    return this.teachingPathService.getGrepFilters(grades, subjects, source);
+  }
+
+  @action
+  public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number) {
+    return this.teachingPathService.getGrepGoalsFilters(grepCoreElementsIds, grepMainTopicsIds, gradesIds, subjectsIds, orderGoalsCodes, perPage, page);
   }
 
 }

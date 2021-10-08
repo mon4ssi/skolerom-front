@@ -16,7 +16,7 @@ import {
   Subject,
   TextQuestion,
 } from '../Assignment';
-import { Article } from 'assignment/Assignment';
+import { Article, GreepElements } from 'assignment/Assignment';
 import { AssertionError } from 'assert';
 import { SAVE_DELAY } from 'utils/constants';
 import { EditableContentBlock, EditableImagesContentBlock, EditableTextContentBlock, EditableVideosContentBlock } from './EditableContentBlock';
@@ -199,6 +199,51 @@ export class DraftAssignment extends Assignment {
   public setDescription(description: string) {
     this._description = description;
     this.save();
+  }
+
+  @action
+  public setGrepCoreElementsIds = (data: Array<number>) => {
+    this.grepCoreElementsIds = data;
+    this.save();
+  }
+
+  @action
+  public setGrepMainTopicsIds = (data: Array<number>) => {
+    this.grepMainTopicsIds = data;
+    this.save();
+  }
+
+  @action
+  public setGrepGoalsIds = (data: Array<number>) => {
+    this.grepGoalsIds = data;
+    this.save();
+  }
+  @action
+  public setGrepGoals = (data: Array<GreepElements>) => {
+    this.grepGoals = data;
+    this.save();
+  }
+
+  @action
+  public setGrepReadingInSubjectId = (data: number) => {
+    this.grepReadingInSubjectId = data;
+    this.save();
+  }
+
+  public getListOfgrepCoreElementsIds() {
+    return this.grepCoreElementsIds;
+  }
+
+  public getListOfgrepGoalsIds() {
+    return this.grepGoalsIds;
+  }
+
+  public getListOfgrepMainTopicsIds() {
+    return this.grepMainTopicsIds;
+  }
+
+  public getListOfgrepReadingInSubjectId() {
+    return this.grepReadingInSubjectId;
   }
 
   @action

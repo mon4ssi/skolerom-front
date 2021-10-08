@@ -16,8 +16,9 @@
     justify-content: start;
     padding-top: 5px;
     transition: 0.3s;
+    padding-left: 5px;
     .InfoCard {
-      width: calc(16.68% - 15px);
+      width: calc(20% - 15px);
       min-height: 300px;
       margin-bottom: 20px;
       margin-right: 14px;
@@ -26,10 +27,11 @@
       }
       .cardTitle {
         height: 44px;
+        padding-right: 28px;
       }
 
       .cardDescription {
-        @include text-shrink-multiline(1);
+        @include text-shrink-multiline(3);
         margin-top: 10px;
       }
 
@@ -38,22 +40,51 @@
       }
     }
   }
+  .noResults.emptyTeachingPaths {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 300;
+  }
+  &.moveListBySearchFilter {
+    transition: 0.3s;
+    &.active {
+      width: calc(100% - 290px);
+      margin-left: 290px;
+      .InfoCard {
+        width: calc(25% - 15px);
+      }
+    }
+  }
 }
+
+
 
 
 @media screen and (max-width: 1800px) {
   .teachingPathsList .cardList .InfoCard {
     width: calc(20% - 15px);
   }
+  .teachingPathsList.moveListBySearchFilter.active .cardList .InfoCard {
+    width: calc(25% - 15px);
+  }
 }
 @media screen and (max-width: 1450px) {
   .teachingPathsList .cardList .InfoCard {
     width: calc(25% - 15px);
   }
+  .teachingPathsList.moveListBySearchFilter.active .cardList .InfoCard {
+    width: calc(33.33% - 15px);
+  }
 }
 @media screen and (max-width: 1200px) {
   .teachingPathsList .cardList .InfoCard {
     width: calc(33.33% - 15px);
+  }
+  .teachingPathsList.moveListBySearchFilter.active .cardList .InfoCard {
+    width: calc(50% - 15px);
   }
 }
 @media screen and (max-width: 575px) {
@@ -73,10 +104,16 @@
         }
       }
     }
-  }  
+  } 
+  .teachingPathsList.moveListBySearchFilter.active .cardList .InfoCard {
+    width: calc(100% - 50px);
+  } 
 }
 @media screen and (min-width: 576px) and (max-width: 767px) {
   .teachingPathsList .cardList .InfoCard {
+    width: calc(50% - 15px);
+  }
+  .teachingPathsList.moveListBySearchFilter.active .cardList .InfoCard {
     width: calc(50% - 15px);
   }
 }

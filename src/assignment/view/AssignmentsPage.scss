@@ -35,6 +35,18 @@
     }
   }
 
+  
+  &.moveListBySearchFilter {
+    transition: 0.3s;
+    &.active {
+      width: calc(100% - 290px);
+      margin-left: 290px;
+      .InfoCard {
+        width: calc(20% - 15px);
+      }
+    }
+  }
+
   .notFoundPage {
     .container-404 {
       left: 0;

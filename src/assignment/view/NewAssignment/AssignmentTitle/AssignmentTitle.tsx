@@ -6,7 +6,7 @@ import TextAreaAutosize from 'react-textarea-autosize';
 import { DraftAssignment } from 'assignment/assignmentDraft/AssignmentDraft';
 import { CreationElements, NewAssignmentStore } from '../NewAssignmentStore';
 import { lettersNoEn } from 'utils/lettersNoEn';
-import { MAX_DESCRIPTION_LENGTH, MAX_TITLE_LENGTH, MAX_DESCRIPTION_LENGTH_500 } from 'utils/constants';
+import { MAX_DESCRIPTION_LENGTH, MAX_DESCRIPTION_LENGTH_500, MAX_TITLE_LENGTH } from 'utils/constants';
 
 import './AssignmentTitle.scss';
 

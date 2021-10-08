@@ -188,20 +188,34 @@ export class AssignmentListStore {
       this.getAssignmentsList();
   }
 
-  public setFiltersGradeID(gradeID: number | null) {
+  public setFiltersGradeID(gradeID: string | number | null) {
     this.clearMyAssignmentsList();
     this.assignmentList.setFiltersGradeID(gradeID);
     this.assignmentList.setFiltersPage(1);
     this.getAssignmentsList();
   }
 
-  public async setFiltersSubjectID(subjectID: number | null) {
+  public async setFiltersSubjectID(subjectID: string | number | null) {
     this.clearMyAssignmentsList();
     this.assignmentList.setFiltersSubjectID(subjectID);
     this.assignmentList.setFiltersPage(1);
     this.userService.getCurrentUser()!.type === UserType.Student ?
       this.getStudentAssignmentList() :
       this.getAssignmentsList();
+  }
+
+  public setFiltersMultiID(multiID: string | number | null) {
+    this.clearMyAssignmentsList();
+    this.assignmentList.setFiltersMultiID(multiID);
+    this.assignmentList.setFiltersPage(1);
+    this.getAssignmentsList();
+  }
+
+  public setFiltersReadingID(readingID: string | number | null) {
+    this.clearMyAssignmentsList();
+    this.assignmentList.setFiltersReadingID(readingID);
+    this.assignmentList.setFiltersPage(1);
+    this.getAssignmentsList();
   }
 
   public setFiltersIsEvaluated(status: string | null) {
@@ -214,6 +228,20 @@ export class AssignmentListStore {
     this.assignmentList.setFiltersIsAnswered(status);
     this.assignmentList.setFiltersPage(1);
     this.getStudentAssignmentList();
+  }
+
+  public setFiltersCoreID(coreID: string | number | null) {
+    this.clearMyAssignmentsList();
+    this.assignmentList.setFiltersCoreID(coreID);
+    this.assignmentList.setFiltersPage(1);
+    this.getAssignmentsList();
+  }
+
+  public setFiltersGoalID(goalID: string | number | null) {
+    this.clearMyAssignmentsList();
+    this.assignmentList.setFiltersGoalID(goalID);
+    this.assignmentList.setFiltersPage(1);
+    this.getAssignmentsList();
   }
 
   public async setFiltersSearchQuery(searchQuery: string) {

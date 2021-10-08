@@ -164,6 +164,7 @@ export interface EvaluateTeachingPathNodeArticleItem {
   featuredImage?: string;
   levels: number;
   isSelected?: boolean;
+  url?: string;
 }
 
 export interface StudentTeachingPathEvaluationNodeItem extends TeachingPathNodeItemResponseDTO {

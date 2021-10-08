@@ -16,6 +16,9 @@
     "Copy url": "Kopier url",
     "not permission": "Beklager, du har ikke tilgang til denne plattformen. Kontakt organisasjonen din for å få tilgang"
   },
+  "assignments_page": {
+    "no_results": "Ingen resultater"
+  },
   "answers": {
     "Answers": "Svar",
     "Not evaluated": "Ikkje evaluert",
@@ -75,7 +78,7 @@
     "Back": "Tilbake",
     "selected": "valt",
     "Log in": "Logg inn",
-    "About skolerom": "Om skolerom",
+    "About skolerom": "Hva er Skolerom?",
     "School": "Skoleartikler",
     "Library": "Biblioteket",
     "teacher": " Lærar",
@@ -167,8 +170,11 @@
   },
   "assignments search": {
     "title": "Uppgifter",
-    "Choose subject": "Vel fag",
-    "Choose grade": "Vel klasse",
+    "Choose subject": "velg fag",
+    "Choose grade": "Velg trinn",
+    "Choose Core": "Velg kjerneelementer",
+    "Choose Multi": "Velg tverrfaglig tema",
+    "Choose reading": "Velg lesing i faget",
     "Class": "Klassetrinn",
     "Popularity": "Popularitet",
     "Search for assignments": "Søk etter oppgåver...",
@@ -218,7 +224,14 @@
     "ARTICLE": "Article",
     "ASSIGNMENT": "Assignment"
   },
-  "new assignment": {
+  "new assignment": {    
+    "greep": {
+      "core": "Kjerneelementer",
+      "goals": "Kompetansemål",
+      "subjects": "Tverrfaglig tema",
+      "source": "Kilde",
+      "reading": "Lesing i faget"
+    },
     "go_back": "Gå tilbake",
     "Create assignment": "Lag oppgåve",
     "publish": "Publiser",
@@ -379,7 +392,8 @@
     "Others": "Andre",
     "Close": "Lukk",
     "Choose assignment": "Velg oppgave",
-    "Choose article": "Velg artikkel"
+    "Choose article": "Velg artikkel",    
+    "Choose domain": "Velg ekstern artikkel"
   },
   "months": {
     "January": "Januar",
@@ -428,6 +442,7 @@
     "grade": "Klasser",
     "student_level": "Nivå",
     "visibility": "Synlegheit",
+    "visibility_description":"Velg offentlig dersom du vil dele innholdet med alle Skoleroms brukere, eller privat hvis du vil begrense det til deg selv og de du velger å dele det med senere.",
     "public": "Offentleg",
     "private": "Privat",
     "teacher": "Lærar: ",
@@ -440,7 +455,13 @@
     "questions_number": "{questions} spm.",
     "after_publishing": "Bra jobba, oppgåva er no publisert!",
     "review_and_submit": "Summer opp og send inn svar",
-    "after_publishing_from_teaching_path": "Oppgåva blei publisert og lagt til i læringsstien."
+    "after_publishing_from_teaching_path": "Oppgåva blei publisert og lagt til i læringsstien.",
+    "grep": {
+      "title":"Koble til læreplanen",
+      "description":"Når du deler offentlig må du koble læringsstien til læreplanen. Velg relevante kompetansemål her under før publisering og distribusjon.",
+      "descrption_assignment":"Når du deler offentlig må du koble oppgaven til læreplanen. Velg relevante kompetansemål her under før publisering og distribusjon.",
+      "description_privado":"Kobling til læreplanen er kun nødvendig når du publiserer offentlig, men du kan gjerne koble innholdet til relevante kompetansemål her under hvis ønskelig."
+    }
   },
   "distribution_page": {
     "distribute_assignment": "Distribuer oppgåve",
@@ -506,6 +527,10 @@
   },
   "teaching path passing": {
     "choose one": "Vel ein",
+    "external_error": "Nettadressen er ugyldig eller kunne ikke analyseres",    
+    "errortype_101": "Nettadressen kunne ikke analyseres. Kontroller at den er en gyldig HTML-side",
+    "errortype_102": "Nettadressen kunne ikke analyseres. Kontroller at den inneholder en gyldig HTML-tittel",
+    "errortype_103": "Nettadressen kunne ikke analyseres. Kontroller at den inneholder en gyldig HTML-beskrivelse",
     "complete": {
       "title": "Læringsstien er fullført!",
       "description": "Bruk navigasjonen i botnen av sida til å gå gjennom kvart steg. Kom tilbake hit og trykk «Registrer og send inn» for å sende svaret til læraren din.",
@@ -548,7 +573,9 @@
       "distribute_teaching_path": "Distribuer læringssti",
       "after_saving": "Bra jobbet, læringsstien er lagra!",
       "after_publishing": "Bra jobba, læringsstien er publisert!",
-      "after_distribution": "Læringsstien har blitt distribuert!"
+      "after_distribution": "Læringsstien har blitt distribuert!",
+      "cant_publish": "Du må fullføre læreplandelen før du publiserer",
+      "notdata_goals": "Det er ingen etablerte mål for disse kriteriene"
     },
     "title": {
       "new_entity": "Ny læringssti",
@@ -559,15 +586,36 @@
     "modals": {
       "add_articles": "Legg til artiklar",
       "add_assignments": "Legg til oppgåver",      
-      "add_domain": "Legg til Domain",
+      "add_domain": "Legg til lenke",
       "create_assignment": "Lag oppgåve",
       "loading": "Lastar...",
       "nothing_found": "Ingenting funne...",
       "articles_selected": "{number} artiklar valde",
       "all_assignments": "Alle oppgåver",
       "my_assignments": "Mine oppgåver",
+      "articles": "Artikler",
+      "articles_title": "Artikkelinformasjon",
+      "articles_default": "Velg en artikkel for mer informasjon",
+      "articles_read": "Les artikkel",
+      "assignments_title": "Oppgaveinformasjon",
+      "assignments_default": "Velg en oppgaver for mer informasjon",
+      "assignments_read": "Les artikkel",
+      "assignmetns": "Oppgaver",
       "assignments_selected": "{number} oppgåver valde",
-      "search_for_articles": "Søk etter artiklar..."
+      "search_for_articles": "Søk etter artiklar...",
+      "expand": "Utvid alle",
+      "expandclose": "Lukk alle",
+      "search": {
+        "buttons": {
+          "button_close": "Filter",
+          "button_open": "Bruk filter",
+          "button_change": "Endre filter"
+        },
+        "header": {
+          "title": "FILTER",
+          "button": "Tilbakestill filter"
+        }
+      }
     },
     "validation": {
       "title_words_count": "Tittelen må vere minst ein bokstav og ikkje ein standardverdi!",
@@ -582,7 +630,9 @@
       "delete_item": "Er du sikker på at du vil slette {item}?",
       "merge_paths": "Er du sikker på at du vil slå saman stiane?",
       "unmerge_path": "Er du sikker på at du vil slette stien?",
-      "unable_to_merge": "Du kan ikkje slå saman artiklar og oppgåver!"
+      "unable_to_merge": "Du kan ikkje slå saman artiklar og oppgåver!",
+      "neccesary_edit": "Vennligst velg bort den nåværende artikkelen, før du velger en ny",
+      "neccesary_edit_asignment": "ennligst velg bort den nåværende oppgaven, før du velger en ny"
     },
     "paths": {
       "main_teaching_path_title": "Læringssti",
@@ -593,7 +643,8 @@
     "Step overview": "Oversikt over stien",
     "Submit": "Registrer læringssti",
     "no_title": "Uten tittel",
-    "No results found": "Søket ditt ga ingen resultater"
+    "No results found": "Søket ditt ga ingen resultater",
+    "no_options": "Ingen treff"
   },
   "students_list": {
     "change_font_size": "Endre skriftstorleik",
@@ -658,7 +709,7 @@
       "MULTIPLE_CHOICE": "Flervalgsspørsmål",
       "IMAGE_CHOICE": "Bildevalg spørsmål"
     },
-    "grade": "Velg fag",
+    "grade": "Klassetrinn",
     "student_level": "Velg elevnivå",
     "visibility": "visibility"
   },

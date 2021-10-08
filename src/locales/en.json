@@ -16,6 +16,9 @@
     "Copy url": "Copy url",
     "not permission": "Sorry, you don't have access to this platform. Please contact your organization to gain access"
   },
+  "assignments_page": {
+    "no_results": "No results found"
+  },
   "answers": {
     "Answers": "Answers",
     "Not evaluated": "Not evaluated",
@@ -167,8 +170,11 @@
   },
   "assignments search": {
     "title": "Assignments",
-    "Choose subject": "Choose subject",
-    "Choose grade": "Choose grade",
+    "Choose subject": "Select subject",
+    "Choose grade": "Select grade",
+    "Choose Core": "Select core elements",
+    "Choose Multi": "Select Main Topics",
+    "Choose reading": "Select reading in Subject",
     "Class": "Class",
     "Popularity": "Popularity",
     "Search for assignments": "Search for assignments...",
@@ -219,6 +225,13 @@
     "ASSIGNMENT": "Assignment"
   },
   "new assignment": {
+    "greep": {
+      "core": "Core elements",
+      "goals": "Educations goals",
+      "subjects": "Multidisciplinary subjects",
+      "source": "Source",
+      "reading": "Reading in Subject"
+    },
     "go_back": "Go back",
     "Create assignment": "Create assignment",
     "publish": "Publish",
@@ -379,7 +392,8 @@
     "Others": "Others",
     "Close": "Close",
     "Choose assignment": "Choose Assignment",
-    "Choose article": "Choose Article"
+    "Choose article": "Choose Article",
+    "Choose domain": "Choose External link"
   },
   "months": {
     "January": "January",
@@ -428,6 +442,7 @@
     "grade": "Grade",
     "student_level": "Level",
     "visibility": "Visibility",
+    "visibility_description":"Select Public to share with everyone using Skolerom or Private to keep it to yourselft and the ones you share it with",
     "public": "Public",
     "private": "Private",
     "teacher": "Teacher: ",
@@ -440,7 +455,13 @@
     "questions_number": "{questions} que.",
     "after_publishing": "Congratulations, your assignment has been published!",
     "review_and_submit": "Review and submit",
-    "after_publishing_from_teaching_path": "Assignment published successfuly and was added to teaching path."
+    "after_publishing_from_teaching_path": "Assignment published successfuly and was added to teaching path.",
+    "grep": {
+      "title":"Connect to curriculum",
+      "description":"Connecting your teaching path is required when sharing publicity. Please select the appropriate educational goals below before publishing and distribution",
+      "descrption_assignment":"Connecting your teaching path is required when sharing publicity. Please select the appropriate educational goals below before publishing and distribution",
+      "description_privado":"Linking to the curriculum is only necessary when you publish publicly, but you are welcome to link the content to relevant competence goals below if desired."
+    }
   },
   "distribution_page": {
     "distribute_assignment": "Distribute assignment",
@@ -506,6 +527,10 @@
   },
   "teaching path passing": {
     "choose one": "Choose one",
+    "external_error": "The web address is invalid or could not be parsed",
+    "errortype_101": "The web address could not be parsed, make sure that it is a valid HTML page",
+    "errortype_102": "The web address could not be parsed, make sure that it contains a valid HTML title",
+    "errortype_103": "The web address could not be parsed, make sure that it contains a valid HTML description",
     "complete": {
       "title": "Teaching Path complete!",
       "description": "All steps successfully completed. Use the breadcrumbs at the bottom to go though and review each step. Come back here and press «Complete and submit» to submit your work to your teacher.",
@@ -548,17 +573,19 @@
       "distribute_teaching_path": "Distribute teaching path",
       "after_saving": "Congratulations, your teaching path has been saved!",
       "after_publishing": "Congratulations, your teaching path has been published!",
-      "after_distribution": "Teaching path successfully distributed!"
+      "after_distribution": "Teaching path successfully distributed!",
+      "cant_publish": "You must complete the Curriculum section before publish",
+      "notdata_goals": "There are no established goals for these criteria"
     },
     "title": {
-      "new_entity": "New teaching path",
+      "new_entity": "Publish teaching path",
       "new_teaching_path_draft": "New Teaching Path draft",
       "title_placeholder": "Teaching path title",
       "description_placeholder": "Describe your teaching path..."
     },
     "modals": {
       "add_articles": "Add articles",
-      "add_domain": "Add domain",
+      "add_domain": "Add Link",
       "add_assignments": "Add assignments",
       "create_assignment": "Create assignment",
       "loading": "Laster...",
@@ -566,8 +593,29 @@
       "articles_selected": "{number} articles selected",
       "all_assignments": "All assignments",
       "my_assignments": "My assignments",
+      "articles": "Articles",
+      "articles_title": "Article Information",
+      "articles_default": "Select an item to view its detailed information",
+      "articles_read": "Read article",
+      "assignments_title": "Assignments Information",
+      "assignments_default": "Select an item to view its detailed information",
+      "assignmetns_read": "Read assignment",
+      "assignmetns": "Assignments",
       "assignments_selected": "{number} assignments selected",
-      "search_for_articles": "Search for articles..."
+      "search_for_articles": "Search for articles...",
+      "expand": "Expand all",
+      "expandclose": "Close all",
+      "search": {
+        "buttons": {
+          "button_close": "Filters",
+          "button_open": "Apply filters",
+          "button_change": "Change filters"
+        },
+        "header": {
+          "title": "FILTERS",
+          "button": "Reset filters"
+        }
+      }
     },
     "validation": {
       "title_words_count": "Title cannot be empty",
@@ -582,7 +630,9 @@
       "delete_item": "Are you sure you want to delete this {item}?",
       "merge_paths": "Are you sure you want to merge these paths?",
       "unmerge_path": "Are you sure you want to unmerge this path?",
-      "unable_to_merge": "You can't merge articles and assignments!"
+      "unable_to_merge": "You can't merge articles and assignments!",
+      "neccesary_edit": "Please unselect the current article, and then select the new one",
+      "neccesary_edit_asignment": "Please unselect the current assignment, and then select the new one"
     },
     "paths": {
       "main_teaching_path_title": "Teaching path",
@@ -593,7 +643,8 @@
     "Step overview": "Step overview",
     "Submit": "Submit Teaching Path",
     "no_title": "No title",
-    "No results found": "No results found"
+    "No results found": "No results found",
+    "no_options": "No options"
   },
   "students_list": {
     "title":"Students",

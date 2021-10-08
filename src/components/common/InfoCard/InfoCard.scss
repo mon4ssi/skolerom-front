@@ -52,6 +52,23 @@
         margin-left: 5px;
       }
     }
+    .actionButtonsItem {
+      &.refreshButtonsItem {
+        width: 36px;
+        text-align: center;
+        button {
+          background: white;
+          border: solid 1px #728089;
+          border-radius: 50%;
+          width: 26px;
+          height: 26px;
+          img {
+            width: 15px;
+            height: 15px;
+          }
+        }
+      }
+    }
   }
 
   .cardImage {
@@ -71,7 +88,6 @@
     .cardTitle {
       flex: 1 1;
       min-width: 0;
-      margin-top: 10px;
       .noTitle {
         color: #939FA7;
       }
@@ -94,6 +110,12 @@
       margin-top: 10px;
       position: relative;
       align-items: center;
+      &.AbsolutePosition {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        margin-top: 0px;
+      }
       .OptionMsj {
         position: relative;
         background: transparent;
@@ -229,7 +251,7 @@
       height: 23px;
       justify-content: space-between;
       align-items: center;
-
+      margin-bottom: 5px;
       img {
         width: 20px;
         height: 20px;
@@ -244,7 +266,13 @@
         align-items: center;
       }
       span {
-        font-size: 16px;
+        font-size: 14px;
+        word-break: break-word;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+        overflow: hidden;
+        max-width: 220px;
       }
       .levels {
         margin-right: 10px;
@@ -259,13 +287,13 @@
     }
 
     .numberOfQuestions {
-      font-size: 0.9375rem;
+      font-size: 0.8rem;
       color: #E2017B;
       font-weight: bold;
     }
 
     .cardDescription {
-      @include text-shrink-multiline(2);
+      @include text-shrink-multiline(3);
       margin-top: 4px;
       font-size: 0.9375rem;
       font-weight: 300;
@@ -289,9 +317,32 @@
         font-weight: 300;
       }
     }
+    .gradesLineInside div:last-child:after {
+        display: none;
+    }
+    .gradesLineInside div:after {
+        content: ', ';
+        margin-right: 5px;
+    }
+    .gradesLineInside {
+        align-items: center;
+    }
+    .gradesLine p {
+        margin: 0px;
+    }
+    .gradesLine {
+        align-items: center;
+        font-size: 14px;
+    }
+    .footerCardInfo {
+      justify-content: space-between;
+      align-items: center;
+    }
   }
 }
-
+.tpIcon-DOMAIN {
+  cursor: pointer;
+}
 @media screen and (max-width: $screen-dimension-desktop) {
   .InfoCard {
     .cardInfo {

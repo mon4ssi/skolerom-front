@@ -27,7 +27,7 @@ class StudentAssignments extends Component<Props> {
   public async componentDidMount() {
     const { studentsListStore } = this.props;
 
-    studentsListStore!.setAssignmentsFilterSorting(SortingFilter.DEADLINE, SortingFilter.ASC);
+    studentsListStore!.setAssignmentsFilterSorting(SortingFilter.DEADLINE, SortingFilter.DESC);
   }
 
   public componentWillUnmount() {
@@ -109,11 +109,11 @@ class StudentAssignments extends Component<Props> {
 
   public renderSorting = () => (
     <select onChange={this.handleChangeSorting} className="StudentAssignments__select">
-      <option value={`${SortingFilter.DEADLINE} ${SortingFilter.ASC}`}>
-        {intl.get('assignments search.Sort by deadline')} ({intl.get('assignments search.due_first').toLowerCase()})
-      </option>
       <option value={`${SortingFilter.DEADLINE} ${SortingFilter.DESC}`}>
         {intl.get('assignments search.Sort by deadline')} ({intl.get('assignments search.due_last').toLowerCase()})
+      </option>
+      <option value={`${SortingFilter.DEADLINE} ${SortingFilter.ASC}`}>
+        {intl.get('assignments search.Sort by deadline')} ({intl.get('assignments search.due_first').toLowerCase()})
       </option>
     </select>
   )
@@ -121,14 +121,14 @@ class StudentAssignments extends Component<Props> {
   public renderAssignment = (assignment: Assignment, index: number) => {
     const { studentsListStore, history, uiStore } = this.props;
     const locale = studentsListStore!.getCurrentLocale();
-
+    const indesPlus = assignment.answerId;
     const handleClickAssignment = (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
       if (!assignment.isAnswered) {
         return;
       }
       uiStore!.setCurrentActiveTab('assignment');
-      history.push(`/assignments/answers/${assignment.id}`);
+      history.push(`/assignments/answers/${assignment.id}?answer=${indesPlus}`);
     };
 
     return studentsListStore!.assignmentsListState === StoreState.LOADING ? (

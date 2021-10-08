@@ -1,14 +1,18 @@
 import isNil from 'lodash/isNil';
 import isNull from 'lodash/isNull';
 import intl from 'react-intl-universal';
+import { injector } from 'Injector';
+import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteractor';
+import { Locales } from 'utils/enums';
 
 import { TeachingPath, TeachingPathItem, TeachingPathNode, TeachingPathNodeType, TeachingPathRepo } from './TeachingPath';
-import { Article, Filter, Grade, Domain } from 'assignment/Assignment';
+import { Article, Filter, Grade, Domain, FilterGrep, GoalsData } from 'assignment/Assignment';
 import { API } from '../utils/api';
 import { buildFilterDTO, GradeDTO } from 'assignment/factory';
 import { Breadcrumbs } from './teachingPathDraft/TeachingPathDraft';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { StudentTeachingPathEvaluationNodeItem } from 'evaluation/api';
+import { CONDITIONALERROR, STATUS_SERVER_ERROR, STATUS_BADREQUEST } from 'utils/constants';
 
 export interface TeachingPathNodeItemResponseDTO {
   id: number;
@@ -45,6 +49,7 @@ export interface TeacherTeachingPathResponseDTO {
   grades: Array<GradeDTO> | null;
   levels: Array<number>;
   featuredImage?: string;
+  url?: string;
   isPublished?: boolean;
   isDistributed?: boolean;
 }
@@ -71,6 +76,9 @@ export interface BreadcrumbsResponseDTO {
 
 export class TeachingPathApi implements TeachingPathRepo {
 
+  public storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
+  public currentLocale = this.storageInteractor.getCurrentLocale()!;
+
   public async getAllTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
     const response = await API.get('api/teacher/teaching-paths', {
       params: buildFilterDTO(filter)
@@ -84,6 +92,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         view: item.view,
         levels: item.levels,
         featuredImage: item.featuredImage,
+        url: item.url,
         isPublished: item.isPublished,
         isDistributed: item.isDistributed
       })),
@@ -103,6 +112,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         grades: isNil(item.grades) ? undefined : item.grades.map(grade => new Grade(grade.id, grade.title)),
         levels: item.levels,
         featuredImage: item.featuredImage,
+        url: item.url,
         isPublished: item.isPublished,
         isDistributed: item.isDistributed
       })),
@@ -191,14 +201,101 @@ export class TeachingPathApi implements TeachingPathRepo {
   }
 
   public async sendDataDomain(url: string): Promise<Domain> {
-    const { data } = await API.post('api/teacher/teaching-paths/domain', { url });
-    return new Domain({
-      id: 0,
-      title: data.title,
-      description: data.description,
-      image: data.image,
-      url: `${url}`
+    try {
+      const { data } = await API.post('api/teacher/teaching-paths/domain', { url });
+      return new Domain({
+        id: data.id,
+        title: data.title,
+        description: data.description,
+        url: `${url}`,
+        featuredImage: data.image
+      });
+    } catch (error) {
+      if (error.response.status === STATUS_SERVER_ERROR || error.response.status === STATUS_BADREQUEST) {
+        if (error.response.data.message.code === CONDITIONALERROR) {
+          Notification.create({
+            type: NotificationTypes.ERROR,
+            title: intl.get('teaching path passing.external_error')
+          });
+        } else {
+          Notification.create({
+            type: NotificationTypes.ERROR,
+            title: intl.get(`teaching path passing.errortype_${error.response.data.message.code}`)
+          });
+        }
+      }
+      throw error;
+    }
+  }
+
+  public async getFiltersArticlePanel() {
+    const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/filterarticlepanel/v1/get/`, {
+      params:
+      {
+        lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
+      }
     });
+    return response.data;
+  }
+
+  public async getTeachingPathDistributes(filter: Filter): Promise<{
+    teachingPathsList: Array<TeachingPath>,
+    total_pages: number;
+  }> {
+    const response = (await API.get('api/teacher/teaching-paths/distributes', { params: filter })).data;
+    return {
+      teachingPathsList: response.data,
+      total_pages: response.meta.pagination.total_pages,
+    };
+  }
+
+  public async getGrepFilters(grades: string, subjects: string, source: string): Promise<FilterGrep>  {
+    const response = await API.get('api/teacher/teaching-paths/grep/filters', {
+      params: {
+        grades,
+        subjects,
+        source
+      }
+    });
+    return response.data;
+  }
+  /* tslint:disable-next-line:max-line-length */
+  public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number): Promise<{ data: Array<GoalsData>; total_pages: number; }> {
+    const response = await API.get('api/teacher/teaching-paths/grep/goals', {
+      params: {
+        grepCoreElementsIds,
+        grepMainTopicsIds,
+        gradesIds,
+        subjectsIds,
+        orderGoalsCodes,
+        page,
+        per_page: perPage
+      }
+    });
+    return {
+      data: response.data.data,
+      total_pages: response.data.meta.pagination.total_pages
+    };
+  }
+
+  public async getTeachingPathListOfStudentInList(studentId: number, filter: Filter) {
+    try {
+      const response = await API.get('api/teacher/students/teaching-paths', {
+        params: {
+          studentId,
+          ...buildFilterDTO(filter)
+        }
+      });
+      return {
+        teachingPathsList: response.data.data,
+        total_pages: response.data.meta.pagination.total_pages
+      };
+    } catch {
+      return {
+        teachingPathsList: [],
+        total_pages: 0
+      };
+    }
   }
 
   public async finishTeachingPath(id: number): Promise<void> {

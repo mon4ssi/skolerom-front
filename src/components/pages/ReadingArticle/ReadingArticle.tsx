@@ -14,6 +14,7 @@ interface Props {
   titleCurrentArticle: string;
   currentArticleChildren?: Array<Article>;
   shownArticleId?: number | null;
+  notFinish?: boolean;
   closeArticle(): void;
   finishReading(graduation: number): void;
   handleChangeLevel?(levelId: number): void;
@@ -31,7 +32,7 @@ export class ReadingArticle extends Component<Props, State> {
     graduation: null,
   };
 
-  private handleLevelClick = (graduation: number) => (e: MouseEvent<HTMLButtonElement>) => {
+  public handleLevelClick = (graduation: number) => (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const { currentArticleChildren, handleChangeLevel } = this.props;
     const value = Number(e.currentTarget.value);
@@ -46,7 +47,7 @@ export class ReadingArticle extends Component<Props, State> {
     handleChangeLevel!(currentLevelId);
   }
 
-  private renderLevel = (article: Article, index: number) => {
+  public renderLevel = (article: Article, index: number) => {
     const title = article.levels![0].slug.split('-')[1];
 
     const classes = classnames('ReadingArticle__level', {
@@ -66,7 +67,7 @@ export class ReadingArticle extends Component<Props, State> {
     );
   }
 
-  private renderLevels = () => {
+  public renderLevels = () => {
     const { currentArticleChildren } = this.props;
 
     return currentArticleChildren && currentArticleChildren.length > 1 ? (
@@ -86,8 +87,8 @@ export class ReadingArticle extends Component<Props, State> {
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
     const qlEditorText = 'ql-editor';
-    if (event.shiftKey && event.key === 'F' || event.shiftKey && event.key === 'f') {
-      if (htmlPathArea !== htmlText && htmlPathArea !== inputText && classDivPath !== qlEditorText) {
+    if (htmlPathArea !== htmlText && htmlPathArea !== inputText && classDivPath !== qlEditorText) {
+      if (event.shiftKey && event.key === 'F' || event.shiftKey && event.key === 'f') {
         this.props.finishReading(this.state.graduation!);
       }
     }
@@ -118,12 +119,23 @@ export class ReadingArticle extends Component<Props, State> {
       graduation: 2
     });
   }
+  public finishButton = () => {
+    const { notFinish } = this.props;
+    return (
+      <div className="ReadingArticle__finishButton">
+        <CreateButton
+          children={intl.get('assignment preview.Finish reading article')}
+          onClick={this.finishReading}
+          title={intl.get('assignment preview.Finish reading article')}
+        />
+      </div>
+    );
+  }
 
   public render() {
     const { closeArticle, titleCurrentArticle, shownArticleId } = this.props;
     const { newArticleId } = this.state;
     const articleId = isNull(newArticleId) ? shownArticleId : newArticleId;
-
     return (
       <div className="ReadingArticle">
         <div className="ReadingArticle__headerWrapper">
@@ -136,14 +148,7 @@ export class ReadingArticle extends Component<Props, State> {
             </button>
 
             {this.renderLevels()}
-
-            <div className="ReadingArticle__finishButton">
-              <CreateButton
-                children={intl.get('assignment preview.Finish reading article')}
-                onClick={this.finishReading}
-                title={intl.get('assignment preview.Finish reading article')}
-              />
-            </div>
+            {this.props.notFinish && this.finishButton()}
           </div>
         </div>
 

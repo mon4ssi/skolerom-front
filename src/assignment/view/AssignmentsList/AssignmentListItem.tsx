@@ -404,7 +404,6 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
               {this.renderContentCreatorIcon()}
               {this.renderSubjects()}
               {this.renderQuestions()}
-              {this.renderLevels()}
               {/*{hasLikes && this.renderLikes(true)}*/}
             </div>
           </li>

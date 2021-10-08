@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { StudentAssignments } from './StudentAssignments/StudentAssignments';
+import { StudentTeachingPaths } from './StudentTeachingPaths/StudentTeachingPaths';
 import { StudentsListStore } from 'student/StudentsListStore';
 import { StudentSettings } from './StudentSettings/StudentSettings';
 import * as QueryStringHelper from 'utils/QueryStringHelper';
@@ -44,6 +45,7 @@ class StudentOverview extends Component<Props & RouteComponentProps, State> {
 
     switch (currentTab) {
       case StudentOverviewTabs.ASSIGNMENTS:
+      case StudentOverviewTabs.TEACHING_PATHS:
       case StudentOverviewTabs.STUDENT_SETTINGS:
         this.setState({
           currentTab,
@@ -62,10 +64,11 @@ class StudentOverview extends Component<Props & RouteComponentProps, State> {
     this.props.studentsListStore!.clearAssignmentsList();
   }
 
-  // public goToTeachingPaths = (event: MouseEvent<HTMLDivElement>) => {
-  //   event.preventDefault();
-  //   this.setState({ currentTab: StudentOverviewTabs.TEACHING_PATHS });
-  // }
+  public goToTeachingPaths = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    this.setState({ currentTab: StudentOverviewTabs.TEACHING_PATHS });
+    QueryStringHelper.set(this.props.history, STUDENT_TAB, StudentOverviewTabs.TEACHING_PATHS);
+  }
 
   public goToAssignments = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
@@ -91,6 +94,10 @@ class StudentOverview extends Component<Props & RouteComponentProps, State> {
       StudentOverview__tab_selected: currentTab === StudentOverviewTabs.ASSIGNMENTS,
     });
 
+    const teachingPathClassnames = classnames('StudentOverview__tab', {
+      StudentOverview__tab_selected: currentTab === StudentOverviewTabs.TEACHING_PATHS,
+    });
+
     const studentSettingsClassname = classnames('StudentOverview__tab', {
       StudentOverview__tab_selected: currentTab === StudentOverviewTabs.STUDENT_SETTINGS,
     });
@@ -107,6 +114,14 @@ class StudentOverview extends Component<Props & RouteComponentProps, State> {
             aria-disabled={currentTab === StudentOverviewTabs.ASSIGNMENTS}
           >
             {intl.get('students_list.students_overview.tabs.assignments')}
+          </a>
+          <a
+            className={teachingPathClassnames}
+            href="#"
+            onClick={this.goToTeachingPaths}
+            aria-disabled={currentTab === StudentOverviewTabs.TEACHING_PATHS}
+          >
+            {intl.get('students_list.students_overview.tabs.teaching_paths')}
           </a>
           {/*<a className="StudentOverview__tab" href="#" aria-disabled={true}>{intl.get('students_list.students_overview.tabs.statistics')}</a>*/}
         </div>
@@ -129,6 +144,8 @@ class StudentOverview extends Component<Props & RouteComponentProps, State> {
     switch (currentTab) {
       case (StudentOverviewTabs.ASSIGNMENTS):
         return <StudentAssignments />;
+      case (StudentOverviewTabs.TEACHING_PATHS):
+        return <StudentTeachingPaths />;
       case (StudentOverviewTabs.STUDENT_SETTINGS):
         return <StudentSettings />;
       default:

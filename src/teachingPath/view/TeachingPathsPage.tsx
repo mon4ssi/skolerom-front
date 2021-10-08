@@ -8,8 +8,8 @@ import { TeachingPathAnswersList } from './Evaluation/TeachingPathAnswersList';
 import { StudentEvaluation } from './Evaluation/StudentEvaluation/StudentEvaluation';
 
 const renderRedirect = () => <Redirect to="/teaching-paths/all" />;
-const renderAllTeachingPaths = () => <TeachingPathsList typeOfTeachingPathsList="all" />;
-const renderMyTeachingPaths = () => <TeachingPathsList typeOfTeachingPathsList="my" />;
+const renderAllTeachingPaths = () => <TeachingPathsList typeOfTeachingPathsList="all" isNotStudent/>;
+const renderMyTeachingPaths = () => <TeachingPathsList typeOfTeachingPathsList="my" isNotStudent />;
 
 const renderStudentTeachingPaths = () => <TeachingPathsList readOnly />;
 const renderStudentEvaluation = () => <StudentEvaluation />;

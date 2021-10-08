@@ -84,13 +84,13 @@ class Student extends Component<StudentProps, StudentState> {
       if (newState) {
         if (!this.isCheckedInAllStudents(student.id)) {
           student.setIsSelected(newState);
-        }else {
+        } else {
           // Notification.create({
           //   type: NotificationTypes.ERROR,
           //   title: 'Este alumno ya ha sido chekeado en otro curso'
           // });
         }
-      }else {
+      } else {
         student.setIsSelected(newState);
       }
 

@@ -116,6 +116,7 @@
     .nestedOrderNumberContainer {
       position: relative;
       min-height: fit-content;
+      z-index: 4;
 
       &.withoutUnmergeButton {
         margin-top: 55px;
