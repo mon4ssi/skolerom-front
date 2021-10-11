@@ -758,7 +758,7 @@ export class PublishingActions extends Component<Props, State> {
     const { optionsSubjects, valueSubjectsOptions } = this.state;
     let myplaceholder = intl.get('publishing_page.subject');
 
-    const subjects = store!.getAllSubjects().map(this.subjectToTagProp);
+    const subjects = store!.getAllSubjects().filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.subjectToTagProp);
     const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
     let filterSelectedSubjects = this.compareTwoArraysReturnValue(subjects, selectedSubjects);
     if (selectedSubjects.length > 0) {
@@ -818,7 +818,7 @@ export class PublishingActions extends Component<Props, State> {
     const { currentEntity } = store!;
     const selectedGrades = currentEntity!.getListOfGrades().map(this.gradeToTagProp);
     const myplaceholder = (selectedGrades.length > 0) ? '' : intl.get('publishing_page.grade');
-    const grades = store!.getAllGrades().map(this.gradeToTagProp).sort((a, b) => a.id - b.id);
+    const grades = store!.getAllGrades().filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.gradeToTagProp).sort((a, b) => a.id - b.id);
     let filterSelectedGrades = this.compareTwoArraysReturnValue(grades, selectedGrades);
     if (filterSelectedGrades.length === 0) {
       filterSelectedGrades = selectedGrades;
@@ -1356,7 +1356,7 @@ export class PublishingActions extends Component<Props, State> {
       control: () => ({
         display: 'flex',
         borderRadius: '5px',
-        border: '1px solid #939fa7',
+        border: '1px solid #0b2541',
         color: '#0B2541',
         fontSize: '14px',
         background: '#E7ECEF',

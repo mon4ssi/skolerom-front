@@ -47,6 +47,7 @@ export class NestedOrderNumber extends Component<Props> {
     this.setState({
       modalDomain: true
     });
+    document.addEventListener('keyup', this.handleKeyboardControl);
   }
 
   public closeDomainModal = () => {
@@ -54,7 +55,26 @@ export class NestedOrderNumber extends Component<Props> {
       this.setState({
         modalDomain: false
       });
+      document.removeEventListener('keyup', this.handleKeyboardControl);
     }
+  }
+
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      if (!this.state.disabledbutton) {
+        this.sendDomain();
+      }
+    }
+    if (event.key === 'Escape') {
+      this.closeDomainModal();
+    }
+  }
+
+  public validUrlPath = (value: string) => {
+    if (value.split('//').length > 1) {
+      return value;
+    }
+    return `https://${value}`;
   }
 
   public handleChangeNewQuestion = (e:  React.ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +90,7 @@ export class NestedOrderNumber extends Component<Props> {
     const { editTeachingPathStore, node } = this.props;
     this.setState({ loading: false });
     this.setState({ disabledbutton: true });
-    const response = await editTeachingPathStore!.sendDataDomain(this.state.valueInputDomain);
+    const response = await editTeachingPathStore!.sendDataDomain(this.validUrlPath(this.state.valueInputDomain));
     this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
     const newChildren = this.state.itemsForNewChildren.map(
       item => editTeachingPathStore!.createNewNode(
