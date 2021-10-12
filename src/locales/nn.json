@@ -537,7 +537,10 @@
       "title": "Læringsstien er fullført!",
       "description": "Bruk navigasjonen i botnen av sida til å gå gjennom kvart steg. Kom tilbake hit og trykk «Registrer og send inn» for å sende svaret til læraren din.",
       "button": "Registrer og send inn",
-      "delete_all_answers": "Slett alle besvarelser"
+      "delete_all_answers": "Slett alle besvarelser",
+      "title_preview": "Læringsstien er fullført!",
+      "description_preview": "Bruk navigasjonen i botnen av sida til å gå gjennom kvart steg. Kom tilbake hit og trykk «Registrer og send inn» for å sende svaret til læraren din.",
+      "button_preview": "Registrer og send inn"
     },
     "submitted": "Svaret ditt er sendt!",
     "next": "Neste",
@@ -577,7 +580,7 @@
       "after_publishing": "Bra jobba, læringsstien er publisert!",
       "after_distribution": "Læringsstien har blitt distribuert!",
       "cant_publish": "Du må fullføre læreplandelen før du publiserer",
-      "cant_publish_goals": "Du kan ikke legge ut fordi du ikke har de fullstendige målene",
+      "cant_publish_goals": "Du kan ikkje publisera utan kopling av kompetansemål",
       "notdata_goals": "Det er ingen etablerte mål for disse kriteriene"
     },
     "title": {

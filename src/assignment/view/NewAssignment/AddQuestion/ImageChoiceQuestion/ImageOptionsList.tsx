@@ -44,6 +44,7 @@ class OptionComponent extends Component<OptionComponentProps> {
     if (lettersNoEn(e.target.value)) {
       this.props.option.setTitle(e.target.value);
     }
+    this.props.option.setTitle(e.target.value);
     this.stateImg = false;
   }
 

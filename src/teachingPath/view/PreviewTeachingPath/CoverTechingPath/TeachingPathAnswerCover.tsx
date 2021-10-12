@@ -34,7 +34,7 @@ class TeachingPathAnswerCoverComponent extends Component<Props>{
       <div className={'cover'}>
         <div className={'infoTeacher'}>
           <img src={userPlaceholder} alt=""/>
-          <span>{content!.author}</span>
+          <span>{content && content!.author}</span>
           {/* <span className={'subject'}>6A/History</span> */}
         </div>
 

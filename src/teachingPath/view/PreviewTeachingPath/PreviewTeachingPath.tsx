@@ -58,6 +58,7 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
     const id = Number(location.pathname.split('/', limitSplit)[itemSplit]);
     document.addEventListener('keyup', this.handleKeyboardControl);
     this.ref.current!.focus();
+    questionaryTeachingPathStore!.setFetchingDataStatus(true);
     const dataTeachingpath = await this.getDatateachingpath(id);
     this.setState(
       {
@@ -65,7 +66,6 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
       }
     );
     questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Root);
-
     /*questionaryTeachingPathStore!.setFetchingDataStatus(true);
 
     questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Root);*/
@@ -87,8 +87,8 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
         await questionaryTeachingPathStore!.calculateCurrentNode(id, questionaryTeachingPathStore!.selectedTeachingPath.lastSelectedNodeId);
       }
     }
-
-    questionaryTeachingPathStore!.setFetchingDataStatus(false);*/
+    */
+    questionaryTeachingPathStore!.setFetchingDataStatus(false);
   }
 
   public getDatateachingpath = async (id: number) => {
@@ -136,12 +136,14 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
 
   public finishReading = (node: EditableTeachingPathNode | undefined) => {
     const { questionaryTeachingPathStore } = this.props;
+    questionaryTeachingPathStore!.setFetchingDataStatus(true);
     const type = (node!.children.length > 0) ? node!.children[0].type : '';
     this.setState(
       {
         selectedNode: node!.children
       },
       () => {
+        questionaryTeachingPathStore!.setFetchingDataStatus(false);
         switch (type) {
           case TeachingPathNodeType.Article:
             return questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Article);
@@ -178,12 +180,12 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
   }
 
   public finishTeachingPath = () => {
-    this.props.questionaryTeachingPathStore!.finishTeachingPath();
-    this.props.history.push('/submitted', {
+    /*this.props.history.push('/submitted', {
       originPath: '/teaching-paths',
       title: 'teaching path passing.submitted',
       isTeachingPath: true
-    });
+    });*/
+    this.props.history.push('/teaching-paths');
   }
 
   public deleteTeachingPathAnswers = async () => {
@@ -202,7 +204,8 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
   public renderContent = () => {
     const isDraftSaving = (typeof(this.state.contenTeaching) !== 'undefined') ? this.state.contenTeaching!.isDraftSaving : true;
     const contenTeaching = (typeof(this.state.contenTeaching) !== 'undefined') ? this.state.contenTeaching : undefined;
-    if (isDraftSaving) {
+    const idTeachingPath = Number(this.props.location.pathname.split('/', limitSplit)[itemSplit]);
+    if (this.props.questionaryTeachingPathStore!.fetchingData) {
       return <div className={'loading'}><Loader /></div>;
     }
     switch (this.props.questionaryTeachingPathStore!.displayedElement) {
@@ -211,11 +214,11 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
       case TeachingPathNodeType.Article:
         return <ArticleTeachingPath content={this.state.selectedNode} finishReading={this.finishReading} />;
       case TeachingPathNodeType.Assignment:
-        return <AssignmentTeachingPath content={this.state.selectedNode} />;
+        return <AssignmentTeachingPath content={this.state.selectedNode} idTeachingPath={idTeachingPath}/>;
       case TeachingPathNodeType.Domain:
         return <DomainTeachingPath finishReading={this.finishReadingDomain} />;
       default:
-        return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers}/>;
+        return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers} isPreview/>;
     }
   }
 

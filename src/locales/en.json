@@ -537,7 +537,10 @@
       "title": "Teaching Path complete!",
       "description": "All steps successfully completed. Use the breadcrumbs at the bottom to go though and review each step. Come back here and press «Complete and submit» to submit your work to your teacher.",
       "button": "Complete and submit",
-      "delete_all_answers": "Delete all answers"
+      "delete_all_answers": "Delete all answers",
+      "title_preview": "Teaching Path Preview complete!",
+      "description_preview": "All steps successfully completed. Use the breadcrumbs at the bottom to go though and review each step. Come back here and press «Complete and submit» to submit your work to your teacher.",
+      "button_preview": "Finish the Preview"
     },
     "submitted": "Your teaching path has been submitted!",
     "next": "Next",

@@ -11,6 +11,7 @@ import { QuestionaryTeachingPathStore } from '../../../questionaryTeachingPath/q
 import { ReadingArticle } from 'components/pages/ReadingArticle/ReadingArticle';
 import { Article, Assignment } from 'assignment/Assignment';
 import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
+import { Loader } from '../../../../components/common/Loader/Loader';
 
 interface Props {
   questionaryTeachingPathStore?: QuestionaryTeachingPathStore;
@@ -23,6 +24,7 @@ interface State {
   attachedArticleId: number;
   nodeSelected: number;
   selectedArticle: Article | undefined;
+  showMyarticles: boolean;
 }
 
 @inject('questionaryTeachingPathStore')
@@ -35,7 +37,8 @@ export class ArticleTeachingPath extends Component<Props, State> {
       attachedArticleId: -1,
       shownArticleLevelId: -1,
       nodeSelected: 0,
-      selectedArticle: undefined
+      selectedArticle: undefined,
+      showMyarticles: false
     };
   }
 
@@ -48,17 +51,19 @@ export class ArticleTeachingPath extends Component<Props, State> {
     const MyArticlesList : Array<Article> = [];
     const MyArticlesListIds : Array<number> = [];
     content!.forEach((e) => {
-      if (e.items![0].type === TeachingPathNodeType.Article) {
-        if (e.items![0].value as Article) {
-          MyArticlesList.push(e.items![0].value as Article);
+      e.items!.forEach((item) => {
+        if (item.type === TeachingPathNodeType.Article) {
+          if (item.value as Article) {
+            MyArticlesList.push(item.value as Article);
+          }
         }
-      }
+      });
     });
     MyArticlesList.forEach((e) => {
       MyArticlesListIds.push(e.wpId!);
     });
-
     await questionaryTeachingPathStore!.getCurrentArticlesList(MyArticlesListIds);
+    this.setState({ showMyarticles: true });
   }
 
   public closeArticleReading = () => {
@@ -85,6 +90,9 @@ export class ArticleTeachingPath extends Component<Props, State> {
   public renderCards = () => {
     const { questionaryTeachingPathStore } = this.props;
     const { content } = this.props;
+    if (!this.state.showMyarticles) {
+      return <div className={'loading'}><Loader /></div>;
+    }
     return questionaryTeachingPathStore!.currentArticlesList.map((item, index) => {
       const passedStyle = item.isSelected ? 'passedStyle' : '';
       return (
@@ -105,9 +113,22 @@ export class ArticleTeachingPath extends Component<Props, State> {
 
   public finishReading = async (graduation: number) => {
     const { content } = this.props;
+    const MyArticlesList : Array<Article> = [];
+    const MyArticlesListIds : Array<number> = [];
     const number = this.state.nodeSelected;
-    this.closeArticleReading();
-    this.props.finishReading(content![Number(number)]);
+    content!.forEach((e) => {
+      e.items!.forEach((item) => {
+        if (item.type === TeachingPathNodeType.Article) {
+          if (item.value as Article) {
+            const articleWpId = (item.value as Article).wpId;
+            if (articleWpId === this.state.attachedArticleId) {
+              this.closeArticleReading();
+              this.props.finishReading(e);
+            }
+          }
+        }
+      });
+    });
   }
 
   public handleChangeLevel = (levelId: number) => {

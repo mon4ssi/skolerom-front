@@ -54,6 +54,7 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 
 // tslint:disable-next-line: no-any
 const CurrentAssignmentPageView = (props: any) => <CurrentAssignmentPage {...props} isTeacher />;
+const CurrentAssignmentPagePreview = (props: any) => <CurrentAssignmentPagePreview {...props} isTeacher />;
 
 // tslint:disable-next-line: no-any
 const ViewTeachingPath = (props: any) => <EditTeachingPath {...props} readOnly />;
@@ -227,6 +228,12 @@ class LocalizedApp extends Component<Props> {
         />
 
         <Route
+          exact
+          path="/assignments/preview/:id"
+          component={CurrentAssignmentPagePreview}
+        />
+
+        <Route
           path="/teaching-path/preview/:id"
           component={PreviewTeachingPath}
         />
@@ -252,6 +259,12 @@ class LocalizedApp extends Component<Props> {
         <Route
           path="/assignments/view/:id"
           component={CurrentAssignmentPageView}
+        />
+
+        <Route
+          exact
+          path="/assignments/preview/:id"
+          component={CurrentAssignmentPagePreview}
         />
 
         <Route

@@ -74,7 +74,7 @@ export class HeaderComponent extends Component<Props> {
 
     if (!editTeachingPathStore!.isActiveButtons) {
       const grepGoals = editTeachingPathStore!.teachingPathContainer!.teachingPath.grepGoalsIds;
-      const msj = (grepGoals!.length === 0) ? intl.get('edit_teaching_path.header.cant_publish_goals') : intl.get('edit_teaching_path.header.cant_publish');
+      const msj = (typeof(grepGoals) === 'undefined') ? intl.get('edit_teaching_path.header.cant_publish_goals') : (grepGoals!.length === 0) ? intl.get('edit_teaching_path.header.cant_publish_goals') : intl.get('edit_teaching_path.header.cant_publish');
       Notification.create({
         type: NotificationTypes.ERROR,
         title: msj

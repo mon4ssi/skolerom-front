@@ -15,6 +15,7 @@ import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachi
 interface Props {
   questionaryTeachingPathStore?: QuestionaryTeachingPathStore;
   content?: Array<EditableTeachingPathNode>;
+  idTeachingPath?: number;
 }
 
 interface State {
@@ -36,24 +37,25 @@ class AssignmentTeachingPathComponent extends Component<ComponentProps, State> {
     const { content } = this.props;
     const MyAssingmentsList : Array<Assignment> = [];
     content!.forEach((e) => {
-      if (e.items![0].type === TeachingPathNodeType.Assignment) {
-        if (e.items![0].value as Assignment) {
-          MyAssingmentsList.push(e.items![0].value as Assignment);
+      e.items!.forEach((item) => {
+        if (item.type === TeachingPathNodeType.Assignment) {
+          if (item.value as Assignment) {
+            MyAssingmentsList.push(item.value as Assignment);
+          }
         }
-      }
+      });
     });
     this.setState({ myAssignments : MyAssingmentsList });
   }
 
   public goToAssignment = (id: number) => () => {
     const { questionaryTeachingPathStore } = this.props;
-    questionaryTeachingPathStore!.handleAssignment(true);
-    questionaryTeachingPathStore!.pickUpItem(id);
+    /* console.log(this.props.idTeachingPath); */
 
-    this.props.history.push(`/assignment/${id}`, {
-      teachingPath: questionaryTeachingPathStore!.teachingPathId,
-      node: questionaryTeachingPathStore!.pickedItemAssignment!.idNode
-    });
+    /*this.props.history.push(`/assignments/preview/${id}`, {
+      teachingPath: this.props.idTeachingPath,
+      node: id
+    });*/
   }
 
   public renderCards = () => {

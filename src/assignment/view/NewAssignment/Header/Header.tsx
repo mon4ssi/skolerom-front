@@ -81,10 +81,10 @@ class HeaderWrapper extends Component<Props> {
     const assignmentTitle = newAssignmentStore!.assignmentContainer!.assignment!.title;
     const isPrivate = newAssignmentStore!.assignmentContainer!.assignment!.isPrivate;
     const isCopy = newAssignmentStore!.assignmentContainer!.assignment!.isCopy;
-    const grepGoals = newAssignmentStore!.assignmentContainer!.assignment.grepGoalsIds;
-    const msj = (grepGoals!.length === 0) ? intl.get('edit_teaching_path.header.cant_publish_goals') : intl.get('edit_teaching_path.header.cant_publish');
 
     if (!newAssignmentStore!.isActiveButtons) {
+      const grepGoals = newAssignmentStore!.assignmentContainer!.assignment.grepGoalsIds;
+      const msj = (typeof(grepGoals) === 'undefined') ? intl.get('edit_teaching_path.header.cant_publish_goals') : (grepGoals!.length === 0) ? intl.get('edit_teaching_path.header.cant_publish_goals') : intl.get('edit_teaching_path.header.cant_publish');
       Notification.create({
         type: NotificationTypes.ERROR,
         title: msj
