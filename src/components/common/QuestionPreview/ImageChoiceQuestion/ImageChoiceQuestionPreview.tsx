@@ -88,7 +88,7 @@ class ImageOption extends Component<ImageOptionProps, ImageOptionState> {
     }
   }
   public async componentDidMount() {
-    if (this.refInput.current) {
+    if (!this.props.readOnly && this.refInput.current) {
       const focusCurrentOption = Array.from(document.getElementsByClassName('ImagenfocusCurrentOption') as HTMLCollectionOf<HTMLElement>);
       focusCurrentOption[0].focus();
     }

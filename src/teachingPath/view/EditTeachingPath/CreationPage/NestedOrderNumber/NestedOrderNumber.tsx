@@ -47,6 +47,7 @@ export class NestedOrderNumber extends Component<Props> {
     this.setState({
       modalDomain: true
     });
+    document.addEventListener('keyup', this.handleKeyboardControl);
   }
 
   public closeDomainModal = () => {
@@ -54,6 +55,18 @@ export class NestedOrderNumber extends Component<Props> {
       this.setState({
         modalDomain: false
       });
+      document.removeEventListener('keyup', this.handleKeyboardControl);
+    }
+  }
+
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      if (!this.state.disabledbutton) {
+        this.sendDomain();
+      }
+    }
+    if (event.key === 'Escape') {
+      this.closeDomainModal();
     }
   }
 
