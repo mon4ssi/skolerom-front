@@ -349,7 +349,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
             {this.renderDescription()}
           </div>
           <div className="footerCardInfo flexBox">
-            {this.renderGrades()}
+            {/* this.renderGrades() */}
             {this.renderNumberOfQuestions()}
           </div>
         </div>
