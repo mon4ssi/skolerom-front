@@ -52,10 +52,10 @@ class AssignmentTeachingPathComponent extends Component<ComponentProps, State> {
     const { questionaryTeachingPathStore } = this.props;
     /* console.log(this.props.idTeachingPath); */
 
-    /*this.props.history.push(`/assignments/preview/${id}`, {
+    this.props.history.push(`/assignments/preview/${id}`, {
       teachingPath: this.props.idTeachingPath,
       node: id
-    });*/
+    });
   }
 
   public renderCards = () => {

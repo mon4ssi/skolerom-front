@@ -35,6 +35,7 @@ interface Props {
   isEvaluationStyle?: boolean;
   comment?: string;
   isReadyToEvaluate?: boolean;
+  isPreview?: boolean;
 
   handleChangeComment?(e: React.ChangeEvent<HTMLTextAreaElement>): void;
   handleShowArrowsTooltip?(value: boolean): void;
@@ -119,12 +120,20 @@ export class QuestionPreview extends Component<Props, State> {
     )
 
   public renderContentBlocks = () => {
-    const { question, isEvaluationStyle, isTeacher } = this.props;
+    const { question, isEvaluationStyle, isTeacher, isPreview } = this.props;
     const blocks = question.content;
     return blocks.map((item, index) => {
       switch (item.type) {
         case ContentBlockType.Text: {
           const block = item as EditableTextContentBlock;
+          if (isPreview) {
+            return (
+              <DescriptionEditor
+                key={index}
+                description={block.text}
+              />
+            );
+          }
           return (
             <DescriptionEditor
               readOnly
@@ -158,10 +167,21 @@ export class QuestionPreview extends Component<Props, State> {
   }
 
   public renderAnswerBlock = () => {
-    const { question, answer, readOnly, redirectData, isEvaluationStyle, isStudentView, handleShowArrowsTooltip } = this.props;
+    const { question, answer, readOnly, redirectData, isEvaluationStyle, isStudentView, handleShowArrowsTooltip, isPreview } = this.props;
 
     switch (question.type) {
       case QuestionType.Text:
+        if (isPreview) {
+          return (
+            <TextQuestionPreview
+              question={question}
+              answer={answer}
+              redirectData={redirectData}
+              isEvaluationStyle={isEvaluationStyle}
+              handleShowArrowsTooltip={handleShowArrowsTooltip}
+            />
+          );
+        }
         return (
           <TextQuestionPreview
             question={question}
@@ -173,6 +193,18 @@ export class QuestionPreview extends Component<Props, State> {
           />
         );
       case QuestionType.MultipleChoice:
+        if (isPreview) {
+          return (
+            <MultipleChoiceQuestionPreview
+              question={question}
+              answer={answer}
+              redirectData={redirectData}
+              isEvaluationStyle={isEvaluationStyle}
+              isStudentView={isStudentView}
+              handleShowArrowsTooltip={handleShowArrowsTooltip}
+            />
+          );
+        }
         return (
           <MultipleChoiceQuestionPreview
             question={question}
@@ -185,6 +217,18 @@ export class QuestionPreview extends Component<Props, State> {
           />
         );
       case QuestionType.ImageChoice:
+        if (isPreview) {
+          return (
+            <ImageChoiceQuestionPreview
+              light
+              question={question}
+              answer={answer}
+              redirectData={redirectData}
+              isEvaluationStyle={isEvaluationStyle}
+              handleShowArrowsTooltip={handleShowArrowsTooltip}
+            />
+          );
+        }
         return (
           <ImageChoiceQuestionPreview
             light

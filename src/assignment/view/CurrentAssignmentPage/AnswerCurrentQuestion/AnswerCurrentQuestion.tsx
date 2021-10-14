@@ -18,6 +18,7 @@ import { QuestionaryTeachingPathStore } from 'teachingPath/questionaryTeachingPa
 interface Props extends RouteComponentProps {
   currentQuestionaryStore?: CurrentQuestionaryStore;
   questionaryTeachingPathStore?: QuestionaryTeachingPathStore;
+  isPreview?: boolean;
   answer: Answer;
   numberOfQuestions: number;
   numberOfAnsweredQuestions: number;
@@ -85,6 +86,7 @@ class AnswerCurrentQuestion extends Component<Props> {
       numberOfAnsweredQuestions,
       publishQuestionary,
       currentQuestionaryStore,
+      isPreview
     } = this.props;
 
     if (!readOnly && this.props.showCover) {
@@ -113,6 +115,7 @@ class AnswerCurrentQuestion extends Component<Props> {
         redirectData={redirectData}
         readOnly={readOnly}
         handleShowArrowsTooltip={currentQuestionaryStore!.handleShowArrowsTooltip}
+        isPreview={isPreview}
       />
     ) :  (
       <Submit
@@ -123,6 +126,7 @@ class AnswerCurrentQuestion extends Component<Props> {
         deleteQuestionary={this.deleteQuestionary}
         revertQuestionary={this.revertQuestionary}
         readOnly={readOnly}
+        isPreview={isPreview}
       />
     );
   }

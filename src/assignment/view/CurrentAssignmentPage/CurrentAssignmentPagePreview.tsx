@@ -54,7 +54,7 @@ enum ExitEventTarget {
 
 type LocataionProps = Location<{ readOnly: boolean } & LocationState>;
 
-interface CurrentAssignmentPageProps extends RouteComponentProps<RouteParams, {}, LocationState> {
+interface CurrentAssignmentPagePreviewProps extends RouteComponentProps<RouteParams, {}, LocationState> {
   currentQuestionaryStore: CurrentQuestionaryStore;
   questionaryTeachingPathStore?: QuestionaryTeachingPathStore;
   assignmentListStore?: AssignmentListStore;
@@ -81,101 +81,49 @@ export enum ContentType {
 
 @inject('currentQuestionaryStore', 'questionaryTeachingPathStore', 'uiStore', 'assignmentListStore')
 @observer
-export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPageProps, State> {
+export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPagePreviewProps, State> {
   public state = {
     showCover: false,
   };
 
-  private goToNextQuestion = () => {
+  public switchCover = () => {
+    const { currentQuestionaryStore } = this.props;
+
+    this.setState({ showCover: false }, () => {
+      currentQuestionaryStore!.setStartedAssignment(true);
+
+      if (currentQuestionaryStore!.currentQuestionary && currentQuestionaryStore!.currentQuestionary.redirectData) {
+        currentQuestionaryStore!.setCurrentQuestion(0);
+        return this.updateQueryString();
+      }
+
+      if (currentQuestionaryStore!.assignment!.relatedArticles.length > 0) {
+        currentQuestionaryStore!.setCurrentQuestion(-1);
+        return this.updateQueryString();
+      }
+      currentQuestionaryStore!.setCurrentQuestion(0);
+      return this.updateQueryString();
+    });
+  }
+
+  public goToNextQuestion = () => {
     const { setCurrentQuestion, currentQuestionIndex } = this.props.currentQuestionaryStore;
     setCurrentQuestion(currentQuestionIndex + 1);
     this.updateQueryString();
   }
 
-  private goToPrevQuestion = () => {
+  public goToPrevQuestion = () => {
     const { setCurrentQuestion, currentQuestionIndex } = this.props.currentQuestionaryStore;
     setCurrentQuestion(currentQuestionIndex - 1);
     this.updateQueryString();
   }
-
   public async componentDidMount() {
     const { currentQuestionaryStore, match, isTeacher, history } = this.props;
-    currentQuestionaryStore.handleShowArrowsTooltip(true);
-    document.addEventListener('keyup', this.handleKeyboardControl);
     const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
     headerArray[0].style.display = 'none';
 
-    /*if (isTeacher) {
-      await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
-      await currentQuestionaryStore.getRelatedArticles();
+    await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
 
-      if (currentQuestionaryStore.assignment && currentQuestionaryStore.assignment.isOwnedByMe()) {
-        this.props.history.replace(`/assignments/edit/${Number(match.params.id)}`);
-        return;
-      }
-    } else {
-      const { teachingPath, node } = (history.location.state || {}) as RedirectData;
-      const redirectData = teachingPath && node ? { teachingPath, node } : undefined;
-      await currentQuestionaryStore.createQuestionaryByAssignmentId(Number(match.params.id), redirectData);
-    }
-    if (!this.isReadOnly) {
-      this.setState({ showCover: true });
-      this.props.currentQuestionaryStore!.setCurrentQuestion(COVER_INDEX);
-      return this.updateQueryString();
-    }
-    if (currentQuestionaryStore.assignment!.relatedArticles.length > 0) {
-      this.props.currentQuestionaryStore.setCurrentQuestion(-1);
-      return this.updateQueryString();
-    }
-    this.props.currentQuestionaryStore.setCurrentQuestion(0);
-    return this.updateQueryString();*/
-  }
-
-  public async componentDidUpdate(prevProps: CurrentAssignmentPageProps) {
-    /*const { currentQuestionaryStore, match, history } = this.props;
-    const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
-    headerArray[0].style.display = 'flex';
-
-    if (match.params.id !== prevProps.match.params.id) {
-      const { teachingPath, node } = (history.location.state || {}) as RedirectData;
-      const redirectData = teachingPath && node ? { teachingPath, node } : undefined;
-      await currentQuestionaryStore.createQuestionaryByAssignmentId(Number(match.params.id), redirectData);
-    }*/
-  }
-
-  public componentWillUnmount(): void {
-    this.props.currentQuestionaryStore!.setStartedAssignment(false);
-    document.removeEventListener('keyup', this.handleKeyboardControl);
-  }
-
-  public get canGoToPrevQuestion() {
-    const {
-      currentQuestionaryStore: {
-        currentQuestionIndex,
-        isStartedAssignment,
-        relatedArticles
-      },
-      isTeacher
-    } = this.props;
-    return ((isStartedAssignment || isTeacher) && currentQuestionIndex === 0 && relatedArticles.length > 0)
-      || currentQuestionIndex > 0;
-  }
-
-  public get canGoToNextQuestion() {
-    const {
-      currentQuestionaryStore: {
-        currentQuestionIndex,
-        isStartedAssignment,
-        questionTitlesListWithSubmit
-      },
-      isTeacher
-    } = this.props;
-    return currentQuestionIndex !== questionTitlesListWithSubmit.length - 1 && (isStartedAssignment || isTeacher);
-  }
-
-  public get isReadOnly(): boolean {
-    const { location, isTeacher } = this.props;
-    return !!((location && location.state && location.state.readOnly) || isTeacher);
   }
 
   public handleExit = (exitEventTarget: ExitEventTarget) => async () => {
@@ -206,34 +154,6 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
     } else {
       // history.push('/assignments');
     }
-  }
-
-  public handleKeyboardControl = (event: KeyboardEvent) => {
-    if (event.shiftKey && event.key === 'ArrowRight' && this.canGoToNextQuestion) {
-      this.goToNextQuestion();
-    } else if (event.shiftKey && event.key === 'ArrowLeft' && this.canGoToPrevQuestion) {
-      this.goToPrevQuestion();
-    }
-  }
-
-  public switchCover = () => {
-    const { currentQuestionaryStore } = this.props;
-
-    this.setState({ showCover: false }, () => {
-      currentQuestionaryStore!.setStartedAssignment(true);
-
-      if (currentQuestionaryStore!.currentQuestionary && currentQuestionaryStore!.currentQuestionary.redirectData) {
-        currentQuestionaryStore!.setCurrentQuestion(0);
-        return this.updateQueryString();
-      }
-
-      if (currentQuestionaryStore!.assignment!.relatedArticles.length > 0) {
-        currentQuestionaryStore!.setCurrentQuestion(-1);
-        return this.updateQueryString();
-      }
-      currentQuestionaryStore!.setCurrentQuestion(0);
-      return this.updateQueryString();
-    });
   }
 
   public updateQueryString() {
@@ -291,6 +211,36 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
       pathname: `/teaching-path/${idTeachingPath}`,
       state: { node, withoutRefresh: true }
     });
+  }
+
+  public get canGoToPrevQuestion() {
+    const {
+      currentQuestionaryStore: {
+        currentQuestionIndex,
+        isStartedAssignment,
+        relatedArticles
+      },
+      isTeacher
+    } = this.props;
+    return ((isStartedAssignment || isTeacher) && currentQuestionIndex === 0 && relatedArticles.length > 0)
+      || currentQuestionIndex > 0;
+  }
+
+  public get canGoToNextQuestion() {
+    const {
+      currentQuestionaryStore: {
+        currentQuestionIndex,
+        isStartedAssignment,
+        questionTitlesListWithSubmit
+      },
+      isTeacher
+    } = this.props;
+    return currentQuestionIndex !== questionTitlesListWithSubmit.length - 1 && (isStartedAssignment || isTeacher);
+  }
+
+  public get isReadOnly(): boolean {
+    const { location, isTeacher } = this.props;
+    return !!((location && location.state && location.state.readOnly) || isTeacher);
   }
 
   public renderNextButton = () => {
@@ -450,6 +400,7 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
               isStartedAssignment={isStartedAssignment}
               isReadArticles={isReadArticles}
               redirectData={state && state.node}
+              isPreview
             />
 
             <ArrowControls
@@ -473,6 +424,7 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
                   switchCover={this.switchCover}
                   showCover={this.state.showCover}
                   isTeachingPath={state && !!state.teachingPath}
+                  isPreview
                 />
                 {isVisibleButtonRender && this.renderIfneedNextButton()}
               </div>

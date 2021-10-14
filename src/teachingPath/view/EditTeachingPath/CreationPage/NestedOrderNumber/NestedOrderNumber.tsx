@@ -151,9 +151,13 @@ export class NestedOrderNumber extends Component<Props> {
     event.preventDefault();
     editTeachingPathStore!.setCurrentNode(node!);
     if (node.children[0].type === TeachingPathNodeType.Domain) {
-      this.setState({
-        modalDomain: true
-      });
+      this.setState(
+        {
+          modalDomain: true
+        },
+        () => {
+          document.addEventListener('keyup', this.handleKeyboardControl);
+        });
     } else {
       this.context.changeContentType(node.children[0].type === TeachingPathNodeType.Article ? 0 : 1);
     }

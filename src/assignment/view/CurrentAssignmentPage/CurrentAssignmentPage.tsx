@@ -105,11 +105,12 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
     headerArray[0].style.display = 'none';
 
+    const search = (history.location.search === '?preview') ? true : false;
+
     if (isTeacher) {
       await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
       await currentQuestionaryStore.getRelatedArticles();
-
-      if (currentQuestionaryStore.assignment && currentQuestionaryStore.assignment.isOwnedByMe()) {
+      if (currentQuestionaryStore.assignment && currentQuestionaryStore.assignment.isOwnedByMe() && !search) {
         this.props.history.replace(`/assignments/edit/${Number(match.params.id)}`);
         return;
       }
@@ -118,12 +119,12 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
       const redirectData = teachingPath && node ? { teachingPath, node } : undefined;
       await currentQuestionaryStore.createQuestionaryByAssignmentId(Number(match.params.id), redirectData);
     }
-    if (!this.isReadOnly) {
+    if (!this.isReadOnly && !search) {
       this.setState({ showCover: true });
       this.props.currentQuestionaryStore!.setCurrentQuestion(COVER_INDEX);
       return this.updateQueryString();
     }
-    if (currentQuestionaryStore.assignment!.relatedArticles.length > 0) {
+    if (currentQuestionaryStore.assignment!.relatedArticles.length > 0 && !search) {
       this.props.currentQuestionaryStore.setCurrentQuestion(-1);
       return this.updateQueryString();
     }
