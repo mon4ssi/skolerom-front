@@ -129,7 +129,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         solo: parentNode!.children.length === 1 && parentNode!.children[0].items!.length === 1
       }
     );
-    const image = item.value.images ?
+    let image = item.value.images ?
       item.value.images.url : item.value.featuredImage ?
         item.value.featuredImage : item.value.relatedArticles && item.value.relatedArticles.length > 0 ?
           item.value.relatedArticles[0].images.url : placeholderImg;
@@ -154,6 +154,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     }
     if (item.type === TeachingPathNodeType.Domain) {
       imagenType = domainImg;
+      image = item.value.featuredImage;
       urlBasic = item.value.url;
       urldomain = item.value.url;
     }
@@ -223,10 +224,12 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     switch (type) {
       case 'ARTICLE':
         editTeachingPathStore!.trueIsEditArticles();
+        editTeachingPathStore!.setArticleInEdit(itemId);
         this.context.changeContentType(0);
         break;
       case 'ASSIGNMENT':
         editTeachingPathStore!.trueIsEditAssignments();
+        editTeachingPathStore!.setAssignmentInEdit(itemId);
         this.context.changeContentType(1);
         break;
       case 'DOMAIN':

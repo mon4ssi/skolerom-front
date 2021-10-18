@@ -91,21 +91,25 @@ export class NestedOrderNumber extends Component<Props> {
     this.setState({ loading: false });
     this.setState({ disabledbutton: true });
     const response = await editTeachingPathStore!.sendDataDomain(this.validUrlPath(this.state.valueInputDomain));
-    this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
-    const newChildren = this.state.itemsForNewChildren.map(
-      item => editTeachingPathStore!.createNewNode(
-        item,
-        TeachingPathNodeType.Domain
-      )
-    );
-    let idNode = 0;
-    editTeachingPathStore!.currentNode!.children.forEach(
-      (child) => {
-        idNode = child.items![0].value.id;
-        node.removeChild(child);
-      }
-    );
-    node.addChild(newChildren[0], idNode);
+    if (node !== null) {
+      editTeachingPathStore!.setCurrentNode(node!);
+      this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
+      const newChildren = this.state.itemsForNewChildren.map(
+        item => editTeachingPathStore!.createNewNode(
+          item,
+          TeachingPathNodeType.Domain
+        )
+      );
+      let idNode = 0;
+      editTeachingPathStore!.currentNode!.children.forEach(
+        (child) => {
+          idNode = child.items![0].value.id;
+          node.removeChild(child);
+        }
+      );
+      node.addChild(newChildren[0], idNode);
+      editTeachingPathStore!.setCurrentNode(null);
+    }
   }
 
   public renderModalDomain = () => {

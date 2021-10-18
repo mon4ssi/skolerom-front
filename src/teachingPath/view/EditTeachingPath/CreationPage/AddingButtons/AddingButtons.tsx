@@ -118,19 +118,20 @@ class AddingButtonsContainer extends Component<Props> {
     const { editTeachingPathStore, node } = this.props;
     if (!disabledbutton) {
       const response = await editTeachingPathStore!.sendDataDomain(this.validUrlPath(this.state.valueInputDomain));
-      editTeachingPathStore!.setCurrentNode(node!);
-      this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
-      const newChildren = this.state.itemsForNewChildren.map(
-        item => editTeachingPathStore!.createNewNode(
-          item,
-          TeachingPathNodeType.Domain
-        )
-      );
-      newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
-      editTeachingPathStore!.currentEntity!.save();
-
-      this.context.changeContentType(null);
-      editTeachingPathStore!.setCurrentNode(null);
+      if (node !== null) {
+        editTeachingPathStore!.setCurrentNode(node!);
+        this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
+        const newChildren = this.state.itemsForNewChildren.map(
+          item => editTeachingPathStore!.createNewNode(
+            item,
+            TeachingPathNodeType.Domain
+          )
+        );
+        newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
+        editTeachingPathStore!.currentEntity!.save();
+        this.context.changeContentType(null);
+        editTeachingPathStore!.setCurrentNode(null);
+      }
     } else {
       Notification.create({
         type: NotificationTypes.ERROR,

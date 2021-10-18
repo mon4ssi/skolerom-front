@@ -35,6 +35,9 @@ export class EditTeachingPathStore {
   @observable public isActiveButtons: boolean = false;
   @observable public hasMoreArticles: boolean = true;
   @observable public isEditArticles: boolean = false;
+  @observable public articleInEdit: number = 0;
+  @observable public assingmentInEdit: number = 0;
+
   @observable public isEditAssignments: boolean = false;
   @observable public isEditDomain: boolean = false;
   @observable public articlesList: Array<Article> = [];
@@ -115,6 +118,22 @@ export class EditTeachingPathStore {
 
   public trueIsEditArticles() {
     this.isEditArticles = true;
+  }
+
+  public setArticleInEdit(idArticle:number) {
+    this.articleInEdit = idArticle;
+  }
+
+  public getArticleInEdit() {
+    return this.articleInEdit;
+  }
+
+  public setAssignmentInEdit(idAssingment:number) {
+    this.assingmentInEdit = idAssingment;
+  }
+
+  public getAssignmentInEdit() {
+    return this.assingmentInEdit;
   }
 
   public falseIsEditArticles() {

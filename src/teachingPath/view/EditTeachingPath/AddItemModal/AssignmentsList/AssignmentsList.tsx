@@ -172,6 +172,7 @@ interface State {
   filtersAjaxLoadingGoals: boolean;
   isEdit: boolean;
   isEditSingle: boolean;
+  isChangeAssingment: boolean;
 }
 
 @inject('assignmentListStore', 'editTeachingPathStore')
@@ -225,15 +226,20 @@ export class AssignmentsList extends Component<Props, State> {
       filtersAjaxLoadingGoals: false,
       isEdit: this.props.editTeachingPathStore!.returnIsEditAssignments()!,
       isEditSingle: false,
+      isChangeAssingment: false
     };
   }
 
   private getAllChildrenItems = () => {
     const { currentNode } = this.props.editTeachingPathStore!;
+    const EditAssingmentSeleted : Array<Assignment> = [];
     if (this.props.editTeachingPathStore!.returnIsEditAssignments()!) {
-      return currentNode!.items!
-      .map((item => item.value))
-      .flat() as Array<Assignment>;
+      currentNode!.items!.forEach((el) => {
+        if (Number(el.value.id) === this.props.editTeachingPathStore!.getAssignmentInEdit()) {
+          EditAssingmentSeleted.push(el.value as Assignment);
+        }
+      });
+      return EditAssingmentSeleted;
     }
     return currentNode!.children
       .map(child => child.items!.map(item => item.value))
@@ -482,6 +488,7 @@ export class AssignmentsList extends Component<Props, State> {
     }
     if (this.state.isEdit) {
       this.setState({ isEditSingle: true });
+      this.setState({ isChangeAssingment: true });
     }
 
     this.setState((state) => {
@@ -519,8 +526,10 @@ export class AssignmentsList extends Component<Props, State> {
     const { itemsForNewChildren } = this.state;
     if (this.state.isEdit) {
       if (itemsForNewChildren.length) {
-        editTeachingPathStore!.currentNode!.editItem(itemsForNewChildren[0]);
-        editTeachingPathStore!.currentEntity!.save();
+        if (this.state.isChangeAssingment) {
+          editTeachingPathStore!.currentNode!.editItem(itemsForNewChildren[0]);
+          editTeachingPathStore!.currentEntity!.save();
+        }
         this.context.changeContentType(null);
         editTeachingPathStore!.setCurrentNode(null);
       } else {

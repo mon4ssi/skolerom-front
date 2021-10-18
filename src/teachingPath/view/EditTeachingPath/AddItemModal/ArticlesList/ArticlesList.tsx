@@ -133,6 +133,7 @@ interface State {
   filtersAjaxLoadingGoals: boolean;
   isEdit: boolean;
   isEditSingle: boolean;
+  isChangeArticle: boolean;
 }
 
 @inject('editTeachingPathStore')
@@ -186,6 +187,7 @@ export class ArticlesList extends Component<Props, State> {
       filtersAjaxLoadingGoals: false,
       isEdit: this.props.editTeachingPathStore!.returnIsEditArticles()!,
       isEditSingle: false,
+      isChangeArticle: false
     };
   }
 
@@ -234,10 +236,14 @@ export class ArticlesList extends Component<Props, State> {
 
   public getAllChildrenItems = () => {
     const { currentNode } = this.props.editTeachingPathStore!;
+    const EditArticlesSeleted : Array<Article> = [];
     if (this.state.isEdit) {
-      return currentNode!.items!
-      .map((item => item.value))
-      .flat() as Array<Article>;
+      currentNode!.items!.forEach((el) => {
+        if (Number(el.value.id) === this.props.editTeachingPathStore!.getArticleInEdit()) {
+          EditArticlesSeleted.push(el.value as Article);
+        }
+      });
+      return EditArticlesSeleted;
     }
     return currentNode!.children
       .map(child => child.items!.map(item => item.value))
@@ -1545,6 +1551,7 @@ export class ArticlesList extends Component<Props, State> {
     }
     if (this.state.isEdit) {
       this.setState({ isEditSingle: true });
+      this.setState({ isChangeArticle: true });
     }
 
     this.setState((state) => {
@@ -1560,8 +1567,10 @@ export class ArticlesList extends Component<Props, State> {
     const { itemsForNewChildren } = this.state;
     if (this.state.isEdit) {
       if (itemsForNewChildren.length) {
-        editTeachingPathStore!.currentNode!.editItem(itemsForNewChildren[0]);
-        editTeachingPathStore!.currentEntity!.save();
+        if (this.state.isChangeArticle) {
+          editTeachingPathStore!.currentNode!.editItem(itemsForNewChildren[0]);
+          editTeachingPathStore!.currentEntity!.save();
+        }
         this.context.changeContentType(null);
         editTeachingPathStore!.setCurrentNode(null);
       } else {
