@@ -173,6 +173,7 @@ interface State {
   isEdit: boolean;
   isEditSingle: boolean;
   isChangeAssingment: boolean;
+  idChangeAssingment: number;
 }
 
 @inject('assignmentListStore', 'editTeachingPathStore')
@@ -226,7 +227,8 @@ export class AssignmentsList extends Component<Props, State> {
       filtersAjaxLoadingGoals: false,
       isEdit: this.props.editTeachingPathStore!.returnIsEditAssignments()!,
       isEditSingle: false,
-      isChangeAssingment: false
+      isChangeAssingment: false,
+      idChangeAssingment: 0
     };
   }
 
@@ -239,6 +241,7 @@ export class AssignmentsList extends Component<Props, State> {
           EditAssingmentSeleted.push(el.value as Assignment);
         }
       });
+      this.setState({ idChangeAssingment: EditAssingmentSeleted[0].id });
       return EditAssingmentSeleted;
     }
     return currentNode!.children
@@ -527,7 +530,7 @@ export class AssignmentsList extends Component<Props, State> {
     if (this.state.isEdit) {
       if (itemsForNewChildren.length) {
         if (this.state.isChangeAssingment) {
-          editTeachingPathStore!.currentNode!.editItem(itemsForNewChildren[0]);
+          editTeachingPathStore!.currentNode!.editItem(this.state.idChangeAssingment, itemsForNewChildren[0]);
           editTeachingPathStore!.currentEntity!.save();
         }
         this.context.changeContentType(null);

@@ -15,6 +15,7 @@ import deleteImg from 'assets/images/trash-tp.svg';
 import addArticleImg from 'assets/images/add-article.svg';
 
 import './NestedOrderNumber.scss';
+const TIMEOUT = 800;
 
 interface Props {
   editTeachingPathStore?: EditTeachingPathStore;
@@ -107,8 +108,14 @@ export class NestedOrderNumber extends Component<Props> {
           node.removeChild(child);
         }
       );
-      node.addChild(newChildren[0], idNode);
-      editTeachingPathStore!.setCurrentNode(null);
+      setTimeout(
+        () => {
+          node.addChild(newChildren[0], idNode);
+          editTeachingPathStore!.setCurrentNode(null);
+          document.removeEventListener('keyup', this.handleKeyboardControl);
+        },
+        TIMEOUT
+      );
     }
   }
 
@@ -161,7 +168,8 @@ export class NestedOrderNumber extends Component<Props> {
         },
         () => {
           document.addEventListener('keyup', this.handleKeyboardControl);
-        });
+        }
+      );
     } else {
       this.context.changeContentType(node.children[0].type === TeachingPathNodeType.Article ? 0 : 1);
     }

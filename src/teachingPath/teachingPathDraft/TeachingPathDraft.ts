@@ -521,7 +521,20 @@ export class EditableTeachingPathNode extends TeachingPathNode {
   }
 
   @action
-  public editItem = (item: TeachingPathItemValue) => {
+  public editItem = (idChanged: number, item: TeachingPathItemValue) => {
+    const newItem = new TeachingPathItem({ type: this.type, value: item });
+    let itemIndex = 0;
+    this._items!.forEach((e, index) => {
+      if (Number(e.value.id) === Number(idChanged)) {
+        itemIndex = index;
+      }
+    });
+    this._items![itemIndex] = newItem;
+    this.draftTeachingPath.save();
+  }
+
+  @action
+  public editItemDomain = (item: TeachingPathItemValue) => {
     const newItem = new TeachingPathItem({ type: this.type, value: item });
     this._items![0] = newItem;
     this.draftTeachingPath.save();

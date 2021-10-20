@@ -154,7 +154,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     }
     if (item.type === TeachingPathNodeType.Domain) {
       imagenType = domainImg;
-      image = item.value.featuredImage;
+      image = (item.value.featuredImage !== undefined) ? item.value.featuredImage : item.value.image;
       urlBasic = item.value.url;
       urldomain = item.value.url;
     }

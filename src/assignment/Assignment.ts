@@ -1036,6 +1036,7 @@ export interface DomainArgs {
   url?: string;
   description?: string;
   featuredImage?: string;
+  image?: string;
   grades?: Array<Grade>;
   subjects?: Array<Subject>;
   isRead?: boolean;
@@ -1050,6 +1051,7 @@ export class Domain {
   public grades?: Array<Grade>;
   public subjects?: Array<Subject>;
   public readonly featuredImage?: string;
+  public image?: string;
   public isRead?: boolean;
   public grepGoals?: Array<GreepElements>;
   constructor(args: DomainArgs) {
@@ -1058,6 +1060,7 @@ export class Domain {
     this.description = args.description;
     this.url = args.url;
     this.featuredImage = args.featuredImage;
+    this.image = args.image;
     this.grades = args.grades;
     this.subjects = args.subjects;
     this.isRead = args.isRead;

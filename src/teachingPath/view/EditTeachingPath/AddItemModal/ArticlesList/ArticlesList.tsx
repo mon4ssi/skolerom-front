@@ -134,6 +134,7 @@ interface State {
   isEdit: boolean;
   isEditSingle: boolean;
   isChangeArticle: boolean;
+  idChangeArticle: number;
 }
 
 @inject('editTeachingPathStore')
@@ -187,7 +188,8 @@ export class ArticlesList extends Component<Props, State> {
       filtersAjaxLoadingGoals: false,
       isEdit: this.props.editTeachingPathStore!.returnIsEditArticles()!,
       isEditSingle: false,
-      isChangeArticle: false
+      isChangeArticle: false,
+      idChangeArticle: 0
     };
   }
 
@@ -243,6 +245,7 @@ export class ArticlesList extends Component<Props, State> {
           EditArticlesSeleted.push(el.value as Article);
         }
       });
+      this.setState({ idChangeArticle: EditArticlesSeleted[0].id });
       return EditArticlesSeleted;
     }
     return currentNode!.children
@@ -1568,7 +1571,7 @@ export class ArticlesList extends Component<Props, State> {
     if (this.state.isEdit) {
       if (itemsForNewChildren.length) {
         if (this.state.isChangeArticle) {
-          editTeachingPathStore!.currentNode!.editItem(itemsForNewChildren[0]);
+          editTeachingPathStore!.currentNode!.editItem(this.state.idChangeArticle, itemsForNewChildren[0]);
           editTeachingPathStore!.currentEntity!.save();
         }
         this.context.changeContentType(null);

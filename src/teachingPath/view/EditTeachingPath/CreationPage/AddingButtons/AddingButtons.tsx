@@ -129,6 +129,7 @@ class AddingButtonsContainer extends Component<Props> {
         );
         newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
         editTeachingPathStore!.currentEntity!.save();
+        document.removeEventListener('keyup', this.handleKeyboardControl);
         this.context.changeContentType(null);
         editTeachingPathStore!.setCurrentNode(null);
       }
