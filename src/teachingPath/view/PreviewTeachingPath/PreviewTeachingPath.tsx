@@ -24,6 +24,7 @@ import actualArrowLeftRounded from 'assets/images/actual-arrow-left-rounded.svg'
 import './PreviewTeachingPath.scss';
 import { Loader } from '../../../components/common/Loader/Loader';
 import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
+import { forEach } from 'lodash';
 
 const limitSplit = 4;
 const itemSplit = 3;
@@ -158,14 +159,10 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
     );
   }
 
-  public finishReadingDomain = async () => {
+  public finishReadingDomain = async (node: EditableTeachingPathNode | undefined) => {
     const { questionaryTeachingPathStore } = this.props;
     questionaryTeachingPathStore!.setFetchingDataStatus(true);
-    await questionaryTeachingPathStore!.getCurrentNode(
-      questionaryTeachingPathStore!.teachingPathId!,
-      questionaryTeachingPathStore!.pickedItemDomain!.idNode
-    );
-    const type = questionaryTeachingPathStore!.childrenType;
+    const type = (node!.children.length > 0) ? node!.children[0].type : '';
     questionaryTeachingPathStore!.setFetchingDataStatus(false);
     switch (type) {
       case TeachingPathNodeType.Article:
@@ -205,6 +202,11 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
     const isDraftSaving = (typeof(this.state.contenTeaching) !== 'undefined') ? this.state.contenTeaching!.isDraftSaving : true;
     const contenTeaching = (typeof(this.state.contenTeaching) !== 'undefined') ? this.state.contenTeaching : undefined;
     const idTeachingPath = Number(this.props.location.pathname.split('/', limitSplit)[itemSplit]);
+    const { node } = this.props.history.location.state || {};
+    /* this.state.selectedNode.forEach((element) => {
+      if (element.id !== node) {}
+    }); */
+
     if (this.props.questionaryTeachingPathStore!.fetchingData) {
       return <div className={'loading'}><Loader /></div>;
     }
@@ -216,7 +218,7 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
       case TeachingPathNodeType.Assignment:
         return <AssignmentTeachingPath content={this.state.selectedNode} idTeachingPath={idTeachingPath}/>;
       case TeachingPathNodeType.Domain:
-        return <DomainTeachingPath finishReading={this.finishReadingDomain} />;
+        return <DomainTeachingPath content={this.state.selectedNode} finishReading={this.finishReading} />;
       default:
         return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers} isPreview/>;
     }
@@ -303,7 +305,7 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
   public render() {
     return (
       <div className={'passageTeachingPath PreviewTeachingPath'}>
-        <AppHeader fromTeachingPathPassing onLogoClick={this.handleExit}/>
+        <AppHeader fromTeachingPathPassing isPreview onLogoClick={this.handleExit}/>
 
         <div className="teachingPathWrapper">
 

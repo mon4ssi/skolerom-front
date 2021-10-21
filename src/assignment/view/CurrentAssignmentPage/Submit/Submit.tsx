@@ -27,6 +27,7 @@ interface Props extends RouteComponentProps<{}, {}, LocationState> {
   questionaryTeachingPathStore?: QuestionaryTeachingPathStore;
   currentQuestionaryStore?: CurrentQuestionaryStore;
   location: LocataionProps;
+  isIdTeachingPath?: number;
   deleteQuestionary: () => void;
   revertQuestionary: () => void;
 }
@@ -80,7 +81,10 @@ export class SubmitComponent extends Component<Props> {
   }
 
   public reloadToPreview = async () => {
-    this.props.history.push('/teaching-paths/');
+    const { isIdTeachingPath } = this.props;
+    this.props.history.push(`/teaching-path/preview/${isIdTeachingPath}`, {
+      title: 'preview'
+    });
   }
 
   public validArticles = (article: Article) => {

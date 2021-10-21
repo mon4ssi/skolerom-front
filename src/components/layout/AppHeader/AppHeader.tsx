@@ -127,6 +127,7 @@ interface HeaderProps extends RouteComponentProps {
   loginStore?: LoginStore;
   fromAssignmentPassing?: boolean;
   fromTeachingPathPassing?: boolean;
+  isPreview?: boolean;
   uiStore?: UIStore;
   width?:number;
   onLogoClick?: (e: MouseEvent) => void;
@@ -644,8 +645,8 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
           </NavLink>
         </div>
         {this.props.loginStore!.currentUser && !fromAssignmentPassing && !fromTeachingPathPassing && this.renderNavigation()}
-        {this.props.loginStore!.currentUser && !isStudent && fromAssignmentPassing && this.renderCopyButton('assignment list.Copy assignment')}
-        {this.props.loginStore!.currentUser && !isStudent && fromTeachingPathPassing && this.renderCopyButton('teaching_paths_list.copy')}
+        {!this.props.isPreview && this.props.loginStore!.currentUser && !isStudent && fromAssignmentPassing && this.renderCopyButton('assignment list.Copy assignment')}
+        {!this.props.isPreview && this.props.loginStore!.currentUser && !isStudent && fromTeachingPathPassing && this.renderCopyButton('teaching_paths_list.copy')}
         {ifLogin && this.renderLineMobileButton()}
 
         {this.props.loginStore!.currentUser &&  this.renderBurgerButton()}

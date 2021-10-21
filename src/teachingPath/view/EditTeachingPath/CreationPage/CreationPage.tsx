@@ -109,6 +109,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
             ...item.value,
             images: article.images,
             title: article.title,
+            url: article.url,
             grades: article.grades,
             levels: article.levels,
             excerpt: article.excerpt

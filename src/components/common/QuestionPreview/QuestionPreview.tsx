@@ -126,14 +126,6 @@ export class QuestionPreview extends Component<Props, State> {
       switch (item.type) {
         case ContentBlockType.Text: {
           const block = item as EditableTextContentBlock;
-          if (isPreview) {
-            return (
-              <DescriptionEditor
-                key={index}
-                description={block.text}
-              />
-            );
-          }
           return (
             <DescriptionEditor
               readOnly
@@ -171,17 +163,6 @@ export class QuestionPreview extends Component<Props, State> {
 
     switch (question.type) {
       case QuestionType.Text:
-        if (isPreview) {
-          return (
-            <TextQuestionPreview
-              question={question}
-              answer={answer}
-              redirectData={redirectData}
-              isEvaluationStyle={isEvaluationStyle}
-              handleShowArrowsTooltip={handleShowArrowsTooltip}
-            />
-          );
-        }
         return (
           <TextQuestionPreview
             question={question}
@@ -193,18 +174,6 @@ export class QuestionPreview extends Component<Props, State> {
           />
         );
       case QuestionType.MultipleChoice:
-        if (isPreview) {
-          return (
-            <MultipleChoiceQuestionPreview
-              question={question}
-              answer={answer}
-              redirectData={redirectData}
-              isEvaluationStyle={isEvaluationStyle}
-              isStudentView={isStudentView}
-              handleShowArrowsTooltip={handleShowArrowsTooltip}
-            />
-          );
-        }
         return (
           <MultipleChoiceQuestionPreview
             question={question}
@@ -217,18 +186,6 @@ export class QuestionPreview extends Component<Props, State> {
           />
         );
       case QuestionType.ImageChoice:
-        if (isPreview) {
-          return (
-            <ImageChoiceQuestionPreview
-              light
-              question={question}
-              answer={answer}
-              redirectData={redirectData}
-              isEvaluationStyle={isEvaluationStyle}
-              handleShowArrowsTooltip={handleShowArrowsTooltip}
-            />
-          );
-        }
         return (
           <ImageChoiceQuestionPreview
             light

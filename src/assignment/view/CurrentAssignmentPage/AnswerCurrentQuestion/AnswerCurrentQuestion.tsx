@@ -28,6 +28,7 @@ interface Props extends RouteComponentProps {
   showCover: boolean;
   isTeachingPath?: boolean;
   location: Location<LocationState>;
+  isIdTeachingPath?: number;
 }
 
 @inject('currentQuestionaryStore', 'questionaryTeachingPathStore')
@@ -86,7 +87,8 @@ class AnswerCurrentQuestion extends Component<Props> {
       numberOfAnsweredQuestions,
       publishQuestionary,
       currentQuestionaryStore,
-      isPreview
+      isPreview,
+      isIdTeachingPath
     } = this.props;
 
     if (!readOnly && this.props.showCover) {
@@ -127,6 +129,7 @@ class AnswerCurrentQuestion extends Component<Props> {
         revertQuestionary={this.revertQuestionary}
         readOnly={readOnly}
         isPreview={isPreview}
+        isIdTeachingPath={isIdTeachingPath}
       />
     );
   }
