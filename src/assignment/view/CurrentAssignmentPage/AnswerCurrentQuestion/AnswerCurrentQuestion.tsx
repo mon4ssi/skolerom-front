@@ -29,6 +29,7 @@ interface Props extends RouteComponentProps {
   isTeachingPath?: boolean;
   location: Location<LocationState>;
   isIdTeachingPath?: number;
+  finishPreviewSubmit?: () => void;
 }
 
 @inject('currentQuestionaryStore', 'questionaryTeachingPathStore')
@@ -86,6 +87,7 @@ class AnswerCurrentQuestion extends Component<Props> {
       numberOfQuestions,
       numberOfAnsweredQuestions,
       publishQuestionary,
+      finishPreviewSubmit,
       currentQuestionaryStore,
       isPreview,
       isIdTeachingPath
@@ -124,6 +126,7 @@ class AnswerCurrentQuestion extends Component<Props> {
         numberOfQuestions={numberOfQuestions}
         numberOfAnsweredQuestions={numberOfAnsweredQuestions}
         publishQuestionary={publishQuestionary}
+        finishPreviewSubmit={finishPreviewSubmit}
         redirectData={redirectData}
         deleteQuestionary={this.deleteQuestionary}
         revertQuestionary={this.revertQuestionary}

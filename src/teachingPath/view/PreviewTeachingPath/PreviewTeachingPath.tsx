@@ -198,29 +198,59 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
     }
   }
 
+  public searchId(id: number, node:  Array<EditableTeachingPathNode>) {
+    let returnNode : Array<EditableTeachingPathNode> = [];
+    node!.forEach((e) => {
+      if (e!.id === id) {
+        returnNode = node;
+      } else {
+        if (e!.children!.length > 0) {
+          returnNode = this.searchId(id, e!.children);
+        }
+      }
+    });
+    return returnNode;
+  }
+
   public renderContent = () => {
     const isDraftSaving = (typeof(this.state.contenTeaching) !== 'undefined') ? this.state.contenTeaching!.isDraftSaving : true;
     const contenTeaching = (typeof(this.state.contenTeaching) !== 'undefined') ? this.state.contenTeaching : undefined;
     const idTeachingPath = Number(this.props.location.pathname.split('/', limitSplit)[itemSplit]);
-    const { node } = this.props.history.location.state || {};
-    /* this.state.selectedNode.forEach((element) => {
-      if (element.id !== node) {}
-    }); */
-
-    if (this.props.questionaryTeachingPathStore!.fetchingData) {
-      return <div className={'loading'}><Loader /></div>;
-    }
-    switch (this.props.questionaryTeachingPathStore!.displayedElement) {
-      case TeachingPathNodeType.Root:
-        return <TeachingPathAnswerCover content={contenTeaching} onClickStart={this.onClickStart}/>;
-      case TeachingPathNodeType.Article:
-        return <ArticleTeachingPath content={this.state.selectedNode} finishReading={this.finishReading} />;
-      case TeachingPathNodeType.Assignment:
-        return <AssignmentTeachingPath content={this.state.selectedNode} idTeachingPath={idTeachingPath}/>;
-      case TeachingPathNodeType.Domain:
-        return <DomainTeachingPath content={this.state.selectedNode} finishReading={this.finishReading} />;
-      default:
+    const { node, teachingPath } = this.props.history.location.state || {};
+    if (node !== undefined) {
+      if (this.state.contenTeaching !== undefined) {
+        const AssigMentNode = this.searchId(node, this.state.contenTeaching!.content.children);
+        let countAssigment = 0;
+        AssigMentNode.forEach((e) => {
+          if (e.children.length > 0) { countAssigment = countAssigment + 1; }
+        });
+        if (this.props.questionaryTeachingPathStore!.fetchingData) {
+          return <div className={'loading'}><Loader /></div>;
+        }
+        if (teachingPath === -1) {
+          return <AssignmentTeachingPath content={AssigMentNode} idTeachingPath={idTeachingPath}/>;
+        }
+        if (countAssigment !== 0) {
+          return <AssignmentTeachingPath content={AssigMentNode} idTeachingPath={idTeachingPath}/>;
+        }
         return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers} isPreview/>;
+      }
+    } else {
+      if (this.props.questionaryTeachingPathStore!.fetchingData) {
+        return <div className={'loading'}><Loader /></div>;
+      }
+      switch (this.props.questionaryTeachingPathStore!.displayedElement) {
+        case TeachingPathNodeType.Root:
+          return <TeachingPathAnswerCover content={contenTeaching} onClickStart={this.onClickStart}/>;
+        case TeachingPathNodeType.Article:
+          return <ArticleTeachingPath content={this.state.selectedNode} finishReading={this.finishReading} />;
+        case TeachingPathNodeType.Assignment:
+          return <AssignmentTeachingPath content={this.state.selectedNode} idTeachingPath={idTeachingPath}/>;
+        case TeachingPathNodeType.Domain:
+          return <DomainTeachingPath content={this.state.selectedNode} finishReading={this.finishReading} />;
+        default:
+          return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers} isPreview/>;
+      }
     }
   }
 

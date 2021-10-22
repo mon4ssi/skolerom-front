@@ -146,7 +146,8 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
       });
     if (teachingPath) {
       this.props.history.push(`/teaching-path/preview/${teachingPath}`, {
-        node
+        node,
+        teachingPath : -1
       });
     } else {
       if (exitQuestionary) {
@@ -204,9 +205,25 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
   }
 
   public handlePublish = async () => {
-    const { state } = this.props.location;
-    const data = undefined;
-    return data;
+    const { currentQuestionaryStore, history } = this.props;
+    const { teachingPath, node } = (history.location.state || {}) as RedirectData;
+
+    if (teachingPath) {
+      this.props.history.push(`/teaching-path/preview/${teachingPath}`, {
+        node
+      });
+    }
+  }
+
+  public finishPreviewSubmit = async () => {
+    const { currentQuestionaryStore, history } = this.props;
+    const { teachingPath, node } = (history.location.state || {}) as RedirectData;
+
+    if (teachingPath) {
+      this.props.history.push(`/teaching-path/preview/${teachingPath}`, {
+        node
+      });
+    }
   }
 
   public redirectToCurrentNode = (idTeachingPath: number, node: number) => {
@@ -425,6 +442,7 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
                   numberOfQuestions={numberOfQuestions}
                   numberOfAnsweredQuestions={numberOfAnsweredQuestions}
                   publishQuestionary={this.handlePublish}
+                  finishPreviewSubmit={this.finishPreviewSubmit}
                   readOnly={this.isReadOnly}
                   switchCover={this.switchCover}
                   showCover={this.state.showCover}

@@ -30,6 +30,7 @@ interface Props extends RouteComponentProps<{}, {}, LocationState> {
   isIdTeachingPath?: number;
   deleteQuestionary: () => void;
   revertQuestionary: () => void;
+  finishPreviewSubmit?: () => void;
 }
 
 @inject('currentQuestionaryStore', 'questionaryTeachingPathStore')
@@ -81,10 +82,10 @@ export class SubmitComponent extends Component<Props> {
   }
 
   public reloadToPreview = async () => {
-    const { isIdTeachingPath } = this.props;
-    this.props.history.push(`/teaching-path/preview/${isIdTeachingPath}`, {
-      title: 'preview'
-    });
+    const { isPreview, finishPreviewSubmit } = this.props;
+    if (isPreview) {
+      finishPreviewSubmit!();
+    }
   }
 
   public validArticles = (article: Article) => {
