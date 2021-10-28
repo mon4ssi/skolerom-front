@@ -6,7 +6,7 @@ import classnames from 'classnames';
 
 import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
-import { Subject, Grade, FilterGrep, GreepSelectValue, GrepFilters, GoalsData } from 'assignment/Assignment';
+import { Subject, Grade, FilterGrep, GreepSelectValue, GrepFilters, GoalsData, Source } from 'assignment/Assignment';
 import tagsImg from 'assets/images/tags.svg';
 import gradeImg from 'assets/images/grade.svg';
 import checkRounded from 'assets/images/check-rounded-white-bg.svg';
@@ -107,6 +107,9 @@ export class PublishingActions extends Component<Props, State> {
       if (!store!.getAllSubjects().length) {
         store!.getSubjects();
       }
+      if (!store!.getAllSources().length) {
+        store!.getSources();
+      }
       if (typeof(store!.currentEntity!.getListOfGoals()) !== 'undefined') {
         listGoals = this.transformDataToString(store!.currentEntity!.getListOfGoals()!);
       }
@@ -117,6 +120,9 @@ export class PublishingActions extends Component<Props, State> {
       }
       if (!store!.getAllSubjects().length) {
         store!.getSubjects();
+      }
+      if (!store!.getAllSources().length) {
+        store!.getSources();
       }
       if (typeof(store!.getGoalsByArticle()) !== 'undefined') {
         listGoals = store!.getGoalsByArticle().split(',');
@@ -419,10 +425,20 @@ export class PublishingActions extends Component<Props, State> {
     title: subject.title,
   })
 
+  public sourceToTagProp = (source: Source): TagProp => ({
+    id: source.id,
+    title: source.title,
+  })
+
   public filterGrepGoals = async (coreoptions: Array<number>, multioptions: Array<number>, gradeoptions: Array<number>, subjectsoptions: Array<number>, goalsoptions: Array<string>) => {
     await new Promise(resolve => setTimeout(resolve, SETTIMEOUT));
     const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(coreoptions, multioptions, gradeoptions, subjectsoptions, goalsoptions, MAGICNUMBER100, MAGICNUMBER1);
     return grepFiltergoalssDataAwait;
+  }
+
+  public addSource = async (id: number) => {
+    // const { currentEntity } = this.props.store!;
+
   }
 
   public addSubject = async (id: number) => {
@@ -751,6 +767,33 @@ export class PublishingActions extends Component<Props, State> {
       }
     });
     return arrayValue;
+  }
+
+  public renderSourceInput = () => {
+    const { store } = this.props;
+    let myplaceholder = intl.get('publishing_page.source');
+
+    const sources = store!.getAllSources().filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.sourceToTagProp);
+    const selectedSources = store!.currentEntity!.getListOfSources().map(this.sourceToTagProp);
+    const filterSelectedSources = this.compareTwoArraysReturnValue(sources, selectedSources);
+    if (selectedSources.length > 0) { myplaceholder = ''; }
+
+    return (
+      <div className="itemsFlex subject">
+        <TagInputComponent
+          dataid="renderSourceInput"
+          className="filterBy darkTheme"
+          tags={sources}
+          addTag={this.addSubject}
+          currentTags={filterSelectedSources}
+          orderbyid={false}
+          removeTag={this.removeSubject}
+          placeholder={myplaceholder}
+          listView
+          temporaryTagsArray
+        />
+      </div>
+    );
   }
 
   public renderSubjectInput = () => {
@@ -1613,6 +1656,7 @@ export class PublishingActions extends Component<Props, State> {
               {!this.state.isValidPrivate && this.renderCoreElements()}
               {!this.state.isValidPrivate && this.renderMultiDisciplinary()}
               {!this.state.isValidPrivate && this.renderReadingInSubject()}
+              {this.renderSourceInput()}
             </div>
             {!this.state.isValidPrivate && this.renderGoals()}
           </div>

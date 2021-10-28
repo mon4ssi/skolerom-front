@@ -383,6 +383,10 @@ export class TeachingPath {
     return toJS(this._subjects);
   }
 
+  public getListOfSources() {
+    return toJS(this._subjects);
+  }
+
   public getListOfGrades() {
     return toJS(this._grades);
   }

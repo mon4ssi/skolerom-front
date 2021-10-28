@@ -25,6 +25,10 @@ export class AssignmentService {
     return this.assignmentRepo.getSubjects();
   }
 
+  public async getSources() {
+    return this.assignmentRepo.getSources();
+  }
+
   public async removeAssignment(assignmentId: number) {
     return this.assignmentRepo.removeAssignment(assignmentId);
   }

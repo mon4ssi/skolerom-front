@@ -19,6 +19,7 @@ export const ARTICLE_SERVICE_KEY = 'ARTICLE_SERVICE_KEY';
 export interface AssignmentRepo {
   getGrades(): Promise<Array<Grade>>;
   getSubjects(): Promise<Array<Subject>>;
+  getSources(): Promise<Array<Source>>;
   getAssignmentById(id: number): Promise<Assignment>;
   getMyAssignmentsList(
     filter: Filter
@@ -71,6 +72,16 @@ export class Grade {
 }
 
 export class Subject {
+  @observable public id: number;
+  @observable public title: string;
+
+  constructor(id: number, title: string) {
+    this.id = id;
+    this.title = title;
+  }
+}
+
+export class Source {
   @observable public id: number;
   @observable public title: string;
 
@@ -428,6 +439,10 @@ export class Assignment {
   }
 
   public getListOfSubjects() {
+    return toJS(this._subjects);
+  }
+
+  public getListOfSources() {
     return toJS(this._subjects);
   }
 

@@ -3,7 +3,7 @@ import isUndefined from 'lodash/isUndefined';
 import isNull from 'lodash/isNull';
 
 import { injector } from 'Injector';
-import { Assignment, Article, ARTICLE_SERVICE_KEY, Attachment, Grade, QuestionAttachment, QuestionType, Subject, GreepElements, FilterArticlePanel } from 'assignment/Assignment';
+import { Assignment, Article, ARTICLE_SERVICE_KEY, Attachment, Grade, QuestionAttachment, QuestionType, Subject, GreepElements, FilterArticlePanel, Source } from 'assignment/Assignment';
 import { DraftAssignment, EditableImageChoiceQuestion, EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
 import { ArticleService, ASSIGNMENT_SERVICE, AssignmentService } from 'assignment/service';
 import { DRAFT_ASSIGNMENT_SERVICE, DraftAssignmentService } from 'assignment/assignmentDraft/service';
@@ -75,6 +75,7 @@ export class NewAssignmentStore {
   public articlesForSkeleton: Array<Article> = new Array(DEFAULT_AMOUNT_ARTICLES_PER_PAGE).fill(new Article({ id: 0, title: '' }));
   @observable public allGrades: Array<Grade> = [];
   @observable public allSubjects: Array<Subject> = [];
+  @observable public allSources: Array<Source> = [];
   @observable public questionAttachments: Array<Attachment> = [];
   @observable public currentOrderOption: number = -1;
   @observable public searchValue: string = '';
@@ -415,6 +416,10 @@ export class NewAssignmentStore {
     return toJS(this.allSubjects);
   }
 
+  public getAllSources(): Array<Source> {
+    return toJS(this.allSources);
+  }
+
   @action
   public async getArticles({
     perPage = DEFAULT_AMOUNT_ARTICLES_PER_PAGE,
@@ -459,6 +464,10 @@ export class NewAssignmentStore {
 
   public async getSubjects() {
     this.allSubjects = await this.assignmentService.getSubjects();
+  }
+
+  public async getSources() {
+    this.allSources = await this.assignmentService.getSources();
   }
 
   public getGoalsByArticle() {

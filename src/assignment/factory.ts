@@ -32,6 +32,12 @@ export interface SubjectDTO {
   title: string;
 }
 
+export interface SourceDTO {
+  id: number;
+  name: string;
+  title: string;
+}
+
 export interface GradeDTO {
   id: number;
   title: string;

@@ -12,7 +12,8 @@ import {
   Grade,
   QuestionAttachment,
   Subject,
-  WPLocale
+  WPLocale,
+  Source
 } from './Assignment';
 import {
   AssignmentDistributeDTO,
@@ -24,7 +25,8 @@ import {
   buildStudentAssignmentList,
   GradeDTO,
   SubjectDTO,
-  GreepElements
+  GreepElements,
+  SourceDTO
 } from './factory';
 import { DEFAULT_AMOUNT_ARTICLES_PER_PAGE } from 'utils/constants';
 import { ContentBlockType } from './ContentBlock';
@@ -196,6 +198,12 @@ export class AssignmentApi implements AssignmentRepo {
   public async getSubjects(): Promise<Array<Subject>> {
     return (await API.get('api/subjects')).data.data.map(
       (item: SubjectDTO) => new Subject(item.id, item.title)
+    );
+  }
+
+  public async getSources(): Promise<Array<Source>> {
+    return (await API.get('api/sources')).data.data.map(
+      (item: SourceDTO) => new Source(item.id, item.title)
     );
   }
 

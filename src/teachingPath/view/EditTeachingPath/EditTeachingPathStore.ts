@@ -4,7 +4,7 @@ import { debounce } from 'utils/debounce';
 import { injector } from 'Injector';
 import { ArticleService, ASSIGNMENT_SERVICE, AssignmentService } from 'assignment/service';
 import { DRAFT_TEACHING_PATH_SERVICE, DraftTeachingPathService } from 'teachingPath/teachingPathDraft/service';
-import { Article, ARTICLE_SERVICE_KEY, Grade, Subject, FilterArticlePanel } from 'assignment/Assignment';
+import { Article, ARTICLE_SERVICE_KEY, Grade, Subject, FilterArticlePanel, Source } from 'assignment/Assignment';
 import { TeachingPathContainer } from 'teachingPath/teachingPathContainer/teachingPathContainer';
 import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
 import { TeachingPathItemValue, TeachingPathNodeType } from 'teachingPath/TeachingPath';
@@ -53,9 +53,9 @@ export class EditTeachingPathStore {
 
   @observable public allGrades: Array<Grade> = [];
   @observable public allSubjects: Array<Subject> = [];
+  @observable public allSources: Array<Source> = [];
   @observable public allGoals: Array<GreepElements> = [];
   @observable public allArticlePanelFilters: FilterArticlePanel | null = null;
-
   @observable public isAssignmentCreating: boolean = false;
 
   public localeKey: string = EditEntityLocaleKeys.EDIT_TEACHING_PATH;
@@ -381,12 +381,20 @@ export class EditTeachingPathStore {
     this.allSubjects = await this.assignmentService.getSubjects();
   }
 
+  public async getSources() {
+    this.allSources = await this.assignmentService.getSources();
+  }
+
   public getAllGrades(): Array<Grade> {
     return toJS(this.allGrades);
   }
 
   public getAllSubjects(): Array<Subject> {
     return toJS(this.allSubjects);
+  }
+
+  public getAllSources(): Array<Source> {
+    return toJS(this.allSources);
   }
 
   public getAllArticlePanelFilters() {
