@@ -81,6 +81,7 @@ class HeaderWrapper extends Component<Props> {
     const assignmentTitle = newAssignmentStore!.assignmentContainer!.assignment!.title;
     const isPrivate = newAssignmentStore!.assignmentContainer!.assignment!.isPrivate;
     const isCopy = newAssignmentStore!.assignmentContainer!.assignment!.isCopy;
+    const sources = newAssignmentStore!.assignmentContainer!.assignment!.sources;
 
     if (!newAssignmentStore!.isActiveButtons) {
       const grepGoals = newAssignmentStore!.assignmentContainer!.assignment.grepGoalsIds;
@@ -88,6 +89,14 @@ class HeaderWrapper extends Component<Props> {
       Notification.create({
         type: NotificationTypes.ERROR,
         title: msj
+      });
+      return;
+    }
+
+    if (userType === UserType.ContentManager && !isPrivate && sources.length === 0) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('edit_teaching_path.header.source_required')
       });
       return;
     }

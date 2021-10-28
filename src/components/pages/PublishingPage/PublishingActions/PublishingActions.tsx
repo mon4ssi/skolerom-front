@@ -711,7 +711,17 @@ export class PublishingActions extends Component<Props, State> {
       });
     }
   }
-
+  public validateAddTeacherContentDefault = (isPrivate: boolean) => {
+    const { store } = this.props;
+    if (store!.getCurrentUser()!.type === UserType.Teacher) {
+      const teacherContentId: number = 9901;
+      if (!(isPrivate)) {
+        this.addSource(teacherContentId);
+      } else {
+        this.removeSource(teacherContentId);
+      }
+    }
+  }
   public handlePrivateOn = () => {
     this.setState(
       {
@@ -719,14 +729,15 @@ export class PublishingActions extends Component<Props, State> {
         isValidPrivate: true
       },
       () => {
+        this.validateAddTeacherContentDefault(true);
         this.sendValidbutton();
       }
     );
+
     this.props.store!.currentEntity!.setIsPrivate(true);
   }
 
   public handlePrivateOff = async () => {
-
     const isCopy = this.props.store!.currentEntity!.isCopy;
     const assignmentTitle = this.props.store!.currentEntity!.title;
     if (
@@ -749,6 +760,7 @@ export class PublishingActions extends Component<Props, State> {
         isValidPrivate: false
       },
       () => {
+        this.validateAddTeacherContentDefault(false);
         this.sendValidbutton();
       }
     );
@@ -811,8 +823,11 @@ export class PublishingActions extends Component<Props, State> {
     const selectedSources = this.grepNumbersToTagprop(store!.currentEntity!.getListOfSources(), sources);
     const myplaceholder = (selectedSources.length > 0) ? '' : intl.get('publishing_page.source');
 
+    let classHidden = 'itemsFlex subject';
+    if (store!.getCurrentUser()!.type === UserType.ContentManager) { classHidden = 'itemsFlex subject'; }
+
     return (
-      <div className="itemsFlex subject">
+      <div className={classHidden}>
         <TagInputComponent
           className="filterBy darkTheme"
           tags={sources}
@@ -1688,7 +1703,7 @@ export class PublishingActions extends Component<Props, State> {
               {!this.state.isValidPrivate && this.renderCoreElements()}
               {!this.state.isValidPrivate && this.renderMultiDisciplinary()}
               {!this.state.isValidPrivate && this.renderReadingInSubject()}
-              {this.renderSourceInput()}
+              {!this.state.isValidPrivate && this.renderSourceInput()}
             </div>
             {!this.state.isValidPrivate && this.renderGoals()}
           </div>
