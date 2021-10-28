@@ -44,6 +44,7 @@ export interface DraftTeachingPathResponseDTO {
   grepMainTopicsIds?: Array<number>;
   grepReadingInSubjectId?: number;
   grepGoalsIds?: Array<number>;
+  sources?: Array<number>;
 }
 
 export interface TeachingPathItemRequestDTO {

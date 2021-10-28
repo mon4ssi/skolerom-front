@@ -1,7 +1,7 @@
 import { computed, observable, toJS } from 'mobx';
 import intl from 'react-intl-universal';
 
-import { Grade, GreepElements, Subject, Article, Assignment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData } from 'assignment/Assignment';
+import { Grade, GreepElements, Subject, Article, Assignment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData, Source } from 'assignment/Assignment';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from './service';
 import { injector } from '../Injector';
 
@@ -163,6 +163,7 @@ export interface TeachingPathArgs {
   minNumberOfSteps?: number;
   grades?: Array<Grade>;
   subjects?: Array<Subject>;
+  sources?: Array<number>;
   view?: string;
   levels?: Array<number>;
   featuredImage?: string;
@@ -205,6 +206,7 @@ export class TeachingPath {
   protected readonly _ownedByMe: boolean;
   @observable protected _grades: Array<Grade> = [];
   @observable protected _subjects: Array<Subject> = [];
+  @observable protected _sources: Array<number> = [];
   @observable protected _levels: Array<number>;
   @observable protected _view: string;
   @observable protected _featuredImage?: string;
@@ -243,6 +245,7 @@ export class TeachingPath {
     this._maxNumberOfSteps = args.maxNumberOfSteps;
     this._grades = args.grades || [];
     this._subjects = args.subjects || [];
+    this._sources = args.sources || [];
     this._view = args.view || 'edit';
     this._levels = args.levels || [secondLevel];
     this._featuredImage = args.featuredImage;
@@ -375,6 +378,11 @@ export class TeachingPath {
   }
 
   @computed
+  public get sources() {
+    return this._sources;
+  }
+
+  @computed
   public get view() {
     return this._view;
   }
@@ -384,7 +392,7 @@ export class TeachingPath {
   }
 
   public getListOfSources() {
-    return toJS(this._subjects);
+    return toJS(this._sources);
   }
 
   public getListOfGrades() {

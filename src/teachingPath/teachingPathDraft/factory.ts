@@ -5,7 +5,7 @@ import { DraftTeachingPath, EditableTeachingPathNode } from './TeachingPathDraft
 import { TeachingPathItem, TeachingPathNode, TeachingPathNodeType } from '../TeachingPath';
 import { DraftTeachingPathResponseDTO, TeachingPathItemSaveResponseDTO, TeachingPathNodeSaveResponseDTO } from './api';
 import { TeachingPathNodeResponseDTO } from 'teachingPath/api';
-import { Article, Assignment, Grade, Subject, Domain } from 'assignment/Assignment';
+import { Article, Assignment, Grade, Subject, Domain, Source } from 'assignment/Assignment';
 
 export const buildNewTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
   const draftTeachingPath = new DraftTeachingPath({
@@ -60,6 +60,7 @@ export const buildDraftTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     grepMainTopicsIds: dto.grepMainTopicsIds,
     grepReadingInSubjectId: dto.grepReadingInSubjectId,
     grepGoalsIds: dto.grepGoalsIds,
+    sources: dto.sources,
   });
 
   draftTeachingPath.setContent(buildEditableNode(dto.content!, draftTeachingPath));
@@ -224,4 +225,5 @@ export const buildTeachingPathRequestDTO = (teachingPath: DraftTeachingPath) => 
   grepMainTopicsIds: teachingPath.grepMainTopicsIds,
   grepReadingInSubjectId: teachingPath.grepReadingInSubjectId,
   grepGoalsIds: teachingPath.grepGoalsIds,
+  sources: teachingPath.sources
 });

@@ -26,6 +26,7 @@ import { firstLevel, secondLevel, studentLevels } from 'utils/constants';
 
 import './PublishingActions.scss';
 import { GreepElements } from 'assignment/factory';
+import { UserType } from 'user/User';
 
 const MAGICNUMBER100 = 100;
 const MAGICNUMBER1 = 1;
@@ -45,6 +46,7 @@ interface State {
   optionsGrades: Array<GrepFilters>;
   valueCoreOptions: Array<number>;
   valueMultiOptions: Array<number>;
+  valueSourceOptions: Array<number>;
   valuereadingOptions: number;
   valueGradesOptions: Array<number>;
   valueSubjectsOptions: Array<number>;
@@ -75,6 +77,7 @@ export class PublishingActions extends Component<Props, State> {
       optionsGrades: [],
       valueCoreOptions: [],
       valueMultiOptions: [],
+      valueSourceOptions: [],
       valuereadingOptions: 0,
       valueGradesOptions: [],
       valueSubjectsOptions: [],
@@ -436,11 +439,6 @@ export class PublishingActions extends Component<Props, State> {
     return grepFiltergoalssDataAwait;
   }
 
-  public addSource = async (id: number) => {
-    // const { currentEntity } = this.props.store!;
-
-  }
-
   public addSubject = async (id: number) => {
     const { optionsSubjects, valueSubjectsOptions } = this.state;
     const { store } = this.props;
@@ -769,25 +767,59 @@ export class PublishingActions extends Component<Props, State> {
     return arrayValue;
   }
 
+  public removeSource = async (id: number) => {
+    const { currentEntity } = this.props.store!;
+    const { valueSourceOptions } = this.state;
+    const ArrayValueSource = this.state.valueSourceOptions;
+    const index = ArrayValueSource.indexOf(id);
+
+    if (index > -1) {
+      ArrayValueSource.splice(index, 1);
+    }
+
+    if (!valueSourceOptions.includes(id)) {
+      this.setState(
+        {
+          valueSourceOptions: ArrayValueSource
+        },
+        () => {
+          currentEntity!.setGrepSourcesIds(this.state.valueSourceOptions);
+        }
+      );
+    }
+  }
+
+  public addSource = async (id: number) => {
+    const { currentEntity } = this.props.store!;
+    const { valueSourceOptions } = this.state;
+    const ArrayValueSource = this.state.valueSourceOptions;
+    ArrayValueSource.push(id);
+    const uniqueArray = ArrayValueSource.filter((item, pos) => (ArrayValueSource.indexOf(item) === pos));
+    this.setState(
+      {
+        valueSourceOptions: uniqueArray
+      },
+      () => {
+        currentEntity!.setGrepSourcesIds(this.state.valueSourceOptions);
+      }
+    );
+  }
+
   public renderSourceInput = () => {
     const { store } = this.props;
-    let myplaceholder = intl.get('publishing_page.source');
-
-    const sources = store!.getAllSources().filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.sourceToTagProp);
-    const selectedSources = store!.currentEntity!.getListOfSources().map(this.sourceToTagProp);
-    const filterSelectedSources = this.compareTwoArraysReturnValue(sources, selectedSources);
-    if (selectedSources.length > 0) { myplaceholder = ''; }
+    const sources = store!.getAllSources().map(this.sourceToTagProp);
+    const selectedSources = this.grepNumbersToTagprop(store!.currentEntity!.getListOfSources(), sources);
+    const myplaceholder = (selectedSources.length > 0) ? '' : intl.get('publishing_page.source');
 
     return (
       <div className="itemsFlex subject">
         <TagInputComponent
-          dataid="renderSourceInput"
           className="filterBy darkTheme"
           tags={sources}
-          addTag={this.addSubject}
-          currentTags={filterSelectedSources}
+          addTag={this.addSource}
+          currentTags={selectedSources}
           orderbyid={false}
-          removeTag={this.removeSubject}
+          removeTag={this.removeSource}
           placeholder={myplaceholder}
           listView
           temporaryTagsArray

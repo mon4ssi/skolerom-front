@@ -208,6 +208,12 @@ export class DraftAssignment extends Assignment {
   }
 
   @action
+  public setGrepSourcesIds = (data: Array<number>) => {
+    this._sources = data;
+    this.save();
+  }
+
+  @action
   public setGrepMainTopicsIds = (data: Array<number>) => {
     this.grepMainTopicsIds = data;
     this.save();

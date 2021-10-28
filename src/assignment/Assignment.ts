@@ -161,6 +161,7 @@ export interface AssignmentArgs {
   questions?: Array<Question>;
   grades?: Array<Grade>;
   subjects?: Array<Subject>;
+  sources?: Array<number>;
   isPrivate?: boolean;
   relatedArticles?: Array<Article>;
   createdAt?: string;
@@ -206,6 +207,7 @@ export class Assignment {
   @observable protected _description: string = '';
   @observable protected _grades: Array<Grade> = [];
   @observable protected _subjects: Array<Subject> = [];
+  @observable protected _sources: Array<number> = [];
   @observable protected _isPrivate: boolean = false;
   @observable protected _relatedArticles: Array<Article> = [];
   @observable protected _createdAt: string = '';
@@ -246,6 +248,7 @@ export class Assignment {
     this._questions = args.questions || [];
     this._grades = args.grades || [];
     this._subjects = args.subjects || [];
+    this._sources = args.sources || [];
     this._isPrivate = !isNil(args.isPrivate) ? args.isPrivate : true;
     this._relatedArticles = args.relatedArticles || [];
     this._createdAt = args.createdAt || '';
@@ -365,6 +368,11 @@ export class Assignment {
   }
 
   @computed
+  public get sources() {
+    return this._sources;
+  }
+
+  @computed
   public get isPrivate() {
     return this._isPrivate;
   }
@@ -443,7 +451,7 @@ export class Assignment {
   }
 
   public getListOfSources() {
-    return toJS(this._subjects);
+    return toJS(this._sources);
   }
 
   public getListOfGrades() {
