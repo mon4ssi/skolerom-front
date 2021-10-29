@@ -26,6 +26,7 @@ export interface NewDraftAssignmentResponseDTO {
   grepMainTopicsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
   grepReadingInSubjectId?: number;
+  sources?: Array<number>;
 }
 
 export interface DraftAssignmentRequestDTO {
@@ -44,6 +45,7 @@ export interface DraftAssignmentRequestDTO {
   grepMainTopicsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
   grepReadingInSubjectId?: number;
+  sources?: Array<number>;
 }
 
 export class DraftAssignmentApi implements DraftAssignmentRepo {

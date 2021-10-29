@@ -41,6 +41,7 @@ export const buildDraftAssignment = (dto: DraftAssignmentResponseDTO): DraftAssi
     grepMainTopicsIds:dto.grepMainTopicsIds,
     grepReadingInSubjectId:dto.grepReadingInSubjectId,
     grepGoalsIds:dto.grepGoalsIds,
+    sources:dto.sources
   });
 
   const draftAssignment = new DraftAssignment({ assignment, sessionId: dto.uuid, questionsWithError: null });
@@ -201,4 +202,5 @@ export const buildDraftAssignmentDTO = (
   grepGoalsIds: draftAssignment.grepGoalsIds,
   grepMainTopicsIds: draftAssignment.grepMainTopicsIds,
   grepReadingInSubjectId: draftAssignment.grepReadingInSubjectId,
+  sources: draftAssignment.sources
 });

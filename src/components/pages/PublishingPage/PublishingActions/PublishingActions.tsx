@@ -196,6 +196,13 @@ export class PublishingActions extends Component<Props, State> {
         }
       );
     }
+    if (typeof(store!.currentEntity!.getListOfSources()) !== 'undefined') {
+      this.setState(
+        {
+          valueSourceOptions: store!.currentEntity!.getListOfSources()!
+        }
+      );
+    }
     if (typeof(store!.currentEntity!.getListOfgrepCoreElementsIds()) !== 'undefined') {
       this.setState({
         valueCoreOptions: store!.currentEntity!.getListOfgrepCoreElementsIds()!
@@ -823,7 +830,7 @@ export class PublishingActions extends Component<Props, State> {
     const selectedSources = this.grepNumbersToTagprop(store!.currentEntity!.getListOfSources(), sources);
     const myplaceholder = (selectedSources.length > 0) ? '' : intl.get('publishing_page.source');
 
-    let classHidden = 'itemsFlex subject';
+    let classHidden = 'itemsFlex subject hidden';
     if (store!.getCurrentUser()!.type === UserType.ContentManager) { classHidden = 'itemsFlex subject'; }
 
     return (
