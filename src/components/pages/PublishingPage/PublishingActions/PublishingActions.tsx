@@ -64,6 +64,12 @@ interface State {
   loadingGoals: boolean;
 }
 
+export interface TagPropSource {
+  id: number;
+  title: string;
+  default: boolean;
+}
+
 @observer
 export class PublishingActions extends Component<Props, State> {
   constructor(props: Props) {
@@ -435,9 +441,10 @@ export class PublishingActions extends Component<Props, State> {
     title: subject.title,
   })
 
-  public sourceToTagProp = (source: Source): TagProp => ({
+  public sourceToTagProp = (source: Source): TagPropSource => ({
     id: source.id,
     title: source.title,
+    default: source.default,
   })
 
   public filterGrepGoals = async (coreoptions: Array<number>, multioptions: Array<number>, gradeoptions: Array<number>, subjectsoptions: Array<number>, goalsoptions: Array<string>) => {
@@ -721,7 +728,8 @@ export class PublishingActions extends Component<Props, State> {
   public validateAddTeacherContentDefault = (isPrivate: boolean) => {
     const { store } = this.props;
     if (store!.getCurrentUser()!.type === UserType.Teacher) {
-      const teacherContentId: number = 9901;
+      const source = store!.getAllSources().map(this.sourceToTagProp).find(w => w.default);
+      const teacherContentId = source!.id as number;
       if (!(isPrivate)) {
         this.addSource(teacherContentId);
       } else {

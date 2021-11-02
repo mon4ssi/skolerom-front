@@ -28,7 +28,7 @@ import {
   GreepElements,
   SourceDTO
 } from './factory';
-import { DEFAULT_AMOUNT_ARTICLES_PER_PAGE } from 'utils/constants';
+import { DEFAULT_AMOUNT_ARTICLES_PER_PAGE, LOCALES_MAPPING_FOR_BACKEND } from 'utils/constants';
 import { ContentBlockType } from './ContentBlock';
 import { Locales } from 'utils/enums';
 
@@ -172,6 +172,8 @@ interface AssignmentByIdResponseDTO {
 }
 
 export class AssignmentApi implements AssignmentRepo {
+  private storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
+  private currentLocale = this.storageInteractor.getCurrentLocale()!;
 
   public async getAssignmentById(id: number): Promise<Assignment> {
     const assignmentDTO: AssignmentByIdResponseDTO = (await API.get(`api/teacher/assignments/${id}`)).data;
@@ -202,8 +204,15 @@ export class AssignmentApi implements AssignmentRepo {
   }
 
   public async getSources(): Promise<Array<Source>> {
-    return (await API.get('api/sources')).data.data.map(
-      (item: SourceDTO) => new Source(item.id, item.title)
+    const locale = this.storageInteractor.getCurrentLocale() as Locales;
+
+    return (await API.get('api/sources', {
+      params:
+      {
+        locale: this.currentLocale === Locales.EN ? null :  LOCALES_MAPPING_FOR_BACKEND[locale]
+      }
+    })).data.data.map(
+      (item: SourceDTO) => new Source(item.id, item.title, item.default)
     );
   }
 

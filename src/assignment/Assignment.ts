@@ -84,10 +84,12 @@ export class Subject {
 export class Source {
   @observable public id: number;
   @observable public title: string;
+  @observable public default: boolean;
 
-  constructor(id: number, title: string) {
+  constructor(id: number, title: string, defaults: boolean) {
     this.id = id;
     this.title = title;
+    this.default = defaults;
   }
 }
 

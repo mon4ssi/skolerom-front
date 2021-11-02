@@ -36,6 +36,7 @@ export interface SourceDTO {
   id: number;
   name: string;
   title: string;
+  default: boolean;
 }
 
 export interface GradeDTO {
