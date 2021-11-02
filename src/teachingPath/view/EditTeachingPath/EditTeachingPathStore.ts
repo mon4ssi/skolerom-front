@@ -437,8 +437,8 @@ export class EditTeachingPathStore {
   }
 
   @action
-  public async getGrepFilters(grades: string, subjects: string, source: string) {
-    return this.teachingPathService.getGrepFilters(grades, subjects, source);
+  public async getGrepFilters(grades: string, subjects: string, source: string, coreElements?: string, goals?: string, ) {
+    return this.teachingPathService.getGrepFilters(grades, subjects, source, coreElements,goals);
   }
 
   @action

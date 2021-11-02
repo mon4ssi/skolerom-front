@@ -13,6 +13,7 @@ import { SearchFilter } from 'components/common/SearchFilter/SearchFilter';
 import { lettersNoEn } from 'utils/lettersNoEn';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 import { ReadingArticle } from 'components/pages/ReadingArticle/ReadingArticle';
+import ReactDOM from 'react-dom';
 
 import closeImg from 'assets/images/close-rounded-black.svg';
 import tagsImg from 'assets/images/tags.svg';
@@ -57,7 +58,7 @@ class ArticleItem extends Component<ArticleItemProps> {
       e.classList.remove('selectedArticle');
     });
     const rootDiv = document.getElementById(`relatedarticle_${article.id}`);
-    if (typeof(rootDiv) !== 'undefined') {
+    if (typeof (rootDiv) !== 'undefined') {
       rootDiv!.classList.add('selectedArticle');
     }
   }
@@ -236,7 +237,7 @@ export class ArticlesList extends Component<Props, State> {
 
   public getAllChildrenItems = () => {
     const { currentNode } = this.props.editTeachingPathStore!;
-    const EditArticlesSeleted : Array<Article> = [];
+    const EditArticlesSeleted: Array<Article> = [];
     if (this.state.isEdit) {
       currentNode!.items!.forEach((el) => {
         if (Number(el.value.id) === this.props.editTeachingPathStore!.getArticleInEdit()) {
@@ -398,32 +399,672 @@ export class ArticlesList extends Component<Props, State> {
     return true;
   }
 
-  public handleChangeSelectCore = async (newValues: Array<any>) => {
+  public refreshAppliedFilters(
+    fn: Function,
+  ) {
+    const gradesForFilters = this.getSelectedGrades();
+    const subjectsForFilters = this.getSelectedSubjects();
+    const coreElementsForFilter = this.getSelectedCoreElements();
+    const mainTopicsForFilter = this.getSelectedMainTopics();
+    const goalsForFilter = this.getSelectedGoals();
 
-    this.customReset(['mainTopics', 'goals']);
+    const filters = { ...this.state.appliedFilters };
+    this.setState({ appliedFilters: {} }, () => {
 
-    // if (!this.arraysEqual(this.state.myValueCore, newValues)) {
-    if (this.state.activeGrepFilters) {
-      this.updateMainTopicFilterFromCoreElements(newValues);
-      this.updateGoalsFilterFromCoreElements(newValues);
-    }
+      /* tslint:disable:no-string-literal */
+      filters['subjects'] = String(subjectsForFilters);
+      filters['grades'] = String(gradesForFilters);
+      filters['core'] = String(coreElementsForFilter);
+      filters['multi'] = String(mainTopicsForFilter);
+      filters['goal'] = String(goalsForFilter);
+      /* tslint:enable:no-string-literal */
+
+      this.setState({ appliedFilters: filters }, () => {
+
+        if (
+          filters.subjects ||
+          filters.grades ||
+          filters.core ||
+          filters.multi ||
+          filters.goal ||
+          filters.source
+        ) {
+          this.setState({ filtersisUsed: true }, () => {
+            this.updateFilters();
+            fn();
+          });
+        } else {
+
+          this.setState({ filtersisUsed: false }, () => {
+            this.updateFilters();
+            fn();
+          });
+        }
+      });
+    });
+  }
+
+  public existInGrepList(grepList: Array<Greep>, id: number | Number): boolean {
+    let valueReturn = false;
+    grepList.forEach((grepElement) => {
+      if (grepElement.id === id)
+        valueReturn = true;
+    });
+    return valueReturn;
+  }
+
+  public updateFilters() {
+    // let grades = this.getSelectedGrades()!.length === 0 ? this.getAllGrades() : this.getSelectedGrades();
+    const grades = this.updateGradesFilters();
+    const gradeForFilters = this.getSelectedGrades()!.length === 0 ?
+      grades :
+      this.getSelectedGrades();
+
+    // subjects
+    const subjectResults = this.updateSubjectsFilters(gradeForFilters);
+    const subjectForFilters = this.getSelectedSubjects()!.length === 0 ?
+      this.getAllSubjects() :
+      this.getSelectedSubjects();
+
+    //coreElements
+    const coreElementsResult = this.updateCoreElementsFilters(grades, subjectForFilters);
+    const coreElementsForFilter = this.getSelectedCoreElements()!.length === 0 ?
+      this.getAllCoreElements() :
+      this.getSelectedCoreElements();
+
+    // mainTopics
+    const mainTopicsResult = this.updateMainTopicsFilters(grades, subjectForFilters, coreElementsForFilter);
+    const mainTopicsForFilter = this.getSelectedMainTopics()!.length === 0 ?
+      this.getAllMainTopics() :
+      this.getSelectedMainTopics();
+
+    // goals
+    const goalsResult = this.updateGoalsFilters(grades, subjectForFilters, coreElementsForFilter, mainTopicsForFilter);
+    const goalsForFilter = this.getSelectedGoals()!.length === 0 ?
+      this.getAllGoals() :
+      this.getSelectedGoals();
+
+  }
+
+  public updateHTMLFilters() {
+
+    const grades = this.getSelectedGrades();
+    const subjectForFilters = this.getSelectedSubjects();
+    const coreElementsForFilter = this.getSelectedCoreElements();
+    const mainTopicsForFilter = this.getSelectedMainTopics();
+    const goalsForFilter = this.getSelectedGoals();
+
+    // if(grades!.length > 0) {
+    //   // ReactDOM.findDOMNode(self.refs.coreElements);
     // }
 
-    let singleString: string = '';
-    if (newValues.length > 0) {
-      newValues.forEach((e, index) => {
-        singleString = (index === 0) ? String(e.value) : `${singleString},${String(e.value)}`;
+  }
+
+  public getSubjectsByCoreElements(coreElements: any[]) {
+    const newSubjects: Array<any> = [];
+    this.state.grepDataFilters!.core_elements_filter!.forEach(((coreElement) => {
+      if (coreElements.includes(Number(coreElement.core_element_id))) {
+        coreElement.grade_ids!.forEach((grade) => {
+          grade.subject_ids!.forEach((subjectId) => {
+            if (!newSubjects.includes(Number(subjectId))) {
+              newSubjects.push(Number(subjectId));
+            }
+          });
+        });
+      }
+    }));
+
+    return newSubjects;
+  }
+
+  public getGradesByCoreElements(coreElements: any[]) {
+    const newGrades: Array<any> = [];
+    this.state.grepDataFilters!.core_elements_filter!.forEach(((coreElement) => {
+      if (coreElements.includes(Number(coreElement.core_element_id))) {
+        coreElement.grade_ids!.forEach((grade) => {
+
+          if (!newGrades.includes(Number(grade.grade_id!))) {
+            newGrades.push(Number(grade.grade_id!));
+          }
+
+        });
+      }
+    }));
+
+    return newGrades;
+  }
+
+  public updateGradesFilters(): Array<any> {
+    const newArrayGrade: Array<Grade> = [];
+
+    this.state.grepDataFilters!.grade_filter!.forEach(((grade) => {
+
+      // set status
+      let filterStatus = 'active';
+
+      if (
+        this.getSelectedGrades()!.length === 0 &&
+        this.getSelectedSubjects()!.length === 0 &&
+        this.getSelectedCoreElements()!.length !== 0
+      ) {
+
+        const findedGrades = this.getGradesByCoreElements(this.getSelectedCoreElements()!);
+
+        if (findedGrades.length === 0)
+          filterStatus = 'active';
+        else
+          filterStatus = findedGrades.includes(Number(grade.grade_id)) ? 'active' : 'inactive';
+      }
+
+      // end set status
+      const newGrade = {
+        // tslint:disable-next-line: variable-name
+        id: Number(grade.grade_id),
+        title: grade.description!,
+        // filter_status: 'inactive'
+        filter_status: filterStatus
+      };
+      if (!this.existInGrepList(newArrayGrade, newGrade.id)) {
+        newArrayGrade.push(newGrade);
+      }
+    }));
+
+    this.setState({
+      selectedGradesFilter: newArrayGrade
+    });
+    return newArrayGrade.map(grade => grade.id);
+  }
+
+  public updateSubjectsFilters(grades: Array<any> | null = this.getSelectedGrades()): Array<any> {
+    const newArraySubject: Array<Subject> = [];
+    this.state.grepDataFilters!.subject_filter!.forEach((subject) => {
+      // tslint:disable-next-line: variable-name
+      subject.grade_ids!.forEach((gradeId) => {
+
+        if (grades!.includes(Number(gradeId))) {
+          // set status
+          let filterStatus = 'active';
+
+          if (
+            this.getSelectedGrades()!.length === 0 &&
+            this.getSelectedSubjects()!.length === 0 &&
+            this.getSelectedCoreElements()!.length !== 0
+          ) {
+            const findedSubjects = this.getSubjectsByCoreElements(this.getSelectedCoreElements()!);
+
+            if (findedSubjects.length === 0)
+              filterStatus = 'active';
+            else
+              filterStatus = findedSubjects.includes(Number(subject.subject_id)) ? 'active' : 'inactive';
+          }
+
+          // end set status
+          const newSubject = {
+            // tslint:disable-next-line: variable-name
+            id: Number(subject.subject_id),
+            title: subject.description!,
+            // filter_status: 'inactive'
+            filter_status: filterStatus
+          };
+          if (!this.existInGrepList(newArraySubject, newSubject.id)) {
+            newArraySubject.push(newSubject);
+          }
+        }
       });
+
+    });
+
+    this.setState({
+      selectedSubjectsFilter: newArraySubject
+    });
+
+    return newArraySubject.map(subject => subject.id);
+  }
+
+  public updateCoreElementsFilters(
+    grades: Array<any> | null = this.getSelectedGrades(),
+    subjects: Array<any> | null = this.getSelectedSubjects()
+  ) {
+
+    const newCoreElements: Array<Greep> = [];
+
+    this.state.grepDataFilters!.core_elements_filter!.forEach(((coreElement) => {
+      // tslint:disable-next-line: variable-name
+      const allSympSubjects: Array<string> = [];
+
+      coreElement.grade_ids!.forEach(grade =>
+        grade.subject_ids!.forEach((subjectId) => {
+          if (
+            grades!.includes(Number(grade.grade_id)) &&
+            subjects!.includes(Number(subjectId))
+          ) {
+            const newCoreElement = {
+              // tslint:disable-next-line: variable-name
+              id: Number(coreElement.core_element_id),
+              title: coreElement.description!
+            };
+            if (!this.existInGrepList(newCoreElements, newCoreElement.id)) {
+              newCoreElements.push(newCoreElement);
+            }
+          }
+        })
+      );
+
+    }));
+    this.setState({
+      selectedCoresFilter: newCoreElements,
+      selectedCoresAll: newCoreElements
+    });
+
+    return newCoreElements.map(coreElement => coreElement.id);
+  }
+
+  public updateMainTopicsFilters(
+    grades: Array<any> | null = this.getSelectedGrades(),
+    subjects: Array<any> | null = this.getSelectedSubjects(),
+    coreElements: Array<any> | null = this.getSelectedCoreElements()
+  ) {
+    const newMainTopics: Array<Greep> = [];
+
+    this.state.grepDataFilters!.multidisciplinay_filter!.forEach(((mainTopic) => {
+      // tslint:disable-next-line: variable-name
+
+      mainTopic.grade_ids!.forEach(grade =>
+        grade.subject_ids!.forEach((subject) => {
+          subject.core_element_ids!.forEach((coreElementId) => {
+            if (
+              grades!.includes(Number(grade.grade_id)) &&
+              subjects!.includes(Number(subject.subject_id)) &&
+              coreElements!.includes(Number(coreElementId))
+            ) {
+              const newMainTopic = {
+                // tslint:disable-next-line: variable-name
+                id: Number(mainTopic.main_topic_id),
+                title: mainTopic.description!
+              };
+              if (!this.existInGrepList(newMainTopics, newMainTopic.id)) {
+                newMainTopics.push(newMainTopic);
+              }
+            }
+          });
+        })
+      );
+    }));
+
+    this.setState({
+      selectedMultisAll: newMainTopics,
+      selectedMultiFilter: newMainTopics,
+    });
+
+    return newMainTopics.map(mainTopic => mainTopic.id);
+  }
+
+  public updateGoalsFilters(
+    grades: Array<any> | null = this.getSelectedGrades(),
+    subjects: Array<any> | null = this.getSelectedSubjects(),
+    coreElements: Array<any> | null = this.getSelectedSubjects(),
+    mainTopics: Array<any> | null = this.getSelectedSubjects()
+  ) {
+    const newGoals: Array<Greep> = [];
+
+    this.state.grepDataFilters!.goals_filter!.forEach(((goal) => {
+      // tslint:disable-next-line: variable-name
+
+      goal.grade_ids!.forEach(grade =>
+        grade.subject_ids!.forEach((subject) => {
+          subject.core_element_ids!.forEach((coreElement) => {
+            coreElement.main_topic_ids!.forEach((mainTopicId) => {
+              if (
+                grades!.includes(Number(grade.grade_id)) &&
+                subjects!.includes(Number(subject.subject_id)) &&
+                coreElements!.includes(Number(coreElement.core_element_id)) &&
+                mainTopics!.includes(Number(mainTopicId))
+              ) {
+                const newGoal = {
+                  // tslint:disable-next-line: variable-name
+                  id: Number(goal.goal_id),
+                  title: goal.description!
+                };
+                if (!this.existInGrepList(newGoals, newGoal.id)) {
+                  newGoals.push(newGoal);
+                }
+              }
+            });
+          });
+        })
+      );
+
+    }));
+    this.setState({
+      selectedGoalsFilter: newGoals,
+      selectedGoalsAll: newGoals
+    });
+
+    return newGoals.map(goal => goal.id);
+  }
+
+  public getAllGrades() {
+    const newGrades: Array<Greep> = [];
+    this.state.grepDataFilters!.grade_filter!.forEach(((grade) => {
+      // tslint:disable-next-line: variable-name
+      newGrades.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(grade.grade_id),
+        title: grade.description!
+      });
+
+    }));
+    return newGrades.map(grade => grade.id);
+  }
+
+  public getAllSubjects() {
+    const newSubjects: Array<Greep> = [];
+    this.state.grepDataFilters!.subject_filter!.forEach(((subject) => {
+      // tslint:disable-next-line: variable-name
+      newSubjects.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(subject.subject_id),
+        title: subject.description!
+      });
+    }));
+    return newSubjects.map(subject => subject.id);
+  }
+
+  public getAllCoreElements() {
+    const newCoreElements: Array<Greep> = [];
+    this.state.grepDataFilters!.core_elements_filter!.forEach(((coreElement) => {
+      // tslint:disable-next-line: variable-name
+      newCoreElements.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(coreElement.core_element_id),
+        title: coreElement.description!
+      });
+    }));
+    return newCoreElements.map(coreElement => coreElement.id);
+  }
+
+  public getAllMainTopics() {
+    const newMainTopics: Array<Greep> = [];
+    this.state.grepDataFilters!.multidisciplinay_filter!.forEach(((mainTopic) => {
+      // tslint:disable-next-line: variable-name
+      newMainTopics.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(mainTopic.main_topic_id),
+        title: mainTopic.description!
+      });
+    }));
+    return newMainTopics.map(mainTopic => mainTopic.id);
+  }
+
+  public getAllGoals() {
+    const newGoals: Array<Greep> = [];
+    this.state.grepDataFilters!.goals_filter!.forEach(((goal) => {
+      // tslint:disable-next-line: variable-name
+      newGoals.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(goal.goal_id),
+        title: goal.description!
+      });
+
+    }));
+    return newGoals.map(goal => goal.id);
+  }
+
+  public getSelectedGrades(): Array<any> | null {
+    const { MySelectGrade } = this.state;
+    return MySelectGrade;
+  }
+
+  public getSelectedSubjects(): Array<any> | null {
+    const { MySelectSubject } = this.state;
+    return MySelectSubject;
+  }
+
+  public getSelectedCoreElements(): Array<any> | null {
+    const { myValueCore } = this.state;
+    return myValueCore;
+  }
+
+  public getSelectedMainTopics(): Array<any> | null {
+    const { MySelectMulti } = this.state;
+    return MySelectMulti;
+  }
+
+  public getSelectedGoals(): Array<any> | null {
+    const { goalValueFilter } = this.state;
+    return goalValueFilter;
+  }
+
+  public setSelectedGrade(gradeId: number, fn: Function) {
+    this.setState({
+      MySelectGrade: [gradeId]
+    }, () => {
+      fn();
+    });
+  }
+
+  public setSelectedSubjects(subjects: Array<any>, fn: Function) {
+    this.setState({
+      MySelectSubject: subjects
+    }, () => {
+      fn();
+    });
+  }
+
+  public setSelectedCoreElements(coreElements: any[], fn: Function) {
+    this.setState({
+      myValueCore: coreElements!
+    }, () => {
+      fn();
+    });
+  }
+
+  public setSelectedMainTopics(mainTopics: any[], fn: Function) {
+    this.setState({
+      MySelectMulti: mainTopics!
+    }, () => {
+      fn();
+    });
+  }
+
+  public setSelectedGoals(goals: any[], fn: Function) {
+    this.setState({
+      goalValueFilter: goals!
+    }, () => {
+      fn();
+    });
+
+  }
+
+  public addSelectedSubjects(subjectId: number, fn: Function) {
+    const currentSelectedSubjects = this.getSelectedSubjects();
+    currentSelectedSubjects!.push(subjectId);
+    this.setState({
+      MySelectSubject: currentSelectedSubjects
+    }, () => {
+      fn();
+    });
+
+  }
+
+  public addSelectedCoreElements(coreElementId: number, fn: Function) {
+
+    const currentSelectedCoreElements = this.getSelectedCoreElements();
+    currentSelectedCoreElements!.push(coreElementId);
+    this.setState(
+      {
+        myValueCore: currentSelectedCoreElements!
+      }, 
+      () => {
+        fn();
+      }
+    );
+
+  }
+
+  public addSelectedMainTopics(mainTopicId: number, fn: Function) {
+
+    const currentSelectedMainTopics = this.getSelectedMainTopics();
+    currentSelectedMainTopics!.push(mainTopicId);
+    this.setState({
+      MySelectMulti: currentSelectedMainTopics!
+    }, () => {
+      fn();
+    });
+
+  }
+
+  public removeSelectedFilter(
+    filterToReset: string,
+    elementId: number | Number,
+    fn: Function,
+    e: React.MouseEvent<HTMLButtonElement> | null = null
+  ) {
+
+    let selectedElements: Array<any> = [];
+
+    switch (filterToReset) {
+      case 'subjects':
+        selectedElements = this.getSelectedSubjects()!;
+        break;
+      case 'grades':
+        selectedElements = this.getSelectedGrades()!;
+        break;
+      case 'coreElements':
+        selectedElements = this.getSelectedCoreElements()!;
+        break;
+      case 'mainTopics':
+        selectedElements = this.getSelectedMainTopics()!;
+        break;
+      case 'goals':
+        selectedElements = this.getSelectedGoals()!;
+        break;
+
+      default:
+        break;
     }
-    this.setState({ myValueCore: newValues });
-    this.handleChangeFilters('core', singleString);
+
+    if (selectedElements.length !== 0) {
+      const indexSelected = selectedElements!.indexOf(elementId);
+      if (indexSelected > -1) {
+        selectedElements!.splice(indexSelected, 1);
+      }
+      if (this.state.activeGrepFilters && e !== null) {
+        e.currentTarget.classList.remove('active');
+      }
+    }
+
+    switch (filterToReset) {
+      case 'subjects':
+        this.setSelectedSubjects(selectedElements, fn);
+        break;
+      case 'grades':
+        this.setSelectedGrade(selectedElements[0], fn);
+        break;
+      case 'coreElements':
+        this.setSelectedCoreElements(selectedElements, fn);
+        break;
+      case 'mainTopics':
+        this.setSelectedMainTopics(selectedElements, fn);
+        break;
+      case 'goals':
+        this.setSelectedGoals(selectedElements, fn);
+        break;
+
+      default:
+        break;
+    }
+
+  }
+
+  public waitForIt(fn: Function, willRun: boolean) {
+    if (willRun) {
+      fn();
+    }
+  }
+
+  public resetFilters(filters: Array<any>, fn: Function) {
+    if (filters.length === 0) {
+      fn();
+    }
+    filters.forEach((filterToReset, index) => {
+
+      if (filterToReset === 'subjects') {
+
+        this.setState(
+          {
+            MySelectSubject: []
+          },
+          () => {
+            this.waitForIt(fn, filters.length === (index + 1));
+          }
+        );
+
+      } else if (filterToReset === 'grades') {
+        this.setState(
+          {
+            MySelectGrade: []
+          },
+          () => {
+            this.waitForIt(fn, filters.length === (index + 1));
+          }
+        );
+
+      } else if (filterToReset === 'coreElements') {
+        this.waitForIt(fn, filters.length === (index + 1));
+        // this.setState({
+        //   myValueCore: []
+        // },
+        //   () => {
+        //     this.waitForIt(fn, filters.length === (index + 1))
+        //   });
+
+      } else if (filterToReset === 'mainTopics') {
+        this.setState({
+          MySelectMulti: []
+        });
+      } else if (filterToReset === 'goals') {
+        this.waitForIt(fn, filters.length === (index + 1));
+        // this.setState({
+        //   goalValueFilter: []
+        // },
+        //   () => {
+        //     this.waitForIt(fn, filters.length === (index + 1))
+        //   });
+      }
+    });
+  }
+
+  public addSelectedGoals(goalId: number, fn: Function) {
+
+    const currentSelectedGoals = this.getSelectedGoals();
+    currentSelectedGoals!.push(goalId);
+    this.setState(
+      {
+        goalValueFilter: currentSelectedGoals!
+      }, 
+      () => {
+        fn();
+      }
+    );
+  }
+
+  public handleChangeSelectCore = async (newValues: Array<any>) => {
+    newValues = newValues.map(value => value.value);
+
+    this.setSelectedCoreElements(newValues, () => {
+      this.resetFilters(['mainTopics', 'goals'], () => {
+        this.refreshAppliedFilters(() => {
+          this.handleChangeFilters('core', String(this.getSelectedCoreElements()));
+        });
+      });
+    });
   }
 
   public handleChangeCore = async (e: React.ChangeEvent<HTMLSelectElement>) => {
 
     const value = e.currentTarget.value;
     // const valueSelectedGrades = this.state.MySelectGrade;
-
     let valueSelectedGrades: Array<number> = [];
     if (!this.state.MySelectGrade!.includes(Number(value))) {
       valueSelectedGrades!.push(Number(value));
@@ -456,15 +1097,42 @@ export class ArticlesList extends Component<Props, State> {
     this.handleChangeFilters('goal', Number(e.target.value));
   }
 
-  public handleChangeSelectGoals = async (newValue: Array<any>) => {
-    let singleString: string = '';
-    if (newValue.length > 0) {
-      newValue.forEach((e, index) => {
-        singleString = (index === 0) ? String(e.value) : `${singleString},${String(e.value)}`;
+  public handleChangeSelectGoals = async (newValues: Array<any>) => {
+
+    if (newValues.length !== 0) {
+      const newGoal = Number(newValues[newValues.length - 1].value);
+      const selectedGoals = this.getSelectedGoals()!;
+
+      if (!selectedGoals.includes(newGoal)) {
+
+        this.addSelectedGoals(newGoal, () => {
+          this.resetFilters(
+            [], 
+            () => {
+              this.refreshAppliedFilters(() => {
+                this.handleChangeFilters('goal', String(this.getSelectedGoals()));
+              });
+            }
+          );
+        });
+      } else { // ??
+
+        this.removeSelectedFilter('goals', newGoal, () => {
+          this.refreshAppliedFilters(() => {
+            this.handleChangeFilters('goal', String(this.getSelectedGoals()));
+          });
+        }, null);
+      }
+
+    } else {
+      this.setSelectedGoals([], () => {
+        this.resetFilters([], () => {
+          this.refreshAppliedFilters(() => {
+            this.handleChangeFilters('goal', String(this.getSelectedGoals()));
+          });
+        });
       });
     }
-    this.setState({ goalValueFilter: newValue });
-    this.handleChangeFilters('goal', singleString);
   }
 
   public handleChangeSubject = async (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -558,7 +1226,6 @@ export class ArticlesList extends Component<Props, State> {
     targets.forEach((target) => {
 
       let grepDataFilterTarget: Array<any> = [];
-
       if (target === 'subjects') {
         const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
         GradeFilterSubjectArray.forEach((e) => {
@@ -615,71 +1282,6 @@ export class ArticlesList extends Component<Props, State> {
     this.setState({ filtersAjaxLoading: false });
     this.setState({ filtersAjaxLoadingGoals: false });
 
-    // const dataCores = this.state.selectedCoresAll;
-    // const dataCoresFilter = this.state.selectedGoalsFilter;
-    // const newArrayGrepCore: Array<Greep> = [];
-    // this.handleChangeFilters('none', 0);
-    // const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
-    // GradeFilterSubjectArray.forEach((e) => {
-    //   e.classList.remove('active');
-    // });
-    // const GradeFilterGradeArray = Array.from(document.getElementsByClassName('gradesFilterClass') as HTMLCollectionOf<HTMLElement>);
-    // GradeFilterGradeArray.forEach((e) => {
-    //   e.classList.remove('active');
-    // });
-    // const GradeFilterMultiArray = Array.from(document.getElementsByClassName('multiFilterClass') as HTMLCollectionOf<HTMLElement>);
-    // GradeFilterMultiArray.forEach((e) => {
-    //   e.classList.remove('active');
-    // });
-    // const GradeFilterArray = Array.from(document.getElementsByClassName('sourceFilterClass') as HTMLCollectionOf<HTMLElement>);
-    // GradeFilterArray.forEach((e) => {
-    //   e.classList.remove('active');
-    // });
-    // this.setState({ filtersisUsed: false });
-
-    // if(targets.includes('coreElements')){
-    //   this.setState({ myValueCore: [] });
-    // }
-
-    // if(targets.includes('mainTopics')){
-    //   this.setState({ MySelectMulti: [] });
-    // }
-
-    // this.setState({ goalValueFilter: [] });
-
-    // this.setState({ filtersAjaxLoadingGoals: true });
-    // await this.props.editTeachingPathStore!.getFiltersArticlePanel();
-    // const dataArticles = this.props.editTeachingPathStore!.getAllArticlePanelFilters();
-    // // tslint:disable-next-line: variable-name
-
-    // dataArticles!.core_elements_filter!.forEach((element) => {
-    //   newArrayGrepCore.push({
-    //     // tslint:disable-next-line: variable-name
-    //     id: Number(element.core_element_id),
-    //     title: element.description!
-    //   });
-    // });
-    // // tslint:disable-next-line: variable-name
-    // dataArticles!.multidisciplinay_filter!.forEach((element) => {
-    //   newArrayGrepMulti.push({
-    //     // tslint:disable-next-line: variable-name
-    //     id: Number(element.main_topic_id),
-    //     title: element.description!
-    //   });
-    // });
-    // if(targets.includes('coreElements')){
-    //   this.setState({
-    //     selectedCoresAll: newArrayGrepCore,
-    //   });
-    // }
-
-    // if(targets.includes('mainTopics')){
-    //   this.setState({
-    //     selectedMultisAll: newArrayGrepMulti
-    //   });
-    // }
-
-    // this.setState({ filtersAjaxLoadingGoals: false });
   }
 
   public resetSubjectFilter() {
@@ -707,265 +1309,25 @@ export class ArticlesList extends Component<Props, State> {
     });
   }
 
-  public updateSubjectFilterFromGrade(gradeId: string) {
-
-    const newArraySubject: Array<Subject> = [];
-
-    this.state.grepDataFilters!.subject_filter!.forEach((element) => {
-      // tslint:disable-next-line: variable-name
-
-      const allSympGrades = element.grade_ids;
-
-      const allSympGradesLength = allSympGrades!.includes(gradeId);
-
-      if (allSympGradesLength) {
-        if (allSympGrades!.includes(gradeId)) {
-
-          newArraySubject.push({
-            // tslint:disable-next-line: variable-name
-            id: Number(element.subject_id),
-            title: element.description!
-          });
-        }
-      }
-    });
-
-    this.setState({
-      selectedSubjectsFilter: newArraySubject
-    });
-
-    this.setState({
-      valueGrade: gradeId,
-    });
-  }
-
-  public updateCoreElementsFilterFromGrade(gradeId: string) {
-
-    const newArrayCore: Array<Greep> = [];
-
-    this.state.grepDataFilters!.core_elements_filter!.forEach((element) => {
-
-      // tslint:disable-next-line: variable-name
-      const allSympGrades = element.grade_ids!.map(grade => grade.grade_id);
-
-      const allSympGradesLength = allSympGrades!.includes(gradeId);
-      let allSympSubjectsLength = false;
-      if (this.state.valueSubject.length > 0) {
-        element.grade_ids!.forEach((grade) => {
-          if (grade.grade_id === gradeId) {
-            const allSympSubjects = grade.subject_ids;
-
-            this.state.MySelectSubject!.forEach((subject) => {
-              if (allSympSubjects!.includes(subject.toString())) {
-                allSympSubjectsLength = true;
-              }
-            });
-
-            // allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
-          }
-        });
-        if (allSympGradesLength && allSympSubjectsLength) {
-          newArrayCore.push({
-            // tslint:disable-next-line: variable-name
-            id: Number(element.core_element_id),
-            title: element.description!
-          });
-        }
-      } else {
-        if (allSympGradesLength) {
-          newArrayCore.push({
-            // tslint:disable-next-line: variable-name
-            id: Number(element.core_element_id),
-            title: element.description!
-          });
-        }
-      }
-    });
-    this.setState({
-      selectedCoresFilter: newArrayCore
-    });
-  }
-
-  public updateMainTopicFilterFromGrade(gradeId: string) {
-
-    const newArrayMulti: Array<Greep> = [];
-
-    this.state.grepDataFilters!.multidisciplinay_filter!.forEach((element) => {
-      // tslint:disable-next-line: variable-name
-      const allSympGrades = element.grade_ids!.map(grade => grade.grade_id);
-
-      const allSympGradesLength = allSympGrades!.includes(gradeId);
-      let allSympSubjectsLength = false;
-      if (this.state.valueSubject.length > 0) {
-        element.grade_ids!.forEach((grade) => {
-          if (grade.grade_id === gradeId) {
-            const allSympSubjects = grade.subject_ids!.map(subject => subject.subject_id);
-            // allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
-            this.state.MySelectSubject!.forEach((subject) => {
-              if (allSympSubjects!.includes(subject.toString())) {
-                allSympSubjectsLength = true;
-              }
-            });
-
-          }
-        });
-        if (allSympGradesLength && allSympSubjectsLength) {
-          newArrayMulti.push({
-            // tslint:disable-next-line: variable-name
-            id: Number(element.main_topic_id),
-            title: element.description!
-          });
-        }
-      } else {
-        if (allSympGradesLength) {
-          newArrayMulti.push({
-            // tslint:disable-next-line: variable-name
-            id: Number(element.main_topic_id),
-            title: element.description!
-          });
-        }
-      }
-    });
-    this.setStateMultiFilter(newArrayMulti);
-
-  }
-
-  public updateGoalsFilterFromGrade(gradeId: string) {
-
-    const newArrayGoals: Array<Greep> = [];
-
-    this.state.grepDataFilters!.goals_filter!.forEach((element) => {
-      // tslint:disable-next-line: variable-name
-      const allSympGrades = element.grade_ids!.map(grade => grade.grade_id);
-
-      let allSympGradesLength = false;
-      if (this.state.valueSubject.length > 0) {
-        let allSympSubjectsLength = false;
-        element.grade_ids!.forEach((grade) => {
-          if (grade.grade_id === gradeId) {
-            allSympGradesLength = true;
-
-            const allSympSubjects = grade.subject_ids!.map(subject => subject.subject_id);
-            this.state.MySelectSubject!.forEach((subject) => {
-              if (allSympSubjects!.includes(subject.toString())) {
-                allSympSubjectsLength = true;
-              }
-            });
-
-            // allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
-          }
-        });
-        if (allSympGradesLength && allSympSubjectsLength) {
-          newArrayGoals.push({
-            // tslint:disable-next-line: variable-name
-            id: Number(element.goal_id),
-            title: element.description!
-          });
-        }
-      } else {
-        if (allSympGradesLength) {
-          newArrayGoals.push({
-            // tslint:disable-next-line: variable-name
-            id: Number(element.goal_id),
-            title: element.description!
-          });
-        }
-      }
-    });
-    this.setState({
-      selectedGoalsFilter: newArrayGoals.sort((a, b) => (a.title > b.title) ? 1 : -1),
-      selectedGoalsAll: newArrayGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
-    });
-  }
-
-  public updateSourceFilterFromGrade(gradeId: string) {
-    const newArraySource: Array<Greep> = [];
-    //
-    // this.state.grepDataFilters!.source_filter!.forEach((element) => {
-    //   // tslint:disable-next-line: variable-name
-    //   const allSympGrades = element.grade_ids;
-    //   const allSympGradesLength = allSympGrades!.includes(gradeId);
-    //   let allSympSubjectsLength = false;
-    //   if (this.state.valueSubject.length > 0) {
-    //     element.grade_subjects!.forEach((item) => {
-    //       if (item.grade_id === gradeId) {
-    //         const allSympSubjects = item.subjects_relations;
-    //         allSympSubjectsLength = allSympSubjects!.includes(this.state.valueSubject);
-    //       }
-    //     });
-    //     if (allSympGradesLength && allSympSubjectsLength) {
-    //       newArraySource.push({
-    //         // tslint:disable-next-line: variable-name
-    //         id: Number(element.source_id),
-    //         title: element.description!
-    //       });
-    //     }
-    //   } else {
-    //     if (allSympGradesLength) {
-    //       newArraySource.push({
-    //         // tslint:disable-next-line: variable-name
-    //         id: Number(element.source_id),
-    //         title: element.description!
-    //       });
-    //     }
-    //   }
-    // });
-    // this.setState(
-    //   {
-    //     selectedSourceFilter : newArraySource
-    //   },
-    //   () => {
-    //     if (this.state.selectedSourceFilter.length > 1) {
-    //       this.setState({ showSourceFilter: true });
-    //     } else {
-    //       this.setState({ showSourceFilter: false });
-    //     }
-    //   }
-    // );
-    //
-  }
-
   public handleClickGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    this.handleClickReset(e);
-    // this.customReset(['subjects', 'coreElements', 'mainTopics', 'goals']);
-    const value = e.currentTarget.value;
-    // const valueSelectedGrades = this.state.MySelectGrade;
-    let valueSelectedGrades: Array<number> = [];
-    if (!this.state.MySelectGrade!.includes(Number(value))) {
-      valueSelectedGrades!.push(Number(value));
-      if (this.state.activeGrepFilters) {
-        e.currentTarget.classList.add('active');
-
-        this.updateSubjectFilterFromGrade(value);
-
-        this.updateCoreElementsFilterFromGrade(value);
-
-        this.updateMainTopicFilterFromGrade(value);
-
-        this.updateGoalsFilterFromGrade(value);
-
-        this.updateSourceFilterFromGrade(value);
-
-        this.resetSubjectFilter();
-      }
+    const newGradeId = Number(e.currentTarget.value);
+    const selectedGrades = this.getSelectedGrades()!;
+    if (!selectedGrades.includes(newGradeId)) {
+      this.setSelectedGrade(newGradeId, () => {
+        this.resetFilters(['subjects', 'coreElements', 'mainTopics', 'goals'], () => {
+          this.refreshAppliedFilters(() => {
+            this.handleChangeFilters('grades', String(this.getSelectedGrades()));
+          });
+        });
+      });
     } else {
-      /*const indexSelected = valueSelectedGrades!.indexOf(Number(value));
-      if (indexSelected > -1) {
-        valueSelectedGrades!.splice(indexSelected, 1);
-      }*/
-      valueSelectedGrades = [];
-      if (this.state.activeGrepFilters) {
-        e.currentTarget.classList.remove('active');
-      }
 
-      this.fillAllSubjects();
-
-      this.resetSubjectFilter();
+      this.removeSelectedFilter('grades', newGradeId, () => {
+        this.refreshAppliedFilters(() => {
+          this.handleChangeFilters('grades', String(this.getSelectedGrades()));
+        });
+      }, e);
     }
-    this.handleChangeFilters('grades', String(valueSelectedGrades));
-    this.setState({
-      MySelectGrade: valueSelectedGrades
-    });
   }
 
   public setStateMultiFilter(newArrayMulti: Array<Greep>) {
@@ -979,11 +1341,9 @@ export class ArticlesList extends Component<Props, State> {
   public uniqueArrayMulti(arrayMulti: Array<Greep>) {
     const newArray: Array<Greep> = [];
     arrayMulti.forEach((mainTopic) => {
-
       if (!this.findInArrayMulti(newArray, mainTopic.id)) {
         newArray.push(mainTopic);
       }
-
     });
     return newArray;
   }
@@ -995,493 +1355,52 @@ export class ArticlesList extends Component<Props, State> {
         found = true;
       }
     });
-
     return found;
   }
 
-  public updateCoreElementsFilterFromSubject(subjectId: string) {
-    const valueSelectedSubject = this.state.MySelectSubject;
-    const newArrayCore: Array<Greep> = [];
-
-    this.state.grepDataFilters!.core_elements_filter!.forEach((element) => {
-      // tslint:disable-next-line: variable-name
-      const allSympSubjects: Array<string> = [];
-
-      element.grade_ids!.forEach(grade =>
-        grade.subject_ids!.forEach(subjecId => allSympSubjects.push(subjecId))
-      );
-
-      let allSympSubjectsLength = false;
-      if (valueSelectedSubject!.length > 0) {
-        valueSelectedSubject!.forEach((subjectId) => {
-          if (allSympSubjects!.includes(subjectId.toString())) {
-            allSympSubjectsLength = true;
-          }
-        });
-      } else {
-        // allSympSubjectsLength =  ;
-
-      }
-
-      let allSympGradesLength = false;
-
-      if (this.state.valueGrade.length > 0) {
-
-        element.grade_ids!.forEach((grade) => {
-          if (grade.grade_id === this.state.valueGrade) {
-            allSympGradesLength = true;
-          }
-        });
-
-        allSympSubjectsLength = valueSelectedSubject!.length > 0 ? allSympSubjectsLength : true;
-
-        if (allSympGradesLength && allSympSubjectsLength) {
-          newArrayCore.push({
-            // tslint:disable-next-line: variable-name
-            id: Number(element.core_element_id),
-            title: element.description!
-          });
-        }
-      } else {
-        if (allSympSubjectsLength) {
-          newArrayCore.push({
-            // tslint:disable-next-line: variable-name
-            id: Number(element.core_element_id),
-            title: element.description!
-          });
-        }
-      }
-    });
-    this.setState({
-      selectedCoresFilter: newArrayCore,
-      selectedCoresAll: newArrayCore
-    });
-  }
-
   public handleClickSubject = (e: React.MouseEvent<HTMLButtonElement>) => {
-    this.customReset(['coreElements', 'mainTopics', 'goals']);
-    const newArrayMulti: Array<Greep> = [];
-    const newArrayGoals: Array<Greep> = [];
-    const newArraySource: Array<Greep> = [];
-    const value: string = e.currentTarget.value;
+    const newSubjectId = Number(e.currentTarget.value);
+    const selectedSubjects = this.getSelectedSubjects()!;
 
-    const valueSelectedSubject = this.state.MySelectSubject;
-    if (!valueSelectedSubject!.includes(Number(value))) {
-      valueSelectedSubject!.push(Number(value));
-      if (this.state.activeGrepFilters) {
-        e.currentTarget.classList.add('active');
-        this.setState(
-          {
-            valueSubject: value
-          }
-        );
-
-        this.state.grepDataFilters!.multidisciplinay_filter!.forEach((element) => {
-          // tslint:disable-next-line: variable-name
-          const allSympGrades: Array<string> = [];
-
-          element.grade_ids!.forEach((grade) => {
-            grade.subject_ids!.forEach((subject) => {
-              allSympGrades.push(subject.subject_id!);
-            });
+    if (!selectedSubjects.includes(newSubjectId)) {
+      this.addSelectedSubjects(Number(e.currentTarget.value), () => {
+        this.resetFilters(['coreElements', 'mainTopics', 'goals'], () => {
+          this.refreshAppliedFilters(() => {
+            this.handleChangeFilters('subjects', String(this.getSelectedSubjects()));
           });
-
-          const allSympGradesLength = allSympGrades!.includes(value);
-
-          let allSympSubjectsLength = false;
-          if (this.state.valueGrade.length > 0) {
-            element.grade_ids!.forEach((grade) => {
-              if (grade.grade_id === this.state.valueGrade) {
-                const allSympSubjects = grade.subject_ids!.map(subject => subject.subject_id);
-                allSympSubjectsLength = allSympSubjects!.includes(value);
-              }
-            });
-            if (allSympGradesLength && allSympSubjectsLength) {
-              newArrayMulti.push({
-                // tslint:disable-next-line: variable-name
-                id: Number(element.main_topic_id),
-                title: element.description!
-              });
-            }
-          } else {
-            if (allSympGradesLength) {
-              newArrayMulti.push({
-                // tslint:disable-next-line: variable-name
-                id: Number(element.main_topic_id),
-                title: element.description!
-              });
-            }
-          }
         });
-        this.setStateMultiFilter(newArrayMulti);
-
-        this.state.grepDataFilters!.goals_filter!.forEach((element) => {
-          // tslint:disable-next-line: variable-name
-          const allSympSubjects: Array<string> = [];
-
-          element.grade_ids!.forEach((grade) => {
-            grade.subject_ids!.forEach((subject) => {
-              allSympSubjects.push(subject.subject_id!);
-            });
-          });
-          let allSympSubjectsLength = false;
-          valueSelectedSubject!.forEach((subject) => {
-            if (allSympSubjects.includes(subject.toString())) {
-              allSympSubjectsLength = true;
-            }
-          });
-
-          let allSympGradesLength = false;
-
-          const allSympGrades: Array<string> = [];
-
-          if (this.state.valueGrade.length > 0) {
-            element.grade_ids!.forEach((grade) => {
-              if (grade.grade_id === this.state.valueGrade) {
-                allSympGradesLength = true;
-
-              }
-            });
-            if (allSympGradesLength && allSympSubjectsLength) {
-              newArrayGoals.push({
-                // tslint:disable-next-line: variable-name
-                id: Number(element.goal_id),
-                title: element.description!
-              });
-            }
-          } else {
-            if (allSympGradesLength) {
-              newArrayGoals.push({
-                // tslint:disable-next-line: variable-name
-                id: Number(element.goal_id),
-                title: element.description!
-              });
-            }
-          }
-        });
-        this.setState({
-          selectedGoalsFilter: newArrayGoals.sort((a, b) => (a.title > b.title) ? 1 : -1),
-          selectedGoalsAll: newArrayGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
-        });
-
-        //
-        // this.state.grepDataFilters!.source_filter!.forEach((element) => {
-        //   // tslint:disable-next-line: variable-name
-        //   const allSympGrades = element.subject_ids;
-        //   const allSympGradesLength = allSympGrades!.includes(value);
-        //   let allSympSubjectsLength = false;
-        //   if (this.state.valueGrade.length > 0) {
-        //     element.grade_subjects!.forEach((item) => {
-        //       if (item.grade_id === this.state.valueGrade) {
-        //         const allSympSubjects = item.subjects_relations;
-        //         allSympSubjectsLength = allSympSubjects!.includes(value);
-        //       }
-        //     });
-        //     if (allSympGradesLength && allSympSubjectsLength) {
-        //       newArraySource.push({
-        //         // tslint:disable-next-line: variable-name
-        //         id: Number(element.source_id),
-        //         title: element.description!
-        //       });
-        //     }
-        //   } else {
-        //     if (allSympGradesLength) {
-        //       newArraySource.push({
-        //         // tslint:disable-next-line: variable-name
-        //         id: Number(element.source_id),
-        //         title: element.description!
-        //       });
-        //     }
-        //   }
-        // });
-        //
-        this.setState(
-          {
-            selectedSourceFilter: newArraySource
-          },
-          () => {
-            if (this.state.selectedSourceFilter.length > 1) {
-              this.setState({ showSourceFilter: true });
-            } else {
-              this.setState({ showSourceFilter: false });
-            }
-          }
-        );
-      }
+      });
     } else {
-      const indexSelected = valueSelectedSubject!.indexOf(Number(value));
-      if (indexSelected > -1) {
-        valueSelectedSubject!.splice(indexSelected, 1);
-      }
-      if (this.state.activeGrepFilters) {
-        e.currentTarget.classList.remove('active');
-      }
-
+      this.removeSelectedFilter('subjects', newSubjectId, () => {
+        this.refreshAppliedFilters(() => {
+          this.handleChangeFilters('subjects', String(this.getSelectedSubjects()));
+        });
+      }, e);
     }
-    this.setState(
-      {
-        MySelectSubject: valueSelectedSubject,
-      },
-      () => {
-        this.updateCoreElementsFilterFromSubject(value);
-      }
-    );
-    this.handleChangeFilters('subjects', String(valueSelectedSubject));
-
-  }
-
-  public updateMainTopicFilterFromCoreElements(selectCoreElements: Array<any>) {
-
-    const newArrayMulti: Array<Greep> = [];
-
-    this.state.grepDataFilters!.multidisciplinay_filter!.forEach((element) => {
-      // tslint:disable-next-line: variable-name
-
-      let allSympCoreElementsLength = false;
-      element.grade_ids!.forEach((grade) => {
-        grade.subject_ids!.forEach((subject) => {
-          subject.core_elments_ids!.forEach((coreElementId) => {
-            if (selectCoreElements!.map(selectCoreElement => selectCoreElement.value.toString()).includes(coreElementId)) {
-              allSympCoreElementsLength = true;
-            }
-          });
-        });
-      });
-
-      if (this.state.MySelectSubject!.length > 0 && this.state.valueGrade.length > 0) {
-
-        let allSympSubjectsLength = false;
-        let allSympGradesLength = false;
-        allSympCoreElementsLength = false;
-        // grade validation
-        element.grade_ids!.forEach((grade) => {
-
-          if (grade.grade_id === this.state.valueGrade) {
-            allSympGradesLength = true;
-
-            // subject validation
-            const allSympSubjects = grade.subject_ids!;
-            allSympSubjects!.forEach((subject) => {
-              if (this.state.MySelectSubject!.includes(Number(subject.subject_id))) {
-                allSympSubjectsLength = true;
-
-                // coreElement validation
-                const allSympCoreElements = subject.core_elments_ids;
-                allSympCoreElements!.forEach((coreElementId) => {
-                  if (selectCoreElements!.map(selectCoreElement => selectCoreElement.value.toString()).includes(coreElementId)) {
-                    allSympCoreElementsLength = true;
-                  }
-                });
-
-              }
-            });
-          }
-        });
-
-        allSympCoreElementsLength = selectCoreElements.length > 0 ? allSympCoreElementsLength : true;
-
-        if (allSympGradesLength && allSympSubjectsLength && allSympCoreElementsLength) {
-
-          newArrayMulti.push({
-            // tslint:disable-next-line: variable-name
-            id: Number(element.main_topic_id),
-            title: element.description!
-          });
-        }
-      } else {
-        if (allSympCoreElementsLength) {
-
-          newArrayMulti.push({
-            // tslint:disable-next-line: variable-name
-            id: Number(element.main_topic_id),
-            title: element.description!
-          });
-        }
-      }
-
-    });
-
-    this.setStateMultiFilter(newArrayMulti);
-  }
-
-  public updateGoalsFilterFromCoreElements(selectCoreElements: Array<any>) {
-
-    const newArrayGoals: Array<Greep> = [];
-
-    this.state.grepDataFilters!.goals_filter!.forEach((element) => {
-
-      // tslint:disable-next-line: variable-name
-      let allSympCoreElementsLength = false;
-
-      element.grade_ids!.forEach((grade) => {
-        grade.subject_ids!.forEach((subject) => {
-          subject.core_element_ids!.forEach((coreElement) => {
-            if (selectCoreElements!.map(selectCoreElement => selectCoreElement.value.toString()).includes(coreElement.core_element_id)) {
-              allSympCoreElementsLength = true;
-            }
-          });
-        });
-      });
-
-      let allSympSubjectsLength = false;
-      let allSympGradesLength = false;
-
-      if (this.state.valueSubject.length > 0 && this.state.valueGrade.length > 0) {
-        element.grade_ids!.forEach((grade) => {
-          if (grade.grade_id === this.state.valueGrade) {
-            // grade validation
-            allSympGradesLength = true;
-
-            // subject validation
-            const allSympSubjects = grade.subject_ids!;
-
-            allSympSubjects.forEach((subject) => {
-              if (this.state.MySelectSubject!.includes(Number(subject!.subject_id))) {
-                allSympSubjectsLength = true;
-
-                subject.core_element_ids!.forEach((coreElement) => {
-                  if (selectCoreElements!.map(selectCoreElement => selectCoreElement.value.toString()).includes(coreElement.core_element_id)) {
-                    allSympCoreElementsLength = true;
-                  }
-                });
-
-              }
-            });
-          }
-
-        });
-
-        allSympCoreElementsLength = selectCoreElements.length > 0 ? allSympCoreElementsLength : true;
-        if (allSympCoreElementsLength && allSympSubjectsLength && allSympGradesLength) {
-          newArrayGoals.push({
-            // tslint:disable-next-line: variable-name
-            id: Number(element.goal_id),
-            title: element.description!
-          });
-        }
-      } else {
-        if (allSympCoreElementsLength) {
-          newArrayGoals.push({
-            // tslint:disable-next-line: variable-name
-            id: Number(element.goal_id),
-            title: element.description!
-          });
-        }
-      }
-
-    });
-    this.setState({
-      selectedGoalsFilter: newArrayGoals.sort((a, b) => (a.title > b.title) ? 1 : -1),
-      selectedGoalsAll: newArrayGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
-    });
   }
 
   public handleClickMulti = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    this.customReset(['goals']);
-    const value = e.currentTarget.value;
+    const target = e.currentTarget;
+    const newMainTopicId = Number(target.value);
+    const selectedMainTopics = this.getSelectedMainTopics()!;
 
-    const valueSelectedMulti = this.state.MySelectMulti;
-    if (!valueSelectedMulti!.includes(Number(value))) {
-      valueSelectedMulti!.push(Number(value));
-      e.currentTarget.classList.add('active');
+    if (!selectedMainTopics.includes(newMainTopicId)) {
+      this.addSelectedMainTopics(Number(newMainTopicId), () => {
 
-      this.setState(
-        {
-          MySelectMulti: valueSelectedMulti
-        },
-        () => {
-          this.updateGoalsFilterFromMulti(this.state.MySelectMulti!);
-        }
-      );
-
+        // target.classList.add('active');
+        this.resetFilters(['goals'], () => {
+          this.refreshAppliedFilters(() => {
+            this.handleChangeFilters('multi', String(this.getSelectedMainTopics()));
+          });
+        });
+      });
     } else {
-      const indexSelected = valueSelectedMulti!.indexOf(Number(value));
-      if (indexSelected > -1) {
-        valueSelectedMulti!.splice(indexSelected, 1);
-      }
-      e.currentTarget.classList.remove('active');
+      this.removeSelectedFilter('mainTopics', newMainTopicId, () => {
+        this.refreshAppliedFilters(() => {
+          this.handleChangeFilters('multi', String(this.getSelectedSubjects()));
+        });
+      }, e);
     }
-    this.handleChangeFilters('multi', String(valueSelectedMulti));
-
-  }
-
-  public updateGoalsFilterFromMulti(selectMainTopics: Array<number>) {
-
-    const newArrayGoals: Array<Greep> = [];
-
-    this.state.grepDataFilters!.goals_filter!.forEach((element) => {
-
-      // tslint:disable-next-line: variable-name
-      const allSympMainTopics: Array<string> = [];
-
-      element.grade_ids!.forEach((grade) => {
-        grade.subject_ids!.forEach((subject) => {
-          subject.core_element_ids!.forEach((coreElement) => {
-            coreElement.main_topic_ids!.forEach((mainTopicId) => {
-              allSympMainTopics.push(mainTopicId);
-            });
-          });
-        });
-      });
-
-      let allSympMainTopicsLength = false;
-      selectMainTopics.forEach((selectMainTopicId) => {
-        const mainTopicId = selectMainTopicId;
-        allSympMainTopicsLength = allSympMainTopics!.includes(mainTopicId.toString());
-      });
-
-      let allSympSubjectsLength = false;
-      let allSympGradesLength = false;
-      let allSympCoreElementsLength = false;
-
-      if (this.state.valueSubject.length > 0 && this.state.valueGrade.length > 0 && allSympMainTopicsLength) {
-        element.grade_ids!.forEach((grade) => {
-          if (grade.grade_id === this.state.valueGrade) {
-            // grade validation
-            allSympGradesLength = true;
-
-            // subject validation
-            this.state.MySelectSubject!.forEach((valueSubject) => {
-              if (grade.subject_ids!.map(subject => subject.subject_id).includes(valueSubject!.toString())) {
-                allSympSubjectsLength = true;
-              }
-            });
-
-            // coreElement
-            this.state.myValueCore.forEach((valueCore) => {
-              grade.subject_ids!.forEach((subject) => {
-                if (subject.core_element_ids!.map(coreElementId => coreElementId.core_element_id).includes(valueCore.value.toString())) {
-                  allSympCoreElementsLength = true;
-                }
-
-              });
-            });
-
-          }
-
-        });
-        if (allSympCoreElementsLength && allSympSubjectsLength && allSympGradesLength && allSympMainTopicsLength) {
-          newArrayGoals.push({
-            // tslint:disable-next-line: variable-name
-            id: Number(element.goal_id),
-            title: element.description!
-          });
-        }
-      } else {
-        if (allSympCoreElementsLength) {
-          newArrayGoals.push({
-            // tslint:disable-next-line: variable-name
-            id: Number(element.goal_id),
-            title: element.description!
-          });
-        }
-      }
-
-    });
-    this.setState({
-      selectedGoalsFilter: newArrayGoals.sort((a, b) => (a.title > b.title) ? 1 : -1),
-      selectedGoalsAll: newArrayGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
-    });
   }
 
   public handleClickSource = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -1536,7 +1455,6 @@ export class ArticlesList extends Component<Props, State> {
       greeddata: true,
       selectedArticle: article
     });
-
   }
 
   public removeItemFromNewChild = async (item: Article) => {
@@ -1682,7 +1600,7 @@ export class ArticlesList extends Component<Props, State> {
 
   public renderArticle = (article: Article, index: number) => (
     <ArticleItem
-      key={article.id}
+      key={article.id + index}
       article={article}
       allItems={this.state.itemsForNewChildren}
       addItem={this.addItemToNewChild}
@@ -1721,8 +1639,10 @@ export class ArticlesList extends Component<Props, State> {
     const cardsContainer = document.getElementsByClassName('articlesListContainer')[0];
     const skeletonCardWidth = ((cardsContainer ? cardsContainer.clientWidth : 0) - allCardsMargins) / cardsInRow;
     const skeletonCardHeight = skeletonCardWidth * cardWidthToHeightIndex;
+
     if (fetchingArticles && articlesList.length === 0) {
       return articlesForSkeletonEight.map((skeletonArticle, index) => (
+
         <SkeletonLoader
           key={index}
           className="RelatedArticlesCard"
@@ -1744,9 +1664,11 @@ export class ArticlesList extends Component<Props, State> {
       );
     }
 
+
     if (!selectedAndLoadedArticles.length) {
       return <div className={'noResults'}>{intl.get('edit_teaching_path.No results found')}</div>;
     }
+
 
     const sortedArticles = selectedAndLoadedArticles.sort(
       (article) => {
@@ -1759,6 +1681,7 @@ export class ArticlesList extends Component<Props, State> {
         return 0;
       }
     );
+
     return (
       sortedArticles.map(this.renderArticle)
     );
@@ -2157,10 +2080,12 @@ export class ArticlesList extends Component<Props, State> {
               // VALUES
               // subjectFilterValue={Number(appliedFilters.subjects)}
               // gradeFilterValue={Number(appliedFilters.grades)}
-              coreFilterValue={Number(appliedFilters.core)}
-              goalsFilterValue={Number(appliedFilters.goal)}
+              coreFilterValue={String(appliedFilters.core)}
+              goalsFilterValue={String(appliedFilters.goal)}
               defaultValueGradeFilter={String(appliedFilters.grades)}
               defaultValueSubjectFilter={String(appliedFilters.subjects)}
+
+              defaultValueMainFilter={String(this.state.MySelectMulti)}
 
               coreValueFilter={this.state.myValueCore}
               goalValueFilter={this.state.goalValueFilter}

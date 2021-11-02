@@ -665,7 +665,8 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       returnArray.push({
         // tslint:disable-next-line: variable-name
         id: Number(element.wp_id),
-        title: element.name
+        title: element.name,
+        filter_status: null
       });
     });
     return returnArray;

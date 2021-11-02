@@ -12,6 +12,13 @@ const API = axios.create({
   }
 });
 
+const ARTICLE_API = axios.create({
+  baseURL: process.env.REACT_ARTICLE_APP_BASE_URL,
+  headers: {
+    'content-type': 'application/json'
+  }
+});
+
 API.interceptors.request.use(
   (config: AxiosRequestConfig): AxiosRequestConfig | Promise<AxiosRequestConfig> => {
     if (!config.headers.Authorization) {
@@ -54,4 +61,4 @@ API.interceptors.response.use(
   }
 );
 
-export { API };
+export { API, ARTICLE_API };

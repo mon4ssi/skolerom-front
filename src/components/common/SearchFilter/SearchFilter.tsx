@@ -51,7 +51,7 @@ interface Props {
   subjectFilterValue?: string | number | null;
   gradeFilterValue?: string | number | null;
   coreFilterValue?: string | number | null;
-  goalsFilterValue?: number | null;
+  goalsFilterValue?: string | number | null;
   coreFilterValueTP?: string |number | null;
   mainFilterValueTP?: string | number | null;
   goalsFilterValueTP?: string | number | null;
@@ -539,11 +539,19 @@ class SearchFilter extends Component<Props, State> {
   public renderFiltersGrade = () => {
     const { assignmentListStore, handleClickGrade, customGradesList, gradeFilterValue, defaultValueGradeFilter } = this.props;
     const grades = (customGradesList || assignmentListStore!.getAllGrades()).sort(this.sortSelectors);
+
     const arrayDefaults = (defaultValueGradeFilter) ? defaultValueGradeFilter.split(',') : [];
+
     const visibleGrades = grades.map((grade) => {
       const title = grade.title.split('.', 1);
       const classD = (arrayDefaults.includes(String(grade.id))) ? 'active' : '';
-      return <button value={grade.id} className={`itemFlexFilter gradesFilterClass ${classD}`} onClick={handleClickGrade} key={grade.id}>{title}{intl.get('new assignment.grade')}</button>;
+      return (<button
+          style={{ color: grade.filter_status === 'inactive' ? 'lightgrey' : '' }}
+          value={grade.id}
+          className={`itemFlexFilter gradesFilterClass ${classD}`}
+          onClick={handleClickGrade} 
+          key={grade.id}>{title}{intl.get('new assignment.grade')}
+        </button>);
     });
     if (grades.length === 0) {
       return (
@@ -563,10 +571,12 @@ class SearchFilter extends Component<Props, State> {
     const { assignmentListStore, handleClickSubject, customSubjectsList, subjectFilterValue, defaultValueSubjectFilter } = this.props;
     const subjects = (customSubjectsList || assignmentListStore!.getAllSubjects()).sort(sortByAlphabet);
     const arrayDefaults = (defaultValueSubjectFilter) ? defaultValueSubjectFilter.split(',') : [];
+
     const visibleSubjects = subjects.map((subject) => {
+
       const title = subject.title.split('.', 1);
       const classD = (arrayDefaults.includes(String(subject.id))) ? 'active' : '';
-      return <button value={subject.id} className={`itemFlexFilter subjectsFilterClass ${classD}`} onClick={handleClickSubject} key={subject.id}>{title}</button>;
+      return <button style={ {color: subject.filter_status === 'inactive' ? 'lightgrey' : '' }} value={subject.id} className={`itemFlexFilter subjectsFilterClass ${classD}`} onClick={handleClickSubject} key={subject.id}>{title}</button>;
     });
     if (subjects.length === 0) {
       return (
@@ -785,8 +795,9 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public renderFiltersMulti = () => {
-    const { handleClickMulti, customMultiList, mainFilterValueTP, defaultValueMainFilter } = this.props;
+    const { handleClickMulti, customMultiList, mainFilterValueTP, defaultValueMainFilter,coreFilterValue } = this.props;
     const cores = customMultiList!.sort(sortByAlphabet);
+
     const arrayDefaults = (defaultValueMainFilter) ? defaultValueMainFilter.split(',') : [];
 
     const visibleCores = cores.map((core, idx) => {

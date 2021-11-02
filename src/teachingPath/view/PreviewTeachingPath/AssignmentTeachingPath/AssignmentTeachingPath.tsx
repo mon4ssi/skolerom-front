@@ -50,7 +50,6 @@ class AssignmentTeachingPathComponent extends Component<ComponentProps, State> {
 
   public goToAssignment = (id: number) => () => {
     const { questionaryTeachingPathStore } = this.props;
-    /* console.log(this.props.idTeachingPath); */
 
     this.props.history.push(`/assignments/preview/${id}`, {
       teachingPath: this.props.idTeachingPath,
