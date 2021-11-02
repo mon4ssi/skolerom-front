@@ -660,6 +660,7 @@ export class Filter {
   @observable public grepMainTopicsIds?: string | number | null;
   @observable public grepGoalsIds?: string | number | null;
   @observable public grepReadingInSubject?: string | number | null;
+  @observable public source?: string | number | null;
   public showMyAssignments?: number | null;
 }
 

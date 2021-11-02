@@ -164,6 +164,10 @@ export const buildFilterDTO = (filter: Filter): Object => {
     filterDTO.grepReadingInSubject = filter.grepReadingInSubject;
   }
 
+  if (filter.source) {
+    filterDTO.source = filter.source;
+  }
+
   if (filter.isEvaluated) {
     filterDTO.isEvaluated = filter.isEvaluated;
   }

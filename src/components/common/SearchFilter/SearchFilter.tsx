@@ -61,6 +61,7 @@ interface Props {
   defaultValueSubjectFilter?: string | null;
   defaultValueMainFilter?: string | null;
   defaultValueReadingFilter?: string | null;
+  defaultValueSourceFilter?: string | null;
 
   isAnsweredFilterValue?: string | null;
   isEvaluatedFilterValue?: string | null;
@@ -993,11 +994,13 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public renderFiltersSource = () => {
-    const { handleClickSource, customSourceList } = this.props;
+    const { handleClickSource, customSourceList, defaultValueSourceFilter } = this.props;
     const cores = customSourceList!.sort(sortByAlphabet);
+    const arrayDefaults = (defaultValueSourceFilter) ? defaultValueSourceFilter.split(',') : [];
     const visibleCores = cores.map((core) => {
       const title = core.title;
-      return <button value={core.id} className="itemFlexFilter subjectsFilterClass" onClick={handleClickSource} key={core.id}>{title}</button>;
+      const classD = (arrayDefaults.includes(String(core.id))) ? 'active' : '';
+      return <button value={core.id} className={`itemFlexFilter sourceFilterClass ${classD}`} onClick={handleClickSource} key={core.id}>{title}</button>;
     });
     if (this.props.filtersAjaxLoading) {
       return (
@@ -1214,6 +1217,7 @@ class SearchFilter extends Component<Props, State> {
                 </div>
               </div>
             </div>
+            {this.renderFiltersContentSource()}
           </div>
         </div>
         <div className="filtersModalBackground" onClick={this.closeFiltersModalTp} />
@@ -1312,6 +1316,7 @@ class SearchFilter extends Component<Props, State> {
                 </div>
               </div>
             </div>
+            {this.renderFiltersContentSource()}
           </div>
         </div>
         <div className="filtersModalBackground" onClick={this.closeFiltersModalAssignment} />

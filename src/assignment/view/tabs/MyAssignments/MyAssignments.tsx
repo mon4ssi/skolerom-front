@@ -47,6 +47,7 @@ class MyAssignments extends Component<Props> {
     filter.grepMainTopicsIds = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREPMAINTOPICSIDS);
     filter.grepGoalsIds = QueryStringHelper.getString(this.props.history, QueryStringKeys.GREEPGOALSIDS);
     filter.grepReadingInSubject = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREPREADINGINSUBJECT);
+    filter.source = QueryStringHelper.getString(this.props.history, QueryStringKeys.SOURCE);
     filter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeys.SEARCH);
     filter.order = QueryStringHelper.getString(this.props.history, QueryStringKeys.ORDER, SortingFilter.DESC);
     filter.orderField = SortingFilter.CREATION_DATE;

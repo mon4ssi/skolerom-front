@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import debounce from 'lodash/debounce';
 
 import { TeachingPathsListStore } from './TeachingPathsListStore';
-import { GrepElementFilters, FilterGrep, GreepSelectValue, GrepFilters, GoalsData, Greep, GreepElements, Subject } from 'assignment/Assignment';
+import { GrepElementFilters, FilterGrep, GreepSelectValue, GrepFilters, GoalsData, Greep, GreepElements, Subject, Source } from 'assignment/Assignment';
 import { InfoCard } from 'components/common/InfoCard/InfoCard';
 import { TabNavigation } from 'components/common/TabNavigation/TabNavigation';
 import { SearchFilter } from 'components/common/SearchFilter/SearchFilter';
@@ -49,12 +49,14 @@ interface State {
   optionsCore: Array<GreepSelectValue>;
   optionsMulti: Array<Greep>;
   optionsReading: Array<Greep>;
+  optionsSource: Array<Greep>;
   optionsSubjects: Array<GrepFilters>;
   optionsGrades: Array<GrepFilters>;
   optionsGoals: Array<GreepSelectValue>;
   valueCoreOptions: Array<number>;
   valueMultiOptions: Array<number>;
   valuereadingOptions: number;
+  valuesourceOptions: number;
   valueGradesOptions: Array<number>;
   valueSubjectsOptions: Array<number>;
   valueGoalsOptions: Array<number>;
@@ -63,6 +65,7 @@ interface State {
   myValueSubject: Array<number>;
   myValueMulti: Array<number>;
   myValueReading: Array<number>;
+  myValueSource: Array<number>;
   myValueCore: Array<any>;
   goalValueFilter: Array<any>;
   subjectsArrayFilter: Array<Subject>;
@@ -117,12 +120,14 @@ class TeachingPathsListComponent extends Component<Props, State> {
       optionsCore: [],
       optionsMulti: [],
       optionsReading: [],
+      optionsSource: [],
       optionsSubjects: [],
       optionsGrades: [],
       optionsGoals: [],
       valueCoreOptions: [],
       valueMultiOptions: [],
       valuereadingOptions: 0,
+      valuesourceOptions: 0,
       valueGradesOptions: [],
       valueSubjectsOptions: [],
       valueGoalsOptions: [],
@@ -131,6 +136,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
       myValueSubject: [],
       myValueMulti: [],
       myValueReading: [],
+      myValueSource: [],
       myValueCore: [],
       subjectsArrayFilter: [],
       gradesArrayFilter: [],
@@ -153,6 +159,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
     filter.grepMainTopicsIds = QueryStringHelper.getString(this.props.history, QueryStringKeys.GREPMAINTOPICSIDS);
     filter.grepGoalsIds = QueryStringHelper.getString(this.props.history, QueryStringKeys.GREEPGOALSIDS);
     filter.grepReadingInSubject = QueryStringHelper.getString(this.props.history, QueryStringKeys.GREPREADINGINSUBJECT);
+    filter.source = QueryStringHelper.getString(this.props.history, QueryStringKeys.SOURCE);
     filter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeys.SEARCH);
     filter.order = QueryStringHelper.getString(this.props.history, QueryStringKeys.ORDER, SortingFilter.DESC);
     filter.orderField = SortingFilter.CREATION_DATE;
@@ -170,6 +177,8 @@ class TeachingPathsListComponent extends Component<Props, State> {
     const { editTeachingPathStore } = this.props;
     this.setState({ filtersAjaxLoading: true });
     const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFilters(grades, subjects, SOURCE);
+    await editTeachingPathStore!.getSources();
+    const sources = editTeachingPathStore!.allSources;
     // console.log(grepFiltersDataAwait);
     this.setState({
       grepFiltersData: grepFiltersDataAwait
@@ -182,6 +191,9 @@ class TeachingPathsListComponent extends Component<Props, State> {
     });
     this.setState({
       optionsReading: this.renderValueOptionsNumbers(grepFiltersDataAwait, 'reading')
+    });
+    this.setState({
+      optionsSource: this.changeDataSource(sources)
     });
     this.setState(
       {
@@ -243,6 +255,17 @@ class TeachingPathsListComponent extends Component<Props, State> {
         );
       });
     this.setState({ filtersAjaxLoading: false });
+  }
+
+  public changeDataSource = (data: Array<Source>) => {
+    const returnArray: Array<Greep> = [];
+    data!.forEach((element) => {
+      returnArray.push({
+        id: Number(element.id),
+        title: element.title
+      });
+    });
+    return returnArray;
   }
 
   public renderDataSubjects = (data: Array<GrepFilters>) => {
@@ -493,6 +516,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
         myValueMulti: [],
         valuereadingOptions: 0,
         myValueReading: [],
+        myValueSource: [],
       },
       async () => {
         // const valueSelectedGrades = this.state.myValueGrade;
@@ -630,6 +654,28 @@ class TeachingPathsListComponent extends Component<Props, State> {
       this.props.history,
       QueryStringKeys.GREPREADINGINSUBJECT,
       String(valueSelectedReading)
+    );
+    QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
+  }
+
+  public handleClickSource = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const value = e.currentTarget.value;
+    const valueSelectedSource = this.state.myValueSource;
+    this.setState({ valuesourceOptions: Number(value) });
+    if (!valueSelectedSource!.includes(Number(value))) {
+      e.currentTarget.classList.add('active');
+      valueSelectedSource!.push(Number(value));
+    } else {
+      e.currentTarget.classList.add('active');
+      const indexSelected = valueSelectedSource!.indexOf(Number(value));
+      if (indexSelected > -1) {
+        valueSelectedSource!.splice(indexSelected, 1);
+      }
+    }
+    QueryStringHelper.set(
+      this.props.history,
+      QueryStringKeys.SOURCE,
+      String(valueSelectedSource)
     );
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
   }
@@ -893,6 +939,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
     QueryStringHelper.set(this.props.history, QueryStringKeys.GREPCOREELEMENTSIDS, '');
     QueryStringHelper.set(this.props.history, QueryStringKeys.GREPMAINTOPICSIDS, '');
     QueryStringHelper.set(this.props.history, QueryStringKeys.GREPREADINGINSUBJECT, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeys.SOURCE, '');
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
     this.setState({ valueGradesOptions: [] });
     this.setState({ valueSubjectsOptions: [] });
@@ -905,6 +952,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
     this.setState({ myValueCore: [] });
     this.setState({ myValueMulti: [] });
     this.setState({ myValueReading: [] });
+    this.setState({ myValueSource: [] });
     this.setState({ goalValueFilter: [] });
 
     const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
@@ -953,6 +1001,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
           customGoalsTPList={this.state.optionsGoals}
           customMultiList={this.state.optionsMulti}
           customReadingList={this.state.optionsReading}
+          customSourceList={this.state.optionsSource}
           filtersisUsed={this.state.filtersisUsed}
           filtersAjaxLoading={this.state.filtersAjaxLoading}
           filtersAjaxLoadingGoals={this.state.filtersAjaxLoadingGoals}
@@ -968,6 +1017,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
           handleClickSubject={this.handleClickSubject}
           handleClickMulti={this.handleClickMulti}
           handleClickReading={this.handleClickReading}
+          handleClickSource={this.handleClickSource}
           // VALUES
           gradeFilterValue={QueryStringHelper.getString(this.props.history, QueryStringKeys.GRADE)}
           defaultValueGradeFilter={QueryStringHelper.getString(this.props.history, QueryStringKeys.GRADE)}
@@ -981,6 +1031,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
           defaultValueMainFilter={QueryStringHelper.getString(this.props.history, QueryStringKeys.GREPMAINTOPICSIDS)}
           goalsFilterValueTP={QueryStringHelper.getString(this.props.history, QueryStringKeys.GREEPGOALSIDS)}
           defaultValueReadingFilter={QueryStringHelper.getString(this.props.history, QueryStringKeys.GREPREADINGINSUBJECT)}
+          defaultValueSourceFilter={QueryStringHelper.getString(this.props.history, QueryStringKeys.SOURCE)}
           coreValueFilter={this.state.myValueCore}
           goalValueFilter={this.state.goalValueFilter}
         />

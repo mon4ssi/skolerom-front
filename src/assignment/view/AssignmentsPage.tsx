@@ -9,7 +9,7 @@ import classNames from 'classnames';
 
 import { TabNavigation } from 'components/common/TabNavigation/TabNavigation';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
-import { GreepSelectValue, FilterGrep, Greep, GrepFilters, GoalsData, Subject } from 'assignment/Assignment';
+import { GreepSelectValue, FilterGrep, Greep, GrepFilters, GoalsData, Subject, Source } from 'assignment/Assignment';
 import { SearchFilter } from 'components/common/SearchFilter/SearchFilter';
 import { MyAssignments } from './tabs/MyAssignments/MyAssignments';
 import { StudentAssignments } from './tabs/StudentAssignments/StudentAssignments';
@@ -130,6 +130,7 @@ interface State {
   myValueSubject: Array<number>;
   myValueMulti: Array<number>;
   myValueReading: Array<number>;
+  myValueSource: Array<number>;
   myValueCore: Array<any>;
   myValueGoal: Array<any>;
   goalValueFilter: Array<any>;
@@ -138,12 +139,14 @@ interface State {
   optionsCore: Array<GreepSelectValue>;
   optionsMulti: Array<Greep>;
   optionsReading: Array<Greep>;
+  optionsSource: Array<Greep>;
   optionsSubjects: Array<GrepFilters>;
   optionsGrades: Array<GrepFilters>;
   optionsGoals: Array<GreepSelectValue>;
   valueCoreOptions: Array<number>;
   valueMultiOptions: Array<number>;
   valuereadingOptions: number;
+  valuersourceOptions: number;
   valueGradesOptions: Array<number>;
   valueSubjectsOptions: Array<number>;
   valueGoalsOptions: Array<number>;
@@ -183,6 +186,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       myValueMulti: [],
       myValueReading: [],
       myValueCore: [],
+      myValueSource: [],
       myValueGoal: [],
       goalValueFilter: [],
       customCoreList: [],
@@ -193,9 +197,11 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       optionsSubjects: [],
       optionsGrades: [],
       optionsGoals: [],
+      optionsSource: [],
       valueCoreOptions: [],
       valueMultiOptions: [],
       valuereadingOptions: 0,
+      valuersourceOptions: 0,
       valueGradesOptions: [],
       valueSubjectsOptions: [],
       valueGoalsOptions: [],
@@ -384,6 +390,35 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       this.props.history,
       QueryStringKeys.GREPREADINGINSUBJECT,
       String(valueSelectedReading)
+    );
+    QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
+  }
+
+  private handleClickSource = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const value = e.currentTarget.value;
+    const valueSelectedSource = this.state.myValueSource;
+    this.setState({ valuersourceOptions: Number(value) });
+    if (!valueSelectedSource!.includes(Number(value))) {
+      valueSelectedSource!.push(Number(value));
+      this.setState({ filtersisUsed: true });
+    } else {
+      const indexSelected = valueSelectedSource!.indexOf(Number(value));
+      if (indexSelected > -1) {
+        valueSelectedSource!.splice(indexSelected, 1);
+      }
+      if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+        this.setState({ filtersisUsed: true });
+      } else {
+        this.setState({ filtersisUsed: false });
+      }
+    }
+    this.setState({
+      myValueSource : valueSelectedSource
+    });
+    QueryStringHelper.set(
+      this.props.history,
+      QueryStringKeys.SOURCE,
+      String(valueSelectedSource)
     );
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
   }
@@ -596,6 +631,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     filter.grepMainTopicsIds = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREPMAINTOPICSIDS);
     filter.grepGoalsIds = QueryStringHelper.getString(this.props.history, QueryStringKeys.GREEPGOALSIDS);
     filter.grepReadingInSubject = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREPREADINGINSUBJECT);
+    filter.source = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.SOURCE);
     filter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeys.SEARCH);
     filter.order = QueryStringHelper.getString(this.props.history, QueryStringKeys.ORDER, SortingFilter.DESC);
     filter.orderField = SortingFilter.CREATION_DATE;
@@ -611,6 +647,8 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     const { newAssignmentStore } = this.props;
     this.setState({ filtersAjaxLoading: true });
     const grepFiltersDataAwait = await newAssignmentStore!.getGrepFilters(grades, subjects, SOURCE);
+    await newAssignmentStore!.getSources();
+    const sources = newAssignmentStore!.allSources;
     this.setState({
       grepFiltersData : grepFiltersDataAwait
     });
@@ -622,6 +660,9 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     });
     this.setState({
       optionsReading : this.renderValueOptionsNumbers(grepFiltersDataAwait, 'reading')
+    });
+    this.setState({
+      optionsSource: this.changeDataSource(sources)
     });
     this.setState(
       {
@@ -657,6 +698,17 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       optionsGrades : this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
     });
     this.setState({ filtersAjaxLoading: false });
+  }
+
+  public changeDataSource = (data: Array<Source>) => {
+    const returnArray: Array<Greep> = [];
+    data!.forEach((element) => {
+      returnArray.push({
+        id: Number(element.id),
+        title: element.title
+      });
+    });
+    return returnArray;
   }
 
   public renderDataSubjects = (data: Array<GrepFilters>) => {
@@ -700,6 +752,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     QueryStringHelper.set(this.props.history, QueryStringKeys.GREPCOREELEMENTSIDS, '');
     QueryStringHelper.set(this.props.history, QueryStringKeys.GREPMAINTOPICSIDS, '');
     QueryStringHelper.set(this.props.history, QueryStringKeys.GREPREADINGINSUBJECT, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeys.SOURCE, '');
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
 
     this.setState({ valueGradesOptions: [] });
@@ -713,6 +766,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     this.setState({ myValueCore: [] });
     this.setState({ myValueMulti: [] });
     this.setState({ myValueReading: [] });
+    this.setState({ myValueSource: [] });
     this.setState({ goalValueFilter: [] });
 
     const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
@@ -785,6 +839,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
           customCoreTPList={this.state.optionsCore}
           customMultiList={this.state.optionsMulti}
           customReadingList={this.state.optionsReading}
+          customSourceList={this.state.optionsSource}
           customGoalsTPList={this.state.optionsGoals}
           filtersisUsed={this.state.filtersisUsed}
           filtersAjaxLoading={this.state.filtersAjaxLoading}
@@ -803,6 +858,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
           handleChangeSelectCore={this.handleChangeSelectCore}
           handleChangeSelectGoals={this.handleChangeSelectGoals}
           handleClickReset={this.handleClickReset}
+          handleClickSource={this.handleClickSource}
           // VALUES
           defaultValueGradeFilter={QueryStringHelper.getString(this.props.history, QueryStringKeys.GRADE)}
           activityFilterValue={QueryStringHelper.getNumber(this.props.history, QueryStringKeys.ACTIVITY)}
@@ -819,6 +875,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
 
           defaultValueMainFilter={QueryStringHelper.getString(this.props.history, QueryStringKeys.GREPMAINTOPICSIDS)}
           defaultValueReadingFilter={QueryStringHelper.getString(this.props.history, QueryStringKeys.GREPREADINGINSUBJECT)}
+          defaultValueSourceFilter={QueryStringHelper.getString(this.props.history, QueryStringKeys.SOURCE)}
         />
       );
     }
