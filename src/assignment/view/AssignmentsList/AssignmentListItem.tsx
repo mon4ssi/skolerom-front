@@ -246,7 +246,7 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
     const { assignment } = this.props;
     const subjects = assignment.subjects.length <= maxNumberOfSubjects ?
       toJS(assignment.subjects) :
-      [...toJS(assignment.subjects).splice(0, maxNumberOfSubjects), { id: 0, title: intl.get('assignment list.Others'), filter_status: null }];
+      [...toJS(assignment.subjects).splice(0, maxNumberOfSubjects), { id: 0, title: intl.get('assignment list.Others'), filterStatus: null }];
     const classes = classNames('AssignmentListItem__subjects', {
       AssignmentListItem__subjects_mobile: isMobile
     });

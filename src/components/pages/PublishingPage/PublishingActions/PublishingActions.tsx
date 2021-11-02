@@ -132,7 +132,7 @@ export class PublishingActions extends Component<Props, State> {
     });
     await new Promise(resolve => setTimeout(resolve, SETTIMEOUT));
     const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects), '');
-    console.log(this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade'));
+
     this.setState({
       grepFiltersData : grepFiltersDataAwait
     });
@@ -562,11 +562,9 @@ export class PublishingActions extends Component<Props, State> {
     const { optionsGrades, valueGradesOptions } = this.state;
     const arrayValueGrades = this.state.valueGradesOptions;
     const { store } = this.props;
-    console.log(store!.getAllGrades());
+
     const grade = store!.getAllGrades().find(grade => grade.id === id);
-    console.log(grade);
-    console.log(optionsGrades);
-    console.log(arrayValueGrades);
+
     if (grade) {
       store!.currentEntity!.addGrade(grade);
       this.setState({ loadingGoals : true });
@@ -578,8 +576,7 @@ export class PublishingActions extends Component<Props, State> {
           }
         }
       }
-     
-      console.log(arrayValueGrades);
+
       this.setState({
         valueGradesOptions : arrayValueGrades
       });

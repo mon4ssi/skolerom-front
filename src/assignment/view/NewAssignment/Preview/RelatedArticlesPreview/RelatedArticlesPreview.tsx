@@ -217,7 +217,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         // tslint:disable-next-line: variable-name
         id: Number(element.subject_id),
         title: element.description!,
-        filter_status: null
+        filterStatus: null
       });
     });
     this.setState({

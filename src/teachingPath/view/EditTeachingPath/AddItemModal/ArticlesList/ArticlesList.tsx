@@ -447,8 +447,9 @@ export class ArticlesList extends Component<Props, State> {
   public existInGrepList(grepList: Array<Greep>, id: number | Number): boolean {
     let valueReturn = false;
     grepList.forEach((grepElement) => {
-      if (grepElement.id === id)
+      if (grepElement.id === id) {
         valueReturn = true;
+      }
     });
     return valueReturn;
   }
@@ -466,7 +467,7 @@ export class ArticlesList extends Component<Props, State> {
       this.getAllSubjects() :
       this.getSelectedSubjects();
 
-    //coreElements
+    // coreElements
     const coreElementsResult = this.updateCoreElementsFilters(grades, subjectForFilters);
     const coreElementsForFilter = this.getSelectedCoreElements()!.length === 0 ?
       this.getAllCoreElements() :
@@ -500,7 +501,7 @@ export class ArticlesList extends Component<Props, State> {
 
   }
 
-  public getSubjectsByCoreElements(coreElements: any[]) {
+  public getSubjectsByCoreElements(coreElements: Array<any>) {
     const newSubjects: Array<any> = [];
     this.state.grepDataFilters!.core_elements_filter!.forEach(((coreElement) => {
       if (coreElements.includes(Number(coreElement.core_element_id))) {
@@ -517,7 +518,7 @@ export class ArticlesList extends Component<Props, State> {
     return newSubjects;
   }
 
-  public getGradesByCoreElements(coreElements: any[]) {
+  public getGradesByCoreElements(coreElements: Array<any>) {
     const newGrades: Array<any> = [];
     this.state.grepDataFilters!.core_elements_filter!.forEach(((coreElement) => {
       if (coreElements.includes(Number(coreElement.core_element_id))) {
@@ -540,8 +541,6 @@ export class ArticlesList extends Component<Props, State> {
     this.state.grepDataFilters!.grade_filter!.forEach(((grade) => {
 
       // set status
-      let filterStatus = 'active';
-
       if (
         this.getSelectedGrades()!.length === 0 &&
         this.getSelectedSubjects()!.length === 0 &&
@@ -550,23 +549,29 @@ export class ArticlesList extends Component<Props, State> {
 
         const findedGrades = this.getGradesByCoreElements(this.getSelectedCoreElements()!);
 
-        if (findedGrades.length === 0)
-          filterStatus = 'active';
-        else
-          filterStatus = findedGrades.includes(Number(grade.grade_id)) ? 'active' : 'inactive';
+        const filterStatus = (findedGrades.length === 0) ? 'active' : findedGrades.includes(Number(grade.grade_id)) ? 'active' : 'inactive';
+        const newGrade = {
+          // tslint:disable-next-line: variable-name
+          filterStatus,
+          id: Number(grade.grade_id),
+          title: grade.description!
+        };
+        if (!this.existInGrepList(newArrayGrade, newGrade.id)) {
+          newArrayGrade.push(newGrade);
+        }
+      } else {
+        const newGrade = {
+          // tslint:disable-next-line: variable-name
+          id: Number(grade.grade_id),
+          title: grade.description!,
+          // filterStatus: 'inactive'
+          filterStatus: 'active'
+        };
+        if (!this.existInGrepList(newArrayGrade, newGrade.id)) {
+          newArrayGrade.push(newGrade);
+        }
       }
 
-      // end set status
-      const newGrade = {
-        // tslint:disable-next-line: variable-name
-        id: Number(grade.grade_id),
-        title: grade.description!,
-        // filter_status: 'inactive'
-        filter_status: filterStatus
-      };
-      if (!this.existInGrepList(newArrayGrade, newGrade.id)) {
-        newArrayGrade.push(newGrade);
-      }
     }));
 
     this.setState({
@@ -583,32 +588,37 @@ export class ArticlesList extends Component<Props, State> {
 
         if (grades!.includes(Number(gradeId))) {
           // set status
-          let filterStatus = 'active';
-
           if (
             this.getSelectedGrades()!.length === 0 &&
             this.getSelectedSubjects()!.length === 0 &&
             this.getSelectedCoreElements()!.length !== 0
           ) {
             const findedSubjects = this.getSubjectsByCoreElements(this.getSelectedCoreElements()!);
-
-            if (findedSubjects.length === 0)
-              filterStatus = 'active';
-            else
-              filterStatus = findedSubjects.includes(Number(subject.subject_id)) ? 'active' : 'inactive';
+            const filterStatus = (findedSubjects.length === 0) ? 'active' : findedSubjects.includes(Number(subject.subject_id)) ? 'active' : 'inactive';
+            const newSubject = {
+              // tslint:disable-next-line: variable-name
+              filterStatus,
+              id: Number(subject.subject_id),
+              title: subject.description!
+              // filterStatus: 'inactive'
+            };
+            if (!this.existInGrepList(newArraySubject, newSubject.id)) {
+              newArraySubject.push(newSubject);
+            }
+          } else {
+            // end set status
+            const newSubject = {
+              // tslint:disable-next-line: variable-name
+              id: Number(subject.subject_id),
+              title: subject.description!,
+              // filterStatus: 'inactive'
+              filterStatus: 'active'
+            };
+            if (!this.existInGrepList(newArraySubject, newSubject.id)) {
+              newArraySubject.push(newSubject);
+            }
           }
 
-          // end set status
-          const newSubject = {
-            // tslint:disable-next-line: variable-name
-            id: Number(subject.subject_id),
-            title: subject.description!,
-            // filter_status: 'inactive'
-            filter_status: filterStatus
-          };
-          if (!this.existInGrepList(newArraySubject, newSubject.id)) {
-            newArraySubject.push(newSubject);
-          }
         }
       });
 
@@ -836,54 +846,67 @@ export class ArticlesList extends Component<Props, State> {
   }
 
   public setSelectedGrade(gradeId: number, fn: Function) {
-    this.setState({
-      MySelectGrade: [gradeId]
-    }, () => {
-      fn();
-    });
+    this.setState(
+      {
+        MySelectGrade: [gradeId]
+      },
+      () => {
+        fn();
+      }
+    );
   }
 
   public setSelectedSubjects(subjects: Array<any>, fn: Function) {
-    this.setState({
-      MySelectSubject: subjects
-    }, () => {
-      fn();
-    });
+    this.setState(
+      {
+        MySelectSubject: subjects
+      },
+      () => {
+        fn();
+      });
   }
 
-  public setSelectedCoreElements(coreElements: any[], fn: Function) {
-    this.setState({
-      myValueCore: coreElements!
-    }, () => {
-      fn();
-    });
+  public setSelectedCoreElements(coreElements: Array<any>, fn: Function) {
+    this.setState(
+      {
+        myValueCore: coreElements!
+      },
+      () => {
+        fn();
+      });
   }
 
-  public setSelectedMainTopics(mainTopics: any[], fn: Function) {
-    this.setState({
-      MySelectMulti: mainTopics!
-    }, () => {
-      fn();
-    });
+  public setSelectedMainTopics(mainTopics: Array<any>, fn: Function) {
+    this.setState(
+      {
+        MySelectMulti: mainTopics!
+      },
+      () => {
+        fn();
+      });
   }
 
-  public setSelectedGoals(goals: any[], fn: Function) {
-    this.setState({
-      goalValueFilter: goals!
-    }, () => {
-      fn();
-    });
+  public setSelectedGoals(goals: Array<any>, fn: Function) {
+    this.setState(
+      {
+        goalValueFilter: goals!
+      },
+      () => {
+        fn();
+      });
 
   }
 
   public addSelectedSubjects(subjectId: number, fn: Function) {
     const currentSelectedSubjects = this.getSelectedSubjects();
     currentSelectedSubjects!.push(subjectId);
-    this.setState({
-      MySelectSubject: currentSelectedSubjects
-    }, () => {
-      fn();
-    });
+    this.setState(
+      {
+        MySelectSubject: currentSelectedSubjects
+      },
+      () => {
+        fn();
+      });
 
   }
 
@@ -894,7 +917,7 @@ export class ArticlesList extends Component<Props, State> {
     this.setState(
       {
         myValueCore: currentSelectedCoreElements!
-      }, 
+      },
       () => {
         fn();
       }
@@ -906,11 +929,13 @@ export class ArticlesList extends Component<Props, State> {
 
     const currentSelectedMainTopics = this.getSelectedMainTopics();
     currentSelectedMainTopics!.push(mainTopicId);
-    this.setState({
-      MySelectMulti: currentSelectedMainTopics!
-    }, () => {
-      fn();
-    });
+    this.setState(
+      {
+        MySelectMulti: currentSelectedMainTopics!
+      },
+      () => {
+        fn();
+      });
 
   }
 
@@ -1042,7 +1067,7 @@ export class ArticlesList extends Component<Props, State> {
     this.setState(
       {
         goalValueFilter: currentSelectedGoals!
-      }, 
+      },
       () => {
         fn();
       }
@@ -1050,9 +1075,9 @@ export class ArticlesList extends Component<Props, State> {
   }
 
   public handleChangeSelectCore = async (newValues: Array<any>) => {
-    newValues = newValues.map(value => value.value);
+    const _newValues = newValues.map(value => value.value);
 
-    this.setSelectedCoreElements(newValues, () => {
+    this.setSelectedCoreElements(_newValues, () => {
       this.resetFilters(['mainTopics', 'goals'], () => {
         this.refreshAppliedFilters(() => {
           this.handleChangeFilters('core', String(this.getSelectedCoreElements()));
@@ -1107,7 +1132,7 @@ export class ArticlesList extends Component<Props, State> {
 
         this.addSelectedGoals(newGoal, () => {
           this.resetFilters(
-            [], 
+            [],
             () => {
               this.refreshAppliedFilters(() => {
                 this.handleChangeFilters('goal', String(this.getSelectedGoals()));
@@ -1117,11 +1142,17 @@ export class ArticlesList extends Component<Props, State> {
         });
       } else { // ??
 
-        this.removeSelectedFilter('goals', newGoal, () => {
-          this.refreshAppliedFilters(() => {
-            this.handleChangeFilters('goal', String(this.getSelectedGoals()));
-          });
-        }, null);
+        this.removeSelectedFilter(
+          'goals',
+          newGoal,
+          () => {
+            this.refreshAppliedFilters(
+              () => {
+                this.handleChangeFilters('goal', String(this.getSelectedGoals()));
+              });
+          },
+          null
+        );
       }
 
     } else {
@@ -1322,11 +1353,19 @@ export class ArticlesList extends Component<Props, State> {
       });
     } else {
 
-      this.removeSelectedFilter('grades', newGradeId, () => {
-        this.refreshAppliedFilters(() => {
-          this.handleChangeFilters('grades', String(this.getSelectedGrades()));
-        });
-      }, e);
+      this.removeSelectedFilter(
+        'grades',
+        newGradeId,
+        () => {
+          this.refreshAppliedFilters(
+            () => {
+              this.handleChangeFilters(
+                'grades',
+                String(this.getSelectedGrades()));
+            });
+        },
+        e
+      );
     }
   }
 
@@ -1363,19 +1402,30 @@ export class ArticlesList extends Component<Props, State> {
     const selectedSubjects = this.getSelectedSubjects()!;
 
     if (!selectedSubjects.includes(newSubjectId)) {
-      this.addSelectedSubjects(Number(e.currentTarget.value), () => {
-        this.resetFilters(['coreElements', 'mainTopics', 'goals'], () => {
-          this.refreshAppliedFilters(() => {
-            this.handleChangeFilters('subjects', String(this.getSelectedSubjects()));
-          });
+      this.addSelectedSubjects(
+        Number(e.currentTarget.value),
+        () => {
+          this.resetFilters(
+            ['coreElements', 'mainTopics', 'goals'],
+            () => {
+              this.refreshAppliedFilters(
+                () => {
+                  this.handleChangeFilters('subjects', String(this.getSelectedSubjects()));
+                });
+            });
         });
-      });
     } else {
-      this.removeSelectedFilter('subjects', newSubjectId, () => {
-        this.refreshAppliedFilters(() => {
-          this.handleChangeFilters('subjects', String(this.getSelectedSubjects()));
-        });
-      }, e);
+      this.removeSelectedFilter(
+        'subjects',
+        newSubjectId,
+        () => {
+          this.refreshAppliedFilters(
+            () => {
+              this.handleChangeFilters('subjects', String(this.getSelectedSubjects()));
+            });
+        },
+        e
+      );
     }
   }
 
@@ -1395,11 +1445,16 @@ export class ArticlesList extends Component<Props, State> {
         });
       });
     } else {
-      this.removeSelectedFilter('mainTopics', newMainTopicId, () => {
-        this.refreshAppliedFilters(() => {
-          this.handleChangeFilters('multi', String(this.getSelectedSubjects()));
-        });
-      }, e);
+      this.removeSelectedFilter(
+        'mainTopics',
+        newMainTopicId,
+        () => {
+          this.refreshAppliedFilters(() => {
+            this.handleChangeFilters('multi', String(this.getSelectedSubjects()));
+          });
+        },
+        e
+      );
     }
   }
 
@@ -1664,11 +1719,9 @@ export class ArticlesList extends Component<Props, State> {
       );
     }
 
-
     if (!selectedAndLoadedArticles.length) {
       return <div className={'noResults'}>{intl.get('edit_teaching_path.No results found')}</div>;
     }
-
 
     const sortedArticles = selectedAndLoadedArticles.sort(
       (article) => {

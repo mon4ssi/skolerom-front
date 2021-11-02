@@ -57,24 +57,24 @@ export enum QuestionType {
 export class Grade {
   @observable public id: number;
   @observable public title: string;
-  @observable public filter_status?: string | undefined | null;
+  @observable public filterStatus?: string | undefined | null;
 
   constructor(id: number, title: string) {
     this.id = id;
     this.title = title;
-    this.filter_status = null;
+    this.filterStatus = null;
   }
 }
 
 export class Subject {
   @observable public id: number;
   @observable public title: string;
-  @observable public filter_status?: string | undefined | null;
+  @observable public filterStatus?: string | undefined | null;
 
   constructor(id: number, title: string) {
     this.id = id;
     this.title = title;
-    this.filter_status = null;
+    this.filterStatus = null;
   }
 }
 
@@ -108,7 +108,7 @@ export interface GrepFilters {
   name: string;
   // tslint:disable-next-line: variable-name
   wp_id: number;
-  filter_status?: any;
+  filterStatus?: any;
 }
 
 export interface GrepElementFilters {

@@ -213,9 +213,11 @@ class TeachingPathsListComponent extends Component<Props, State> {
         );
       }
     );
-    this.setState({
-      optionsGrades: this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
-    },() => {
+    this.setState(
+      {
+        optionsGrades: this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
+      },
+      () => {
         this.setState(
           {
             gradesArrayFilter: this.renderDataSubjects(this.state.optionsGrades)
@@ -251,7 +253,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
         // tslint:disable-next-line: variable-name
         id: Number(element.wp_id),
         title: element.name,
-        filter_status: element.filter_status
+        filterStatus: element.filterStatus
       });
     });
     return returnArray;
@@ -353,7 +355,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
           name: element.name,
           // tslint:disable-next-line: variable-name
           wp_id: element.wp_id,
-          filter_status: element.filter_status,
+          filterStatus: element.filterStatus,
         });
       });
     }
@@ -364,7 +366,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
           name: element.name,
           // tslint:disable-next-line: variable-name
           wp_id: element.wp_id,
-          filter_status: element.filter_status,
+          filterStatus: element.filterStatus,
         });
       });
     }
@@ -485,52 +487,54 @@ class TeachingPathsListComponent extends Component<Props, State> {
       String([])
     );
 
-    this.setState({
-      valueMultiOptions: [],
-      myValueMulti: [],
-      valuereadingOptions: 0,
-      myValueReading: [],
-    }, async () => {
-      // const valueSelectedGrades = this.state.myValueGrade;
-      let valueSelectedGrades: Array<number> = [];
-      const value = currentTarget.value;
-      const valueToArray: Array<number> = [];
-      if (!this.state.myValueGrade!.includes(Number(value))) {
-        currentTarget.classList.add('active');
-        valueSelectedGrades = [Number(value)];
-      } else {
-        currentTarget.classList.remove('active');
-        valueSelectedGrades = [];
-        /*const indexSelected = valueSelectedGrades!.indexOf(Number(value));
-        if (indexSelected > -1) {
-          valueSelectedGrades!.splice(indexSelected, 1);
-        }*/
-      }
-      this.setState({
-        myValueGrade: valueSelectedGrades
-      });
-      optionsGrades!.forEach((element) => {
-        valueSelectedGrades.forEach((el) => {
-          if (Number(element.wp_id) === Number(el)) {
-            valueToArray.push(element.id);
-            this.setState({ valueGradesOptions: valueToArray });
-          }
+    this.setState(
+      {
+        valueMultiOptions: [],
+        myValueMulti: [],
+        valuereadingOptions: 0,
+        myValueReading: [],
+      },
+      async () => {
+        // const valueSelectedGrades = this.state.myValueGrade;
+        let valueSelectedGrades: Array<number> = [];
+        const value = currentTarget.value;
+        const valueToArray: Array<number> = [];
+        if (!this.state.myValueGrade!.includes(Number(value))) {
+          currentTarget.classList.add('active');
+          valueSelectedGrades = [Number(value)];
+        } else {
+          currentTarget.classList.remove('active');
+          valueSelectedGrades = [];
+          /*const indexSelected = valueSelectedGrades!.indexOf(Number(value));
+          if (indexSelected > -1) {
+            valueSelectedGrades!.splice(indexSelected, 1);
+          }*/
+        }
+        this.setState({
+          myValueGrade: valueSelectedGrades
         });
+        optionsGrades!.forEach((element) => {
+          valueSelectedGrades.forEach((el) => {
+            if (Number(element.wp_id) === Number(el)) {
+              valueToArray.push(element.id);
+              this.setState({ valueGradesOptions: valueToArray });
+            }
+          });
+        });
+        QueryStringHelper.set(
+          this.props.history,
+          QueryStringKeys.GRADE,
+          String(valueSelectedGrades)
+        );
+        QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
+        this.assigValueData(String(valueSelectedGrades), String(this.state.myValueSubject));
+        this.setState({ filtersAjaxLoadingGoals: true });
+        const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueToArray, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
+        this.setState({
+          optionsGoals: this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
+        });
+        this.setState({ filtersAjaxLoadingGoals: false });
       });
-      QueryStringHelper.set(
-        this.props.history,
-        QueryStringKeys.GRADE,
-        String(valueSelectedGrades)
-      );
-      QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
-      this.assigValueData(String(valueSelectedGrades), String(this.state.myValueSubject));
-      this.setState({ filtersAjaxLoadingGoals: true });
-      const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueToArray, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
-      this.setState({
-        optionsGoals: this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
-      });
-      this.setState({ filtersAjaxLoadingGoals: false });
-    });
 
   }
 
@@ -670,7 +674,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
     });
     this.setState({ valueCoreOptions: ArrayValue });
 
-    if (valueGradesOptions.length === 0 && valueSubjectsOptions.length === 0 ) {
+    if (valueGradesOptions.length === 0 && valueSubjectsOptions.length === 0) {
 
       // REFRESH SUBJECTS
       this.refreshSubject(ArrayValue, valueGoalsOptions);

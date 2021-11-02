@@ -52,7 +52,7 @@ interface Props {
   gradeFilterValue?: string | number | null;
   coreFilterValue?: string | number | null;
   goalsFilterValue?: string | number | null;
-  coreFilterValueTP?: string |number | null;
+  coreFilterValueTP?: string | number | null;
   mainFilterValueTP?: string | number | null;
   goalsFilterValueTP?: string | number | null;
   readingFilterValueTP?: string | number | null;
@@ -166,7 +166,7 @@ class SearchFilter extends Component<Props, State> {
   )
 
   public renderValueOptions = (data: Array<Greep>) => {
-    const returnArray : Array<GreepSelectValue> = [];
+    const returnArray: Array<GreepSelectValue> = [];
     data.forEach((element) => {
       returnArray.push({
         // tslint:disable-next-line: variable-name
@@ -545,13 +545,17 @@ class SearchFilter extends Component<Props, State> {
     const visibleGrades = grades.map((grade) => {
       const title = grade.title.split('.', 1);
       const classD = (arrayDefaults.includes(String(grade.id))) ? 'active' : '';
-      return (<button
-          style={{ color: grade.filter_status === 'inactive' ? 'lightgrey' : '' }}
+      return (
+        <button
+          style={{ color: grade.filterStatus === 'inactive' ? 'lightgrey' : '' }}
           value={grade.id}
           className={`itemFlexFilter gradesFilterClass ${classD}`}
-          onClick={handleClickGrade} 
-          key={grade.id}>{title}{intl.get('new assignment.grade')}
-        </button>);
+          onClick={handleClickGrade}
+          key={grade.id}
+        >
+          {title}{intl.get('new assignment.grade')}
+        </button>
+      );
     });
     if (grades.length === 0) {
       return (
@@ -576,7 +580,7 @@ class SearchFilter extends Component<Props, State> {
 
       const title = subject.title.split('.', 1);
       const classD = (arrayDefaults.includes(String(subject.id))) ? 'active' : '';
-      return <button style={ {color: subject.filter_status === 'inactive' ? 'lightgrey' : '' }} value={subject.id} className={`itemFlexFilter subjectsFilterClass ${classD}`} onClick={handleClickSubject} key={subject.id}>{title}</button>;
+      return <button style={{ color: subject.filterStatus === 'inactive' ? 'lightgrey' : '' }} value={subject.id} className={`itemFlexFilter subjectsFilterClass ${classD}`} onClick={handleClickSubject} key={subject.id}>{title}</button>;
     });
     if (subjects.length === 0) {
       return (
@@ -694,7 +698,7 @@ class SearchFilter extends Component<Props, State> {
         </div>
       );
     }
-    if (typeof(options) !== 'undefined') {
+    if (typeof (options) !== 'undefined') {
       if (options.length === 0) {
         return (
           <div className="centerMin">
@@ -762,7 +766,7 @@ class SearchFilter extends Component<Props, State> {
         </div>
       );
     }
-    if (typeof(options) !== 'undefined') {
+    if (typeof (options) !== 'undefined') {
       if (options.length === 0) {
         return (
           <div className="centerMin">
@@ -795,7 +799,7 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public renderFiltersMulti = () => {
-    const { handleClickMulti, customMultiList, mainFilterValueTP, defaultValueMainFilter,coreFilterValue } = this.props;
+    const { handleClickMulti, customMultiList, mainFilterValueTP, defaultValueMainFilter, coreFilterValue } = this.props;
     const cores = customMultiList!.sort(sortByAlphabet);
 
     const arrayDefaults = (defaultValueMainFilter) ? defaultValueMainFilter.split(',') : [];
@@ -1380,31 +1384,31 @@ class SearchFilter extends Component<Props, State> {
             </div>
           </div>
           <div className="FiltersModal__body__item">
-              <div className="itemFilter">
-                <div className="itemFilter__left">
-                  <img src={goalsImg} />
-                </div>
-                <div className="itemFilter__right">
-                  <h3>{intl.get('new assignment.greep.goals')}</h3>
-                  <div className="itemFilter__core">
-                    {this.renderFiltersGoalsTP()}
-                  </div>
+            <div className="itemFilter">
+              <div className="itemFilter__left">
+                <img src={goalsImg} />
+              </div>
+              <div className="itemFilter__right">
+                <h3>{intl.get('new assignment.greep.goals')}</h3>
+                <div className="itemFilter__core">
+                  {this.renderFiltersGoalsTP()}
                 </div>
               </div>
             </div>
+          </div>
           <div className="FiltersModal__body__item">
-              <div className="itemFilter">
-                <div className="itemFilter__left">
-                  <img src={readingImg} />
-                </div>
-                <div className="itemFilter__right">
-                  <h3>{intl.get('new assignment.greep.reading')}</h3>
-                  <div className="itemFilter__core">
-                    {this.renderFilterReadingInSubject()}
-                  </div>
+            <div className="itemFilter">
+              <div className="itemFilter__left">
+                <img src={readingImg} />
+              </div>
+              <div className="itemFilter__right">
+                <h3>{intl.get('new assignment.greep.reading')}</h3>
+                <div className="itemFilter__core">
+                  {this.renderFilterReadingInSubject()}
                 </div>
               </div>
             </div>
+          </div>
         </div>
         <div className="FiltersModal__backgroundside assigFiltersModal" onClick={this.closeFiltersAssignments} />
       </div>
@@ -1428,7 +1432,7 @@ class SearchFilter extends Component<Props, State> {
       isAssignmentsListPage,
       isAssignmentsListFilter
     } = this.props;
-    let myValue : any;
+    let myValue: any;
     const searchQueryValue = searchQueryFilterValue || '';
     const searchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value;
@@ -1445,14 +1449,14 @@ class SearchFilter extends Component<Props, State> {
         {!isArticlesListPage && !isStudentTpPage && activity && this.renderActivity()}
 
         {isStudentTpPage && this.applyFiltersTeachingPathbutton()}
-        {isArticlesListPage &&  this.applyFiltersbutton()}
+        {isArticlesListPage && this.applyFiltersbutton()}
         {this.state.filtersModal && this.modalFilters()}
         {this.state.filtersModalTp && this.modalFiltersTp()}
         {isAssignmentsListPage && !isStudent && this.applyFiltersbuttonAssignments()}
         {this.state.filtersModalAssignment && this.modalFiltersAssignments()}
         {isAssignmentsListFilter && !isStudent && this.applyFiltersbuttonFilterAssignments()}
         {this.state.filtersAssignment && this.filtersAssignments()}
-        <div className="SearchFilter__space" ref={this.space}/>
+        <div className="SearchFilter__space" ref={this.space} />
 
         {!isStudent && date && this.renderDate()}
         {orderFieldFilterValue === SortingFilter.DEADLINE ? this.renderSorting() : popularity && this.renderPopularities()}

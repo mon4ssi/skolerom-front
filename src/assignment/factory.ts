@@ -30,7 +30,7 @@ export interface SubjectDTO {
   id: number;
   name: string;
   title: string;
-  filter_status: string | undefined | null;
+  filterStatus: string | undefined | null;
 }
 
 export interface GradeDTO {
@@ -254,7 +254,7 @@ export const buildAssignmentDTO = (assignment: Assignment): AssignmentRequestDTO
 export const buildSubject = (subject: SubjectDTO): Subject => ({
   id: subject.id,
   title: subject.title || subject.name,
-  filter_status: subject.filter_status,
+  filterStatus: subject.filterStatus,
 });
 
 export const buildGrade = (grade: GradeDTO): Grade => ({
@@ -361,7 +361,6 @@ export const buildArticle = (item: ArticleDTO) =>
                     [],
 
   });
-
 
 const buildArticleLevel = (levels: Array<StudentLevelDTO>) => (
   new ArticleLevel({
