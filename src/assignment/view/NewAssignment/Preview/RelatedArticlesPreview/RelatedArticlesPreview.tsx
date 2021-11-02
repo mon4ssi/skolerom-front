@@ -216,7 +216,8 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       newArraySubjects.push({
         // tslint:disable-next-line: variable-name
         id: Number(element.subject_id),
-        title: element.description!
+        title: element.description!,
+        filterStatus: null
       });
     });
     this.setState({

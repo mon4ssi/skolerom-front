@@ -55,6 +55,7 @@ export class LoginStore {
     if (response && !isNull(response)) {
       this.currentUser = this.storageInteractor.getUser();
     }
+
     if (isNull(response)) {
       this.needRedirect = true;
     }

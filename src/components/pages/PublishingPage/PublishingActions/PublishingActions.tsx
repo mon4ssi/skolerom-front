@@ -147,6 +147,7 @@ export class PublishingActions extends Component<Props, State> {
     });
     await new Promise(resolve => setTimeout(resolve, SETTIMEOUT));
     const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects), '');
+
     this.setState({
       grepFiltersData : grepFiltersDataAwait
     });
@@ -280,7 +281,7 @@ export class PublishingActions extends Component<Props, State> {
         optionsGoals : grepFiltergoalssDataAwait.data,
       },
       () => {
-        if (typeof(this.state.editvalueGoalsOptions) !== 'undefined') {
+        if (this.state.editvalueGoalsOptions !== null && typeof(this.state.editvalueGoalsOptions) !== 'undefined') {
           if (this.state.editvalueGoalsOptions!.length === 0) {
             this.setState(
               {
@@ -589,7 +590,9 @@ export class PublishingActions extends Component<Props, State> {
     const { optionsGrades, valueGradesOptions } = this.state;
     const arrayValueGrades = this.state.valueGradesOptions;
     const { store } = this.props;
+
     const grade = store!.getAllGrades().find(grade => grade.id === id);
+
     if (grade) {
       store!.currentEntity!.addGrade(grade);
       this.setState({ loadingGoals : true });
@@ -601,6 +604,7 @@ export class PublishingActions extends Component<Props, State> {
           }
         }
       }
+
       this.setState({
         valueGradesOptions : arrayValueGrades
       });
@@ -1612,7 +1616,7 @@ export class PublishingActions extends Component<Props, State> {
     if (typeof(optionsGoals) !== 'undefined') {
       activeVisibleGoals = true;
     }
-    if (typeof(listGoals) !== 'undefined') {
+    if (listGoals !== null && typeof(listGoals) !== 'undefined') {
       // step 1: frag in two arrays
       myOptionGoals!.forEach((goal) => {
         if (listGoals!.includes(Number(goal!.id))) {
@@ -1653,7 +1657,7 @@ export class PublishingActions extends Component<Props, State> {
               </button>
             </div>
             <div className="itemTablesTd grade">{visibleGoalsGrade} {intl.get('new assignment.grade')}</div>
-            <div className="itemTablesTd subjects">{goal!.subject!.name}</div>
+            {/* <div className="itemTablesTd subjects">{goal!.subject!.name}</div> */}
             <div className="itemTablesTd core">{visibleGoalsCore}</div>
             <div className="itemTablesTd goals">{goal!.description}</div>
           </div>

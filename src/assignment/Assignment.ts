@@ -21,21 +21,15 @@ export interface AssignmentRepo {
   getSubjects(): Promise<Array<Subject>>;
   getSources(): Promise<Array<Source>>;
   getAssignmentById(id: number): Promise<Assignment>;
-  getMyAssignmentsList(
-    filter: Filter
-  ): Promise<{
+  getMyAssignmentsList(filter: Filter): Promise<{
     myAssignments: Array<Assignment>;
     total_pages: number;
   }>;
-  getAllAssignmentsList(
-    filter: Filter
-  ): Promise<{
+  getAllAssignmentsList(filter: Filter): Promise<{
     myAssignments: Array<Assignment>;
     total_pages: number;
   }>;
-  getStudentAssignmentList(
-    filter: Filter
-  ): Promise<{
+  getStudentAssignmentList(filter: Filter): Promise<{
     myAssignments: Array<Assignment>;
     total_pages: number;
   }>;
@@ -48,7 +42,7 @@ export interface AssignmentRepo {
     total_pages: number;
   }>;
   getAssignmentDistributes(filter: Filter): Promise<{
-    distributes: Array<AssignmentDistribute>,
+    distributes: Array<AssignmentDistribute>;
     total_pages: number;
   }>;
   copyAssignment(id: number): Promise<number>;
@@ -58,26 +52,30 @@ export enum QuestionType {
   Text = 'TEXT',
   MultipleChoice = 'MULTIPLE_CHOICE',
   TeachingPath = 'TEACHING_PATH',
-  ImageChoice = 'IMAGE_CHOICE'
+  ImageChoice = 'IMAGE_CHOICE',
 }
 
 export class Grade {
   @observable public id: number;
   @observable public title: string;
+  @observable public filterStatus?: string | undefined | null;
 
   constructor(id: number, title: string) {
     this.id = id;
     this.title = title;
+    this.filterStatus = null;
   }
 }
 
 export class Subject {
   @observable public id: number;
   @observable public title: string;
+  @observable public filterStatus?: string | undefined | null;
 
   constructor(id: number, title: string) {
     this.id = id;
     this.title = title;
+    this.filterStatus = null;
   }
 }
 
@@ -123,6 +121,7 @@ export interface GrepFilters {
   name: string;
   // tslint:disable-next-line: variable-name
   wp_id: number;
+  filterStatus?: any;
 }
 
 export interface GrepElementFilters {
@@ -167,7 +166,7 @@ export interface AssignmentArgs {
   isPrivate?: boolean;
   relatedArticles?: Array<Article>;
   createdAt?: string;
-  updatedAt?: string ;
+  updatedAt?: string;
   publishedAt?: string;
   numberOfQuestions?: number;
   isAnswered?: boolean;
@@ -199,7 +198,6 @@ export interface AssignmentArgs {
 }
 
 export class Assignment {
-
   protected readonly _id: number;
   protected readonly _deadline: Date | undefined;
   protected readonly _ownedByMe: boolean;
@@ -273,7 +271,8 @@ export class Assignment {
     this._isCreatedByContentManager = !!args.isCreatedByContentManager;
     this._isPublished = args.isPublished;
     this._isDistributed = args.isDistributed;
-    this._ownedByMe = typeof args.ownedByMe === 'boolean' ? args.ownedByMe : false;
+    this._ownedByMe =
+      typeof args.ownedByMe === 'boolean' ? args.ownedByMe : false;
     this._isCopy = args.isCopy || false;
     this.grepCoreelements = args.grepCoreelements;
     this.grepGoals = args.grepGoals;
@@ -473,7 +472,14 @@ export class QuestionAttachment {
   public readonly fileName: string;
   public readonly duration?: number;
 
-  constructor(params: { id: number, path: string, alt: string, title: string, fileName: string, duration: number }) {
+  constructor(params: {
+    id: number;
+    path: string;
+    alt: string;
+    title: string;
+    fileName: string;
+    duration: number;
+  }) {
     this.id = params.id;
     this.path = params.path;
     this.alt = params.alt;
@@ -491,7 +497,6 @@ export interface QuestionParams {
 }
 
 export abstract class Question {
-
   private readonly _id?: number;
   private readonly _type: QuestionType;
   @observable protected _title: string;
@@ -532,7 +537,9 @@ export abstract class Question {
   }
 }
 
-export type TypedQuestion = TextQuestion & MultipleChoiceQuestion & ImageChoiceQuestion;
+export type TypedQuestion = TextQuestion &
+  MultipleChoiceQuestion &
+  ImageChoiceQuestion;
 
 export class TextQuestion extends Question {
   constructor(params: QuestionParams) {
@@ -541,7 +548,6 @@ export class TextQuestion extends Question {
 }
 
 export class MultipleChoiceQuestionOption {
-
   @observable protected _title: string;
   @observable protected _isRight: boolean;
 
@@ -559,7 +565,6 @@ export class MultipleChoiceQuestionOption {
   public get isRight() {
     return this._isRight;
   }
-
 }
 
 export interface MultipleChoiceQuestionArgs extends QuestionParams {
@@ -567,7 +572,6 @@ export interface MultipleChoiceQuestionArgs extends QuestionParams {
 }
 
 export class MultipleChoiceQuestion extends Question {
-
   protected _options: Array<MultipleChoiceQuestionOption>;
 
   constructor(params: MultipleChoiceQuestionArgs) {
@@ -582,13 +586,17 @@ export class MultipleChoiceQuestion extends Question {
 }
 
 export class ImageChoiceQuestionOption {
-
   @observable protected _title: string;
   @observable protected _image: QuestionAttachment | undefined;
   @observable protected _orderPosition: number;
   @observable protected _isRight: boolean;
 
-  constructor(title: string, image: QuestionAttachment | undefined, orderPosition: number, isRight: boolean) {
+  constructor(
+    title: string,
+    image: QuestionAttachment | undefined,
+    orderPosition: number,
+    isRight: boolean
+  ) {
     this._title = title;
     this._image = image;
     this._orderPosition = orderPosition;
@@ -621,7 +629,6 @@ export interface ImageChoiceQuestionArgs extends QuestionParams {
 }
 
 export class ImageChoiceQuestion extends Question {
-
   protected _options: Array<ImageChoiceQuestionOption>;
 
   constructor(params: ImageChoiceQuestionArgs) {
@@ -643,7 +650,7 @@ export class Filter {
   @observable public order?: string | null;
   @observable public orderField?: string | null;
   @observable public grade?: string | number | null;
-  @observable public subject?:  string | number | null;
+  @observable public subject?: string | number | null;
   @observable public isAnswered?: string | null;
   @observable public searchQuery?: string | null;
   @observable public isEvaluated?: string | null;
@@ -680,15 +687,13 @@ export interface GradeStringObject {
 export interface MultidisciplinayGradeSubjectFilter {
   // tslint:disable-next-line: variable-name
   subject_id?: string;
-  core_elments_ids?: Array<string>;
-
+  core_element_ids?: Array<string>;
 }
 
 export interface MultidisciplinayGradeFilter {
   // tslint:disable-next-line: variable-name
   grade_id?: string;
   subject_ids?: Array<MultidisciplinayGradeSubjectFilter>;
-
 }
 
 export interface MultiFilter {
@@ -767,8 +772,8 @@ export class FilterArticlePanel {
 }
 
 export class AssignmentList {
-
-  private assignmentService: AssignmentService = injector.get<AssignmentService>(ASSIGNMENT_SERVICE);
+  private assignmentService: AssignmentService =
+    injector.get<AssignmentService>(ASSIGNMENT_SERVICE);
 
   public filter: Filter = new Filter();
 
@@ -843,9 +848,11 @@ export class AssignmentList {
   }
 
   public async getAssignmentListOfStudentInList(studentId: number) {
-    return this.assignmentService.getAssignmentListOfStudentInList(studentId, this.filter);
+    return this.assignmentService.getAssignmentListOfStudentInList(
+      studentId,
+      this.filter
+    );
   }
-
 }
 
 export class AssignmentDistribute {
@@ -867,13 +874,16 @@ export class AssignmentDistribute {
     this.answeredDistributes = dto.answeredDistributes;
     this.totalDistributes = dto.totalDistributes;
     this.deadline = moment(dto.defaultEndDate);
-    this.subjects = dto.subjects.map(subject => new Subject(subject.id, subject.title));
+    this.subjects = dto.subjects.map(
+      subject => new Subject(subject.id, subject.title)
+    );
     this.grades = dto.grades.map(grade => new Grade(grade.id, grade.title));
   }
 }
 
 export class AssignmentDistributeList {
-  private assignmentService: AssignmentService = injector.get<AssignmentService>(ASSIGNMENT_SERVICE);
+  private assignmentService: AssignmentService =
+    injector.get<AssignmentService>(ASSIGNMENT_SERVICE);
   @observable private _distributes: Array<AssignmentDistribute> = [];
   @observable private _pages: number = 0;
   @observable private _state: StoreState = StoreState.PENDING;
@@ -896,7 +906,8 @@ export class AssignmentDistributeList {
     this._state = StoreState.LOADING;
 
     try {
-      const { distributes, total_pages } = await this.assignmentService.getAssignmentDistributes(filter);
+      const { distributes, total_pages } =
+        await this.assignmentService.getAssignmentDistributes(filter);
 
       this._distributes = distributes;
       this._pages = total_pages;
@@ -910,16 +921,16 @@ export class AssignmentDistributeList {
 
 export interface ArticleRepo {
   getArticles(params?: {
-    page: number,
-    perPage: number,
-    order?: string,
-    grades?: number,
-    subjects?: number,
-    core?: number | string,
-    goal?: number | string,
-    multi?: number,
-    source?: number,
-    searchTitle?: string
+    page: number;
+    perPage: number;
+    order?: string;
+    grades?: number;
+    subjects?: number;
+    core?: number | string;
+    goal?: number | string;
+    multi?: number;
+    source?: number;
+    searchTitle?: string;
   }): Promise<Array<Article>>;
   getArticlesByIds(ids: Array<number>): Promise<Array<Article>>;
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
@@ -969,7 +980,6 @@ interface ArticleLevelArgs {
 }
 
 export class ArticleLevel {
-
   public readonly wpId: number;
   public readonly name: string;
   public readonly slug: string;
