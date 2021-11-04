@@ -4,16 +4,14 @@ import intl from 'react-intl-universal';
 import isNaN from 'lodash/isNaN';
 
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
-import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
 import { TeachingPathNodeType } from 'teachingPath/TeachingPath';
 import { ItemContentTypeContext } from 'teachingPath/view/EditTeachingPath/ItemContentTypeContext';
-import { Article, Subject, Greep, FilterArticlePanel, Grade, CoreElementGradeFilter, MultidisciplinayGradeFilter, GoalsGradeFilter } from 'assignment/Assignment';
+import { Article, Subject, Greep, FilterArticlePanel, Grade } from 'assignment/Assignment';
 import { RelatedArticlesCard } from 'assignment/view/NewAssignment/Preview/RelatedArticlesPreview/RelatedArticlesCard';
 import { SearchFilter } from 'components/common/SearchFilter/SearchFilter';
 import { lettersNoEn } from 'utils/lettersNoEn';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 import { ReadingArticle } from 'components/pages/ReadingArticle/ReadingArticle';
-import ReactDOM from 'react-dom';
 
 import closeImg from 'assets/images/close-rounded-black.svg';
 import tagsImg from 'assets/images/tags.svg';
@@ -289,6 +287,7 @@ export class ArticlesList extends Component<Props, State> {
     this.props.editTeachingPathStore!.getSubjects();
     this.setState({ filtersAjaxLoading: true });
     this.setState({ filtersAjaxLoadingGoals: true });
+
     await this.props.editTeachingPathStore!.getFiltersArticlePanel();
     const dataArticles = this.props.editTeachingPathStore!.getAllArticlePanelFilters();
 
@@ -298,12 +297,15 @@ export class ArticlesList extends Component<Props, State> {
 
     // tslint:disable-next-line: variable-name
     dataArticles!.grade_filter!.forEach((element) => {
-      newArrayGrades.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(element.grade_id),
-        title: element.description!
-      });
+      if (element.grade_parent === null) {
+        newArrayGrades.push({
+          // tslint:disable-next-line: variable-name
+          id: Number(element.grade_id),
+          title: element.description!
+        });
+      }
     });
+
     this.setState({
       selectedGradesAll: newArrayGrades
     });
@@ -355,7 +357,7 @@ export class ArticlesList extends Component<Props, State> {
       newArrayGrepSource.push({
         // tslint:disable-next-line: variable-name
         id: Number(element.term_id),
-        title: element.name!
+        title: element.description!
       });
     });
 
@@ -2136,8 +2138,8 @@ export class ArticlesList extends Component<Props, State> {
               // VALUES
               // subjectFilterValue={Number(appliedFilters.subjects)}
               // gradeFilterValue={Number(appliedFilters.grades)}
-              coreFilterValue={String(appliedFilters.core)}
-              goalsFilterValue={String(appliedFilters.goal)}
+              coreFilterValue={Number(appliedFilters.core)}
+              goalsFilterValue={Number(appliedFilters.goal)}
               defaultValueGradeFilter={String(appliedFilters.grades)}
               defaultValueSubjectFilter={String(appliedFilters.subjects)}
 

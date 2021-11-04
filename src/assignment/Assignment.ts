@@ -666,95 +666,123 @@ export class Filter {
 
 export interface GradeFilter {
   // tslint:disable-next-line: variable-name
-  grade_id?: string;
-  description?: string;
+  grade_id: string;
+  description: string;
+  // tslint:disable-next-line: variable-name
+  grade_parent: Array<string>;
+  // tslint:disable-next-line: variable-name
+  name_sub: string;
+  // tslint:disable-next-line: variable-name
+  term_order: string;
 }
 
 export interface SubjectFilter {
   // tslint:disable-next-line: variable-name
-  subject_id?: string;
-  description?: string;
+  subject_id: string;
+  description: string;
   // tslint:disable-next-line: variable-name
-  grade_ids?: Array<string>;
-}
-
-export interface GradeStringObject {
-  // tslint:disable-next-line: variable-name
-  grade_id?: string;
-  // tslint:disable-next-line: variable-name
-  subjects_relations?: Array<string>;
-}
-
-export interface MultidisciplinayGradeSubjectFilter {
-  // tslint:disable-next-line: variable-name
-  subject_id?: string;
-  core_element_ids?: Array<string>;
-}
-
-export interface MultidisciplinayGradeFilter {
-  // tslint:disable-next-line: variable-name
-  grade_id?: string;
-  subject_ids?: Array<MultidisciplinayGradeSubjectFilter>;
-}
-
-export interface MultiFilter {
-  // tslint:disable-next-line: variable-name
-  main_topic_id?: string;
-  description?: string;
-  // tslint:disable-next-line: variable-name
-  grade_ids?: Array<MultidisciplinayGradeFilter>;
-}
-
-export interface CoreElementGradeFilter {
-  // tslint:disable-next-line: variable-name
-  grade_id?: string;
-  subject_ids?: Array<string>;
+  grade_ids: Array<string>;
 }
 
 export interface CoreFilter {
   // tslint:disable-next-line: variable-name
-  core_element_id?: string;
-  description?: string;
+  core_element_id: string;
+  description: string;
   // tslint:disable-next-line: variable-name
-  grade_ids?: Array<CoreElementGradeFilter>;
+  grade_ids: Array<CoreFilterItemGrades>;
 }
 
-export interface GoalsGradeSubjectCoreElementsFilter {
+export interface CoreFilterItemGrades {
   // tslint:disable-next-line: variable-name
-  core_element_id?: string;
-  // tslint:disable-next-line: variable-name
-  main_topic_ids?: Array<string>;
+  grade_id: string;
+  subject_ids: Array<string>;
 }
 
-export interface GoalsGradeSubjectFilter {
+export interface MultiFilter {
   // tslint:disable-next-line: variable-name
-  subject_id?: string;
+  main_topic_id: string;
+  description: string;
   // tslint:disable-next-line: variable-name
-  core_element_ids?: Array<GoalsGradeSubjectCoreElementsFilter>;
+  grade_ids: Array<MultiFilterItemGrades>;
 }
 
-export interface GoalsGradeFilter {
+export interface MultiFilterItemGrades {
   // tslint:disable-next-line: variable-name
-  grade_id?: string;
+  grade_id: string;
+  subject_ids: Array<MultiFilterItemGradesItemSubjects>;
+}
+
+export interface MultiFilterItemGradesItemSubjects {
   // tslint:disable-next-line: variable-name
-  subject_ids?: Array<GoalsGradeSubjectFilter>;
+  subject_id: string;
+  core_element_ids: Array<string>;
 }
 
 export interface GoalsFilter {
   // tslint:disable-next-line: variable-name
-  goal_id?: string;
-  description?: string;
+  goal_id: string;
+  description: string;
   // tslint:disable-next-line: variable-name
-  grade_ids?: Array<GoalsGradeFilter>;
+  grade_ids: Array<GoalsFilterItemGrades>;
+}
+
+export interface GoalsFilterItemGrades {
+  // tslint:disable-next-line: variable-name
+  grade_id: string;
+  // tslint:disable-next-line: variable-name
+  subject_ids?: Array<GoalsFilterItemGradesItemSubjects>;
+}
+
+export interface GoalsFilterItemGradesItemSubjects {
+  // tslint:disable-next-line: variable-name
+  subject_id: string;
+  // tslint:disable-next-line: variable-name
+  core_element_ids: Array<GoalsFilterItemGradesItemSubjectsItemCoreElements>;
+}
+
+export interface GoalsFilterItemGradesItemSubjectsItemCoreElements {
+  // tslint:disable-next-line: variable-name
+  core_element_id: string;
+  // tslint:disable-next-line: variable-name
+  main_topic_ids: Array<string>;
 }
 
 export interface SourceFilter {
   // tslint:disable-next-line: variable-name
-  term_id?: string;
+  term_id: string;
   // tslint:disable-next-line: variable-name
-  name?: string;
+  description: string;
   // tslint:disable-next-line: variable-name
-  slug?: string;
+  slug: string;
+  grade_ids: Array<SourceFilterItemGrades>;
+}
+
+export interface SourceFilterItemGrades {
+  // tslint:disable-next-line: variable-name
+  grade_id: string;
+  // tslint:disable-next-line: variable-name
+  subject_ids?: Array<SourceFilterItemGradesItemSubjects>;
+}
+
+export interface SourceFilterItemGradesItemSubjects {
+  // tslint:disable-next-line: variable-name
+  subject_id: string;
+  // tslint:disable-next-line: variable-name
+  core_element_ids: Array<SourceFilterItemGradesItemSubjectsItemCoreElements>;
+}
+
+export interface SourceFilterItemGradesItemSubjectsItemCoreElements {
+  // tslint:disable-next-line: variable-name
+  core_element_id: string;
+  // tslint:disable-next-line: variable-name
+  main_topic_ids: Array<SourceFilterItemGradesItemSubjectsItemCoreElementsItemMainTopics>;
+}
+
+export interface SourceFilterItemGradesItemSubjectsItemCoreElementsItemMainTopics {
+  // tslint:disable-next-line: variable-name
+  main_topic_id: string;
+  // tslint:disable-next-line: variable-name
+  goal_ids: Array<string>;
 }
 
 export class FilterArticlePanel {
@@ -763,9 +791,9 @@ export class FilterArticlePanel {
   // tslint:disable-next-line: variable-name
   public subject_filter?: Array<SubjectFilter>;
   // tslint:disable-next-line: variable-name
-  public multidisciplinay_filter?: Array<MultiFilter>;
-  // tslint:disable-next-line: variable-name
   public core_elements_filter?: Array<CoreFilter>;
+  // tslint:disable-next-line: variable-name
+  public multidisciplinay_filter?: Array<MultiFilter>;
   // tslint:disable-next-line: variable-name
   public goals_filter?: Array<GoalsFilter>;
   // tslint:disable-next-line: variable-name

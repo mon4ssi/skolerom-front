@@ -261,7 +261,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       newArrayGrepSource.push({
         // tslint:disable-next-line: variable-name
         id: Number(element.term_id),
-        title: element.name!
+        title: element.description!
       });
     });
     this.setState(
