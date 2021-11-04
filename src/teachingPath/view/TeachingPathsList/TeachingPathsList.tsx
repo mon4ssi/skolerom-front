@@ -177,9 +177,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
     const { editTeachingPathStore } = this.props;
     this.setState({ filtersAjaxLoading: true });
     const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFilters(grades, subjects, SOURCE);
-    await editTeachingPathStore!.getSources();
-    const sources = editTeachingPathStore!.allSources;
-    // console.log(grepFiltersDataAwait);
     this.setState({
       grepFiltersData: grepFiltersDataAwait
     });
@@ -193,7 +190,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
       optionsReading: this.renderValueOptionsNumbers(grepFiltersDataAwait, 'reading')
     });
     this.setState({
-      optionsSource: this.changeDataSource(sources)
+      optionsSource: this.renderValueOptionsNumbers(grepFiltersDataAwait, 'source')
     });
     this.setState(
       {
@@ -346,6 +343,15 @@ class TeachingPathsListComponent extends Component<Props, State> {
 
   public renderValueOptionsNumbers = (data: FilterGrep, type: string) => {
     const returnArray: Array<Greep> = [];
+    if (type === 'source') {
+      data!.sourceFilters!.forEach((element) => {
+        returnArray.push({
+          // tslint:disable-next-line: variable-name
+          id: Number(element.wp_id),
+          title: element.name
+        });
+      });
+    }
     if (type === 'multi') {
       data!.mainTopicFilters!.forEach((element) => {
         returnArray.push({

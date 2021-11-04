@@ -137,12 +137,20 @@ export interface GrepReading {
   locale_id: number;
 }
 
+export interface GrepSource {
+  id: number;
+  name: string;
+  // tslint:disable-next-line: variable-name
+  wp_id: number;
+}
+
 export class FilterGrep {
   public subjectFilters?: Array<GrepFilters>;
   public gradeFilters?: Array<GrepFilters>;
   public coreElementsFilters?: Array<GrepElementFilters>;
   public mainTopicFilters?: Array<GrepElementFilters>;
   public readingInSubjects?: Array<GrepReading>;
+  public sourceFilters?: Array<GrepSource>;
 }
 
 export class GoalsData {
