@@ -410,7 +410,7 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
           </li>
         </Link>
         <div className="AssignmentListItem__moreWrapper">
-          <button className={moreButtonClasses} onClick={this.toggleActionMenu} data-msj={intl.get('activity_page.options')} />
+          <button className={moreButtonClasses} onClick={this.toggleActionMenu} title={intl.get('activity_page.options')} />
           <div className={actionMenuWrapperClasses}>
             {isActionMenuVisible && this.renderActionMenu()}
           </div>

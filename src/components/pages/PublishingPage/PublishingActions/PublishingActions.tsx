@@ -733,11 +733,13 @@ export class PublishingActions extends Component<Props, State> {
     const { store } = this.props;
     if (store!.getCurrentUser()!.type === UserType.Teacher) {
       const source = store!.getAllSources().map(this.sourceToTagProp).find(w => w.default);
-      const teacherContentId = source!.id as number;
-      if (!(isPrivate)) {
-        this.addSource(teacherContentId);
-      } else {
-        this.removeSource(teacherContentId);
+      if (source !== undefined) {
+        const teacherContentId = source!.id as number;
+        if (!(isPrivate)) {
+          this.addSource(teacherContentId);
+        } else {
+          this.removeSource(teacherContentId);
+        }
       }
     }
   }
