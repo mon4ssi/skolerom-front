@@ -402,59 +402,6 @@ export class ArticlesList extends Component<Props, State> {
     this.handleChangeFilters('grades', Number(e.target.value));
   }
 
-  public getAllSubjects() {
-    const newSubjects: Array<Greep> = [];
-    this.state.grepDataFilters!.subject_filter!.forEach(((subject) => {
-      // tslint:disable-next-line: variable-name
-      newSubjects.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(subject.subject_id),
-        title: subject.description!
-      });
-    }));
-    return newSubjects.map(subject => subject.id);
-  }
-
-  public getAllCoreElements() {
-    const newCoreElements: Array<Greep> = [];
-    this.state.grepDataFilters!.core_elements_filter!.forEach(((coreElement) => {
-      // tslint:disable-next-line: variable-name
-      newCoreElements.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(coreElement.core_element_id),
-        title: coreElement.description!
-      });
-    }));
-    return newCoreElements.map(coreElement => coreElement.id);
-  }
-
-  public getAllMainTopics() {
-    const newMainTopics: Array<Greep> = [];
-    this.state.grepDataFilters!.multidisciplinay_filter!.forEach(((mainTopic) => {
-      // tslint:disable-next-line: variable-name
-      newMainTopics.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(mainTopic.main_topic_id),
-        title: mainTopic.description!
-      });
-    }));
-    return newMainTopics.map(mainTopic => mainTopic.id);
-  }
-
-  public getAllGoals() {
-    const newGoals: Array<Greep> = [];
-    this.state.grepDataFilters!.goals_filter!.forEach(((goal) => {
-      // tslint:disable-next-line: variable-name
-      newGoals.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(goal.goal_id),
-        title: goal.description!
-      });
-
-    }));
-    return newGoals.map(goal => goal.id);
-  }
-
   public getSelectedGrades(): Array<any> | null {
     const { MySelectGrade } = this.state;
     return MySelectGrade;
@@ -534,34 +481,6 @@ export class ArticlesList extends Component<Props, State> {
       () => {
         fn();
       });
-
-  }
-
-  public addSelectedSubjects(subjectId: number, fn: Function) {
-    const currentSelectedSubjects = this.getSelectedSubjects();
-    currentSelectedSubjects!.push(subjectId);
-    this.setState(
-      {
-        MySelectSubject: currentSelectedSubjects
-      },
-      () => {
-        fn();
-      });
-
-  }
-
-  public addSelectedCoreElements(coreElementId: number, fn: Function) {
-
-    const currentSelectedCoreElements = this.getSelectedCoreElements();
-    currentSelectedCoreElements!.push(coreElementId);
-    this.setState(
-      {
-        myValueCore: currentSelectedCoreElements!
-      },
-      () => {
-        fn();
-      }
-    );
 
   }
 
