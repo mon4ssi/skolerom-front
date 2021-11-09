@@ -223,7 +223,10 @@
             &:focus {
               outline-offset: 2px;
             }
-          }        
+            &.downlight {
+              color: #808080b8;
+            }
+          }
         }
         &__core {
           min-width: 300px;

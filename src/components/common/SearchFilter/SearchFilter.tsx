@@ -850,7 +850,9 @@ class SearchFilter extends Component<Props, State> {
     const visibleCores = cores.map((core, idx) => {
       const title = core.title;
       const classD = (arrayDefaults.includes(String(core.id))) ? 'active' : '';
-      return <button value={core.id} className={`itemFlexFilter multiFilterClass ${classD}`} onClick={handleClickMulti} key={core.id}>{title}</button>;
+      let alt = (typeof(core.alt) !== 'undefined') ? core.alt : '';
+      if (classD === '' && alt === 'jrDelItem') { alt = 'hidden'; }
+      return <button value={core.id} className={`itemFlexFilter multiFilterClass ${classD} ${alt}`} onClick={handleClickMulti} key={core.id}>{title}</button>;
     });
     if (this.props.filtersAjaxLoading) {
       return (

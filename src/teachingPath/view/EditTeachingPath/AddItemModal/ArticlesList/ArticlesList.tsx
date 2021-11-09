@@ -586,6 +586,7 @@ export class ArticlesList extends Component<Props, State> {
         this.getGREPParametersDicipline();
         this.getGREPParametersGoals();
         this.getGREPParametersSources();
+        this.highLightGradeSubject();
       }
     );
   }
@@ -609,6 +610,7 @@ export class ArticlesList extends Component<Props, State> {
       () => {
         this.handleChangeFilters('goal', singleString);
         this.getGREPParametersSources();
+        this.highLightGradeSubject();
       }
     );
   }
@@ -644,6 +646,8 @@ export class ArticlesList extends Component<Props, State> {
     GradeFilterArray.forEach((e) => {
       e.classList.remove('active');
     });
+
+    this.cleanHihtLightGradeSubject();
 
     this.setState(
       {
@@ -728,6 +732,7 @@ export class ArticlesList extends Component<Props, State> {
     this.getGREPParametersDicipline();
     this.getGREPParametersGoals();
     this.getGREPParametersSources();
+    this.highLightGradeSubject();
   }
 
   public getGroupGrade(nameGroup:string) {
@@ -850,6 +855,7 @@ export class ArticlesList extends Component<Props, State> {
   public getGREPParametersDicipline() {
     const diciplineArr = this.state.grepDataFilters!.multidisciplinay_filter!;
     const newArrayDicipline: Array<Greep> = [];
+    const currentLstDicipline: Array<number> = [];
 
     diciplineArr.forEach((item) => {
       if (this.getValidateInsertOptionDisipline(item)) {
@@ -857,8 +863,25 @@ export class ArticlesList extends Component<Props, State> {
           id: Number(item.main_topic_id),
           title: item.description
         });
+        currentLstDicipline.push(Number(item.main_topic_id));
       }
     });
+
+    const filterDicipline: Array<number> | null = this.state.MySelectMulti;
+    if (filterDicipline!.length > 0) {
+      filterDicipline!.forEach((item) => {
+        if (!currentLstDicipline.includes(item)) {
+          const itemSourceArr = diciplineArr.find(o => o.main_topic_id === String(item));
+          if (typeof(itemSourceArr) !== 'undefined') {
+            newArrayDicipline.push({
+              id: Number(itemSourceArr.main_topic_id),
+              title: itemSourceArr.description,
+              alt: 'jrDelItem'
+            });
+          }
+        }
+      });
+    }
 
     this.setState({
       selectedMultisAll: newArrayDicipline
@@ -1205,6 +1228,176 @@ export class ArticlesList extends Component<Props, State> {
     return (lstFoundGoal.length > 0);
   }
 
+  public cleanHihtLightGradeSubject() {
+    const GradeFilterGradeArray = Array.from(document.getElementsByClassName('gradesFilterClass') as HTMLCollectionOf<HTMLElement>);
+    GradeFilterGradeArray.forEach((e) => {
+      e.classList.remove('downlight');
+    });
+    const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
+    GradeFilterSubjectArray.forEach((e) => {
+      e.classList.remove('downlight');
+    });
+  }
+
+  public getLstChildGrade(gradeIdParent: number): Array<any> {
+    const { grepDataFilters } = this.state;
+    const lstChilds: Array<number> = [];
+
+    const gradeArr = grepDataFilters!.grade_filter!;
+    gradeArr.forEach((item) => {
+      if (item.grade_parent !== null) {
+        const listGradesAllowArr = item.grade_parent;
+        if (listGradesAllowArr.includes(String(gradeIdParent))) {
+          lstChilds.push(Number(item.grade_id));
+        }
+      }
+    });
+
+    return lstChilds;
+  }
+
+  public highLightGradeSubject() {
+    const { MySelectGrade, MySelectSubject } = this.state;
+    const existFilterGrade = (MySelectGrade!.length > 0);
+    const existFilterSubject = (MySelectSubject!.length > 0);
+
+    this.cleanHihtLightGradeSubject();
+
+    if (!existFilterGrade && !existFilterSubject) {
+      const lstResponse: Array<any> = this.getGradeSubjectIdsBy();
+
+      // Grade
+      const lstGradeHighlight = lstResponse[0];
+      if (lstGradeHighlight.length > 0) {
+        const GradeFilterGradeArray = Array.from(document.getElementsByClassName('gradesFilterClass') as HTMLCollectionOf<HTMLElement>);
+        GradeFilterGradeArray.forEach((e) => {
+          const gradeId: number = Number(e.getAttribute('value'));
+          if (!lstGradeHighlight.includes(gradeId)) {
+            const lstChilds: Array<number> = this.getLstChildGrade(gradeId);
+            let setDownlight = true;
+
+            lstGradeHighlight.some((itemGh: number) => {
+              if (lstChilds.includes(itemGh)) {
+                setDownlight = false;
+                return true;
+              }
+            });
+
+            if (setDownlight) e.classList.add('downlight');
+          }
+        });
+      }
+
+      // Subject
+      const lstSubjectHighlight = lstResponse[1];
+      if (lstSubjectHighlight.length > 0) {
+        const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
+        GradeFilterSubjectArray.forEach((e) => {
+          if (!lstSubjectHighlight.includes(Number(e.getAttribute('value')))) {
+            e.classList.add('downlight');
+          }
+        });
+      }
+    }
+  }
+
+  public getGradeSubjectIdsBy(): Array<any> {
+    const { MySelectCore, MySelectMulti, MySelectGoal, MySelectSource, grepDataFilters } = this.state;
+
+    const lstResponse = [];
+    const lstGradeHighlight: Array<number> = [];
+    const lstSubjectHighlight: Array<number> = [];
+
+    if (MySelectCore!.length > 0) {
+      MySelectCore!.forEach((iCore) => {
+        const itemCoreArr = grepDataFilters!.core_elements_filter!.find(o => o.core_element_id === String(iCore));
+        if (typeof(itemCoreArr) !== 'undefined') {
+          itemCoreArr.grade_ids.forEach((iGrade) => {
+            // Grade
+            if (!lstGradeHighlight.includes(Number(iGrade.grade_id))) {
+              lstGradeHighlight.push(Number(iGrade.grade_id));
+            }
+
+            // Subject
+            iGrade.subject_ids.forEach((iSubject) => {
+              if (!lstSubjectHighlight.includes(Number(iSubject))) {
+                lstSubjectHighlight.push(Number(iSubject));
+              }
+            });
+          });
+        }
+      });
+    }
+
+    if (MySelectMulti!.length > 0) {
+      MySelectMulti!.forEach((iDisipline) => {
+        const itemDiciplineArr = grepDataFilters!.multidisciplinay_filter!.find(o => o.main_topic_id === String(iDisipline));
+        if (typeof(itemDiciplineArr) !== 'undefined') {
+          itemDiciplineArr.grade_ids.forEach((iGrade) => {
+            // Grade
+            if (!lstGradeHighlight.includes(Number(iGrade.grade_id))) {
+              lstGradeHighlight.push(Number(iGrade.grade_id));
+            }
+
+            // Subject
+            iGrade.subject_ids.forEach((iSubject) => {
+              if (!lstSubjectHighlight.includes(Number(iSubject.subject_id))) {
+                lstSubjectHighlight.push(Number(iSubject.subject_id));
+              }
+            });
+          });
+        }
+      });
+    }
+
+    if (MySelectGoal!.length > 0) {
+      MySelectGoal!.forEach((iGoal) => {
+        const itemGoalArr = grepDataFilters!.goals_filter!.find(o => o.goal_id === String(iGoal));
+        if (typeof(itemGoalArr) !== 'undefined') {
+          itemGoalArr.grade_ids.forEach((iGrade) => {
+            // Grade
+            if (!lstGradeHighlight.includes(Number(iGrade.grade_id))) {
+              lstGradeHighlight.push(Number(iGrade.grade_id));
+            }
+
+            // Subject
+            iGrade.subject_ids!.forEach((iSubject) => {
+              if (!lstSubjectHighlight.includes(Number(iSubject.subject_id))) {
+                lstSubjectHighlight.push(Number(iSubject.subject_id));
+              }
+            });
+          });
+        }
+      });
+    }
+
+    if (MySelectSource!.length > 0) {
+      MySelectSource!.forEach((iSource) => {
+        const itemSourceArr = grepDataFilters!.source_filter!.find(o => o.term_id === String(iSource));
+        if (typeof(itemSourceArr) !== 'undefined') {
+          itemSourceArr.grade_ids.forEach((iGrade) => {
+            // Grade
+            if (!lstGradeHighlight.includes(Number(iGrade.grade_id))) {
+              lstGradeHighlight.push(Number(iGrade.grade_id));
+            }
+
+            // Subject
+            iGrade.subject_ids!.forEach((iSubject) => {
+              if (!lstSubjectHighlight.includes(Number(iSubject.subject_id))) {
+                lstSubjectHighlight.push(Number(iSubject.subject_id));
+              }
+            });
+          });
+        }
+      });
+    }
+
+    lstResponse.push(lstGradeHighlight);
+    lstResponse.push(lstSubjectHighlight);
+
+    return lstResponse;
+  }
+
   public handleClickSubject = (e: React.MouseEvent<HTMLButtonElement>) => {
     const subjectId = Number(e.currentTarget.value);
     const filterSubject: Array<number> = this.getSelectedSubjects()!;
@@ -1225,6 +1418,7 @@ export class ArticlesList extends Component<Props, State> {
         this.getGREPParametersDicipline();
         this.getGREPParametersGoals();
         this.getGREPParametersSources();
+        this.highLightGradeSubject();
       }
     );
   }
@@ -1247,6 +1441,7 @@ export class ArticlesList extends Component<Props, State> {
         this.handleChangeFilters('multi', String(this.getSelectedMainTopics()));
         this.getGREPParametersGoals();
         this.getGREPParametersSources();
+        this.highLightGradeSubject();
       }
     );
   }
@@ -1267,6 +1462,7 @@ export class ArticlesList extends Component<Props, State> {
       },
       () => {
         this.handleChangeFilters('source', String(this.getSelectedSource()));
+        this.highLightGradeSubject();
       }
     );
   }
