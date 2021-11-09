@@ -1039,10 +1039,13 @@ class SearchFilter extends Component<Props, State> {
     const { handleClickSource, customSourceList, defaultValueSourceFilter } = this.props;
     const cores = customSourceList!.sort(sortByAlphabet);
     const arrayDefaults = (defaultValueSourceFilter) ? defaultValueSourceFilter.split(',') : [];
+
     const visibleCores = cores.map((core) => {
       const title = core.title;
       const classD = (arrayDefaults.includes(String(core.id))) ? 'active' : '';
-      return <button value={core.id} className={`itemFlexFilter sourceFilterClass ${classD}`} onClick={handleClickSource} key={core.id}>{title}</button>;
+      let alt = (typeof(core.alt) !== 'undefined') ? core.alt : '';
+      if (classD === '' && alt === 'jrDelItem') { alt = 'hidden'; }
+      return <button value={core.id} className={`itemFlexFilter sourceFilterClass ${classD} ${alt}`} onClick={handleClickSource} key={core.id}>{title}</button>;
     });
     if (this.props.filtersAjaxLoading) {
       return (
@@ -1065,24 +1068,22 @@ class SearchFilter extends Component<Props, State> {
     );
   }
 
-  public renderFiltersContentSource = () => {
-    const { showSourceFilter } = this.props;
-    return (
-      <div className="FiltersModal__body__item">
-        <div className="itemFilter">
-          <div className="itemFilter__left">
-            <img src={voiceImg} />
-          </div>
-          <div className="itemFilter__right">
-            <h3>{intl.get('new assignment.greep.source')}</h3>
-            <div className="itemFilter__core">
-              {this.renderFiltersSource()}
-            </div>
+  public renderFiltersContentSource = () =>
+  (
+    <div className="FiltersModal__body__item">
+      <div className="itemFilter">
+        <div className="itemFilter__left">
+          <img src={voiceImg} />
+        </div>
+        <div className="itemFilter__right">
+          <h3>{intl.get('new assignment.greep.source')}</h3>
+          <div className="itemFilter__core">
+            {this.renderFiltersSource()}
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  )
 
   public modalFilters() {
     const { handleClickReset, showSourceFilter } = this.props;

@@ -402,369 +402,6 @@ export class ArticlesList extends Component<Props, State> {
     this.handleChangeFilters('grades', Number(e.target.value));
   }
 
-  public arraysEqual(a: Array<any>, b: Array<any>) {
-    if (a === b) return true;
-    if (a === null || b === null) return false;
-    if (a.length !== b.length) return false;
-    for (let i = 0; i < a.length; i = i + 1) {
-      if (a[i] !== b[i]) return false;
-    }
-    return true;
-  }
-
-  public refreshAppliedFilters(
-    fn: Function,
-  ) {
-    const gradesForFilters = this.getSelectedGrades();
-    const subjectsForFilters = this.getSelectedSubjects();
-    const coreElementsForFilter = this.getSelectedCoreElements();
-    const mainTopicsForFilter = this.getSelectedMainTopics();
-    const goalsForFilter = this.getSelectedGoals();
-
-    const filters = { ...this.state.appliedFilters };
-    this.setState({ appliedFilters: {} }, () => {
-
-      /* tslint:disable:no-string-literal */
-      filters['subjects'] = String(subjectsForFilters);
-      filters['grades'] = String(gradesForFilters);
-      filters['core'] = String(coreElementsForFilter);
-      filters['multi'] = String(mainTopicsForFilter);
-      filters['goal'] = String(goalsForFilter);
-      /* tslint:enable:no-string-literal */
-
-      this.setState({ appliedFilters: filters }, () => {
-
-        if (
-          filters.subjects ||
-          filters.grades ||
-          filters.core ||
-          filters.multi ||
-          filters.goal ||
-          filters.source
-        ) {
-          this.setState({ filtersisUsed: true }, () => {
-            this.updateFilters();
-            fn();
-          });
-        } else {
-
-          this.setState({ filtersisUsed: false }, () => {
-            this.updateFilters();
-            fn();
-          });
-        }
-      });
-    });
-  }
-
-  public existInGrepList(grepList: Array<Greep>, id: number | Number): boolean {
-    let valueReturn = false;
-    grepList.forEach((grepElement) => {
-      if (grepElement.id === id) {
-        valueReturn = true;
-      }
-    });
-    return valueReturn;
-  }
-
-  public updateFilters() {
-    // let grades = this.getSelectedGrades()!.length === 0 ? this.getAllGrades() : this.getSelectedGrades();
-    const grades = this.updateGradesFilters();
-    const gradeForFilters = this.getSelectedGrades()!.length === 0 ?
-      grades :
-      this.getSelectedGrades();
-
-    // subjects
-    const subjectResults = this.updateSubjectsFilters(gradeForFilters);
-    const subjectForFilters = this.getSelectedSubjects()!.length === 0 ?
-      this.getAllSubjects() :
-      this.getSelectedSubjects();
-
-    // coreElements
-    const coreElementsResult = this.updateCoreElementsFilters(grades, subjectForFilters);
-    const coreElementsForFilter = this.getSelectedCoreElements()!.length === 0 ?
-      this.getAllCoreElements() :
-      this.getSelectedCoreElements();
-
-    // mainTopics
-    const mainTopicsResult = this.updateMainTopicsFilters(grades, subjectForFilters, coreElementsForFilter);
-    const mainTopicsForFilter = this.getSelectedMainTopics()!.length === 0 ?
-      this.getAllMainTopics() :
-      this.getSelectedMainTopics();
-
-    // goals
-    const goalsResult = this.updateGoalsFilters(grades, subjectForFilters, coreElementsForFilter, mainTopicsForFilter);
-    const goalsForFilter = this.getSelectedGoals()!.length === 0 ?
-      this.getAllGoals() :
-      this.getSelectedGoals();
-  }
-
-  public getSubjectsByCoreElements(coreElements: Array<any>) {
-    const newSubjects: Array<any> = [];
-    this.state.grepDataFilters!.core_elements_filter!.forEach(((coreElement) => {
-      if (coreElements.includes(Number(coreElement.core_element_id))) {
-        coreElement.grade_ids!.forEach((grade) => {
-          grade.subject_ids!.forEach((subjectId) => {
-            if (!newSubjects.includes(Number(subjectId))) {
-              newSubjects.push(Number(subjectId));
-            }
-          });
-        });
-      }
-    }));
-
-    return newSubjects;
-  }
-
-  public getGradesByCoreElements(coreElements: Array<any>) {
-    const newGrades: Array<any> = [];
-    this.state.grepDataFilters!.core_elements_filter!.forEach(((coreElement) => {
-      if (coreElements.includes(Number(coreElement.core_element_id))) {
-        coreElement.grade_ids!.forEach((grade) => {
-
-          if (!newGrades.includes(Number(grade.grade_id!))) {
-            newGrades.push(Number(grade.grade_id!));
-          }
-
-        });
-      }
-    }));
-
-    return newGrades;
-  }
-
-  public updateGradesFilters(): Array<any> {
-    const newArrayGrade: Array<Grade> = [];
-
-    this.state.grepDataFilters!.grade_filter!.forEach(((grade) => {
-
-      // set status
-      if (
-        this.getSelectedGrades()!.length === 0 &&
-        this.getSelectedSubjects()!.length === 0 &&
-        this.getSelectedCoreElements()!.length !== 0
-      ) {
-
-        const findedGrades = this.getGradesByCoreElements(this.getSelectedCoreElements()!);
-
-        const filterStatus = (findedGrades.length === 0) ? 'active' : findedGrades.includes(Number(grade.grade_id)) ? 'active' : 'inactive';
-        const newGrade = {
-          // tslint:disable-next-line: variable-name
-          filterStatus,
-          id: Number(grade.grade_id),
-          title: grade.description!
-        };
-        if (!this.existInGrepList(newArrayGrade, newGrade.id)) {
-          newArrayGrade.push(newGrade);
-        }
-      } else {
-        const newGrade = {
-          // tslint:disable-next-line: variable-name
-          id: Number(grade.grade_id),
-          title: grade.description!,
-          // filterStatus: 'inactive'
-          filterStatus: 'active'
-        };
-        if (!this.existInGrepList(newArrayGrade, newGrade.id)) {
-          newArrayGrade.push(newGrade);
-        }
-      }
-
-    }));
-
-    this.setState({
-      selectedGradesFilter: newArrayGrade
-    });
-    return newArrayGrade.map(grade => grade.id);
-  }
-
-  public updateSubjectsFilters(grades: Array<any> | null = this.getSelectedGrades()): Array<any> {
-    const newArraySubject: Array<Subject> = [];
-    this.state.grepDataFilters!.subject_filter!.forEach((subject) => {
-      // tslint:disable-next-line: variable-name
-      subject.grade_ids!.forEach((gradeId) => {
-
-        if (grades!.includes(Number(gradeId))) {
-          // set status
-          if (
-            this.getSelectedGrades()!.length === 0 &&
-            this.getSelectedSubjects()!.length === 0 &&
-            this.getSelectedCoreElements()!.length !== 0
-          ) {
-            const findedSubjects = this.getSubjectsByCoreElements(this.getSelectedCoreElements()!);
-            const filterStatus = (findedSubjects.length === 0) ? 'active' : findedSubjects.includes(Number(subject.subject_id)) ? 'active' : 'inactive';
-            const newSubject = {
-              // tslint:disable-next-line: variable-name
-              filterStatus,
-              id: Number(subject.subject_id),
-              title: subject.description!
-              // filterStatus: 'inactive'
-            };
-            if (!this.existInGrepList(newArraySubject, newSubject.id)) {
-              newArraySubject.push(newSubject);
-            }
-          } else {
-            // end set status
-            const newSubject = {
-              // tslint:disable-next-line: variable-name
-              id: Number(subject.subject_id),
-              title: subject.description!,
-              // filterStatus: 'inactive'
-              filterStatus: 'active'
-            };
-            if (!this.existInGrepList(newArraySubject, newSubject.id)) {
-              newArraySubject.push(newSubject);
-            }
-          }
-
-        }
-      });
-
-    });
-
-    this.setState({
-      selectedSubjectsFilter: newArraySubject
-    });
-
-    return newArraySubject.map(subject => subject.id);
-  }
-
-  public updateCoreElementsFilters(
-    grades: Array<any> | null = this.getSelectedGrades(),
-    subjects: Array<any> | null = this.getSelectedSubjects()
-  ) {
-
-    const newCoreElements: Array<Greep> = [];
-
-    this.state.grepDataFilters!.core_elements_filter!.forEach(((coreElement) => {
-      // tslint:disable-next-line: variable-name
-      const allSympSubjects: Array<string> = [];
-
-      coreElement.grade_ids!.forEach(grade =>
-        grade.subject_ids!.forEach((subjectId) => {
-          if (
-            grades!.includes(Number(grade.grade_id)) &&
-            subjects!.includes(Number(subjectId))
-          ) {
-            const newCoreElement = {
-              // tslint:disable-next-line: variable-name
-              id: Number(coreElement.core_element_id),
-              title: coreElement.description!
-            };
-            if (!this.existInGrepList(newCoreElements, newCoreElement.id)) {
-              newCoreElements.push(newCoreElement);
-            }
-          }
-        })
-      );
-
-    }));
-    this.setState({
-      selectedCoresFilter: newCoreElements,
-      selectedCoresAll: newCoreElements
-    });
-
-    return newCoreElements.map(coreElement => coreElement.id);
-  }
-
-  public updateMainTopicsFilters(
-    grades: Array<any> | null = this.getSelectedGrades(),
-    subjects: Array<any> | null = this.getSelectedSubjects(),
-    coreElements: Array<any> | null = this.getSelectedCoreElements()
-  ) {
-    const newMainTopics: Array<Greep> = [];
-
-    this.state.grepDataFilters!.multidisciplinay_filter!.forEach(((mainTopic) => {
-      // tslint:disable-next-line: variable-name
-
-      mainTopic.grade_ids!.forEach(grade =>
-        grade.subject_ids!.forEach((subject) => {
-          subject.core_element_ids!.forEach((coreElementId) => {
-            if (
-              grades!.includes(Number(grade.grade_id)) &&
-              subjects!.includes(Number(subject.subject_id)) &&
-              coreElements!.includes(Number(coreElementId))
-            ) {
-              const newMainTopic = {
-                // tslint:disable-next-line: variable-name
-                id: Number(mainTopic.main_topic_id),
-                title: mainTopic.description!
-              };
-              if (!this.existInGrepList(newMainTopics, newMainTopic.id)) {
-                newMainTopics.push(newMainTopic);
-              }
-            }
-          });
-        })
-      );
-    }));
-
-    this.setState({
-      selectedMultisAll: newMainTopics,
-      selectedMultiFilter: newMainTopics,
-    });
-
-    return newMainTopics.map(mainTopic => mainTopic.id);
-  }
-
-  public updateGoalsFilters(
-    grades: Array<any> | null = this.getSelectedGrades(),
-    subjects: Array<any> | null = this.getSelectedSubjects(),
-    coreElements: Array<any> | null = this.getSelectedSubjects(),
-    mainTopics: Array<any> | null = this.getSelectedSubjects()
-  ) {
-    const newGoals: Array<Greep> = [];
-
-    this.state.grepDataFilters!.goals_filter!.forEach(((goal) => {
-      // tslint:disable-next-line: variable-name
-
-      goal.grade_ids!.forEach(grade =>
-        grade.subject_ids!.forEach((subject) => {
-          subject.core_element_ids!.forEach((coreElement) => {
-            coreElement.main_topic_ids!.forEach((mainTopicId) => {
-              if (
-                grades!.includes(Number(grade.grade_id)) &&
-                subjects!.includes(Number(subject.subject_id)) &&
-                coreElements!.includes(Number(coreElement.core_element_id)) &&
-                mainTopics!.includes(Number(mainTopicId))
-              ) {
-                const newGoal = {
-                  // tslint:disable-next-line: variable-name
-                  id: Number(goal.goal_id),
-                  title: goal.description!
-                };
-                if (!this.existInGrepList(newGoals, newGoal.id)) {
-                  newGoals.push(newGoal);
-                }
-              }
-            });
-          });
-        })
-      );
-
-    }));
-    this.setState({
-      selectedGoalsFilter: newGoals,
-      selectedGoalsAll: newGoals
-    });
-
-    return newGoals.map(goal => goal.id);
-  }
-
-  public getAllGrades() {
-    const newGrades: Array<Greep> = [];
-    this.state.grepDataFilters!.grade_filter!.forEach(((grade) => {
-      // tslint:disable-next-line: variable-name
-      newGrades.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(grade.grade_id),
-        title: grade.description!
-      });
-
-    }));
-    return newGrades.map(grade => grade.id);
-  }
-
   public getAllSubjects() {
     const newSubjects: Array<Greep> = [];
     this.state.grepDataFilters!.subject_filter!.forEach(((subject) => {
@@ -841,6 +478,11 @@ export class ArticlesList extends Component<Props, State> {
   public getSelectedGoals(): Array<any> | null {
     const { goalValueFilter } = this.state;
     return goalValueFilter;
+  }
+
+  public getSelectedSource(): Array<any> | null {
+    const { MySelectSource } = this.state;
+    return MySelectSource;
   }
 
   public setSelectedGrade(gradeIdArr: Array<number>, fn: Function) {
@@ -921,155 +563,6 @@ export class ArticlesList extends Component<Props, State> {
       }
     );
 
-  }
-
-  public addSelectedMainTopics(mainTopicId: number, fn: Function) {
-
-    const currentSelectedMainTopics = this.getSelectedMainTopics();
-    currentSelectedMainTopics!.push(mainTopicId);
-    this.setState(
-      {
-        MySelectMulti: currentSelectedMainTopics!
-      },
-      () => {
-        fn();
-      });
-
-  }
-
-  public removeSelectedFilter(
-    filterToReset: string,
-    elementId: number | Number,
-    fn: Function,
-    e: React.MouseEvent<HTMLButtonElement> | null = null
-  ) {
-
-    let selectedElements: Array<any> = [];
-
-    switch (filterToReset) {
-      case 'subjects':
-        selectedElements = this.getSelectedSubjects()!;
-        break;
-      case 'grades':
-        selectedElements = this.getSelectedGrades()!;
-        break;
-      case 'coreElements':
-        selectedElements = this.getSelectedCoreElements()!;
-        break;
-      case 'mainTopics':
-        selectedElements = this.getSelectedMainTopics()!;
-        break;
-      case 'goals':
-        selectedElements = this.getSelectedGoals()!;
-        break;
-
-      default:
-        break;
-    }
-
-    if (selectedElements.length !== 0) {
-      const indexSelected = selectedElements!.indexOf(elementId);
-      if (indexSelected > -1) {
-        selectedElements!.splice(indexSelected, 1);
-      }
-      if (this.state.activeGrepFilters && e !== null) {
-        e.currentTarget.classList.remove('active');
-      }
-    }
-
-    switch (filterToReset) {
-      case 'subjects':
-        this.setSelectedSubjects(selectedElements, fn);
-        break;
-      case 'grades':
-        this.setSelectedGrade([selectedElements[0]], fn);
-        break;
-      case 'coreElements':
-        this.setSelectedCoreElements(selectedElements, fn);
-        break;
-      case 'mainTopics':
-        this.setSelectedMainTopics(selectedElements, fn);
-        break;
-      case 'goals':
-        this.setSelectedGoals(selectedElements, fn);
-        break;
-
-      default:
-        break;
-    }
-
-  }
-
-  public waitForIt(fn: Function, willRun: boolean) {
-    if (willRun) {
-      fn();
-    }
-  }
-
-  public resetFilters(filters: Array<any>, fn: Function) {
-    if (filters.length === 0) {
-      fn();
-    }
-    filters.forEach((filterToReset, index) => {
-
-      if (filterToReset === 'subjects') {
-
-        this.setState(
-          {
-            MySelectSubject: []
-          },
-          () => {
-            this.waitForIt(fn, filters.length === (index + 1));
-          }
-        );
-
-      } else if (filterToReset === 'grades') {
-        this.setState(
-          {
-            MySelectGrade: []
-          },
-          () => {
-            this.waitForIt(fn, filters.length === (index + 1));
-          }
-        );
-
-      } else if (filterToReset === 'coreElements') {
-        this.waitForIt(fn, filters.length === (index + 1));
-        // this.setState({
-        //   myValueCore: []
-        // },
-        //   () => {
-        //     this.waitForIt(fn, filters.length === (index + 1))
-        //   });
-
-      } else if (filterToReset === 'mainTopics') {
-        this.setState({
-          MySelectMulti: []
-        });
-      } else if (filterToReset === 'goals') {
-        this.waitForIt(fn, filters.length === (index + 1));
-        // this.setState({
-        //   goalValueFilter: []
-        // },
-        //   () => {
-        //     this.waitForIt(fn, filters.length === (index + 1))
-        //   });
-      }
-    });
-  }
-
-  public addSelectedGoals(goalId: number, fn: Function) {
-
-    const currentSelectedGoals = this.getSelectedGoals();
-    currentSelectedGoals!.push(goalId);
-    this.setState(
-      {
-        goalValueFilter: currentSelectedGoals!
-      },
-      () => {
-        fn();
-      }
-    );
   }
 
   public handleChangeSelectCore = async (newValue: Array<any>) => {
@@ -1175,21 +668,6 @@ export class ArticlesList extends Component<Props, State> {
         this.getGREPParametersGoals();
         this.getGREPParametersSources();
       });
-  }
-
-  public getAllSubjectsFromFilter() {
-    return this.state.grepDataFilters!.subject_filter!.map(subject =>
-    ({
-      id: Number(subject.subject_id),
-      title: subject.description!
-    })
-    );
-  }
-
-  public fillAllSubjects() {
-    this.setState({
-      selectedSubjectsFilter: this.getAllSubjectsFromFilter()
-    });
   }
 
   public handleClickGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -1408,6 +886,7 @@ export class ArticlesList extends Component<Props, State> {
   public getGREPParametersSources() {
     const sourceArr = this.state.grepDataFilters!.source_filter!;
     const newArraySource: Array<Greep> = [];
+    const currentLstSource: Array<number> = [];
 
     sourceArr.forEach((item) => {
       if (this.getValidateInsertOptionSource(item)) {
@@ -1415,8 +894,25 @@ export class ArticlesList extends Component<Props, State> {
           id: Number(item.term_id),
           title: item.description
         });
+        currentLstSource.push(Number(item.term_id));
       }
     });
+
+    const filterSource: Array<number> | null = this.state.MySelectSource;
+    if (filterSource!.length > 0) {
+      filterSource!.forEach((item) => {
+        if (!currentLstSource.includes(item)) {
+          const itemSourceArr = sourceArr.find(o => o.term_id === String(item));
+          if (typeof(itemSourceArr) !== 'undefined') {
+            newArraySource.push({
+              id: Number(itemSourceArr.term_id),
+              title: itemSourceArr.description,
+              alt: 'jrDelItem'
+            });
+          }
+        }
+      });
+    }
 
     this.setState({
       selectedSourceAll: newArraySource
@@ -1756,22 +1252,23 @@ export class ArticlesList extends Component<Props, State> {
   }
 
   public handleClickSource = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const value = e.currentTarget.value;
-    const valueSelectedSource = this.state.MySelectSource;
-    if (!valueSelectedSource!.includes(Number(value))) {
-      valueSelectedSource!.push(Number(value));
-      e.currentTarget.classList.add('active');
+    const newSourceId = Number(e.currentTarget.value);
+    const filterSource: Array<number> = this.getSelectedSource()!;
+
+    if (filterSource.includes(newSourceId)) {
+      filterSource.splice(filterSource.indexOf(newSourceId), 1);
     } else {
-      const indexSelected = valueSelectedSource!.indexOf(Number(value));
-      if (indexSelected > -1) {
-        valueSelectedSource!.splice(indexSelected, 1);
-      }
-      e.currentTarget.classList.remove('active');
+      filterSource.push(newSourceId);
     }
-    this.setState({
-      MySelectSource: valueSelectedSource
-    });
-    this.handleChangeFilters('source', String(valueSelectedSource));
+
+    this.setState(
+      {
+        MySelectSource: filterSource
+      },
+      () => {
+        this.handleChangeFilters('source', String(this.getSelectedSource()));
+      }
+    );
   }
 
   public addItemToNewChild = (item: Article) => {
@@ -2439,6 +1936,7 @@ export class ArticlesList extends Component<Props, State> {
               defaultValueSubjectFilter={String(appliedFilters.subjects)}
 
               defaultValueMainFilter={String(this.state.MySelectMulti)}
+              defaultValueSourceFilter={String(this.state.MySelectSource)}
 
               coreValueFilter={this.state.myValueCore}
               goalValueFilter={this.state.goalValueFilter}

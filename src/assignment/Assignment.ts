@@ -104,10 +104,12 @@ export class GreepSelectValue {
 export class Greep {
   @observable public id: number;
   @observable public title: string;
+  @observable public alt?: string;
 
-  constructor(id: number, title: string) {
+  constructor(id: number, title: string, alt: string = '') {
     this.id = id;
     this.title = title;
+    this.alt = alt;
   }
 }
 
