@@ -275,13 +275,13 @@ class AssignmentsPageWrapper extends Component<Props, State> {
         }
       });
     });
-    this.assigValueData(String(valueSelectedGrades), String(this.state.myValueSubject));
-    this.setState({ filtersAjaxLoadingGoals: true });
+    this.assigValueData(String(valueSelectedGrades), String(this.state.myValueSubject), '', '');
+    /*this.setState({ filtersAjaxLoadingGoals: true });
     const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueToArray, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
-    this.setState({ filtersAjaxLoadingGoals: false });
+    this.setState({ filtersAjaxLoadingGoals: false });*/
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
   }
 
@@ -322,13 +322,13 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       });
     });
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
-    this.setState({ filtersAjaxLoadingGoals: true });
-    this.assigValueData(String(this.state.myValueGrade), String(valueSelectedSubjects));
-    const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueToArray, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
+    /*this.setState({ filtersAjaxLoadingGoals: true });*/
+    this.assigValueData(String(this.state.myValueGrade), String(valueSelectedSubjects), '', '');
+    /*const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueToArray, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
-    this.setState({ filtersAjaxLoadingGoals: false });
+    this.setState({ filtersAjaxLoadingGoals: false });*/
   }
 
   private handleClickMulti = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -356,12 +356,12 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       QueryStringKeys.GREPMAINTOPICSIDS,
       String(valueSelectedMulti)
     );
-    this.setState({ filtersAjaxLoadingGoals: true });
+    /*this.setState({ filtersAjaxLoadingGoals: true });
     const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(valueCoreOptions, valueSelectedMulti, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
-    this.setState({ filtersAjaxLoadingGoals: false });
+    this.setState({ filtersAjaxLoadingGoals: false });*/
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
   }
 
@@ -443,12 +443,13 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       ArrayValue.push(e.value);
     });
     this.setState({ valueCoreOptions: ArrayValue });
-    this.setState({ filtersAjaxLoadingGoals: true });
+    this.assigValueData(String(this.state.myValueGrade), String(this.state.myValueSubject), String(ArrayValue), String(this.state.myValueGoal));
+    /*this.setState({ filtersAjaxLoadingGoals: true });
     const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(ArrayValue, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
-    this.setState({ filtersAjaxLoadingGoals: false });
+    this.setState({ filtersAjaxLoadingGoals: false });*/
     let singleString : string = '';
     if (newValue.length > 0) {
       newValue.forEach((e, index) => {
@@ -481,6 +482,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       ArrayValue.push(e.value);
     });
     this.setState({ valueGoalsOptions: ArrayValue });
+    this.assigValueData(String(this.state.myValueGrade), String(this.state.myValueSubject), String(this.state.myValueCore), String(ArrayValue));
     let singleString : string = '';
     if (newValue.length > 0) {
       newValue.forEach((e, index) => {
@@ -652,10 +654,10 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     }
   }
 
-  public async assigValueData(grades: string, subjects: string) {
+  public async assigValueData(grades: string, subjects: string, core?: string, goals?: string) {
     const { newAssignmentStore } = this.props;
     this.setState({ filtersAjaxLoading: true });
-    const grepFiltersDataAwait = await newAssignmentStore!.getGrepFiltersAssignment(grades, subjects);
+    const grepFiltersDataAwait = await newAssignmentStore!.getGrepFiltersAssignment(grades, subjects, core, goals);
     this.setState({
       grepFiltersData : grepFiltersDataAwait
     });
@@ -670,6 +672,9 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     });
     this.setState({
       optionsSource: this.renderValueOptionsNumbers(grepFiltersDataAwait, 'source')
+    });
+    this.setState({
+      optionsGoals: this.renderValueOptions(grepFiltersDataAwait, 'goals').sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
     this.setState(
       {
@@ -737,18 +742,18 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     this.fetchTeachingPaths();
     if (!this.props.isStudent) {
       this.setState({ filtersAjaxLoading: true });
-      this.assigValueData('', '');
+      this.assigValueData('', '', '', '');
       this.setState({ filtersAjaxLoading: false });
       const listGoals = [''];
       this.setState({
         valueStringGoalsOptions: listGoals
       });
-      this.setState({ filtersAjaxLoadingGoals: true });
+      /*this.setState({ filtersAjaxLoadingGoals: true });
       const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, listGoals, MAGICNUMBER100, MAGICNUMBER1);
       this.setState({
         optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
       });
-      this.setState({ filtersAjaxLoadingGoals: false });
+      this.setState({ filtersAjaxLoadingGoals: false });*/
     }
   }
 
@@ -792,13 +797,13 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     GradeFilterArray.forEach((e) => {
       e.classList.remove('active');
     });
-    this.assigValueData('', '');
-    this.setState({ filtersAjaxLoadingGoals: true });
+    this.assigValueData('', '', '', '');
+    /*this.setState({ filtersAjaxLoadingGoals: true });
     const grepFiltergoalssDataAwait = await this.props.newAssignmentStore!.getGrepGoalsFilters([], [], [], [], [], MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals : this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
-    this.setState({ filtersAjaxLoadingGoals: false });
+    this.setState({ filtersAjaxLoadingGoals: false });*/
   }
 
   public createAssignment = async () => {

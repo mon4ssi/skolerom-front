@@ -173,10 +173,10 @@ class TeachingPathsListComponent extends Component<Props, State> {
     this.props.teachingPathsListStore!.getTeachingPathsList();
   }
 
-  public async assigValueData(grades: string, subjects: string) {
+  public async assigValueData(grades: string, subjects: string, core?: string, multi?: string, goals?: string, source?: string) {
     const { editTeachingPathStore } = this.props;
     this.setState({ filtersAjaxLoading: true });
-    const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFiltersTeachingPath(grades, subjects);
+    const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFiltersTeachingPath(grades, subjects, core, multi, goals, source);
     this.setState({
       grepFiltersData: grepFiltersDataAwait
     });
@@ -191,6 +191,9 @@ class TeachingPathsListComponent extends Component<Props, State> {
     });
     this.setState({
       optionsSource: this.renderValueOptionsNumbers(grepFiltersDataAwait, 'source')
+    });
+    this.setState({
+      optionsGoals: this.renderValueOptions(grepFiltersDataAwait, 'goals').sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
     this.setState(
       {
@@ -287,17 +290,17 @@ class TeachingPathsListComponent extends Component<Props, State> {
     this.unregisterListener = this.props.history.listen(this.locationUpdateListener);
     document.addEventListener('keyup', this.handleKeyboardControl);
     if (this.props.isNotStudent) {
-      this.assigValueData('', '');
+      this.assigValueData('', '', '', '', '');
       const listGoals = [''];
       this.setState({
         valueStringGoalsOptions: listGoals
       });
-      this.setState({ filtersAjaxLoadingGoals: true });
+      /*this.setState({ filtersAjaxLoadingGoals: true });
       const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, listGoals, MAGICNUMBER100, MAGICNUMBER1);
       this.setState({
         optionsGoals: this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
       });
-      this.setState({ filtersAjaxLoadingGoals: false });
+      this.setState({ filtersAjaxLoadingGoals: false });*/
     }
   }
 
@@ -322,6 +325,15 @@ class TeachingPathsListComponent extends Component<Props, State> {
     }
     if (type === 'multi') {
       data!.mainTopicFilters!.forEach((element) => {
+        returnArray.push({
+          // tslint:disable-next-line: variable-name
+          value: Number(element.id),
+          label: element.description
+        });
+      });
+    }
+    if (type === 'goals') {
+      data!.goalFilters!.forEach((element) => {
         returnArray.push({
           // tslint:disable-next-line: variable-name
           value: Number(element.id),
@@ -557,13 +569,15 @@ class TeachingPathsListComponent extends Component<Props, State> {
           String(valueSelectedGrades)
         );
         QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
-        this.assigValueData(String(valueSelectedGrades), String(this.state.myValueSubject));
         this.setState({ filtersAjaxLoadingGoals: true });
+        this.assigValueData(String(valueSelectedGrades), String(this.state.myValueSubject), '', '', '', '');
+        this.setState({ filtersAjaxLoadingGoals: false });
+        /*
         const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueToArray, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
         this.setState({
           optionsGoals: this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
         });
-        this.setState({ filtersAjaxLoadingGoals: false });
+        */
       });
 
   }
@@ -601,13 +615,15 @@ class TeachingPathsListComponent extends Component<Props, State> {
       String(valueSelectedSubjects)
     );
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
-    this.assigValueData(String(this.state.myValueGrade), String(valueSelectedSubjects));
     this.setState({ filtersAjaxLoadingGoals: true });
+    this.assigValueData(String(this.state.myValueGrade), String(valueSelectedSubjects), '', '', '', '');
+    this.setState({ filtersAjaxLoadingGoals: false });
+    /*
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueToArray, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals: this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
-    this.setState({ filtersAjaxLoadingGoals: false });
+    */
   }
 
   public handleClickMulti = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -629,11 +645,14 @@ class TeachingPathsListComponent extends Component<Props, State> {
       myValueMulti: valueSelectedMulti
     });
     this.setState({ filtersAjaxLoadingGoals: true });
+    this.assigValueData(String(this.state.myValueGrade), String(this.state.myValueSubject), '', String(valueSelectedMulti), '', '');
+    this.setState({ filtersAjaxLoadingGoals: false });
+    /*this.setState({ filtersAjaxLoadingGoals: true });
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueSelectedMulti, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals: this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
-    this.setState({ filtersAjaxLoadingGoals: false });
+    this.setState({ filtersAjaxLoadingGoals: false });*/
     QueryStringHelper.set(
       this.props.history,
       QueryStringKeys.GREPMAINTOPICSIDS,
@@ -689,8 +708,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
   public async refreshSubject(coreElementsArray: Array<any>, goalsArray: Array<any>) {
     const { editTeachingPathStore } = this.props;
 
-    const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFiltersTeachingPath(String(this.state.myValueGrade), String(this.state.myValueSubject), String(coreElementsArray), String(goalsArray));
-
+    const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFiltersTeachingPath(String(this.state.myValueGrade), String(this.state.myValueSubject), String(coreElementsArray), '', String(goalsArray), '');
     this.setState(
       {
         subjectsArrayFilter: this.renderDataSubjects(this.renderValueOptionsBasics(grepFiltersDataAwait, 'subject'))
@@ -707,7 +725,9 @@ class TeachingPathsListComponent extends Component<Props, State> {
       String(this.state.myValueGrade),
       String(this.state.myValueSubject),
       String(coreElementsArray),
-      String(goalsArray));
+      '',
+      String(goalsArray),
+      '');
 
     this.setState(
       {
@@ -737,10 +757,11 @@ class TeachingPathsListComponent extends Component<Props, State> {
 
     // REFRESH GOALS
     this.setState({ filtersAjaxLoadingGoals: true });
-    const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(ArrayValue, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
+    /*const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(ArrayValue, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals: this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
-    });
+    });*/
+    this.assigValueData(String(this.state.myValueGrade), String(this.state.myValueSubject), String(ArrayValue), String(this.state.valueMultiOptions), String(this.state.valueGoalsOptions), '');
     this.setState({ filtersAjaxLoadingGoals: false });
     // END REFRESH GOALS
 
@@ -776,7 +797,14 @@ class TeachingPathsListComponent extends Component<Props, State> {
     }
 
     // REFRESH SUBJECTS
-    this.refreshSubject(valueCoreOptions, valueGoalsOptions);
+    // this.refreshSubject(valueCoreOptions, valueGoalsOptions);
+    this.setState({ filtersAjaxLoadingGoals: true });
+    /*const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(ArrayValue, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
+    this.setState({
+      optionsGoals: this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
+    });*/
+    this.assigValueData(String(this.state.myValueGrade), String(this.state.myValueSubject), String(this.state.valueCoreOptions), String(this.state.valueMultiOptions), String(ArrayValue), '');
+    this.setState({ filtersAjaxLoadingGoals: false });
     // END REFRESH SUBJECTS
 
     QueryStringHelper.set(
@@ -978,12 +1006,12 @@ class TeachingPathsListComponent extends Component<Props, State> {
       e.classList.remove('active');
     });
     this.assigValueData('', '');
-    this.setState({ filtersAjaxLoadingGoals: true });
+    /*this.setState({ filtersAjaxLoadingGoals: true });
     const grepFiltergoalssDataAwait = await this.props.editTeachingPathStore!.getGrepGoalsFilters([], [], [], [], [], MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals: this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
-    this.setState({ filtersAjaxLoadingGoals: false });
+    this.setState({ filtersAjaxLoadingGoals: false });*/
   }
 
   public render() {

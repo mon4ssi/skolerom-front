@@ -249,13 +249,15 @@ export class TeachingPathApi implements TeachingPathRepo {
     };
   }
 
-  public async getGrepFiltersTeachingPath(grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep>  {
+  public async getGrepFiltersTeachingPath(grades: string, subjects: string, coreElements?: string, mainTopics?:string, goals?: string, source?:string): Promise<FilterGrep>  {
     const response = await API.get('api/teacher/teaching-paths/grep/filters', {
       params: {
         grades,
         subjects,
         coreElements,
-        goals
+        mainTopics,
+        goals,
+        source
       }
     });
     return response.data;

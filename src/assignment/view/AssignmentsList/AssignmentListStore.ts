@@ -304,8 +304,8 @@ export class AssignmentListStore {
     }
   }
 
-  public async getGrepFiltersAssignment(grades: string, subjects: string) {
-    return this.assignmentService.getGrepFiltersAssignment(grades, subjects);
+  public async getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, goals?: string) {
+    return this.assignmentService.getGrepFiltersAssignment(grades, subjects, coreElements, goals);
   }
 
   public get gradeFilterValue() {

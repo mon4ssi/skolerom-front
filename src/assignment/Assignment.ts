@@ -152,6 +152,7 @@ export class FilterGrep {
   public mainTopicFilters?: Array<GrepElementFilters>;
   public readingInSubjects?: Array<GrepReading>;
   public sourceFilters?: Array<GrepSource>;
+  public goalFilters?: Array<GrepElementFilters>;
 }
 
 export class GoalsData {
