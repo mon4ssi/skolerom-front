@@ -578,11 +578,9 @@ class SearchFilter extends Component<Props, State> {
   public renderFiltersGradeChildren = () => {
     const { handleClickGrade, customGradeChildrenList, defaultValueGradeFilter } = this.props;
     const grades = customGradeChildrenList!.sort(this.sortSelectors);
-
     const arrayDefaults = (defaultValueGradeFilter) ? defaultValueGradeFilter.split(',') : [];
-
     const visibleGrades = grades.map((grade) => {
-      const classD = (arrayDefaults.includes(String(grade.id))) ? 'active' : '';
+      const classD = (arrayDefaults[0] === String(grade.id) ? 'active' : '');
       return (
         <button
           style={{ color: grade.filterStatus === 'inactive' ? 'lightgrey' : '' }}
