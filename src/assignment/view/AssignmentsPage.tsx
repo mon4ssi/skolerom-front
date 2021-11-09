@@ -655,7 +655,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
   public async assigValueData(grades: string, subjects: string) {
     const { newAssignmentStore } = this.props;
     this.setState({ filtersAjaxLoading: true });
-    const grepFiltersDataAwait = await newAssignmentStore!.getGrepFilters(grades, subjects, SOURCE);
+    const grepFiltersDataAwait = await newAssignmentStore!.getGrepFiltersAssignment(grades, subjects);
     this.setState({
       grepFiltersData : grepFiltersDataAwait
     });

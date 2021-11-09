@@ -137,8 +137,10 @@ export class PublishingActions extends Component<Props, State> {
         listGoals = store!.getGoalsByArticle().split(',');
       }
     }
+    await new Promise(resolve => setTimeout(resolve, SETTIMEOUT));
     const selectedGrades = store!.currentEntity!.getListOfGrades();
     const selectedSubjects = store!.currentEntity!.getListOfSubjects();
+
     selectedGrades.forEach((ee) => {
       arraySelectedIdsGrades.push(Number(ee.id));
     });
@@ -146,7 +148,7 @@ export class PublishingActions extends Component<Props, State> {
       arraySelectedIdsSubjects.push(Number(ee.id));
     });
     await new Promise(resolve => setTimeout(resolve, SETTIMEOUT));
-    const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects), '');
+    const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
 
     this.setState({
       grepFiltersData : grepFiltersDataAwait
@@ -504,7 +506,7 @@ export class PublishingActions extends Component<Props, State> {
       selectedSubjects.forEach((ee) => {
         arraySelectedIdsSubjects.push(Number(ee.id));
       });
-      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects), '');
+      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
       this.setState({
         grepFiltersData : grepFiltersDataAwait
       });
@@ -568,7 +570,7 @@ export class PublishingActions extends Component<Props, State> {
       selectedSubjects.forEach((ee) => {
         arraySelectedIdsSubjects.push(Number(ee.id));
       });
-      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects), '');
+      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
       this.setState({
         grepFiltersData : grepFiltersDataAwait
       });
@@ -637,7 +639,7 @@ export class PublishingActions extends Component<Props, State> {
       selectedSubjects.forEach((ee) => {
         arraySelectedIdsSubjects.push(Number(ee.id));
       });
-      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects), '');
+      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
       this.setState({
         grepFiltersData : grepFiltersDataAwait
       });
@@ -717,7 +719,7 @@ export class PublishingActions extends Component<Props, State> {
       selectedSubjects.forEach((ee) => {
         arraySelectedIdsSubjects.push(Number(ee.id));
       });
-      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects), '');
+      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
       this.setState({
         grepFiltersData : grepFiltersDataAwait
       });
@@ -1628,6 +1630,7 @@ export class PublishingActions extends Component<Props, State> {
           goalsNotSelected.push(goal);
         }
       });
+
       // step 2: reOrder goals from array
       if (anotherGoals.length > 0) {
         anotherGoals = anotherGoals!.sort((a, b) => (a!.grades![0].id > b!.grades![0].id) ? 1 : (b!.grades![0].id > a!.grades![0].id) ? -1 : 0);

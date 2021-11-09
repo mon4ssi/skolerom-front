@@ -13,7 +13,9 @@ import {
   QuestionAttachment,
   Subject,
   WPLocale,
-  Source
+  Source,
+  FilterGrep,
+  GoalsData
 } from './Assignment';
 import {
   AssignmentDistributeDTO,
@@ -261,6 +263,18 @@ export class AssignmentApi implements AssignmentRepo {
         total_pages: 0
       };
     }
+  }
+
+  public async getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep>  {
+    const response = await API.get('api/teacher/assignments/grep/filters', {
+      params: {
+        grades,
+        subjects,
+        coreElements,
+        goals
+      }
+    });
+    return response.data;
   }
 
   public async getStudentAssignmentList(filter: Filter) {

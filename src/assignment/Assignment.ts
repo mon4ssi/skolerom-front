@@ -46,6 +46,7 @@ export interface AssignmentRepo {
     total_pages: number;
   }>;
   copyAssignment(id: number): Promise<number>;
+  getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
 }
 
 export enum QuestionType {

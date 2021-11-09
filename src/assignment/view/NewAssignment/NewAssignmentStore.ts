@@ -602,8 +602,11 @@ export class NewAssignmentStore {
   public async assignStudentToAssignment(assignmentId:string, referralToken: string) {
     return this.distributionService.assignStudentToAssignment(assignmentId, referralToken);
   }
-  public async getGrepFilters(grades: string, subjects: string, source: string) {
-    return this.teachingPathService.getGrepFilters(grades, subjects, source);
+  public async getGrepFilters(grades: string, subjects: string) {
+    return this.teachingPathService.getGrepFilters(grades, subjects);
+  }
+  public async getGrepFiltersAssignment(grades: string, subjects: string) {
+    return this.assignmentService.getGrepFiltersAssignment(grades, subjects);
   }
   public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number) {
     return this.teachingPathService.getGrepGoalsFilters(grepCoreElementsIds, grepMainTopicsIds, gradesIds, subjectsIds, orderGoalsCodes, perPage, page);

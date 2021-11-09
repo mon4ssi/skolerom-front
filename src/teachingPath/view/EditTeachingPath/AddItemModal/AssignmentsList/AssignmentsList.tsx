@@ -344,7 +344,7 @@ export class AssignmentsList extends Component<Props, State> {
   public async assigValueData(grades: string, subjects: string) {
     const { editTeachingPathStore, assignmentListStore } = this.props;
     this.setState({ filtersAjaxLoading: true });
-    const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFilters(grades, subjects, SOURCE);
+    const grepFiltersDataAwait = await assignmentListStore!.getGrepFiltersAssignment(grades, subjects);
     this.setState({
       grepFiltersData : grepFiltersDataAwait
     });

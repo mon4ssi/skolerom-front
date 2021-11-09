@@ -176,7 +176,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
   public async assigValueData(grades: string, subjects: string) {
     const { editTeachingPathStore } = this.props;
     this.setState({ filtersAjaxLoading: true });
-    const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFilters(grades, subjects, SOURCE);
+    const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFiltersTeachingPath(grades, subjects);
     this.setState({
       grepFiltersData: grepFiltersDataAwait
     });
@@ -689,7 +689,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
   public async refreshSubject(coreElementsArray: Array<any>, goalsArray: Array<any>) {
     const { editTeachingPathStore } = this.props;
 
-    const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFilters(String(this.state.myValueGrade), String(this.state.myValueSubject), SOURCE, String(coreElementsArray), String(goalsArray));
+    const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFiltersTeachingPath(String(this.state.myValueGrade), String(this.state.myValueSubject), String(coreElementsArray), String(goalsArray));
 
     this.setState(
       {
@@ -703,10 +703,10 @@ class TeachingPathsListComponent extends Component<Props, State> {
   public async refreshGrade(coreElementsArray: Array<any>, goalsArray: Array<any>) {
     const { editTeachingPathStore } = this.props;
 
-    const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFilters(
+    const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFiltersTeachingPath(
       String(this.state.myValueGrade),
       String(this.state.myValueSubject),
-      SOURCE, String(coreElementsArray),
+      String(coreElementsArray),
       String(goalsArray));
 
     this.setState(

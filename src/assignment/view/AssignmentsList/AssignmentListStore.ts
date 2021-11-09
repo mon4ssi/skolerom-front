@@ -304,6 +304,10 @@ export class AssignmentListStore {
     }
   }
 
+  public async getGrepFiltersAssignment(grades: string, subjects: string) {
+    return this.assignmentService.getGrepFiltersAssignment(grades, subjects);
+  }
+
   public get gradeFilterValue() {
     return this.assignmentList.filter.grade;
   }
