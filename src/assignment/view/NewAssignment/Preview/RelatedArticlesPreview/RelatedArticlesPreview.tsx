@@ -47,6 +47,7 @@ interface State {
   selectedCoresFilter: Array<Greep>;
   selectedCoresAll: Array<Greep>;
   selectedGradesAll: Array<Grade>;
+  selectedGradeChildrenAll: Array<Grade>;
   selectedSubjectsAll: Array<Subject>;
   selectedMultiFilter: Array<Greep>;
   selectedMultisAll: Array<Greep>;
@@ -94,6 +95,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       selectedSubjectsAll: [],
       selectedGradesAll: [],
       selectedCoresAll: [],
+      selectedGradeChildrenAll: [],
       selectedCoresFilter: [],
       selectedMultisAll: [],
       selectedMultiFilter: [],
@@ -1204,6 +1206,11 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     return selectedGradesAll;
   }
 
+  public customGradeChildrenList = () => {
+    const { selectedGradeChildrenAll } = this.state;
+    return selectedGradeChildrenAll;
+  }
+
   public mySubjects = () => {
     const { selectedSubjectsAll, selectedSubjectsFilter } = this.state;
     if (selectedSubjectsFilter.length) {
@@ -1349,6 +1356,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
                 searchQueryFilterValue={this.state.appliedFilters.searchTitle as string}
                 customGradesList={this.customGradesList()}
                 customSubjectsList={this.mySubjects()}
+                customGradeChildrenList={this.customGradeChildrenList()}
                 customCoreList={this.customCoreList()}
                 customMultiList={this.customMultiList()}
                 customGoalsList={this.customGoalsList()}
