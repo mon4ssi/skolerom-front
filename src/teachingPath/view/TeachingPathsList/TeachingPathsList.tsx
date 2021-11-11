@@ -746,14 +746,14 @@ class TeachingPathsListComponent extends Component<Props, State> {
     });
     this.setState({ valueCoreOptions: ArrayValue });
 
-    if (valueGradesOptions.length === 0 && valueSubjectsOptions.length === 0) {
+    /* if (valueGradesOptions.length === 0 && valueSubjectsOptions.length === 0) {
 
       // REFRESH SUBJECTS
-      this.refreshSubject(ArrayValue, valueGoalsOptions);
+      // this.refreshSubject(ArrayValue, valueGoalsOptions);
 
       // REFRESH GRADES
-      this.refreshGrade(ArrayValue, valueGoalsOptions);
-    }
+      // this.refreshGrade(ArrayValue, valueGoalsOptions);
+    }*/
 
     // REFRESH GOALS
     this.setState({ filtersAjaxLoadingGoals: true });
@@ -798,13 +798,13 @@ class TeachingPathsListComponent extends Component<Props, State> {
 
     // REFRESH SUBJECTS
     // this.refreshSubject(valueCoreOptions, valueGoalsOptions);
-    this.setState({ filtersAjaxLoadingGoals: true });
+    // this.setState({ filtersAjaxLoadingGoals: true });
     /*const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(ArrayValue, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
       optionsGoals: this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
     });*/
     this.assigValueData(String(this.state.myValueGrade), String(this.state.myValueSubject), String(this.state.valueCoreOptions), String(this.state.valueMultiOptions), String(ArrayValue), '');
-    this.setState({ filtersAjaxLoadingGoals: false });
+    // this.setState({ filtersAjaxLoadingGoals: false });
     // END REFRESH SUBJECTS
 
     QueryStringHelper.set(
