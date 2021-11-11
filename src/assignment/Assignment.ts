@@ -60,11 +60,19 @@ export class Grade {
   @observable public id: number;
   @observable public title: string;
   @observable public filterStatus?: string | undefined | null;
+  // tslint:disable-next-line: variable-name
+  @observable public grade_parent?: Array<number | string>;
+  // tslint:disable-next-line: variable-name
+  @observable public name_sub?: string | null;
 
   constructor(id: number, title: string) {
     this.id = id;
     this.title = title;
     this.filterStatus = null;
+    // tslint:disable-next-line: variable-name
+    this.grade_parent = [];
+    // tslint:disable-next-line: variable-name
+    this.name_sub = null;
   }
 }
 
@@ -123,6 +131,10 @@ export interface GrepFilters {
   // tslint:disable-next-line: variable-name
   wp_id: number;
   filterStatus?: any;
+  // tslint:disable-next-line: variable-name
+  grade_parent?: Array<number | string>;
+  // tslint:disable-next-line: variable-name
+  name_sub?: string | null;
 }
 
 export interface GrepElementFilters {

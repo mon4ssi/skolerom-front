@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import debounce from 'lodash/debounce';
 
 import { TeachingPathsListStore } from './TeachingPathsListStore';
-import { GrepElementFilters, FilterGrep, GreepSelectValue, GrepFilters, GoalsData, Greep, GreepElements, Subject, Source } from 'assignment/Assignment';
+import { GrepElementFilters, FilterGrep, GreepSelectValue, GrepFilters, GoalsData, Greep, GreepElements, Subject, Source, Grade } from 'assignment/Assignment';
 import { InfoCard } from 'components/common/InfoCard/InfoCard';
 import { TabNavigation } from 'components/common/TabNavigation/TabNavigation';
 import { SearchFilter } from 'components/common/SearchFilter/SearchFilter';
@@ -69,7 +69,7 @@ interface State {
   myValueCore: Array<any>;
   goalValueFilter: Array<any>;
   subjectsArrayFilter: Array<Subject>;
-  gradesArrayFilter: Array<Subject>;
+  gradesArrayFilter: Array<Grade>;
   filtersisUsed: boolean;
   filtersAjaxLoading: boolean;
   filtersAjaxLoadingGoals: boolean;
@@ -232,7 +232,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
       () => {
         this.setState(
           {
-            gradesArrayFilter: this.renderDataSubjects(this.state.optionsGrades)
+            gradesArrayFilter: this.renderDataGrades(this.state.optionsGrades)
           },
           () => {
             const ArrayValue: Array<number> = [];
@@ -277,6 +277,24 @@ class TeachingPathsListComponent extends Component<Props, State> {
         id: Number(element.wp_id),
         title: element.name,
         filterStatus: element.filterStatus
+      });
+    });
+    return returnArray;
+  }
+
+  public renderDataGrades = (data: Array<GrepFilters>) => {
+    const returnArray: Array<any> = [];
+    data!.forEach((element) => {
+
+      returnArray.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(element.wp_id),
+        title: element.name,
+        filterStatus: element.filterStatus,
+        // tslint:disable-next-line: variable-name
+        grade_parent: element.grade_parent,
+        // tslint:disable-next-line: variable-name
+        name_sub: element.name_sub
       });
     });
     return returnArray;
@@ -408,6 +426,10 @@ class TeachingPathsListComponent extends Component<Props, State> {
           // tslint:disable-next-line: variable-name
           wp_id: element.wp_id,
           filterStatus: element.filterStatus,
+          // tslint:disable-next-line: variable-name
+          grade_parent: element.grade_parent,
+          // tslint:disable-next-line: variable-name
+          name_sub: element.name_sub
         });
       });
     }
@@ -527,7 +549,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
       QueryStringKeys.GREPREADINGINSUBJECT,
       String([])
     );
-
     this.setState(
       {
         valueMultiOptions: [],
@@ -731,7 +752,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
 
     this.setState(
       {
-        gradesArrayFilter: this.renderDataSubjects(this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade'))
+        gradesArrayFilter: this.renderDataGrades(this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade'))
       },
     );
   }

@@ -545,7 +545,13 @@ class SearchFilter extends Component<Props, State> {
 
     const visibleGrades = grades.map((grade) => {
       const title = grade.title.split('.', 1);
+      const variableTitle = (grade.title.split('.').length > 1) ? `${title} ${intl.get('new assignment.grade')}` : title;
       const classD = (arrayDefaults.includes(String(grade.id))) ? 'active' : '';
+      /*grades.forEach((insidegrade) => {
+        // tslint:disable-next-line: variable-name
+        if (insidegrade.grade_parent!.length > 0) {
+        }
+      });*/
       return (
         <button
           style={{ color: grade.filterStatus === 'inactive' ? 'lightgrey' : '' }}
@@ -554,7 +560,7 @@ class SearchFilter extends Component<Props, State> {
           onClick={handleClickGrade}
           key={grade.id}
         >
-          {title}{intl.get('new assignment.grade')}
+          {variableTitle}
         </button>
       );
     });
