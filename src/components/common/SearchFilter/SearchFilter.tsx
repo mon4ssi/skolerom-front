@@ -547,22 +547,29 @@ class SearchFilter extends Component<Props, State> {
       const title = grade.title.split('.', 1);
       const variableTitle = (grade.title.split('.').length > 1) ? `${title} ${intl.get('new assignment.grade')}` : title;
       const classD = (arrayDefaults.includes(String(grade.id))) ? 'active' : '';
-      /*grades.forEach((insidegrade) => {
+      const arrayIds: Array<string> = [];
+      arrayIds.push(String(grade.id));
+      grades.forEach((insidegrade) => {
         // tslint:disable-next-line: variable-name
-        if (insidegrade.grade_parent!.length > 0) {
+        if (insidegrade.grade_parent !== null) {
+          if (Number(insidegrade.grade_parent) === Number(grade.id)) {
+            arrayIds.push(String(insidegrade.grade_parent));
+          }
         }
-      });*/
-      return (
-        <button
-          style={{ color: grade.filterStatus === 'inactive' ? 'lightgrey' : '' }}
-          value={grade.id}
-          className={`itemFlexFilter gradesFilterClass ${classD}`}
-          onClick={handleClickGrade}
-          key={grade.id}
-        >
-          {variableTitle}
-        </button>
-      );
+      });
+      if (grade.grade_parent === null) {
+        return (
+          <button
+            style={{ color: grade.filterStatus === 'inactive' ? 'lightgrey' : '' }}
+            value={String(arrayIds)}
+            className={`itemFlexFilter gradesFilterClass ${classD}`}
+            onClick={handleClickGrade}
+            key={grade.id}
+          >
+            {variableTitle}
+          </button>
+        );
+      }
     });
     if (grades.length === 0) {
       return (

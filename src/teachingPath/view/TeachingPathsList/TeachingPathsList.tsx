@@ -294,7 +294,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
         // tslint:disable-next-line: variable-name
         grade_parent: element.grade_parent,
         // tslint:disable-next-line: variable-name
-        name_sub: element.name_sub
+        name_sub: element.grade_parent
       });
     });
     return returnArray;
@@ -549,6 +549,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
       QueryStringKeys.GREPREADINGINSUBJECT,
       String([])
     );
+
     this.setState(
       {
         valueMultiOptions: [],
