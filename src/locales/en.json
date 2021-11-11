@@ -227,7 +227,7 @@
   "new assignment": {
     "greep": {
       "core": "Core elements",
-      "goals": "Educations goals",
+      "goals": "Educational goals",
       "subjects": "Multidisciplinary subjects",
       "source": "Source",
       "reading": "Reading in Subject"
@@ -370,7 +370,8 @@
     "No results found": "No results found",
     "articles selected": "articles selected",
     "Image caption": "Image caption",
-    "grade": "th grade",
+    "grade": " grade",
+    "indicadorgrade": "th",
     "go_back_to_teaching_path": "Assignment was not published and will not be added to the teaching path. Are you sure you want to go back to the teaching path?",
     "specify": "Specify 1 or more related articles to get suggestions for images, PDFs, videos and sound.",
     "no_title": "No title"
@@ -458,6 +459,7 @@
     "after_publishing_from_teaching_path": "Assignment published successfuly and was added to teaching path.",
     "grep": {
       "title":"Connect to curriculum",
+      "title_private":"Select Grade and Subject",
       "description":"Connecting your teaching path is required when sharing publicity. Please select the appropriate educational goals below before publishing and distribution",
       "descrption_assignment":"Connecting your teaching path is required when sharing publicity. Please select the appropriate educational goals below before publishing and distribution",
       "description_privado":"Linking to the curriculum is only necessary when you publish publicly, but you are welcome to link the content to relevant competence goals below if desired."
@@ -535,7 +537,10 @@
       "title": "Teaching Path complete!",
       "description": "All steps successfully completed. Use the breadcrumbs at the bottom to go though and review each step. Come back here and press «Complete and submit» to submit your work to your teacher.",
       "button": "Complete and submit",
-      "delete_all_answers": "Delete all answers"
+      "delete_all_answers": "Delete all answers",
+      "title_preview": "Teaching Path Preview complete!",
+      "description_preview": "All steps successfully completed. Use the breadcrumbs at the bottom to go though and review each step. Come back here and press «Complete and submit» to submit your work to your teacher.",
+      "button_preview": "Finish the Preview"
     },
     "submitted": "Your teaching path has been submitted!",
     "next": "Next",
@@ -575,6 +580,7 @@
       "after_publishing": "Congratulations, your teaching path has been published!",
       "after_distribution": "Teaching path successfully distributed!",
       "cant_publish": "You must complete the Curriculum section before publish",
+      "cant_publish_goals": "You can't publish because no educational goals are available",
       "notdata_goals": "There are no established goals for these criteria"
     },
     "title": {

@@ -859,6 +859,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
           handleClickMulti={this.handleClickMulti}
           handleClickReading={this.handleClickReading}
           // VALUES
+          gradeFilterValue={QueryStringHelper.getString(this.props.history, QueryStringKeys.GRADE)}
           defaultValueGradeFilter={QueryStringHelper.getString(this.props.history, QueryStringKeys.GRADE)}
           defaultValueSubjectFilter={QueryStringHelper.getString(this.props.history, QueryStringKeys.SUBJECT)}
           isAnsweredFilterValue={QueryStringHelper.getString(this.props.history, QueryStringKeys.IS_ANSWERED)}

@@ -842,16 +842,24 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     }
   }
 
+  public renderTitle = () => {
+    const { location } = this.props;
+    return (
+      <h1 className="generalTitle">
+        {intl.get('assignments search.title')}
+      </h1>
+    );
+  }
+
   public render() {
+    const isAnswerPage = this.props.location.pathname.includes('/answers');
     const classes = classNames('AssignmentsPage moveListBySearchFilter ', {
       AssignmentsPage_noTabs: !this.hasTabNavigation()
     });
 
     return (
       <div className={classes}>
-        <h1 className="generalTitle">
-        {intl.get('assignments search.title')}
-        </h1>
+        {!isAnswerPage && this.renderTitle()}
         {this.renderTabNavigations()}
 
         {this.renderSearchFilter()}

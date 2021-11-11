@@ -1,3 +1,4 @@
+@import "style";
 .TeachingPathDistributeList {
     display: flex;
     flex-wrap: wrap;
@@ -29,6 +30,21 @@
             .cardInfo {
                 min-height: 76px;
             }
+        }
+    }
+}
+
+@media screen and (max-width: $screen-dimension-tablet) {
+    .TeachingPathDistributeList {
+        .TeachingPathDistributeItem {
+            width: calc(33.33% - 15px);
+        }
+    }
+}
+@media screen and (max-width: $screen-dimension-mobile) {
+    .TeachingPathDistributeList {
+        .TeachingPathDistributeItem {
+            width: 100%;
         }
     }
 }

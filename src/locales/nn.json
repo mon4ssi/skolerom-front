@@ -370,7 +370,8 @@
     "No results found": "Søket ditt ga ingen resultater",
     "articles selected": "artiklar valde",
     "Image caption": "Bilettekst",
-    "grade": ". trinn",
+    "grade": " trinn",
+    "indicadorgrade": ".",
     "go_back_to_teaching_path": "Oppgåva blei ikkje publisert og vil ikkje bli lagt til i læringsstien. Er du sikker på at du vil tilbake til læringsstien?",
     "specify": "Spesifiser 1 eller fleire relaterte artiklar for å få forslag til bilete, PDF-ar, videoar og lyd.",
     "no_title": "Utan tittel"
@@ -458,6 +459,7 @@
     "after_publishing_from_teaching_path": "Oppgåva blei publisert og lagt til i læringsstien.",
     "grep": {
       "title":"Koble til læreplanen",
+      "title_private":"Velg trinn og fag",
       "description":"Når du deler offentlig må du koble læringsstien til læreplanen. Velg relevante kompetansemål her under før publisering og distribusjon.",
       "descrption_assignment":"Når du deler offentlig må du koble oppgaven til læreplanen. Velg relevante kompetansemål her under før publisering og distribusjon.",
       "description_privado":"Kobling til læreplanen er kun nødvendig når du publiserer offentlig, men du kan gjerne koble innholdet til relevante kompetansemål her under hvis ønskelig."
@@ -535,7 +537,10 @@
       "title": "Læringsstien er fullført!",
       "description": "Bruk navigasjonen i botnen av sida til å gå gjennom kvart steg. Kom tilbake hit og trykk «Registrer og send inn» for å sende svaret til læraren din.",
       "button": "Registrer og send inn",
-      "delete_all_answers": "Slett alle besvarelser"
+      "delete_all_answers": "Slett alle besvarelser",
+      "title_preview": "Læringsstien er fullført!",
+      "description_preview": "Bruk navigasjonen i botnen av sida til å gå gjennom kvart steg. Kom tilbake hit og trykk «Registrer og send inn» for å sende svaret til læraren din.",
+      "button_preview": "Registrer og send inn"
     },
     "submitted": "Svaret ditt er sendt!",
     "next": "Neste",
@@ -575,6 +580,7 @@
       "after_publishing": "Bra jobba, læringsstien er publisert!",
       "after_distribution": "Læringsstien har blitt distribuert!",
       "cant_publish": "Du må fullføre læreplandelen før du publiserer",
+      "cant_publish_goals": "Du kan ikkje publisera utan kopling av kompetansemål",
       "notdata_goals": "Det er ingen etablerte mål for disse kriteriene"
     },
     "title": {

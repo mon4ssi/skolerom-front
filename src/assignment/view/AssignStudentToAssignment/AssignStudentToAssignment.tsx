@@ -41,8 +41,7 @@ export class AssignStudentToAssignment extends Component<Props, State> {
         type: response ? NotificationTypes.ERROR : NotificationTypes.SUCCESS,
         title: response || intl.get('distribution_page.assignment_is_assigned_to_user')
       });
-      this.setState({ path: '/assignments' });
-
+      this.setState({ path: `/assignment/${assignmentId}` });
     } else if (currentUser && currentUser.type === UserType.Teacher) {
       this.setState({ path: '/assignments/all' });
 

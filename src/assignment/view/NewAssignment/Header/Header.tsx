@@ -83,9 +83,11 @@ class HeaderWrapper extends Component<Props> {
     const isCopy = newAssignmentStore!.assignmentContainer!.assignment!.isCopy;
 
     if (!newAssignmentStore!.isActiveButtons) {
+      const grepGoals = newAssignmentStore!.assignmentContainer!.assignment.grepGoalsIds;
+      const msj = (typeof(grepGoals) === 'undefined') ? intl.get('edit_teaching_path.header.cant_publish_goals') : (grepGoals!.length === 0) ? intl.get('edit_teaching_path.header.cant_publish_goals') : intl.get('edit_teaching_path.header.cant_publish');
       Notification.create({
         type: NotificationTypes.ERROR,
-        title: intl.get('edit_teaching_path.header.cant_publish')
+        title: msj
       });
       return;
     }

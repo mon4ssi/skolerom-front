@@ -71,7 +71,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
       const title = grade.title.split('.', 1);
       return (
         <div key={grade.id}>
-          {title}
+          {title}{intl.get('new assignment.indicadorgrade')}
         </div>
       );
     }
@@ -349,7 +349,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
             {this.renderDescription()}
           </div>
           <div className="footerCardInfo flexBox">
-            {this.renderGrades()}
+            {/* this.renderGrades() */}
             {this.renderNumberOfQuestions()}
           </div>
         </div>

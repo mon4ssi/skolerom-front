@@ -25,6 +25,7 @@ import { NewAssignment } from 'assignment/view/NewAssignment/NewAssignment';
 import { CurrentAssignmentPage } from 'assignment/view/CurrentAssignmentPage/CurrentAssignmentPage';
 import { CreateNewAssignmentFromArticle } from 'assignment/view/CreateNewAssignmentFromArticle/CreateNewAssignmentFromArticle';
 import { PassageTeachingPath } from 'teachingPath/view/PassageTeachingPath/PassageTeachingPath';
+import { PreviewTeachingPath } from 'teachingPath/view/PreviewTeachingPath/PreviewTeachingPath';
 import { EditTeachingPath } from 'teachingPath/view/EditTeachingPath/EditTeachingPath';
 import { ConfirmationPage } from 'components/pages/DistributionPage/ConfirmationPage/ConfirmationPage';
 
@@ -53,6 +54,7 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 
 // tslint:disable-next-line: no-any
 const CurrentAssignmentPageView = (props: any) => <CurrentAssignmentPage {...props} isTeacher />;
+const CurrentAssignmentPagePreview = (props: any) => <CurrentAssignmentPagePreview {...props} isTeacher />;
 
 // tslint:disable-next-line: no-any
 const ViewTeachingPath = (props: any) => <EditTeachingPath {...props} readOnly />;
@@ -225,6 +227,17 @@ class LocalizedApp extends Component<Props> {
           component={CurrentAssignmentPageView}
         />
 
+        <Route
+          exact
+          path="/assignments/preview/:id"
+          component={CurrentAssignmentPagePreview}
+        />
+
+        <Route
+          path="/teaching-path/preview/:id"
+          component={PreviewTeachingPath}
+        />
+
         <Route path="/login" component={LoginPage} />
         <Route path="/logout" component={LogOutPage} />
         <Route path="/dataporten" component={FeideCodeGetter} />
@@ -249,6 +262,12 @@ class LocalizedApp extends Component<Props> {
         />
 
         <Route
+          exact
+          path="/assignments/preview/:id"
+          component={CurrentAssignmentPagePreview}
+        />
+
+        <Route
           path="/teaching-paths/edit/:id"
           component={EditTeachingPath}
         />
@@ -256,6 +275,11 @@ class LocalizedApp extends Component<Props> {
         <Route
           path="/teaching-paths/view/:id"
           component={ViewTeachingPath}
+        />
+
+        <Route
+          path="/teaching-path/preview/:id"
+          component={PreviewTeachingPath}
         />
 
         <Route

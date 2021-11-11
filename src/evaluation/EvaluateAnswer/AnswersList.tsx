@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import intl from 'react-intl-universal';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
 import * as QueryStringHelper from 'utils/QueryStringHelper';
@@ -139,9 +139,65 @@ class AnswersList extends Component<AssignmentAnswerListProps & RouteComponentPr
     store!.getAnswersByPage(selected + 1, Number(match.params.entityId));
   }
 
+  public renderBreadcrumbs = () => {
+    const { store } = this.props;
+    const isAssingment = this.props.history.location.pathname.includes('/assignments');
+    const isStudentRedirect = this.props.history.location.search.includes('isstudent');
+    const title = (isStudentRedirect) ? intl.get('evaluation_page.students') : intl.get('evaluation_page.title');
+
+    if (isStudentRedirect) {
+      return (
+        <div className="AnswerList__breadcrumbs">
+          <ul>
+            <li>
+              <Link to="/students/my">
+                {title}
+              </Link>
+            </li>
+            <li className="separator">/</li>
+            <li className="item">
+              <p>{intl.get('evaluation_page.Assignments')}</p>
+            </li>
+          </ul>
+        </div>
+      );
+    }
+    if (isAssingment) {
+      return (
+        <div className="AnswerList__breadcrumbs">
+          <ul>
+            <li>
+              <Link to="/evaluation/assignments">
+                {title}
+              </Link>
+            </li>
+            <li className="separator">/</li>
+            <li className="item">
+              <p>{intl.get('evaluation_page.Assignments')}</p>
+            </li>
+          </ul>
+        </div>
+      );
+    }
+    return (
+      <div className="AnswerList__breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/evaluation/teaching-paths">
+            {title}
+            </Link>
+          </li>
+          <li className="separator">/</li>
+          <li className="item">
+            <p>{intl.get('evaluation_page.Teaching paths')}</p>
+          </li>
+        </ul>
+      </div>
+    );
+  }
+
   public render() {
     const { store } = this.props;
-
     if (store!.answersListState === StoreState.LOADING || store!.currentEntityState === StoreState.LOADING) {
       return <div className={'loading'}><Loader /></div>;
     }
@@ -149,7 +205,7 @@ class AnswersList extends Component<AssignmentAnswerListProps & RouteComponentPr
     return (
       <div className="AnswerList">
         <div className="AnswerList__content">
-          <div className="AnswerList__title">{intl.get('answers.Answers')}</div>
+          {this.renderBreadcrumbs()}
           <div className="AnswerList__entityTitle">
             {store!.currentEntity && store!.currentEntity.title}
           </div>
