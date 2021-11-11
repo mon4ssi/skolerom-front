@@ -218,7 +218,6 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
       return (
         <div className="defaultIcons flexBox">
           <div className="flexBox">
-            {levels && levels.length ? this.renderLevel(levels) : null}
             <img src={icon} className={`tpIcon tpIcon-${type}`} alt="info-icon" onClick={this.targetRouteDomain}/>
             <span>{this.renderRouteDomain()}</span>
           </div>
@@ -228,7 +227,6 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
     return (
       <div className="defaultIcons flexBox">
         <div className="flexBox">
-          {levels && levels.length ? this.renderLevel(levels) : null}
           <img src={icon} className={`tpIcon tpIcon-${type}`} alt="info-icon"/>
           <span>{this.renderRouteDomain()}</span>
         </div>
