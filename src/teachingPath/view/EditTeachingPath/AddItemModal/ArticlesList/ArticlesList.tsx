@@ -4,16 +4,15 @@ import intl from 'react-intl-universal';
 import isNaN from 'lodash/isNaN';
 
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
-import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
 import { TeachingPathNodeType } from 'teachingPath/TeachingPath';
 import { ItemContentTypeContext } from 'teachingPath/view/EditTeachingPath/ItemContentTypeContext';
-import { Article, Subject, Greep, FilterArticlePanel, Grade, CoreElementGradeFilter, MultidisciplinayGradeFilter, GoalsGradeFilter } from 'assignment/Assignment';
+import { Article, Subject, Greep, FilterArticlePanel, Grade, GradeFilter, CoreFilter, CoreFilterItemGrades,
+  MultiFilter, MultiFilterItemGrades, GoalsFilter, GoalsFilterItemGrades, SourceFilter, SourceFilterItemGrades } from 'assignment/Assignment';
 import { RelatedArticlesCard } from 'assignment/view/NewAssignment/Preview/RelatedArticlesPreview/RelatedArticlesCard';
 import { SearchFilter } from 'components/common/SearchFilter/SearchFilter';
 import { lettersNoEn } from 'utils/lettersNoEn';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 import { ReadingArticle } from 'components/pages/ReadingArticle/ReadingArticle';
-import ReactDOM from 'react-dom';
 
 import closeImg from 'assets/images/close-rounded-black.svg';
 import tagsImg from 'assets/images/tags.svg';
@@ -27,6 +26,7 @@ import './ArticlesList.scss';
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
 import { SCROLL_OFFSET } from 'utils/constants';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
+import { stringify } from 'querystring';
 
 const showDelay = 500;
 interface ArticleItemProps {
@@ -112,6 +112,7 @@ interface State {
   selectedCoresFilter: Array<Greep>;
   selectedCoresAll: Array<Greep>;
   selectedGradesAll: Array<Grade>;
+  selectedGradeChildrenAll: Array<Grade>;
   selectedSubjectsAll: Array<Subject>;
   selectedMultiFilter: Array<Greep>;
   selectedMultisAll: Array<Greep>;
@@ -123,7 +124,9 @@ interface State {
   valueSubject: string;
   MySelectGrade: Array<number> | null;
   MySelectSubject: Array<number> | null;
+  MySelectCore: Array<number> | null;
   MySelectMulti: Array<number> | null;
+  MySelectGoal: Array<number> | null;
   MySelectSource: Array<number> | null;
   showSourceFilter: boolean;
   userFilters: boolean;
@@ -136,6 +139,7 @@ interface State {
   isEditSingle: boolean;
   isChangeArticle: boolean;
   idChangeArticle: number;
+  gradeParentId: number;
 }
 
 @inject('editTeachingPathStore')
@@ -165,6 +169,7 @@ export class ArticlesList extends Component<Props, State> {
       selectedGradesFilter: [],
       selectedSubjectsAll: [],
       selectedGradesAll: [],
+      selectedGradeChildrenAll: [],
       selectedCoresAll: [],
       selectedCoresFilter: [],
       selectedMultisAll: [],
@@ -178,7 +183,9 @@ export class ArticlesList extends Component<Props, State> {
       activeGrepFilters: false,
       MySelectGrade: [],
       MySelectSubject: [],
+      MySelectCore: [],
       MySelectMulti: [],
+      MySelectGoal: [],
       MySelectSource: [],
       showSourceFilter: false,
       userFilters: false,
@@ -190,12 +197,12 @@ export class ArticlesList extends Component<Props, State> {
       isEdit: this.props.editTeachingPathStore!.returnIsEditArticles()!,
       isEditSingle: false,
       isChangeArticle: false,
-      idChangeArticle: 0
+      idChangeArticle: 0,
+      gradeParentId: 0
     };
   }
 
   public handleChangeFilters = async (filterName: string, filterValue: number | string) => {
-
     const { editTeachingPathStore } = this.props;
     const allModal = Array.from(document.getElementsByClassName('addItemModal__right') as HTMLCollectionOf<HTMLElement>);
     editTeachingPathStore!.resetCurrentArticlesPage();
@@ -289,6 +296,7 @@ export class ArticlesList extends Component<Props, State> {
     this.props.editTeachingPathStore!.getSubjects();
     this.setState({ filtersAjaxLoading: true });
     this.setState({ filtersAjaxLoadingGoals: true });
+
     await this.props.editTeachingPathStore!.getFiltersArticlePanel();
     const dataArticles = this.props.editTeachingPathStore!.getAllArticlePanelFilters();
 
@@ -296,23 +304,25 @@ export class ArticlesList extends Component<Props, State> {
       grepDataFilters: dataArticles
     });
 
+    // Grade
     // tslint:disable-next-line: variable-name
     dataArticles!.grade_filter!.forEach((element) => {
-      newArrayGrades.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(element.grade_id),
-        title: element.description!
-      });
+      if (element.grade_parent === null) {
+        newArrayGrades.push({
+          // tslint:disable-next-line: variable-name
+          id: Number(element.grade_id),
+          title: element.description!
+        });
+      }
     });
-    this.setState({
-      selectedGradesAll: newArrayGrades
-    });
-    // tslint:disable-next-line: variable-name
 
+    this.setState({ selectedGradesAll: newArrayGrades });
+    // EndGrade
+
+    // Subject
     newArraySubjects = this.getSubjectFromDataArticles(dataArticles);
-    this.setState({
-      selectedSubjectsAll: newArraySubjects
-    });
+    this.setState({ selectedSubjectsAll: newArraySubjects });
+    // EndSubject
 
     // tslint:disable-next-line: variable-name
     dataArticles!.core_elements_filter!.forEach((element) => {
@@ -355,7 +365,7 @@ export class ArticlesList extends Component<Props, State> {
       newArrayGrepSource.push({
         // tslint:disable-next-line: variable-name
         id: Number(element.term_id),
-        title: element.name!
+        title: element.description!
       });
     });
 
@@ -392,437 +402,6 @@ export class ArticlesList extends Component<Props, State> {
     this.handleChangeFilters('grades', Number(e.target.value));
   }
 
-  public arraysEqual(a: Array<any>, b: Array<any>) {
-    if (a === b) return true;
-    if (a === null || b === null) return false;
-    if (a.length !== b.length) return false;
-    for (let i = 0; i < a.length; i = i + 1) {
-      if (a[i] !== b[i]) return false;
-    }
-    return true;
-  }
-
-  public refreshAppliedFilters(
-    fn: Function,
-  ) {
-    const gradesForFilters = this.getSelectedGrades();
-    const subjectsForFilters = this.getSelectedSubjects();
-    const coreElementsForFilter = this.getSelectedCoreElements();
-    const mainTopicsForFilter = this.getSelectedMainTopics();
-    const goalsForFilter = this.getSelectedGoals();
-
-    const filters = { ...this.state.appliedFilters };
-    this.setState({ appliedFilters: {} }, () => {
-
-      /* tslint:disable:no-string-literal */
-      filters['subjects'] = String(subjectsForFilters);
-      filters['grades'] = String(gradesForFilters);
-      filters['core'] = String(coreElementsForFilter);
-      filters['multi'] = String(mainTopicsForFilter);
-      filters['goal'] = String(goalsForFilter);
-      /* tslint:enable:no-string-literal */
-
-      this.setState({ appliedFilters: filters }, () => {
-
-        if (
-          filters.subjects ||
-          filters.grades ||
-          filters.core ||
-          filters.multi ||
-          filters.goal ||
-          filters.source
-        ) {
-          this.setState({ filtersisUsed: true }, () => {
-            this.updateFilters();
-            fn();
-          });
-        } else {
-
-          this.setState({ filtersisUsed: false }, () => {
-            this.updateFilters();
-            fn();
-          });
-        }
-      });
-    });
-  }
-
-  public existInGrepList(grepList: Array<Greep>, id: number | Number): boolean {
-    let valueReturn = false;
-    grepList.forEach((grepElement) => {
-      if (grepElement.id === id) {
-        valueReturn = true;
-      }
-    });
-    return valueReturn;
-  }
-
-  public updateFilters() {
-    // let grades = this.getSelectedGrades()!.length === 0 ? this.getAllGrades() : this.getSelectedGrades();
-    const grades = this.updateGradesFilters();
-    const gradeForFilters = this.getSelectedGrades()!.length === 0 ?
-      grades :
-      this.getSelectedGrades();
-
-    // subjects
-    const subjectResults = this.updateSubjectsFilters(gradeForFilters);
-    const subjectForFilters = this.getSelectedSubjects()!.length === 0 ?
-      this.getAllSubjects() :
-      this.getSelectedSubjects();
-
-    // coreElements
-    const coreElementsResult = this.updateCoreElementsFilters(grades, subjectForFilters);
-    const coreElementsForFilter = this.getSelectedCoreElements()!.length === 0 ?
-      this.getAllCoreElements() :
-      this.getSelectedCoreElements();
-
-    // mainTopics
-    const mainTopicsResult = this.updateMainTopicsFilters(grades, subjectForFilters, coreElementsForFilter);
-    const mainTopicsForFilter = this.getSelectedMainTopics()!.length === 0 ?
-      this.getAllMainTopics() :
-      this.getSelectedMainTopics();
-
-    // goals
-    const goalsResult = this.updateGoalsFilters(grades, subjectForFilters, coreElementsForFilter, mainTopicsForFilter);
-    const goalsForFilter = this.getSelectedGoals()!.length === 0 ?
-      this.getAllGoals() :
-      this.getSelectedGoals();
-
-  }
-
-  public updateHTMLFilters() {
-
-    const grades = this.getSelectedGrades();
-    const subjectForFilters = this.getSelectedSubjects();
-    const coreElementsForFilter = this.getSelectedCoreElements();
-    const mainTopicsForFilter = this.getSelectedMainTopics();
-    const goalsForFilter = this.getSelectedGoals();
-
-    // if(grades!.length > 0) {
-    //   // ReactDOM.findDOMNode(self.refs.coreElements);
-    // }
-
-  }
-
-  public getSubjectsByCoreElements(coreElements: Array<any>) {
-    const newSubjects: Array<any> = [];
-    this.state.grepDataFilters!.core_elements_filter!.forEach(((coreElement) => {
-      if (coreElements.includes(Number(coreElement.core_element_id))) {
-        coreElement.grade_ids!.forEach((grade) => {
-          grade.subject_ids!.forEach((subjectId) => {
-            if (!newSubjects.includes(Number(subjectId))) {
-              newSubjects.push(Number(subjectId));
-            }
-          });
-        });
-      }
-    }));
-
-    return newSubjects;
-  }
-
-  public getGradesByCoreElements(coreElements: Array<any>) {
-    const newGrades: Array<any> = [];
-    this.state.grepDataFilters!.core_elements_filter!.forEach(((coreElement) => {
-      if (coreElements.includes(Number(coreElement.core_element_id))) {
-        coreElement.grade_ids!.forEach((grade) => {
-
-          if (!newGrades.includes(Number(grade.grade_id!))) {
-            newGrades.push(Number(grade.grade_id!));
-          }
-
-        });
-      }
-    }));
-
-    return newGrades;
-  }
-
-  public updateGradesFilters(): Array<any> {
-    const newArrayGrade: Array<Grade> = [];
-
-    this.state.grepDataFilters!.grade_filter!.forEach(((grade) => {
-
-      // set status
-      if (
-        this.getSelectedGrades()!.length === 0 &&
-        this.getSelectedSubjects()!.length === 0 &&
-        this.getSelectedCoreElements()!.length !== 0
-      ) {
-
-        const findedGrades = this.getGradesByCoreElements(this.getSelectedCoreElements()!);
-
-        const filterStatus = (findedGrades.length === 0) ? 'active' : findedGrades.includes(Number(grade.grade_id)) ? 'active' : 'inactive';
-        const newGrade = {
-          // tslint:disable-next-line: variable-name
-          filterStatus,
-          id: Number(grade.grade_id),
-          title: grade.description!
-        };
-        if (!this.existInGrepList(newArrayGrade, newGrade.id)) {
-          newArrayGrade.push(newGrade);
-        }
-      } else {
-        const newGrade = {
-          // tslint:disable-next-line: variable-name
-          id: Number(grade.grade_id),
-          title: grade.description!,
-          // filterStatus: 'inactive'
-          filterStatus: 'active'
-        };
-        if (!this.existInGrepList(newArrayGrade, newGrade.id)) {
-          newArrayGrade.push(newGrade);
-        }
-      }
-
-    }));
-
-    this.setState({
-      selectedGradesFilter: newArrayGrade
-    });
-    return newArrayGrade.map(grade => grade.id);
-  }
-
-  public updateSubjectsFilters(grades: Array<any> | null = this.getSelectedGrades()): Array<any> {
-    const newArraySubject: Array<Subject> = [];
-    this.state.grepDataFilters!.subject_filter!.forEach((subject) => {
-      // tslint:disable-next-line: variable-name
-      subject.grade_ids!.forEach((gradeId) => {
-
-        if (grades!.includes(Number(gradeId))) {
-          // set status
-          if (
-            this.getSelectedGrades()!.length === 0 &&
-            this.getSelectedSubjects()!.length === 0 &&
-            this.getSelectedCoreElements()!.length !== 0
-          ) {
-            const findedSubjects = this.getSubjectsByCoreElements(this.getSelectedCoreElements()!);
-            const filterStatus = (findedSubjects.length === 0) ? 'active' : findedSubjects.includes(Number(subject.subject_id)) ? 'active' : 'inactive';
-            const newSubject = {
-              // tslint:disable-next-line: variable-name
-              filterStatus,
-              id: Number(subject.subject_id),
-              title: subject.description!
-              // filterStatus: 'inactive'
-            };
-            if (!this.existInGrepList(newArraySubject, newSubject.id)) {
-              newArraySubject.push(newSubject);
-            }
-          } else {
-            // end set status
-            const newSubject = {
-              // tslint:disable-next-line: variable-name
-              id: Number(subject.subject_id),
-              title: subject.description!,
-              // filterStatus: 'inactive'
-              filterStatus: 'active'
-            };
-            if (!this.existInGrepList(newArraySubject, newSubject.id)) {
-              newArraySubject.push(newSubject);
-            }
-          }
-
-        }
-      });
-
-    });
-
-    this.setState({
-      selectedSubjectsFilter: newArraySubject
-    });
-
-    return newArraySubject.map(subject => subject.id);
-  }
-
-  public updateCoreElementsFilters(
-    grades: Array<any> | null = this.getSelectedGrades(),
-    subjects: Array<any> | null = this.getSelectedSubjects()
-  ) {
-
-    const newCoreElements: Array<Greep> = [];
-
-    this.state.grepDataFilters!.core_elements_filter!.forEach(((coreElement) => {
-      // tslint:disable-next-line: variable-name
-      const allSympSubjects: Array<string> = [];
-
-      coreElement.grade_ids!.forEach(grade =>
-        grade.subject_ids!.forEach((subjectId) => {
-          if (
-            grades!.includes(Number(grade.grade_id)) &&
-            subjects!.includes(Number(subjectId))
-          ) {
-            const newCoreElement = {
-              // tslint:disable-next-line: variable-name
-              id: Number(coreElement.core_element_id),
-              title: coreElement.description!
-            };
-            if (!this.existInGrepList(newCoreElements, newCoreElement.id)) {
-              newCoreElements.push(newCoreElement);
-            }
-          }
-        })
-      );
-
-    }));
-    this.setState({
-      selectedCoresFilter: newCoreElements,
-      selectedCoresAll: newCoreElements
-    });
-
-    return newCoreElements.map(coreElement => coreElement.id);
-  }
-
-  public updateMainTopicsFilters(
-    grades: Array<any> | null = this.getSelectedGrades(),
-    subjects: Array<any> | null = this.getSelectedSubjects(),
-    coreElements: Array<any> | null = this.getSelectedCoreElements()
-  ) {
-    const newMainTopics: Array<Greep> = [];
-
-    this.state.grepDataFilters!.multidisciplinay_filter!.forEach(((mainTopic) => {
-      // tslint:disable-next-line: variable-name
-
-      mainTopic.grade_ids!.forEach(grade =>
-        grade.subject_ids!.forEach((subject) => {
-          subject.core_element_ids!.forEach((coreElementId) => {
-            if (
-              grades!.includes(Number(grade.grade_id)) &&
-              subjects!.includes(Number(subject.subject_id)) &&
-              coreElements!.includes(Number(coreElementId))
-            ) {
-              const newMainTopic = {
-                // tslint:disable-next-line: variable-name
-                id: Number(mainTopic.main_topic_id),
-                title: mainTopic.description!
-              };
-              if (!this.existInGrepList(newMainTopics, newMainTopic.id)) {
-                newMainTopics.push(newMainTopic);
-              }
-            }
-          });
-        })
-      );
-    }));
-
-    this.setState({
-      selectedMultisAll: newMainTopics,
-      selectedMultiFilter: newMainTopics,
-    });
-
-    return newMainTopics.map(mainTopic => mainTopic.id);
-  }
-
-  public updateGoalsFilters(
-    grades: Array<any> | null = this.getSelectedGrades(),
-    subjects: Array<any> | null = this.getSelectedSubjects(),
-    coreElements: Array<any> | null = this.getSelectedSubjects(),
-    mainTopics: Array<any> | null = this.getSelectedSubjects()
-  ) {
-    const newGoals: Array<Greep> = [];
-
-    this.state.grepDataFilters!.goals_filter!.forEach(((goal) => {
-      // tslint:disable-next-line: variable-name
-
-      goal.grade_ids!.forEach(grade =>
-        grade.subject_ids!.forEach((subject) => {
-          subject.core_element_ids!.forEach((coreElement) => {
-            coreElement.main_topic_ids!.forEach((mainTopicId) => {
-              if (
-                grades!.includes(Number(grade.grade_id)) &&
-                subjects!.includes(Number(subject.subject_id)) &&
-                coreElements!.includes(Number(coreElement.core_element_id)) &&
-                mainTopics!.includes(Number(mainTopicId))
-              ) {
-                const newGoal = {
-                  // tslint:disable-next-line: variable-name
-                  id: Number(goal.goal_id),
-                  title: goal.description!
-                };
-                if (!this.existInGrepList(newGoals, newGoal.id)) {
-                  newGoals.push(newGoal);
-                }
-              }
-            });
-          });
-        })
-      );
-
-    }));
-    this.setState({
-      selectedGoalsFilter: newGoals,
-      selectedGoalsAll: newGoals
-    });
-
-    return newGoals.map(goal => goal.id);
-  }
-
-  public getAllGrades() {
-    const newGrades: Array<Greep> = [];
-    this.state.grepDataFilters!.grade_filter!.forEach(((grade) => {
-      // tslint:disable-next-line: variable-name
-      newGrades.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(grade.grade_id),
-        title: grade.description!
-      });
-
-    }));
-    return newGrades.map(grade => grade.id);
-  }
-
-  public getAllSubjects() {
-    const newSubjects: Array<Greep> = [];
-    this.state.grepDataFilters!.subject_filter!.forEach(((subject) => {
-      // tslint:disable-next-line: variable-name
-      newSubjects.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(subject.subject_id),
-        title: subject.description!
-      });
-    }));
-    return newSubjects.map(subject => subject.id);
-  }
-
-  public getAllCoreElements() {
-    const newCoreElements: Array<Greep> = [];
-    this.state.grepDataFilters!.core_elements_filter!.forEach(((coreElement) => {
-      // tslint:disable-next-line: variable-name
-      newCoreElements.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(coreElement.core_element_id),
-        title: coreElement.description!
-      });
-    }));
-    return newCoreElements.map(coreElement => coreElement.id);
-  }
-
-  public getAllMainTopics() {
-    const newMainTopics: Array<Greep> = [];
-    this.state.grepDataFilters!.multidisciplinay_filter!.forEach(((mainTopic) => {
-      // tslint:disable-next-line: variable-name
-      newMainTopics.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(mainTopic.main_topic_id),
-        title: mainTopic.description!
-      });
-    }));
-    return newMainTopics.map(mainTopic => mainTopic.id);
-  }
-
-  public getAllGoals() {
-    const newGoals: Array<Greep> = [];
-    this.state.grepDataFilters!.goals_filter!.forEach(((goal) => {
-      // tslint:disable-next-line: variable-name
-      newGoals.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(goal.goal_id),
-        title: goal.description!
-      });
-
-    }));
-    return newGoals.map(goal => goal.id);
-  }
-
   public getSelectedGrades(): Array<any> | null {
     const { MySelectGrade } = this.state;
     return MySelectGrade;
@@ -848,10 +427,15 @@ export class ArticlesList extends Component<Props, State> {
     return goalValueFilter;
   }
 
-  public setSelectedGrade(gradeId: number, fn: Function) {
+  public getSelectedSource(): Array<any> | null {
+    const { MySelectSource } = this.state;
+    return MySelectSource;
+  }
+
+  public setSelectedGrade(gradeIdArr: Array<number>, fn: Function) {
     this.setState(
       {
-        MySelectGrade: [gradeId]
+        MySelectGrade: gradeIdArr,
       },
       () => {
         fn();
@@ -900,273 +484,54 @@ export class ArticlesList extends Component<Props, State> {
 
   }
 
-  public addSelectedSubjects(subjectId: number, fn: Function) {
-    const currentSelectedSubjects = this.getSelectedSubjects();
-    currentSelectedSubjects!.push(subjectId);
-    this.setState(
-      {
-        MySelectSubject: currentSelectedSubjects
-      },
-      () => {
-        fn();
+  public handleChangeSelectCore = async (newValue: Array<any>) => {
+    const filterCore: Array<number> = [];
+
+    let singleString : string = '';
+    if (newValue.length > 0) {
+      newValue.forEach((e, index) => {
+        singleString = (index === 0) ? String(e.value) : `${singleString},${String(e.value)}`;
+        filterCore.push(e.value);
       });
+    }
 
-  }
-
-  public addSelectedCoreElements(coreElementId: number, fn: Function) {
-
-    const currentSelectedCoreElements = this.getSelectedCoreElements();
-    currentSelectedCoreElements!.push(coreElementId);
     this.setState(
       {
-        myValueCore: currentSelectedCoreElements!
+        MySelectCore: filterCore,
+        myValueCore: newValue
       },
       () => {
-        fn();
-      }
-    );
-
-  }
-
-  public addSelectedMainTopics(mainTopicId: number, fn: Function) {
-
-    const currentSelectedMainTopics = this.getSelectedMainTopics();
-    currentSelectedMainTopics!.push(mainTopicId);
-    this.setState(
-      {
-        MySelectMulti: currentSelectedMainTopics!
-      },
-      () => {
-        fn();
-      });
-
-  }
-
-  public removeSelectedFilter(
-    filterToReset: string,
-    elementId: number | Number,
-    fn: Function,
-    e: React.MouseEvent<HTMLButtonElement> | null = null
-  ) {
-
-    let selectedElements: Array<any> = [];
-
-    switch (filterToReset) {
-      case 'subjects':
-        selectedElements = this.getSelectedSubjects()!;
-        break;
-      case 'grades':
-        selectedElements = this.getSelectedGrades()!;
-        break;
-      case 'coreElements':
-        selectedElements = this.getSelectedCoreElements()!;
-        break;
-      case 'mainTopics':
-        selectedElements = this.getSelectedMainTopics()!;
-        break;
-      case 'goals':
-        selectedElements = this.getSelectedGoals()!;
-        break;
-
-      default:
-        break;
-    }
-
-    if (selectedElements.length !== 0) {
-      const indexSelected = selectedElements!.indexOf(elementId);
-      if (indexSelected > -1) {
-        selectedElements!.splice(indexSelected, 1);
-      }
-      if (this.state.activeGrepFilters && e !== null) {
-        e.currentTarget.classList.remove('active');
-      }
-    }
-
-    switch (filterToReset) {
-      case 'subjects':
-        this.setSelectedSubjects(selectedElements, fn);
-        break;
-      case 'grades':
-        this.setSelectedGrade(selectedElements[0], fn);
-        break;
-      case 'coreElements':
-        this.setSelectedCoreElements(selectedElements, fn);
-        break;
-      case 'mainTopics':
-        this.setSelectedMainTopics(selectedElements, fn);
-        break;
-      case 'goals':
-        this.setSelectedGoals(selectedElements, fn);
-        break;
-
-      default:
-        break;
-    }
-
-  }
-
-  public waitForIt(fn: Function, willRun: boolean) {
-    if (willRun) {
-      fn();
-    }
-  }
-
-  public resetFilters(filters: Array<any>, fn: Function) {
-    if (filters.length === 0) {
-      fn();
-    }
-    filters.forEach((filterToReset, index) => {
-
-      if (filterToReset === 'subjects') {
-
-        this.setState(
-          {
-            MySelectSubject: []
-          },
-          () => {
-            this.waitForIt(fn, filters.length === (index + 1));
-          }
-        );
-
-      } else if (filterToReset === 'grades') {
-        this.setState(
-          {
-            MySelectGrade: []
-          },
-          () => {
-            this.waitForIt(fn, filters.length === (index + 1));
-          }
-        );
-
-      } else if (filterToReset === 'coreElements') {
-        this.waitForIt(fn, filters.length === (index + 1));
-        // this.setState({
-        //   myValueCore: []
-        // },
-        //   () => {
-        //     this.waitForIt(fn, filters.length === (index + 1))
-        //   });
-
-      } else if (filterToReset === 'mainTopics') {
-        this.setState({
-          MySelectMulti: []
-        });
-      } else if (filterToReset === 'goals') {
-        this.waitForIt(fn, filters.length === (index + 1));
-        // this.setState({
-        //   goalValueFilter: []
-        // },
-        //   () => {
-        //     this.waitForIt(fn, filters.length === (index + 1))
-        //   });
-      }
-    });
-  }
-
-  public addSelectedGoals(goalId: number, fn: Function) {
-
-    const currentSelectedGoals = this.getSelectedGoals();
-    currentSelectedGoals!.push(goalId);
-    this.setState(
-      {
-        goalValueFilter: currentSelectedGoals!
-      },
-      () => {
-        fn();
+        this.handleChangeFilters('core', singleString);
+        this.getGREPParametersDicipline();
+        this.getGREPParametersGoals();
+        this.getGREPParametersSources();
+        this.highLightGradeSubject();
       }
     );
   }
 
-  public handleChangeSelectCore = async (newValues: Array<any>) => {
-    const _newValues = newValues.map(value => value.value);
+  public handleChangeSelectGoals = async (newValue: Array<any>) => {
+    const filterGoal: Array<number> = [];
 
-    this.setSelectedCoreElements(_newValues, () => {
-      this.resetFilters(['mainTopics', 'goals'], () => {
-        this.refreshAppliedFilters(() => {
-          this.handleChangeFilters('core', String(this.getSelectedCoreElements()));
-        });
-      });
-    });
-  }
-
-  public handleChangeCore = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-
-    const value = e.currentTarget.value;
-    // const valueSelectedGrades = this.state.MySelectGrade;
-    let valueSelectedGrades: Array<number> = [];
-    if (!this.state.MySelectGrade!.includes(Number(value))) {
-      valueSelectedGrades!.push(Number(value));
-      if (this.state.activeGrepFilters) {
-        e.currentTarget.classList.add('active');
-
-      }
-    } else {
-      /*const indexSelected = valueSelectedGrades!.indexOf(Number(value));
-      if (indexSelected > -1) {
-        valueSelectedGrades!.splice(indexSelected, 1);
-      }*/
-      valueSelectedGrades = [];
-      if (this.state.activeGrepFilters) {
-        e.currentTarget.classList.remove('active');
-      }
-
-      this.fillAllSubjects();
-
-      this.resetSubjectFilter();
-    }
-    this.handleChangeFilters('core', Number(e.target.value));
-    this.setState({
-      MySelectGrade: valueSelectedGrades
-    });
-
-  }
-
-  public handleChangeGoals = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    this.handleChangeFilters('goal', Number(e.target.value));
-  }
-
-  public handleChangeSelectGoals = async (newValues: Array<any>) => {
-
-    if (newValues.length !== 0) {
-      const newGoal = Number(newValues[newValues.length - 1].value);
-      const selectedGoals = this.getSelectedGoals()!;
-
-      if (!selectedGoals.includes(newGoal)) {
-
-        this.addSelectedGoals(newGoal, () => {
-          this.resetFilters(
-            [],
-            () => {
-              this.refreshAppliedFilters(() => {
-                this.handleChangeFilters('goal', String(this.getSelectedGoals()));
-              });
-            }
-          );
-        });
-      } else { // ??
-
-        this.removeSelectedFilter(
-          'goals',
-          newGoal,
-          () => {
-            this.refreshAppliedFilters(
-              () => {
-                this.handleChangeFilters('goal', String(this.getSelectedGoals()));
-              });
-          },
-          null
-        );
-      }
-
-    } else {
-      this.setSelectedGoals([], () => {
-        this.resetFilters([], () => {
-          this.refreshAppliedFilters(() => {
-            this.handleChangeFilters('goal', String(this.getSelectedGoals()));
-          });
-        });
+    let singleString : string = '';
+    if (newValue.length > 0) {
+      newValue.forEach((e, index) => {
+        singleString = (index === 0) ? String(e.value) : `${singleString},${String(e.value)}`;
+        filterGoal.push(e.value);
       });
     }
+
+    this.setState(
+      {
+        MySelectGoal:filterGoal,
+        goalValueFilter: newValue
+      },
+      () => {
+        this.handleChangeFilters('goal', singleString);
+        this.getGREPParametersSources();
+        this.highLightGradeSubject();
+      }
+    );
   }
 
   public handleChangeSubject = async (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -1184,17 +549,12 @@ export class ArticlesList extends Component<Props, State> {
   }
 
   public handleClickReset = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const dataCores = this.state.selectedCoresAll;
-    const dataCoresFilter = this.state.selectedGoalsFilter;
-    const newArrayGrepCore: Array<Greep> = [];
-    const newArrayGrepMulti: Array<Greep> = [];
-    this.handleChangeFilters('none', 0);
-    const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
-    GradeFilterSubjectArray.forEach((e) => {
-      e.classList.remove('active');
-    });
     const GradeFilterGradeArray = Array.from(document.getElementsByClassName('gradesFilterClass') as HTMLCollectionOf<HTMLElement>);
     GradeFilterGradeArray.forEach((e) => {
+      e.classList.remove('active');
+    });
+    const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
+    GradeFilterSubjectArray.forEach((e) => {
       e.classList.remove('active');
     });
     const GradeFilterMultiArray = Array.from(document.getElementsByClassName('multiFilterClass') as HTMLCollectionOf<HTMLElement>);
@@ -1205,279 +565,825 @@ export class ArticlesList extends Component<Props, State> {
     GradeFilterArray.forEach((e) => {
       e.classList.remove('active');
     });
-    this.setState({ filtersisUsed: false });
-    this.setState({ MySelectGrade: [] });
-    this.setState({ MySelectSubject: [] });
-    this.setState({ MySelectMulti: [] });
-    this.setState({ MySelectSource: [] });
-    this.setState({ myValueCore: [] });
-    this.setState({ goalValueFilter: [] });
-    this.setState({ filtersAjaxLoading: true });
-    this.setState({ filtersAjaxLoadingGoals: true });
-    await this.props.editTeachingPathStore!.getFiltersArticlePanel();
-    const dataArticles = this.props.editTeachingPathStore!.getAllArticlePanelFilters();
-    // tslint:disable-next-line: variable-name
-    dataArticles!.core_elements_filter!.forEach((element) => {
-      newArrayGrepCore.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(element.core_element_id),
-        title: element.description!
+
+    this.cleanHihtLightGradeSubject();
+
+    this.setState(
+      {
+        filtersisUsed: false,
+        MySelectGrade: [],
+        MySelectSubject: [],
+        MySelectCore: [],
+        myValueCore: [],
+        selectedCoresAll: [],
+        MySelectMulti: [],
+        MySelectGoal: [],
+        goalValueFilter: [],
+        selectedGoalsAll: [],
+        MySelectSource: [],
+        selectedGradeChildrenAll: []
+      },
+      () => {
+        this.handleChangeFilters('none', 0);
+        this.getGREPParametersSubject();
+        this.getGREPParametersCoreElements();
+        this.getGREPParametersDicipline();
+        this.getGREPParametersGoals();
+        this.getGREPParametersSources();
       });
-    });
-    // tslint:disable-next-line: variable-name
-    dataArticles!.multidisciplinay_filter!.forEach((element) => {
-      newArrayGrepMulti.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(element.main_topic_id),
-        title: element.description!
-      });
-    });
-    this.setState({
-      selectedCoresAll: newArrayGrepCore,
-      selectedMultisAll: newArrayGrepMulti
-    });
-    this.setState({ filtersAjaxLoading: false });
-    this.setState({ filtersAjaxLoadingGoals: false });
-  }
-
-  public customReset = async (targets: Array<string>) => {
-
-    // this.handleChangeFilters('none', 0);
-
-    this.setState({ filtersAjaxLoading: true });
-    this.setState({ filtersAjaxLoadingGoals: true });
-
-    this.setState({ filtersisUsed: true });
-    this.setState({ MySelectGrade: [] });
-    this.setState({ MySelectSubject: [] });
-    this.setState({ MySelectMulti: [] });
-    this.setState({ MySelectSource: [] });
-    this.setState({ myValueCore: [] });
-    this.setState({ goalValueFilter: [] });
-    this.setState({ filtersAjaxLoading: true });
-    this.setState({ filtersAjaxLoadingGoals: true });
-
-    targets.forEach((target) => {
-
-      let grepDataFilterTarget: Array<any> = [];
-      if (target === 'subjects') {
-        const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
-        GradeFilterSubjectArray.forEach((e) => {
-          e.classList.remove('active');
-        });
-        grepDataFilterTarget = this.state.grepDataFilters!.subject_filter!;
-      } else if (target === 'coreElements') {
-        grepDataFilterTarget = this.state.grepDataFilters!.core_elements_filter!;
-      } else if (target === 'mainTopics') {
-        const GradeFilterMultiArray = Array.from(document.getElementsByClassName('multiFilterClass') as HTMLCollectionOf<HTMLElement>);
-        GradeFilterMultiArray.forEach((e) => {
-          e.classList.remove('active');
-        });
-        grepDataFilterTarget = this.state.grepDataFilters!.multidisciplinay_filter!;
-      } else if (target === 'goals') {
-        grepDataFilterTarget = this.state.grepDataFilters!.goals_filter!;
-      }
-
-      const newArray: Array<Greep> = [];
-
-      grepDataFilterTarget!.forEach((element) => {
-        newArray.push({
-          id: Number(element.main_topic_id),
-          title: element.description!
-        });
-      });
-
-      if (target === 'subjects') {
-        this.setState({
-          selectedSubjectsAll: newArray,
-          selectedSubjectsFilter: newArray,
-          MySelectSubject: []
-        });
-      } else if (target === 'coreElements') {
-        this.setState({
-          selectedCoresAll: [],
-          selectedCoresFilter: [],
-          myValueCore: []
-        });
-      } else if (target === 'mainTopics') {
-        this.setState({
-          selectedMultisAll: newArray,
-          selectedMultiFilter: newArray,
-          MySelectMulti: []
-        });
-      } else if (target === 'goals') {
-        this.setState({
-          selectedGoalsAll: newArray,
-          selectedGoalsFilter: newArray,
-          goalValueFilter: []
-        });
-      }
-    });
-    this.setState({ filtersAjaxLoading: false });
-    this.setState({ filtersAjaxLoadingGoals: false });
-
-  }
-
-  public resetSubjectFilter() {
-    const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
-    GradeFilterSubjectArray.forEach((e) => {
-      e.classList.remove('active');
-    });
-    this.setState({
-      valueSubject: ''
-    });
-  }
-
-  public getAllSubjectsFromFilter() {
-    return this.state.grepDataFilters!.subject_filter!.map(subject =>
-    ({
-      id: Number(subject.subject_id),
-      title: subject.description!
-    })
-    );
-  }
-
-  public fillAllSubjects() {
-    this.setState({
-      selectedSubjectsFilter: this.getAllSubjectsFromFilter()
-    });
   }
 
   public handleClickGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const newGradeId = Number(e.currentTarget.value);
-    const selectedGrades = this.getSelectedGrades()!;
-    if (!selectedGrades.includes(newGradeId)) {
-      this.setSelectedGrade(newGradeId, () => {
-        this.resetFilters(['subjects', 'coreElements', 'mainTopics', 'goals'], () => {
-          this.refreshAppliedFilters(() => {
-            this.handleChangeFilters('grades', String(this.getSelectedGrades()));
-          });
-        });
-      });
-    } else {
+    let filterGrade: Array<number> = [];
+    let newArrayGradeChildren: Array<Grade> = [];
 
-      this.removeSelectedFilter(
-        'grades',
-        newGradeId,
-        () => {
-          this.refreshAppliedFilters(
-            () => {
-              this.handleChangeFilters(
-                'grades',
-                String(this.getSelectedGrades()));
-            });
-        },
-        e
-      );
+    if (!e.currentTarget.classList.contains('active')) {
+      if (e.currentTarget.classList.contains('jrGradeChild')) {
+        filterGrade = this.getGroupGrade(e.currentTarget.innerHTML);
+
+        this.setState({ MySelectGrade: filterGrade }, () => {
+          this.handleClickGradeAfter();
+        });
+      } else {
+        const lstResp: Array<any> = this.getChildrenGrade(newGradeId);
+        filterGrade = lstResp[0];
+        newArrayGradeChildren = lstResp[1];
+
+        this.setState(
+          {
+            gradeParentId: newGradeId,
+            MySelectGrade: filterGrade,
+            selectedGradeChildrenAll: newArrayGradeChildren
+          },
+          () => { this.handleClickGradeAfter(); }
+        );
+      }
+    } else {
+      if (e.currentTarget.classList.contains('jrGradeChild')) {
+        const lstResp: Array<any> = this.getChildrenGrade(this.state.gradeParentId);
+        filterGrade = lstResp[0];
+        newArrayGradeChildren = lstResp[1];
+        this.setState(
+          {
+            MySelectGrade: [],
+            selectedGradeChildrenAll: newArrayGradeChildren
+          },
+          () => { this.handleClickGradeAfter(); }
+        );
+      } else {
+        this.setState(
+          {
+            gradeParentId: newGradeId,
+            MySelectGrade: filterGrade,
+            selectedGradeChildrenAll: newArrayGradeChildren
+          },
+          () => { this.handleClickGradeAfter(); }
+        );
+      }
     }
   }
 
-  public setStateMultiFilter(newArrayMulti: Array<Greep>) {
-    const arrayMulti: Array<Greep> = this.uniqueArrayMulti(newArrayMulti);
+  public handleClickGradeAfter() {
+    this.handleChangeFilters('grades', String(this.getSelectedGrades()));
+    this.getGREPParametersSubject();
+    this.getGREPParametersCoreElements();
+    this.getGREPParametersDicipline();
+    this.getGREPParametersGoals();
+    this.getGREPParametersSources();
+    this.highLightGradeSubject();
+  }
+
+  public getGroupGrade(nameGroup:string) {
+    const iGradeArr: Array<GradeFilter | undefined> = this.state.grepDataFilters!.grade_filter!.filter(w => w.grade_parent !== null);
+    const filterGrade: Array<number> = [];
+
+    iGradeArr.forEach((item: any) => {
+      // tslint:disable-next-line: variable-name
+      const lstGradesAllorArr: Array<string> = item.grade_parent;
+      if (lstGradesAllorArr.includes(String(this.state.gradeParentId))) {
+        const gradeSubName = item.name_sub;
+        const gradeSubNameLst: Array<string> = gradeSubName.split(':');
+        if (gradeSubNameLst.includes(nameGroup)) {
+          // tslint:disable-next-line: variable-name
+          filterGrade.push(Number(item.grade_id));
+        }
+      }
+    });
+
+    return filterGrade;
+  }
+
+  public getChildrenGrade(gradeIdParent: number): Array<any> {
+    const lstResp:Array<any> = [];
+    const lstChildren: Array<string> = [];
+    const filterGrade: Array<number> = [];
+    const newArrayGradeChildren: Array<Grade> = [];
+
+    filterGrade.push(gradeIdParent);
+
+    // tslint:disable-next-line: variable-name
+    const iGradeArr: Array<GradeFilter | undefined> = this.state.grepDataFilters!.grade_filter!.filter(w => w.grade_parent !== null);
+    iGradeArr.forEach((item: any) => {
+      // tslint:disable-next-line: variable-name
+      const lstGradesAllorArr: Array<string> = item.grade_parent;
+
+      if (lstGradesAllorArr.includes(String(gradeIdParent))) {
+        // tslint:disable-next-line: variable-name
+        const gradeSubId = item.grade_id;
+        filterGrade.push(Number(gradeSubId));
+
+        // tslint:disable-next-line: variable-name
+        const gradeSubName = item.name_sub;
+        const gradeSubNameLst: Array<string> = gradeSubName.split(':');
+
+        gradeSubNameLst.forEach((iGradeSubName: string) => {
+          if (!lstChildren.includes(iGradeSubName)) {
+            lstChildren.push(iGradeSubName);
+
+            newArrayGradeChildren.push({
+              id: Number(gradeSubId),
+              title: iGradeSubName
+            });
+          }
+        });
+      }
+    });
+
+    lstResp.push(filterGrade);
+    lstResp.push(newArrayGradeChildren);
+
+    return lstResp;
+  }
+
+  public getGREPParametersSubject() {
+    const SubjectArr = this.state.grepDataFilters!.subject_filter!;
+
+    const filterSubjectSelected: Array<number> = this.getSelectedSubjects()!;
+    const filterSubject: Array<number> = [];
+    const newArraySubject: Array<Subject> = [];
+
+    const filterGrade: Array<number> = this.getSelectedGrades()!;
+    SubjectArr.forEach((subject) => {
+      const ListGradesAllowArr = subject.grade_ids!;
+      let addSubject:boolean = (filterGrade.length === 0);
+
+      if (!addSubject) {
+        filterGrade!.some((iGrade: number) => {
+          addSubject = ListGradesAllowArr.includes(String(iGrade));
+          if (addSubject) return true;
+        });
+      }
+
+      if (addSubject) {
+        if (filterSubjectSelected!.includes(Number(subject.subject_id))) {
+          filterSubject.push(Number(subject.subject_id));
+        }
+
+        newArraySubject.push({
+          id: Number(subject.subject_id),
+          title: subject.description!
+        });
+      }
+    });
+
     this.setState({
-      selectedMultiFilter: arrayMulti,
-      selectedMultisAll: arrayMulti
+      MySelectSubject: filterSubject,
+      selectedSubjectsAll: newArraySubject
     });
   }
 
-  public uniqueArrayMulti(arrayMulti: Array<Greep>) {
-    const newArray: Array<Greep> = [];
-    arrayMulti.forEach((mainTopic) => {
-      if (!this.findInArrayMulti(newArray, mainTopic.id)) {
-        newArray.push(mainTopic);
+  public getGREPParametersCoreElements() {
+    const coreElementArr = this.state.grepDataFilters!.core_elements_filter!;
+
+    const newArrayCores: Array<Greep> = [];
+    coreElementArr.forEach((item) => {
+      if (this.getValidateInsertOptionCore(item)) {
+        newArrayCores.push({
+          id: Number(item.core_element_id),
+          title: item.description
+        });
       }
     });
-    return newArray;
+
+    this.setState({
+      selectedCoresAll: newArrayCores
+    });
   }
 
-  public findInArrayMulti(arrayMulti: Array<Greep>, value: number) {
-    let found: boolean = false;
-    arrayMulti.forEach((mainTopic) => {
-      if (mainTopic.id === value) {
-        found = true;
+  public getGREPParametersDicipline() {
+    const diciplineArr = this.state.grepDataFilters!.multidisciplinay_filter!;
+    const newArrayDicipline: Array<Greep> = [];
+    const currentLstDicipline: Array<number> = [];
+
+    diciplineArr.forEach((item) => {
+      if (this.getValidateInsertOptionDisipline(item)) {
+        newArrayDicipline.push({
+          id: Number(item.main_topic_id),
+          title: item.description
+        });
+        currentLstDicipline.push(Number(item.main_topic_id));
       }
     });
-    return found;
+
+    const filterDicipline: Array<number> | null = this.state.MySelectMulti;
+    if (filterDicipline!.length > 0) {
+      filterDicipline!.forEach((item) => {
+        if (!currentLstDicipline.includes(item)) {
+          const itemSourceArr = diciplineArr.find(o => o.main_topic_id === String(item));
+          if (typeof(itemSourceArr) !== 'undefined') {
+            newArrayDicipline.push({
+              id: Number(itemSourceArr.main_topic_id),
+              title: itemSourceArr.description,
+              alt: 'jrDelItem'
+            });
+          }
+        }
+      });
+    }
+
+    this.setState({
+      selectedMultisAll: newArrayDicipline
+    });
+  }
+
+  public getGREPParametersGoals() {
+    const goalsArr = this.state.grepDataFilters!.goals_filter!;
+
+    const newArrayGoal: Array<Greep> = [];
+    goalsArr.forEach((item) => {
+      if (this.getValidateInsertOptionGoal(item)) {
+        newArrayGoal.push({
+          id: Number(item.goal_id),
+          title: item.description
+        });
+      }
+    });
+
+    this.setState({
+      selectedGoalsAll: newArrayGoal
+    });
+  }
+
+  public getGREPParametersSources() {
+    const sourceArr = this.state.grepDataFilters!.source_filter!;
+    const newArraySource: Array<Greep> = [];
+    const currentLstSource: Array<number> = [];
+
+    sourceArr.forEach((item) => {
+      if (this.getValidateInsertOptionSource(item)) {
+        newArraySource.push({
+          id: Number(item.term_id),
+          title: item.description
+        });
+        currentLstSource.push(Number(item.term_id));
+      }
+    });
+
+    const filterSource: Array<number> | null = this.state.MySelectSource;
+    if (filterSource!.length > 0) {
+      filterSource!.forEach((item) => {
+        if (!currentLstSource.includes(item)) {
+          const itemSourceArr = sourceArr.find(o => o.term_id === String(item));
+          if (typeof(itemSourceArr) !== 'undefined') {
+            newArraySource.push({
+              id: Number(itemSourceArr.term_id),
+              title: itemSourceArr.description,
+              alt: 'jrDelItem'
+            });
+          }
+        }
+      });
+    }
+
+    this.setState({
+      selectedSourceAll: newArraySource
+    });
+  }
+
+  public getValidateInsertOptionCore(item: CoreFilter): boolean {
+    const { MySelectGrade, MySelectSubject } = this.state;
+
+    // Grades
+    let lstFoundGrade: Array<CoreFilterItemGrades> = [];
+    if (MySelectGrade!.length > 0) {
+      MySelectGrade!.forEach((iGrade: number) => {
+        const itemGradeArr = item.grade_ids.find(w => w.grade_id === String(iGrade));
+        if (typeof(itemGradeArr) !== 'undefined') lstFoundGrade.push(itemGradeArr);
+      });
+    } else {
+      lstFoundGrade = item.grade_ids;
+    }
+    // EndGrades
+
+    // Subject
+    let lstFoundSubject: Array<CoreFilterItemGrades> = [];
+    if (MySelectSubject!.length > 0) {
+      lstFoundGrade.some((itemGradeArr) => {
+        const listSubjectsAllowArr = itemGradeArr.subject_ids;
+        MySelectSubject!.some((iSubject: number) => {
+          if (listSubjectsAllowArr.includes(String(iSubject))) {
+            lstFoundSubject.push(itemGradeArr);
+            return true;
+          }
+        });
+        if (lstFoundSubject.length > 0) return true;
+      });
+    } else {
+      lstFoundSubject = lstFoundGrade;
+    }
+    // EndSubject
+
+    return (lstFoundSubject.length > 0);
+  }
+
+  public getValidateInsertOptionDisipline(item: MultiFilter): boolean {
+    const { MySelectGrade, MySelectSubject, MySelectCore } = this.state;
+
+    // Grades
+    let lstFoundGrade: Array<MultiFilterItemGrades> = [];
+    if (MySelectGrade!.length > 0) {
+      MySelectGrade!.forEach((iGrade: number) => {
+        const itemGradeArr = item.grade_ids.find(w => w.grade_id === String(iGrade));
+        if (typeof(itemGradeArr) !== 'undefined') lstFoundGrade.push(itemGradeArr);
+      });
+    } else {
+      lstFoundGrade = item.grade_ids;
+    }
+    // EndGrades
+
+    // Subject
+    let lstFoundSubject: Array<MultiFilterItemGrades> = [];
+    if (MySelectSubject!.length > 0) {
+      lstFoundGrade.some((itemGradeArr) => {
+        MySelectSubject!.some((iSubject: number) => {
+          const itemSubjectArr = itemGradeArr.subject_ids.find(o => o.subject_id === String(iSubject));
+          if (typeof(itemSubjectArr) !== 'undefined') {
+            lstFoundSubject.push(itemGradeArr);
+            return true;
+          }
+        });
+        if (lstFoundSubject.length > 0) return true;
+      });
+    } else {
+      lstFoundSubject = lstFoundGrade;
+    }
+    // EndSubject
+
+    // Core
+    let lstFoundCore: Array<MultiFilterItemGrades> = [];
+    if (MySelectCore!.length > 0) {
+      lstFoundSubject.some((itemGradeArr) => {
+        itemGradeArr.subject_ids.some((itemSubjectArr) => {
+          const listCoreAllowArr = itemSubjectArr.core_element_ids;
+          MySelectCore!.some((iCore) => {
+            if (listCoreAllowArr.includes(String(iCore))) {
+              lstFoundCore.push(itemGradeArr);
+              return true;
+            }
+          });
+          if (lstFoundCore.length > 0) return true;
+        });
+        if (lstFoundCore.length > 0) return true;
+      });
+    } else {
+      lstFoundCore = lstFoundSubject;
+    }
+    // EndCore
+
+    return (lstFoundCore.length > 0);
+  }
+
+  public getValidateInsertOptionGoal(item: GoalsFilter): boolean {
+    const { MySelectGrade, MySelectSubject, MySelectCore, MySelectMulti } = this.state;
+
+    // Grades
+    let lstFoundGrade: Array<GoalsFilterItemGrades> = [];
+    if (MySelectGrade!.length > 0) {
+      MySelectGrade!.forEach((iGrade: number) => {
+        const itemGradeArr = item.grade_ids.find(w => w.grade_id === String(iGrade));
+        if (typeof(itemGradeArr) !== 'undefined') lstFoundGrade.push(itemGradeArr);
+      });
+    } else {
+      lstFoundGrade = item.grade_ids;
+    }
+    // EndGrades
+
+    // Subject
+    let lstFoundSubject: Array<GoalsFilterItemGrades> = [];
+    if (MySelectSubject!.length > 0) {
+      lstFoundGrade.some((itemGradeArr) => {
+        MySelectSubject!.some((iSubject: number) => {
+          const itemSubjectArr = itemGradeArr.subject_ids!.find(o => o.subject_id === String(iSubject));
+          if (typeof(itemSubjectArr) !== 'undefined') {
+            lstFoundSubject.push(itemGradeArr);
+            return true;
+          }
+        });
+        if (lstFoundSubject.length > 0) return true;
+      });
+    } else {
+      lstFoundSubject = lstFoundGrade;
+    }
+    // EndSubject
+
+    // Core
+    let lstFoundCore: Array<GoalsFilterItemGrades> = [];
+    if (MySelectCore!.length > 0) {
+      lstFoundSubject.some((itemGradeArr) => {
+        itemGradeArr.subject_ids!.some((itemSubjectArr) => {
+          const listCoreAllowArr = itemSubjectArr.core_element_ids;
+          MySelectCore!.some((iCore) => {
+            const itemCoreArr = listCoreAllowArr.find(o => o.core_element_id === String(iCore));
+            if (typeof(itemCoreArr) !== 'undefined') {
+              lstFoundCore.push(itemGradeArr);
+              return true;
+            }
+            if (lstFoundCore.length > 0) return true;
+          });
+          if (lstFoundCore.length > 0) return true;
+        });
+        if (lstFoundCore.length > 0) return true;
+      });
+    } else {
+      lstFoundCore = lstFoundSubject;
+    }
+    // EndCore
+
+    // MainTopic
+    let lstFoundDicipline: Array<GoalsFilterItemGrades> = [];
+    if (MySelectMulti!.length > 0) {
+      lstFoundCore.some((itemGradeArr) => {
+        itemGradeArr.subject_ids!.some((itemSubjectArr) => {
+          itemSubjectArr.core_element_ids!.some((itemCoreArr) => {
+            const listMaintopicAllowArr = itemCoreArr.main_topic_ids;
+            MySelectMulti!.some((iDisipline) => {
+              if (listMaintopicAllowArr.includes(String(iDisipline))) {
+                lstFoundDicipline.push(itemGradeArr);
+                return true;
+              }
+            });
+            if (lstFoundDicipline.length > 0) return true;
+          });
+          if (lstFoundDicipline.length > 0) return true;
+        });
+        if (lstFoundDicipline.length > 0) return true;
+      });
+    } else {
+      lstFoundDicipline = lstFoundCore;
+    }
+    // EndMainTopic
+
+    return (lstFoundDicipline.length > 0);
+  }
+
+  public getValidateInsertOptionSource(item: SourceFilter): boolean {
+    const { MySelectGrade, MySelectSubject, MySelectCore, MySelectMulti, MySelectGoal } = this.state;
+
+    // Grades
+    let lstFoundGrade: Array<SourceFilterItemGrades> = [];
+    if (MySelectGrade!.length > 0) {
+      MySelectGrade!.forEach((iGrade: number) => {
+        const itemGradeArr = item.grade_ids.find(w => w.grade_id === String(iGrade));
+        if (typeof(itemGradeArr) !== 'undefined') lstFoundGrade.push(itemGradeArr);
+      });
+    } else {
+      lstFoundGrade = item.grade_ids;
+    }
+    // EndGrades
+
+    // Subject
+    let lstFoundSubject: Array<SourceFilterItemGrades> = [];
+    if (MySelectSubject!.length > 0) {
+      lstFoundGrade.some((itemGradeArr) => {
+        MySelectSubject!.some((iSubject: number) => {
+          const itemSubjectArr = itemGradeArr.subject_ids!.find(o => o.subject_id === String(iSubject));
+          if (typeof(itemSubjectArr) !== 'undefined') {
+            lstFoundSubject.push(itemGradeArr);
+            return true;
+          }
+        });
+        if (lstFoundSubject.length > 0) return true;
+      });
+    } else {
+      lstFoundSubject = lstFoundGrade;
+    }
+    // EndSubject
+
+    // Core
+    let lstFoundCore: Array<SourceFilterItemGrades> = [];
+    if (MySelectCore!.length > 0) {
+      lstFoundSubject.some((itemGradeArr) => {
+        itemGradeArr.subject_ids!.some((itemSubjectArr) => {
+          const listCoreAllowArr = itemSubjectArr.core_element_ids;
+          MySelectCore!.some((iCore) => {
+            const itemCoreArr = listCoreAllowArr.find(o => o.core_element_id === String(iCore));
+            if (typeof(itemCoreArr) !== 'undefined') {
+              lstFoundCore.push(itemGradeArr);
+              return true;
+            }
+            if (lstFoundCore.length > 0) return true;
+          });
+          if (lstFoundCore.length > 0) return true;
+        });
+        if (lstFoundCore.length > 0) return true;
+      });
+    } else {
+      lstFoundCore = lstFoundSubject;
+    }
+    // EndCore
+
+    // MainTopic
+    let lstFoundDicipline: Array<SourceFilterItemGrades> = [];
+    if (MySelectMulti!.length > 0) {
+      lstFoundCore.some((itemGradeArr) => {
+        itemGradeArr.subject_ids!.some((itemSubjectArr) => {
+          itemSubjectArr.core_element_ids!.some((itemCoreArr) => {
+            const listMaintopicAllowArr = itemCoreArr.main_topic_ids;
+            MySelectMulti!.some((iDisipline) => {
+              const itemDiciplineArr = listMaintopicAllowArr.find(o => o.main_topic_id === String(iDisipline));
+              if (typeof(itemDiciplineArr) !== 'undefined') {
+                lstFoundDicipline.push(itemGradeArr);
+                return false;
+              }
+            });
+            if (lstFoundDicipline.length > 0) return true;
+          });
+          if (lstFoundDicipline.length > 0) return true;
+        });
+        if (lstFoundDicipline.length > 0) return true;
+      });
+    } else {
+      lstFoundDicipline = lstFoundCore;
+    }
+    // EndMainTopic
+
+    // Goals
+    let lstFoundGoal: Array<SourceFilterItemGrades> = [];
+    if (MySelectGoal!.length > 0) {
+      lstFoundDicipline.some((itemGradeArr) => {
+        itemGradeArr.subject_ids!.some((itemSubjectArr) => {
+          itemSubjectArr.core_element_ids!.some((itemCoreArr) => {
+            itemCoreArr.main_topic_ids!.some((itemDiciplineArr) => {
+              const listGoalAllowArr = itemDiciplineArr.goal_ids;
+              MySelectGoal!.some((iGoal) => {
+                if (listGoalAllowArr.includes(String(iGoal))) {
+                  lstFoundGoal.push(itemGradeArr);
+                  return true;
+                }
+              });
+              if (lstFoundGoal.length > 0) return true;
+            });
+            if (lstFoundGoal.length > 0) return true;
+          });
+          if (lstFoundGoal.length > 0) return true;
+        });
+        if (lstFoundGoal.length > 0) return true;
+      });
+    } else {
+      lstFoundGoal = lstFoundDicipline;
+    }
+
+    return (lstFoundGoal.length > 0);
+  }
+
+  public cleanHihtLightGradeSubject() {
+    const GradeFilterGradeArray = Array.from(document.getElementsByClassName('gradesFilterClass') as HTMLCollectionOf<HTMLElement>);
+    GradeFilterGradeArray.forEach((e) => {
+      e.classList.remove('downlight');
+    });
+    const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
+    GradeFilterSubjectArray.forEach((e) => {
+      e.classList.remove('downlight');
+    });
+  }
+
+  public getLstChildGrade(gradeIdParent: number): Array<any> {
+    const { grepDataFilters } = this.state;
+    const lstChilds: Array<number> = [];
+
+    const gradeArr = grepDataFilters!.grade_filter!;
+    gradeArr.forEach((item) => {
+      if (item.grade_parent !== null) {
+        const listGradesAllowArr = item.grade_parent;
+        if (listGradesAllowArr.includes(String(gradeIdParent))) {
+          lstChilds.push(Number(item.grade_id));
+        }
+      }
+    });
+
+    return lstChilds;
+  }
+
+  public highLightGradeSubject() {
+    const { MySelectGrade, MySelectSubject } = this.state;
+    const existFilterGrade = (MySelectGrade!.length > 0);
+    const existFilterSubject = (MySelectSubject!.length > 0);
+
+    this.cleanHihtLightGradeSubject();
+
+    if (!existFilterGrade && !existFilterSubject) {
+      const lstResponse: Array<any> = this.getGradeSubjectIdsBy();
+
+      // Grade
+      const lstGradeHighlight = lstResponse[0];
+      if (lstGradeHighlight.length > 0) {
+        const GradeFilterGradeArray = Array.from(document.getElementsByClassName('gradesFilterClass') as HTMLCollectionOf<HTMLElement>);
+        GradeFilterGradeArray.forEach((e) => {
+          const gradeId: number = Number(e.getAttribute('value'));
+          if (!lstGradeHighlight.includes(gradeId)) {
+            const lstChilds: Array<number> = this.getLstChildGrade(gradeId);
+            let setDownlight = true;
+
+            lstGradeHighlight.some((itemGh: number) => {
+              if (lstChilds.includes(itemGh)) {
+                setDownlight = false;
+                return true;
+              }
+            });
+
+            if (setDownlight) e.classList.add('downlight');
+          }
+        });
+      }
+
+      // Subject
+      const lstSubjectHighlight = lstResponse[1];
+      if (lstSubjectHighlight.length > 0) {
+        const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
+        GradeFilterSubjectArray.forEach((e) => {
+          if (!lstSubjectHighlight.includes(Number(e.getAttribute('value')))) {
+            e.classList.add('downlight');
+          }
+        });
+      }
+    }
+  }
+
+  public getGradeSubjectIdsBy(): Array<any> {
+    const { MySelectCore, MySelectMulti, MySelectGoal, MySelectSource, grepDataFilters } = this.state;
+
+    const lstResponse = [];
+    const lstGradeHighlight: Array<number> = [];
+    const lstSubjectHighlight: Array<number> = [];
+
+    if (MySelectCore!.length > 0) {
+      MySelectCore!.forEach((iCore) => {
+        const itemCoreArr = grepDataFilters!.core_elements_filter!.find(o => o.core_element_id === String(iCore));
+        if (typeof(itemCoreArr) !== 'undefined') {
+          itemCoreArr.grade_ids.forEach((iGrade) => {
+            // Grade
+            if (!lstGradeHighlight.includes(Number(iGrade.grade_id))) {
+              lstGradeHighlight.push(Number(iGrade.grade_id));
+            }
+
+            // Subject
+            iGrade.subject_ids.forEach((iSubject) => {
+              if (!lstSubjectHighlight.includes(Number(iSubject))) {
+                lstSubjectHighlight.push(Number(iSubject));
+              }
+            });
+          });
+        }
+      });
+    }
+
+    if (MySelectMulti!.length > 0) {
+      MySelectMulti!.forEach((iDisipline) => {
+        const itemDiciplineArr = grepDataFilters!.multidisciplinay_filter!.find(o => o.main_topic_id === String(iDisipline));
+        if (typeof(itemDiciplineArr) !== 'undefined') {
+          itemDiciplineArr.grade_ids.forEach((iGrade) => {
+            // Grade
+            if (!lstGradeHighlight.includes(Number(iGrade.grade_id))) {
+              lstGradeHighlight.push(Number(iGrade.grade_id));
+            }
+
+            // Subject
+            iGrade.subject_ids.forEach((iSubject) => {
+              if (!lstSubjectHighlight.includes(Number(iSubject.subject_id))) {
+                lstSubjectHighlight.push(Number(iSubject.subject_id));
+              }
+            });
+          });
+        }
+      });
+    }
+
+    if (MySelectGoal!.length > 0) {
+      MySelectGoal!.forEach((iGoal) => {
+        const itemGoalArr = grepDataFilters!.goals_filter!.find(o => o.goal_id === String(iGoal));
+        if (typeof(itemGoalArr) !== 'undefined') {
+          itemGoalArr.grade_ids.forEach((iGrade) => {
+            // Grade
+            if (!lstGradeHighlight.includes(Number(iGrade.grade_id))) {
+              lstGradeHighlight.push(Number(iGrade.grade_id));
+            }
+
+            // Subject
+            iGrade.subject_ids!.forEach((iSubject) => {
+              if (!lstSubjectHighlight.includes(Number(iSubject.subject_id))) {
+                lstSubjectHighlight.push(Number(iSubject.subject_id));
+              }
+            });
+          });
+        }
+      });
+    }
+
+    if (MySelectSource!.length > 0) {
+      MySelectSource!.forEach((iSource) => {
+        const itemSourceArr = grepDataFilters!.source_filter!.find(o => o.term_id === String(iSource));
+        if (typeof(itemSourceArr) !== 'undefined') {
+          itemSourceArr.grade_ids.forEach((iGrade) => {
+            // Grade
+            if (!lstGradeHighlight.includes(Number(iGrade.grade_id))) {
+              lstGradeHighlight.push(Number(iGrade.grade_id));
+            }
+
+            // Subject
+            iGrade.subject_ids!.forEach((iSubject) => {
+              if (!lstSubjectHighlight.includes(Number(iSubject.subject_id))) {
+                lstSubjectHighlight.push(Number(iSubject.subject_id));
+              }
+            });
+          });
+        }
+      });
+    }
+
+    lstResponse.push(lstGradeHighlight);
+    lstResponse.push(lstSubjectHighlight);
+
+    return lstResponse;
   }
 
   public handleClickSubject = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const newSubjectId = Number(e.currentTarget.value);
-    const selectedSubjects = this.getSelectedSubjects()!;
+    const subjectId = Number(e.currentTarget.value);
+    const filterSubject: Array<number> = this.getSelectedSubjects()!;
 
-    if (!selectedSubjects.includes(newSubjectId)) {
-      this.addSelectedSubjects(
-        Number(e.currentTarget.value),
-        () => {
-          this.resetFilters(
-            ['coreElements', 'mainTopics', 'goals'],
-            () => {
-              this.refreshAppliedFilters(
-                () => {
-                  this.handleChangeFilters('subjects', String(this.getSelectedSubjects()));
-                });
-            });
-        });
+    if (filterSubject.includes(subjectId)) {
+      filterSubject.splice(filterSubject.indexOf(subjectId), 1);
     } else {
-      this.removeSelectedFilter(
-        'subjects',
-        newSubjectId,
-        () => {
-          this.refreshAppliedFilters(
-            () => {
-              this.handleChangeFilters('subjects', String(this.getSelectedSubjects()));
-            });
-        },
-        e
-      );
+      filterSubject.push(subjectId);
     }
+
+    this.setState(
+      {
+        MySelectSubject: filterSubject
+      },
+      () => {
+        this.handleChangeFilters('subjects', String(this.getSelectedSubjects()));
+        this.getGREPParametersCoreElements();
+        this.getGREPParametersDicipline();
+        this.getGREPParametersGoals();
+        this.getGREPParametersSources();
+        this.highLightGradeSubject();
+      }
+    );
   }
 
   public handleClickMulti = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const target = e.currentTarget;
-    const newMainTopicId = Number(target.value);
-    const selectedMainTopics = this.getSelectedMainTopics()!;
+    const newMainTopicId = Number(e.currentTarget.value);
+    const filterDicipline: Array<number> = this.getSelectedMainTopics()!;
 
-    if (!selectedMainTopics.includes(newMainTopicId)) {
-      this.addSelectedMainTopics(Number(newMainTopicId), () => {
-
-        // target.classList.add('active');
-        this.resetFilters(['goals'], () => {
-          this.refreshAppliedFilters(() => {
-            this.handleChangeFilters('multi', String(this.getSelectedMainTopics()));
-          });
-        });
-      });
+    if (filterDicipline.includes(newMainTopicId)) {
+      filterDicipline.splice(filterDicipline.indexOf(newMainTopicId), 1);
     } else {
-      this.removeSelectedFilter(
-        'mainTopics',
-        newMainTopicId,
-        () => {
-          this.refreshAppliedFilters(() => {
-            this.handleChangeFilters('multi', String(this.getSelectedSubjects()));
-          });
-        },
-        e
-      );
+      filterDicipline.push(newMainTopicId);
     }
+
+    this.setState(
+      {
+        MySelectMulti: filterDicipline
+      },
+      () => {
+        this.handleChangeFilters('multi', String(this.getSelectedMainTopics()));
+        this.getGREPParametersGoals();
+        this.getGREPParametersSources();
+        this.highLightGradeSubject();
+      }
+    );
   }
 
   public handleClickSource = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const value = e.currentTarget.value;
-    const valueSelectedSource = this.state.MySelectSource;
-    if (!valueSelectedSource!.includes(Number(value))) {
-      valueSelectedSource!.push(Number(value));
-      e.currentTarget.classList.add('active');
+    const newSourceId = Number(e.currentTarget.value);
+    const filterSource: Array<number> = this.getSelectedSource()!;
+
+    if (filterSource.includes(newSourceId)) {
+      filterSource.splice(filterSource.indexOf(newSourceId), 1);
     } else {
-      const indexSelected = valueSelectedSource!.indexOf(Number(value));
-      if (indexSelected > -1) {
-        valueSelectedSource!.splice(indexSelected, 1);
-      }
-      e.currentTarget.classList.remove('active');
+      filterSource.push(newSourceId);
     }
-    this.setState({
-      MySelectSource: valueSelectedSource
-    });
-    this.handleChangeFilters('source', String(valueSelectedSource));
+
+    this.setState(
+      {
+        MySelectSource: filterSource
+      },
+      () => {
+        this.handleChangeFilters('source', String(this.getSelectedSource()));
+        this.highLightGradeSubject();
+      }
+    );
   }
 
   public addItemToNewChild = (item: Article) => {
@@ -2041,6 +1947,11 @@ export class ArticlesList extends Component<Props, State> {
     return selectedGradesAll;
   }
 
+  public customGradeChildrenList = () => {
+    const { selectedGradeChildrenAll } = this.state;
+    return selectedGradeChildrenAll;
+  }
+
   public mySubjects = () => {
     const { selectedSubjectsAll, selectedSubjectsFilter } = this.state;
     if (selectedSubjectsFilter.length) {
@@ -2120,8 +2031,6 @@ export class ArticlesList extends Component<Props, State> {
               // METHODS
               handleChangeSubject={this.handleChangeSubject}
               handleChangeGrade={this.handleChangeGrade}
-              handleChangeCore={this.handleChangeCore}
-              handleChangeGoals={this.handleChangeGoals}
               handleInputSearchQuery={this.handleChangeSearchQuery}
               handleClickGrade={this.handleClickGrade}
               handleClickSubject={this.handleClickSubject}
@@ -2136,17 +2045,19 @@ export class ArticlesList extends Component<Props, State> {
               // VALUES
               // subjectFilterValue={Number(appliedFilters.subjects)}
               // gradeFilterValue={Number(appliedFilters.grades)}
-              coreFilterValue={String(appliedFilters.core)}
-              goalsFilterValue={String(appliedFilters.goal)}
+              coreFilterValue={Number(appliedFilters.core)}
+              goalsFilterValue={Number(appliedFilters.goal)}
               defaultValueGradeFilter={String(appliedFilters.grades)}
               defaultValueSubjectFilter={String(appliedFilters.subjects)}
 
               defaultValueMainFilter={String(this.state.MySelectMulti)}
+              defaultValueSourceFilter={String(this.state.MySelectSource)}
 
               coreValueFilter={this.state.myValueCore}
               goalValueFilter={this.state.goalValueFilter}
               searchQueryFilterValue={appliedFilters.searchTitle as string}
               customGradesList={this.customGradesList()}
+              customGradeChildrenList={this.customGradeChildrenList()}
               customSubjectsList={this.mySubjects()}
               customCoreList={this.customCoreList()}
               customMultiList={this.customMultiList()}

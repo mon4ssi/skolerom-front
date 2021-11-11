@@ -42,6 +42,7 @@ interface Props {
   isAssignmentsListFilter?: boolean;
 
   customGradesList?: Array<Grade>;
+  customGradeChildrenList?: Array<Grade>;
   customSubjectsList?: Array<Subject>;
   showSourceFilter?: boolean;
   filtersisUsed?: boolean;
@@ -85,12 +86,10 @@ interface Props {
   handleChangeSubject?(e: ChangeEvent<HTMLSelectElement>): void;
   handleChangeActivity?(e: ChangeEvent<HTMLSelectElement>): void;
   handleChangeGrade?(e: ChangeEvent<HTMLSelectElement>): void;
-  handleChangeCore?(e: ChangeEvent<HTMLSelectElement>): void;
   switchNewestOldest?(e: ChangeEvent<HTMLSelectElement>): void;
   handleChangeSorting?(e: ChangeEvent<HTMLSelectElement>): void;
   handleChangeEvaluationStatus?(e: ChangeEvent<HTMLSelectElement>): void;
   handleChangeAnswerStatus?(e: ChangeEvent<HTMLSelectElement>): void;
-  handleChangeGoals?(e: ChangeEvent<HTMLSelectElement>): void;
   handleInputSearchQuery?(e: SyntheticEvent): void;
   handleChangeSelectCore?(e: any): void;
   handleChangeSelectGoals?(e: any): void;
@@ -544,32 +543,23 @@ class SearchFilter extends Component<Props, State> {
     const arrayDefaults = (defaultValueGradeFilter) ? defaultValueGradeFilter.split(',') : [];
 
     const visibleGrades = grades.map((grade) => {
-      const title = grade.title.split('.', 1);
-      const variableTitle = (grade.title.split('.').length > 1) ? `${title} ${intl.get('new assignment.grade')}` : title;
-      const classD = (arrayDefaults.includes(String(grade.id))) ? 'active' : '';
-      const arrayIds: Array<string> = [];
-      arrayIds.push(String(grade.id));
-      grades.forEach((insidegrade) => {
-        // tslint:disable-next-line: variable-name
-        if (insidegrade.grade_parent !== null) {
-          if (Number(insidegrade.grade_parent) === Number(grade.id)) {
-            arrayIds.push(String(insidegrade.grade_parent));
-          }
-        }
-      });
-      if (grade.grade_parent === null) {
-        return (
-          <button
-            style={{ color: grade.filterStatus === 'inactive' ? 'lightgrey' : '' }}
-            value={String(arrayIds)}
-            className={`itemFlexFilter gradesFilterClass ${classD}`}
-            onClick={handleClickGrade}
-            key={grade.id}
-          >
-            {variableTitle}
-          </button>
-        );
+      const gradetitle: Array<string> = grade.title.split('.');
+      let title:string = gradetitle[0];
+      if (gradetitle.length > 1) {
+        title = gradetitle[0] + intl.get('new assignment.grade');
       }
+      const classD = (arrayDefaults.includes(String(grade.id))) ? 'active' : '';
+      return (
+        <button
+          style={{ color: grade.filterStatus === 'inactive' ? 'lightgrey' : '' }}
+          value={grade.id}
+          className={`itemFlexFilter gradesFilterClass ${classD}`}
+          onClick={handleClickGrade}
+          key={grade.id}
+        >
+          {title}
+        </button>
+      );
     });
     if (grades.length === 0) {
       return (
@@ -581,6 +571,45 @@ class SearchFilter extends Component<Props, State> {
     return (
       <div className="gradesItems flexFilter">
         {visibleGrades}
+      </div>
+    );
+  }
+
+  public renderFiltersGradeChildren = () => {
+    const { handleClickGrade, customGradeChildrenList, defaultValueGradeFilter } = this.props;
+    const grades = customGradeChildrenList!.sort(this.sortSelectors);
+    const arrayDefaults = (defaultValueGradeFilter) ? defaultValueGradeFilter.split(',') : [];
+    const visibleGrades = grades.map((grade) => {
+      const classD = (arrayDefaults[0] === String(grade.id) ? 'active' : '');
+      return (
+        <button
+          style={{ color: grade.filterStatus === 'inactive' ? 'lightgrey' : '' }}
+          value={grade.id}
+          className={`itemFlexFilter gradesFilterClass ${classD} jrGradeChild`}
+          onClick={handleClickGrade}
+          key={grade.id}
+        >
+          {grade.title}
+        </button>
+      );
+    });
+    if (grades.length === 0) {
+      return ('');
+    }
+    return (
+      <div className="FiltersModal__body__item">
+        <div className="itemFilter">
+          <div className="itemFilter__leftWithoutIcon">
+            &nbsp;
+          </div>
+          <div className="itemFilter__right">
+            <div className="itemFilter__core">
+              <div className="gradesItems flexFilter">
+                {visibleGrades}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -821,7 +850,9 @@ class SearchFilter extends Component<Props, State> {
     const visibleCores = cores.map((core, idx) => {
       const title = core.title;
       const classD = (arrayDefaults.includes(String(core.id))) ? 'active' : '';
-      return <button value={core.id} className={`itemFlexFilter multiFilterClass ${classD}`} onClick={handleClickMulti} key={core.id}>{title}</button>;
+      let alt = (typeof(core.alt) !== 'undefined') ? core.alt : '';
+      if (classD === '' && alt === 'jrDelItem') { alt = 'hidden'; }
+      return <button value={core.id} className={`itemFlexFilter multiFilterClass ${classD} ${alt}`} onClick={handleClickMulti} key={core.id}>{title}</button>;
     });
     if (this.props.filtersAjaxLoading) {
       return (
@@ -1010,10 +1041,13 @@ class SearchFilter extends Component<Props, State> {
     const { handleClickSource, customSourceList, defaultValueSourceFilter } = this.props;
     const cores = customSourceList!.sort(sortByAlphabet);
     const arrayDefaults = (defaultValueSourceFilter) ? defaultValueSourceFilter.split(',') : [];
+
     const visibleCores = cores.map((core) => {
       const title = core.title;
       const classD = (arrayDefaults.includes(String(core.id))) ? 'active' : '';
-      return <button value={core.id} className={`itemFlexFilter sourceFilterClass ${classD}`} onClick={handleClickSource} key={core.id}>{title}</button>;
+      let alt = (typeof(core.alt) !== 'undefined') ? core.alt : '';
+      if (classD === '' && alt === 'jrDelItem') { alt = 'hidden'; }
+      return <button value={core.id} className={`itemFlexFilter sourceFilterClass ${classD} ${alt}`} onClick={handleClickSource} key={core.id}>{title}</button>;
     });
     if (this.props.filtersAjaxLoading) {
       return (
@@ -1036,24 +1070,22 @@ class SearchFilter extends Component<Props, State> {
     );
   }
 
-  public renderFiltersContentSource = () => {
-    const { showSourceFilter } = this.props;
-    return (
-      <div className="FiltersModal__body__item">
-        <div className="itemFilter">
-          <div className="itemFilter__left">
-            <img src={voiceImg} />
-          </div>
-          <div className="itemFilter__right">
-            <h3>{intl.get('new assignment.greep.source')}</h3>
-            <div className="itemFilter__core">
-              {this.renderFiltersSource()}
-            </div>
+  public renderFiltersContentSource = () =>
+  (
+    <div className="FiltersModal__body__item">
+      <div className="itemFilter">
+        <div className="itemFilter__left">
+          <img src={voiceImg} />
+        </div>
+        <div className="itemFilter__right">
+          <h3>{intl.get('new assignment.greep.source')}</h3>
+          <div className="itemFilter__core">
+            {this.renderFiltersSource()}
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  )
 
   public modalFilters() {
     const { handleClickReset, showSourceFilter } = this.props;
@@ -1067,7 +1099,7 @@ class SearchFilter extends Component<Props, State> {
           </button>
         </div>
         <div className="FiltersModal__body">
-          <div className="FiltersModal__body__item">
+        <div className="FiltersModal__body__item">
             <div className="itemFilter">
               <div className="itemFilter__left">
                 <img src={gradeImg} />
@@ -1080,6 +1112,7 @@ class SearchFilter extends Component<Props, State> {
               </div>
             </div>
           </div>
+          {this.renderFiltersGradeChildren()}
           <div className="FiltersModal__body__item">
             <div className="itemFilter">
               <div className="itemFilter__left">
