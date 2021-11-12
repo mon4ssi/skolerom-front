@@ -545,13 +545,12 @@ class SearchFilter extends Component<Props, State> {
     const visibleGrades = grades.map((grade) => {
       const gradetitle: Array<string> = grade.title.split('.');
       let title:string = gradetitle[0];
-      if (gradetitle.length > 1) {
-        title = gradetitle[0] + intl.get('new assignment.grade');
-      }
-      const classD = (arrayDefaults.includes(String(grade.id))) ? 'active' : '';
+      if (gradetitle.length > 1) { title = gradetitle[0] + intl.get('new assignment.grade'); }
+      let classD = (arrayDefaults.includes(String(grade.id))) ? 'active' : '';
+      if (grade.filterStatus === 'inactive') { classD += ' downlight'; }
+
       return (
         <button
-          style={{ color: grade.filterStatus === 'inactive' ? 'lightgrey' : '' }}
           value={grade.id}
           className={`itemFlexFilter gradesFilterClass ${classD}`}
           onClick={handleClickGrade}
@@ -580,10 +579,10 @@ class SearchFilter extends Component<Props, State> {
     const grades = customGradeChildrenList!.sort(this.sortSelectors);
     const arrayDefaults = (defaultValueGradeFilter) ? defaultValueGradeFilter.split(',') : [];
     const visibleGrades = grades.map((grade) => {
-      const classD = (arrayDefaults[0] === String(grade.id) ? 'active' : '');
+      let classD = (arrayDefaults[0] === String(grade.id) ? 'active' : '');
+      if (grade.filterStatus === 'inactive') { classD += ' downlight'; }
       return (
         <button
-          style={{ color: grade.filterStatus === 'inactive' ? 'lightgrey' : '' }}
           value={grade.id}
           className={`itemFlexFilter gradesFilterClass ${classD} jrGradeChild`}
           onClick={handleClickGrade}
@@ -622,8 +621,9 @@ class SearchFilter extends Component<Props, State> {
     const visibleSubjects = subjects.map((subject) => {
 
       const title = subject.title.split('.', 1);
-      const classD = (arrayDefaults.includes(String(subject.id))) ? 'active' : '';
-      return <button style={{ color: subject.filterStatus === 'inactive' ? 'lightgrey' : '' }} value={subject.id} className={`itemFlexFilter subjectsFilterClass ${classD}`} onClick={handleClickSubject} key={subject.id}>{title}</button>;
+      let classD = (arrayDefaults.includes(String(subject.id))) ? 'active' : '';
+      if (subject.filterStatus === 'inactive') { classD += ' downlight'; }
+      return <button value={subject.id} className={`itemFlexFilter subjectsFilterClass ${classD}`} onClick={handleClickSubject} key={subject.id}>{title}</button>;
     });
     if (subjects.length === 0) {
       return (

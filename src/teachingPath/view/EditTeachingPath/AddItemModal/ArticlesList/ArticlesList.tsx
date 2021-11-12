@@ -566,8 +566,6 @@ export class ArticlesList extends Component<Props, State> {
       e.classList.remove('active');
     });
 
-    this.cleanHihtLightGradeSubject();
-
     this.setState(
       {
         filtersisUsed: false,
@@ -1147,17 +1145,6 @@ export class ArticlesList extends Component<Props, State> {
     return (lstFoundGoal.length > 0);
   }
 
-  public cleanHihtLightGradeSubject() {
-    const GradeFilterGradeArray = Array.from(document.getElementsByClassName('gradesFilterClass') as HTMLCollectionOf<HTMLElement>);
-    GradeFilterGradeArray.forEach((e) => {
-      e.classList.remove('downlight');
-    });
-    const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
-    GradeFilterSubjectArray.forEach((e) => {
-      e.classList.remove('downlight');
-    });
-  }
-
   public getLstChildGrade(gradeIdParent: number): Array<any> {
     const { grepDataFilters } = this.state;
     const lstChilds: Array<number> = [];
@@ -1180,44 +1167,78 @@ export class ArticlesList extends Component<Props, State> {
     const existFilterGrade = (MySelectGrade!.length > 0);
     const existFilterSubject = (MySelectSubject!.length > 0);
 
-    this.cleanHihtLightGradeSubject();
+    let lstResponse: Array<any> = [] ;
 
     if (!existFilterGrade && !existFilterSubject) {
-      const lstResponse: Array<any> = this.getGradeSubjectIdsBy();
-
-      // Grade
-      const lstGradeHighlight = lstResponse[0];
-      if (lstGradeHighlight.length > 0) {
-        const GradeFilterGradeArray = Array.from(document.getElementsByClassName('gradesFilterClass') as HTMLCollectionOf<HTMLElement>);
-        GradeFilterGradeArray.forEach((e) => {
-          const gradeId: number = Number(e.getAttribute('value'));
-          if (!lstGradeHighlight.includes(gradeId)) {
-            const lstChilds: Array<number> = this.getLstChildGrade(gradeId);
-            let setDownlight = true;
-
-            lstGradeHighlight.some((itemGh: number) => {
-              if (lstChilds.includes(itemGh)) {
-                setDownlight = false;
-                return true;
-              }
-            });
-
-            if (setDownlight) e.classList.add('downlight');
-          }
-        });
-      }
-
-      // Subject
-      const lstSubjectHighlight = lstResponse[1];
-      if (lstSubjectHighlight.length > 0) {
-        const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
-        GradeFilterSubjectArray.forEach((e) => {
-          if (!lstSubjectHighlight.includes(Number(e.getAttribute('value')))) {
-            e.classList.add('downlight');
-          }
-        });
-      }
+      lstResponse = this.getGradeSubjectIdsBy();
     }
+
+    // Grade
+    const newArrayGrades: Array<Grade> = [];
+    const newArrayGradeChildren: Array<Grade> = [];
+
+    const lstGradeHighlight = lstResponse[0];
+    const GradeFilterGradeArray = Array.from(document.getElementsByClassName('gradesFilterClass') as HTMLCollectionOf<HTMLElement>);
+    GradeFilterGradeArray.forEach((e) => {
+      const gradeId: number = Number(e.getAttribute('value'));
+      const gradeTitle = e.innerText;
+      let filterStatusBoton = '';
+
+      if (typeof(lstGradeHighlight) !== 'undefined' &&  lstGradeHighlight.length > 0) {
+        if (!lstGradeHighlight.includes(gradeId)) {
+          const lstChilds: Array<number> = this.getLstChildGrade(gradeId);
+          let setDownlight = true;
+
+          lstGradeHighlight.some((itemGh: number) => {
+            if (lstChilds.includes(itemGh)) {
+              setDownlight = false;
+              return true;
+            }
+          });
+
+          if (setDownlight) filterStatusBoton = 'inactive';
+        }
+      }
+
+      if (e.classList.contains('jrGradeChild')) {
+        newArrayGradeChildren.push({
+          id: gradeId,
+          title: gradeTitle,
+          filterStatus: filterStatusBoton
+        });
+      } else {
+        newArrayGrades.push({
+          id: gradeId,
+          title: gradeTitle,
+          filterStatus: filterStatusBoton
+        });
+      }
+    });
+
+    // Subject
+    const newArraySubject: Array<Subject> = [];
+    const lstSubjectHighlight = lstResponse[1];
+    const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
+    GradeFilterSubjectArray.forEach((e) => {
+      const subjectId: number = Number(e.getAttribute('value'));
+      const subjectTitle = e.innerText;
+      let filterStatusBoton = '';
+
+      if (typeof(lstSubjectHighlight) !== 'undefined' &&  lstSubjectHighlight.length > 0) {
+        if (!lstSubjectHighlight.includes(subjectId)) { filterStatusBoton = 'inactive'; }
+      }
+
+      newArraySubject.push({
+        id: subjectId,
+        title: subjectTitle,
+        filterStatus: filterStatusBoton
+      });
+    });
+
+    this.setState({
+      selectedGradesAll: newArrayGrades,
+      selectedSubjectsAll: newArraySubject
+    });
   }
 
   public getGradeSubjectIdsBy(): Array<any> {
