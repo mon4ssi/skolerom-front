@@ -4,7 +4,9 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-
+  .gradesChildrenItems {
+    margin-top: 15px;
+  }
   .cardList {
     display: flex;
     flex-wrap: wrap;    

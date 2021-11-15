@@ -53,6 +53,7 @@ interface State {
   optionsSubjects: Array<GrepFilters>;
   optionsGrades: Array<GrepFilters>;
   optionsGoals: Array<GreepSelectValue>;
+  customGradeChildrenList: Array<Grade>;
   valueCoreOptions: Array<number>;
   valueMultiOptions: Array<number>;
   valuereadingOptions: number;
@@ -124,6 +125,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
       optionsSubjects: [],
       optionsGrades: [],
       optionsGoals: [],
+      customGradeChildrenList: [],
       valueCoreOptions: [],
       valueMultiOptions: [],
       valuereadingOptions: 0,
@@ -236,14 +238,20 @@ class TeachingPathsListComponent extends Component<Props, State> {
           },
           () => {
             const ArrayValue: Array<number> = [];
+            const newArrayGradeChildren: Array<Grade> = [];
             this.state.gradesArrayFilter!.forEach((element) => {
+              if (element.grade_parent !== null) {
+                newArrayGradeChildren.push(element);
+              }
               this.state.myValueGrade.forEach((el) => {
                 if (Number(element.id) === Number(el)) {
                   ArrayValue.push(element.id);
                 }
               });
             });
-            this.setState({ myValueGrade: ArrayValue });
+            this.setState({
+              myValueGrade: ArrayValue
+            });
             if (grades !== '' && subjects !== '') {
               QueryStringHelper.set(
                 this.props.history,
@@ -294,7 +302,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
         // tslint:disable-next-line: variable-name
         grade_parent: element.grade_parent,
         // tslint:disable-next-line: variable-name
-        name_sub: element.grade_parent
+        name_sub: element.name_sub
       });
     });
     return returnArray;
@@ -562,10 +570,22 @@ class TeachingPathsListComponent extends Component<Props, State> {
         // const valueSelectedGrades = this.state.myValueGrade;
         let valueSelectedGrades: Array<number> = [];
         const value = currentTarget.value;
+        const arrayMyValue = value.split(',');
+        const NumberArrayMyValue = [];
         const valueToArray: Array<number> = [];
-        if (!this.state.myValueGrade!.includes(Number(value))) {
+        const newArrayGradeChildren: Array<Grade> = [];
+        let isInclude = this.state.myValueGrade!.includes(Number(value));
+        if (arrayMyValue.length > 1) {
+          arrayMyValue.forEach((ar) => {
+            isInclude = this.state.myValueGrade!.includes(Number(ar));
+            NumberArrayMyValue.push(Number(ar));
+          });
+        } else {
+          NumberArrayMyValue.push(Number(value));
+        }
+        if (!isInclude) {
           currentTarget.classList.add('active');
-          valueSelectedGrades = [Number(value)];
+          valueSelectedGrades = NumberArrayMyValue;
         } else {
           currentTarget.classList.remove('active');
           valueSelectedGrades = [];
@@ -581,10 +601,91 @@ class TeachingPathsListComponent extends Component<Props, State> {
           valueSelectedGrades.forEach((el) => {
             if (Number(element.wp_id) === Number(el)) {
               valueToArray.push(element.id);
-              this.setState({ valueGradesOptions: valueToArray });
+              if (element.grade_parent !== null) {
+                newArrayGradeChildren.push({
+                  id: element.wp_id,
+                  title: element.name,
+                  filterStatus: element.filterStatus,
+                  grade_parent: element.grade_parent,
+                  name_sub: element.name_sub
+                });
+              }
             }
           });
         });
+        this.setState({ valueGradesOptions: valueToArray });
+        this.setState({ customGradeChildrenList: newArrayGradeChildren });
+        QueryStringHelper.set(
+          this.props.history,
+          QueryStringKeys.GRADE,
+          String(valueSelectedGrades)
+        );
+        QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
+        this.setState({ filtersAjaxLoadingGoals: true });
+        this.assigValueData(String(valueSelectedGrades), String(this.state.myValueSubject), '', '', '', '');
+        this.setState({ filtersAjaxLoadingGoals: false });
+        /*
+        const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueToArray, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
+        this.setState({
+          optionsGoals: this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
+        });
+        */
+      });
+
+  }
+
+  public handleClickChildrenGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { editTeachingPathStore } = this.props;
+    const { optionsGrades, valueSubjectsOptions, valueCoreOptions, myValueCore, valueMultiOptions, valueGradesOptions } = this.state;
+    const currentTarget = e.currentTarget;
+    QueryStringHelper.set(
+      this.props.history,
+      QueryStringKeys.GREPMAINTOPICSIDS,
+      String([])
+    );
+
+    QueryStringHelper.set(
+      this.props.history,
+      QueryStringKeys.GREPREADINGINSUBJECT,
+      String([])
+    );
+
+    this.setState(
+      {
+        valueMultiOptions: [],
+        myValueMulti: [],
+        valuereadingOptions: 0,
+        myValueReading: [],
+        myValueSource: [],
+      },
+      async () => {
+        // const valueSelectedGrades = this.state.myValueGrade;
+        let valueSelectedGrades: Array<number> = [];
+        const value = currentTarget.value;
+        const arrayMyValue = value.split(',');
+        const NumberArrayMyValue = [];
+        const valueToArray: Array<number> = [];
+
+        if (value === String(this.state.myValueGrade)) {
+          currentTarget.classList.remove('active');
+          valueSelectedGrades = [];
+        } else {
+          currentTarget.classList.add('active');
+          arrayMyValue.forEach((ar) => {
+            valueSelectedGrades.push(Number(ar));
+          });
+        }
+        this.setState({
+          myValueGrade: valueSelectedGrades
+        });
+        optionsGrades!.forEach((element) => {
+          valueSelectedGrades.forEach((el) => {
+            if (Number(element.wp_id) === Number(el)) {
+              valueToArray.push(element.id);
+            }
+          });
+        });
+        this.setState({ valueGradesOptions: valueToArray });
         QueryStringHelper.set(
           this.props.history,
           QueryStringKeys.GRADE,
@@ -1058,6 +1159,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
           customMultiList={this.state.optionsMulti}
           customReadingList={this.state.optionsReading}
           customSourceList={this.state.optionsSource}
+          customGradeChildrenList={this.state.customGradeChildrenList}
           filtersisUsed={this.state.filtersisUsed}
           filtersAjaxLoading={this.state.filtersAjaxLoading}
           filtersAjaxLoadingGoals={this.state.filtersAjaxLoadingGoals}
@@ -1074,6 +1176,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
           handleClickMulti={this.handleClickMulti}
           handleClickReading={this.handleClickReading}
           handleClickSource={this.handleClickSource}
+          handleClickChildrenGrade={this.handleClickChildrenGrade}
           // VALUES
           gradeFilterValue={QueryStringHelper.getString(this.props.history, QueryStringKeys.GRADE)}
           defaultValueGradeFilter={QueryStringHelper.getString(this.props.history, QueryStringKeys.GRADE)}
