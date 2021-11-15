@@ -100,6 +100,7 @@ interface Props {
   handleClickSource?(e: SyntheticEvent): void;
   handleClickReset?(e: SyntheticEvent): void;
   handleClickReading?(e: SyntheticEvent): void;
+  highLightGradeSubject?(): void;
 }
 
 interface State {
@@ -357,9 +358,16 @@ class SearchFilter extends Component<Props, State> {
         filtersModal: false
       });
     } else {
-      this.setState({
-        filtersModal: true
-      });
+      this.setState(
+        {
+          filtersModal: true
+        },
+        () => {
+          if (this.props.highLightGradeSubject) {
+            this.props.highLightGradeSubject();
+          }
+        }
+      );
     }
   }
 

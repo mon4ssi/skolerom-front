@@ -1175,7 +1175,7 @@ export class ArticlesList extends Component<Props, State> {
     return lstChilds;
   }
 
-  public highLightGradeSubject() {
+  public highLightGradeSubject = () => {
     const { MySelectGrade, MySelectSubject } = this.state;
     const existFilterGrade = (MySelectGrade!.length > 0);
     const existFilterSubject = (MySelectSubject!.length > 0);
@@ -2063,6 +2063,7 @@ export class ArticlesList extends Component<Props, State> {
               customMultiList={this.customMultiList()}
               customGoalsList={this.customGoalsList()}
               customSourceList={this.customSourceList()}
+              highLightGradeSubject={this.highLightGradeSubject}
             />
 
             <div
