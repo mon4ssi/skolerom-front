@@ -189,20 +189,20 @@ export class DraftTeachingPath extends TeachingPath {
   public addSubjectBySave() {
     let myFirstSubjects: Array<Subject> = [];
     const firstItems = this.content;
-    if (this.subjects.length === 0) {
-      if (firstItems.children.length > 0) {
-        const firstItemForList = firstItems.children;
-        firstItemForList.forEach((element) => {
-          myFirstSubjects = this.anySubjects(myFirstSubjects, element);
+    /*if (this.subjects.length === 0) {*/
+    if (firstItems.children.length > 0) {
+      const firstItemForList = firstItems.children;
+      firstItemForList.forEach((element) => {
+        myFirstSubjects = this.anySubjects(myFirstSubjects, element);
+      });
+      if (typeof(myFirstSubjects) !== 'undefined') {
+        this.subjects.splice(0, this.subjects.length);
+        myFirstSubjects!.forEach((e) => {
+          this.subjects.push(e);
         });
-        if (typeof(myFirstSubjects) !== 'undefined') {
-          this.subjects.splice(0, this.subjects.length);
-          myFirstSubjects!.forEach((e) => {
-            this.subjects.push(e);
-          });
-        }
       }
     }
+    /*}*/
   }
 
   public anyGoals(butGoals: Array<GreepElements>, node: EditableTeachingPathNode) {
@@ -259,20 +259,20 @@ export class DraftTeachingPath extends TeachingPath {
   public addGradesBySave() {
     let myFirstGrades: Array<Grade> = [];
     const firstItems = this.content;
-    if (this.grades.length === 0) {
-      if (firstItems.children.length > 0) {
-        const firstItemForList = firstItems.children;
-        firstItemForList.forEach((element) => {
-          myFirstGrades = this.anyGrades(myFirstGrades, element);
+    /* if (this.grades.length === 0) {*/
+    if (firstItems.children.length > 0) {
+      const firstItemForList = firstItems.children;
+      firstItemForList.forEach((element) => {
+        myFirstGrades = this.anyGrades(myFirstGrades, element);
+      });
+      if (typeof(myFirstGrades) !== 'undefined') {
+        this.grades.splice(0, this.grades.length);
+        myFirstGrades!.forEach((e) => {
+          this.grades.push(e);
         });
-        if (typeof(myFirstGrades) !== 'undefined') {
-          this.grades.splice(0, this.grades.length);
-          myFirstGrades!.forEach((e) => {
-            this.grades.push(e);
-          });
-        }
       }
     }
+    /* } */
   }
 
   @action

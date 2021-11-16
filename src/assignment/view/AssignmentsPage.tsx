@@ -9,7 +9,7 @@ import classNames from 'classnames';
 
 import { TabNavigation } from 'components/common/TabNavigation/TabNavigation';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
-import { GreepSelectValue, FilterGrep, Greep, GrepFilters, GoalsData, Subject, Source } from 'assignment/Assignment';
+import { GreepSelectValue, FilterGrep, Greep, GrepFilters, GoalsData, Subject, Source, Grade } from 'assignment/Assignment';
 import { SearchFilter } from 'components/common/SearchFilter/SearchFilter';
 import { MyAssignments } from './tabs/MyAssignments/MyAssignments';
 import { StudentAssignments } from './tabs/StudentAssignments/StudentAssignments';
@@ -143,6 +143,7 @@ interface State {
   optionsSubjects: Array<GrepFilters>;
   optionsGrades: Array<GrepFilters>;
   optionsGoals: Array<GreepSelectValue>;
+  customGradeChildrenList: Array<Grade>;
   valueCoreOptions: Array<number>;
   valueMultiOptions: Array<number>;
   valuereadingOptions: number;
@@ -152,6 +153,7 @@ interface State {
   valueGoalsOptions: Array<number>;
   valueStringGoalsOptions: Array<string>;
   subjectsArrayFilter: Array<Subject>;
+  gradesArrayFilter: Array<Grade>;
   filtersisUsed: boolean;
   filtersAjaxLoading: boolean;
   filtersAjaxLoadingGoals: boolean;
@@ -198,6 +200,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       optionsGrades: [],
       optionsGoals: [],
       optionsSource: [],
+      customGradeChildrenList: [],
       valueCoreOptions: [],
       valueMultiOptions: [],
       valuereadingOptions: 0,
@@ -207,6 +210,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       valueGoalsOptions: [],
       valueStringGoalsOptions: [],
       subjectsArrayFilter: [],
+      gradesArrayFilter: [],
       filtersisUsed: false,
       filtersAjaxLoading: false,
       filtersAjaxLoadingGoals: false
@@ -240,24 +244,33 @@ class AssignmentsPageWrapper extends Component<Props, State> {
   private handleClickGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const { newAssignmentStore } = this.props;
     const { optionsGrades, valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
+    const currentTarget = e.currentTarget;
     // const valueSelectedGrades = this.state.myValueGrade;
     let valueSelectedGrades: Array<number> = [];
     const value = e.currentTarget.value;
+    const arrayMyValue = value.split(',');
+    const NumberArrayMyValue = [];
     const valueToArray: Array<number> = [];
-    if (!this.state.myValueGrade!.includes(Number(value))) {
-      valueSelectedGrades = [Number(value)];
-      this.setState({ filtersisUsed: true });
+    const newArrayGradeChildren: Array<Grade> = [];
+    let isInclude = this.state.myValueGrade!.includes(Number(value));
+    if (arrayMyValue.length > 1) {
+      arrayMyValue.forEach((ar) => {
+        isInclude = this.state.myValueGrade!.includes(Number(ar));
+        NumberArrayMyValue.push(Number(ar));
+      });
     } else {
+      NumberArrayMyValue.push(Number(value));
+    }
+    if (!isInclude) {
+      currentTarget.classList.add('active');
+      valueSelectedGrades = NumberArrayMyValue;
+    } else {
+      currentTarget.classList.remove('active');
+      valueSelectedGrades = [];
       /*const indexSelected = valueSelectedGrades!.indexOf(Number(value));
       if (indexSelected > -1) {
         valueSelectedGrades!.splice(indexSelected, 1);
       }*/
-      valueSelectedGrades = [];
-      if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
-        this.setState({ filtersisUsed: true });
-      } else {
-        this.setState({ filtersisUsed: false });
-      }
     }
     this.setState({
       myValueGrade: valueSelectedGrades
@@ -271,10 +284,20 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       valueSelectedGrades.forEach((el) => {
         if (Number(element.wp_id) === Number(el)) {
           valueToArray.push(element.id);
-          this.setState({ valueGradesOptions: valueToArray });
+          if (element.grade_parent !== null) {
+            newArrayGradeChildren.push({
+              id: element.wp_id,
+              title: element.name,
+              filterStatus: element.filterStatus,
+              grade_parent: element.grade_parent,
+              name_sub: element.name_sub
+            });
+          }
         }
       });
     });
+    this.setState({ valueGradesOptions: valueToArray });
+    this.setState({ customGradeChildrenList: newArrayGradeChildren });
     this.assigValueData(String(valueSelectedGrades), String(this.state.myValueSubject), '', '');
     /*this.setState({ filtersAjaxLoadingGoals: true });
     const grepFiltergoalssDataAwait = await newAssignmentStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueToArray, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
@@ -285,7 +308,77 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
   }
 
-  private handleClickSubject = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  public handleClickChildrenGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { optionsGrades, valueSubjectsOptions, valueCoreOptions, myValueCore, valueMultiOptions, valueGradesOptions } = this.state;
+    const currentTarget = e.currentTarget;
+    QueryStringHelper.set(
+      this.props.history,
+      QueryStringKeys.GREPMAINTOPICSIDS,
+      String([])
+    );
+
+    QueryStringHelper.set(
+      this.props.history,
+      QueryStringKeys.GREPREADINGINSUBJECT,
+      String([])
+    );
+
+    this.setState(
+      {
+        valueMultiOptions: [],
+        myValueMulti: [],
+        valuereadingOptions: 0,
+        myValueReading: [],
+        myValueSource: [],
+      },
+      async () => {
+        // const valueSelectedGrades = this.state.myValueGrade;
+        let valueSelectedGrades: Array<number> = [];
+        const value = currentTarget.value;
+        const arrayMyValue = value.split(',');
+        const NumberArrayMyValue = [];
+        const valueToArray: Array<number> = [];
+
+        if (value === String(this.state.myValueGrade)) {
+          currentTarget.classList.remove('active');
+          valueSelectedGrades = [];
+        } else {
+          currentTarget.classList.add('active');
+          arrayMyValue.forEach((ar) => {
+            valueSelectedGrades.push(Number(ar));
+          });
+        }
+        this.setState({
+          myValueGrade: valueSelectedGrades
+        });
+        optionsGrades!.forEach((element) => {
+          valueSelectedGrades.forEach((el) => {
+            if (Number(element.wp_id) === Number(el)) {
+              valueToArray.push(element.id);
+            }
+          });
+        });
+        this.setState({ valueGradesOptions: valueToArray });
+        QueryStringHelper.set(
+          this.props.history,
+          QueryStringKeys.GRADE,
+          String(valueSelectedGrades)
+        );
+        QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
+        this.setState({ filtersAjaxLoadingGoals: true });
+        this.assigValueData(String(valueSelectedGrades), String(this.state.myValueSubject), '', '');
+        this.setState({ filtersAjaxLoadingGoals: false });
+        /*
+        const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueToArray, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
+        this.setState({
+          optionsGoals: this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
+        });
+        */
+      });
+
+  }
+
+  public handleClickSubject = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const { newAssignmentStore } = this.props;
     const { optionsSubjects, valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
     const valueSelectedSubjects = this.state.myValueSubject;
@@ -331,7 +424,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     this.setState({ filtersAjaxLoadingGoals: false });*/
   }
 
-  private handleClickMulti = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  public handleClickMulti = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const { newAssignmentStore } = this.props;
     const { valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
     const value = e.currentTarget.value;
@@ -365,7 +458,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
   }
 
-  private handleClickReading = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  public handleClickReading = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const value = e.currentTarget.value;
     const valueSelectedReading = this.state.myValueReading;
     this.setState({ valuereadingOptions: Number(value) });
@@ -394,7 +487,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
   }
 
-  private handleClickSource = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  public handleClickSource = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const value = e.currentTarget.value;
     const valueSelectedSource = this.state.myValueSource;
     this.setState({ valuersourceOptions: Number(value) });
@@ -423,7 +516,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
   }
 
-  private handleChangeSelectCore = async (newValue: Array<any>) => {
+  public handleChangeSelectCore = async (newValue: Array<any>) => {
     const ArrayValue: Array<number> = [];
     const { newAssignmentStore } = this.props;
     const { valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
@@ -464,7 +557,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
   }
 
-  private handleChangeSelectGoals = async (newValue: Array<any>) => {
+  public handleChangeSelectGoals = async (newValue: Array<any>) => {
     const ArrayValue: Array<number> = [];
     this.setState(
       {
@@ -498,7 +591,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
   }
 
-  private handleChangeIsAnswered = (e: ChangeEvent<HTMLSelectElement>) => {
+  public handleChangeIsAnswered = (e: ChangeEvent<HTMLSelectElement>) => {
     const value = e.currentTarget.value;
 
     QueryStringHelper.set(
@@ -509,7 +602,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
   }
 
-  private handleChangeIsEvaluated = (e: ChangeEvent<HTMLSelectElement>) => {
+  public handleChangeIsEvaluated = (e: ChangeEvent<HTMLSelectElement>) => {
     const value = e.currentTarget.value;
 
     QueryStringHelper.set(
@@ -520,14 +613,14 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
   }
 
-  private handleChangeSearchQuery = (e: ChangeEvent<HTMLInputElement>) => {
+  public handleChangeSearchQuery = (e: ChangeEvent<HTMLInputElement>) => {
     if (lettersNoEn(e.target.value)) {
       QueryStringHelper.set(this.props.history, QueryStringKeys.SEARCH, e.currentTarget.value);
       QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
     }
   }
 
-  private onChangePage = ({ selected }: { selected: number }) => {
+  public onChangePage = ({ selected }: { selected: number }) => {
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, selected + 1);
   }
 
@@ -613,7 +706,12 @@ class AssignmentsPageWrapper extends Component<Props, State> {
           id: Number(element.id),
           name: element.name,
           // tslint:disable-next-line: variable-name
-          wp_id: element.wp_id
+          wp_id: element.wp_id,
+          filterStatus: element.filterStatus,
+          // tslint:disable-next-line: variable-name
+          grade_parent: element.grade_parent,
+          // tslint:disable-next-line: variable-name
+          name_sub: element.name_sub
         });
       });
     }
@@ -706,9 +804,42 @@ class AssignmentsPageWrapper extends Component<Props, State> {
         );
       }
     );
-    this.setState({
-      optionsGrades : this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
-    });
+    this.setState(
+      {
+        optionsGrades : this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
+      },
+      () => {
+        this.setState(
+          {
+            gradesArrayFilter: this.renderDataGrades(this.state.optionsGrades)
+          },
+          () => {
+            const ArrayValue: Array<number> = [];
+            const newArrayGradeChildren: Array<Grade> = [];
+            this.state.gradesArrayFilter!.forEach((element) => {
+              if (element.grade_parent !== null) {
+                newArrayGradeChildren.push(element);
+              }
+              this.state.myValueGrade.forEach((el) => {
+                if (Number(element.id) === Number(el)) {
+                  ArrayValue.push(element.id);
+                }
+              });
+            });
+            this.setState({
+              myValueGrade: ArrayValue
+            });
+            if (grades !== '' && subjects !== '') {
+              QueryStringHelper.set(
+                this.props.history,
+                QueryStringKeys.GRADE,
+                String(ArrayValue)
+              );
+            }
+          }
+        );
+      }
+    );
     this.setState({ filtersAjaxLoading: false });
   }
 
@@ -718,6 +849,23 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       returnArray.push({
         id: Number(element.id),
         title: element.title
+      });
+    });
+    return returnArray;
+  }
+
+  public renderDataGrades = (data: Array<GrepFilters>) => {
+    const returnArray: Array<any> = [];
+    data!.forEach((element) => {
+      returnArray.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(element.wp_id),
+        title: element.name,
+        filterStatus: element.filterStatus,
+        // tslint:disable-next-line: variable-name
+        grade_parent: element.grade_parent,
+        // tslint:disable-next-line: variable-name
+        name_sub: element.name_sub
       });
     });
     return returnArray;
@@ -847,18 +995,21 @@ class AssignmentsPageWrapper extends Component<Props, State> {
           isAssignmentsPathPage
           isAssignmentsListPage
           placeholder={intl.get('assignments search.Search for assignments')}
+          customGradesList={this.state.gradesArrayFilter}
           customSubjectsList={this.state.subjectsArrayFilter}
           customCoreTPList={this.state.optionsCore}
           customMultiList={this.state.optionsMulti}
           customReadingList={this.state.optionsReading}
           customSourceList={this.state.optionsSource}
           customGoalsTPList={this.state.optionsGoals}
+          customGradeChildrenList={this.state.customGradeChildrenList}
           filtersisUsed={this.state.filtersisUsed}
           filtersAjaxLoading={this.state.filtersAjaxLoading}
           filtersAjaxLoadingGoals={this.state.filtersAjaxLoadingGoals}
           // METHODS
           handleChangeSubject={this.handleChangeSubject}
           handleChangeGrade={this.handleChangeGrade}
+          handleClickChildrenGrade={this.handleClickChildrenGrade}
           handleInputSearchQuery={this.handleChangeSearchQuery}
           handleChangeSorting={this.handleChangeSorting}
           handleChangeAnswerStatus={this.handleChangeIsAnswered}

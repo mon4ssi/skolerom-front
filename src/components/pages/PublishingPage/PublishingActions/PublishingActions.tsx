@@ -1641,7 +1641,8 @@ export class PublishingActions extends Component<Props, State> {
       visibleGoals = realOptionsGoals!.map((goal) => {
         const visibleGoalsGrade = goal!.grades!.map((grade) => {
           const title = grade.name.split('.', 1);
-          return <span key={grade.id}>{title}</span>;
+          const mytitle = (grade.name.split('.')[0].split(' ').length > 1) ? title : `${title} ${intl.get('new assignment.grade')}` ;
+          return <span key={grade.id}>{mytitle}</span>;
         });
         const visibleGoalsCore = goal!.coreElements!.map((core) => {
           const title = core.description;
@@ -1661,7 +1662,7 @@ export class PublishingActions extends Component<Props, State> {
                 <img src={checkActive} alt="Check" title="check" className={'checkImgFalse'} />
               </button>
             </div>
-            <div className="itemTablesTd grade">{visibleGoalsGrade} {intl.get('new assignment.grade')}</div>
+            <div className="itemTablesTd grade">{visibleGoalsGrade} </div>
             <div className="itemTablesTd subjects">{goal!.subject!.name}</div>
             <div className="itemTablesTd core">{visibleGoalsCore}</div>
             <div className="itemTablesTd goals">{goal!.description}</div>

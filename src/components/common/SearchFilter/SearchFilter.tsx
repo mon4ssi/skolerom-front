@@ -625,7 +625,6 @@ class SearchFilter extends Component<Props, State> {
   public renderFiltersMainGrade = () => {
     const { assignmentListStore, handleClickGrade, customGradesList, gradeFilterValue, defaultValueGradeFilter } = this.props;
     const grades = (customGradesList || assignmentListStore!.getAllGrades()).sort(this.sortSelectors);
-
     const arrayDefaults = (defaultValueGradeFilter) ? defaultValueGradeFilter.split(',') : [];
 
     const visibleGrades = grades.map((grade) => {
@@ -1397,8 +1396,9 @@ class SearchFilter extends Component<Props, State> {
                 <div className="itemFilter__right">
                   <h3>{intl.get('generals.grade')}</h3>
                   <div className="itemFilter__core">
-                    {this.renderFiltersGrade()}
+                    {this.renderFiltersMainGrade()}
                   </div>
+                  {this.renderFiltersMainGradeChildren()}
                 </div>
               </div>
             </div>
@@ -1495,8 +1495,9 @@ class SearchFilter extends Component<Props, State> {
               <div className="itemFilter__right">
                 <h3>{intl.get('generals.grade')}</h3>
                 <div className="itemFilter__core">
-                  {this.renderFiltersGrade()}
+                  {this.renderFiltersMainGrade()}
                 </div>
+                {this.renderFiltersMainGradeChildren()}
               </div>
             </div>
           </div>

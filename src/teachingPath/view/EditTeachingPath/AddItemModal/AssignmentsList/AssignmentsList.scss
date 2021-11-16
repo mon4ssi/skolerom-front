@@ -4,6 +4,9 @@
   position: relative;
   height: calc(100% - 60px);
   background: #E7ECEF;
+  .gradesChildrenItems {
+    margin-top: 15px;
+  }
 
   .assignmentsListHeader {
     width: calc(100% - 40px);
