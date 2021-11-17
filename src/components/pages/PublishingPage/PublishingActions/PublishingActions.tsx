@@ -1516,12 +1516,12 @@ export class PublishingActions extends Component<Props, State> {
 
   public sendValidbutton = () => {
     if (!this.state.isValid) {
-      if (this.state.valueGradesOptions.length > 0 && this.state.valueGoalsOptions.length > 0 && this.state.valuereadingOptions !== null && this.state.valuereadingOptions !== 0) {
+      if (this.state.valueGradesOptions.length > 0 && this.state.valueGoalsOptions.length > 0) {
         this.props.store!.setIsActiveButtons();
       } else {
         if (typeof(this.state.editvalueGoalsOptions) !== 'undefined') {
           if (this.state.editvalueGoalsOptions!.length > 0) {
-            if (this.state.valueGradesOptions.length > 0 && this.state.valueGoalsOptions.length > 0 && this.state.valuereadingOptions !== null && this.state.valuereadingOptions !== 0) {
+            if (this.state.valueGradesOptions.length > 0 && this.state.valueGoalsOptions.length > 0) {
               this.props.store!.setIsActiveButtons();
             } else {
               this.props.store!.setIsActiveButtonsFalse();
@@ -1641,7 +1641,7 @@ export class PublishingActions extends Component<Props, State> {
       visibleGoals = realOptionsGoals!.map((goal) => {
         const visibleGoalsGrade = goal!.grades!.map((grade) => {
           const title = grade.name.split('.', 1);
-          const mytitle = (grade.name.split('.')[0].split(' ').length > 1) ? title : `${title} ${intl.get('new assignment.grade')}` ;
+          const mytitle = (grade.name.split('.').length === 1) ? title : `${title} ${intl.get('new assignment.grade')}` ;
           return <span key={grade.id}>{mytitle}</span>;
         });
         const visibleGoalsCore = goal!.coreElements!.map((core) => {
