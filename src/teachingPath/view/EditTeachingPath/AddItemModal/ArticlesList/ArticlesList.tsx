@@ -1564,7 +1564,7 @@ export class ArticlesList extends Component<Props, State> {
 
   public renderArticle = (article: Article, index: number) => (
     <ArticleItem
-      key={article.id + index}
+      key={article.id}
       article={article}
       allItems={this.state.itemsForNewChildren}
       addItem={this.addItemToNewChild}
@@ -1632,20 +1632,8 @@ export class ArticlesList extends Component<Props, State> {
       return <div className={'noResults'}>{intl.get('edit_teaching_path.No results found')}</div>;
     }
 
-    const sortedArticles = selectedAndLoadedArticles.sort(
-      (article) => {
-        const isSelected = !!this.state.itemsForNewChildren.filter(
-          (item: Article) => item.id === article.id
-        ).length;
-        if (isSelected) {
-          return -1;
-        }
-        return 0;
-      }
-    );
-
     return (
-      sortedArticles.map(this.renderArticle)
+      selectedAndLoadedArticles.map(this.renderArticle)
     );
   }
 

@@ -422,7 +422,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       );
     }
 
-    return selectedAndLoadedArticles.sort(this.sortSelectedCards).map((article, index) => article.id ? (
+    return selectedAndLoadedArticles.map((article, index) => article.id ? (
       <RelatedArticlesCard
         key={article.id}
         article={article}
