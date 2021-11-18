@@ -196,13 +196,25 @@ export class DraftTeachingPath extends TeachingPath {
         myFirstSubjects = this.anySubjects(myFirstSubjects, element);
       });
       if (typeof(myFirstSubjects) !== 'undefined') {
-        this.subjects.splice(0, this.subjects.length);
         myFirstSubjects!.forEach((e) => {
-          this.subjects.push(e);
+          if (!this.subjects.includes(e)) {
+            this.subjects.push(e);
+          }
         });
       }
     }
     /*}*/
+  }
+
+  @action
+  public improbeSubjects(subjects: Array<Subject>) {
+    if (this.isCopy) {
+      subjects!.forEach((e) => {
+        if (!this.subjects.includes(e)) {
+          this.subjects.push(e);
+        }
+      });
+    }
   }
 
   public anyGoals(butGoals: Array<GreepElements>, node: EditableTeachingPathNode) {
@@ -518,6 +530,11 @@ export class EditableTeachingPathNode extends TeachingPathNode {
   public setSelectedQuestion = (title: string) => {
     this._selectQuestion = title;
     this.draftTeachingPath.save();
+  }
+
+  @action
+  public improbeSubjects = (subjects: Array<Subject>) => {
+    this.draftTeachingPath.improbeSubjects(subjects);
   }
 
   @action

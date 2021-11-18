@@ -30,12 +30,12 @@ API.interceptors.request.use(
         const setCookie = document.cookie;
         const pathName: string = window.location.pathname;
 
-        if (pathName !== '/logout') {
+        /*if (pathName !== '/logout') {
           if (setCookie.split('sso-authcookie-skolerom').length <= 1) {
             storageInteractor.logOut();
             window.location.reload();
           }
-        }
+        }*/
 
         config.headers.Authorization = `Bearer ${token}`;
       }

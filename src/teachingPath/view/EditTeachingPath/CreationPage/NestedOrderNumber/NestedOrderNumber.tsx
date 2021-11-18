@@ -89,12 +89,18 @@ export class NestedOrderNumber extends Component<Props> {
 
   public sendDomain = async () => {
     const { editTeachingPathStore, node } = this.props;
-    this.setState({ loading: false });
     this.setState({ disabledbutton: true });
     const response = await editTeachingPathStore!.sendDataDomain(this.validUrlPath(this.state.valueInputDomain));
     if (node !== null) {
       editTeachingPathStore!.setCurrentNode(node!);
-      this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
+      editTeachingPathStore!.currentNode!.children[0].editItemDomain(response);
+      editTeachingPathStore!.currentEntity!.save();
+      editTeachingPathStore!.setCurrentNode(null);
+      this.setState({
+        modalDomain: false
+      });
+      document.removeEventListener('keyup', this.handleKeyboardControl);
+      /*this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
       const newChildren = this.state.itemsForNewChildren.map(
         item => editTeachingPathStore!.createNewNode(
           item,
@@ -107,12 +113,12 @@ export class NestedOrderNumber extends Component<Props> {
           idNode = child.items![0].value.id;
           node.removeChild(child);
         }
-      );
+      );*/
       setTimeout(
         () => {
-          node.addChild(newChildren[0], idNode);
+          /*node.addChild(newChildren[0], idNode);
           editTeachingPathStore!.setCurrentNode(null);
-          document.removeEventListener('keyup', this.handleKeyboardControl);
+          document.removeEventListener('keyup', this.handleKeyboardControl);*/
         },
         TIMEOUT
       );

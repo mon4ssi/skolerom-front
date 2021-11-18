@@ -69,6 +69,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   };
 
   public componentDidMount() {
+    this.props.node.improbeSubjects(this.props.node.draftTeachingPath.subjects);
     if (this.titleRef && this.titleRef.current) {
       const valueLength = this.titleRef.current.props.value!.length;
       this.handleChangeNumberOfTitleCols(valueLength);
