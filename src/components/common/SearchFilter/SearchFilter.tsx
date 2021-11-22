@@ -1210,12 +1210,10 @@ class SearchFilter extends Component<Props, State> {
                 <div className="itemFilter__core">
                   {this.renderFiltersGrade()}
                 </div>
-                <div className="item_filter__core__children">
-                  {this.renderFiltersGradeChildren()}
-                </div>
               </div>
             </div>
           </div>
+          {this.renderFiltersGradeChildren()}
           <div className="FiltersModal__body__item">
             <div className="itemFilter">
               <div className="itemFilter__left">
