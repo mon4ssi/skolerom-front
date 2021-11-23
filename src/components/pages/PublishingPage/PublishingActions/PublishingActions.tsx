@@ -872,7 +872,7 @@ export class PublishingActions extends Component<Props, State> {
     let myplaceholder = intl.get('publishing_page.subject');
 
     const subjects = store!.getAllSubjects().filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.subjectToTagProp);
-    const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
+    const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp).filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
     let filterSelectedSubjects = this.compareTwoArraysReturnValue(subjects, selectedSubjects);
     if (selectedSubjects.length > 0) {
       myplaceholder = '';
@@ -929,7 +929,7 @@ export class PublishingActions extends Component<Props, State> {
     const { store } = this.props;
     const { optionsGrades, valueGradesOptions } = this.state;
     const { currentEntity } = store!;
-    const selectedGrades = currentEntity!.getListOfGrades().map(this.gradeToTagProp);
+    const selectedGrades = currentEntity!.getListOfGrades().filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.gradeToTagProp);
     const myplaceholder = (selectedGrades.length > 0) ? '' : intl.get('publishing_page.grade');
     const grades = store!.getAllGrades().filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.gradeToTagProp).sort((a, b) => a.id - b.id);
     let filterSelectedGrades = this.compareTwoArraysReturnValue(grades, selectedGrades);
