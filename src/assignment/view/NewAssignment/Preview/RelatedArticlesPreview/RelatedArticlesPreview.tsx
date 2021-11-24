@@ -572,9 +572,18 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
           {
             gradeParentId: newGradeId,
             MySelectGrade: filterGrade,
-            selectedGradeChildrenAll: newArrayGradeChildren
+            selectedGradeChildrenAll: []
           },
-          () => { this.handleClickGradeAfter(); }
+          () => {
+            this.setState(
+              {
+                gradeParentId: newGradeId,
+                MySelectGrade: filterGrade,
+                selectedGradeChildrenAll: newArrayGradeChildren
+              },
+              () => { this.handleClickGradeAfter(); }
+            );
+          }
         );
       }
     } else {
@@ -658,15 +667,41 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         gradeSubNameLst.forEach((iGradeSubName: string) => {
           if (!lstChildren.includes(iGradeSubName)) {
             lstChildren.push(iGradeSubName);
-
-            newArrayGradeChildren.push({
-              id: Number(gradeSubId),
-              title: iGradeSubName
-            });
           }
         });
       }
     });
+
+    if (lstChildren.length > 0) {
+      let numCont:number = 1;
+      lstChildren.forEach((itemChild: any) => {
+        const listGradeChildren:Array<string> = [];
+
+        iGradeArr.forEach((item: any) => {
+          // tslint:disable-next-line: variable-name
+          const lstGradesAllorArr: Array<string> = item.grade_parent;
+
+          if (lstGradesAllorArr.includes(String(gradeIdParent))) {
+
+            // tslint:disable-next-line: variable-name
+            const gradeSubName = item.name_sub;
+            const gradeSubNameLst: Array<string> = gradeSubName.split(':');
+
+            if (gradeSubNameLst.includes(itemChild)) {
+              listGradeChildren.push(item.grade_id);
+            }
+          }
+        });
+
+        newArrayGradeChildren.push({
+          id: numCont,
+          title: itemChild,
+          filterStatus: listGradeChildren.join()
+        });
+
+        numCont += 1;
+      });
+    }
 
     lstResp.push(filterGrade);
     lstResp.push(newArrayGradeChildren);

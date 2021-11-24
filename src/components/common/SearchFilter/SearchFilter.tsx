@@ -588,8 +588,7 @@ class SearchFilter extends Component<Props, State> {
     const grades = customGradeChildrenList!.sort(this.sortSelectors);
     const arrayDefaults = (defaultValueGradeFilter) ? defaultValueGradeFilter.split(',') : [];
     const visibleGrades = grades.map((grade) => {
-      let classD = (arrayDefaults[0] === String(grade.id) ? 'active' : '');
-      if (grade.filterStatus === 'inactive') { classD += ' downlight'; }
+      const classD = (arrayDefaults.join() === grade.filterStatus ? 'active' : '');
       return (
         <button
           value={grade.id}
