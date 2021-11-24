@@ -1111,6 +1111,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
     this.setState({ myValueReading: [] });
     this.setState({ myValueSource: [] });
     this.setState({ goalValueFilter: [] });
+    this.setState({ optionsGoals: [] });
 
     const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
     GradeFilterSubjectArray.forEach((e) => {

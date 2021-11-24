@@ -635,6 +635,15 @@ class AssignmentsPageWrapper extends Component<Props, State> {
         });
       });
     }
+    if (type === 'goal') {
+      data!.goalFilters!.forEach((element) => {
+        returnArray.push({
+          // tslint:disable-next-line: variable-name
+          value: Number(element.id),
+          label: element.description
+        });
+      });
+    }
     if (type === 'multi') {
       data!.mainTopicFilters!.forEach((element) => {
         returnArray.push({
@@ -772,7 +781,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       optionsSource: this.renderValueOptionsNumbers(grepFiltersDataAwait, 'source')
     });
     this.setState({
-      optionsGoals: this.renderValueOptions(grepFiltersDataAwait, 'goals').sort((a, b) => (a.label > b.label) ? 1 : -1)
+      optionsGoals: this.renderValueOptions(grepFiltersDataAwait, 'goal').sort((a, b) => (a.label > b.label) ? 1 : -1)
     });
     this.setState(
       {
@@ -928,6 +937,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     this.setState({ myValueReading: [] });
     this.setState({ myValueSource: [] });
     this.setState({ goalValueFilter: [] });
+    this.setState({ optionsGoals: [] });
 
     const GradeFilterSubjectArray = Array.from(document.getElementsByClassName('subjectsFilterClass') as HTMLCollectionOf<HTMLElement>);
     GradeFilterSubjectArray.forEach((e) => {
