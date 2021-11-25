@@ -246,7 +246,6 @@ class SearchFilter extends Component<Props, State> {
     const value = orderFieldFilterValue && orderFilterValue ?
       `${orderFieldFilterValue} ${orderFilterValue}` :
       `${SortingFilter.DEADLINE} ${SortingFilter.DESC}`;
-
     return (
       <select className="SearchFilter__select SearchFilter__select_sorting" onChange={handleChangeSorting} value={value}>
         <option value={`${SortingFilter.DEADLINE} ${SortingFilter.ASC}`}>
