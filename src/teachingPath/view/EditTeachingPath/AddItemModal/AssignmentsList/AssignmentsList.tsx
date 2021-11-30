@@ -139,6 +139,7 @@ interface State {
   greeddata: boolean;
   selectedAssignment: Assignment | null;
   selectedAssignmentTitle: string;
+  selectedAssignmentID: string;
   selectedAssignmentDescription: string;
   expand: boolean;
   expandCore: boolean;
@@ -196,6 +197,7 @@ export class AssignmentsList extends Component<Props, State> {
       greeddata: false,
       expand: true,
       selectedAssignmentTitle: '',
+      selectedAssignmentID: '',
       selectedAssignmentDescription: '',
       selectedAssignment: null,
       expandCore: true,
@@ -505,6 +507,7 @@ export class AssignmentsList extends Component<Props, State> {
       if (this.state.isEditSingle) {
         this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, item] });
         this.setState({ greeddata: true });
+        this.setState({ selectedAssignmentID: String(item.id) });
         this.setState({ selectedAssignmentTitle: item.title });
         this.setState({ selectedAssignmentDescription: item.description });
         this.setState({ selectedAssignment: item });
@@ -532,9 +535,9 @@ export class AssignmentsList extends Component<Props, State> {
       greeddata: true,
       selectedAssignmentTitle: item.title,
       selectedAssignmentDescription: item.description,
+      selectedAssignmentID: String(item.id),
       selectedAssignment: item
     });
-
   }
 
   public removeItemFromNewChild = async (item: Assignment) => {
@@ -1336,16 +1339,22 @@ export class AssignmentsList extends Component<Props, State> {
       </div>
     );
   }
+  public openAssignmentReading = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const url = e.currentTarget.value;
+    window.open(`${url}`, '_blank');
+  }
 
   public renderInformationContent = () => {
-    const { selectedAssignmentTitle, selectedAssignmentDescription, expand } = this.state;
+    const { selectedAssignmentTitle, selectedAssignmentDescription, selectedAssignmentID, expand } = this.state;
     const textexpand = expand ? intl.get('edit_teaching_path.modals.expandclose') : intl.get('edit_teaching_path.modals.expand');
+    const url = `/assignments/view/${selectedAssignmentID}?preview`;
     return (
       <div className="defaultContentModal">
         <h2>{intl.get('edit_teaching_path.modals.assignments_title')}</h2>
         <div className="defaultContentModal__content">
           <h3>{selectedAssignmentTitle}</h3>
           <p>{selectedAssignmentDescription}</p>
+          <button value={url} className="CreateButton" onClick={this.openAssignmentReading}>{intl.get('edit_teaching_path.modals.assignments_read')}</button>
         </div>
         <div className="defaultContentModal__expand">
           <div className={`expandContent ${expand && 'active'}`} onClick={this.toggleData}>{textexpand}</div>
