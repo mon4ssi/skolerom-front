@@ -134,7 +134,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     let image = item.value.images ?
       item.value.images.url : item.value.featuredImage ?
         item.value.featuredImage : item.value.relatedArticles && item.value.relatedArticles.length > 0 ?
-          item.value.relatedArticles[0].images.url : placeholderImg;
+          (item.value.relatedArticles[0].images !== undefined) ? item.value.relatedArticles[0].images.url : placeholderImg : placeholderImg;
 
     const levels = item.type === TeachingPathNodeType.Assignment ?
       item.value.levels :
