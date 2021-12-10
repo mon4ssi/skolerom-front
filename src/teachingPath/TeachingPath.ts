@@ -186,7 +186,7 @@ export interface TeachingPathArgs {
   isCopy?: boolean;
   grepMainTopicsIds?: Array<number>;
   grepCoreElementsIds?: Array<number>;
-  grepReadingInSubjectId?: number;
+  grepReadingInSubjectId?: Array<number>;
   grepGoalsIds?: Array<number>;
   grepGoals?: Array<GreepElements>;
 }
@@ -228,7 +228,7 @@ export class TeachingPath {
   @observable protected _isCopy?: boolean;
   @observable protected _grepCoreElementsIds?: Array<number>;
   @observable protected _grepMainTopicsIds?: Array<number>;
-  @observable protected _grepReadingInSubjectId?: number;
+  @observable protected _grepReadingInSubjectId?: Array<number>;
   @observable protected _grepGoalsIds?: Array<number>;
   @observable protected _grepGoals?: Array<GreepElements> = [];
 

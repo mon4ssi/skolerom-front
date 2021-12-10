@@ -28,7 +28,19 @@
       margin: 10px 0 20px;
     }
   }
-
+  .checkRelated {
+    display: flex;
+    align-items: center;
+    .hiddenRelatedCheck {
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      margin-left: 40px;
+      img {
+        margin: 5px;
+      }
+    }
+  }
   .articlesWrapper {
 
     .relatedArticleContent {

@@ -47,7 +47,7 @@ interface State {
   valueCoreOptions: Array<number>;
   valueMultiOptions: Array<number>;
   valueSourceOptions: Array<number>;
-  valuereadingOptions: number;
+  valuereadingOptions: Array<number>;
   valueGradesOptions: Array<number>;
   valueSubjectsOptions: Array<number>;
   optionsGoals: Array<GoalsData>;
@@ -55,7 +55,7 @@ interface State {
   valueGoalsOptions: Array<number>;
   editValueCoreOptions: Array<number> | undefined;
   editvalueMultiOptions: Array<number> | undefined;
-  editvaluereadingOptions: number| undefined;
+  editvaluereadingOptions: Array<number> | undefined;
   editvalueGoalsOptions: Array<number> | undefined;
   page: number;
   pageCurrent: number;
@@ -84,7 +84,7 @@ export class PublishingActions extends Component<Props, State> {
       valueCoreOptions: [],
       valueMultiOptions: [],
       valueSourceOptions: [],
-      valuereadingOptions: 0,
+      valuereadingOptions: [],
       valueGradesOptions: [],
       valueSubjectsOptions: [],
       optionsGoals: [],
@@ -92,7 +92,7 @@ export class PublishingActions extends Component<Props, State> {
       valueGoalsOptions: [],
       editValueCoreOptions: [],
       editvalueMultiOptions: [],
-      editvaluereadingOptions: 0,
+      editvaluereadingOptions: [],
       editvalueGoalsOptions: [],
       isValid: false,
       isValidPrivate: true,
@@ -227,9 +227,6 @@ export class PublishingActions extends Component<Props, State> {
       this.setState(
         {
           valuereadingOptions: store!.currentEntity!.getListOfgrepReadingInSubjectId()!
-        },
-        () => {
-          this.sendValidbutton();
         }
       );
     }
@@ -400,10 +397,6 @@ export class PublishingActions extends Component<Props, State> {
       });
     }
     if (type === 'reading') {
-      returnArray.push({
-        value: 0,
-        label: intl.get('assignments search.Choose reading')
-      });
       data!.readingInSubjects!.forEach((element) => {
         returnArray.push({
           // tslint:disable-next-line: variable-name
@@ -1421,7 +1414,7 @@ export class PublishingActions extends Component<Props, State> {
     );
   }
 
-  public handleChangeSelectReading = async (newValue: any) => {
+  /*public handleChangeSelectReading = async (newValue: any) => {
     const { currentEntity } = this.props.store!;
     const { valuereadingOptions } = this.state;
     if (newValue !== 0) {
@@ -1444,7 +1437,7 @@ export class PublishingActions extends Component<Props, State> {
       );
     }
     currentEntity!.setGrepReadingInSubjectId(newValue.value);
-  }
+  }*/
 
   public searchValueInNumbers = (emisor: Array<GreepSelectValue>, receptor: number | undefined) => {
     let valueCoreElement:any = emisor[0];
@@ -1466,58 +1459,58 @@ export class PublishingActions extends Component<Props, State> {
     return valueCoreElement;
   }
 
-  public renderReadingInSubject = () => {
-    const { optionsReading, editvaluereadingOptions } = this.state;
-    const customStyles = {
-      option: () => ({
-        fontSize: '14px',
-        padding: '5px',
-        borderBottom: '1px solid #e7ecef',
-        cursor: 'pointer'
-      }),
-      control: () => ({
-        display: 'flex',
-        borderRadius: '5px',
-        border: '1px solid #0b2541',
-        color: '#0B2541',
-        fontSize: '14px',
-        background: '#E7ECEF',
-        padding: '3px'
-      })
-    };
-    const NoOptionsMessage = () => {
-      const { optionsCore } = this.state;
-      return (
-        <div className="centerMin">
-          {intl.get('edit_teaching_path.no_options')}
-        </div>
-      );
-    };
-    if (typeof(editvaluereadingOptions) !== 'undefined') {
-      if (editvaluereadingOptions! > 0) {
-        const value = this.searchValueInNumbers(optionsReading, editvaluereadingOptions);
-        const placeho = this.searchStringValueInNumbers(optionsReading, editvaluereadingOptions);
-        return (
-          <div className="itemsFlex">
-            <Select
-              components={{ NoOptionsMessage }}
-              styles={customStyles}
-              options={optionsReading}
-              onChange={this.handleChangeSelectReading}
-              placeholder={placeho}
-            />
-          </div>
-        );
+  public addReading = async (id: number) => {
+    const { currentEntity } = this.props.store!;
+    const { valuereadingOptions } = this.state;
+    const ArrayValueReading = (this.state.valuereadingOptions === null) ? [] : this.state.valuereadingOptions;
+    ArrayValueReading.push(id);
+    const uniqueArray = ArrayValueReading.filter((item, pos) => (ArrayValueReading.indexOf(item) === pos));
+    this.setState(
+      {
+        valuereadingOptions: uniqueArray
       }
+    );
+    currentEntity!.setGrepReadingInSubjectId(uniqueArray);
+  }
+
+  public removeReading = async (id: number) => {
+    const { currentEntity } = this.props.store!;
+    const { valuereadingOptions } = this.state;
+    const ArrayValueReading = this.state.valuereadingOptions;
+    const index = ArrayValueReading.indexOf(id);
+    if (index > -1) {
+      ArrayValueReading.splice(index, 1);
     }
+    if (!valuereadingOptions.includes(id)) {
+      this.setState(
+        {
+          valuereadingOptions: ArrayValueReading
+        }
+      );
+      currentEntity!.setGrepReadingInSubjectId(ArrayValueReading);
+    }
+  }
+
+  public renderReadingInSubject = () => {
+    const { store } = this.props;
+    const { optionsReading, editvaluereadingOptions } = this.state;
+    const newOptionsReading = optionsReading.map(this.grepToTagProp);
+    const valueReading = (store!.currentEntity!.getListOfgrepReadingInSubjectId() !== undefined) ? store!.currentEntity!.getListOfgrepReadingInSubjectId() : [];
+    const selectedReading = this.grepNumbersToTagprop(valueReading, newOptionsReading);
+    const myplaceholder = (selectedReading.length > 0) ? '' : intl.get('assignments search.Choose reading');
     return (
-      <div className="itemsFlex">
-        <Select
-          components={{ NoOptionsMessage }}
-          styles={customStyles}
-          options={optionsReading}
-          onChange={this.handleChangeSelectReading}
-          placeholder={intl.get('assignments search.Choose reading')}
+      <div className="itemsFlex grade">
+        <TagInputComponent
+          dataid="renderGradeInput"
+          className="filterBy darkTheme"
+          tags={newOptionsReading}
+          addTag={this.addReading}
+          currentTags={selectedReading}
+          orderbyid={true}
+          removeTag={this.removeReading}
+          placeholder={myplaceholder}
+          listView
+          temporaryTagsArray
         />
       </div>
     );

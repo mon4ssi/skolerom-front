@@ -200,7 +200,8 @@
     "active": "Aktiv",
     "inactive": "Inaktiv",
     "due_first": "først",
-    "due_last": "sist"
+    "due_last": "sist",
+    "hidden_related": "Hide articles in the student view"
   },
   "assignment list": {
     "question": "spørsmål",

@@ -244,7 +244,7 @@ const buildRelatedArticleDTO = (articles: Array<Article>) => (
     })),
     wpId: article.id,
     title: article.title,
-
+    isHidden: article.isHidden
   }))
 );
 

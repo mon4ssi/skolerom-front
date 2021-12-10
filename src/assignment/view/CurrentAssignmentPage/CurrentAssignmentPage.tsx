@@ -228,7 +228,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
         return this.updateQueryString();
       }
 
-      if (currentQuestionaryStore!.assignment!.relatedArticles.length > 0) {
+      if (currentQuestionaryStore!.assignment!.relatedArticles.length > 0 && !currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden) {
         currentQuestionaryStore!.setCurrentQuestion(-1);
         return this.updateQueryString();
       }
@@ -249,7 +249,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
       currentPage = ContentType.COVER;
       questionId = null;
     } else if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles.length > 0
-      && currentQuestionaryStore!.currentQuestionIndex < 0 && redirectData === undefined) {
+      && !currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden && currentQuestionaryStore!.currentQuestionIndex < 0 && redirectData === undefined) {
       currentPage = ContentType.ARTICLE_LIST;
       questionId = null;
     } else if (currentQuestionaryStore.currentAnswer) {

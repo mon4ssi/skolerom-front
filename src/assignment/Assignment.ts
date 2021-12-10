@@ -217,7 +217,7 @@ export interface AssignmentArgs {
   grepCoreElementsIds?: Array<number>;
   grepMainTopicsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
-  grepReadingInSubjectId?: number;
+  grepReadingInSubjectId?: Array<number>;
   grepGoals?: Array<GreepElements>;
 }
 
@@ -262,7 +262,7 @@ export class Assignment {
   public grepCoreElementsIds?: Array<number>;
   public grepMainTopicsIds?: Array<number>;
   public grepGoalsIds?: Array<number>;
-  public grepReadingInSubjectId?: number;
+  public grepReadingInSubjectId?: Array<number>;
 
   constructor(args: AssignmentArgs) {
     this._id = args.id;
@@ -1078,6 +1078,7 @@ export interface ArticleArgs {
   grepCoreelements?: Array<GreepElements>;
   grepGoals?: Array<GreepElements>;
   grepMaintopic?: Array<GreepElements>;
+  isHidden?: boolean;
 }
 
 export class Article {
@@ -1097,6 +1098,7 @@ export class Article {
   public grepCoreelements?: Array<GreepElements>;
   public grepGoals?: Array<GreepElements>;
   public grepMaintopic?: Array<GreepElements>;
+  public isHidden?: boolean;
 
   constructor(args: ArticleArgs) {
     this.id = args.id;
@@ -1115,6 +1117,7 @@ export class Article {
     this.grepCoreelements = args.grepCoreelements;
     this.grepGoals = args.grepGoals;
     this.grepMaintopic = args.grepMaintopic;
+    this.isHidden = args.isHidden;
   }
 }
 

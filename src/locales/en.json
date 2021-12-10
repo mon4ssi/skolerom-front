@@ -200,7 +200,8 @@
     "active": "Active",
     "inactive": "Inactive",
     "due_first": "due first",
-    "due_last": "due last"
+    "due_last": "due last",
+    "hidden_related": "Hide articles in the student view"
   },
   "assignment list": {
     "question": "question",

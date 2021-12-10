@@ -443,6 +443,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
   public closePanel = () => {
     this.props.newAssignmentStore!.setPreviewQuestionByIndex(0);
     this.context.changeContentType(AttachmentContentType.text);
+    this.props.newAssignmentStore!.relatedArticlesIsHidden();
     this.props.newAssignmentStore!.visibilityArticles = false;
   }
 

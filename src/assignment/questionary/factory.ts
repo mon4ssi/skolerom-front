@@ -63,7 +63,8 @@ const buildRelatedArticles = (articles: Array<Article>): Array<Article> => (
     id: Number(item.wpId),
     isRead: item.isRead,
     levels: item.levels,
-    correspondingLevelArticleId: item.correspondingLevelArticleId
+    correspondingLevelArticleId: item.correspondingLevelArticleId,
+    isHidden: item.isHidden
   }))
 );
 

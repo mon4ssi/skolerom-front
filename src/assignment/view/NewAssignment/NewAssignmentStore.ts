@@ -62,6 +62,7 @@ export class NewAssignmentStore {
 
   @observable public fetchingArticles: boolean = false;
   @observable public visibilityArticles: boolean = false;
+  @observable public hiddenArticles: boolean = false;
   @observable public isActiveButtons: boolean = false;
   @observable public fetchingAttachments: boolean = false;
   @observable public visibilityAttachments: boolean = false;
@@ -101,6 +102,12 @@ export class NewAssignmentStore {
   @computed
   public get ifSearchValueIsNumber() {
     return !isNaN(Number(this.searchValue.charAt(0)));
+  }
+
+  public relatedArticlesIsHidden() {
+    this.currentEntity!.relatedArticles.forEach((e) => {
+      e.isHidden = this.hiddenArticles;
+    });
   }
 
   public setIsActiveButtons() {

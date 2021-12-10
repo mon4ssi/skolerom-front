@@ -384,7 +384,7 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
-  public setGrepReadingInSubjectId = (data: number) => {
+  public setGrepReadingInSubjectId = (data: Array<number>) => {
     this._grepReadingInSubjectId = data;
     this.save();
   }

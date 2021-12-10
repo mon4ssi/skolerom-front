@@ -42,7 +42,7 @@ export interface DraftTeachingPathResponseDTO {
   isCopy: boolean;
   grepCoreElementsIds?: Array<number>;
   grepMainTopicsIds?: Array<number>;
-  grepReadingInSubjectId?: number;
+  grepReadingInSubjectId?: Array<number>;
   grepGoalsIds?: Array<number>;
   sources?: Array<number>;
 }

@@ -98,13 +98,11 @@ class AnswerCurrentQuestion extends Component<Props> {
         <AnswerCover switchCover={this.props.switchCover}/>
       );
     }
-
     const redirectData = (currentQuestionaryStore!.currentQuestionary && currentQuestionaryStore!.currentQuestionary.redirectData)
       ? currentQuestionaryStore!.currentQuestionary.redirectData
       : undefined;
-
     if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles.length > 0
-      && currentQuestionaryStore!.currentQuestionIndex < 0 && redirectData === undefined) {
+      && !currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden && currentQuestionaryStore!.currentQuestionIndex < 0 && redirectData === undefined) {
       return <AssignmentArticlesToReading readOnly={readOnly} />;
     }
 

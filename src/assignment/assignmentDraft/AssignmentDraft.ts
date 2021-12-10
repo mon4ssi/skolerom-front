@@ -231,7 +231,7 @@ export class DraftAssignment extends Assignment {
   }
 
   @action
-  public setGrepReadingInSubjectId = (data: number) => {
+  public setGrepReadingInSubjectId = (data: Array<number>) => {
     this.grepReadingInSubjectId = data;
     this.save();
   }
