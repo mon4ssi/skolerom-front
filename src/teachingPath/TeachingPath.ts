@@ -29,6 +29,8 @@ export interface TeachingPathRepo {
   finishTeachingPath(id: number): Promise<void>;
   deleteTeachingPathAnswers(teachingPathId: number, answerId: number): Promise<void>;
   copyTeachingPath(id: number): Promise<number>;
+  getGradeWpIds(gradeWpIds: Array<number>): Promise<Array<Grade>>;
+  getSubjectWpIds(subjectWpIds: Array<number>): Promise<Array<Subject>>;
 }
 
 export enum TeachingPathNodeType {
@@ -186,7 +188,7 @@ export interface TeachingPathArgs {
   isCopy?: boolean;
   grepMainTopicsIds?: Array<number>;
   grepCoreElementsIds?: Array<number>;
-  grepReadingInSubjectId?: Array<number>;
+  grepReadingInSubjectsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
   grepGoals?: Array<GreepElements>;
 }
@@ -228,7 +230,7 @@ export class TeachingPath {
   @observable protected _isCopy?: boolean;
   @observable protected _grepCoreElementsIds?: Array<number>;
   @observable protected _grepMainTopicsIds?: Array<number>;
-  @observable protected _grepReadingInSubjectId?: Array<number>;
+  @observable protected _grepReadingInSubjectsIds?: Array<number>;
   @observable protected _grepGoalsIds?: Array<number>;
   @observable protected _grepGoals?: Array<GreepElements> = [];
 
@@ -270,7 +272,7 @@ export class TeachingPath {
     this._isCopy = args.isCopy || false;
     this._grepCoreElementsIds = args.grepCoreElementsIds;
     this._grepMainTopicsIds = args.grepMainTopicsIds;
-    this._grepReadingInSubjectId = args.grepReadingInSubjectId;
+    this._grepReadingInSubjectsIds = args.grepReadingInSubjectsIds;
     this._grepGoalsIds = args.grepGoalsIds;
     this._grepGoals = args.grepGoals || [];
   }
@@ -291,8 +293,8 @@ export class TeachingPath {
   }
 
   @computed
-  public get grepReadingInSubjectId() {
-    return this._grepReadingInSubjectId;
+  public get grepReadingInSubjectsIds() {
+    return this._grepReadingInSubjectsIds;
   }
 
   @computed
@@ -417,7 +419,7 @@ export class TeachingPath {
   }
 
   public getListOfgrepReadingInSubjectId() {
-    return this._grepReadingInSubjectId;
+    return this._grepReadingInSubjectsIds;
   }
 
   public isOwnedByMe(): boolean {

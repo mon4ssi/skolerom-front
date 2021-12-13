@@ -609,6 +609,15 @@ export class NewAssignmentStore {
   public async assignStudentToAssignment(assignmentId:string, referralToken: string) {
     return this.distributionService.assignStudentToAssignment(assignmentId, referralToken);
   }
+
+  public async getGradeWpIds(gradeWpIds: Array<number>) {
+    return this.teachingPathService.getGradeWpIds(gradeWpIds);
+  }
+
+  public async getSubjectWpIds(subjectWpIds: Array<number>) {
+    return this.teachingPathService.getSubjectWpIds(subjectWpIds);
+  }
+
   public async getGrepFilters(grades: string, subjects: string) {
     return this.teachingPathService.getGrepFilters(grades, subjects);
   }

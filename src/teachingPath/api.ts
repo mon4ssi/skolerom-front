@@ -313,6 +313,26 @@ export class TeachingPathApi implements TeachingPathRepo {
     }
   }
 
+  public async getGradeWpIds(gradeWpIds: Array<number>): Promise<Array<Grade>> {
+    const response = await API.get('/api/teacher/classes/lang', {
+      params:
+      {
+        gradeWpIds
+      }
+    });
+    return response.data.data;
+  }
+
+  public async getSubjectWpIds(subjectWpIds: Array<number>): Promise<Array<Grade>> {
+    const response = await API.get('/api/teacher/subjects/lang', {
+      params:
+      {
+        subjectWpIds
+      }
+    });
+    return response.data.data;
+  }
+
   public async finishTeachingPath(id: number): Promise<void> {
     await API.get(`api/student/teaching-paths/${id}/finish`);
   }

@@ -51,6 +51,8 @@ interface State {
   valueGradesOptions: Array<number>;
   valueSubjectsOptions: Array<number>;
   optionsGoals: Array<GoalsData>;
+  optionsMyGrades: Array<Grade>;
+  optionsMySubjects: Array<Subject>;
   valueStringGoalsOptions: Array<string>;
   valueGoalsOptions: Array<number>;
   editValueCoreOptions: Array<number> | undefined;
@@ -88,6 +90,8 @@ export class PublishingActions extends Component<Props, State> {
       valueGradesOptions: [],
       valueSubjectsOptions: [],
       optionsGoals: [],
+      optionsMyGrades: [],
+      optionsMySubjects: [],
       valueStringGoalsOptions: [],
       valueGoalsOptions: [],
       editValueCoreOptions: [],
@@ -107,6 +111,8 @@ export class PublishingActions extends Component<Props, State> {
     const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, valuereadingOptions } = this.state;
     const arraySelectedIdsGrades: Array<number> = [];
     const arraySelectedIdsSubjects: Array<number> = [];
+    const arraySelectedIdsNewsGrades: Array<number> = [];
+    const arraySelectedIdsNewsSubjects: Array<number> = [];
     let listGoals: Array<string> = [];
 
     if (from === 'TEACHINGPATH') {
@@ -142,11 +148,27 @@ export class PublishingActions extends Component<Props, State> {
     const selectedSubjectsNature = store!.currentEntity!.getListOfSubjects();
     const selectedGrades = selectedGradesNature.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
     const selectedSubjects = selectedSubjectsNature.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+
     selectedGrades.forEach((ee) => {
+      arraySelectedIdsNewsGrades.push(Number(ee.id));
+    });
+    const newSelectGrades:Array<Grade> = await store!.getGradeWpIds(arraySelectedIdsNewsGrades);
+    newSelectGrades.forEach((ee) => {
       arraySelectedIdsGrades.push(Number(ee.id));
     });
+    this.setState({
+      optionsMyGrades : newSelectGrades
+    });
+
     selectedSubjects.forEach((ee) => {
+      arraySelectedIdsNewsSubjects.push(Number(ee.id));
+    });
+    const newselectedSubjects:Array<Grade> = await store!.getSubjectWpIds(arraySelectedIdsNewsSubjects);
+    newselectedSubjects.forEach((ee) => {
       arraySelectedIdsSubjects.push(Number(ee.id));
+    });
+    this.setState({
+      optionsMySubjects : newselectedSubjects
     });
     await new Promise(resolve => setTimeout(resolve, SETTIMEOUT));
     const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
@@ -181,6 +203,13 @@ export class PublishingActions extends Component<Props, State> {
     this.setState({
       editvaluereadingOptions : store!.currentEntity!.getListOfgrepReadingInSubjectId()!
     });
+    if (typeof(store!.currentEntity!.getListOfgrepGoalsIds()) !== 'undefined') {
+      this.setState(
+        {
+          valueGoalsOptions: store!.currentEntity!.getListOfgrepGoalsIds()!
+        }
+      );
+    }
     if (store!.currentEntity!.isPrivate) {
       this.setState(
         {
@@ -196,13 +225,6 @@ export class PublishingActions extends Component<Props, State> {
       this.setState(
         {
           isValidPrivate: false
-        }
-      );
-    }
-    if (typeof(store!.currentEntity!.getListOfgrepGoalsIds()) !== 'undefined') {
-      this.setState(
-        {
-          valueGoalsOptions: store!.currentEntity!.getListOfgrepGoalsIds()!
         }
       );
     }
@@ -230,7 +252,7 @@ export class PublishingActions extends Component<Props, State> {
         }
       );
     }
-    const arrayForGrades : Array<number> = [];
+    /*const arrayForGrades : Array<number> = [];
     if (selectedGrades.length > 0) {
       selectedGrades.forEach((element) => {
         for (let i = 0; i < this.state.optionsGrades.length; i = i + 1) {
@@ -245,8 +267,8 @@ export class PublishingActions extends Component<Props, State> {
       this.setState({
         valueGradesOptions: arrayForGrades!
       });
-    }
-    const arrayForSubjects : Array<number> = [];
+    }*/
+    /*const arrayForSubjects : Array<number> = [];
     if (selectedSubjects.length > 0) {
       selectedSubjects.forEach((element) => {
         for (let i = 0; i < this.state.optionsSubjects.length; i = i + 1) {
@@ -261,7 +283,7 @@ export class PublishingActions extends Component<Props, State> {
       this.setState({
         valueSubjectsOptions: arrayForSubjects!
       });
-    }
+    }*/
     if (listGoals.length > 0) {
       localStorage.setItem('goals', String(listGoals));
     } else {
@@ -275,7 +297,7 @@ export class PublishingActions extends Component<Props, State> {
     this.setState({
       valueStringGoalsOptions: listGoals
     });
-    const grepFiltergoalssDataAwait = await store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, arrayForGrades, arrayForSubjects, listGoals, MAGICNUMBER100, MAGICNUMBER1);
+    const grepFiltergoalssDataAwait = await store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, arraySelectedIdsGrades, arraySelectedIdsSubjects, listGoals, MAGICNUMBER100, MAGICNUMBER1);
     this.setState(
       {
         optionsGoals : grepFiltergoalssDataAwait.data,
@@ -871,11 +893,11 @@ export class PublishingActions extends Component<Props, State> {
   public renderSubjectInput = () => {
     const { store } = this.props;
     const { optionsSubjects, valueSubjectsOptions } = this.state;
-    let myplaceholder = intl.get('publishing_page.subject');
-
+    const selectedSubjects = this.state.optionsMySubjects.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.gradeToTagProp);
+    const myplaceholder = (selectedSubjects.length > 0) ? '' : intl.get('publishing_page.subject');
     const subjects = store!.getAllSubjects().filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.subjectToTagProp);
-    const selectedSubjects = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp).filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
-    let filterSelectedSubjects = this.compareTwoArraysReturnValue(subjects, selectedSubjects);
+
+    /*let filterSelectedSubjects = this.compareTwoArraysReturnValue(subjects, selectedSubjects);
     if (selectedSubjects.length > 0) {
       myplaceholder = '';
     }
@@ -895,7 +917,7 @@ export class PublishingActions extends Component<Props, State> {
           }
         }
       });
-    }
+    }*/
 
     return (
       <div className="itemsFlex subject">
@@ -904,7 +926,7 @@ export class PublishingActions extends Component<Props, State> {
           className="filterBy darkTheme"
           tags={subjects}
           addTag={this.addSubject}
-          currentTags={filterSelectedSubjects}
+          currentTags={selectedSubjects}
           orderbyid={false}
           removeTag={this.removeSubject}
           placeholder={myplaceholder}
@@ -931,10 +953,10 @@ export class PublishingActions extends Component<Props, State> {
     const { store } = this.props;
     const { optionsGrades, valueGradesOptions } = this.state;
     const { currentEntity } = store!;
-    const selectedGrades = currentEntity!.getListOfGrades().filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.gradeToTagProp);
+    const selectedGrades = this.state.optionsMyGrades.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.gradeToTagProp);
     const myplaceholder = (selectedGrades.length > 0) ? '' : intl.get('publishing_page.grade');
     const grades = store!.getAllGrades().filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.gradeToTagProp).sort((a, b) => a.id - b.id);
-    let filterSelectedGrades = this.compareTwoArraysReturnValue(grades, selectedGrades);
+    /*let filterSelectedGrades = this.compareTwoArraysReturnValue(grades, selectedGrades);
     if (filterSelectedGrades.length === 0) {
       filterSelectedGrades = selectedGrades;
     }
@@ -949,7 +971,7 @@ export class PublishingActions extends Component<Props, State> {
           }
         }
       });
-    }
+    }*/
     return (
       <div className="itemsFlex grade">
         <TagInputComponent
@@ -957,7 +979,7 @@ export class PublishingActions extends Component<Props, State> {
           className="filterBy darkTheme"
           tags={grades}
           addTag={this.addGrade}
-          currentTags={filterSelectedGrades}
+          currentTags={selectedGrades}
           orderbyid={true}
           removeTag={this.removeGrade}
           placeholder={myplaceholder}

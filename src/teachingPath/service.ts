@@ -40,6 +40,14 @@ export class TeachingPathService {
     return this.teachingPathRepo.getFiltersArticlePanel();
   }
 
+  public async getGradeWpIds(gradeWpIds: Array<number>) {
+    return this.teachingPathRepo.getGradeWpIds(gradeWpIds);
+  }
+
+  public async getSubjectWpIds(subjectWpIds: Array<number>) {
+    return this.teachingPathRepo.getSubjectWpIds(subjectWpIds);
+  }
+
   public async getTeachingPathDistributes(filter: Filter) {
     return this.teachingPathRepo.getTeachingPathDistributes(filter);
   }

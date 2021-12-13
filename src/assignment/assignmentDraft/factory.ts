@@ -39,7 +39,7 @@ export const buildDraftAssignment = (dto: DraftAssignmentResponseDTO): DraftAssi
     isCopy:dto.isCopy,
     grepCoreElementsIds:dto.grepCoreElementsIds,
     grepMainTopicsIds:dto.grepMainTopicsIds,
-    grepReadingInSubjectId:dto.grepReadingInSubjectId,
+    grepReadingInSubjectsIds:dto.grepReadingInSubjectsIds,
     grepGoalsIds:dto.grepGoalsIds,
     sources:dto.sources
   });
@@ -201,6 +201,6 @@ export const buildDraftAssignmentDTO = (
   grepCoreElementsIds: draftAssignment.grepCoreElementsIds,
   grepGoalsIds: draftAssignment.grepGoalsIds,
   grepMainTopicsIds: draftAssignment.grepMainTopicsIds,
-  grepReadingInSubjectId: draftAssignment.grepReadingInSubjectId,
+  grepReadingInSubjectsIds: draftAssignment.grepReadingInSubjectsIds,
   sources: draftAssignment.sources
 });

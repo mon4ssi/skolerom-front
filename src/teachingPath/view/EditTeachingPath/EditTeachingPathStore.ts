@@ -445,6 +445,16 @@ export class EditTeachingPathStore {
   }
 
   @action
+  public async getGradeWpIds(gradeWpIds: Array<number>) {
+    return this.teachingPathService.getGradeWpIds(gradeWpIds);
+  }
+
+  @action
+  public async getSubjectWpIds(subjectWpIds: Array<number>) {
+    return this.teachingPathService.getSubjectWpIds(subjectWpIds);
+  }
+
+  @action
   public async getGrepFilters(grades: string, subjects: string, coreElements?: string, goals?: string) {
     return this.teachingPathService.getGrepFilters(grades, subjects, coreElements, goals);
   }

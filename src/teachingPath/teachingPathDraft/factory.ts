@@ -58,7 +58,7 @@ export const buildDraftTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     isCopy: dto.isCopy,
     grepCoreElementsIds: dto.grepCoreElementsIds,
     grepMainTopicsIds: dto.grepMainTopicsIds,
-    grepReadingInSubjectId: dto.grepReadingInSubjectId,
+    grepReadingInSubjectsIds: dto.grepReadingInSubjectsIds,
     grepGoalsIds: dto.grepGoalsIds,
     sources: dto.sources,
   });
@@ -223,7 +223,7 @@ export const buildTeachingPathRequestDTO = (teachingPath: DraftTeachingPath) => 
   isCopy: teachingPath.isCopy,
   grepCoreElementsIds: teachingPath.grepCoreElementsIds,
   grepMainTopicsIds: teachingPath.grepMainTopicsIds,
-  grepReadingInSubjectId: teachingPath.grepReadingInSubjectId,
+  grepReadingInSubjectsIds: teachingPath.grepReadingInSubjectsIds,
   grepGoalsIds: teachingPath.grepGoalsIds,
   sources: teachingPath.sources
 });

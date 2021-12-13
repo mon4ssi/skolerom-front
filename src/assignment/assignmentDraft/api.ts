@@ -25,7 +25,7 @@ export interface NewDraftAssignmentResponseDTO {
   grepCoreElementsIds?: Array<number>;
   grepMainTopicsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
-  grepReadingInSubjectId?: number;
+  grepReadingInSubjectsIds?: number;
   sources?: Array<number>;
 }
 
@@ -44,7 +44,7 @@ export interface DraftAssignmentRequestDTO {
   grepCoreElementsIds?: Array<number>;
   grepMainTopicsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
-  grepReadingInSubjectId?: Array<number>;
+  grepReadingInSubjectsIds?: Array<number>;
   sources?: Array<number>;
 }
 

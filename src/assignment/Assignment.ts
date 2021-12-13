@@ -217,7 +217,7 @@ export interface AssignmentArgs {
   grepCoreElementsIds?: Array<number>;
   grepMainTopicsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
-  grepReadingInSubjectId?: Array<number>;
+  grepReadingInSubjectsIds?: Array<number>;
   grepGoals?: Array<GreepElements>;
 }
 
@@ -262,7 +262,7 @@ export class Assignment {
   public grepCoreElementsIds?: Array<number>;
   public grepMainTopicsIds?: Array<number>;
   public grepGoalsIds?: Array<number>;
-  public grepReadingInSubjectId?: Array<number>;
+  public grepReadingInSubjectsIds?: Array<number>;
 
   constructor(args: AssignmentArgs) {
     this._id = args.id;
@@ -305,7 +305,7 @@ export class Assignment {
     this.grepCoreElementsIds = args.grepCoreElementsIds;
     this.grepMainTopicsIds = args.grepMainTopicsIds;
     this.grepGoalsIds = args.grepGoalsIds;
-    this.grepReadingInSubjectId = args.grepReadingInSubjectId;
+    this.grepReadingInSubjectsIds = args.grepReadingInSubjectsIds;
   }
 
   public isOwnedByMe(): boolean {
