@@ -113,6 +113,8 @@ export class PublishingActions extends Component<Props, State> {
     const arraySelectedIdsSubjects: Array<number> = [];
     const arraySelectedIdsNewsGrades: Array<number> = [];
     const arraySelectedIdsNewsSubjects: Array<number> = [];
+    const arraySelectedIdsNewsManagemdGrades: Array<number> = [];
+    const arraySelectedIdsNewsManagemdSubjects: Array<number> = [];
     let listGoals: Array<string> = [];
 
     if (from === 'TEACHINGPATH') {
@@ -155,6 +157,7 @@ export class PublishingActions extends Component<Props, State> {
     const newSelectGrades:Array<Grade> = await store!.getGradeWpIds(arraySelectedIdsNewsGrades);
     newSelectGrades.forEach((ee) => {
       arraySelectedIdsGrades.push(Number(ee.id));
+      arraySelectedIdsNewsManagemdGrades.push(Number(ee.managementId));
     });
     this.setState({
       optionsMyGrades : newSelectGrades
@@ -163,11 +166,13 @@ export class PublishingActions extends Component<Props, State> {
     selectedSubjects.forEach((ee) => {
       arraySelectedIdsNewsSubjects.push(Number(ee.id));
     });
-    const newselectedSubjects:Array<Grade> = await store!.getSubjectWpIds(arraySelectedIdsNewsSubjects);
+    const newselectedSubjects:Array<Subject> = await store!.getSubjectWpIds(arraySelectedIdsNewsSubjects);
     newselectedSubjects.forEach((ee) => {
       arraySelectedIdsSubjects.push(Number(ee.id));
+      arraySelectedIdsNewsManagemdSubjects.push(Number(ee.managementId));
     });
     this.setState({
+      valueSubjectsOptions: arraySelectedIdsSubjects,
       optionsMySubjects : newselectedSubjects
     });
     await new Promise(resolve => setTimeout(resolve, SETTIMEOUT));
@@ -297,7 +302,7 @@ export class PublishingActions extends Component<Props, State> {
     this.setState({
       valueStringGoalsOptions: listGoals
     });
-    const grepFiltergoalssDataAwait = await store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, arraySelectedIdsGrades, arraySelectedIdsSubjects, listGoals, MAGICNUMBER100, MAGICNUMBER1);
+    const grepFiltergoalssDataAwait = await store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, arraySelectedIdsNewsManagemdGrades, arraySelectedIdsNewsManagemdSubjects, listGoals, MAGICNUMBER100, MAGICNUMBER1);
     this.setState(
       {
         optionsGoals : grepFiltergoalssDataAwait.data,
@@ -480,126 +485,83 @@ export class PublishingActions extends Component<Props, State> {
     if (subject) {
       store!.currentEntity!.addSubject(subject);
       this.setState({ loadingGoals : true });
-      for (let i = 0; i < optionsSubjects.length; i = i + 1) {
-        // tslint:disable-next-line: variable-name
-        if (subject.id === optionsSubjects[i].wp_id) {
-          if (!arrayValueSubjects.includes(optionsSubjects[i].id)) {
-            arrayValueSubjects.push(optionsSubjects[i].id);
-          }
-        }
-      }
-      this.setState({
-        valueSubjectsOptions : arrayValueSubjects
-      });
-      /* tslint:disable-next-line:max-line-length */
-      const grepFiltergoalssDataAwait = await this.filterGrepGoals(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, arrayValueSubjects, this.state.valueStringGoalsOptions);
       this.setState(
         {
-          optionsGoals : grepFiltergoalssDataAwait.data
+          optionsMySubjects : [...this.state.optionsMySubjects, subject]
         },
         () => {
-          this.sendValidbutton();
+          this.forceUpdate();
         }
       );
-      this.setState(
-        {
-          // tslint:disable-next-line: variable-name
-          page : grepFiltergoalssDataAwait.total_pages,
-          // valueGoalsOptions : [],
-          loadingGoals: false
-        }
-      );
-      this.comparativeGoalsValueToFilter();
-      this.setState({ pageCurrent: MAGICNUMBER1 });
-      // updatedata
-      const selectedGradesNature = store!.currentEntity!.getListOfGrades().map(this.gradeToTagProp);
-      const selectedSubjectsNature = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
-      const selectedGrades = selectedGradesNature.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
-      const selectedSubjects = selectedSubjectsNature.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
-      const arraySelectedIdsGrades: Array<number> = [];
-      const arraySelectedIdsSubjects: Array<number> = [];
-      selectedGrades.forEach((ee) => {
-        arraySelectedIdsGrades.push(Number(ee.id));
-      });
-      selectedSubjects.forEach((ee) => {
-        arraySelectedIdsSubjects.push(Number(ee.id));
-      });
-      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
-      this.setState({
-        grepFiltersData : grepFiltersDataAwait
-      });
-      this.setState({
-        optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
-      });
-      this.setState({
-        optionsMulti : this.renderValueOptions(grepFiltersDataAwait, 'multi')
-      });
     }
+  }
+
+  public forceUpdate = async () => {
+    const { store } = this.props;
+    // updatedata
+    const arraySelectedIdsGrades: Array<number> = [];
+    const arraySelectedIdsSubjects: Array<number> = [];
+    const arraySelectedIdsGradesManagmend: Array<number> = [];
+    const arraySelectedIdsSubjectsManagmend: Array<number> = [];
+    this.state.optionsMyGrades.forEach((ee) => {
+      arraySelectedIdsGrades.push(Number(ee.id));
+      arraySelectedIdsGradesManagmend.push(Number(ee.managementId));
+    });
+    this.state.optionsMySubjects.forEach((ee) => {
+      arraySelectedIdsSubjects.push(Number(ee.id));
+      arraySelectedIdsSubjectsManagmend.push(Number(ee.managementId));
+    });
+    const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
+    this.setState({
+      grepFiltersData : grepFiltersDataAwait
+    });
+    this.setState({
+      optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
+    });
+    this.setState({
+      optionsMulti : this.renderValueOptions(grepFiltersDataAwait, 'multi')
+    });
+    /* tslint:disable-next-line:max-line-length */
+    const grepFiltergoalssDataAwait = await this.filterGrepGoals(this.state.valueCoreOptions, this.state.valueMultiOptions, arraySelectedIdsGradesManagmend, arraySelectedIdsSubjectsManagmend, this.state.valueStringGoalsOptions);
+    this.setState(
+      {
+        optionsGoals : grepFiltergoalssDataAwait.data
+      },
+      () => {
+        this.sendValidbutton();
+      }
+    );
+    this.setState(
+      {
+        // tslint:disable-next-line: variable-name
+        page : grepFiltergoalssDataAwait.total_pages,
+        // valueGoalsOptions : [],
+        loadingGoals: false
+      }
+    );
+    this.comparativeGoalsValueToFilter();
+    this.setState({ pageCurrent: MAGICNUMBER1 });
   }
 
   public removeSubject = async (id: number) => {
     const { optionsSubjects, valueSubjectsOptions } = this.state;
     const { store } = this.props;
     const subject = store!.getAllSubjects().find(subject => subject.id === id);
-    const arrayValueSubjects = this.state.valueSubjectsOptions;
+    const arrayRemove: Array<Subject> = [];
     if (subject) {
       store!.currentEntity!.removeSubject(subject);
       this.setState({ loadingGoals : true });
-      for (let i = 0; i < optionsSubjects.length; i = i + 1) {
-        // tslint:disable-next-line: variable-name
-        if (subject.id === optionsSubjects[i].wp_id) {
-          const index = arrayValueSubjects.indexOf(optionsSubjects[i].id);
-          if (index > -1) {
-            arrayValueSubjects.splice(index, 1);
-          }
-        }
-      }
-      this.setState({
-        valueSubjectsOptions : arrayValueSubjects
+      this.state.optionsMySubjects.forEach((e) => {
+        if (e.id !== subject.id) { arrayRemove.push(e); }
       });
-      /* tslint:disable-next-line:max-line-length */
-      const grepFiltergoalssDataAwait = await this.filterGrepGoals(this.state.valueCoreOptions, this.state.valueMultiOptions, this.state.valueGradesOptions, arrayValueSubjects, this.state.valueStringGoalsOptions);
       this.setState(
         {
-          optionsGoals : grepFiltergoalssDataAwait.data
+          optionsMySubjects : arrayRemove
         },
         () => {
-          this.sendValidbutton();
+          this.forceUpdate();
         }
       );
-      this.setState(
-        {
-          // tslint:disable-next-line: variable-name
-          page : grepFiltergoalssDataAwait.total_pages,
-          // valueGoalsOptions : [],
-          loadingGoals: false
-        }
-      );
-      this.comparativeGoalsValueToFilter();
-      this.setState({ pageCurrent: MAGICNUMBER1 });
-      // updatedata
-      const selectedGradesNature = store!.currentEntity!.getListOfGrades().map(this.gradeToTagProp);
-      const selectedSubjectsNature = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
-      const selectedGrades = selectedGradesNature.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
-      const selectedSubjects = selectedSubjectsNature.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
-      const arraySelectedIdsGrades: Array<number> = [];
-      const arraySelectedIdsSubjects: Array<number> = [];
-      selectedGrades.forEach((ee) => {
-        arraySelectedIdsGrades.push(Number(ee.id));
-      });
-      selectedSubjects.forEach((ee) => {
-        arraySelectedIdsSubjects.push(Number(ee.id));
-      });
-      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
-      this.setState({
-        grepFiltersData : grepFiltersDataAwait
-      });
-      this.setState({
-        optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
-      });
-      this.setState({
-        optionsMulti : this.renderValueOptions(grepFiltersDataAwait, 'multi')
-      });
     }
   }
 
@@ -609,70 +571,21 @@ export class PublishingActions extends Component<Props, State> {
   })
 
   public addGrade = async (id: number) => {
-    const { optionsGrades, valueGradesOptions } = this.state;
-    const arrayValueGrades = this.state.valueGradesOptions;
+    const { optionsSubjects, valueSubjectsOptions } = this.state;
     const { store } = this.props;
-
+    const arrayValueGrades = this.state.valueGradesOptions;
     const grade = store!.getAllGrades().find(grade => grade.id === id);
-
     if (grade) {
       store!.currentEntity!.addGrade(grade);
       this.setState({ loadingGoals : true });
-      for (let i = 0; i < optionsGrades.length; i = i + 1) {
-        // tslint:disable-next-line: variable-name
-        if (grade.id === optionsGrades[i].wp_id) {
-          if (!arrayValueGrades.includes(optionsGrades[i].id)) {
-            arrayValueGrades.push(optionsGrades[i].id);
-          }
-        }
-      }
-
-      this.setState({
-        valueGradesOptions : arrayValueGrades
-      });
-      /* tslint:disable-next-line:max-line-length */
-      const grepFiltergoalssDataAwait = await this.filterGrepGoals(this.state.valueCoreOptions, this.state.valueMultiOptions, arrayValueGrades, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
       this.setState(
         {
-          optionsGoals : grepFiltergoalssDataAwait.data
+          optionsMyGrades : [...this.state.optionsMyGrades, grade]
         },
         () => {
-          this.sendValidbutton();
+          this.forceUpdate();
         }
       );
-      this.setState(
-        {
-          // tslint:disable-next-line: variable-name
-          page : grepFiltergoalssDataAwait.total_pages,
-          // valueGoalsOptions : [],
-          loadingGoals: false
-        }
-      );
-      // updatedata
-      const selectedGradesNature = store!.currentEntity!.getListOfGrades().map(this.gradeToTagProp);
-      const selectedSubjectsNature = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
-      const selectedGrades = selectedGradesNature.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
-      const selectedSubjects = selectedSubjectsNature.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
-      const arraySelectedIdsGrades: Array<number> = [];
-      const arraySelectedIdsSubjects: Array<number> = [];
-      selectedGrades.forEach((ee) => {
-        arraySelectedIdsGrades.push(Number(ee.id));
-      });
-      selectedSubjects.forEach((ee) => {
-        arraySelectedIdsSubjects.push(Number(ee.id));
-      });
-      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
-      this.setState({
-        grepFiltersData : grepFiltersDataAwait
-      });
-      this.setState({
-        optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
-      });
-      this.setState({
-        optionsMulti : this.renderValueOptions(grepFiltersDataAwait, 'multi')
-      });
-      this.comparativeGoalsValueToFilter();
-      this.setState({ pageCurrent: MAGICNUMBER1 });
     }
   }
 
@@ -690,71 +603,27 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public removeGrade = async (id: number) => {
+    const { optionsGrades, valueSubjectsOptions } = this.state;
     const { store } = this.props;
-    const { optionsGrades, valueGradesOptions } = this.state;
-    const arrayValueGrades = this.state.valueGradesOptions;
     const grade = store!.getAllGrades().find(grade => grade.id === id);
-
+    const arrayRemove: Array<Grade> = [];
     if (grade) {
       store!.currentEntity!.removeGrade(grade);
       this.setState({ loadingGoals : true });
-      for (let i = 0; i < optionsGrades.length; i = i + 1) {
-        // tslint:disable-next-line: variable-name
-        if (grade.id === optionsGrades[i].wp_id) {
-          const index = arrayValueGrades.indexOf(optionsGrades[i].id);
-          if (index > -1) {
-            arrayValueGrades.splice(index, 1);
-          }
-        }
-      }
-      this.setState({
-        valueGradesOptions : arrayValueGrades
+      this.state.optionsMyGrades.forEach((e) => {
+        if (e.id !== grade.id) { arrayRemove.push(e); }
       });
-      /* tslint:disable-next-line:max-line-length */
-      const grepFiltergoalssDataAwait = await this.filterGrepGoals(this.state.valueCoreOptions, this.state.valueMultiOptions, arrayValueGrades, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
       this.setState(
         {
-          optionsGoals : grepFiltergoalssDataAwait.data
+          optionsMyGrades : arrayRemove
         },
         () => {
-          this.sendValidbutton();
+          this.forceUpdate();
         }
       );
-      this.setState(
-        {
-          // tslint:disable-next-line: variable-name
-          page : grepFiltergoalssDataAwait.total_pages,
-          // valueGoalsOptions : [],
-          loadingGoals: false
-        }
-      );
-      this.comparativeGoalsValueToFilter();
-      this.setState({ pageCurrent: MAGICNUMBER1 });
-      // updatedata
-      const selectedGradesNature = store!.currentEntity!.getListOfGrades().map(this.gradeToTagProp);
-      const selectedSubjectsNature = store!.currentEntity!.getListOfSubjects().map(this.subjectToTagProp);
-      const selectedGrades = selectedGradesNature.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
-      const selectedSubjects = selectedSubjectsNature.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
-      const arraySelectedIdsGrades: Array<number> = [];
-      const arraySelectedIdsSubjects: Array<number> = [];
-      selectedGrades.forEach((ee) => {
-        arraySelectedIdsGrades.push(Number(ee.id));
-      });
-      selectedSubjects.forEach((ee) => {
-        arraySelectedIdsSubjects.push(Number(ee.id));
-      });
-      const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
-      this.setState({
-        grepFiltersData : grepFiltersDataAwait
-      });
-      this.setState({
-        optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
-      });
-      this.setState({
-        optionsMulti : this.renderValueOptions(grepFiltersDataAwait, 'multi')
-      });
     }
   }
+
   public validateAddTeacherContentDefault = (isPrivate: boolean) => {
     const { store } = this.props;
     if (store!.getCurrentUser()!.type === UserType.Teacher) {
@@ -896,7 +765,6 @@ export class PublishingActions extends Component<Props, State> {
     const selectedSubjects = this.state.optionsMySubjects.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.gradeToTagProp);
     const myplaceholder = (selectedSubjects.length > 0) ? '' : intl.get('publishing_page.subject');
     const subjects = store!.getAllSubjects().filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.subjectToTagProp);
-
     /*let filterSelectedSubjects = this.compareTwoArraysReturnValue(subjects, selectedSubjects);
     if (selectedSubjects.length > 0) {
       myplaceholder = '';
@@ -1540,12 +1408,12 @@ export class PublishingActions extends Component<Props, State> {
 
   public sendValidbutton = () => {
     if (!this.state.isValid) {
-      if (this.state.valueGradesOptions.length > 0 && this.state.valueGoalsOptions.length > 0) {
+      if (this.state.optionsMyGrades.length > 0 && this.state.valueGoalsOptions.length > 0) {
         this.props.store!.setIsActiveButtons();
       } else {
         if (typeof(this.state.editvalueGoalsOptions) !== 'undefined') {
           if (this.state.editvalueGoalsOptions!.length > 0) {
-            if (this.state.valueGradesOptions.length > 0 && this.state.valueGoalsOptions.length > 0) {
+            if (this.state.optionsMyGrades.length > 0 && this.state.valueGoalsOptions.length > 0) {
               this.props.store!.setIsActiveButtons();
             } else {
               this.props.store!.setIsActiveButtonsFalse();

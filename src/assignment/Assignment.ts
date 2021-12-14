@@ -64,6 +64,7 @@ export class Grade {
   @observable public grade_parent?: Array<number | string>;
   // tslint:disable-next-line: variable-name
   @observable public name_sub?: string | null;
+  @observable public managementId?: number | null;
 
   constructor(id: number, title: string) {
     this.id = id;
@@ -73,6 +74,7 @@ export class Grade {
     this.grade_parent = [];
     // tslint:disable-next-line: variable-name
     this.name_sub = null;
+    this.managementId = null;
   }
 }
 
@@ -80,11 +82,13 @@ export class Subject {
   @observable public id: number;
   @observable public title: string;
   @observable public filterStatus?: string | undefined | null;
+  @observable public managementId?: number | undefined | null;
 
-  constructor(id: number, title: string) {
+  constructor(id: number, title: string, managementId?:number | undefined | null) {
     this.id = id;
     this.title = title;
     this.filterStatus = null;
+    this.managementId = managementId;
   }
 }
 

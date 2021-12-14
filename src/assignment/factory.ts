@@ -31,6 +31,7 @@ export interface SubjectDTO {
   name: string;
   title: string;
   filterStatus: string | undefined | null;
+  managementId: number | null;
 }
 
 export interface SourceDTO {
@@ -44,6 +45,7 @@ export interface GradeDTO {
   id: number;
   title: string;
   name: string;
+  managementId: number | null;
 }
 
 export interface GreepElements {
