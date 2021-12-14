@@ -56,6 +56,20 @@ export enum QuestionType {
   ImageChoice = 'IMAGE_CHOICE',
 }
 
+export class Language {
+  @observable public langId: string;
+  @observable public description: string;
+  @observable public slug: string;
+  @observable public langOrder: number;
+
+  constructor(langId: string, description: string, slug: string, langOrder: number) {
+    this.langId = langId;
+    this.description = description;
+    this.slug = slug;
+    this.langOrder = langOrder;
+  }
+}
+
 export class Grade {
   @observable public id: number;
   @observable public title: string;
@@ -692,6 +706,13 @@ export class Filter {
   public showMyAssignments?: number | null;
 }
 
+export interface LanguageFilter {
+  langId: string;
+  description: string;
+  slug: string;
+  langOrder: number;
+}
+
 export interface GradeFilter {
   // tslint:disable-next-line: variable-name
   grade_id: string;
@@ -814,6 +835,7 @@ export interface SourceFilterItemGradesItemSubjectsItemCoreElementsItemMainTopic
 }
 
 export class FilterArticlePanel {
+  public LanguageFilter?: Array<LanguageFilter>;
   // tslint:disable-next-line: variable-name
   public grade_filter?: Array<GradeFilter>;
   // tslint:disable-next-line: variable-name

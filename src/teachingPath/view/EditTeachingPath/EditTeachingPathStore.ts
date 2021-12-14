@@ -268,6 +268,7 @@ export class EditTeachingPathStore {
           multi: rest.multi,
           source: rest.source,
           searchTitle: rest.searchTitle,
+          lang: rest.lang
         });
         this.articlesList = isNextPage ? this.articlesList.concat(articles) : articles;
         if (articles.length < perPage) {
@@ -369,8 +370,8 @@ export class EditTeachingPathStore {
     return this.currentEntity!.getIsDraftSaving();
   }
 
-  public async getFiltersArticlePanel() {
-    this.allArticlePanelFilters = await this.teachingPathService.getFiltersArticlePanel();
+  public async getFiltersArticlePanel(lang: string) {
+    this.allArticlePanelFilters = await this.teachingPathService.getFiltersArticlePanel(lang);
   }
 
   public async getGrades() {

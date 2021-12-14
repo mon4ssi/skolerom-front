@@ -7,7 +7,7 @@ import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTe
 import { TeachingPathNodeType } from 'teachingPath/TeachingPath';
 import { ItemContentTypeContext } from 'teachingPath/view/EditTeachingPath/ItemContentTypeContext';
 import { Article, Subject, Greep, FilterArticlePanel, Grade, GradeFilter, CoreFilter, CoreFilterItemGrades,
-  MultiFilter, MultiFilterItemGrades, GoalsFilter, GoalsFilterItemGrades, SourceFilter, SourceFilterItemGrades } from 'assignment/Assignment';
+  MultiFilter, MultiFilterItemGrades, GoalsFilter, GoalsFilterItemGrades, SourceFilter, SourceFilterItemGrades, Language } from 'assignment/Assignment';
 import { RelatedArticlesCard } from 'assignment/view/NewAssignment/Preview/RelatedArticlesPreview/RelatedArticlesCard';
 import { SearchFilter } from 'components/common/SearchFilter/SearchFilter';
 import { lettersNoEn } from 'utils/lettersNoEn';
@@ -26,7 +26,8 @@ import './ArticlesList.scss';
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
 import { SCROLL_OFFSET } from 'utils/constants';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
-import { stringify } from 'querystring';
+import { injector } from 'Injector';
+import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteractor';
 
 const showDelay = 500;
 interface ArticleItemProps {
@@ -42,7 +43,6 @@ interface ArticleItemProps {
 @inject('editTeachingPathStore')
 @observer
 class ArticleItem extends Component<ArticleItemProps> {
-
   public isArticleSelected = () => {
     const { article, allItems } = this.props;
 
@@ -111,6 +111,7 @@ interface State {
   selectedSubjectsFilter: Array<Subject>;
   selectedCoresFilter: Array<Greep>;
   selectedCoresAll: Array<Greep>;
+  selectedLanguageAll: Array<Language>;
   selectedGradesAll: Array<Grade>;
   selectedGradeChildrenAll: Array<Grade>;
   selectedSubjectsAll: Array<Subject>;
@@ -124,6 +125,7 @@ interface State {
   valueSubject: string;
   MySelectGrade: Array<number> | null;
   MySelectSubject: Array<number> | null;
+  MySelectLanguage: Array<number> | null;
   MySelectCore: Array<number> | null;
   MySelectMulti: Array<number> | null;
   MySelectGoal: Array<number> | null;
@@ -145,8 +147,8 @@ interface State {
 @inject('editTeachingPathStore')
 @observer
 export class ArticlesList extends Component<Props, State> {
-
-  public static contextType = ItemContentTypeContext;
+  public storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
+  public contextType = ItemContentTypeContext;
   public ref = React.createRef<HTMLDivElement>();
   public refButton = React.createRef<HTMLButtonElement>();
 
@@ -168,6 +170,7 @@ export class ArticlesList extends Component<Props, State> {
       selectedSubjectsFilter: [],
       selectedGradesFilter: [],
       selectedSubjectsAll: [],
+      selectedLanguageAll: [],
       selectedGradesAll: [],
       selectedGradeChildrenAll: [],
       selectedCoresAll: [],
@@ -183,6 +186,7 @@ export class ArticlesList extends Component<Props, State> {
       activeGrepFilters: false,
       MySelectGrade: [],
       MySelectSubject: [],
+      MySelectLanguage: [],
       MySelectCore: [],
       MySelectMulti: [],
       MySelectGoal: [],
@@ -230,11 +234,12 @@ export class ArticlesList extends Component<Props, State> {
 
     this.setState({ appliedFilters: filters });
     this.setState({ userFilters: true });
-    if (filters.subjects || filters.grades || filters.core || filters.multi || filters.goal || filters.source) {
+    if (filters.lang || filters.grades || filters.subjects || filters.core || filters.multi || filters.goal || filters.source) {
       this.setState({ filtersisUsed: true });
     } else {
       this.setState({ filtersisUsed: false });
     }
+
     if (filterName === 'searchTitle') {
       editTeachingPathStore!.getArticlesWithDebounce(filters);
       allModal[0].classList.remove('loadingdata');
@@ -274,12 +279,6 @@ export class ArticlesList extends Component<Props, State> {
   }
 
   public async componentDidMount() {
-    const newArrayGrades: Array<Grade> = [];
-    let newArraySubjects: Array<Subject> = [];
-    const newArrayGrepCore: Array<Greep> = [];
-    const newArrayGrepMulti: Array<Greep> = [];
-    const newArrayGrepGoals: Array<Greep> = [];
-    const newArrayGrepSource: Array<Greep> = [];
     const { appliedFilters } = this.state;
     const { articlesList } = this.props.editTeachingPathStore!;
     document.addEventListener('keyup', this.handleKeyboardControl);
@@ -291,18 +290,54 @@ export class ArticlesList extends Component<Props, State> {
     }
     this.setState({ itemsForNewChildren: this.getAllChildrenItems() });
     const isNextPage = articlesList.length > 0;
+
     this.props.editTeachingPathStore!.getArticles({ isNextPage, ...appliedFilters });
     this.props.editTeachingPathStore!.getGrades();
     this.props.editTeachingPathStore!.getSubjects();
+    this.getDataPanelLeftGrep('', true);
+  }
+
+  public async getDataPanelLeftGrep(lang: string, firstLoadlang: boolean) {
     this.setState({ filtersAjaxLoading: true });
     this.setState({ filtersAjaxLoadingGoals: true });
 
-    await this.props.editTeachingPathStore!.getFiltersArticlePanel();
+    const newArrayGrades: Array<Grade> = [];
+    let newArraySubjects: Array<Subject> = [];
+    const newArrayGrepCore: Array<Greep> = [];
+    const newArrayGrepMulti: Array<Greep> = [];
+    const newArrayGrepGoals: Array<Greep> = [];
+    const newArrayGrepSource: Array<Greep> = [];
+
+    if (!firstLoadlang) {
+      this.handleChangeFilters('lang', String(this.state.MySelectLanguage!.join()));
+    }
+
+    await this.props.editTeachingPathStore!.getFiltersArticlePanel(lang);
     const dataArticles = this.props.editTeachingPathStore!.getAllArticlePanelFilters();
 
-    this.setState({
-      grepDataFilters: dataArticles
-    });
+    this.setState({ grepDataFilters: dataArticles });
+
+    if (firstLoadlang) {
+      // Language
+      const newArrayLanguages: Array<Language> = [];
+      const newMySelectLanguage: Array<number> = [];
+
+      dataArticles!.LanguageFilter!.forEach((element) => {
+        newArrayLanguages.push({
+          langId: element.langId,
+          description: element.description,
+          slug: element.slug,
+          langOrder: element.langOrder
+        });
+      });
+
+      newMySelectLanguage.push(Number(this.storageInteractor.getArticlesLocaleId()));
+
+      this.setState({
+        selectedLanguageAll: newArrayLanguages,
+        MySelectLanguage: newMySelectLanguage
+      });
+    }
 
     // Grade
     // tslint:disable-next-line: variable-name
@@ -593,6 +628,29 @@ export class ArticlesList extends Component<Props, State> {
       });
   }
 
+  public handleClickLanguage = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const langId = Number(e.currentTarget.value);
+    const filterLanguage: Array<number> = this.state.MySelectLanguage!;
+
+    if (e.currentTarget.classList.contains('active')) {
+      if (filterLanguage.length === 1) return;
+    }
+
+    if (filterLanguage.includes(langId)) {
+      filterLanguage.splice(filterLanguage.indexOf(langId), 1);
+    } else {
+      filterLanguage.push(langId);
+    }
+
+    this.setState(
+      {
+        MySelectLanguage: filterLanguage
+      },
+      () => {
+        this.getDataPanelLeftGrep(this.state.MySelectLanguage!.sort().join(), false);
+      }
+    );
+  }
   public handleClickGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const newGradeId = Number(e.currentTarget.value);
     let filterGrade: Array<number> = [];
@@ -2054,6 +2112,7 @@ export class ArticlesList extends Component<Props, State> {
               handleChangeSubject={this.handleChangeSubject}
               handleChangeGrade={this.handleChangeGrade}
               handleInputSearchQuery={this.handleChangeSearchQuery}
+              handleClickLanguage={this.handleClickLanguage}
               handleClickGrade={this.handleClickGrade}
               handleClickSubject={this.handleClickSubject}
               handleClickMulti={this.handleClickMulti}
@@ -2069,15 +2128,16 @@ export class ArticlesList extends Component<Props, State> {
               // gradeFilterValue={Number(appliedFilters.grades)}
               coreFilterValue={Number(appliedFilters.core)}
               goalsFilterValue={Number(appliedFilters.goal)}
+              defaultValueLanguageFilter={String(this.state.MySelectLanguage)}
               defaultValueGradeFilter={String(appliedFilters.grades)}
               defaultValueSubjectFilter={String(appliedFilters.subjects)}
-
               defaultValueMainFilter={String(this.state.MySelectMulti)}
               defaultValueSourceFilter={String(this.state.MySelectSource)}
 
               coreValueFilter={this.state.myValueCore}
               goalValueFilter={this.state.goalValueFilter}
               searchQueryFilterValue={appliedFilters.searchTitle as string}
+              customLanguagesList={this.state.selectedLanguageAll}
               customGradesList={this.customGradesList()}
               customGradeChildrenList={this.customGradeChildrenList()}
               customSubjectsList={this.mySubjects()}

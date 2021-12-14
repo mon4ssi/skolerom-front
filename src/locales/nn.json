@@ -720,7 +720,8 @@
     },
     "grade": "Klassetrinn",
     "student_level": "Vel elevspor",
-    "visibility": "synlegheit"
+    "visibility": "synlegheit",
+    "language": "Språk"
   },
   "activity_page": {
     "Hello": "Hei",

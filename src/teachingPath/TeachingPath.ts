@@ -21,7 +21,7 @@ export interface TeachingPathRepo {
   getCurrentNode(teachingPathId: number, nodeId: number): Promise<TeachingPathNode>;
   markAsPickedArticle(teachingPathId: number, nodeId: number, idArticle: number, levelWpId: number): Promise<void>;
   sendDataDomain(domain: string): Promise<Domain>;
-  getFiltersArticlePanel(): Promise<FilterArticlePanel>;
+  getFiltersArticlePanel(lang: string): Promise<FilterArticlePanel>;
   getGrepFilters(grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
   getGrepFiltersTeachingPath(grades: string, subjects: string, coreElements?: string, mainTopics?: string, $goals?: string, source?: string): Promise<FilterGrep>;
   /* tslint:disable-next-line:max-line-length */

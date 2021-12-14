@@ -602,8 +602,8 @@ export class NewAssignmentStore {
     return toJS(this.allArticlePanelFilters);
   }
 
-  public async getFiltersArticlePanel() {
-    this.allArticlePanelFilters = await this.teachingPathService.getFiltersArticlePanel();
+  public async getFiltersArticlePanel(lang: string) {
+    this.allArticlePanelFilters = await this.teachingPathService.getFiltersArticlePanel(lang);
   }
 
   public async assignStudentToAssignment(assignmentId:string, referralToken: string) {
