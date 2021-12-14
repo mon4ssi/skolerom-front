@@ -33,16 +33,24 @@ export class TeachingPathTitle extends Component<Props> {
   }
 
   public componentDidMount() {
+    this.titleRef.current!.focus();
     this.titleRef.current!.selectionStart = this.titleRef.current!.selectionEnd - this.titleRef.current!.value!.length;
-
   }
 
   public setTitle = (event: React.SyntheticEvent<HTMLTextAreaElement>) => {
     const { currentEntity: currentTeachingPath } = this.props.editTeachingPathStore!;
+    const startQuote = '«';
+    const endQuote = '»';
+    let value = event.currentTarget.value;
     event.preventDefault();
-
-    if (lettersNoEn(event.currentTarget.value)) {
-      currentTeachingPath!.setTitle(event.currentTarget.value);
+    if (value.split("'").length > 1 || value.split('"').length > 1) {
+      const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
+      value = `${initValue}${startQuote}${endQuote}`;
+      // this.titleRef.current!.selectionStart = 2;
+      this.titleRef.current!.focus();
+    }
+    if (lettersNoEn(value)) {
+      currentTeachingPath!.setTitle(value);
     }
   }
 
@@ -84,7 +92,6 @@ export class TeachingPathTitle extends Component<Props> {
           {!readOnly && <span>{intl.get('edit_teaching_path.title.new_entity')}</span>}
           <label id="titleInputTextArea" className="hidden">{intl.get('edit_teaching_path.title.title_placeholder')}</label>
           <TextAreaAutosize
-            autoFocus
             inputRef={this.titleRef}
             className="titleInput fw500"
             value={currentTeachingPath!.title}

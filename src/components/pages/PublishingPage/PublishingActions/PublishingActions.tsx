@@ -1059,7 +1059,7 @@ export class PublishingActions extends Component<Props, State> {
     return returnArray;
   }
 
-  public addCore = async (id: number) => {
+  /*public addCore = async (id: number) => {
     const { currentEntity } = this.props.store!;
     const { valueCoreOptions } = this.state;
     const ArrayValueCores = this.state.valueCoreOptions;
@@ -1075,7 +1075,6 @@ export class PublishingActions extends Component<Props, State> {
         currentEntity!.setGrepCoreElementsIds(this.state.valueCoreOptions);
       }
     );
-    /* tslint:disable-next-line:max-line-length */
     const grepFiltergoalssDataAwait = await this.filterGrepGoals(uniqueArray, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
     this.setState({
       optionsGoals : grepFiltergoalssDataAwait.data
@@ -1090,6 +1089,24 @@ export class PublishingActions extends Component<Props, State> {
     );
     this.comparativeGoalsValueToFilter();
     this.setState({ pageCurrent: MAGICNUMBER1 });
+  }*/
+
+  public addCore = async (id: number) => {
+    const { optionsSubjects, valueSubjectsOptions } = this.state;
+    const { store } = this.props;
+    const ArrayValueCores = this.state.valueCoreOptions;
+    ArrayValueCores.push(id);
+    const uniqueArray = ArrayValueCores.filter((item, pos) => (ArrayValueCores.indexOf(item) === pos));
+    this.setState({ loadingGoals : true });
+    this.setState(
+      {
+        valueCoreOptions: uniqueArray
+      },
+      () => {
+        this.forceUpdate();
+        store!.currentEntity!.setGrepCoreElementsIds(this.state.valueCoreOptions);
+      }
+    );
   }
 
   public removeCore = async (id: number) => {
@@ -1107,26 +1124,11 @@ export class PublishingActions extends Component<Props, State> {
           valueCoreOptions: ArrayValueCores
         },
         () => {
-          this.sendValidbutton();
+          this.forceUpdate();
           currentEntity!.setGrepCoreElementsIds(this.state.valueCoreOptions);
         }
       );
     }
-    /* tslint:disable-next-line:max-line-length */
-    const grepFiltergoalssDataAwait = await this.filterGrepGoals(ArrayValueCores, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
-    this.setState({
-      optionsGoals : grepFiltergoalssDataAwait.data
-    });
-    this.setState(
-      {
-        // tslint:disable-next-line: variable-name
-        page : grepFiltergoalssDataAwait.total_pages,
-        // valueGoalsOptions : [],
-        loadingGoals: false
-      }
-    );
-    this.comparativeGoalsValueToFilter();
-    this.setState({ pageCurrent: MAGICNUMBER1 });
   }
 
   public renderCoreElements = () => {
@@ -1222,25 +1224,10 @@ export class PublishingActions extends Component<Props, State> {
         valueMultiOptions: uniqueArray
       },
       () => {
-        this.sendValidbutton();
+        this.forceUpdate();
         currentEntity!.setGrepMainTopicsIds(this.state.valueMultiOptions);
       }
     );
-    /* tslint:disable-next-line:max-line-length */
-    const grepFiltergoalssDataAwait = await this.filterGrepGoals(this.state.valueCoreOptions, uniqueArray, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
-    this.setState({
-      optionsGoals : grepFiltergoalssDataAwait.data
-    });
-    this.setState(
-      {
-        // tslint:disable-next-line: variable-name
-        page : grepFiltergoalssDataAwait.total_pages,
-        // valueGoalsOptions : [],
-        loadingGoals: false
-      }
-    );
-    this.comparativeGoalsValueToFilter();
-    this.setState({ pageCurrent: MAGICNUMBER1 });
   }
 
   public removeMulti = async (id: number) => {
@@ -1258,26 +1245,11 @@ export class PublishingActions extends Component<Props, State> {
           valueMultiOptions: ArrayValueMulti
         },
         () => {
-          this.sendValidbutton();
+          this.forceUpdate();
           currentEntity!.setGrepMainTopicsIds(this.state.valueMultiOptions);
         }
       );
     }
-    /* tslint:disable-next-line:max-line-length */
-    const grepFiltergoalssDataAwait = await this.filterGrepGoals(this.state.valueMultiOptions, ArrayValueMulti, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
-    this.setState({
-      optionsGoals : grepFiltergoalssDataAwait.data
-    });
-    this.setState(
-      {
-        // tslint:disable-next-line: variable-name
-        page : grepFiltergoalssDataAwait.total_pages,
-        // valueGoalsOptions : [],
-        loadingGoals: false
-      }
-    );
-    this.comparativeGoalsValueToFilter();
-    this.setState({ pageCurrent: MAGICNUMBER1 });
   }
 
   public renderMultiDisciplinary = () => {
