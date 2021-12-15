@@ -147,8 +147,8 @@ interface State {
 @inject('editTeachingPathStore')
 @observer
 export class ArticlesList extends Component<Props, State> {
+  public static contextType = ItemContentTypeContext;
   public storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
-  public contextType = ItemContentTypeContext;
   public ref = React.createRef<HTMLDivElement>();
   public refButton = React.createRef<HTMLButtonElement>();
 
