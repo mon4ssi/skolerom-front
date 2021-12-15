@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Icon - Globe</title>
+    <g id="Artboards" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="School-Articles-V2-(WP)---Filters-opened" transform="translate(-177.000000, -140.000000)" stroke="#0B2541" stroke-width="1.88">
+            <g id="Filtermenu" transform="translate(0.000000, 78.000000)">
+                <g id="Icon---Globe" transform="translate(178.000000, 63.000000)">
+                    <circle id="Oval" cx="14" cy="14" r="14"></circle>
+                    <g id="Group" transform="translate(0.670319, 6.000000)">
+                        <path d="M4.59863946,18.4983919 L5.74829932,12.557216 L6.98993197,12.557216 C7.52146029,12.5590863 8.02330517,12.3066643 8.34653061,11.8748631 C8.67969323,11.4527374 8.79510393,10.8928458 8.65693878,10.3689809 L7.79469388,6.83956943 C7.6087038,6.05198705 6.91947507,5.49747385 6.12768707,5.49839194 L0,5.49839194" id="Path"></path>
+                        <path d="M24.0915858,0 L19.0401573,0 C18.1874625,-0.000953518358 17.4452162,0.574955703 17.2449192,1.39292714 L16.3163477,5.05852177 C16.1709617,5.60454714 16.2999016,6.18625939 16.6630144,6.62250881 C17.0111033,7.07097119 17.5515517,7.33313292 18.1239668,7.33119044 L20.0801573,7.33119044 L21.0458715,13.1350486 C21.1953637,14.0082963 21.9561763,14.651138 22.8534906,14.6623797 L25.3296811,14.6623797" id="Path"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

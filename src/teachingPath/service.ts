@@ -36,8 +36,8 @@ export class TeachingPathService {
     return this.teachingPathRepo.sendDataDomain(domain);
   }
 
-  public async getFiltersArticlePanel() {
-    return this.teachingPathRepo.getFiltersArticlePanel();
+  public async getFiltersArticlePanel(lang: string) {
+    return this.teachingPathRepo.getFiltersArticlePanel(lang);
   }
 
   public async getGradeWpIds(gradeWpIds: Array<number>) {

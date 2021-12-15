@@ -204,7 +204,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     await newAssignmentStore!.getGrades();
     await newAssignmentStore!.getSubjects();
     this.props.newAssignmentStore!.visibilityArticles = true;
-    await newAssignmentStore!.getFiltersArticlePanel();
+    await newAssignmentStore!.getFiltersArticlePanel('');
     const dataArticles = newAssignmentStore!.getAllArticlePanelFilters();
     this.setState({
       grepDataFilters : dataArticles

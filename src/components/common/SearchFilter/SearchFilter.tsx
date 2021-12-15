@@ -7,11 +7,12 @@ import { withResizeDetector } from 'react-resize-detector';
 import isNumber from 'lodash/isNumber';
 
 import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
-import { Grade, Subject, Greep, GreepSelectValue } from 'assignment/Assignment';
+import { Grade, Subject, Greep, GreepSelectValue, Language } from 'assignment/Assignment';
 import { sortByAlphabet } from 'utils/sortByAlphabet';
 import filterImg from 'assets/images/filter.svg';
 import filterWhiteImg from 'assets/images/filter_white.svg';
 import resetImg from 'assets/images/reset-icon.svg';
+import langImg from 'assets/images/lang.svg';
 import gradeImg from 'assets/images/grade.svg';
 import tagsImg from 'assets/images/tags.svg';
 import cogsImg from 'assets/images/cogs.svg';
@@ -41,6 +42,7 @@ interface Props {
   isAssignmentsListPage?: boolean;
   isAssignmentsListFilter?: boolean;
 
+  customLanguagesList?: Array<Language>;
   customGradesList?: Array<Grade>;
   customGradeChildrenList?: Array<Grade>;
   customSubjectsList?: Array<Subject>;
@@ -58,6 +60,7 @@ interface Props {
   goalsFilterValueTP?: string | number | null;
   readingFilterValueTP?: string | number | null;
 
+  defaultValueLanguageFilter?: string | null;
   defaultValueGradeFilter?: string | null;
   defaultValueSubjectFilter?: string | null;
   defaultValueMainFilter?: string | null;
@@ -94,6 +97,7 @@ interface Props {
   handleChangeSelectCore?(e: any): void;
   handleChangeSelectGoals?(e: any): void;
 
+  handleClickLanguage?(e: SyntheticEvent): void;
   handleClickGrade?(e: SyntheticEvent): void;
   handleClickChildrenGrade?(e: SyntheticEvent): void;
   handleClickSubject?(e: SyntheticEvent): void;
@@ -544,6 +548,40 @@ class SearchFilter extends Component<Props, State> {
     );
   }
 
+  public renderFiltersLanguage = () => {
+    const { handleClickLanguage, customLanguagesList, defaultValueLanguageFilter } = this.props;
+    const languages = (customLanguagesList!).sort((a, b) => (a.langOrder > b.langOrder) ? 1 : -1);
+    const arrayDefaults = (defaultValueLanguageFilter) ? defaultValueLanguageFilter.split(',') : [];
+
+    const visibleLang = languages!.map((lang) => {
+      const title: string = lang.description;
+      const classD = (arrayDefaults.includes(String(lang.langId))) ? 'active' : '';
+
+      return (
+        <button
+          value={lang.langId}
+          className={`itemFlexFilter languageFilterClass ${classD}`}
+          onClick={handleClickLanguage}
+          key={lang.langId}
+        >
+          {title}
+        </button>
+      );
+    });
+    if (languages!.length === 0) {
+      return (
+        <div className="minimalLoading">
+          <span /><span /><span />
+        </div>
+      );
+    }
+    return (
+      <div className="gradesItems flexFilter">
+        {visibleLang}
+      </div>
+    );
+  }
+
   public renderFiltersGrade = () => {
     const { assignmentListStore, handleClickGrade, customGradesList, gradeFilterValue, defaultValueGradeFilter } = this.props;
     const grades = (customGradesList || assignmentListStore!.getAllGrades()).sort(this.sortSelectors);
@@ -568,7 +606,7 @@ class SearchFilter extends Component<Props, State> {
         </button>
       );
     });
-    if (grades.length === 0) {
+    if (this.props.filtersAjaxLoading) {
       return (
         <div className="minimalLoading">
           <span /><span /><span />
@@ -599,7 +637,7 @@ class SearchFilter extends Component<Props, State> {
         </button>
       );
     });
-    if (grades.length === 0) {
+    if (grades.length === 0 || this.props.filtersAjaxLoading) {
       return ('');
     }
     return (
@@ -724,7 +762,7 @@ class SearchFilter extends Component<Props, State> {
       if (subject.filterStatus === 'inactive') { classD += ' downlight'; }
       return <button value={subject.id} className={`itemFlexFilter subjectsFilterClass ${classD}`} onClick={handleClickSubject} key={subject.id}>{title}</button>;
     });
-    if (subjects.length === 0) {
+    if (this.props.filtersAjaxLoading) {
       return (
         <div className="minimalLoading">
           <span /><span /><span />
@@ -1199,6 +1237,19 @@ class SearchFilter extends Component<Props, State> {
         </div>
         <div className="FiltersModal__body">
         <div className="FiltersModal__body__item">
+            <div className="itemFilter">
+              <div className="itemFilter__left">
+                <img src={langImg} />
+              </div>
+              <div className="itemFilter__right">
+                <h3>{intl.get('generals.language')}</h3>
+                <div className="itemFilter__core">
+                  {this.renderFiltersLanguage()}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="FiltersModal__body__item">
             <div className="itemFilter">
               <div className="itemFilter__left">
                 <img src={gradeImg} />

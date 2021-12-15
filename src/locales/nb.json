@@ -718,7 +718,8 @@
     },
     "grade": "Klassetrinn",
     "student_level": "Velg elevspor",
-    "visibility": "synlighet"
+    "visibility": "synlighet",
+    "language": "Språk"
   },
   "activity_page": {
     "Hello": "Hei",

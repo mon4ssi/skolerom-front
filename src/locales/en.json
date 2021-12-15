@@ -719,7 +719,8 @@
     },
     "grade": "Grade",
     "student_level": "Student level",
-    "visibility": "visibility"
+    "visibility": "visibility",
+    "language": "Languages"
   },
   "activity_page": {
     "Hello": "Hello",

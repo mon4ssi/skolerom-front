@@ -349,8 +349,12 @@ export class WPApi implements ArticleRepo {
     multi,
     source,
     subjects,
-    searchTitle
-  }: { page: number, perPage: number, order: string, grades?: number, subjects?: number, searchTitle?: string, core?: number | string, goal?: number | string, multi?: number, source?: number }): Promise<Array<Article>> {
+    searchTitle,
+    lang,
+  }: { page: number, perPage: number, order: string, grades?: number, subjects?: number, searchTitle?: string, core?: number | string, goal?: number | string, multi?: number, source?: number, lang: string }): Promise<Array<Article>> {
+
+    let langParmeter = lang;
+    if (lang === '') langParmeter = this.storageInteractor.getArticlesLocaleId()!;
 
     return (
       await API.get(`${process.env.REACT_APP_WP_URL}/wp-articles/api/filterarticle/v1/post`, {
@@ -366,7 +370,7 @@ export class WPApi implements ArticleRepo {
           student_disciplin_id: multi || null,
           student_source_id: source || null,
           search_title: searchTitle || null,
-          lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
+          lang: langParmeter || null
         }
       },
       )

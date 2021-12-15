@@ -79,7 +79,8 @@ export class ArticleService {
     goal?: number | string,
     multi?: number,
     source?: number,
-    searchTitle?: string
+    searchTitle?: string,
+    lang?: string
   }): Promise<Array<Article>> {
 
     return this.articleRepo.getArticles(params);

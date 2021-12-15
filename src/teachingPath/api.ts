@@ -228,11 +228,15 @@ export class TeachingPathApi implements TeachingPathRepo {
     }
   }
 
-  public async getFiltersArticlePanel() {
+  public async getFiltersArticlePanel(lang: string) {
+    let langParmeter = lang;
+    if (lang === '') langParmeter = this.storageInteractor.getArticlesLocaleId()!;
+
     const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/filterarticlepanel/v1/get/`, {
       params:
       {
-        lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
+        lang: langParmeter,
+        lc: this.storageInteractor.getArticlesLocaleId()
       }
     });
     return response.data;
