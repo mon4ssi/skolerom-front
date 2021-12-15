@@ -354,7 +354,7 @@ export class WPApi implements ArticleRepo {
   }: { page: number, perPage: number, order: string, grades?: number, subjects?: number, searchTitle?: string, core?: number | string, goal?: number | string, multi?: number, source?: number, lang: string }): Promise<Array<Article>> {
 
     let langParmeter = lang;
-    if (lang === '') langParmeter = this.storageInteractor.getArticlesLocaleId()!;
+    if (lang === '' || (typeof(lang) === 'undefined')) langParmeter = this.storageInteractor.getArticlesLocaleId()!;
 
     return (
       await API.get(`${process.env.REACT_APP_WP_URL}/wp-articles/api/filterarticle/v1/post`, {

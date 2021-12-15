@@ -230,7 +230,7 @@ export class TeachingPathApi implements TeachingPathRepo {
 
   public async getFiltersArticlePanel(lang: string) {
     let langParmeter = lang;
-    if (lang === '') langParmeter = this.storageInteractor.getArticlesLocaleId()!;
+    if (lang === '' || (typeof(lang) === 'undefined')) langParmeter = this.storageInteractor.getArticlesLocaleId()!;
 
     const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/filterarticlepanel/v1/get/`, {
       params:
