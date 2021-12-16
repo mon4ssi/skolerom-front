@@ -30,6 +30,8 @@ import { injector } from 'Injector';
 import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteractor';
 
 const showDelay = 500;
+const refreshSearchDelay = 300;
+
 interface ArticleItemProps {
   editTeachingPathStore?: EditTeachingPathStore;
   article: Article;
@@ -107,6 +109,7 @@ interface State {
   checkArticle: boolean;
   activeGrepFilters: boolean;
   grepDataFilters: FilterArticlePanel | null;
+  grepDataJSON: {[field: string]: object};
   selectedGradesFilter: Array<Grade>;
   selectedSubjectsFilter: Array<Subject>;
   selectedCoresFilter: Array<Greep>;
@@ -167,6 +170,7 @@ export class ArticlesList extends Component<Props, State> {
       expandSubjects: true,
       checkArticle: false,
       grepDataFilters: null,
+      grepDataJSON: {},
       selectedSubjectsFilter: [],
       selectedGradesFilter: [],
       selectedSubjectsAll: [],
@@ -308,12 +312,23 @@ export class ArticlesList extends Component<Props, State> {
     const newArrayGrepGoals: Array<Greep> = [];
     const newArrayGrepSource: Array<Greep> = [];
 
+    let langId: string = this.storageInteractor.getArticlesLocaleId()!;
+
     if (!firstLoadlang) {
       this.handleChangeFilters('lang', String(this.state.MySelectLanguage!.join()));
+      langId = String(this.state.MySelectLanguage![0]);
     }
 
-    await this.props.editTeachingPathStore!.getFiltersArticlePanel(lang);
-    const dataArticles = this.props.editTeachingPathStore!.getAllArticlePanelFilters();
+    const currentGrepDataJSON = this.state.grepDataJSON;
+    let dataArticles:FilterArticlePanel | null;
+
+    if (typeof (currentGrepDataJSON[langId]) !== 'undefined') {
+      dataArticles = currentGrepDataJSON[langId];
+    } else {
+      await this.props.editTeachingPathStore!.getFiltersArticlePanel(lang);
+      dataArticles = this.props.editTeachingPathStore!.getAllArticlePanelFilters();
+      currentGrepDataJSON[langId] = dataArticles!;
+    }
 
     this.setState({ grepDataFilters: dataArticles });
 
@@ -331,9 +346,10 @@ export class ArticlesList extends Component<Props, State> {
         });
       });
 
-      newMySelectLanguage.push(Number(this.storageInteractor.getArticlesLocaleId()));
+      newMySelectLanguage.push(Number(langId));
 
       this.setState({
+        grepDataJSON: currentGrepDataJSON,
         selectedLanguageAll: newArrayLanguages,
         MySelectLanguage: newMySelectLanguage
       });
@@ -352,11 +368,40 @@ export class ArticlesList extends Component<Props, State> {
     });
 
     this.setState({ selectedGradesAll: newArrayGrades });
+
+    let continueReviewFilters: boolean = true;
+    const currentMySelectGrade: Array<number> | null = this.state.MySelectGrade;
+    if (currentMySelectGrade!.length > 0) {
+      const itemGradeArr = dataArticles!.grade_filter!.find(w => w.grade_id === String((currentMySelectGrade!.length === 1) ? currentMySelectGrade![0] : this.state.gradeParentId) && w.grade_parent === null);
+      if (typeof(itemGradeArr) === 'undefined') {
+        continueReviewFilters = false;
+        this.setState({ MySelectGrade: [], selectedGradeChildrenAll: [] }, () => { setTimeout(() => { this.handleChangeFilters('grades', String([])); }, refreshSearchDelay); });
+      }
+    }
     // EndGrade
 
     // Subject
     newArraySubjects = this.getSubjectFromDataArticles(dataArticles);
     this.setState({ selectedSubjectsAll: newArraySubjects });
+
+    if (continueReviewFilters) {
+      const currentMySelectSubject: Array<number> | null = this.state.MySelectSubject;
+      const newMySelectSubject: Array<number> | null = [];
+      if (currentMySelectSubject!.length > 0) {
+        let allSubjectExists = true;
+        currentMySelectSubject!.some((iSubject: number) => {
+          const itemSubjectFind = dataArticles!.subject_filter!.find(o => o.subject_id === String(iSubject));
+          if (typeof(itemSubjectFind) !== 'undefined') {
+            newMySelectSubject.push(iSubject);
+          } else { allSubjectExists = false; }
+        });
+
+        if (!allSubjectExists) {
+          continueReviewFilters = false;
+          this.setState({ MySelectSubject: newMySelectSubject }, () => { setTimeout(() => { this.handleChangeFilters('subjects', String(newMySelectSubject)); }, refreshSearchDelay); });
+        }
+      }
+    }
     // EndSubject
 
     // tslint:disable-next-line: variable-name
@@ -371,6 +416,7 @@ export class ArticlesList extends Component<Props, State> {
       selectedCoresAll: newArrayGrepCore
     });
 
+    // Discipline
     // tslint:disable-next-line: variable-name
     dataArticles!.multidisciplinay_filter!.forEach((element) => {
       newArrayGrepMulti.push({
@@ -379,9 +425,27 @@ export class ArticlesList extends Component<Props, State> {
         title: element.description!
       });
     });
-    this.setState({
-      selectedMultisAll: newArrayGrepMulti
-    });
+    this.setState({ selectedMultisAll: newArrayGrepMulti });
+    if (continueReviewFilters) {
+      const currentMySelectMulti: Array<number> | null = this.state.MySelectMulti;
+      const newMySelectMulti: Array<number> | null = [];
+      if (currentMySelectMulti!.length > 0) {
+        let allDisciplineExists = true;
+        currentMySelectMulti!.some((iDiscipline: number) => {
+          // tslint:disable-next-line: variable-name
+          const itemDisciplineFind = dataArticles!.multidisciplinay_filter!.find(o => o.main_topic_id === String(iDiscipline));
+          if (typeof(itemDisciplineFind) !== 'undefined') {
+            newMySelectMulti.push(iDiscipline);
+          } else { allDisciplineExists = false; }
+        });
+
+        if (!allDisciplineExists) {
+          continueReviewFilters = false;
+          this.setState({ MySelectMulti: newMySelectMulti }, () => { setTimeout(() => { this.handleChangeFilters('multi', String(newMySelectMulti)); }, refreshSearchDelay); });
+        }
+      }
+    }
+    // EndDiscipline
 
     // tslint:disable-next-line: variable-name
     dataArticles!.goals_filter!.forEach((element) => {
@@ -395,6 +459,7 @@ export class ArticlesList extends Component<Props, State> {
       selectedGoalsAll: newArrayGrepGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
     });
 
+    // Source
     // tslint:disable-next-line: variable-name
     dataArticles!.source_filter!.forEach((element) => {
       newArrayGrepSource.push({
@@ -403,19 +468,42 @@ export class ArticlesList extends Component<Props, State> {
         title: element.description!
       });
     });
-
     this.setState(
       {
         selectedSourceAll: newArrayGrepSource
       },
       () => {
-        if (this.state.selectedSourceAll.length > 1) {
-          this.setState({ showSourceFilter: true });
-        } else {
-          this.setState({ showSourceFilter: false });
-        }
+        this.setState({ showSourceFilter: true });
+        this.getGREPParametersSubject();
+        this.getGREPParametersCoreElements();
+        this.getGREPParametersDicipline();
+        this.getGREPParametersGoals();
+        this.getGREPParametersSources();
+        this.highLightGradeSubject();
       }
     );
+
+    if (continueReviewFilters) {
+      const currentMySelectSource: Array<number> | null = this.state.MySelectSource;
+      const newMySelectSource: Array<number> | null = [];
+      if (currentMySelectSource!.length > 0) {
+        let allSourceExists = true;
+        currentMySelectSource!.some((iSource: number) => {
+          // tslint:disable-next-line: variable-name
+          const itemSourceFind = dataArticles!.source_filter!.find(o => o.term_id === String(iSource));
+          if (typeof(itemSourceFind) !== 'undefined') {
+            newMySelectSource.push(iSource);
+          } else { allSourceExists = false; }
+        });
+
+        if (!allSourceExists) {
+          continueReviewFilters = false;
+          this.setState({ MySelectSource: newMySelectSource }, () => { setTimeout(() => { this.handleChangeFilters('source', String(newMySelectSource)); }, refreshSearchDelay); });
+        }
+      }
+    }
+    // EndSource
+
     this.setState({
       activeGrepFilters: true
     });
@@ -620,27 +708,32 @@ export class ArticlesList extends Component<Props, State> {
       },
       () => {
         this.handleChangeFilters('none', 0);
+/*
         this.getGREPParametersSubject();
         this.getGREPParametersCoreElements();
         this.getGREPParametersDicipline();
         this.getGREPParametersGoals();
         this.getGREPParametersSources();
+*/
+        const langId: string = this.storageInteractor.getArticlesLocaleId()!;
+        const langFilterArray = Array.from(document.getElementsByClassName('languageFilterClass') as HTMLCollectionOf<HTMLElement>);
+        langFilterArray.forEach((e) => {
+          e.classList.remove('active');
+          const buttonLangId: string = e.getAttribute('value')!;
+          if (langId === buttonLangId) { e.click(); }
+        });
       });
   }
 
   public handleClickLanguage = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const langId = Number(e.currentTarget.value);
-    const filterLanguage: Array<number> = this.state.MySelectLanguage!;
+    const filterLanguage: Array<number> = [];
 
     if (e.currentTarget.classList.contains('active')) {
       if (filterLanguage.length === 1) return;
     }
 
-    if (filterLanguage.includes(langId)) {
-      filterLanguage.splice(filterLanguage.indexOf(langId), 1);
-    } else {
-      filterLanguage.push(langId);
-    }
+    filterLanguage.push(langId);
 
     this.setState(
       {
