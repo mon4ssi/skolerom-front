@@ -88,11 +88,20 @@ export class DomainTeachingPath extends Component<Props, State> {
     });
   }
 
+  public chooseTitle = () => {
+    const { questionaryTeachingPathStore } = this.props;
+    const length = questionaryTeachingPathStore!.currentArticlesList.length;
+    if (length > 1) {
+      return (
+        <span className={'chooseOne fs15'}>{intl.get('teaching path passing.choose one')}</span>
+      );
+    }
+  }
+
   public renderContent = () => {
     const { questionaryTeachingPathStore, content } = this.props;
     return (
       <div className={'articleTeachingPath'}>
-        <span className={'chooseOne fs15'}>{intl.get('teaching path passing.choose one')}</span>
         <span className={'title'}>{content![0].selectQuestion}</span>
         <div className="cards">
           {this.renderCards()}
