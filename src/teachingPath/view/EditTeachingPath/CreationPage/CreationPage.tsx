@@ -365,7 +365,24 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     const placeholder = node.type === TeachingPathNodeType.Root ?
       intl.get('edit_teaching_path.paths.main_teaching_path_title') :
       intl.get('edit_teaching_path.paths.teaching_path_title');
-    if (node.selectQuestion !== placeholder) {
+    if (readOnly) {
+      if (node.selectQuestion !== intl.get('edit_teaching_path.paths.main_teaching_path_title') && node.selectQuestion !== intl.get('edit_teaching_path.paths.teaching_path_title')) {
+        return node.type === TeachingPathNodeType.Root || node.children.length ? (
+          <div className="teachingPathItemsTitleDiv" data-number={nestedOrder} >
+          <TextAreaAutosize
+            ref={this.titleRef}
+            className="teachingPathItemsTitle fw500"
+            value={node.selectQuestion}
+            placeholder={placeholder}
+            onChange={this.handleChangeTitle}
+            cols={this.state.numberOfTitleCols}
+            maxLength={MAX_TITLE_LENGTH}
+            readOnly={readOnly}
+          />
+          </div>
+        ) : null;
+      }
+    } else {
       return node.type === TeachingPathNodeType.Root || node.children.length ? (
         <div className="teachingPathItemsTitleDiv" data-number={nestedOrder} >
         <TextAreaAutosize
