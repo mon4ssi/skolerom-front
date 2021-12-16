@@ -365,7 +365,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     const placeholder = node.type === TeachingPathNodeType.Root ?
       intl.get('edit_teaching_path.paths.main_teaching_path_title') :
       intl.get('edit_teaching_path.paths.teaching_path_title');
-    if (!readOnly) {
+    if (node.selectQuestion !== placeholder) {
       return node.type === TeachingPathNodeType.Root || node.children.length ? (
         <div className="teachingPathItemsTitleDiv" data-number={nestedOrder} >
         <TextAreaAutosize

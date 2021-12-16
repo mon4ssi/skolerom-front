@@ -80,7 +80,7 @@ export class Grade {
   @observable public name_sub?: string | null;
   @observable public managementId?: number | null;
 
-  constructor(id: number, title: string) {
+  constructor(id: number, title: string, managementId?:number | undefined | null) {
     this.id = id;
     this.title = title;
     this.filterStatus = null;
@@ -88,7 +88,7 @@ export class Grade {
     this.grade_parent = [];
     // tslint:disable-next-line: variable-name
     this.name_sub = null;
-    this.managementId = null;
+    this.managementId = managementId;
   }
 }
 

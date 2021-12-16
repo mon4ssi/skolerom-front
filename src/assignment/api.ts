@@ -195,7 +195,7 @@ export class AssignmentApi implements AssignmentRepo {
 
   public async getGrades(): Promise<Array<Grade>> {
     return (await API.get('api/classes')).data.data.map(
-      (item: GradeDTO) => new Grade(item.id, item.title)
+      (item: GradeDTO) => new Grade(item.id, item.title, item.managementId)
     );
   }
 

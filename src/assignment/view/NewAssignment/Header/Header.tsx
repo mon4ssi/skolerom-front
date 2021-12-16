@@ -40,13 +40,15 @@ class HeaderWrapper extends Component<Props> {
   private refGoDistribution = React.createRef<HTMLButtonElement>();
   private refFinalDistribution = React.createRef<HTMLButtonElement>();
   private isDisabledPublishButton = (): boolean => {
-    const { currentEntity: currentAssignment } = this.props.newAssignmentStore!;
-
-    return currentAssignment!.getIsDraftSaving();
+    const { isActiveButtons } = this.props.newAssignmentStore!;
+    return !isActiveButtons;
   }
 
   private isDisabledSaveButton = () => false;
-  private isDisabledDistributeButton = () => false;
+  private isDisabledDistributeButton = (): boolean => {
+    const { isActiveButtons } = this.props.newAssignmentStore!;
+    return !isActiveButtons;
+  }
 
   private onSave = async (): Promise<void> => {
     const { newAssignmentStore, history, location } = this.props;

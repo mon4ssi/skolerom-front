@@ -46,8 +46,8 @@ export class TeachingPathTitle extends Component<Props> {
     if (value.split("'").length > 1 || value.split('"').length > 1) {
       const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
       value = `${initValue}${startQuote}${endQuote}`;
-      // this.titleRef.current!.selectionStart = 2;
       this.titleRef.current!.focus();
+      // this.titleRef.current!.selectionStart = 2;
     }
     if (lettersNoEn(value)) {
       currentTeachingPath!.setTitle(value);
