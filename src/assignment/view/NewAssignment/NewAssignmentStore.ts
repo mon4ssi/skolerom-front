@@ -440,11 +440,16 @@ export class NewAssignmentStore {
       try {
         const articles = await this.articleService!.getArticles({
           perPage,
+          page: this.currentArticlesPage,
           order: rest.order,
           grades: rest.grades,
           subjects: rest.subjects,
+          core: rest.core,
+          goal: rest.goal,
+          multi: rest.multi,
+          source: rest.source,
           searchTitle: rest.searchTitle,
-          page: this.currentArticlesPage,
+          lang: rest.lang
         });
 
         this.allArticles = isNextPage ? this.allArticles.concat(articles) : articles;

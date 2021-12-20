@@ -9,7 +9,7 @@ import { NewAssignmentStore } from '../../NewAssignmentStore';
 import { RelatedArticlesCard } from './RelatedArticlesCard';
 import { AttachmentContentType, AttachmentContentTypeContext } from '../../AttachmentContentTypeContext';
 import { Article, FilterArticlePanel, Grade, Subject, Greep, GradeFilter, CoreFilter, CoreFilterItemGrades,
-  MultiFilter, MultiFilterItemGrades, GoalsFilter, GoalsFilterItemGrades, SourceFilter, SourceFilterItemGrades } from 'assignment/Assignment';
+  MultiFilter, MultiFilterItemGrades, GoalsFilter, GoalsFilterItemGrades, SourceFilter, SourceFilterItemGrades, Language } from 'assignment/Assignment';
 import { TagProp } from 'components/common/TagInput/TagInput';
 import { SearchFilter } from 'components/common/SearchFilter/SearchFilter';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
@@ -27,6 +27,10 @@ import backIcon from 'assets/images/back-arrow.svg';
 import './RelatedArticlesPreview.scss';
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
 import { SCROLL_OFFSET } from 'utils/constants';
+import { injector } from 'Injector';
+import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteractor';
+
+const refreshSearchDelay = 300;
 
 interface Props {
   newAssignmentStore?: NewAssignmentStore;
@@ -43,10 +47,12 @@ interface State {
   checkArticle: boolean;
   activeGrepFilters: boolean;
   grepDataFilters: FilterArticlePanel | null;
+  grepDataJSON: {[field: string]: object};
   selectedGradesFilter: Array<Grade>;
   selectedSubjectsFilter: Array<Subject>;
   selectedCoresFilter: Array<Greep>;
   selectedCoresAll: Array<Greep>;
+  selectedLanguageAll: Array<Language>;
   selectedGradesAll: Array<Grade>;
   selectedGradeChildrenAll: Array<Grade>;
   selectedSubjectsAll: Array<Subject>;
@@ -60,6 +66,7 @@ interface State {
   valueSubject: string;
   MySelectGrade: Array<number> | null;
   MySelectSubject: Array<number> | null;
+  MySelectLanguage: Array<number> | null;
   MySelectCore: Array<number> | null;
   MySelectMulti: Array<number> | null;
   MySelectGoal: Array<number> | null;
@@ -78,6 +85,7 @@ interface State {
 @observer
 class RelatedArticlesPreviewComponent extends Component<Props, State> {
   public static contextType = AttachmentContentTypeContext;
+  public storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
   public ref = createRef<HTMLDivElement>();
   public refButton = createRef<HTMLButtonElement>();
 
@@ -94,9 +102,11 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       expandSubjects: true,
       checkArticle: false,
       grepDataFilters: null,
+      grepDataJSON: {},
       selectedSubjectsFilter: [],
       selectedGradesFilter: [],
       selectedSubjectsAll: [],
+      selectedLanguageAll: [],
       selectedGradesAll: [],
       selectedCoresAll: [],
       selectedGradeChildrenAll: [],
@@ -112,6 +122,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       activeGrepFilters: false,
       MySelectGrade: [],
       MySelectSubject: [],
+      MySelectLanguage: [],
       MySelectCore: [],
       MySelectMulti: [],
       MySelectGoal: [],
@@ -119,8 +130,8 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       showSourceFilter: false,
       userFilters: false,
       filtersisUsed: false,
-      filtersAjaxLoading: false,
-      filtersAjaxLoadingGoals: false,
+      filtersAjaxLoading: true,
+      filtersAjaxLoadingGoals: true,
       myValueCore: [],
       goalValueFilter: [],
       gradeParentId: 0
@@ -142,7 +153,6 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     newAssignmentStore!.resetCurrentArticlesPage();
     newAssignmentStore!.resetIsFetchedArticlesListFinished();
     let filters = { ...this.state.appliedFilters };
-
     allModal[0].classList.add('loadingdata');
 
     if (!isNaN(filterValue)) {
@@ -162,13 +172,16 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       this.setState({ appliedFilters: {} });
       filters = {};
     }
+
     this.setState({ appliedFilters: filters });
     this.setState({ userFilters: true });
-    if (filters.subjects || filters.grades || filters.core || filters.multi || filters.goal || filters.source) {
+
+    if (filters.lang || filters.grades || filters.subjects || filters.core || filters.multi || filters.goal || filters.source) {
       this.setState({ filtersisUsed: true });
     } else {
       this.setState({ filtersisUsed: false });
     }
+
     if (filterName === 'searchTitle') {
       newAssignmentStore!.getArticlesWithDebounce(filters);
       allModal[0].classList.remove('loadingdata');
@@ -179,13 +192,8 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
   }
 
   public async componentDidMount() {
-    const newArrayGrades : Array<Grade> = [];
-    const newArraySubjects : Array<Subject> = [];
-    const newArrayGrepCore : Array<Greep> = [];
-    const newArrayGrepMulti : Array<Greep> = [];
-    const newArrayGrepGoals : Array<Greep> = [];
-    const newArrayGrepSource : Array<Greep> = [];
     const { newAssignmentStore } = this.props;
+
     const { appliedFilters } = this.state;
     if (this.refButton.current) {
       this.refButton.current!.focus();
@@ -198,17 +206,82 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
 
     const isNextPage = newAssignmentStore!.allArticles.length > 0;
     document.addEventListener('keyup', this.handleKeyboardControl);
-    this.setState({ filtersAjaxLoading: true });
-    this.setState({ filtersAjaxLoadingGoals: true });
+
     await newAssignmentStore!.getArticles({ isNextPage, ...appliedFilters });
     await newAssignmentStore!.getGrades();
     await newAssignmentStore!.getSubjects();
+
     this.props.newAssignmentStore!.visibilityArticles = true;
-    await newAssignmentStore!.getFiltersArticlePanel('');
-    const dataArticles = newAssignmentStore!.getAllArticlePanelFilters();
-    this.setState({
-      grepDataFilters : dataArticles
+    this.getDataPanelLeftGrep('', true);
+  }
+
+  public getSubjectFromDataArticles = (dataArticles: any) => {
+    const newArraySubjects: Array<Subject> = [];
+    dataArticles!.subject_filter!.forEach((element: any) => { // subjeeeect filterr
+      newArraySubjects.push({
+        // tslint:disable-next-line: variable-name
+        id: Number(element.subject_id),
+        title: element.description!
+      });
     });
+    return newArraySubjects;
+  }
+  public async getDataPanelLeftGrep(lang: string, firstLoadlang: boolean) {
+    this.setState({ filtersAjaxLoading: true });
+    this.setState({ filtersAjaxLoadingGoals: true });
+
+    const { newAssignmentStore } = this.props;
+    const newArrayGrades: Array<Grade> = [];
+    let newArraySubjects: Array<Subject> = [];
+    const newArrayGrepCore: Array<Greep> = [];
+    const newArrayGrepMulti: Array<Greep> = [];
+    const newArrayGrepGoals: Array<Greep> = [];
+    const newArrayGrepSource: Array<Greep> = [];
+
+    let langId: string = this.storageInteractor.getArticlesLocaleId()!;
+
+    if (!firstLoadlang) {
+      this.handleChangeFilters('lang', String(this.state.MySelectLanguage!.join()));
+      langId = String(this.state.MySelectLanguage![0]);
+    }
+
+    const currentGrepDataJSON = this.state.grepDataJSON;
+    let dataArticles:FilterArticlePanel | null;
+
+    if (typeof (currentGrepDataJSON[langId]) !== 'undefined') {
+      dataArticles = currentGrepDataJSON[langId];
+    } else {
+      await newAssignmentStore!.getFiltersArticlePanel(langId);
+      dataArticles = newAssignmentStore!.getAllArticlePanelFilters();
+      currentGrepDataJSON[langId] = dataArticles!;
+    }
+
+    this.setState({ grepDataFilters: dataArticles });
+
+    if (firstLoadlang) {
+      // Language
+      const newArrayLanguages: Array<Language> = [];
+      const newMySelectLanguage: Array<number> = [];
+
+      dataArticles!.LanguageFilter!.forEach((element) => {
+        newArrayLanguages.push({
+          langId: element.langId,
+          description: element.description,
+          slug: element.slug,
+          langOrder: element.langOrder
+        });
+      });
+
+      newMySelectLanguage.push(Number(langId));
+
+      this.setState({
+        grepDataJSON: currentGrepDataJSON,
+        selectedLanguageAll: newArrayLanguages,
+        MySelectLanguage: newMySelectLanguage
+      });
+    }
+
+    // Grade
     // tslint:disable-next-line: variable-name
     dataArticles!.grade_filter!.forEach((element) => {
       if (element.grade_parent === null) {
@@ -219,21 +292,44 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         });
       }
     });
-    this.setState({
-      selectedGradesAll : newArrayGrades
-    });
-    // tslint:disable-next-line: variable-name
-    dataArticles!.subject_filter!.forEach((element) => {
-      newArraySubjects.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(element.subject_id),
-        title: element.description!,
-        filterStatus: null
-      });
-    });
-    this.setState({
-      selectedSubjectsAll : newArraySubjects
-    });
+
+    this.setState({ selectedGradesAll: newArrayGrades });
+
+    let continueReviewFilters: boolean = true;
+    const currentMySelectGrade: Array<number> | null = this.state.MySelectGrade;
+    if (currentMySelectGrade!.length > 0) {
+      const itemGradeArr = dataArticles!.grade_filter!.find(w => w.grade_id === String((currentMySelectGrade!.length === 1) ? currentMySelectGrade![0] : this.state.gradeParentId) && w.grade_parent === null);
+      if (typeof(itemGradeArr) === 'undefined') {
+        continueReviewFilters = false;
+        this.setState({ MySelectGrade: [], selectedGradeChildrenAll: [] }, () => { setTimeout(() => { this.handleChangeFilters('grades', String([])); }, refreshSearchDelay); });
+      }
+    }
+    // EndGrade
+
+    // Subject
+    newArraySubjects = this.getSubjectFromDataArticles(dataArticles);
+    this.setState({ selectedSubjectsAll: newArraySubjects });
+
+    if (continueReviewFilters) {
+      const currentMySelectSubject: Array<number> | null = this.state.MySelectSubject;
+      const newMySelectSubject: Array<number> | null = [];
+      if (currentMySelectSubject!.length > 0) {
+        let allSubjectExists = true;
+        currentMySelectSubject!.some((iSubject: number) => {
+          const itemSubjectFind = dataArticles!.subject_filter!.find(o => o.subject_id === String(iSubject));
+          if (typeof(itemSubjectFind) !== 'undefined') {
+            newMySelectSubject.push(iSubject);
+          } else { allSubjectExists = false; }
+        });
+
+        if (!allSubjectExists) {
+          continueReviewFilters = false;
+          this.setState({ MySelectSubject: newMySelectSubject }, () => { setTimeout(() => { this.handleChangeFilters('subjects', String(newMySelectSubject)); }, refreshSearchDelay); });
+        }
+      }
+    }
+    // EndSubject
+
     // tslint:disable-next-line: variable-name
     dataArticles!.core_elements_filter!.forEach((element) => {
       newArrayGrepCore.push({
@@ -243,8 +339,10 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       });
     });
     this.setState({
-      selectedCoresAll : newArrayGrepCore
+      selectedCoresAll: newArrayGrepCore
     });
+
+    // Discipline
     // tslint:disable-next-line: variable-name
     dataArticles!.multidisciplinay_filter!.forEach((element) => {
       newArrayGrepMulti.push({
@@ -253,9 +351,28 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
         title: element.description!
       });
     });
-    this.setState({
-      selectedMultisAll : newArrayGrepMulti
-    });
+    this.setState({ selectedMultisAll: newArrayGrepMulti });
+    if (continueReviewFilters) {
+      const currentMySelectMulti: Array<number> | null = this.state.MySelectMulti;
+      const newMySelectMulti: Array<number> | null = [];
+      if (currentMySelectMulti!.length > 0) {
+        let allDisciplineExists = true;
+        currentMySelectMulti!.some((iDiscipline: number) => {
+          // tslint:disable-next-line: variable-name
+          const itemDisciplineFind = dataArticles!.multidisciplinay_filter!.find(o => o.main_topic_id === String(iDiscipline));
+          if (typeof(itemDisciplineFind) !== 'undefined') {
+            newMySelectMulti.push(iDiscipline);
+          } else { allDisciplineExists = false; }
+        });
+
+        if (!allDisciplineExists) {
+          continueReviewFilters = false;
+          this.setState({ MySelectMulti: newMySelectMulti }, () => { setTimeout(() => { this.handleChangeFilters('multi', String(newMySelectMulti)); }, refreshSearchDelay); });
+        }
+      }
+    }
+    // EndDiscipline
+
     // tslint:disable-next-line: variable-name
     dataArticles!.goals_filter!.forEach((element) => {
       newArrayGrepGoals.push({
@@ -265,8 +382,10 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       });
     });
     this.setState({
-      selectedGoalsAll : newArrayGrepGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
+      selectedGoalsAll: newArrayGrepGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
     });
+
+    // Source
     // tslint:disable-next-line: variable-name
     dataArticles!.source_filter!.forEach((element) => {
       newArrayGrepSource.push({
@@ -277,21 +396,46 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     });
     this.setState(
       {
-        selectedSourceAll : newArrayGrepSource
+        selectedSourceAll: newArrayGrepSource
       },
       () => {
-        if (this.state.selectedSourceAll.length > 1) {
-          this.setState({ showSourceFilter: true });
-        } else {
-          this.setState({ showSourceFilter: false });
-        }
+        this.setState({ showSourceFilter: true });
+        this.getGREPParametersSubject();
+        this.getGREPParametersCoreElements();
+        this.getGREPParametersDicipline();
+        this.getGREPParametersGoals();
+        this.getGREPParametersSources();
+        this.highLightGradeSubject();
       }
     );
+
+    if (continueReviewFilters) {
+      const currentMySelectSource: Array<number> | null = this.state.MySelectSource;
+      const newMySelectSource: Array<number> | null = [];
+      if (currentMySelectSource!.length > 0) {
+        let allSourceExists = true;
+        currentMySelectSource!.some((iSource: number) => {
+          // tslint:disable-next-line: variable-name
+          const itemSourceFind = dataArticles!.source_filter!.find(o => o.term_id === String(iSource));
+          if (typeof(itemSourceFind) !== 'undefined') {
+            newMySelectSource.push(iSource);
+          } else { allSourceExists = false; }
+        });
+
+        if (!allSourceExists) {
+          continueReviewFilters = false;
+          this.setState({ MySelectSource: newMySelectSource }, () => { setTimeout(() => { this.handleChangeFilters('source', String(newMySelectSource)); }, refreshSearchDelay); });
+        }
+      }
+    }
+    // EndSource
+
     this.setState({
-      activeGrepFilters : true
+      activeGrepFilters: true
     });
     this.setState({ filtersAjaxLoading: false });
     this.setState({ filtersAjaxLoadingGoals: false });
+
   }
 
   public componentWillUnmount() {
@@ -544,12 +688,40 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       },
       () => {
         this.handleChangeFilters('none', 0);
-        this.getGREPParametersSubject();
+        /*this.getGREPParametersSubject();
         this.getGREPParametersCoreElements();
         this.getGREPParametersDicipline();
         this.getGREPParametersGoals();
-        this.getGREPParametersSources();
+        this.getGREPParametersSources();*/
+
+        const langId: string = this.storageInteractor.getArticlesLocaleId()!;
+        const langFilterArray = Array.from(document.getElementsByClassName('languageFilterClass') as HTMLCollectionOf<HTMLElement>);
+        langFilterArray.forEach((e) => {
+          e.classList.remove('active');
+          const buttonLangId: string = e.getAttribute('value')!;
+          if (langId === buttonLangId) { e.click(); }
+        });
       });
+  }
+
+  public handleClickLanguage = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const langId = Number(e.currentTarget.value);
+    const filterLanguage: Array<number> = [];
+
+    if (e.currentTarget.classList.contains('active')) {
+      if (filterLanguage.length === 1) return;
+    }
+
+    filterLanguage.push(langId);
+
+    this.setState(
+      {
+        MySelectLanguage: filterLanguage
+      },
+      () => {
+        this.getDataPanelLeftGrep(this.state.MySelectLanguage!.sort().join(), false);
+      }
+    );
   }
 
   public handleClickGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -1813,6 +1985,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
                 handleChangeGrade={this.handleChangeGrade}
                 switchNewestOldest={this.switchNewestOldest}
                 handleInputSearchQuery={this.handleChangeSearchQuery}
+                handleClickLanguage={this.handleClickLanguage}
                 handleClickGrade={this.handleClickGrade}
                 handleClickSubject={this.handleClickSubject}
                 handleClickMulti={this.handleClickMulti}
@@ -1826,6 +1999,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
                 // gradeFilterValue={Number(this.state.appliedFilters.grades)}
                 coreFilterValue={Number(this.state.appliedFilters.core)}
                 goalsFilterValue={Number(this.state.appliedFilters.goal)}
+                defaultValueLanguageFilter={String(this.state.MySelectLanguage)}
                 defaultValueGradeFilter={String(this.state.appliedFilters.grades)}
                 defaultValueSubjectFilter={String(this.state.appliedFilters.subjects)}
                 defaultValueMainFilter={String(this.state.MySelectMulti)}
@@ -1833,6 +2007,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
                 coreValueFilter={this.state.myValueCore}
                 goalValueFilter={this.state.goalValueFilter}
                 searchQueryFilterValue={this.state.appliedFilters.searchTitle as string}
+                customLanguagesList={this.state.selectedLanguageAll}
                 customGradesList={this.customGradesList()}
                 customSubjectsList={this.mySubjects()}
                 customGradeChildrenList={this.customGradeChildrenList()}
