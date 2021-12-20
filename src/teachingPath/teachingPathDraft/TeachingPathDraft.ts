@@ -8,6 +8,8 @@ import {
   TeachingPathNode,
   TeachingPathItem,
   TeachingPathItemValue,
+  TeachingPathRepo,
+  TEACHING_PATH_REPO,
   TeachingPathNodeArgs
 } from 'teachingPath/TeachingPath';
 import { SAVE_DELAY } from 'utils/constants';
@@ -38,6 +40,7 @@ interface DraftTeachingPathArgs extends TeachingPathArgs {
 export class DraftTeachingPath extends TeachingPath {
 
   protected repo: DraftTeachingPathRepo = injector.get(DRAFT_TEACHING_PATH_REPO);
+  protected teachingPathRepo: TeachingPathRepo = injector.get<TeachingPathRepo>(TEACHING_PATH_REPO);
 
   protected _uuid: string;
   @observable protected _createdAt: string;
@@ -186,8 +189,9 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
-  public addSubjectBySave() {
+  public addSubjectBySave = async () => {
     let myFirstSubjects: Array<Subject> = [];
+    const idItems: Array<number> = [];
     const firstItems = this.content;
     /*if (this.subjects.length === 0) {*/
     if (firstItems.children.length > 0) {
@@ -196,10 +200,13 @@ export class DraftTeachingPath extends TeachingPath {
         myFirstSubjects = this.anySubjects(myFirstSubjects, element);
       });
       if (typeof(myFirstSubjects) !== 'undefined') {
-        myFirstSubjects!.forEach((e) => {
-          if (!this.subjects.includes(e)) {
-            this.subjects.push(e);
-          }
+        myFirstSubjects.forEach((e) => {
+          idItems.push(e.id);
+        });
+        const getSubjecsItems = await this.teachingPathRepo.getSubjectWpIds(idItems);
+        this.subjects.splice(0, this.grades.length);
+        getSubjecsItems!.forEach((e) => {
+          this.subjects.push(e);
         });
       }
     }
@@ -268,8 +275,9 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
-  public addGradesBySave() {
+  public addGradesBySave = async () => {
     let myFirstGrades: Array<Grade> = [];
+    const idItems: Array<number> = [];
     const firstItems = this.content;
     /* if (this.grades.length === 0) {*/
     if (firstItems.children.length > 0) {
@@ -278,8 +286,12 @@ export class DraftTeachingPath extends TeachingPath {
         myFirstGrades = this.anyGrades(myFirstGrades, element);
       });
       if (typeof(myFirstGrades) !== 'undefined') {
+        myFirstGrades.forEach((e) => {
+          idItems.push(e.id);
+        });
+        const getGradesItems = await this.teachingPathRepo.getGradeWpIds(idItems);
         this.grades.splice(0, this.grades.length);
-        myFirstGrades!.forEach((e) => {
+        getGradesItems!.forEach((e) => {
           this.grades.push(e);
         });
       }
@@ -420,7 +432,7 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   public removeGrade(removableGrade: Grade) {
-    this._grades = this.grades.filter(grade => grade.id !== removableGrade.id);
+    this._grades = this.grades.filter(grade => Number(grade.id) !== Number(removableGrade.id));
     this.save();
   }
 

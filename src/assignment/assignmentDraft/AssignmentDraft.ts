@@ -23,6 +23,7 @@ import { EditableContentBlock, EditableImagesContentBlock, EditableTextContentBl
 import { ContentBlock, ContentBlockType } from '../ContentBlock';
 
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
+import { ConsoleView } from 'react-device-detect';
 
 const MIN_QUESTION_NUMBER = 1;
 
