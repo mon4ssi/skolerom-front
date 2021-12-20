@@ -720,7 +720,10 @@ export class ArticlesList extends Component<Props, State> {
         langFilterArray.forEach((e) => {
           e.classList.remove('active');
           const buttonLangId: string = e.getAttribute('value')!;
-          if (langId === buttonLangId) { e.click(); }
+          if (langId === buttonLangId) {
+            e.click();
+            e.classList.add('active');
+          }
         });
       });
   }

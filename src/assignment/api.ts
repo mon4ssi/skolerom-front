@@ -356,25 +356,29 @@ export class WPApi implements ArticleRepo {
     let langParmeter = lang;
     if (lang === '' || (typeof(lang) === 'undefined')) langParmeter = this.storageInteractor.getArticlesLocaleId()!;
 
-    return (
-      await API.get(`${process.env.REACT_APP_WP_URL}/wp-articles/api/filterarticle/v1/post`, {
-        params:
-        {
-          page,
-          order_by: order,
-          per_page: perPage,
-          student_grade_id: grades || null,
-          student_subject_id: subjects || null,
-          core_id: core || null,
-          goal_id: goal || null,
-          student_disciplin_id: multi || null,
-          student_source_id: source || null,
-          search_title: searchTitle || null,
-          lang: langParmeter || null
-        }
-      },
-      )
-    ).data.data.map(buildArticle);
+    try {
+      return (
+        await API.get(`${process.env.REACT_APP_WP_URL}/wp-articles/api/filterarticle/v1/post`, {
+          params:
+          {
+            page,
+            order_by: order,
+            per_page: perPage,
+            student_grade_id: grades || null,
+            student_subject_id: subjects || null,
+            core_id: core || null,
+            goal_id: goal || null,
+            student_disciplin_id: multi || null,
+            student_source_id: source || null,
+            search_title: searchTitle || null,
+            lang: langParmeter || null
+          }
+        },
+        )
+      ).data.data.map(buildArticle);
+    } catch {
+      return [];
+    }
   }
 
   public async getArticlesByIds(ids: Array<number>): Promise<Array<Article>> {
