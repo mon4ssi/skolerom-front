@@ -18,7 +18,9 @@ import { MAX_DESCRIPTION_LENGTH } from 'utils/constants';
 
 import newMultipleChoiceQuestionIcon from 'assets/images/new-multiple-choice-question.svg';
 import newMultipleChoiceQuestionIconPink from 'assets/images/new-multiple-choice-question-pink.svg';
-
+const ENTER_SINGLE_QUOTE_CODE = 219;
+const ENTER_DOUBLE_QUOTE_CODE = 50;
+const DELAY = 100;
 interface Props {
   question: EditableMultipleChoiceQuestion;
   newAssignmentStore?: NewAssignmentStore;
@@ -29,6 +31,7 @@ interface Props {
 class MultipleChoiceQuestionContent extends Component<Props> {
   public static contextType = AttachmentContentTypeContext;
   private refbutton = createRef<HTMLButtonElement>();
+  private titleRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
 
   private addNewOption = () => {
     const { question } = this.props;
@@ -43,9 +46,34 @@ class MultipleChoiceQuestionContent extends Component<Props> {
 
   private handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { question } = this.props;
-    if (lettersNoEn(e.target.value)) {
-      question.setTitle(e.target.value);
+    e.preventDefault();
+    const value = this.useValuedQuotes(e.currentTarget.value);
+    if (lettersNoEn(value)) {
+      question.setTitle(value);
     }
+  }
+
+  private focusTextField  = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+    if (e.keyCode === ENTER_SINGLE_QUOTE_CODE || e.keyCode === ENTER_DOUBLE_QUOTE_CODE) {
+      setTimeout(
+        () => {
+          this.titleRef.current!.selectionEnd = Number(this.titleRef.current!.value!.length) - 1;
+          this.titleRef.current!.focus();
+        },
+        DELAY
+      );
+    }
+  }
+
+  public useValuedQuotes = (value: string) => {
+    const startQuote = '«';
+    const endQuote = '»';
+    let newvalue = value;
+    if (value.split("'").length > 1 || value.split('"').length > 1) {
+      const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
+      newvalue = `${initValue}${startQuote}${endQuote}`;
+    }
+    return newvalue;
   }
 
   public async componentDidUpdate() {
@@ -100,6 +128,8 @@ class MultipleChoiceQuestionContent extends Component<Props> {
           placeholder={intl.get('new assignment.Enter a question')}
           value={question.title}
           onChange={this.handleChangeTitle}
+          onKeyUp={this.focusTextField}
+          inputRef={this.titleRef}
           maxLength={MAX_DESCRIPTION_LENGTH}
           aria-labelledby={titleId}
           autoFocus

@@ -12,7 +12,9 @@ import { lettersNoEn } from 'utils/lettersNoEn';
 import { MAX_DESCRIPTION_LENGTH_MAX } from 'utils/constants';
 
 import './TextQuestionPreview.scss';
-
+const ENTER_SINGLE_QUOTE_CODE = 219;
+const ENTER_DOUBLE_QUOTE_CODE = 50;
+const DELAY = 100;
 interface Props {
   question: TypedQuestion | EditableQuestion;
   answer?: Answer;
@@ -24,12 +26,37 @@ interface Props {
 
 @observer
 class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps<{}, {}, LocationState>> {
+  private titleRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
   public handleChangeAnswer = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { redirectData, answer, handleShowArrowsTooltip } = this.props;
-    answer!.setValue(event.target.value, redirectData);
+    event.preventDefault();
+    const value = this.useValuedQuotes(event.currentTarget.value);
+    answer!.setValue(value, redirectData);
     if (handleShowArrowsTooltip) {
       handleShowArrowsTooltip(true);
     }
+  }
+  public focusTextField  = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+    if (e.keyCode === ENTER_SINGLE_QUOTE_CODE || e.keyCode === ENTER_DOUBLE_QUOTE_CODE) {
+      setTimeout(
+        () => {
+          this.titleRef.current!.selectionEnd = Number(this.titleRef.current!.value!.length) - 1;
+          this.titleRef.current!.focus();
+        },
+        DELAY
+      );
+    }
+  }
+
+  public useValuedQuotes = (value: string) => {
+    const startQuote = '«';
+    const endQuote = '»';
+    let newvalue = value;
+    if (value.split("'").length > 1 || value.split('"').length > 1) {
+      const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
+      newvalue = `${initValue}${startQuote}${endQuote}`;
+    }
+    return newvalue;
   }
 
   public renderContent = () => {
@@ -50,9 +77,11 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
             placeholder={intl.get('new assignment.Write your answer here')}
             readOnly={readOnly}
             onChange={this.handleChangeAnswer}
+            onKeyUp={this.focusTextField}
             aria-labelledby="titleTextAnswser"
             aria-required="true"
             aria-invalid="false"
+            ref={this.titleRef}
           />
         </div>
       );
@@ -67,9 +96,11 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
           placeholder={intl.get('new assignment.Write your answer here')}
           readOnly={readOnly}
           onChange={this.handleChangeAnswer}
+          onKeyUp={this.focusTextField}
           aria-labelledby="titleTextAnswser"
           aria-required="true"
           aria-invalid="false"
+          inputRef={this.titleRef}
         />
       </div>
     );

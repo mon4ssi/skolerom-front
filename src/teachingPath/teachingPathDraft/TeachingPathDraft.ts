@@ -193,24 +193,24 @@ export class DraftTeachingPath extends TeachingPath {
     let myFirstSubjects: Array<Subject> = [];
     const idItems: Array<number> = [];
     const firstItems = this.content;
-    /*if (this.subjects.length === 0) {*/
-    if (firstItems.children.length > 0) {
-      const firstItemForList = firstItems.children;
-      firstItemForList.forEach((element) => {
-        myFirstSubjects = this.anySubjects(myFirstSubjects, element);
-      });
-      if (typeof(myFirstSubjects) !== 'undefined') {
-        myFirstSubjects.forEach((e) => {
-          idItems.push(e.id);
+    if (this.subjects.length === 0) {
+      if (firstItems.children.length > 0) {
+        const firstItemForList = firstItems.children;
+        firstItemForList.forEach((element) => {
+          myFirstSubjects = this.anySubjects(myFirstSubjects, element);
         });
-        const getSubjecsItems = await this.teachingPathRepo.getSubjectWpIds(idItems);
-        this.subjects.splice(0, this.grades.length);
-        getSubjecsItems!.forEach((e) => {
-          this.subjects.push(e);
-        });
+        if (typeof(myFirstSubjects) !== 'undefined') {
+          myFirstSubjects.forEach((e) => {
+            idItems.push(e.id);
+          });
+          const getSubjecsItems = await this.teachingPathRepo.getSubjectWpIds(idItems);
+          this.subjects.splice(0, this.subjects.length);
+          getSubjecsItems!.forEach((e) => {
+            this.subjects.push(e);
+          });
+        }
       }
     }
-    /*}*/
   }
 
   @action

@@ -43,6 +43,9 @@ const leftIndent = 160;
 const minNumberOfTitleCols = 20;
 const maxNumberOfTitleCols = 50;
 const num2 = 2;
+const ENTER_SINGLE_QUOTE_CODE = 219;
+const ENTER_DOUBLE_QUOTE_CODE = 50;
+const DELAY = 100;
 
 interface NodeContentProps {
   editTeachingPathStore?: EditTeachingPathStore;
@@ -88,9 +91,10 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
   public handleChangeTitle = (event: React.SyntheticEvent<HTMLTextAreaElement>) => {
     event.preventDefault();
-    if (lettersNoEn(event.currentTarget.value)) {
-      this.props.node.setSelectedQuestion(event.currentTarget.value);
-      const valueLength = event.currentTarget.value.length;
+    const value = this.useValuedQuotes(event.currentTarget.value);
+    if (lettersNoEn(value)) {
+      this.props.node.setSelectedQuestion(value);
+      const valueLength = value.length;
 
       this.handleChangeNumberOfTitleCols(valueLength);
     }
@@ -358,6 +362,17 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         <AddingButtons node={node} nester={nestedOrder}/>
       </div>
     );
+  }
+
+  public useValuedQuotes = (value: string) => {
+    const startQuote = '«';
+    const endQuote = '»';
+    let newvalue = value;
+    if (value.split("'").length > 1 || value.split('"').length > 1) {
+      const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
+      newvalue = `${initValue}${startQuote}${endQuote}`;
+    }
+    return newvalue;
   }
 
   public renderInput = () => {
