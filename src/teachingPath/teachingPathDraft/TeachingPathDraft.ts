@@ -204,7 +204,7 @@ export class DraftTeachingPath extends TeachingPath {
           idItems.push(e.id);
         });
         const getSubjecsItems = await this.teachingPathRepo.getSubjectWpIds(idItems);
-        this.subjects.splice(0, this.grades.length);
+        this.subjects.splice(0, this.subjects.length);
         getSubjecsItems!.forEach((e) => {
           this.subjects.push(e);
         });
@@ -398,6 +398,7 @@ export class DraftTeachingPath extends TeachingPath {
   @action
   public setGrepReadingInSubjectId = (data: Array<number>) => {
     this._grepReadingInSubjectsIds = data;
+    this.isRunningPublishing = true;
     this.save();
   }
 

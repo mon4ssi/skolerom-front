@@ -16,6 +16,16 @@ import {
   Subject,
   TextQuestion,
 } from '../Assignment';
+import {
+  TeachingPath,
+  TeachingPathArgs,
+  TeachingPathNode,
+  TeachingPathItem,
+  TeachingPathItemValue,
+  TeachingPathRepo,
+  TEACHING_PATH_REPO,
+  TeachingPathNodeArgs
+} from 'teachingPath/TeachingPath';
 import { Article, GreepElements } from 'assignment/Assignment';
 import { AssertionError } from 'assert';
 import { SAVE_DELAY } from 'utils/constants';
@@ -51,6 +61,7 @@ export interface DraftAssignmentArgs {
 
 export class DraftAssignment extends Assignment {
 
+  protected teachingPathRepo: TeachingPathRepo = injector.get<TeachingPathRepo>(TEACHING_PATH_REPO);
   protected repo: DraftAssignmentRepo = injector.get<DraftAssignmentRepo>(
     DRAFT_ASSIGNMENT_REPO
   );
@@ -400,14 +411,34 @@ export class DraftAssignment extends Assignment {
   }
 
   @action
-  public setArticle(article: Article) {
+  public setArticle = async (article: Article) => {
+    const idItems: Array<number> = [];
+    const idItemsSubejs: Array<number> = [];
     this._relatedArticles = this.relatedArticles.concat(article);
 
     const allGrades: Array<Grade> = [...this.grades, ...article.grades!];
     const allSubjects: Array<Subject> = [...this.subjects, ...article.subjects!];
 
-    this._grades = uniqBy(allGrades, 'id');
-    this._subjects = uniqBy(allSubjects, 'id');
+    allGrades.forEach((e) => {
+      idItems.push(e.id);
+    });
+
+    allSubjects.forEach((e) => {
+      idItemsSubejs.push(e.id);
+    });
+    const getGradesItems = await this.teachingPathRepo.getGradeWpIds(idItems);
+    const getSubjecsItems = await this.teachingPathRepo.getSubjectWpIds(idItemsSubejs);
+    this._grades.splice(0, this._grades.length);
+    getGradesItems!.forEach((e) => {
+      this._grades.push(e);
+    });
+    this._subjects.splice(0, this._subjects.length);
+    getSubjecsItems!.forEach((e) => {
+      this._subjects.push(e);
+    });
+
+    // this._grades = uniqBy(allGrades, 'id');
+    // this._subjects = uniqBy(allSubjects, 'id');
   }
 
   @action
