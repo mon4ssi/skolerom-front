@@ -11,6 +11,9 @@ import { MAX_TITLE_LENGTH, MAX_DESCRIPTION_LENGTH, MAX_DESCRIPTION_LENGTH_500 } 
 import './TeachingPathTitle.scss';
 
 const ENTER_KEY_CODE = 13;
+const ENTER_SINGLE_QUOTE_CODE = 219;
+const ENTER_DOUBLE_QUOTE_CODE = 50;
+const DELAY = 100;
 
 interface Props {
   editTeachingPathStore?: EditTeachingPathStore;
@@ -30,6 +33,27 @@ export class TeachingPathTitle extends Component<Props> {
       this.descriptionRef.current!.selectionStart = this.descriptionRef.current!.selectionEnd - this.descriptionRef.current!.value!.length;
       this.descriptionRef.current!.focus();
     }
+    if (e.keyCode === ENTER_SINGLE_QUOTE_CODE || e.keyCode === ENTER_DOUBLE_QUOTE_CODE) {
+      setTimeout(
+        () => {
+          this.titleRef.current!.selectionEnd = Number(this.titleRef.current!.value!.length) - 1;
+          this.titleRef.current!.focus();
+        },
+        DELAY
+      );
+    }
+  }
+
+  private focusTextField  = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+    if (e.keyCode === ENTER_SINGLE_QUOTE_CODE || e.keyCode === ENTER_DOUBLE_QUOTE_CODE) {
+      setTimeout(
+        () => {
+          this.descriptionRef.current!.selectionEnd = Number(this.descriptionRef.current!.value!.length) - 1;
+          this.descriptionRef.current!.focus();
+        },
+        DELAY
+      );
+    }
   }
 
   public componentDidMount() {
@@ -37,18 +61,21 @@ export class TeachingPathTitle extends Component<Props> {
     this.titleRef.current!.selectionStart = this.titleRef.current!.selectionEnd - this.titleRef.current!.value!.length;
   }
 
-  public setTitle = (event: React.SyntheticEvent<HTMLTextAreaElement>) => {
-    const { currentEntity: currentTeachingPath } = this.props.editTeachingPathStore!;
+  public useValuedQuotes = (value: string) => {
     const startQuote = '«';
     const endQuote = '»';
-    let value = event.currentTarget.value;
-    event.preventDefault();
+    let newvalue = value;
     if (value.split("'").length > 1 || value.split('"').length > 1) {
       const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
-      value = `${initValue}${startQuote}${endQuote}`;
-      this.titleRef.current!.focus();
-      // this.titleRef.current!.selectionStart = 2;
+      newvalue = `${initValue}${startQuote}${endQuote}`;
     }
+    return newvalue;
+  }
+
+  public setTitle = (event: React.SyntheticEvent<HTMLTextAreaElement>) => {
+    const { currentEntity: currentTeachingPath } = this.props.editTeachingPathStore!;
+    event.preventDefault();
+    const value = this.useValuedQuotes(event.currentTarget.value);
     if (lettersNoEn(value)) {
       currentTeachingPath!.setTitle(value);
     }
@@ -57,9 +84,9 @@ export class TeachingPathTitle extends Component<Props> {
   public setDescription = (event: React.SyntheticEvent<HTMLTextAreaElement>) => {
     const { currentEntity: currentTeachingPath } = this.props.editTeachingPathStore!;
     event.preventDefault();
-
-    if (lettersNoEn(event.currentTarget.value)) {
-      currentTeachingPath!.setDescription(event.currentTarget.value);
+    const value = this.useValuedQuotes(event.currentTarget.value);
+    if (lettersNoEn(value)) {
+      currentTeachingPath!.setDescription(value);
     }
   }
 
@@ -75,6 +102,7 @@ export class TeachingPathTitle extends Component<Props> {
         placeholder={intl.get('edit_teaching_path.title.description_placeholder')}
         value={currentTeachingPath!.description}
         onChange={this.setDescription}
+        onKeyUp={this.focusTextField}
         maxLength={MAX_DESCRIPTION_LENGTH_500}
         readOnly={readOnly}
         aria-labelledby="DescriptionInputTextArea"

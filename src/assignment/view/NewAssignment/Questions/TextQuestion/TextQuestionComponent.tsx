@@ -18,7 +18,9 @@ import textQuestionIcon from 'assets/images/new-text-question.svg';
 import textQuestionIconPink from 'assets/images/new-text-question-pink.svg';
 
 import '../Questions.scss';
-
+const ENTER_SINGLE_QUOTE_CODE = 219;
+const ENTER_DOUBLE_QUOTE_CODE = 50;
+const DELAY = 100;
 interface TextQuestionProps {
   question: EditableQuestion;
   newAssignmentStore?: NewAssignmentStore;
@@ -28,6 +30,7 @@ interface TextQuestionProps {
 @observer
 class TextQuestionContent extends Component<TextQuestionProps> {
   public static contextType = AttachmentContentTypeContext;
+  private titleRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
 
   public addNewContentBlock = (type: ContentBlockType): void => {
     const { question, newAssignmentStore } = this.props;
@@ -41,9 +44,34 @@ class TextQuestionContent extends Component<TextQuestionProps> {
 
   public handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { question } = this.props;
-    if (lettersNoEn(e.target.value)) {
-      question.setTitle(e.target.value);
+    e.preventDefault();
+    const value = this.useValuedQuotes(e.currentTarget.value);
+    if (lettersNoEn(value)) {
+      question.setTitle(value);
     }
+  }
+
+  public focusTextField  = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+    if (e.keyCode === ENTER_SINGLE_QUOTE_CODE || e.keyCode === ENTER_DOUBLE_QUOTE_CODE) {
+      setTimeout(
+        () => {
+          this.titleRef.current!.selectionEnd = Number(this.titleRef.current!.value!.length) - 1;
+          this.titleRef.current!.focus();
+        },
+        DELAY
+      );
+    }
+  }
+
+  public useValuedQuotes = (value: string) => {
+    const startQuote = '«';
+    const endQuote = '»';
+    let newvalue = value;
+    if (value.split("'").length > 1 || value.split('"').length > 1) {
+      const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
+      newvalue = `${initValue}${startQuote}${endQuote}`;
+    }
+    return newvalue;
   }
 
   public onSortEnd = (data: SortEnd, event: SortEvent) => {
@@ -76,6 +104,8 @@ class TextQuestionContent extends Component<TextQuestionProps> {
           placeholder={intl.get('new assignment.Enter a question')}
           value={question.title}
           onChange={this.handleChangeTitle}
+          onKeyUp={this.focusTextField}
+          inputRef={this.titleRef}
           maxLength={MAX_DESCRIPTION_LENGTH}
           aria-labelledby={titleId}
           autoFocus

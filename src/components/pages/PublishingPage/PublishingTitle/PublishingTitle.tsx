@@ -11,6 +11,9 @@ import { DraftAssignment } from 'assignment/assignmentDraft/AssignmentDraft';
 import { DraftTeachingPath } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
 
 const ENTER_KEY_CODE = 13;
+const ENTER_SINGLE_QUOTE_CODE = 219;
+const ENTER_DOUBLE_QUOTE_CODE = 50;
+const DELAY = 100;
 
 interface Props {
   currentEntity: DraftAssignment | DraftTeachingPath;
@@ -20,6 +23,7 @@ interface Props {
 
 @observer
 export class PublishingTitle extends Component<Props> {
+  private titleRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
   private descriptionRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
 
   private focusDescriptionField = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
@@ -27,20 +31,55 @@ export class PublishingTitle extends Component<Props> {
       this.descriptionRef.current!.selectionStart = this.descriptionRef.current!.selectionEnd = this.descriptionRef.current!.value.length;
       this.descriptionRef.current!.focus();
     }
-  }
-
-  private setTeachingPathTitle = (e: ChangeEvent<HTMLTextAreaElement>): void => {
-    const { currentEntity } = this.props;
-
-    if (lettersNoEn(e.target.value)) {
-      currentEntity!.setTitle(e.target.value);
+    if (e.keyCode === ENTER_SINGLE_QUOTE_CODE || e.keyCode === ENTER_DOUBLE_QUOTE_CODE) {
+      setTimeout(
+        () => {
+          this.titleRef.current!.selectionEnd = Number(this.titleRef.current!.value!.length) - 1;
+          this.titleRef.current!.focus();
+        },
+        DELAY
+      );
     }
   }
 
-  private setTeachingPathDescription = (e: ChangeEvent<HTMLTextAreaElement>): void => {
+  private focusTextField  = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+    if (e.keyCode === ENTER_SINGLE_QUOTE_CODE || e.keyCode === ENTER_DOUBLE_QUOTE_CODE) {
+      setTimeout(
+        () => {
+          this.descriptionRef.current!.selectionEnd = Number(this.descriptionRef.current!.value!.length) - 1;
+          this.descriptionRef.current!.focus();
+        },
+        DELAY
+      );
+    }
+  }
+
+  public useValuedQuotes = (value: string) => {
+    const startQuote = '«';
+    const endQuote = '»';
+    let newvalue = value;
+    if (value.split("'").length > 1 || value.split('"').length > 1) {
+      const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
+      newvalue = `${initValue}${startQuote}${endQuote}`;
+    }
+    return newvalue;
+  }
+
+  public setTeachingPathTitle = (e: ChangeEvent<HTMLTextAreaElement>): void => {
     const { currentEntity } = this.props;
-    if (lettersNoEn(e.target.value)) {
-      currentEntity!.setDescription(e.target.value);
+    e.preventDefault();
+    const value = this.useValuedQuotes(e.currentTarget.value);
+    if (lettersNoEn(value)) {
+      currentEntity!.setTitle(value);
+    }
+  }
+
+  public setTeachingPathDescription = (e: ChangeEvent<HTMLTextAreaElement>): void => {
+    const { currentEntity } = this.props;
+    e.preventDefault();
+    const value = this.useValuedQuotes(e.currentTarget.value);
+    if (lettersNoEn(value)) {
+      currentEntity!.setDescription(value);
     }
   }
 
@@ -69,6 +108,7 @@ export class PublishingTitle extends Component<Props> {
             placeholder={intl.get(`${localeKey}.title.title_placeholder`)}
             onKeyUp={this.focusDescriptionField}
             maxLength={MAX_TITLE_LENGTH}
+            inputRef={this.titleRef}
             aria-labelledby="titleInputTextArea"
           />
           <label id="DescriptionInputTextArea" className="hidden">{intl.get('edit_teaching_path.title.description_placeholder')}</label>
@@ -77,6 +117,7 @@ export class PublishingTitle extends Component<Props> {
             placeholder={intl.get(`${localeKey}.title.description_placeholder`)}
             value={currentEntity!.description}
             onChange={this.setTeachingPathDescription}
+            onKeyUp={this.focusTextField}
             inputRef={this.descriptionRef}
             maxLength={MAX_DESCRIPTION_LENGTH}
             aria-labelledby="DescriptionInputTextArea"
