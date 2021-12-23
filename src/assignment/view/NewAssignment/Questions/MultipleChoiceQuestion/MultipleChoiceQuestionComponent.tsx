@@ -54,7 +54,8 @@ class MultipleChoiceQuestionContent extends Component<Props> {
   }
 
   private focusTextField  = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    if (e.keyCode === ENTER_SINGLE_QUOTE_CODE || e.keyCode === ENTER_DOUBLE_QUOTE_CODE) {
+    const isDoubleQuote = (e.shiftKey && e.keyCode === ENTER_DOUBLE_QUOTE_CODE) ? true : false;
+    if (isDoubleQuote || e.keyCode === ENTER_SINGLE_QUOTE_CODE) {
       setTimeout(
         () => {
           this.titleRef.current!.selectionEnd = Number(this.titleRef.current!.value!.length) - 1;

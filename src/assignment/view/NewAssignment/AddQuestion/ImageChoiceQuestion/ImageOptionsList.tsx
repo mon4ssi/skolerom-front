@@ -92,7 +92,8 @@ class OptionComponent extends Component<OptionComponentProps> {
   }
 
   private focusTextField  = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (e.keyCode === ENTER_SINGLE_QUOTE_CODE || e.keyCode === ENTER_DOUBLE_QUOTE_CODE) {
+    const isDoubleQuote = (e.shiftKey && e.keyCode === ENTER_DOUBLE_QUOTE_CODE) ? true : false;
+    if (isDoubleQuote || e.keyCode === ENTER_SINGLE_QUOTE_CODE) {
       setTimeout(
         () => {
           this.refInput.current!.selectionEnd = Number(this.refInput.current!.value!.length) - 1;

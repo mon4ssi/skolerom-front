@@ -762,13 +762,6 @@ class SearchFilter extends Component<Props, State> {
       if (subject.filterStatus === 'inactive') { classD += ' downlight'; }
       return <button value={subject.id} className={`itemFlexFilter subjectsFilterClass ${classD}`} onClick={handleClickSubject} key={subject.id}>{title}</button>;
     });
-    if (this.props.filtersAjaxLoading) {
-      return (
-        <div className="minimalLoading">
-          <span /><span /><span />
-        </div>
-      );
-    }
     return (
       <div className="subjectsItems flexFilter">
         {visibleSubjects}

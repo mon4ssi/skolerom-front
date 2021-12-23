@@ -279,24 +279,24 @@ export class DraftTeachingPath extends TeachingPath {
     let myFirstGrades: Array<Grade> = [];
     const idItems: Array<number> = [];
     const firstItems = this.content;
-    /* if (this.grades.length === 0) {*/
-    if (firstItems.children.length > 0) {
-      const firstItemForList = firstItems.children;
-      firstItemForList.forEach((element) => {
-        myFirstGrades = this.anyGrades(myFirstGrades, element);
-      });
-      if (typeof(myFirstGrades) !== 'undefined') {
-        myFirstGrades.forEach((e) => {
-          idItems.push(e.id);
+    if (this.grades.length === 0) {
+      if (firstItems.children.length > 0) {
+        const firstItemForList = firstItems.children;
+        firstItemForList.forEach((element) => {
+          myFirstGrades = this.anyGrades(myFirstGrades, element);
         });
-        const getGradesItems = await this.teachingPathRepo.getGradeWpIds(idItems);
-        this.grades.splice(0, this.grades.length);
-        getGradesItems!.forEach((e) => {
-          this.grades.push(e);
-        });
+        if (typeof(myFirstGrades) !== 'undefined') {
+          myFirstGrades.forEach((e) => {
+            idItems.push(e.id);
+          });
+          const getGradesItems = await this.teachingPathRepo.getGradeWpIds(idItems);
+          this.grades.splice(0, this.grades.length);
+          getGradesItems!.forEach((e) => {
+            this.grades.push(e);
+          });
+        }
       }
     }
-    /* } */
   }
 
   @action

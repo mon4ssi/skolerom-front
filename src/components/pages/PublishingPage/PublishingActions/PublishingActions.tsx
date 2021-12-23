@@ -116,6 +116,7 @@ export class PublishingActions extends Component<Props, State> {
     const arraySelectedIdsNewsManagemdGrades: Array<number> = [];
     const arraySelectedIdsNewsManagemdSubjects: Array<number> = [];
     let listGoals: Array<string> = [];
+    this.props.store!.setIsDisabledButtonsFalse();
 
     if (from === 'TEACHINGPATH') {
       if (!store!.getAllGrades().length) {
@@ -1380,12 +1381,17 @@ export class PublishingActions extends Component<Props, State> {
 
   public sendValidbutton = () => {
     if (!this.state.isValid) {
-      if (this.state.optionsMyGrades.length > 0 && this.state.valueGoalsOptions.length > 0) {
+      if (this.state.optionsMyGrades.length > 0 && this.state.optionsMySubjects.length > 0) {
+        this.props.store!.setIsDisabledButtons();
+      } else {
+        this.props.store!.setIsDisabledButtonsFalse();
+      }
+      if (this.state.optionsMyGrades.length > 0 && this.state.optionsMySubjects.length > 0 && this.state.valueGoalsOptions.length > 0) {
         this.props.store!.setIsActiveButtons();
       } else {
         if (typeof(this.state.editvalueGoalsOptions) !== 'undefined') {
           if (this.state.editvalueGoalsOptions!.length > 0) {
-            if (this.state.optionsMyGrades.length > 0 && this.state.valueGoalsOptions.length > 0) {
+            if (this.state.optionsMyGrades.length > 0 && this.state.optionsMySubjects.length > 0 && this.state.valueGoalsOptions.length > 0) {
               this.props.store!.setIsActiveButtons();
             } else {
               this.props.store!.setIsActiveButtonsFalse();
@@ -1398,6 +1404,11 @@ export class PublishingActions extends Component<Props, State> {
         }
       }
     } else {
+      if (this.state.optionsMyGrades.length > 0 && this.state.optionsMySubjects.length > 0) {
+        this.props.store!.setIsDisabledButtons();
+      } else {
+        this.props.store!.setIsDisabledButtonsFalse();
+      }
       this.props.store!.setIsActiveButtons();
     }
   }

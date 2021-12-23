@@ -33,6 +33,7 @@ export class EditTeachingPathStore {
   @observable public fetchingArticles: boolean = false;
   @observable public isFetchedArticlesListFinished: boolean = false;
   @observable public isActiveButtons: boolean = false;
+  @observable public isDisabledButtons: boolean = false;
   @observable public hasMoreArticles: boolean = true;
   @observable public isEditArticles: boolean = false;
   @observable public articleInEdit: number = 0;
@@ -92,8 +93,16 @@ export class EditTeachingPathStore {
     this.isActiveButtons = true;
   }
 
+  public setIsDisabledButtons() {
+    this.isDisabledButtons = true;
+  }
+
   public setIsActiveButtonsFalse() {
     this.isActiveButtons = false;
+  }
+
+  public setIsDisabledButtonsFalse() {
+    this.isDisabledButtons = false;
   }
 
   public getGoalsByArticle() {

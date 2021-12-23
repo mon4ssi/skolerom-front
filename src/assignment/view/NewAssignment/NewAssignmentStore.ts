@@ -64,6 +64,7 @@ export class NewAssignmentStore {
   @observable public visibilityArticles: boolean = false;
   @observable public hiddenArticles: boolean = false;
   @observable public isActiveButtons: boolean = false;
+  @observable public isDisabledButtons: boolean = false;
   @observable public fetchingAttachments: boolean = false;
   @observable public visibilityAttachments: boolean = false;
   @observable public showValidationErrors: boolean = false;
@@ -114,8 +115,16 @@ export class NewAssignmentStore {
     this.isActiveButtons = true;
   }
 
+  public setIsDisabledButtons() {
+    this.isDisabledButtons = true;
+  }
+
   public setIsActiveButtonsFalse() {
     this.isActiveButtons = false;
+  }
+
+  public setIsDisabledButtonsFalse() {
+    this.isDisabledButtons = false;
   }
 
   @computed

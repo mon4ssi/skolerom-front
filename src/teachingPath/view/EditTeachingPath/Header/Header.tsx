@@ -39,8 +39,8 @@ export class HeaderComponent extends Component<Props> {
   private refFinalDistribution = React.createRef<HTMLButtonElement>();
   private isDisabledSaveButton = () => false;
   private isDisabledPublishButton = (): boolean => {
-    const { isActiveButtons } = this.props.editTeachingPathStore!;
-    return !isActiveButtons;
+    const { isDisabledButtons } = this.props.editTeachingPathStore!;
+    return !isDisabledButtons;
   }
 
   private onSave = async (): Promise<void> => {

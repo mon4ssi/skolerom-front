@@ -33,7 +33,8 @@ export class TeachingPathTitle extends Component<Props> {
       this.descriptionRef.current!.selectionStart = this.descriptionRef.current!.selectionEnd - this.descriptionRef.current!.value!.length;
       this.descriptionRef.current!.focus();
     }
-    if (e.keyCode === ENTER_SINGLE_QUOTE_CODE || e.keyCode === ENTER_DOUBLE_QUOTE_CODE) {
+    const isDoubleQuote = (e.shiftKey && e.keyCode === ENTER_DOUBLE_QUOTE_CODE) ? true : false;
+    if (isDoubleQuote || e.keyCode === ENTER_SINGLE_QUOTE_CODE) {
       setTimeout(
         () => {
           this.titleRef.current!.selectionEnd = Number(this.titleRef.current!.value!.length) - 1;
@@ -45,7 +46,8 @@ export class TeachingPathTitle extends Component<Props> {
   }
 
   private focusTextField  = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    if (e.keyCode === ENTER_SINGLE_QUOTE_CODE || e.keyCode === ENTER_DOUBLE_QUOTE_CODE) {
+    const isDoubleQuote = (e.shiftKey && e.keyCode === ENTER_DOUBLE_QUOTE_CODE) ? true : false;
+    if (isDoubleQuote || e.keyCode === ENTER_SINGLE_QUOTE_CODE) {
       setTimeout(
         () => {
           this.descriptionRef.current!.selectionEnd = Number(this.descriptionRef.current!.value!.length) - 1;
