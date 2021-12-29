@@ -114,21 +114,37 @@ export class SubmitComponent extends Component<Props> {
       this.setState({ disablebutton: false });
     }
     this.sendValidArticlesRead();
-    if (redirectData === undefined) {
-      if (currentQuestionaryStore!.relatedAllArticles.length) {
-        if (numberOfAnsweredQuestions === numberOfQuestions && currentQuestionaryStore!.allArticlesread) {
-          this.setState({ disablebutton : false });
-          setTimeout(
-            () => {
-              if (this.refbutton.current) {
-                this.refbutton.current!.focus();
-              }
-            },
-            showDelay
-          );
+    if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles.length > 0 && currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden) {
+      this.setState({ disablebutton : false });
+    } else {
+      if (redirectData === undefined) {
+        if (currentQuestionaryStore!.relatedAllArticles.length) {
+          if (numberOfAnsweredQuestions === numberOfQuestions && currentQuestionaryStore!.allArticlesread) {
+            this.setState({ disablebutton : false });
+            setTimeout(
+              () => {
+                if (this.refbutton.current) {
+                  this.refbutton.current!.focus();
+                }
+              },
+              showDelay
+            );
+          } else {
+            if (!readOnly) {
+              this.setState({ disablebutton : true });
+            }
+          }
         } else {
-          if (!readOnly) {
-            this.setState({ disablebutton : true });
+          if (numberOfAnsweredQuestions === numberOfQuestions) {
+            this.setState({ disablebutton : false });
+            setTimeout(
+              () => {
+                if (this.refbutton.current) {
+                  this.refbutton.current!.focus();
+                }
+              },
+              showDelay
+            );
           }
         }
       } else {
@@ -143,18 +159,6 @@ export class SubmitComponent extends Component<Props> {
             showDelay
           );
         }
-      }
-    } else {
-      if (numberOfAnsweredQuestions === numberOfQuestions) {
-        this.setState({ disablebutton : false });
-        setTimeout(
-          () => {
-            if (this.refbutton.current) {
-              this.refbutton.current!.focus();
-            }
-          },
-          showDelay
-        );
       }
     }
   }
