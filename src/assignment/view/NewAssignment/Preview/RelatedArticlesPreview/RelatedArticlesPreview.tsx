@@ -217,13 +217,15 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
 
   public getSubjectFromDataArticles = (dataArticles: any) => {
     const newArraySubjects: Array<Subject> = [];
-    dataArticles!.subject_filter!.forEach((element: any) => { // subjeeeect filterr
-      newArraySubjects.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(element.subject_id),
-        title: element.description!
+    if (dataArticles!.subject_filter! !== null) {
+      dataArticles!.subject_filter!.forEach((element: any) => { // subjeeeect filterr
+        newArraySubjects.push({
+          // tslint:disable-next-line: variable-name
+          id: Number(element.subject_id),
+          title: element.description!
+        });
       });
-    });
+    }
     return newArraySubjects;
   }
   public async getDataPanelLeftGrep(lang: string, firstLoadlang: boolean) {
@@ -331,26 +333,30 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     // EndSubject
 
     // tslint:disable-next-line: variable-name
-    dataArticles!.core_elements_filter!.forEach((element) => {
-      newArrayGrepCore.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(element.core_element_id),
-        title: element.description!
+    if (dataArticles!.core_elements_filter! !== null) {
+      dataArticles!.core_elements_filter!.forEach((element) => {
+        newArrayGrepCore.push({
+          // tslint:disable-next-line: variable-name
+          id: Number(element.core_element_id),
+          title: element.description!
+        });
       });
-    });
+    }
     this.setState({
       selectedCoresAll: newArrayGrepCore
     });
 
     // Discipline
     // tslint:disable-next-line: variable-name
-    dataArticles!.multidisciplinay_filter!.forEach((element) => {
-      newArrayGrepMulti.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(element.main_topic_id),
-        title: element.description!
+    if (dataArticles!.multidisciplinay_filter! !== null) {
+      dataArticles!.multidisciplinay_filter!.forEach((element) => {
+        newArrayGrepMulti.push({
+          // tslint:disable-next-line: variable-name
+          id: Number(element.main_topic_id),
+          title: element.description!
+        });
       });
-    });
+    }
     this.setState({ selectedMultisAll: newArrayGrepMulti });
     if (continueReviewFilters) {
       const currentMySelectMulti: Array<number> | null = this.state.MySelectMulti;
@@ -374,26 +380,30 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     // EndDiscipline
 
     // tslint:disable-next-line: variable-name
-    dataArticles!.goals_filter!.forEach((element) => {
-      newArrayGrepGoals.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(element.goal_id),
-        title: element.description!
+    if (dataArticles!.goals_filter! !== null) {
+      dataArticles!.goals_filter!.forEach((element) => {
+        newArrayGrepGoals.push({
+          // tslint:disable-next-line: variable-name
+          id: Number(element.goal_id),
+          title: element.description!
+        });
       });
-    });
+    }
     this.setState({
       selectedGoalsAll: newArrayGrepGoals.sort((a, b) => (a.title > b.title) ? 1 : -1)
     });
 
     // Source
     // tslint:disable-next-line: variable-name
-    dataArticles!.source_filter!.forEach((element) => {
-      newArrayGrepSource.push({
-        // tslint:disable-next-line: variable-name
-        id: Number(element.term_id),
-        title: element.description!
+    if (dataArticles!.source_filter! !== null) {
+      dataArticles!.source_filter!.forEach((element) => {
+        newArrayGrepSource.push({
+          // tslint:disable-next-line: variable-name
+          id: Number(element.term_id),
+          title: element.description!
+        });
       });
-    });
+    }
     this.setState(
       {
         selectedSourceAll: newArrayGrepSource
@@ -893,28 +903,30 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     const newArraySubject: Array<Subject> = [];
 
     const filterGrade: Array<number> = this.getSelectedGrades()!;
-    SubjectArr.forEach((subject) => {
-      const ListGradesAllowArr = subject.grade_ids!;
-      let addSubject:boolean = (filterGrade.length === 0);
+    if (SubjectArr !== null) {
+      SubjectArr.forEach((subject) => {
+        const ListGradesAllowArr = subject.grade_ids!;
+        let addSubject:boolean = (filterGrade.length === 0);
 
-      if (!addSubject) {
-        filterGrade!.some((iGrade: number) => {
-          addSubject = ListGradesAllowArr.includes(String(iGrade));
-          if (addSubject) return true;
-        });
-      }
-
-      if (addSubject) {
-        if (filterSubjectSelected!.includes(Number(subject.subject_id))) {
-          filterSubject.push(Number(subject.subject_id));
+        if (!addSubject) {
+          filterGrade!.some((iGrade: number) => {
+            addSubject = ListGradesAllowArr.includes(String(iGrade));
+            if (addSubject) return true;
+          });
         }
 
-        newArraySubject.push({
-          id: Number(subject.subject_id),
-          title: subject.description!
-        });
-      }
-    });
+        if (addSubject) {
+          if (filterSubjectSelected!.includes(Number(subject.subject_id))) {
+            filterSubject.push(Number(subject.subject_id));
+          }
+
+          newArraySubject.push({
+            id: Number(subject.subject_id),
+            title: subject.description!
+          });
+        }
+      });
+    }
 
     this.setState({
       MySelectSubject: filterSubject,
@@ -926,15 +938,16 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     const coreElementArr = this.state.grepDataFilters!.core_elements_filter!;
 
     const newArrayCores: Array<Greep> = [];
-    coreElementArr.forEach((item) => {
-      if (this.getValidateInsertOptionCore(item)) {
-        newArrayCores.push({
-          id: Number(item.core_element_id),
-          title: item.description
-        });
-      }
-    });
-
+    if (coreElementArr !== null) {
+      coreElementArr.forEach((item) => {
+        if (this.getValidateInsertOptionCore(item)) {
+          newArrayCores.push({
+            id: Number(item.core_element_id),
+            title: item.description
+          });
+        }
+      });
+    }
     this.setState({
       selectedCoresAll: newArrayCores
     });
@@ -945,15 +958,17 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     const newArrayDicipline: Array<Greep> = [];
     const currentLstDicipline: Array<number> = [];
 
-    diciplineArr.forEach((item) => {
-      if (this.getValidateInsertOptionDisipline(item)) {
-        newArrayDicipline.push({
-          id: Number(item.main_topic_id),
-          title: item.description
-        });
-        currentLstDicipline.push(Number(item.main_topic_id));
-      }
-    });
+    if (diciplineArr !== null) {
+      diciplineArr.forEach((item) => {
+        if (this.getValidateInsertOptionDisipline(item)) {
+          newArrayDicipline.push({
+            id: Number(item.main_topic_id),
+            title: item.description
+          });
+          currentLstDicipline.push(Number(item.main_topic_id));
+        }
+      });
+    }
 
     const filterDicipline: Array<number> | null = this.state.MySelectMulti;
     if (filterDicipline!.length > 0) {
@@ -980,15 +995,16 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     const goalsArr = this.state.grepDataFilters!.goals_filter!;
 
     const newArrayGoal: Array<Greep> = [];
-    goalsArr.forEach((item) => {
-      if (this.getValidateInsertOptionGoal(item)) {
-        newArrayGoal.push({
-          id: Number(item.goal_id),
-          title: item.description
-        });
-      }
-    });
-
+    if (goalsArr !== null) {
+      goalsArr.forEach((item) => {
+        if (this.getValidateInsertOptionGoal(item)) {
+          newArrayGoal.push({
+            id: Number(item.goal_id),
+            title: item.description
+          });
+        }
+      });
+    }
     this.setState({
       selectedGoalsAll: newArrayGoal
     });
@@ -999,15 +1015,17 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     const newArraySource: Array<Greep> = [];
     const currentLstSource: Array<number> = [];
 
-    sourceArr.forEach((item) => {
-      if (this.getValidateInsertOptionSource(item)) {
-        newArraySource.push({
-          id: Number(item.term_id),
-          title: item.description
-        });
-        currentLstSource.push(Number(item.term_id));
-      }
-    });
+    if (sourceArr !== null) {
+      sourceArr.forEach((item) => {
+        if (this.getValidateInsertOptionSource(item)) {
+          newArraySource.push({
+            id: Number(item.term_id),
+            title: item.description
+          });
+          currentLstSource.push(Number(item.term_id));
+        }
+      });
+    }
 
     const filterSource: Array<number> | null = this.state.MySelectSource;
     if (filterSource!.length > 0) {

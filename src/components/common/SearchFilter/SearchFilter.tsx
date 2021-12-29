@@ -613,6 +613,13 @@ class SearchFilter extends Component<Props, State> {
         </div>
       );
     }
+    if (grades.length === 0) {
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
+        </div>
+      );
+    }
     return (
       <div className="gradesItems flexFilter">
         {visibleGrades}
@@ -762,6 +769,39 @@ class SearchFilter extends Component<Props, State> {
       if (subject.filterStatus === 'inactive') { classD += ' downlight'; }
       return <button value={subject.id} className={`itemFlexFilter subjectsFilterClass ${classD}`} onClick={handleClickSubject} key={subject.id}>{title}</button>;
     });
+    return (
+      <div className="subjectsItems flexFilter">
+        {visibleSubjects}
+      </div>
+    );
+  }
+
+  public renderFiltersSubjectMF = () => {
+    const { assignmentListStore, handleClickSubject, customSubjectsList, subjectFilterValue, defaultValueSubjectFilter } = this.props;
+    const subjects = (customSubjectsList || assignmentListStore!.getAllSubjects()).sort(sortByAlphabet);
+    const arrayDefaults = (defaultValueSubjectFilter) ? defaultValueSubjectFilter.split(',') : [];
+
+    const visibleSubjects = subjects.map((subject) => {
+
+      const title = subject.title.split('.', 1);
+      let classD = (arrayDefaults.includes(String(subject.id))) ? 'active' : '';
+      if (subject.filterStatus === 'inactive') { classD += ' downlight'; }
+      return <button value={subject.id} className={`itemFlexFilter subjectsFilterClass ${classD}`} onClick={handleClickSubject} key={subject.id}>{title}</button>;
+    });
+    if (this.props.filtersAjaxLoading) {
+      return (
+        <div className="minimalLoading">
+          <span /><span /><span />
+        </div>
+      );
+    }
+    if (subjects.length === 0) {
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
+        </div>
+      );
+    }
     return (
       <div className="subjectsItems flexFilter">
         {visibleSubjects}
@@ -1073,9 +1113,9 @@ class SearchFilter extends Component<Props, State> {
     }
     if (options.length === 0) {
       return (
-        <p className="NotData">
-          {intl.get('edit_teaching_path.header.notdata_goals')}
-        </p>
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
+        </div>
       );
     }
     const NoOptionsMessage = () => {
@@ -1264,7 +1304,7 @@ class SearchFilter extends Component<Props, State> {
               <div className="itemFilter__right">
                 <h3>{intl.get('new assignment.Subject')}</h3>
                 <div className="itemFilter__core">
-                  {this.renderFiltersSubject()}
+                  {this.renderFiltersSubjectMF()}
                 </div>
               </div>
             </div>
