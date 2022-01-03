@@ -52,10 +52,11 @@ class OptionComponent extends Component<OptionComponentProps> {
   }
 
   private focusTextField  = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+    const startQuote = '«»';
     if (e.keyCode === ENTER_SINGLE_QUOTE_CODE || e.keyCode === ENTER_DOUBLE_QUOTE_CODE) {
       setTimeout(
         () => {
-          this.titleRef.current!.selectionEnd = Number(this.titleRef.current!.value!.length) - 1;
+          this.titleRef.current!.selectionEnd = Number(this.titleRef.current!.value!.split(startQuote)[0].length) + 1;
           this.titleRef.current!.focus();
         },
         DELAY
@@ -69,7 +70,8 @@ class OptionComponent extends Component<OptionComponentProps> {
     let newvalue = value;
     if (value.split("'").length > 1 || value.split('"').length > 1) {
       const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
-      newvalue = `${initValue}${startQuote}${endQuote}`;
+      const secondValue = (value.split("'").length > 1) ? value.split("'")[1] : value.split('"')[1];
+      newvalue = `${initValue}${startQuote}${endQuote}${secondValue}`;
     }
     return newvalue;
   }

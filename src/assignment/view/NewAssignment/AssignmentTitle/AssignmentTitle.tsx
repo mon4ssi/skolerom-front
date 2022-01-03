@@ -29,6 +29,7 @@ export class AssignmentTitle extends Component<Props> {
   private descriptionRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
 
   private focusDescriptionField = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+    const startQuote = '«»';
     if (e.keyCode === ENTER_KEY_CODE) {
       this.descriptionField!.selectionStart = this.descriptionField!.selectionEnd = this.descriptionField!.value.length;
       this.descriptionField!.focus();
@@ -37,7 +38,7 @@ export class AssignmentTitle extends Component<Props> {
     if (isDoubleQuote || e.keyCode === ENTER_SINGLE_QUOTE_CODE) {
       setTimeout(
         () => {
-          this.titleRef.current!.selectionEnd = Number(this.titleRef.current!.value!.length) - 1;
+          this.titleRef.current!.selectionEnd = Number(this.titleRef.current!.value!.split(startQuote)[0].length) + 1;
           this.titleRef.current!.focus();
         },
         DELAY
@@ -46,11 +47,12 @@ export class AssignmentTitle extends Component<Props> {
   }
 
   private focusTextField  = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+    const startQuote = '«»';
     const isDoubleQuote = (e.shiftKey && e.keyCode === ENTER_DOUBLE_QUOTE_CODE) ? true : false;
     if (isDoubleQuote || e.keyCode === ENTER_SINGLE_QUOTE_CODE) {
       setTimeout(
         () => {
-          this.descriptionRef.current!.selectionEnd = Number(this.descriptionRef.current!.value!.length) - 1;
+          this.descriptionRef.current!.selectionEnd = Number(this.descriptionRef.current!.value!.split(startQuote)[0].length) + 1;
           this.descriptionRef.current!.focus();
         },
         DELAY
@@ -64,7 +66,8 @@ export class AssignmentTitle extends Component<Props> {
     let newvalue = value;
     if (value.split("'").length > 1 || value.split('"').length > 1) {
       const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
-      newvalue = `${initValue}${startQuote}${endQuote}`;
+      const secondValue = (value.split("'").length > 1) ? value.split("'")[1] : value.split('"')[1];
+      newvalue = `${initValue}${startQuote}${endQuote}${secondValue}`;
     }
     return newvalue;
   }

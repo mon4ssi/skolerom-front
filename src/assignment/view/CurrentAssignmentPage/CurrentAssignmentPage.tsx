@@ -104,12 +104,15 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     document.addEventListener('keyup', this.handleKeyboardControl);
     const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
     headerArray[0].style.display = 'none';
-
     const search = (history.location.search === '?preview') ? true : false;
 
     if (isTeacher) {
       await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
       await currentQuestionaryStore.getRelatedArticles();
+      if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles.length > 0 && currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden) {
+        currentQuestionaryStore!.setCurrentQuestion(0);
+        return this.updateQueryString();
+      }
       if (currentQuestionaryStore.assignment && currentQuestionaryStore.assignment.isOwnedByMe() && !search) {
         this.props.history.replace(`/assignments/edit/${Number(match.params.id)}`);
         return;
