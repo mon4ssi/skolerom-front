@@ -653,7 +653,12 @@
     "Submit": "Submit Teaching Path",
     "no_title": "No title",
     "No results found": "No results found",
-    "no_options": "No options"
+    "no_options": "No options",
+    "buttons": {
+      "add_teacher_guidance": "Add teacher guidance",
+      "edit_teacher_guidance": "Edit teacher guidance",
+      "read_teacher_guidance": "Read teacher guidance"
+    }
   },
   "students_list": {
     "title":"Students",
