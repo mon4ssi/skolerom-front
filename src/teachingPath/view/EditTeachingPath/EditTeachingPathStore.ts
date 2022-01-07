@@ -324,6 +324,7 @@ export class EditTeachingPathStore {
     children: [],
     draftTeachingPath: this.currentNode!.draftTeachingPath,
     selectQuestion: '',
+    guidance: '',
     parentNode: this.currentNode!
   })
 

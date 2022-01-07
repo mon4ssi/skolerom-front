@@ -32,6 +32,7 @@ export interface TeachingPathNodeResponseDTO {
   id?: number;
   type: TeachingPathNodeType;
   selectQuestion: string | null;
+  guidance: string | null;
   items: Array<TeachingPathNodeItemResponseDTO>;
   children: Array<TeachingPathNodeResponseDTO>;
 }

@@ -546,6 +546,12 @@ export class EditableTeachingPathNode extends TeachingPathNode {
   }
 
   @action
+  public setGuidance = (title: string) => {
+    this._guidance = title;
+    this.draftTeachingPath.save();
+  }
+
+  @action
   public improbeSubjects = (subjects: Array<Subject>) => {
     this.draftTeachingPath.improbeSubjects(subjects);
   }

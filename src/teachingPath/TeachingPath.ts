@@ -96,6 +96,7 @@ export interface TeachingPathNodeArgs {
   id?: number;
   type: TeachingPathNodeType;
   selectQuestion: string | null;
+  guidance: string | null;
   items: Array<TeachingPathItemValue> | null;
   children: Array<TeachingPathNodeArgs>;
   nestedOrder?: number;
@@ -109,6 +110,7 @@ export class TeachingPathNode {
   @observable protected _items: Array<TeachingPathItem> | null;
   @observable protected _children: Array<TeachingPathNode>;
   @observable protected _selectQuestion: string;
+  @observable protected _guidance: string;
   @observable protected _breadcrumbs?: Array<Breadcrumbs>;
 
   constructor(args: TeachingPathNodeArgs) {
@@ -117,6 +119,7 @@ export class TeachingPathNode {
     this._items = args.items && args.items.map(value => new TeachingPathItem({ value, type: args.type }));
     this._children = args.children ? args.children.map(node => new TeachingPathNode(node)) : [];
     this._selectQuestion = args.selectQuestion || intl.get('edit_teaching_path.paths.teaching_path_title');
+    this._guidance = args.guidance || '';
     this._breadcrumbs = args.breadcrumbs;
   }
 
@@ -143,6 +146,11 @@ export class TeachingPathNode {
   @computed
   public get selectQuestion() {
     return this._selectQuestion;
+  }
+
+  @computed
+  public get guidance() {
+    return this._guidance;
   }
 
   @computed

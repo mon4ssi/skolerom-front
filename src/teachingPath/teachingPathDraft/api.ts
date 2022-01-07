@@ -76,6 +76,7 @@ export interface TeachingPathItemSaveResponseDTO {
 export interface TeachingPathNodeSaveResponseDTO {
   type: TeachingPathNodeType;
   selectQuestion: string;
+  guidance: string;
   featuredImage?: string;
   items: Array<TeachingPathItemSaveResponseDTO> | null;
   children: Array<TeachingPathNodeSaveResponseDTO>;

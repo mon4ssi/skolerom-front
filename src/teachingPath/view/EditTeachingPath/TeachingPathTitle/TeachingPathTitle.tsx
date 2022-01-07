@@ -168,7 +168,7 @@ export class TeachingPathTitle extends Component<Props> {
           </div>
 
           <TeacherguidanceModal
-            nodeData={currentTeachingPath!.content! as EditableTeachingPathNode}
+            currentEntity={currentTeachingPath!}
           />
 
           <div className="horizontalLine" />

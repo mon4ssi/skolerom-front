@@ -1,39 +1,44 @@
 import React, { Component } from 'react';
-import { EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
+import { observer, inject } from 'mobx-react';
+import { DescriptionEditor } from 'assignment/view/NewAssignment/Questions/DescriptionEditor';
+import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
+import { ItemContentTypeContext } from 'teachingPath/view/EditTeachingPath/ItemContentTypeContext';
+import './TeacherguidanceModal.scss';
+import { DraftAssignment } from 'assignment/assignmentDraft/AssignmentDraft';
 
 interface Props {
-  nodeData: EditableTeachingPathNode;
+  currentEntity: DraftTeachingPath;
 }
 
-interface TeacherguidanceChild {
-  level: number;
-  title: string;
-  description: string;
-}
+@inject('editTeachingPathStore')
+@observer
+export class TeacherguidanceModal extends Component<Props> {
+  public static contextType = ItemContentTypeContext;
 
-interface Teacherguidance {
-  modalTitle: string;
-  sourceTitle:string;
-  sourceDescription:string;
-  children: Array<TeacherguidanceChild>;
-}
-
-const getDataTeacherguidance = (data: EditableTeachingPathNode): Teacherguidance => {
-  const nodeTG: Array<TeacherguidanceChild> = [];
-  const obj: Teacherguidance = {
-    modalTitle: 'How is the teacher supposed to use this teaching path?',
-    sourceTitle: 'prueba',
-    sourceDescription: 'prueba2',
-    children: nodeTG,
-  };
-  return obj;
-};
-
-export const TeacherguidanceModal = (props: Props) => {
-  const dataTeacherguidance = getDataTeacherguidance(props.nodeData);
-  return (
-      <div>
-          <h1>{dataTeacherguidance.modalTitle}</h1>
+  public render() {
+    return (
+      <div className="modalContentTG">
+        <div className="modalContentTG__header">
+          <h1>ADD TEACHER GUIDANCE</h1>
+          <span>How is the teacher supposed to use this teaching path?</span>
+          <button type="button" className="modalContentTG__header__close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div className="modalContentTG__body">
+          <form>
+            <div className="form-group">
+              <DescriptionEditor
+                description={this.props.currentEntity.description}
+              />
+            </div>
+          </form>
+        </div>
+        <div className="modalContentTG__footer">
+          <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" className="btn btn-primary">Send message</button>
+        </div>
       </div>
-  );
-};
+    );
+  }
+}

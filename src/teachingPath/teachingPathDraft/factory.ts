@@ -28,6 +28,7 @@ export const buildNewTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
 const buildNewRootDraftTeachingPathNodeArgs = {
   type: TeachingPathNodeType.Root,
   selectQuestion: intl.get('edit_teaching_path.paths.main_teaching_path_title'),
+  guidance: '',
   items: [],
   children: [],
 };
@@ -195,6 +196,7 @@ export const buildFeatureImageForTeachingPathRequestDTO = (data: TeachingPathNod
 const buildTeachingPathNodeRequestDTO = (content: EditableTeachingPathNode): TeachingPathNodeSaveResponseDTO => ({
   type: content.type,
   selectQuestion: content.selectQuestion,
+  guidance: content.guidance,
   items: content.items ? content.items.map(item => buildTeachingPathItemRequestDTO(item)) : [],
   children: content.children.map(child => buildTeachingPathNodeRequestDTO(child))
 });

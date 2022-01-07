@@ -1,0 +1,61 @@
+.modalContentTG {
+    position: relative;
+    width: 100%;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 0.3rem;
+    outline: 0;
+
+    &__header {
+        padding: 1rem;
+        border-bottom: 1px solid #e9ecef;
+        border-top-left-radius: 0.3rem;
+        border-top-right-radius: 0.3rem;
+
+        h1 {
+            text-transform: uppercase;
+            color: #e2017b;
+            font-size: 1rem;
+            clear: both;
+            margin-bottom:3px;
+        }
+
+        span {
+            text-decoration: none !important;
+            text-transform: none !important;
+            color: #000 !important;
+            font-size: 1rem !important;
+            clear: both;
+        }
+        .__close {
+            padding: 1rem;
+            margin: -1rem -1rem -1rem auto;
+        }
+    }
+
+    &__body {
+        position: relative;
+        -webkit-box-flex: 1;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        padding: 1rem;
+        max-height: 400px;
+        overflow-y:auto;
+    }
+    
+    &__footer {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: end;
+        -ms-flex-pack: end;
+        justify-content: flex-end;
+        padding: 1rem;
+        border-top: 1px solid #e9ecef;
+    }
+}
