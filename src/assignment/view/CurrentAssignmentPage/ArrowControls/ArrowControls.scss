@@ -17,7 +17,16 @@
   padding-top: 6px;
   text-align: left;
   font-size: 0.9375rem;
-
+  &:focus {
+    color: #e2017b;
+    .ArrowControls__imageContainer {
+      background: #e2017b;
+      border-color: #e2017b;
+      img {
+        filter: brightness(0)invert(1);
+      }
+    }
+  }
   &:disabled {
     background: transparent;
     cursor: default;

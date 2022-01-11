@@ -15,7 +15,7 @@ import level3 from 'assets/images/level-3-blue.svg';
 import user from 'assets/images/user-placeholder.png';
 
 import './AnswerCover.scss';
-
+const DELAY = 800;
 interface Props {
   currentQuestionaryStore?: CurrentQuestionaryStore;
   switchCover(): void;
@@ -32,6 +32,7 @@ export class AnswerCover extends Component<Props> {
     if (this.ref.current) {
       this.ref.current!.focus();
       this.refEl.current!.scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => { this.refEl.current!.focus(); }, DELAY);
     }
   }
   public getStartButtonTitle = () => {

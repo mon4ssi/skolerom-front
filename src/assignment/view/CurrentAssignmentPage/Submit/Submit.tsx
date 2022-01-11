@@ -112,10 +112,26 @@ export class SubmitComponent extends Component<Props> {
       : undefined;
     if (readOnly) {
       this.setState({ disablebutton: false });
+      setTimeout(
+        () => {
+          if (this.refbutton.current) {
+            this.refbutton.current!.focus();
+          }
+        },
+        showDelay
+      );
     }
     this.sendValidArticlesRead();
     if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles.length > 0 && currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden) {
       this.setState({ disablebutton : false });
+      setTimeout(
+        () => {
+          if (this.refbutton.current) {
+            this.refbutton.current!.focus();
+          }
+        },
+        showDelay
+      );
     } else {
       if (redirectData === undefined) {
         if (currentQuestionaryStore!.relatedAllArticles.length) {

@@ -8,7 +8,7 @@ import { Article } from '../../../Assignment';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 import { AttachmentContentType, AttachmentContentTypeContext } from '../AttachmentContentTypeContext';
 import checkInactive from 'assets/images/ckeck-inactive.svg';
-import checkActive from 'assets/images/check-active-green.svg';
+import checkActive from 'assets/images/check-active.svg';
 
 import './SetRelatedArticles.scss';
 
@@ -145,7 +145,6 @@ export class SetRelatedArticles extends Component<Props, State> {
         </div>
 
         <div className="articlesWrapper">
-          {this.renderArticleInput(selectedArticles)}
           <div className="checkRelated">
             <button className="CreateButton newAnswerButton" id="newAnswerRelatedButton" title={this.renderButtonTitle()} onClick={this.handleRelatedArticles}>
               {this.renderButtonTitle()}
@@ -157,6 +156,7 @@ export class SetRelatedArticles extends Component<Props, State> {
               </div>
             </div>
           </div>
+          {this.renderArticleInput(selectedArticles)}
         </div>
       </div>
     );
