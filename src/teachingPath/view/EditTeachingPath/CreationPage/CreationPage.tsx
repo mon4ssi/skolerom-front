@@ -36,6 +36,7 @@ import actualArrowLeftRounded from 'assets/images/actual-arrow-left-rounded.svg'
 import './CreationPage.scss';
 import { AppHeader } from 'components/layout/AppHeader/AppHeader';
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
+import { TeacherguidanceModal } from 'components/common/TeacherguidanceModal/TeacherguidanceModal';
 
 const cardWidth = 322;
 const leftIndent = 160;
@@ -588,6 +589,10 @@ export class CreationPageComponent extends Component<Props> {
 
         <div className="main flexBox dirColumn alignCenter">
           <TeachingPathTitle readOnly={readOnly}/>
+
+          <TeacherguidanceModal
+            currentEntity={currentTeachingPath!}
+          />
 
           <NodeContent
             isRoot

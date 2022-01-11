@@ -9,15 +9,11 @@ import { lettersNoEn } from 'utils/lettersNoEn';
 import { MAX_TITLE_LENGTH, MAX_DESCRIPTION_LENGTH, MAX_DESCRIPTION_LENGTH_500 } from 'utils/constants';
 
 import './TeachingPathTitle.scss';
-import { CreateButton } from 'components/common/CreateButton/CreateButton';
-import { TeacherguidanceModal } from 'components/common/TeacherguidanceModal/TeacherguidanceModal';
-import { EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
 
 const ENTER_KEY_CODE = 13;
 const ENTER_SINGLE_QUOTE_CODE = 219;
 const ENTER_DOUBLE_QUOTE_CODE = 50;
 const DELAY = 100;
-let titleBtnTeacherGuidance = '';
 
 interface Props {
   editTeachingPathStore?: EditTeachingPathStore;
@@ -61,18 +57,6 @@ export class TeachingPathTitle extends Component<Props> {
         },
         DELAY
       );
-    }
-  }
-
-  public componentWillMount() {
-    const { readOnly } = this.props;
-
-    if (readOnly) {
-      titleBtnTeacherGuidance = intl.get('edit_teaching_path.buttons.read_teacher_guidance');
-    } else {
-      const { currentEntity: currentTeachingPath } = this.props.editTeachingPathStore!;
-      const numNodes: Number = currentTeachingPath!.content!.children!.length;
-      titleBtnTeacherGuidance = (numNodes === 0) ? intl.get('edit_teaching_path.buttons.add_teacher_guidance') : intl.get('edit_teaching_path.buttons.edit_teacher_guidance');
     }
   }
 
@@ -157,21 +141,6 @@ export class TeachingPathTitle extends Component<Props> {
           />
           <label id="DescriptionInputTextArea" className="hidden">{intl.get('edit_teaching_path.title.description_placeholder')}</label>
           {this.renderDescription()}
-
-          <div className="btnTeacherguide">
-            <CreateButton
-              title={titleBtnTeacherGuidance}
-              onClick={this.openModalTeacherguidance}
-            >
-              {titleBtnTeacherGuidance}
-            </CreateButton>
-          </div>
-
-          <TeacherguidanceModal
-            currentEntity={currentTeachingPath!}
-          />
-
-          <div className="horizontalLine" />
         </div>
       </div>
     );

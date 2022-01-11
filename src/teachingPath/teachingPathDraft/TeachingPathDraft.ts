@@ -364,6 +364,12 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
+  public setGuidance = (value: string) => {
+    this._guidance = value;
+    this.save();
+  }
+
+  @action
   public setGrepSourcesIds = (data: Array<number>) => {
     this._sources = data;
     this.save();
