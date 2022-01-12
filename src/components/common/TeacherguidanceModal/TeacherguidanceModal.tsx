@@ -7,6 +7,7 @@ import { ItemContentTypeContext } from 'teachingPath/view/EditTeachingPath/ItemC
 import './TeacherguidanceModal.scss';
 import { CreateButton } from '../CreateButton/CreateButton';
 import closeImg from 'assets/images/modal-close.svg';
+import downloadImg from 'assets/images/download.svg';
 
 interface Props {
   currentEntity: DraftTeachingPath;
@@ -16,6 +17,7 @@ interface Teacherguidance {
   nroLevel: number;
   nroLetter: number;
   hideBorderTop: boolean;
+  nroChild: number;
   children: EditableTeachingPathNode;
 }
 
@@ -43,7 +45,7 @@ export class TeacherguidanceModal extends Component<Props> {
 
     if (currentEntity.content.children.length > 0) {
       return (
-        <div className="modalContentTG__body__row">
+        <div className="modalContentTG__body__row line">
           <h4>
             <div className="nestedOrderNumber">1</div>
             {currentEntity.content.selectQuestion}
@@ -86,6 +88,7 @@ export class TeacherguidanceModal extends Component<Props> {
             nroLevel: nroLevelLoop,
             nroLetter: nroLetterLoop,
             hideBorderTop: hideBorderTopLoop,
+            nroChild: children.length,
             children: item
           };
 
@@ -103,10 +106,10 @@ export class TeacherguidanceModal extends Component<Props> {
     }
 
     return childrenFinal.map((item, index) => (
-            <div className={item.hideBorderTop ? 'modalContentTG__body__row line' : 'modalContentTG__body__row'} key={index}>
+            <div className={`modalContentTG__body__row ${item.hideBorderTop ? 'line' : ''}`} key={index}>
               <h4>
                 <div className="nestedOrderNumber">{item.nroLevel}</div>
-                {item.children.selectQuestion} (option {String.fromCharCode(item.nroLetter)})
+                {item.children.selectQuestion} {item.nroChild > 1 ? `(${intl.get('generals.option')} ${String.fromCharCode(item.nroLetter)})` : ''}
               </h4>
               <DescriptionEditor
                 description={item.children.guidance}
@@ -157,8 +160,29 @@ export class TeacherguidanceModal extends Component<Props> {
             {this.renderChildrenNode()}
           </div>
           <div className="modalContentTG__footer">
-            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" className="btn btn-primary">Send message</button>
+            <div className="modalContentTG__footer__aligLeft">
+              <CreateButton
+                title={intl.get('notifications.cancel')}
+                onClick={this.closeModalTG}
+                pink={true}
+              >
+                {intl.get('notifications.cancel')}
+              </CreateButton>
+              &nbsp;
+              <CreateButton
+                title={intl.get('generals.save_and_close')}
+                onClick={this.closeModalTG}
+                green={true}
+              >
+                {intl.get('generals.save_and_close')}
+              </CreateButton>
+            </div>
+            <div className="modalContentTG__footer__aligRight">
+              <button>
+                <span>{intl.get('edit_teaching_path.download_pdf')}</span>
+                <img src={downloadImg} />
+              </button>
+            </div>
           </div>
         </div>
         <div className="modalContentTGBackground hide">&nbsp;</div>
