@@ -30,7 +30,8 @@ export class DescriptionEditor extends Component<Props> {
   public render() {
     const { description, readOnly, className } = this.props;
 
-    const placeholder = intl.get('new assignment.enter_a_description');
+    let placeholder = intl.get('new assignment.enter_a_description');
+    if (readOnly === true) { placeholder = ''; }
 
     const formats = ['bold', 'italic', 'link', 'header'];
 

@@ -653,12 +653,21 @@
     "Submit": "Submit Teaching Path",
     "no_title": "No title",
     "No results found": "No results found",
-    "no_options": "No options",
+    "no_options": "No options"
+  },
+  "teacherGuidance": {
     "download_pdf": "Download as PDF",
+    "option": "option",
+    "titleAdd": "ADD TEACHER GUIDANCE",
+    "titleEdit": "EDIT TEACHER GUIDANCE",
+    "titleRead": "TEACHER GUIDANCE",
+    "titleSub": "How is the teacher supposed to use this teaching path?",
+    "titleSubRead": "This is how you can use the teaching path",
+    "save_and_close": "Save and close",
     "buttons": {
-      "add_teacher_guidance": "Add teacher guidance",
-      "edit_teacher_guidance": "Edit teacher guidance",
-      "read_teacher_guidance": "Read teacher guidance"
+      "add": "Add teacher guidance",
+      "edit": "Edit teacher guidance",
+      "read": "Read teacher guidance"
     }
   },
   "students_list": {
@@ -712,7 +721,6 @@
     },
     "edit": "Edith Path",
     "delete": "Delete Path",
-    "save_and_close": "Save and close",
     "close": "Close",
     "close_maintenance": "Close",
     "maintenance": "Scheduled maintenance today between 4pm and 7pm. The System can be unresponsive in this period",
@@ -727,8 +735,7 @@
     "grade": "Grade",
     "student_level": "Student level",
     "visibility": "visibility",
-    "language": "Languages",
-    "option": "option"
+    "language": "Languages"
   },
   "activity_page": {
     "Hello": "Hello",

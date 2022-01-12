@@ -592,6 +592,7 @@ export class CreationPageComponent extends Component<Props> {
 
           <TeacherguidanceModal
             currentEntity={currentTeachingPath!}
+            readOnly={readOnly}
           />
 
           <NodeContent

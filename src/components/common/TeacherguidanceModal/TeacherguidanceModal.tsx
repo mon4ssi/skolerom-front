@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { observer, inject } from 'mobx-react';
 import intl from 'react-intl-universal';
 import { DescriptionEditor } from 'assignment/view/NewAssignment/Questions/DescriptionEditor';
@@ -11,6 +11,7 @@ import downloadImg from 'assets/images/download.svg';
 
 interface Props {
   currentEntity: DraftTeachingPath;
+  readOnly?: boolean;
 }
 
 interface Teacherguidance {
@@ -26,14 +27,12 @@ interface Teacherguidance {
 export class TeacherguidanceModal extends Component<Props> {
   public static contextType = ItemContentTypeContext;
 
-  private openModalTG = () => {
-    const modalTG = Array.from(document.getElementsByClassName('modalContentTG') as HTMLCollectionOf<HTMLElement>);
-    const modalTGBack = Array.from(document.getElementsByClassName('modalContentTGBackground') as HTMLCollectionOf<HTMLElement>);
-    modalTG[0].classList.add('open');
-    modalTGBack[0].classList.remove('hide');
+  public openModalTG = (nroLevel: string) => {
+    const { currentEntity } = this.props;
+    currentEntity.handleOpenTeachingGuidance(nroLevel);
   }
 
-  private closeModalTG = () => {
+  public closeModalTG = () => {
     const modalTG = Array.from(document.getElementsByClassName('modalContentTG') as HTMLCollectionOf<HTMLElement>);
     const modalTGBack = Array.from(document.getElementsByClassName('modalContentTGBackground') as HTMLCollectionOf<HTMLElement>);
     modalTG[0].classList.remove('open');
@@ -41,17 +40,21 @@ export class TeacherguidanceModal extends Component<Props> {
   }
 
   public renderFirstNode = () => {
-    const { currentEntity } = this.props;
+    const { currentEntity, readOnly } = this.props;
+    let titleTG = currentEntity.content.selectQuestion;
+    if (titleTG === intl.get('edit_teaching_path.title.title_placeholder')) { titleTG = ''; }
 
     if (currentEntity.content.children.length > 0) {
       return (
         <div className="modalContentTG__body__row line">
           <h4>
             <div className="nestedOrderNumber">1</div>
-            {currentEntity.content.selectQuestion}
+            {titleTG}
           </h4>
           <DescriptionEditor
+            className="jr-desEdit1"
             description={currentEntity.content.guidance}
+            readOnly={readOnly}
             onChange={(value: string) => { currentEntity.content.setGuidance(value); }}
           />
         </div>
@@ -59,7 +62,7 @@ export class TeacherguidanceModal extends Component<Props> {
     }
   }
   public renderChildrenNode = () => {
-    const { currentEntity } = this.props;
+    const { currentEntity, readOnly } = this.props;
     let nroLevelLoop: number = 2;
     const firstLetterNumber: number = 97;
 
@@ -109,10 +112,12 @@ export class TeacherguidanceModal extends Component<Props> {
             <div className={`modalContentTG__body__row ${item.hideBorderTop ? 'line' : ''}`} key={index}>
               <h4>
                 <div className="nestedOrderNumber">{item.nroLevel}</div>
-                {item.children.selectQuestion} {item.nroChild > 1 ? `(${intl.get('generals.option')} ${String.fromCharCode(item.nroLetter)})` : ''}
+                {item.children.selectQuestion === intl.get('edit_teaching_path.title.title_placeholder') ? '' : item.children.selectQuestion} {item.nroChild > 1 ? `(${intl.get('teacherGuidance.option')} ${String.fromCharCode(item.nroLetter)})` : ''}
               </h4>
               <DescriptionEditor
+                className={`jr-desEdit${item.nroLevel}`}
                 description={item.children.guidance}
+                readOnly={readOnly}
                 onChange={(value: string) => { item.children.setGuidance(value); }}
               />
             </div>
@@ -120,26 +125,66 @@ export class TeacherguidanceModal extends Component<Props> {
         );
   }
 
+  public renderButtonTeacherguidance = () => {
+    const { readOnly, currentEntity } = this.props;
+    const nroChildren: number = currentEntity.content.children.length;
+    let titleButton = intl.get('teacherGuidance.buttons.edit');
+    if (nroChildren === 0) titleButton = intl.get('teacherGuidance.buttons.add');
+    if (readOnly === true) titleButton = intl.get('teacherGuidance.buttons.read');
+
+    return (
+            <div className="btnTeacherguide">
+              <CreateButton
+                title={titleButton}
+                onClick={this.openModalTG.bind(this, '0')}
+              >
+                {titleButton}
+              </CreateButton>
+              <div className="horizontalLine" />
+            </div>
+    );
+  }
+
+  public renderFooterButtons = () => (
+    <div className="modalContentTG__footer__aligLeft">
+      <CreateButton
+        title={intl.get('notifications.cancel')}
+        onClick={this.closeModalTG}
+        pink={true}
+      >
+        {intl.get('notifications.cancel')}
+      </CreateButton>
+      &nbsp;
+      <CreateButton
+        title={intl.get('teacherGuidance.save_and_close')}
+        onClick={this.closeModalTG}
+        green={true}
+      >
+        {intl.get('teacherGuidance.save_and_close')}
+      </CreateButton>
+    </div>
+  )
+
   public render() {
-    const { currentEntity } = this.props;
+    const { currentEntity, readOnly } = this.props;
+
+    const nroChildren: number = currentEntity.content.children.length;
+    let titleTG = intl.get('teacherGuidance.titleEdit');
+    let titleTGSub = intl.get('teacherGuidance.titleSub');
+
+    if (nroChildren === 0) titleTG = intl.get('teacherGuidance.titleAdd');
+    if (readOnly === true) {
+      titleTG = intl.get('teacherGuidance.titleRead');
+      titleTGSub = intl.get('teacherGuidance.titleSubRead');
+    }
 
     return (
       <div>
-        <div className="btnTeacherguide">
-          <CreateButton
-            title={intl.get('edit_teaching_path.buttons.edit_teacher_guidance')}
-            onClick={this.openModalTG}
-          >
-            {intl.get('edit_teaching_path.buttons.edit_teacher_guidance')}
-          </CreateButton>
-
-          <div className="horizontalLine" />
-        </div>
-
+        {this.renderButtonTeacherguidance()}
         <div className="modalContentTG">
           <div className="modalContentTG__header">
-            <h1>ADD TEACHER GUIDANCE</h1>
-            <span>How is the teacher supposed to use this teaching path?</span>
+            <h1>{titleTG}</h1>
+            <span>{titleTGSub}</span>
             <div className="modalContentTG__header__close">
               <img
                 src={closeImg}
@@ -152,7 +197,9 @@ export class TeacherguidanceModal extends Component<Props> {
           <div className="modalContentTG__body">
             <div className="modalContentTG__body__row">
               <DescriptionEditor
+                className="jr-desEdit0"
                 description={currentEntity.guidance}
+                readOnly={readOnly}
                 onChange={(value: string) => { currentEntity.setGuidance(value); }}
               />
             </div>
@@ -160,26 +207,10 @@ export class TeacherguidanceModal extends Component<Props> {
             {this.renderChildrenNode()}
           </div>
           <div className="modalContentTG__footer">
-            <div className="modalContentTG__footer__aligLeft">
-              <CreateButton
-                title={intl.get('notifications.cancel')}
-                onClick={this.closeModalTG}
-                pink={true}
-              >
-                {intl.get('notifications.cancel')}
-              </CreateButton>
-              &nbsp;
-              <CreateButton
-                title={intl.get('generals.save_and_close')}
-                onClick={this.closeModalTG}
-                green={true}
-              >
-                {intl.get('generals.save_and_close')}
-              </CreateButton>
-            </div>
+            {readOnly !== true && this.renderFooterButtons()}
             <div className="modalContentTG__footer__aligRight">
               <button>
-                <span>{intl.get('edit_teaching_path.download_pdf')}</span>
+                <span>{intl.get('teacherGuidance.download_pdf')}</span>
                 <img src={downloadImg} />
               </button>
             </div>

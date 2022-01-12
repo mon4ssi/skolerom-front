@@ -196,6 +196,11 @@ export class NestedOrderNumber extends Component<Props> {
     }
   }
 
+  public handleOpenModalTG = (nroLevel: string) => {
+    const { editTeachingPathStore } = this.props;
+    editTeachingPathStore!.currentEntity!.handleOpenTeachingGuidance(nroLevel);
+  }
+
   public renderEditIcon = () => (
     <button onClick={this.handleEditClick} title={intl.get('generals.edit')} ref={this.buttonref}>
       <img
@@ -216,6 +221,16 @@ export class NestedOrderNumber extends Component<Props> {
     </button>
   )
 
+  public renderEditTGIcon = (nroLevel: string) => (
+    <button onClick={this.handleOpenModalTG.bind(this, nroLevel)} title={intl.get('teacherGuidance.buttons.edit')}>
+      <img
+        src={deleteImg}
+        alt={intl.get('teacherGuidance.buttons.edit')}
+        title={intl.get('teacherGuidance.buttons.edit')}
+      />
+    </button>
+  )
+
   public render() {
     const { nestedOrderNumber, readOnly } = this.props;
 
@@ -226,6 +241,7 @@ export class NestedOrderNumber extends Component<Props> {
 
     return (
       <div className={numberAndActionsClassnames}>
+        {!readOnly && this.renderEditTGIcon(String(nestedOrderNumber))}
         {!readOnly && this.renderEditIcon()}
         {this.state.modalDomain && this.renderModalDomain()}
         <div className="nestedOrderNumber">

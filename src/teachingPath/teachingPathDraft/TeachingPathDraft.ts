@@ -475,6 +475,17 @@ export class DraftTeachingPath extends TeachingPath {
     return this.isDraftSaving;
   }
 
+  @action
+  public handleOpenTeachingGuidance = (nroLevel: string): void => {
+    const modalTG = Array.from(document.getElementsByClassName('modalContentTG') as HTMLCollectionOf<HTMLElement>);
+    const modalTGBack = Array.from(document.getElementsByClassName('modalContentTGBackground') as HTMLCollectionOf<HTMLElement>);
+    modalTG[0].classList.add('open');
+    modalTGBack[0].classList.remove('hide');
+
+    const editDescript = (document.getElementsByClassName(`jr-desEdit${nroLevel}`)[0] as HTMLDivElement);
+    const editInputText = (editDescript.getElementsByClassName('ql-editor')[0] as HTMLInputElement);
+    editInputText.focus();
+  }
 }
 
 interface EditableTeachingPathNodeArgs extends TeachingPathNodeArgs {
