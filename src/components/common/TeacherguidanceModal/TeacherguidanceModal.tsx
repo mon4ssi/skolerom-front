@@ -8,6 +8,7 @@ import './TeacherguidanceModal.scss';
 import { CreateButton } from '../CreateButton/CreateButton';
 import closeImg from 'assets/images/modal-close.svg';
 import downloadImg from 'assets/images/download.svg';
+import teaGuiBGImg from 'assets/images/guidance-bg.svg';
 
 interface Props {
   currentEntity: DraftTeachingPath;
@@ -135,9 +136,11 @@ export class TeacherguidanceModal extends Component<Props> {
     return (
             <div className="btnTeacherguide">
               <CreateButton
+                className="buttonTeacherGuide"
                 title={titleButton}
                 onClick={this.openModalTG.bind(this, '0')}
               >
+                <img src={teaGuiBGImg} alt={titleButton} />
                 {titleButton}
               </CreateButton>
               <div className="horizontalLine" />

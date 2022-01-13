@@ -48,9 +48,6 @@ const ENTER_SINGLE_QUOTE_CODE = 219;
 const ENTER_DOUBLE_QUOTE_CODE = 50;
 const DELAY = 100;
 
-const firstLetterNumber: number = 96;
-let arrNestedOrderNumber: Array<number> = [];
-
 interface NodeContentProps {
   editTeachingPathStore?: EditTeachingPathStore;
   node: EditableTeachingPathNode;
@@ -419,15 +416,60 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     }
   }
 
-  public renderNestedOrderNumber = (withUnmerge?: boolean) => {
-    const { nestedOrder, node, readOnly } = this.props;
+  public getLetterNode = (): number => {
+    const { editTeachingPathStore, node } = this.props;
     let nroLetterLoop: number;
 
     if (node.children.length) {
-      if (nestedOrder === 1) { arrNestedOrderNumber = []; }
-      arrNestedOrderNumber.push(nestedOrder);
-      nroLetterLoop = firstLetterNumber + arrNestedOrderNumber.filter(x => x === nestedOrder).length;
+      const firstLetterNumber: number = 97;
+
+      if (editTeachingPathStore!.currentEntity!.content === node) {
+        nroLetterLoop = firstLetterNumber;
+      } else {
+        let children: Array<EditableTeachingPathNode> = [];
+        let childrenTmp: Array<EditableTeachingPathNode> = editTeachingPathStore!.currentEntity!.content.children;
+        let continueLoop = true;
+        let nroNodes: number = 0;
+
+        //
+        while (continueLoop) {
+          nroNodes = 0;
+          children = childrenTmp;
+          childrenTmp = [];
+
+          nroLetterLoop = firstLetterNumber;
+
+          children.some((item) => {
+
+            if (item.children.length > 0) {
+              item.children.forEach((child) => {
+                if (child.children.length > 0) {
+                  childrenTmp.push(child);
+                }
+              });
+
+              nroNodes += 1;
+
+              if (item === node) {
+                nroNodes = 0;
+                return true;
+              }
+
+              nroLetterLoop += 1;
+            }
+          });
+
+          continueLoop = (nroNodes > 0);
+        }
+      }
     }
+
+    return nroLetterLoop!;
+  }
+
+  public renderNestedOrderNumber = (withUnmerge?: boolean) => {
+    const { nestedOrder, node, readOnly, editTeachingPathStore } = this.props;
+    const nroLetterLoop: number = this.getLetterNode();
 
     const containerClassName = classnames(
       'nestedOrderNumberContainer flexBox dirColumn',

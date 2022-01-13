@@ -123,6 +123,15 @@
 
 .btnTeacherguide {
     margin-top: 19px;
+
+    .buttonTeacherGuide {
+        display: flex;
+        align-items: center;
+
+        img {
+            margin-right: 8px;
+        }
+    }
 }
 .modalContentTGBackground {
     position: fixed;
