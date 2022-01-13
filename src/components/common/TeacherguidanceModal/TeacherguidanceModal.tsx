@@ -52,7 +52,7 @@ export class TeacherguidanceModal extends Component<Props> {
             {titleTG}
           </h4>
           <DescriptionEditor
-            className="jr-desEdit1"
+            className="jr-desEdit1a"
             description={currentEntity.content.guidance}
             readOnly={readOnly}
             onChange={(value: string) => { currentEntity.content.setGuidance(value); }}
@@ -115,7 +115,7 @@ export class TeacherguidanceModal extends Component<Props> {
                 {item.children.selectQuestion === intl.get('edit_teaching_path.title.title_placeholder') ? '' : item.children.selectQuestion} {item.nroChild > 1 ? `(${intl.get('teacherGuidance.option')} ${String.fromCharCode(item.nroLetter)})` : ''}
               </h4>
               <DescriptionEditor
-                className={`jr-desEdit${item.nroLevel}`}
+                className={`jr-desEdit${item.nroLevel}${String.fromCharCode(item.nroLetter)}`}
                 description={item.children.guidance}
                 readOnly={readOnly}
                 onChange={(value: string) => { item.children.setGuidance(value); }}

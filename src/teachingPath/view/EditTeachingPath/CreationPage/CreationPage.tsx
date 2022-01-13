@@ -48,6 +48,9 @@ const ENTER_SINGLE_QUOTE_CODE = 219;
 const ENTER_DOUBLE_QUOTE_CODE = 50;
 const DELAY = 100;
 
+const firstLetterNumber: number = 96;
+let arrNestedOrderNumber: Array<number> = [];
+
 interface NodeContentProps {
   editTeachingPathStore?: EditTeachingPathStore;
   node: EditableTeachingPathNode;
@@ -418,6 +421,14 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
   public renderNestedOrderNumber = (withUnmerge?: boolean) => {
     const { nestedOrder, node, readOnly } = this.props;
+    let nroLetterLoop: number;
+
+    if (node.children.length) {
+      if (nestedOrder === 1) { arrNestedOrderNumber = []; }
+      arrNestedOrderNumber.push(nestedOrder);
+      nroLetterLoop = firstLetterNumber + arrNestedOrderNumber.filter(x => x === nestedOrder).length;
+    }
+
     const containerClassName = classnames(
       'nestedOrderNumberContainer flexBox dirColumn',
       !withUnmerge && 'withoutUnmergeButton'
@@ -430,6 +441,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
           node={node}
           nestedOrderNumber={nestedOrder}
           readOnly={readOnly}
+          nroLetter={nroLetterLoop!}
         />
       </div>
     ) : null;

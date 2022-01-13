@@ -22,6 +22,7 @@ interface Props {
   node: EditableTeachingPathNode;
   nestedOrderNumber: number;
   readOnly?: boolean;
+  nroLetter?: number;
 }
 
 @inject('editTeachingPathStore')
@@ -221,15 +222,19 @@ export class NestedOrderNumber extends Component<Props> {
     </button>
   )
 
-  public renderEditTGIcon = (nroLevel: string) => (
-    <button onClick={this.handleOpenModalTG.bind(this, nroLevel)} title={intl.get('teacherGuidance.buttons.edit')}>
-      <img
-        src={deleteImg}
-        alt={intl.get('teacherGuidance.buttons.edit')}
-        title={intl.get('teacherGuidance.buttons.edit')}
-      />
-    </button>
-  )
+  public renderEditTGIcon = () => {
+    const { nestedOrderNumber, nroLetter } = this.props;
+
+    return (
+      <button onClick={this.handleOpenModalTG.bind(this, `${String(nestedOrderNumber)}${String.fromCharCode(nroLetter!)}`)} title={intl.get('teacherGuidance.buttons.edit')}>
+        <img
+          src={deleteImg}
+          alt={intl.get('teacherGuidance.buttons.edit')}
+          title={intl.get('teacherGuidance.buttons.edit')}
+        />
+      </button>
+    );
+  }
 
   public render() {
     const { nestedOrderNumber, readOnly } = this.props;
@@ -241,7 +246,7 @@ export class NestedOrderNumber extends Component<Props> {
 
     return (
       <div className={numberAndActionsClassnames}>
-        {!readOnly && this.renderEditTGIcon(String(nestedOrderNumber))}
+        {!readOnly && this.renderEditTGIcon()}
         {!readOnly && this.renderEditIcon()}
         {this.state.modalDomain && this.renderModalDomain()}
         <div className="nestedOrderNumber">
