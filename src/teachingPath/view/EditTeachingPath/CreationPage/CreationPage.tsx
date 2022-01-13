@@ -398,22 +398,31 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
           </div>
         ) : null;
       }
-    } else {
-      return node.type === TeachingPathNodeType.Root || node.children.length ? (
+
+      return (
         <div className="teachingPathItemsTitleDiv" data-number={nestedOrder} >
-        <TextAreaAutosize
-          ref={this.titleRef}
-          className="teachingPathItemsTitle fw500"
-          value={node.selectQuestion}
-          placeholder={placeholder}
-          onChange={this.handleChangeTitle}
-          cols={this.state.numberOfTitleCols}
-          maxLength={MAX_TITLE_LENGTH}
-          readOnly={readOnly}
-        />
+          <TextAreaAutosize
+            className="teachingPathItemsTitle fw500"
+            readOnly={readOnly}
+          />
         </div>
-      ) : null;
+      );
     }
+
+    return node.type === TeachingPathNodeType.Root || node.children.length ? (
+      <div className="teachingPathItemsTitleDiv" data-number={nestedOrder} >
+      <TextAreaAutosize
+        ref={this.titleRef}
+        className="teachingPathItemsTitle fw500"
+        value={node.selectQuestion}
+        placeholder={placeholder}
+        onChange={this.handleChangeTitle}
+        cols={this.state.numberOfTitleCols}
+        maxLength={MAX_TITLE_LENGTH}
+        readOnly={readOnly}
+      />
+      </div>
+    ) : null;
   }
 
   public getLetterNode = (): number => {
@@ -477,7 +486,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     );
 
     return node.children.length ? (
-      <div className={containerClassName}>
+      <>
         {node.type !== TeachingPathNodeType.Root && <div className="topVerticalLine"/>}
         <NestedOrderNumber
           node={node}
@@ -485,7 +494,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
           readOnly={readOnly}
           nroLetter={nroLetterLoop!}
         />
-      </div>
+      </>
     ) : null;
   }
 
@@ -521,6 +530,20 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     ) : null;
   }
 
+  public renderBoxNodeOptions = () => {
+    const { node, readOnly } = this.props;
+
+    return node.children.length ? (
+      <div className={`${node.type === TeachingPathNodeType.Root ? 'boxNodeOptionsRoot' : 'boxNodeOptionsChildren'} ${readOnly ? '' : ''}`}>
+        {this.renderInput()}
+        <div className={`sectImgs ${readOnly ? 'sectImgsReadOnly' : ''}`}>
+          {node.type === TeachingPathNodeType.Root && this.renderNestedOrderNumber(true)}
+          {node.type !== TeachingPathNodeType.Root && this.renderNestedOrderNumber(readOnly ? false : !!this.renderUnmergeButton())}
+        </div>
+      </div>
+    ) : null;
+  }
+
   public render() {
     const { node, parentNode, index, readOnly } = this.props;
     const children = node.children as Array<EditableTeachingPathNode>;
@@ -546,11 +569,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
         {!readOnly && this.renderUnmergeButton()}
 
-        {node.type !== TeachingPathNodeType.Root && this.renderNestedOrderNumber(readOnly ? false : !!this.renderUnmergeButton())}
-
-        {this.renderInput()}
-
-        {node.type === TeachingPathNodeType.Root && this.renderNestedOrderNumber(true)}
+        {this.renderBoxNodeOptions()}
 
         {!readOnly && this.renderAddingButtons(!!this.renderUnmergeButton())}
 

@@ -1,5 +1,5 @@
 .numberAndActions {
-  width: 100px;
+  width: 100%;
   cursor: default;
   margin-bottom: -3px;
   z-index: 3;
@@ -10,6 +10,7 @@
   }
   button {
     padding: 0px;
+    background: #fff;
     &:focus {
       outline: black;
       outline-style: auto;
@@ -28,11 +29,18 @@
     color: #ffffff;
     font-size: 1.0625rem;
     margin: 0 10px;
+    position: absolute;
+    top: 0px;
   }
 
   img {
     width: 25px;
     height: 25px;
     cursor: pointer;
+    margin: 0px 6px 0px 6px;
+    outline: 0px;
+  }
+  img:focus  {
+    outline: 0px;
   }
 }

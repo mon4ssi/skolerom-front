@@ -246,8 +246,8 @@ export class NestedOrderNumber extends Component<Props> {
 
     return (
       <div className={numberAndActionsClassnames}>
-        {!readOnly && this.renderEditTGIcon()}
         {!readOnly && this.renderEditIcon()}
+        {!readOnly && this.renderEditTGIcon()}
         {this.state.modalDomain && this.renderModalDomain()}
         <div className="nestedOrderNumber">
           {nestedOrderNumber}

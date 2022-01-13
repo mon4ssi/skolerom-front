@@ -330,7 +330,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
     return (
       <div className={infoCardClassNames} onClick={this.onCardClick} data-id={this.props.id}>
         {!isDomain && withButtons && this.renderActionButtons()}
-        {isDomain && this.renderDomainButtons()}
+        {isDomain && withButtons && this.renderDomainButtons()}
         <button title={title}>
           <img src={img || placeholderImgDefault} alt={title} title={title} className="cardImage" onClick={this.onCardImgClick}/>
         </button>
