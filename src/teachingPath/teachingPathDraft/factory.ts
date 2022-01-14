@@ -219,6 +219,7 @@ export const buildTeachingPathRequestDTO = (teachingPath: DraftTeachingPath) => 
   title: teachingPath.title,
   description: teachingPath.description,
   guidance: teachingPath.guidance,
+  hasGuidance: teachingPath.hasGuidance,
   isPrivate: teachingPath.isPrivate,
   content: buildTeachingPathNodeRequestDTO(teachingPath.content),
   grades: buildGrade(teachingPath.grades),

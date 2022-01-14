@@ -134,19 +134,13 @@ export class TeacherguidanceModal extends Component<Props> {
     let titleButton = intl.get('teacherGuidance.buttons.edit');
     if (nroChildren === 0) titleButton = intl.get('teacherGuidance.buttons.add');
     if (readOnly === true) titleButton = intl.get('teacherGuidance.buttons.read');
+    const showButton: boolean = (((readOnly === true && currentEntity.hasGuidance) || (!readOnly)));
 
     return (
-            <div className="btnTeacherguide">
-              <CreateButton
-                className="buttonTeacherGuide"
-                title={titleButton}
-                onClick={this.openModalTG.bind(this, '0')}
-              >
-                <img src={teaGuiBGImg} alt={titleButton} />
-                {titleButton}
-              </CreateButton>
-              <div className="horizontalLine" />
-            </div>
+      <div className="btnTeacherguide">
+        {showButton && <CreateButton className="buttonTeacherGuide" title={titleButton} onClick={this.openModalTG.bind(this, '0')}><img src={teaGuiBGImg} alt={titleButton} /> {titleButton}</CreateButton>}
+        <div className={`horizontalLine ${!showButton ? 'withOutButton' : ''}`} />
+      </div>
     );
   }
 

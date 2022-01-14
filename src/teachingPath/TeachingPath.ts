@@ -170,6 +170,7 @@ export interface TeachingPathArgs {
   content?: TeachingPathNodeArgs | null;
   description?: string;
   guidance?: string;
+  hasGuidance?: boolean;
   isPrivate?: boolean;
   isFinished?: boolean;
   maxNumberOfSteps?: number;
@@ -210,6 +211,7 @@ export class TeachingPath {
   @observable protected _author: string | undefined;
   @observable protected _description: string;
   @observable protected _guidance: string;
+  @observable protected _hasGuidance: boolean = false;
   @observable protected _rootNodeId: number | undefined;
   @observable protected _lastSelectedNodeId: number | undefined;
   @observable protected _isPrivate: boolean = false;
@@ -253,6 +255,7 @@ export class TeachingPath {
     this._lastSelectedNodeId = args.lastSelectedNodeId || undefined;
     this._description = args.description || '';
     this._guidance = args.guidance || '';
+    this._hasGuidance = args.hasGuidance || false;
     this._isPrivate = !isNil(args.isPrivate) ? args.isPrivate : true;
     this._isFinished = args.isFinished || false;
     this._content = args.content ? new TeachingPathNode(args.content) : null;
@@ -352,6 +355,11 @@ export class TeachingPath {
   @computed
   public get guidance() {
     return this._guidance;
+  }
+
+  @computed
+  public get hasGuidance() {
+    return this._hasGuidance;
   }
 
   @computed

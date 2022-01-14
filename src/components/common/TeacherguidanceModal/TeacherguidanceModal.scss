@@ -117,19 +117,25 @@
 .horizontalLine {
     width: 135px;
     display: block;
-    margin: 35px auto 20px auto;
+    margin: 35px auto 5px auto;
     border-bottom: 1px solid #d3d9de;
+
+    &.withOutButton {
+        margin-top: 5px;
+        margin-bottom: 35px;
+    }
 }
 
 .btnTeacherguide {
     margin-top: 19px;
 
     .buttonTeacherGuide {
-        display: flex;
-        align-items: center;
+        line-height:24px;
 
         img {
             margin-right: 8px;
+            display: initial;
+            vertical-align:bottom;
         }
     }
 }
