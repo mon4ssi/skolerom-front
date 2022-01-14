@@ -31,6 +31,7 @@ export interface TeachingPathRepo {
   copyTeachingPath(id: number): Promise<number>;
   getGradeWpIds(gradeWpIds: Array<number>): Promise<Array<Grade>>;
   getSubjectWpIds(subjectWpIds: Array<number>): Promise<Array<Subject>>;
+  downloadTeacherGuidancePDF(id: number): Promise<void>;
 }
 
 export enum TeachingPathNodeType {

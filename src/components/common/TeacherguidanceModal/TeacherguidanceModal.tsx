@@ -9,8 +9,10 @@ import { CreateButton } from '../CreateButton/CreateButton';
 import closeImg from 'assets/images/modal-close.svg';
 import downloadImg from 'assets/images/download.svg';
 import teaGuiBGImg from 'assets/images/guidance-bg.svg';
+import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
 
 interface Props {
+  editTeachingPathStore?: EditTeachingPathStore;
   currentEntity: DraftTeachingPath;
   readOnly?: boolean;
 }
@@ -167,6 +169,10 @@ export class TeacherguidanceModal extends Component<Props> {
       </CreateButton>
     </div>
   )
+  public handleDownloadAsPDF = () => {
+    const { editTeachingPathStore, currentEntity } = this.props;
+    editTeachingPathStore!.downloadTeacherGuidancePDF(currentEntity.id);
+  }
 
   public render() {
     const { currentEntity, readOnly } = this.props;
@@ -212,7 +218,7 @@ export class TeacherguidanceModal extends Component<Props> {
           <div className="modalContentTG__footer">
             {readOnly !== true && this.renderFooterButtons()}
             <div className="modalContentTG__footer__aligRight">
-              <button>
+              <button onClick={this.handleDownloadAsPDF}>
                 <span>{intl.get('teacherGuidance.download_pdf')}</span>
                 <img src={downloadImg} />
               </button>

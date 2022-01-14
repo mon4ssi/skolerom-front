@@ -480,4 +480,9 @@ export class EditTeachingPathStore {
     return this.teachingPathService.getGrepGoalsFilters(grepCoreElementsIds, grepMainTopicsIds, gradesIds, subjectsIds, orderGoalsCodes, perPage, page);
   }
 
+  @action
+  public async downloadTeacherGuidancePDF(id: number) {
+    return this.teachingPathService.downloadTeacherGuidancePDF(id);
+  }
+
 }
