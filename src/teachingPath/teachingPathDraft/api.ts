@@ -31,6 +31,7 @@ export interface DraftTeachingPathResponseDTO {
   title?: string;
   description?: string;
   guidance?: string;
+  hasGuidance?: boolean;
   isPrivate?: boolean;
   content: TeachingPathNodeResponseDTO | null;
   createdAt: string;

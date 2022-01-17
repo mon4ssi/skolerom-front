@@ -3,7 +3,7 @@
     left: 50%;
     top: calc(40% - 0.59em);
     transform: translate(-50%, -28%);
-    min-width: 700px;
+    width: 700px;
     pointer-events: auto;
     background-color: #fff;
     background-clip: padding-box;
@@ -95,6 +95,14 @@
         padding: 20px 10px 25px 46px;
         border-top: 1px solid #e9ecef;
 
+        &__aligLeft {
+            display: flex;
+
+            button {
+                min-width: 160px;
+            }
+        }
+
         &__aligRight {
             margin-top: 9px;
             margin-right: 25px;
@@ -117,12 +125,11 @@
 .horizontalLine {
     width: 135px;
     display: block;
-    margin: 35px auto 5px auto;
+    margin: 35px auto 30px auto;
     border-bottom: 1px solid #d3d9de;
 
     &.withOutButton {
         margin-top: 5px;
-        margin-bottom: 35px;
     }
 }
 

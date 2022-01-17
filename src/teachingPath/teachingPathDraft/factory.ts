@@ -47,6 +47,7 @@ export const buildDraftTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     title: dto.title!,
     description: dto.description,
     guidance: dto.guidance,
+    hasGuidance: dto.hasGuidance,
     isPrivate: dto.isPrivate,
     content: null,
     sessionId: dto.uuid,

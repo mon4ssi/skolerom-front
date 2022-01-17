@@ -366,7 +366,6 @@ export class DraftTeachingPath extends TeachingPath {
   @action
   public setGuidance = (value: string) => {
     this._guidance = value;
-    this.setValidateHasGuidance(value);
     this.save();
   }
 
@@ -621,9 +620,6 @@ export class EditableTeachingPathNode extends TeachingPathNode {
   @action
   public setGuidance = (title: string) => {
     this._guidance = title;
-
-    this.draftTeachingPath.setValidateHasGuidance(title);
-
     this.draftTeachingPath.save();
   }
 
