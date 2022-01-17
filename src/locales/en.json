@@ -656,6 +656,7 @@
     "no_options": "No options"
   },
   "teacherGuidance": {
+    "name": "Teacher guidance",
     "download_pdf": "Download as PDF",
     "option": "option",
     "titleAdd": "ADD TEACHER GUIDANCE",
@@ -664,6 +665,8 @@
     "titleSub": "How is the teacher supposed to use this teaching path?",
     "titleSubRead": "This is how you can use the teaching path",
     "save_and_close": "Save and close",
+    "open": "Open teacher guidance",
+    "noAdded": "no teacher guidance added",
     "buttons": {
       "add": "Add teacher guidance",
       "edit": "Edit teacher guidance",

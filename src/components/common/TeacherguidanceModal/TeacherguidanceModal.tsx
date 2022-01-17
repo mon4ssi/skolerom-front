@@ -9,7 +9,13 @@ import { CreateButton } from '../CreateButton/CreateButton';
 import closeImg from 'assets/images/modal-close.svg';
 import downloadImg from 'assets/images/download.svg';
 import teaGuiBGImg from 'assets/images/guidance-bg.svg';
+import openTGImg from 'assets/images/open.svg';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
+import { Link } from 'react-router-dom';
+import { TeachingPathNodeType } from 'teachingPath/TeachingPath';
+import { checkIfStateModificationsAreAllowed } from 'mobx/lib/internal';
+import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
+import clone from 'lodash/clone';
 
 interface Props {
   editTeachingPathStore?: EditTeachingPathStore;
@@ -23,6 +29,7 @@ interface Teacherguidance {
   hideBorderTop: boolean;
   nroChild: number;
   children: EditableTeachingPathNode;
+  hasAssignmenet: boolean;
 }
 
 @inject('editTeachingPathStore')
@@ -64,6 +71,22 @@ export class TeacherguidanceModal extends Component<Props> {
       );
     }
   }
+  public getContentAssignment = (itemTG: Teacherguidance) => {
+    const { currentEntity, editTeachingPathStore } = this.props;
+    const countChildren = itemTG.children.children.length;
+    if (countChildren > 0) {
+      if (itemTG.children.children[0].type ===  TeachingPathNodeType.Assignment) {
+        return itemTG.children.children.map((itemAssignment, index) => (
+          <Link key={index} to={`/assignments/view/${itemAssignment.items![0].value.id}?preview`} target="_blank" className="flexBox alignCenter">
+            {itemAssignment.items![0].value.title} - ({intl.get('teacherGuidance.noAdded')})
+          </Link>
+        ));
+      }
+    } else {
+      return null;
+    }
+  }
+
   public renderChildrenNode = () => {
     const { currentEntity, readOnly } = this.props;
     let nroLevelLoop: number = 2;
@@ -95,7 +118,8 @@ export class TeacherguidanceModal extends Component<Props> {
             nroLetter: nroLetterLoop,
             hideBorderTop: hideBorderTopLoop,
             nroChild: children.length,
-            children: item
+            children: item,
+            hasAssignmenet: (item.children.length > 0 && item.children[0].type === TeachingPathNodeType.Assignment)
           };
 
           childrenFinal.push(child);
@@ -123,6 +147,7 @@ export class TeacherguidanceModal extends Component<Props> {
                 readOnly={readOnly}
                 onChange={(value: string) => { item.children.setGuidance(value); }}
               />
+              {item.hasAssignmenet && <div className="contentAssigments">{this.getContentAssignment(item)}</div>}
             </div>
           )
         );
@@ -198,7 +223,7 @@ export class TeacherguidanceModal extends Component<Props> {
             </div>
           </div>
           <div className="modalContentTG__body">
-            <div className="modalContentTG__body__row">
+            <div className="modalContentTG__body__row first">
               <DescriptionEditor
                 className="jr-desEdit0"
                 description={currentEntity.guidance}
