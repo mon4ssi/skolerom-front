@@ -13,6 +13,7 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 import editImg from 'assets/images/edit-tp.svg';
 import deleteImg from 'assets/images/trash-tp.svg';
 import addArticleImg from 'assets/images/add-article.svg';
+import guidanceEditImg from 'assets/images/guidance-edit.svg';
 
 import './NestedOrderNumber.scss';
 const TIMEOUT = 800;
@@ -228,7 +229,7 @@ export class NestedOrderNumber extends Component<Props> {
     return (
       <button onClick={this.handleOpenModalTG.bind(this, `${String(nestedOrderNumber)}${String.fromCharCode(nroLetter!)}`)} title={intl.get('teacherGuidance.buttons.edit')}>
         <img
-          src={deleteImg}
+          src={guidanceEditImg}
           alt={intl.get('teacherGuidance.buttons.edit')}
           title={intl.get('teacherGuidance.buttons.edit')}
         />

@@ -13,9 +13,6 @@ import openTGImg from 'assets/images/open.svg';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
 import { Link } from 'react-router-dom';
 import { TeachingPathNodeType } from 'teachingPath/TeachingPath';
-import { checkIfStateModificationsAreAllowed } from 'mobx/lib/internal';
-import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
-import clone from 'lodash/clone';
 
 interface Props {
   editTeachingPathStore?: EditTeachingPathStore;
