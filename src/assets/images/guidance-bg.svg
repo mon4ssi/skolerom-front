@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="25px" viewBox="0 0 24 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group</title>
+    <g id="New-assignment" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="New-assignment-(Teacher-guidance)" transform="translate(-49.000000, -265.000000)" stroke="#E7ECEF">
+            <g id="Bygger" transform="translate(0.000000, 77.000000)">
+                <g id="Add-teacher-guidance" transform="translate(20.000000, 180.000000)">
+                    <g id="Group" transform="translate(30.000000, 9.000000)">
+                        <line x1="10.5" y1="16" x2="10.5" y2="23" id="Path"></line>
+                        <line x1="10.5" y1="0" x2="10.5" y2="2" id="Path"></line>
+                        <line x1="10.5" y1="8" x2="10.5" y2="10" id="Path"></line>
+                        <path d="M19.4591395,7.854 C19.3691878,7.94746895 19.247331,8 19.1202805,8 L3.47997024,8 C3.21489,8 3,7.77614237 3,7.5 L3,2.5 C3,2.22385763 3.21489,2 3.47997024,2 L19.1202805,2 C19.247331,2 19.3691878,2.05253105 19.4591395,2.146 L21.8589907,4.646 C21.9492651,4.73980426 22,4.86717274 22,5 C22,5.13282726 21.9492651,5.26019574 21.8589907,5.354 L19.4591395,7.854 Z" id="Path"></path>
+                        <path d="M2.54086049,15.854 C2.63081223,15.947469 2.75266901,16 2.87971948,16 L18.5200298,16 C18.78511,16 19,15.7761424 19,15.5 L19,10.5 C19,10.2238576 18.78511,10 18.5200298,10 L2.87971948,10 C2.75266901,10 2.63081223,10.052531 2.54086049,10.146 L0.14100929,12.646 C0.050734854,12.7398043 0,12.8671727 0,13 C0,13.1328273 0.050734854,13.2601957 0.14100929,13.354 L2.54086049,15.854 Z" id="Path"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -115,6 +115,10 @@ export class TeachingPathTitle extends Component<Props> {
     );
   }
 
+  public openModalTeacherguidance = () => {
+    const { currentEntity: currentTeachingPath } = this.props.editTeachingPathStore!;
+  }
+
   public render() {
     const { readOnly } = this.props;
     const { currentEntity: currentTeachingPath } = this.props.editTeachingPathStore!;
@@ -137,7 +141,6 @@ export class TeachingPathTitle extends Component<Props> {
           />
           <label id="DescriptionInputTextArea" className="hidden">{intl.get('edit_teaching_path.title.description_placeholder')}</label>
           {this.renderDescription()}
-          <div className="horizontalLine" />
         </div>
       </div>
     );

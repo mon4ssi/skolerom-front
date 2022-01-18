@@ -28,6 +28,7 @@ export const buildNewTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
 const buildNewRootDraftTeachingPathNodeArgs = {
   type: TeachingPathNodeType.Root,
   selectQuestion: intl.get('edit_teaching_path.paths.main_teaching_path_title'),
+  guidance: '',
   items: [],
   children: [],
 };
@@ -45,6 +46,8 @@ export const buildDraftTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     id: dto.id,
     title: dto.title!,
     description: dto.description,
+    guidance: dto.guidance,
+    hasGuidance: dto.hasGuidance,
     isPrivate: dto.isPrivate,
     content: null,
     sessionId: dto.uuid,
@@ -195,6 +198,7 @@ export const buildFeatureImageForTeachingPathRequestDTO = (data: TeachingPathNod
 const buildTeachingPathNodeRequestDTO = (content: EditableTeachingPathNode): TeachingPathNodeSaveResponseDTO => ({
   type: content.type,
   selectQuestion: content.selectQuestion,
+  guidance: content.guidance,
   items: content.items ? content.items.map(item => buildTeachingPathItemRequestDTO(item)) : [],
   children: content.children.map(child => buildTeachingPathNodeRequestDTO(child))
 });
@@ -215,6 +219,8 @@ export const buildTeachingPathRequestDTO = (teachingPath: DraftTeachingPath) => 
   uuid: teachingPath.uuid!,
   title: teachingPath.title,
   description: teachingPath.description,
+  guidance: teachingPath.guidance,
+  hasGuidance: teachingPath.hasGuidance,
   isPrivate: teachingPath.isPrivate,
   content: buildTeachingPathNodeRequestDTO(teachingPath.content),
   grades: buildGrade(teachingPath.grades),

@@ -79,4 +79,8 @@ export class TeachingPathService {
   public async getTeachingPathListOfStudentInList(studentId: number, filter: Filter) {
     return this.teachingPathRepo.getTeachingPathListOfStudentInList(studentId, filter);
   }
+
+  public async downloadTeacherGuidancePDF(id: number) {
+    return this.teachingPathRepo.downloadTeacherGuidancePDF(id);
+  }
 }

@@ -31,6 +31,7 @@ export interface TeachingPathRepo {
   copyTeachingPath(id: number): Promise<number>;
   getGradeWpIds(gradeWpIds: Array<number>): Promise<Array<Grade>>;
   getSubjectWpIds(subjectWpIds: Array<number>): Promise<Array<Subject>>;
+  downloadTeacherGuidancePDF(id: number): Promise<void>;
 }
 
 export enum TeachingPathNodeType {
@@ -96,6 +97,7 @@ export interface TeachingPathNodeArgs {
   id?: number;
   type: TeachingPathNodeType;
   selectQuestion: string | null;
+  guidance: string | null;
   items: Array<TeachingPathItemValue> | null;
   children: Array<TeachingPathNodeArgs>;
   nestedOrder?: number;
@@ -109,6 +111,7 @@ export class TeachingPathNode {
   @observable protected _items: Array<TeachingPathItem> | null;
   @observable protected _children: Array<TeachingPathNode>;
   @observable protected _selectQuestion: string;
+  @observable protected _guidance: string;
   @observable protected _breadcrumbs?: Array<Breadcrumbs>;
 
   constructor(args: TeachingPathNodeArgs) {
@@ -117,6 +120,7 @@ export class TeachingPathNode {
     this._items = args.items && args.items.map(value => new TeachingPathItem({ value, type: args.type }));
     this._children = args.children ? args.children.map(node => new TeachingPathNode(node)) : [];
     this._selectQuestion = args.selectQuestion || intl.get('edit_teaching_path.paths.teaching_path_title');
+    this._guidance = args.guidance || '';
     this._breadcrumbs = args.breadcrumbs;
   }
 
@@ -146,6 +150,11 @@ export class TeachingPathNode {
   }
 
   @computed
+  public get guidance() {
+    return this._guidance;
+  }
+
+  @computed
   public get breadcrumbs() {
     return this._breadcrumbs;
   }
@@ -160,6 +169,8 @@ export interface TeachingPathArgs {
   lastSelectedNodeId?: number;
   content?: TeachingPathNodeArgs | null;
   description?: string;
+  guidance?: string;
+  hasGuidance?: boolean;
   isPrivate?: boolean;
   isFinished?: boolean;
   maxNumberOfSteps?: number;
@@ -199,6 +210,8 @@ export class TeachingPath {
   @observable protected _title: string;
   @observable protected _author: string | undefined;
   @observable protected _description: string;
+  @observable protected _guidance: string;
+  @observable protected _hasGuidance: boolean = false;
   @observable protected _rootNodeId: number | undefined;
   @observable protected _lastSelectedNodeId: number | undefined;
   @observable protected _isPrivate: boolean = false;
@@ -241,6 +254,8 @@ export class TeachingPath {
     this._rootNodeId = args.rootNodeId || undefined;
     this._lastSelectedNodeId = args.lastSelectedNodeId || undefined;
     this._description = args.description || '';
+    this._guidance = args.guidance || '';
+    this._hasGuidance = args.hasGuidance || false;
     this._isPrivate = !isNil(args.isPrivate) ? args.isPrivate : true;
     this._isFinished = args.isFinished || false;
     this._content = args.content ? new TeachingPathNode(args.content) : null;
@@ -335,6 +350,16 @@ export class TeachingPath {
   @computed
   public get description() {
     return this._description;
+  }
+
+  @computed
+  public get guidance() {
+    return this._guidance;
+  }
+
+  @computed
+  public get hasGuidance() {
+    return this._hasGuidance;
   }
 
   @computed

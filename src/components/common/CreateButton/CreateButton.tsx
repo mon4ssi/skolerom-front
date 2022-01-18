@@ -11,15 +11,17 @@ interface Props {
   className?: string;
   title?: string;
   onClick?: () => void;
+  pink?: boolean;
 }
 
 export const CreateButton = (props: Props) => {
-  const { light, green, disabled, children, className, onClick, title } = props;
+  const { light, green, disabled, children, className, onClick, title, pink } = props;
   const classNames = classnames(
     'CreateButton',
     className && className,
     light && 'light',
-    green && 'green'
+    green && 'green',
+    pink && 'pink'
   );
 
   return (

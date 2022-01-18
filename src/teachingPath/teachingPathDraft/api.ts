@@ -30,6 +30,8 @@ export interface DraftTeachingPathResponseDTO {
   uuid: string;
   title?: string;
   description?: string;
+  guidance?: string;
+  hasGuidance?: boolean;
   isPrivate?: boolean;
   content: TeachingPathNodeResponseDTO | null;
   createdAt: string;
@@ -76,6 +78,7 @@ export interface TeachingPathItemSaveResponseDTO {
 export interface TeachingPathNodeSaveResponseDTO {
   type: TeachingPathNodeType;
   selectQuestion: string;
+  guidance: string;
   featuredImage?: string;
   items: Array<TeachingPathItemSaveResponseDTO> | null;
   children: Array<TeachingPathNodeSaveResponseDTO>;
@@ -104,6 +107,7 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
       const response: AxiosResponse<DraftTeachingPathResponseDTO> = await API.get(
         `/api/teacher/teaching-paths/draft/${id}/edit`
       );
+
       return response.data.content ?
         buildDraftTeachingPath(response.data) :
         buildNewTeachingPath(response.data);

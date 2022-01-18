@@ -36,6 +36,7 @@ import actualArrowLeftRounded from 'assets/images/actual-arrow-left-rounded.svg'
 import './CreationPage.scss';
 import { AppHeader } from 'components/layout/AppHeader/AppHeader';
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
+import { TeacherguidanceModal } from 'components/common/TeacherguidanceModal/TeacherguidanceModal';
 
 const cardWidth = 322;
 const leftIndent = 160;
@@ -397,40 +398,103 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
           </div>
         ) : null;
       }
-    } else {
-      return node.type === TeachingPathNodeType.Root || node.children.length ? (
+
+      return (
         <div className="teachingPathItemsTitleDiv" data-number={nestedOrder} >
-        <TextAreaAutosize
-          ref={this.titleRef}
-          className="teachingPathItemsTitle fw500"
-          value={node.selectQuestion}
-          placeholder={placeholder}
-          onChange={this.handleChangeTitle}
-          cols={this.state.numberOfTitleCols}
-          maxLength={MAX_TITLE_LENGTH}
-          readOnly={readOnly}
-        />
+          <TextAreaAutosize
+            className="teachingPathItemsTitle fw500"
+            readOnly={readOnly}
+          />
         </div>
-      ) : null;
+      );
     }
+
+    return node.type === TeachingPathNodeType.Root || node.children.length ? (
+      <div className="teachingPathItemsTitleDiv" data-number={nestedOrder} >
+      <TextAreaAutosize
+        ref={this.titleRef}
+        className="teachingPathItemsTitle fw500"
+        value={node.selectQuestion}
+        placeholder={placeholder}
+        onChange={this.handleChangeTitle}
+        cols={this.state.numberOfTitleCols}
+        maxLength={MAX_TITLE_LENGTH}
+        readOnly={readOnly}
+      />
+      </div>
+    ) : null;
+  }
+
+  public getLetterNode = (): number => {
+    const { editTeachingPathStore, node } = this.props;
+    let nroLetterLoop: number;
+
+    if (node.children.length) {
+      const firstLetterNumber: number = 97;
+
+      if (editTeachingPathStore!.currentEntity!.content === node) {
+        nroLetterLoop = firstLetterNumber;
+      } else {
+        let children: Array<EditableTeachingPathNode> = [];
+        let childrenTmp: Array<EditableTeachingPathNode> = editTeachingPathStore!.currentEntity!.content.children;
+        let continueLoop = true;
+        let nroNodes: number = 0;
+
+        //
+        while (continueLoop) {
+          nroNodes = 0;
+          children = childrenTmp;
+          childrenTmp = [];
+
+          nroLetterLoop = firstLetterNumber;
+
+          children.some((item) => {
+
+            if (item.children.length > 0) {
+              item.children.forEach((child) => {
+                if (child.children.length > 0) {
+                  childrenTmp.push(child);
+                }
+              });
+
+              nroNodes += 1;
+
+              if (item === node) {
+                nroNodes = 0;
+                return true;
+              }
+
+              nroLetterLoop += 1;
+            }
+          });
+
+          continueLoop = (nroNodes > 0);
+        }
+      }
+    }
+
+    return nroLetterLoop!;
   }
 
   public renderNestedOrderNumber = (withUnmerge?: boolean) => {
-    const { nestedOrder, node, readOnly } = this.props;
+    const { nestedOrder, node, readOnly, editTeachingPathStore } = this.props;
+    const nroLetterLoop: number = this.getLetterNode();
+
     const containerClassName = classnames(
       'nestedOrderNumberContainer flexBox dirColumn',
       !withUnmerge && 'withoutUnmergeButton'
     );
 
     return node.children.length ? (
-      <div className={containerClassName}>
+      <>
         {node.type !== TeachingPathNodeType.Root && <div className="topVerticalLine"/>}
         <NestedOrderNumber
           node={node}
           nestedOrderNumber={nestedOrder}
           readOnly={readOnly}
+          nroLetter={nroLetterLoop!}
         />
-      </div>
+      </>
     ) : null;
   }
 
@@ -466,6 +530,20 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     ) : null;
   }
 
+  public renderBoxNodeOptions = () => {
+    const { node, readOnly } = this.props;
+
+    return node.children.length ? (
+      <div className={`${node.type === TeachingPathNodeType.Root ? 'boxNodeOptionsRoot' : 'boxNodeOptionsChildren'} ${readOnly ? '' : ''}`}>
+        {this.renderInput()}
+        <div className={`sectImgs ${readOnly ? 'sectImgsReadOnly' : ''}`}>
+          {node.type === TeachingPathNodeType.Root && this.renderNestedOrderNumber(true)}
+          {node.type !== TeachingPathNodeType.Root && this.renderNestedOrderNumber(readOnly ? false : !!this.renderUnmergeButton())}
+        </div>
+      </div>
+    ) : null;
+  }
+
   public render() {
     const { node, parentNode, index, readOnly } = this.props;
     const children = node.children as Array<EditableTeachingPathNode>;
@@ -491,11 +569,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
         {!readOnly && this.renderUnmergeButton()}
 
-        {node.type !== TeachingPathNodeType.Root && this.renderNestedOrderNumber(readOnly ? false : !!this.renderUnmergeButton())}
-
-        {this.renderInput()}
-
-        {node.type === TeachingPathNodeType.Root && this.renderNestedOrderNumber(true)}
+        {this.renderBoxNodeOptions()}
 
         {!readOnly && this.renderAddingButtons(!!this.renderUnmergeButton())}
 
@@ -588,6 +662,12 @@ export class CreationPageComponent extends Component<Props> {
 
         <div className="main flexBox dirColumn alignCenter">
           <TeachingPathTitle readOnly={readOnly}/>
+
+          <TeacherguidanceModal
+            currentEntity={currentTeachingPath!}
+            readOnly={readOnly}
+            editTeachingPathStore={editTeachingPathStore}
+          />
 
           <NodeContent
             isRoot

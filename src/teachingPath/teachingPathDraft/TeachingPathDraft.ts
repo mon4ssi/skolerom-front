@@ -364,6 +364,67 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
+  public setGuidance = (value: string) => {
+    this._guidance = value;
+    this.save();
+  }
+
+  public setValidateHasGuidance = (value: string) => {
+    const guidanceBlank1 = '<p><br></p>';
+    const guidanceBlank2 = '';
+
+    if (value !== guidanceBlank1 && value !== guidanceBlank2) {
+      this._hasGuidance = true;
+    } else {
+      this._hasGuidance = false;
+
+      if (this.guidance !== guidanceBlank1 && this.guidance !== guidanceBlank2) {
+        this._hasGuidance = true;
+      } else {
+        if (this.content.guidance !== guidanceBlank1 && this.content.guidance !== guidanceBlank2) {
+          this._hasGuidance = true;
+        } else {
+          let children: Array<EditableTeachingPathNode> = [];
+          let childrenTmp: Array<EditableTeachingPathNode> = this.content.children;
+          let continueLoop = true;
+          let nroNodes: number = 0;
+
+          //
+          while (continueLoop) {
+            nroNodes = 0;
+            children = childrenTmp;
+            childrenTmp = [];
+
+            children.some((item) => {
+              if (item.guidance !== guidanceBlank1 && item.guidance !== guidanceBlank2) {
+                this._hasGuidance = true;
+                return true;
+              }
+
+              if (item.children.length > 0) {
+                item.children.forEach((child) => {
+                  if (child.guidance !== guidanceBlank1 && child.guidance !== guidanceBlank2) {
+                    this._hasGuidance = true;
+                    return true;
+                  }
+
+                  if (child.children.length > 0) {
+                    childrenTmp.push(child);
+                  }
+                });
+
+                nroNodes += 1;
+              }
+            });
+
+            continueLoop = (nroNodes > 0);
+          }
+        }
+      }
+    }
+  }
+
+  @action
   public setGrepSourcesIds = (data: Array<number>) => {
     this._sources = data;
     this.save();
@@ -469,6 +530,17 @@ export class DraftTeachingPath extends TeachingPath {
     return this.isDraftSaving;
   }
 
+  @action
+  public handleOpenTeachingGuidance = (nroLevel: string): void => {
+    const modalTG = Array.from(document.getElementsByClassName('modalContentTG') as HTMLCollectionOf<HTMLElement>);
+    const modalTGBack = Array.from(document.getElementsByClassName('modalContentTGBackground') as HTMLCollectionOf<HTMLElement>);
+    modalTG[0].classList.add('open');
+    modalTGBack[0].classList.remove('hide');
+
+    const editDescript = (document.getElementsByClassName(`jr-desEdit${nroLevel}`)[0] as HTMLDivElement);
+    const editInputText = (editDescript.getElementsByClassName('ql-editor')[0] as HTMLInputElement);
+    editInputText.focus();
+  }
 }
 
 interface EditableTeachingPathNodeArgs extends TeachingPathNodeArgs {
@@ -542,6 +614,12 @@ export class EditableTeachingPathNode extends TeachingPathNode {
   @action
   public setSelectedQuestion = (title: string) => {
     this._selectQuestion = title;
+    this.draftTeachingPath.save();
+  }
+
+  @action
+  public setGuidance = (title: string) => {
+    this._guidance = title;
     this.draftTeachingPath.save();
   }
 
