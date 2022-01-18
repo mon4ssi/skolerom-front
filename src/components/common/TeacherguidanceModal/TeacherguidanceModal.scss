@@ -73,6 +73,7 @@
 
                 a {
                     font-weight: 100;
+                    display: table;
                 }
 
                 img {
@@ -118,7 +119,7 @@
             display: flex;
 
             button {
-                min-width: 160px;
+                width: auto;
             }
         }
 

@@ -77,7 +77,7 @@ export class TeacherguidanceModal extends Component<Props> {
     if (countChildren > 0) {
       if (itemTG.children.children[0].type ===  TeachingPathNodeType.Assignment) {
         return itemTG.children.children.map((itemAssignment, index) => (
-          <Link key={index} to={`/assignments/view/${itemAssignment.items![0].value.id}?preview`} target="_blank" className="flexBox alignCenter">
+          <Link key={index} to={`/assignments/view/${itemAssignment.items![0].value.id}?preview`} target="_blank" className="alignCenter">
             {itemAssignment.items![0].value.title} - ({intl.get('teacherGuidance.noAdded')})
           </Link>
         ));
