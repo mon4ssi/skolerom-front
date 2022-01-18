@@ -1,11 +1,10 @@
-import React, { Component, createRef } from 'react';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import intl from 'react-intl-universal';
 import { DescriptionEditor } from 'assignment/view/NewAssignment/Questions/DescriptionEditor';
 import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
 import { ItemContentTypeContext } from 'teachingPath/view/EditTeachingPath/ItemContentTypeContext';
-import './TeacherguidanceModal.scss';
-import { CreateButton } from '../CreateButton/CreateButton';
+import 'teachingPath/view/TeacherGuidance/TeacherGuidanceModal.scss';
 import closeImg from 'assets/images/modal-close.svg';
 import downloadImg from 'assets/images/download.svg';
 import teaGuiBGImg from 'assets/images/guidance-bg.svg';
@@ -13,6 +12,7 @@ import openTGImg from 'assets/images/open.svg';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
 import { Link } from 'react-router-dom';
 import { TeachingPathNodeType } from 'teachingPath/TeachingPath';
+import { CreateButton } from 'components/common/CreateButton/CreateButton';
 
 interface Props {
   editTeachingPathStore?: EditTeachingPathStore;
@@ -51,6 +51,20 @@ export class TeacherguidanceModal extends Component<Props> {
     let titleTG = currentEntity.content.selectQuestion;
     if (titleTG === intl.get('edit_teaching_path.title.title_placeholder')) { titleTG = ''; }
 
+    const hasAssignmenet = (currentEntity.content.children.length > 0 && currentEntity.content.children[0].type === TeachingPathNodeType.Assignment);
+    let itemTG: Teacherguidance | null = null;
+
+    if (hasAssignmenet) {
+      itemTG = {
+        nroLevel: 1,
+        nroLetter: 1,
+        hideBorderTop: false,
+        nroChild: currentEntity.content.children.length,
+        children: currentEntity.content,
+        hasAssignmenet: true
+      };
+    }
+
     if (currentEntity.content.children.length > 0) {
       return (
         <div className="modalContentTG__body__row line">
@@ -64,12 +78,13 @@ export class TeacherguidanceModal extends Component<Props> {
             readOnly={readOnly}
             onChange={(value: string) => { currentEntity.content.setGuidance(value); }}
           />
+          {hasAssignmenet && <div className="contentAssigments">{this.getContentAssignment(itemTG!)}</div>}
         </div>
       );
     }
   }
+
   public getContentAssignment = (itemTG: Teacherguidance) => {
-    const { currentEntity, editTeachingPathStore } = this.props;
     const countChildren = itemTG.children.children.length;
     if (countChildren > 0) {
       if (itemTG.children.children[0].type ===  TeachingPathNodeType.Assignment) {

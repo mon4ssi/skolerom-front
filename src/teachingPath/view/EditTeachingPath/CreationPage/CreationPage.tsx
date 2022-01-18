@@ -36,7 +36,7 @@ import actualArrowLeftRounded from 'assets/images/actual-arrow-left-rounded.svg'
 import './CreationPage.scss';
 import { AppHeader } from 'components/layout/AppHeader/AppHeader';
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
-import { TeacherguidanceModal } from 'components/common/TeacherguidanceModal/TeacherguidanceModal';
+import { TeacherguidanceModal } from 'teachingPath/view/TeacherGuidance/TeacherGuidanceModal';
 
 const cardWidth = 322;
 const leftIndent = 160;
