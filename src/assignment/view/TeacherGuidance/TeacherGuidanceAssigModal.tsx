@@ -53,9 +53,27 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
     const { newAssignmentStore, assignment } = this.props;
     newAssignmentStore!.downloadTeacherGuidancePDF(assignment.id);
   }
+  public renderQuestions = () => {
+    const { readOnly, assignment } = this.props;
+    return assignment.questions.map((item, index) => (
+        <div className={'modalContentTG__body__row line'} key={index}>
+          <h4>
+            <div className="nestedOrderNumber">{item.orderPosition + 1}</div>
+            {item.title === intl.get('new assignment.Enter a question') ? '' : item.title}
+          </h4>
+          <DescriptionEditor
+            className={`jr-desEdit${item.orderPosition}${String.fromCharCode(item.orderPosition)}`}
+            description={item.guidance}
+            readOnly={readOnly}
+            onChange={(value: string) => { item.setGuidance(value); }}
+          />
+        </div>
+      )
+    );
+  }
 
   public render() {
-    const { readOnly } = this.props;
+    const { readOnly, assignment } = this.props;
     const titleTG = intl.get('teacherGuidance.titleRead');
     const titleTGSub = intl.get('teacherGuidance.titleSubReadAssig');
 
@@ -76,8 +94,14 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
           </div>
           <div className="modalContentTGAssig__body">
             <div className="modalContentTGAssig__body__row first">
-              123
+              <DescriptionEditor
+                className="jr-desEdit0"
+                description={assignment.guidance}
+                readOnly={readOnly}
+                onChange={(value: string) => { assignment.setGuidance(value); }}
+              />
             </div>
+            {this.renderQuestions()}
           </div>
           <div className="modalContentTGAssig__footer">
           {readOnly !== true && this.renderFooterButtons()}

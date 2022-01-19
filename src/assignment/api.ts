@@ -90,6 +90,7 @@ export interface QuestionDTO {
   id?: number;
   type: string;
   title: string;
+  guidance: string;
   orderPosition: number;
   options?: Array<OptionDTO>;
   content?: Array<ContentBlockDTO>;

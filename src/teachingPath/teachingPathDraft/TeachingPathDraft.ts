@@ -618,8 +618,8 @@ export class EditableTeachingPathNode extends TeachingPathNode {
   }
 
   @action
-  public setGuidance = (title: string) => {
-    this._guidance = title;
+  public setGuidance = (value: string) => {
+    this._guidance = value;
     this.draftTeachingPath.save();
   }
 

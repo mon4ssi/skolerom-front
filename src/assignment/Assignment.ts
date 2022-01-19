@@ -202,6 +202,8 @@ export interface AssignmentArgs {
   title?: string;
   author?: string;
   description?: string;
+  guidance?: string;
+  hasGuidance?: boolean;
   questions?: Array<Question>;
   grades?: Array<Grade>;
   subjects?: Array<Subject>;
@@ -248,6 +250,8 @@ export class Assignment {
   @observable private _author: string = '';
   @observable protected _questions: Array<Question> = [];
   @observable protected _description: string = '';
+  @observable protected _guidance: string;
+  @observable protected _hasGuidance: boolean = false;
   @observable protected _grades: Array<Grade> = [];
   @observable protected _subjects: Array<Subject> = [];
   @observable protected _sources: Array<number> = [];
@@ -288,6 +292,8 @@ export class Assignment {
     this._title = args.title || '';
     this._author = args.author || '';
     this._description = args.description || '';
+    this._guidance = args.guidance || '';
+    this._hasGuidance = args.hasGuidance || false;
     this._questions = args.questions || [];
     this._grades = args.grades || [];
     this._subjects = args.subjects || [];
@@ -379,6 +385,16 @@ export class Assignment {
   @computed
   public get description() {
     return this._description;
+  }
+
+  @computed
+  public get guidance() {
+    return this._guidance;
+  }
+
+  @computed
+  public get hasGuidance() {
+    return this._hasGuidance;
   }
 
   @computed
@@ -535,6 +551,7 @@ export class QuestionAttachment {
 export interface QuestionParams {
   id?: number;
   title: string;
+  guidance?: string;
   order: number;
   contentBlocks: Array<ContentBlock>;
 }
@@ -543,6 +560,7 @@ export abstract class Question {
   private readonly _id?: number;
   private readonly _type: QuestionType;
   @observable protected _title: string;
+  @observable protected _guidance: string;
   @observable protected _order: number;
   @observable protected _content: Array<ContentBlock> = [];
 
@@ -550,6 +568,7 @@ export abstract class Question {
     this._id = params.id;
     this._type = params.type;
     this._title = params.title;
+    this._guidance = params.guidance || '';
     this._order = params.order;
     this._content = params.contentBlocks;
   }
@@ -572,6 +591,11 @@ export abstract class Question {
   @computed
   public get title() {
     return this._title;
+  }
+
+  @computed
+  public get guidance() {
+    return this._guidance;
   }
 
   @computed

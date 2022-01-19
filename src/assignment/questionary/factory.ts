@@ -103,6 +103,7 @@ export const buildQuestionary = (dto: QuestionaryResponseDTO, assignmentId: numb
 const buildQuestion = (dto: QuestionDTO, index: number) => {
   const id = dto.id;
   const title = dto.title;
+  const guidance = dto.guidance;
   const order = dto.orderPosition || index;
   const contentBlocks = dto.content!.map(buildContentBlock);
 
@@ -111,6 +112,7 @@ const buildQuestion = (dto: QuestionDTO, index: number) => {
       return new TextQuestion({
         id,
         title,
+        guidance,
         order,
         contentBlocks,
       });
@@ -121,6 +123,7 @@ const buildQuestion = (dto: QuestionDTO, index: number) => {
         {
           id,
           title,
+          guidance,
           order,
           contentBlocks,
           options: dto.options!.map(dto => buildMultipleChoiceOption(dto))
@@ -133,6 +136,7 @@ const buildQuestion = (dto: QuestionDTO, index: number) => {
         {
           id,
           title,
+          guidance,
           order,
           contentBlocks,
           options: dto.options!.map(dto => buildImageChoiceOption(dto))

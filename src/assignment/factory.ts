@@ -197,6 +197,7 @@ export const buildQuestionDTO = (question: Question): QuestionDTO => {
   const dto: QuestionDTO = {
     type: question.type,
     title: question.title,
+    guidance: question.guidance,
     orderPosition: question.orderPosition,
     content: question.content.map(buildContentBlockDTO),
   };
