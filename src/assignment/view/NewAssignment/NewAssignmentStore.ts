@@ -641,5 +641,15 @@ export class NewAssignmentStore {
   public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number) {
     return this.teachingPathService.getGrepGoalsFilters(grepCoreElementsIds, grepMainTopicsIds, gradesIds, subjectsIds, orderGoalsCodes, perPage, page);
   }
-
+  @action
+  public async downloadTeacherGuidancePDF(id: number) {
+    return this.assignmentService.downloadTeacherGuidancePDF(id);
+  }
+  @action
+  public openTeacherGuidanceAssig = (nroLevel: string): void => {
+    const modalTG = Array.from(document.getElementsByClassName('modalContentTGAssig') as HTMLCollectionOf<HTMLElement>);
+    const modalTGBack = Array.from(document.getElementsByClassName('modalContentTGAssigBackground') as HTMLCollectionOf<HTMLElement>);
+    modalTG[0].classList.add('open');
+    modalTGBack[0].classList.remove('hide');
+  }
 }

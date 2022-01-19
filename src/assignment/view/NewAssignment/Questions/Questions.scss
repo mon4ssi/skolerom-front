@@ -185,6 +185,23 @@
     margin-top: 0;
     cursor: pointer;
   }
+
+  .sectionGuidance {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:25px 20px 0px 20px;
+
+    button {
+      line-height:24px;
+
+      img {
+          margin-right: 8px;
+          display: initial;
+          vertical-align:bottom;
+      }
+    }
+  }
 }
 
 .hasError {
@@ -223,6 +240,24 @@
       width: max-content;
     }
   }
+
+  .sectionGuidance {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    button {
+      line-height:24px;
+
+      img {
+          margin-right: 8px;
+          display: initial;
+          vertical-align:bottom;
+      }
+    }
+  }
+
+
 }
 
 .content-block-dragged.attached-files {

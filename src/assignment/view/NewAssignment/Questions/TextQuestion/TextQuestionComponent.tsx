@@ -18,6 +18,9 @@ import textQuestionIcon from 'assets/images/new-text-question.svg';
 import textQuestionIconPink from 'assets/images/new-text-question-pink.svg';
 
 import '../Questions.scss';
+import { CreateButton } from 'components/common/CreateButton/CreateButton';
+import teaGuiBGImg from 'assets/images/guidance-bg.svg';
+
 const ENTER_SINGLE_QUOTE_CODE = 219;
 const ENTER_DOUBLE_QUOTE_CODE = 50;
 const DELAY = 100;
@@ -86,6 +89,10 @@ class TextQuestionContent extends Component<TextQuestionProps> {
     );
   }
 
+  public openModalTGAssig = (nroLevel: string) => {
+    this.props.newAssignmentStore!.openTeacherGuidanceAssig(nroLevel);
+  }
+
   public render() {
     const { question, newAssignmentStore } = this.props;
     const order = question.orderPosition + 1;
@@ -130,6 +137,15 @@ class TextQuestionContent extends Component<TextQuestionProps> {
             question={question}
             addNewContentBlock={this.addNewContentBlock}
           />
+        </div>
+        <div className="sectionGuidance">
+          <CreateButton
+            title={intl.get('teacherGuidance.buttons.add')}
+            onClick={this.openModalTGAssig.bind(this, String(order))}
+          >
+            <img src={teaGuiBGImg} alt={intl.get('teacherGuidance.buttons.add')} />
+            {intl.get('teacherGuidance.buttons.add')}
+          </CreateButton>
         </div>
       </div>
     );

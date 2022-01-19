@@ -17,6 +17,7 @@ import { SetRelatedArticles } from './SetRelatedArticles/SetRelatedArticles';
 import { Loader } from 'components/common/Loader/Loader';
 
 import './NewAssignment.scss';
+import { TeacherGuidanceAssigModal } from '../TeacherGuidance/TeacherGuidanceAssigModal';
 
 interface Props extends RouteChildrenProps<{ id: string }> {
   newAssignmentStore?: NewAssignmentStore;
@@ -76,6 +77,10 @@ class NewAssignmentComponent extends Component<Props & RouteComponentProps, Stat
           <div className="main flexBox spaceBetween">
             <div className={'addAssignmentFlow w50'}>
               <AssignmentTitle assignment={currentAssignment} />
+              <TeacherGuidanceAssigModal
+                newAssignmentStore={newAssignmentStore}
+                assignment={currentAssignment}
+              />
               <SetRelatedArticles />
               <QuestionsList assignment={currentAssignment} />
               <AddQuestion />

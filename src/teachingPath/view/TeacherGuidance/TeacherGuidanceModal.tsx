@@ -36,7 +36,7 @@ export class TeacherguidanceModal extends Component<Props> {
 
   public openModalTG = (nroLevel: string) => {
     const { currentEntity } = this.props;
-    currentEntity.handleOpenTeachingGuidance(nroLevel);
+    currentEntity.handleOpenTeacherGuidance(nroLevel);
   }
 
   public closeModalTG = () => {

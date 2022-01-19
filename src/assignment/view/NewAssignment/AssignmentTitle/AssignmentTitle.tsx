@@ -10,6 +10,9 @@ import { MAX_DESCRIPTION_LENGTH, MAX_DESCRIPTION_LENGTH_500, MAX_TITLE_LENGTH } 
 
 import './AssignmentTitle.scss';
 
+import { CreateButton } from 'components/common/CreateButton/CreateButton';
+import teaGuiBGImg from 'assets/images/guidance-bg.svg';
+
 const ENTER_KEY_CODE = 13;
 const ENTER_SINGLE_QUOTE_CODE = 219;
 const ENTER_DOUBLE_QUOTE_CODE = 50;
@@ -98,6 +101,10 @@ export class AssignmentTitle extends Component<Props> {
     // this.titleField!.setSelectionRange(this.props.assignment.title.length, this.props.assignment.title.length);
   }
 
+  public openModalTGAssig = (nroLevel: string) => {
+    this.props.newAssignmentStore!.openTeacherGuidanceAssig(nroLevel);
+  }
+
   public render() {
     const { assignment, newAssignmentStore } = this.props;
     const lightItem = newAssignmentStore!.isHighlightedItem(CreationElements.Title) ? 'lightItem' : '';
@@ -131,6 +138,15 @@ export class AssignmentTitle extends Component<Props> {
             maxLength={MAX_DESCRIPTION_LENGTH_500}
             aria-labelledby="DescriptionInputTextArea"
           />
+          <div className="sectionGuidance">
+            <CreateButton
+              title={intl.get('teacherGuidance.buttons.add')}
+              onClick={this.openModalTGAssig.bind(this, '0')}
+            >
+              <img src={teaGuiBGImg} alt={intl.get('teacherGuidance.buttons.add')} />
+              {intl.get('teacherGuidance.buttons.add')}
+            </CreateButton>
+          </div>
         </div>
       </div>
     );

@@ -47,6 +47,7 @@ export interface AssignmentRepo {
   }>;
   copyAssignment(id: number): Promise<number>;
   getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
+  downloadTeacherGuidancePDF(id: number): Promise<void>;
 }
 
 export enum QuestionType {

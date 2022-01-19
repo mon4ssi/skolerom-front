@@ -531,7 +531,7 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
-  public handleOpenTeachingGuidance = (nroLevel: string): void => {
+  public handleOpenTeacherGuidance = (nroLevel: string): void => {
     const modalTG = Array.from(document.getElementsByClassName('modalContentTG') as HTMLCollectionOf<HTMLElement>);
     const modalTGBack = Array.from(document.getElementsByClassName('modalContentTGBackground') as HTMLCollectionOf<HTMLElement>);
     modalTG[0].classList.add('open');

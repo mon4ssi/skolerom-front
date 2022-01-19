@@ -64,6 +64,10 @@ export class AssignmentService {
   public async copyAssignment(id: number) {
     return this.assignmentRepo.copyAssignment(id);
   }
+
+  public async downloadTeacherGuidancePDF(id: number) {
+    return this.assignmentRepo.downloadTeacherGuidancePDF(id);
+  }
 }
 
 export class ArticleService {
