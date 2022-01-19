@@ -656,21 +656,21 @@
     "no_options": "Ingen treff"
   },
   "teacherGuidance": {
-    "name": "Teacher guidance",
-    "download_pdf": "Download as PDF",
-    "option": "option",
-    "titleAdd": "ADD TEACHER GUIDANCE",
-    "titleEdit": "EDIT TEACHER GUIDANCE",
-    "titleRead": "TEACHER GUIDANCE",
-    "titleSub": "How is the teacher supposed to use this teaching path?",
-    "titleSubRead": "This is how you can use the teaching path",
-    "save_and_close": "Save and close",
-    "open": "Open teacher guidance",
-    "noAdded": "no teacher guidance added",
+    "name": "Lærerveiledning",
+    "download_pdf": "Last ned PDF",
+    "option": "valg",
+    "titleAdd": "OPPRETT LÆRERVEILEDNING",
+    "titleEdit": "REDIGER LÆRERVEILEDNING",
+    "titleRead": "LÆRERVEILEDNING",
+    "titleSub": "Hvordan brukes læringsstien i undervisning?",
+    "titleSubRead": "Slik kan du bruke læringsstien i undervisning",
+    "save_and_close": "Lagre og lukk",
+    "open": "Åpne lærerveiledning",
+    "noAdded": "Ingen lærerveiledning lagt til",
     "buttons": {
-      "add": "Add teacher guidance",
-      "edit": "Edit teacher guidance",
-      "read": "Read teacher guidance"
+      "add": "Opprett lærerveiledning",
+      "edit": "Rediger lærerveiledning",
+      "read": "Les lærerveiledning"
     }
   },
   "students_list": {
