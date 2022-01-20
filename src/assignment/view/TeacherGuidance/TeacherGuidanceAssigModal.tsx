@@ -62,7 +62,7 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
             {item.title === intl.get('new assignment.Enter a question') ? '' : item.title}
           </h4>
           <DescriptionEditor
-            className={`jr-desEdit${item.orderPosition}${String.fromCharCode(item.orderPosition)}`}
+            className={`jr-desEdit${item.orderPosition + 1}`}
             description={item.guidance}
             readOnly={readOnly}
             onChange={(value: string) => { item.setGuidance(value); }}
