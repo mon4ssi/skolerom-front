@@ -54,6 +54,7 @@ export type TeachingPathItemValueArgs = {
   numberOfQuestions?: number;
   featuredImage?: string;
   grepGoals?: Array<GreepElements>;
+  hasGuidance?: boolean;
 };
 
 export type TeachingPathItemValue = Article | Assignment | Domain;

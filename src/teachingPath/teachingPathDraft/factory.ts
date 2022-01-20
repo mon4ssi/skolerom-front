@@ -129,7 +129,8 @@ const buildAssignmentItemDTO = (
   grepCoreelements: item.grepCoreelements,
   grepGoals: item.grepGoals,
   grepMaintopic: item.grepMaintopic,
-  grepReadingInsubject: item.grepReadingInsubject
+  grepReadingInsubject: item.grepReadingInsubject,
+  hasGuidance: item.hasGuidance
 });
 
 const buildDomainItemDTO = (

@@ -73,6 +73,7 @@ export interface TeachingPathItemSaveResponseDTO {
   relatedArticles?: Array<Article>;
   images?: { id: number, url: string };
   featuredImage?: string;
+  hasGuidance?: boolean;
 }
 
 export interface TeachingPathNodeSaveResponseDTO {
