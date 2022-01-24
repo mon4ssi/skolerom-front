@@ -531,7 +531,7 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
-  public handleOpenTeachingGuidance = (nroLevel: string): void => {
+  public handleOpenTeacherGuidance = (nroLevel: string): void => {
     const modalTG = Array.from(document.getElementsByClassName('modalContentTG') as HTMLCollectionOf<HTMLElement>);
     const modalTGBack = Array.from(document.getElementsByClassName('modalContentTGBackground') as HTMLCollectionOf<HTMLElement>);
     modalTG[0].classList.add('open');
@@ -618,8 +618,8 @@ export class EditableTeachingPathNode extends TeachingPathNode {
   }
 
   @action
-  public setGuidance = (title: string) => {
-    this._guidance = title;
+  public setGuidance = (value: string) => {
+    this._guidance = value;
     this.draftTeachingPath.save();
   }
 

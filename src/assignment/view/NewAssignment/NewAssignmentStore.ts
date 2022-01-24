@@ -21,6 +21,7 @@ import { TEACHING_PATH_SERVICE, TeachingPathService } from 'teachingPath/service
 const statusCode204 = 204;
 const numberOfImagesForSkeleton = 12;
 const numberOfVideosForSkeleton = 4;
+const delayFocus = 250;
 
 const getAllChildArticlesIds = (article: Article) => {
   const qwe = article.levels![0] && article.levels![0].childArticles ? article.levels![0].childArticles.map(child => child.wpId || child.id) : [];
@@ -641,5 +642,24 @@ export class NewAssignmentStore {
   public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number) {
     return this.teachingPathService.getGrepGoalsFilters(grepCoreElementsIds, grepMainTopicsIds, gradesIds, subjectsIds, orderGoalsCodes, perPage, page);
   }
+  @action
+  public async downloadTeacherGuidancePDF(id: number) {
+    return this.assignmentService.downloadTeacherGuidancePDF(id);
+  }
+  @action
+  public openTeacherGuidanceAssig = (nroLevel: string): void => {
+    const modalTG = Array.from(document.getElementsByClassName('modalContentTGAssig') as HTMLCollectionOf<HTMLElement>);
+    const modalTGBack = Array.from(document.getElementsByClassName('modalContentTGAssigBackground') as HTMLCollectionOf<HTMLElement>);
+    modalTG[0].classList.add('open');
+    modalTGBack[0].classList.remove('hide');
 
+    setTimeout(
+      () => {
+        const editDescript = (document.getElementsByClassName(`jr-desEdit${nroLevel}`)[0] as HTMLDivElement);
+        const editInputText = (editDescript.getElementsByClassName('ql-editor')[0] as HTMLInputElement);
+        editInputText.focus();
+      },
+      delayFocus
+    );
+  }
 }

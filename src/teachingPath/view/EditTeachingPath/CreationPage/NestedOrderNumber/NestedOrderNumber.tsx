@@ -200,7 +200,7 @@ export class NestedOrderNumber extends Component<Props> {
 
   public handleOpenModalTG = (nroLevel: string) => {
     const { editTeachingPathStore } = this.props;
-    editTeachingPathStore!.currentEntity!.handleOpenTeachingGuidance(nroLevel);
+    editTeachingPathStore!.currentEntity!.handleOpenTeacherGuidance(nroLevel);
   }
 
   public renderEditIcon = () => (

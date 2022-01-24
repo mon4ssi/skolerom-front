@@ -90,6 +90,7 @@ export interface QuestionDTO {
   id?: number;
   type: string;
   title: string;
+  guidance: string;
   orderPosition: number;
   options?: Array<OptionDTO>;
   content?: Array<ContentBlockDTO>;
@@ -325,6 +326,24 @@ export class AssignmentApi implements AssignmentRepo {
       distributes: response.data.map((distribute: AssignmentDistributeDTO) => new AssignmentDistribute(distribute)),
       total_pages: response.meta.pagination.total_pages,
     };
+  }
+  public async downloadTeacherGuidancePDF(id: number): Promise<void> {
+    const response = await API.get(`api/teacher/assignments/${id}/guidance/download`, {
+      responseType: 'blob',
+      headers: { Accept: 'application/octet-stream' },
+    });
+
+    const blob = new Blob([response.data], { type: 'application/pdf' });
+    const a = document.createElement('a');
+    a.download = 'TeacherGuidance';
+    a.href = window.URL.createObjectURL(blob);
+    const clickEvt = new MouseEvent('click', {
+      view: window,
+      bubbles: true,
+      cancelable: true,
+    });
+    a.dispatchEvent(clickEvt);
+    a.remove();
   }
 }
 

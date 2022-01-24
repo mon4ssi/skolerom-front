@@ -27,12 +27,15 @@ export interface NewDraftAssignmentResponseDTO {
   grepGoalsIds?: Array<number>;
   grepReadingInSubjectsIds?: number;
   sources?: Array<number>;
+  guidance?: string;
+  hasGuidance?: boolean;
 }
 
 export interface DraftAssignmentRequestDTO {
   uuid: string;
   title: string;
   description: string;
+  guidance: string;
   numberOfQuestions: number;
   isPrivate: boolean;
   assignmentContent: AssignmentRequestDTO;

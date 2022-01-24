@@ -97,6 +97,7 @@ export interface TeacherAssignmentResponseDTO {
   id: number;
   title: string;
   description: string;
+  hasGuidance?: boolean;
   numberOfQuestions: number;
   view: string;
   grades: Array<GradeDTO>;
@@ -197,6 +198,7 @@ export const buildQuestionDTO = (question: Question): QuestionDTO => {
   const dto: QuestionDTO = {
     type: question.type,
     title: question.title,
+    guidance: question.guidance,
     orderPosition: question.orderPosition,
     content: question.content.map(buildContentBlockDTO),
   };
@@ -309,6 +311,7 @@ export const buildAllAssignmentsList = (item: TeacherAssignmentResponseDTO) => (
       id: item.id,
       title: item.title,
       description: item.description,
+      hasGuidance: item.hasGuidance || false,
       numberOfQuestions: item.numberOfQuestions,
       grades: item.grades.map(grade => buildGrade(grade)) || [],
       subjects: item.subjects.map(subject => buildSubject(subject)) || [],

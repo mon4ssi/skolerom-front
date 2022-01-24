@@ -18,6 +18,8 @@ import { MAX_DESCRIPTION_LENGTH } from 'utils/constants';
 
 import newMultipleChoiceQuestionIcon from 'assets/images/new-multiple-choice-question.svg';
 import newMultipleChoiceQuestionIconPink from 'assets/images/new-multiple-choice-question-pink.svg';
+import teaGuiBGImg from 'assets/images/guidance-bg.svg';
+
 const ENTER_SINGLE_QUOTE_CODE = 219;
 const ENTER_DOUBLE_QUOTE_CODE = 50;
 const DELAY = 100;
@@ -106,6 +108,10 @@ class MultipleChoiceQuestionContent extends Component<Props> {
     );
   }
 
+  public openModalTGAssig = (nroLevel: string) => {
+    this.props.newAssignmentStore!.openTeacherGuidanceAssig(nroLevel);
+  }
+
   public render() {
     const { question, newAssignmentStore } = this.props;
     const lightItem = newAssignmentStore!.isHighlightedItem(CreationElements.Questions, question.orderPosition) ? 'lightItem' : '';
@@ -167,6 +173,15 @@ class MultipleChoiceQuestionContent extends Component<Props> {
           >
             {intl.get('new assignment.New answer')}
           </button>
+          <div className="sectionGuidance">
+            <CreateButton
+              title={intl.get('teacherGuidance.buttons.add')}
+              onClick={this.openModalTGAssig.bind(this, String(question.orderPosition + 1))}
+            >
+              <img src={teaGuiBGImg} alt={intl.get('teacherGuidance.buttons.add')} />
+              {intl.get('teacherGuidance.buttons.add')}
+            </CreateButton>
+          </div>
         </div>
 
       </div>

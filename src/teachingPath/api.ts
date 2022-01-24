@@ -26,6 +26,7 @@ export interface TeachingPathNodeItemResponseDTO {
   images?: { id: number, url: string };
   relatedArticles?: Array<Article>;
   isSelected?: boolean;
+  hasGuidance?: boolean;
 }
 
 export interface TeachingPathNodeResponseDTO {
