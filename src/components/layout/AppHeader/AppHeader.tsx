@@ -541,6 +541,32 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     </div>
   )
 
+  public openModalTGAssig = (nroLevel: string) => {
+    const modalTG = Array.from(document.getElementsByClassName('modalContentTGAssig') as HTMLCollectionOf<HTMLElement>);
+    const modalTGBack = Array.from(document.getElementsByClassName('modalContentTGAssigBackground') as HTMLCollectionOf<HTMLElement>);
+    modalTG[0].classList.add('open');
+    modalTGBack[0].classList.remove('hide');
+  }
+
+  public renderGuidanceAndCopyButton = () => (
+    <div className="doneBox flexBox alignCenter">
+      <CreateButton
+        className="jr-btnHeaderTeacherGuidance AppHeader__btnHeaderGuidance"
+        onClick={this.openModalTGAssig.bind(this, '0')}
+        title={intl.get('teacherGuidance.name')}
+      >
+        {intl.get('teacherGuidance.name')}
+      </CreateButton>
+      &nbsp;
+      <CreateButton
+        onClick={this.handleCopy}
+        title={intl.get('assignment list.Copy assignment')}
+      >
+        {intl.get('assignment list.Copy assignment')}
+      </CreateButton>
+    </div>
+  )
+
   public renderBurgerButton = () => {
     const { loginStore } = this.props;
 
@@ -645,7 +671,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
           </NavLink>
         </div>
         {this.props.loginStore!.currentUser && !fromAssignmentPassing && !fromTeachingPathPassing && this.renderNavigation()}
-        {!this.props.isPreview && this.props.loginStore!.currentUser && !isStudent && fromAssignmentPassing && this.renderCopyButton('assignment list.Copy assignment')}
+        {!this.props.isPreview && this.props.loginStore!.currentUser && !isStudent && fromAssignmentPassing && this.renderGuidanceAndCopyButton()}
         {!this.props.isPreview && this.props.loginStore!.currentUser && !isStudent && fromTeachingPathPassing && this.renderCopyButton('teaching_paths_list.copy')}
         {ifLogin && this.renderLineMobileButton()}
 

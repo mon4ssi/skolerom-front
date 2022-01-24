@@ -79,7 +79,7 @@ class NewAssignmentComponent extends Component<Props & RouteComponentProps, Stat
               <AssignmentTitle assignment={currentAssignment} />
               <TeacherGuidanceAssigModal
                 newAssignmentStore={newAssignmentStore}
-                assignment={currentAssignment}
+                drafAssignment={currentAssignment}
               />
               <SetRelatedArticles />
               <QuestionsList assignment={currentAssignment} />

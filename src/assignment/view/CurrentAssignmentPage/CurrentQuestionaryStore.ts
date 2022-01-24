@@ -197,4 +197,9 @@ export class CurrentQuestionaryStore {
   public handleShowArrowsTooltip = (isVisible: boolean) => {
     this.isArrowsTooltipVisible = isVisible;
   }
+
+  @action
+  public async downloadTeacherGuidancePDF(id: number) {
+    return this.assignmentService.downloadTeacherGuidancePDF(id);
+  }
 }

@@ -28,6 +28,7 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 
 import './CurrentAssignmentPage.scss';
 import { AssignmentListStore } from '../AssignmentsList/AssignmentListStore';
+import { TeacherGuidanceAssigModal } from '../TeacherGuidance/TeacherGuidanceAssigModal';
 
 const COVER_INDEX = -2;
 const animationInDuration = 500;
@@ -104,7 +105,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     document.addEventListener('keyup', this.handleKeyboardControl);
     const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
     headerArray[0].style.display = 'none';
-    const search = (history.location.search === '?preview') ? true : false;
+    const search = (history.location.search === '?preview' || history.location.search === '?preview&open=tg') ? true : false;
 
     if (isTeacher) {
       await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
@@ -427,6 +428,8 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     if (currentAnswer) {
       isVisibleButtonRender = true;
     }
+    const url: URL = new URL(window.location.href);
+    const openTeacherGuidance: boolean = (url.searchParams.get('open') === 'tg' ? true : false);
 
     return !isLoading && (
       <div tabIndex={0} className="CurrentAssignmentPage">
@@ -435,6 +438,12 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
           onLogoClick={this.handleExit(ExitEventTarget.HEADER_LOGO)}
           entityStore={assignmentListStore!}
           currentEntityId={Number(match.params.id)}
+        />
+
+        <TeacherGuidanceAssigModal
+          currentQuestionaryStore={this.props.currentQuestionaryStore}
+          openGuidance={openTeacherGuidance}
+          readOnly={true}
         />
 
         {this.props.uiStore!.sidebarShown && <div className="CurrentAssignmentPage__overlay" onClick={uiStore!.hideSidebar}/>}
