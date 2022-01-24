@@ -36,7 +36,7 @@ const ANIMATION_TIMEOUT = 200;
 const headerLinks: Array<HeaderNavigationLink> = [
   {
     name: 'School',
-    url: `${process.env.REACT_APP_WP_URL}/undervisning/`
+    url: `${process.env.REACT_APP_WP_URL}/hva-er-skolerom/`
   },
   {
     name: 'Library',
@@ -65,7 +65,7 @@ const headerLinks: Array<HeaderNavigationLink> = [
 const tabletHeaderLinks: Array<HeaderNavigationLink> = [
   {
     name: 'School',
-    url: `${process.env.REACT_APP_WP_URL}/undervisning/`
+    url: `${process.env.REACT_APP_WP_URL}/hva-er-skolerom/`
   },
   {
     name: 'Articles',
@@ -87,7 +87,7 @@ const tabletHeaderLinks: Array<HeaderNavigationLink> = [
 const nynorskHeaderLinks: Array<HeaderNavigationLink> = [
   {
     name: 'School',
-    url: `${process.env.REACT_APP_WP_URL}/nn/undervisning/`
+    url: `${process.env.REACT_APP_WP_URL}/nn/hva-er-skolerom/`
   }
 ];
 
