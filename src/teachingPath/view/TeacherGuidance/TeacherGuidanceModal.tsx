@@ -186,19 +186,11 @@ export class TeacherguidanceModal extends Component<Props> {
   public renderFooterButtons = () => (
     <div className="modalContentTG__footer__aligLeft">
       <CreateButton
-        title={intl.get('notifications.cancel')}
-        onClick={this.closeModalTG}
-        pink={true}
-      >
-        {intl.get('notifications.cancel')}
-      </CreateButton>
-      &nbsp;
-      <CreateButton
-        title={intl.get('teacherGuidance.save_and_close')}
+        title={intl.get('generals.save')}
         onClick={this.closeModalTG}
         green={true}
       >
-        {intl.get('teacherGuidance.save_and_close')}
+        {intl.get('generals.save')}
       </CreateButton>
     </div>
   )

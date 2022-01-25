@@ -728,6 +728,7 @@
     "delete": "Slett stien",
     "maintenance": "Planlagt vedlikehald i dag mellom kl. 16 og kl. 19. Vi beklagar ulempen.",
     "close":"Lukk artikkelvisinga",
+    "save": "Lagre",
     "close_maintenance": "Lukk meldinga",
     "close_assignment":"Lukk oppgåvevindauget",
     "selected_assignment": "Vel oppgåve",
