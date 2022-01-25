@@ -37,6 +37,7 @@ import './CreationPage.scss';
 import { AppHeader } from 'components/layout/AppHeader/AppHeader';
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
 import { TeacherguidanceModal } from 'teachingPath/view/TeacherGuidance/TeacherGuidanceModal';
+import { trim } from 'lodash';
 
 const cardWidth = 322;
 const leftIndent = 160;
@@ -485,9 +486,11 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       !withUnmerge && 'withoutUnmergeButton'
     );
 
+    const isFirstNodeReadOnlyBlank: boolean = (readOnly === true && node.type === TeachingPathNodeType.Root && this.haveTitleNode(node.selectQuestion));
+
     return node.children.length ? (
       <>
-        {node.type !== TeachingPathNodeType.Root && <div className="topVerticalLine"/>}
+        {node.type !== TeachingPathNodeType.Root ? <div className="topVerticalLine"/> : isFirstNodeReadOnlyBlank ? <div className="topVerticalLine" style={{ top:0, height:0 }}/> : null}
         <NestedOrderNumber
           node={node}
           nestedOrderNumber={nestedOrder}
@@ -530,11 +533,18 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     ) : null;
   }
 
+  public haveTitleNode = (value: string): boolean => {
+    const titleNode: string = trim(value);
+    return (titleNode === '' || titleNode === null || typeof (titleNode) === 'undefined'
+      || titleNode === intl.get('edit_teaching_path.paths.main_teaching_path_title') || titleNode === intl.get('edit_teaching_path.paths.teaching_path_title'));
+  }
+
   public renderBoxNodeOptions = () => {
     const { node, readOnly } = this.props;
+    const classNodeTransparent: string = (readOnly === true && this.haveTitleNode(node.selectQuestion)) ? 'nodeChildrenReadOnly' : '';
 
     return node.children.length ? (
-      <div className={`${node.type === TeachingPathNodeType.Root ? 'boxNodeOptionsRoot' : 'boxNodeOptionsChildren'} ${readOnly ? '' : ''}`}>
+      <div className={`${node.type === TeachingPathNodeType.Root ? 'boxNodeOptionsRoot' : 'boxNodeOptionsChildren'} ${classNodeTransparent}`}>
         {this.renderInput()}
         <div className={`sectImgs ${readOnly ? 'sectImgsReadOnly' : ''}`}>
           {node.type === TeachingPathNodeType.Root && this.renderNestedOrderNumber(true)}

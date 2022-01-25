@@ -42,6 +42,20 @@
         &.bnoReadOnly {
           background:none;
         }
+
+      }
+
+      .nodeChildrenReadOnly {
+        background:transparent;
+
+        textarea {
+          visibility: hidden;
+        }
+
+        .topVerticalLine {
+          height: 90px;
+          top: -50px;
+        }
       }
 
       .sectImgs {
