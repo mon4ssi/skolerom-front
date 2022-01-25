@@ -204,7 +204,7 @@ export class NestedOrderNumber extends Component<Props> {
   }
 
   public renderEditIcon = () => (
-    <button onClick={this.handleEditClick} title={intl.get('generals.edit')} ref={this.buttonref}>
+    <button onClick={this.handleEditClick} title={intl.get('generals.edit')}>
       <img
         src={editImg}
         alt={intl.get('generals.edit')}

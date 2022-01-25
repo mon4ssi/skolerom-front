@@ -68,6 +68,7 @@ interface NodeContentState {
 class NodeContent extends Component<NodeContentProps, NodeContentState> {
   public static contextType = ItemContentTypeContext;
   public titleRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
+  public insideRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
   public state = {
     numberOfTitleCols: 20,
     EditDomain: false
@@ -357,7 +358,6 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       !(node.type !== TeachingPathNodeType.Root && node.items!.length > 1) && 'withPadding',
       node.type === TeachingPathNodeType.Root && 'withoutPadding'
     );
-
     return !node.children.length && (
       <div className={containerClassNames}>
         {node.type !== TeachingPathNodeType.Root && <div className="topVerticalLine"/>}
@@ -388,6 +388,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
           <div className="teachingPathItemsTitleDiv" data-number={nestedOrder} >
           <TextAreaAutosize
             ref={this.titleRef}
+            inputRef={this.insideRef}
             className="teachingPathItemsTitle fw500"
             value={node.selectQuestion}
             placeholder={placeholder}
@@ -404,6 +405,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         <div className="teachingPathItemsTitleDiv" data-number={nestedOrder} >
           <TextAreaAutosize
             className="teachingPathItemsTitle fw500"
+            ref={this.titleRef}
+            inputRef={this.insideRef}
             readOnly={readOnly}
           />
         </div>
@@ -414,6 +417,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       <div className="teachingPathItemsTitleDiv" data-number={nestedOrder} >
       <TextAreaAutosize
         ref={this.titleRef}
+        inputRef={this.insideRef}
         className="teachingPathItemsTitle fw500"
         value={node.selectQuestion}
         placeholder={placeholder}
