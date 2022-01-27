@@ -328,22 +328,26 @@ export class AssignmentApi implements AssignmentRepo {
     };
   }
   public async downloadTeacherGuidancePDF(id: number): Promise<void> {
-    const response = await API.get(`api/teacher/assignments/${id}/guidance/download`, {
-      responseType: 'blob',
-      headers: { Accept: 'application/octet-stream' },
-    });
+    try {
+      const response = await API.get(`api/teacher/assignments/${id}/guidance/download`, {
+        responseType: 'blob',
+        headers: { Accept: 'application/octet-stream' },
+      });
 
-    const blob = new Blob([response.data], { type: 'application/pdf' });
-    const a = document.createElement('a');
-    a.download = 'TeacherGuidance';
-    a.href = window.URL.createObjectURL(blob);
-    const clickEvt = new MouseEvent('click', {
-      view: window,
-      bubbles: true,
-      cancelable: true,
-    });
-    a.dispatchEvent(clickEvt);
-    a.remove();
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const a = document.createElement('a');
+      a.download = 'Assignment-Guidance';
+      a.href = window.URL.createObjectURL(blob);
+      const clickEvt = new MouseEvent('click', {
+        view: window,
+        bubbles: true,
+        cancelable: true,
+      });
+      a.dispatchEvent(clickEvt);
+      a.remove();
+    } catch (e) {
+      throw new Error(`download Assignment Guidance pdf ${e}`);
+    }
   }
 }
 
