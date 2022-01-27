@@ -425,6 +425,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         cols={this.state.numberOfTitleCols}
         maxLength={MAX_TITLE_LENGTH}
         readOnly={readOnly}
+        autoFocus={true}
       />
       </div>
     ) : null;
