@@ -8,6 +8,10 @@ import clone from 'lodash/clone';
 import isEqual from 'lodash/isEqual';
 import { Location } from 'history';
 
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { TouchBackend } from 'react-dnd-touch-backend';
+import { DndProvider, DragSource, useDrag, useDrop } from 'react-dnd';
+
 import { EditTeachingPathStore } from '../EditTeachingPathStore';
 import { TeachingPathTitle } from '../TeachingPathTitle/TeachingPathTitle';
 import { InfoCard } from 'components/common/InfoCard/InfoCard';

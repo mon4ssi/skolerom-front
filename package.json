@@ -69,6 +69,7 @@
     "react-datepicker": "^2.14.0",
     "react-dev-utils": "9.1.0",
     "react-device-detect": "^1.13.1",
+    "react-dnd": "^14.0.5",
     "react-dnd-html5-backend": "^14.1.0",
     "react-dnd-touch-backend": "^14.1.1",
     "react-dom": "16.12.0",
