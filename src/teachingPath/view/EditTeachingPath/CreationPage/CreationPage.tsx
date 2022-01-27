@@ -407,6 +407,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
             className="teachingPathItemsTitle fw500"
             ref={this.titleRef}
             inputRef={this.insideRef}
+            value={node.selectQuestion}
             readOnly={readOnly}
           />
         </div>
