@@ -32,12 +32,6 @@ class TeachingPathAnswerCoverComponent extends Component<Props>{
     const numberOfSteps = content && content.numberOfSteps;
     return (
       <div className={'cover'}>
-        <div className={'infoTeacher'}>
-          <img src={userPlaceholder} alt=""/>
-          <span>{content && content!.author}</span>
-          {/* <span className={'subject'}>6A/History</span> */}
-        </div>
-
          <div className="assignmentInfo">
           {/*<div className={'extraInfo'}>*/}
           {/*  <img src={clock} alt="question"/>*/}
