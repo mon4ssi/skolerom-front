@@ -27,7 +27,7 @@ export const buildNewTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
 
 const buildNewRootDraftTeachingPathNodeArgs = {
   type: TeachingPathNodeType.Root,
-  selectQuestion: intl.get('edit_teaching_path.paths.main_teaching_path_title'),
+  selectQuestion: intl.get('edit_teaching_path.paths.node_teaching_path_title'),
   guidance: '',
   items: [],
   children: [],

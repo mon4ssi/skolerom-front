@@ -644,7 +644,9 @@
     },
     "paths": {
       "main_teaching_path_title": "Læringssti",
-      "teaching_path_title": "Legg til undertittel"
+      "teaching_path_title": "Legg til undertittel",
+      "node_teaching_path_title": "Neste aktivitet",
+      "node_teaching_path_place_holder": "Legg til overskrift til aktivitet"
     },
     "merge": "Slå sammen stiene",
     "expand": "Utvid stien",

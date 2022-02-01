@@ -30,6 +30,8 @@ interface Teacherguidance {
   hasAssignmenet: boolean;
 }
 
+const downloadWait = 2000;
+
 @inject('editTeachingPathStore')
 @observer
 export class TeacherguidanceModal extends Component<Props> {
@@ -195,8 +197,13 @@ export class TeacherguidanceModal extends Component<Props> {
     </div>
   )
   public handleDownloadAsPDF = () => {
-    const { editTeachingPathStore, currentEntity } = this.props;
-    editTeachingPathStore!.downloadTeacherGuidancePDF(currentEntity.id);
+    setTimeout(
+      () => {
+        const { editTeachingPathStore, currentEntity } = this.props;
+        editTeachingPathStore!.downloadTeacherGuidancePDF(currentEntity.id);
+      },
+      downloadWait
+    );
   }
 
   public render() {

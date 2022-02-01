@@ -645,7 +645,9 @@
     },
     "paths": {
       "main_teaching_path_title": "Teaching path",
-      "teaching_path_title": "Teaching path title"
+      "teaching_path_title": "Teaching path title",
+      "node_teaching_path_title": "Teaching path title",
+      "node_teaching_path_place_holder": "Teaching path"
     },
     "merge": "Merge path",
     "expand": "Expand path",

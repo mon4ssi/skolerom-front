@@ -21,6 +21,7 @@ interface Props {
   readOnly?: boolean;
   openGuidance?: boolean;
 }
+const downloadWait = 2000;
 
 @inject('newAssignmentStore')
 @observer
@@ -58,14 +59,19 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
     </div>
   )
   public handleDownloadAsPDF = () => {
-    const { readOnly, newAssignmentStore, drafAssignment, currentQuestionaryStore } = this.props;
-    if (readOnly) {
-      if (currentQuestionaryStore!.assignment !== null) {
-        currentQuestionaryStore!.downloadTeacherGuidancePDF(currentQuestionaryStore!.assignment.id);
-      }
-    } else {
-      newAssignmentStore!.downloadTeacherGuidancePDF(drafAssignment!.id);
-    }
+    setTimeout(
+      () => {
+        const { readOnly, newAssignmentStore, drafAssignment, currentQuestionaryStore } = this.props;
+        if (readOnly) {
+          if (currentQuestionaryStore!.assignment !== null) {
+            currentQuestionaryStore!.downloadTeacherGuidancePDF(currentQuestionaryStore!.assignment.id);
+          }
+        } else {
+          newAssignmentStore!.downloadTeacherGuidancePDF(drafAssignment!.id);
+        }
+      },
+      downloadWait
+    );
   }
   public renderQuestions = () => {
     const { readOnly, drafAssignment, currentQuestionaryStore } = this.props;
