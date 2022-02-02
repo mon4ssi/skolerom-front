@@ -62,7 +62,15 @@
   }
 }
 
-
+.css-1y8mk30-SkeletonTheme .react-loading-skeleton {
+  height: 300px;
+  box-shadow: 0px 3px 4px #00000033;
+}
+.css-1y8mk30-SkeletonTheme {
+  width: calc(25% - 20px);
+  height: 300px;
+  margin-right: 20px;
+}
 
 
 @media screen and (max-width: 1800px) {
