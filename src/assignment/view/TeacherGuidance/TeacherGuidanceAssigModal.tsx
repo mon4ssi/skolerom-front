@@ -63,6 +63,7 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
     if (readOnly) downloadWait = 0;
 
     const btnDownload = document.getElementById('btnDownloadPDFTP');
+    btnDownload!.setAttribute('disabled', 'true');
     btnDownload!.classList.add('downloading');
     btnDownload!.firstChild!.textContent = `${intl.get('generals.downloading')} ...`;
 
@@ -75,6 +76,7 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
         } else {
           await newAssignmentStore!.downloadTeacherGuidancePDF(drafAssignment!.id);
         }
+        btnDownload!.removeAttribute('disabled');
         btnDownload!.classList.remove('downloading');
         btnDownload!.firstChild!.textContent = intl.get('teacherGuidance.download_pdf');
       },

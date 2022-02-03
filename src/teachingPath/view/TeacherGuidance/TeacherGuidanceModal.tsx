@@ -200,12 +200,14 @@ export class TeacherguidanceModal extends Component<Props> {
     if (readOnly) downloadWait = 0;
 
     const btnDownload = document.getElementById('btnDownloadPDFTP');
+    btnDownload!.setAttribute('disabled', 'true');
     btnDownload!.classList.add('downloading');
     btnDownload!.firstChild!.textContent = `${intl.get('generals.downloading')} ...`;
 
     setTimeout(
       async () => {
         await editTeachingPathStore!.downloadTeacherGuidancePDF(currentEntity.id);
+        btnDownload!.removeAttribute('disabled');
         btnDownload!.classList.remove('downloading');
         btnDownload!.firstChild!.textContent = intl.get('teacherGuidance.download_pdf');
       },
@@ -258,7 +260,7 @@ export class TeacherguidanceModal extends Component<Props> {
             {readOnly !== true && this.renderFooterButtons()}
             <div className="modalContentTG__footer__aligRight">
               <button id="btnDownloadPDFTP" onClick={this.handleDownloadAsPDF}>
-                <span>{intl.get('teacherGuidance.download_pdf')}</span>
+                {intl.get('teacherGuidance.download_pdf')}
                 <img src={downloadImg} />
               </button>
             </div>

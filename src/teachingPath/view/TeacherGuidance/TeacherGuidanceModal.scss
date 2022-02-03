@@ -140,6 +140,7 @@
                 }
             }
             button.downloading {
+                cursor:progress;
                 img {
                     visibility: hidden;
                 }
