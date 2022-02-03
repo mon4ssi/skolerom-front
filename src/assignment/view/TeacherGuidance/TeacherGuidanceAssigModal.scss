@@ -113,18 +113,23 @@
       }
 
       &__aligRight {
-          margin-top: 9px;
-          margin-right: 25px;
+        margin-top: 9px;
+        margin-right: 25px;
 
-          button {
-              display:flex;
-              background: transparent;
-  
-              img {
-                  margin-left: 5px
-              }
+        button {
+            display:flex;
+            background: transparent;
 
-          }
+            img {
+                margin-left: 5px
+            }
+        }
+
+        button.downloading {
+        img {
+            visibility: hidden;
+        }
+        }
       }
   }
 }

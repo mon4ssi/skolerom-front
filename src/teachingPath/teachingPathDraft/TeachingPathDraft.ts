@@ -565,7 +565,7 @@ export class EditableTeachingPathNode extends TeachingPathNode {
   private validateTitle() {
     if (!this.selectQuestion && this.children.length) {
       throw new TeachingPathValidationError(
-        'edit_teaching_path.validation.title_words_count'
+        'edit_teaching_path.validation.title_node_words_count'
       );
     }
   }
