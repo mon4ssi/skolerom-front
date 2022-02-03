@@ -37,10 +37,6 @@ class TeachingPathAnswerCoverComponent extends Component<Props>{
           {/*  <img src={clock} alt="question"/>*/}
           {/*  <span>17 {intl.get('assignment preview.min completion time')}</span>*/}
           {/*</div>*/}
-           <div className={'extraInfo'}>
-             <img src={teachingPath} alt="teachingPath"/>
-             <span>{numberOfSteps && numberOfSteps.min}-{numberOfSteps && numberOfSteps.max} {intl.get('teaching path preview.steps')}</span>
-           </div>
          </div>
 
         <span className="assignmentTitle">{content && content.title}</span>
