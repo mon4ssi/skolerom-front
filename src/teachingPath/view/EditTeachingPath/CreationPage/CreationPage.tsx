@@ -57,6 +57,7 @@ interface NodeContentProps {
   editTeachingPathStore?: EditTeachingPathStore;
   node: EditableTeachingPathNode;
   parentNode?: EditableTeachingPathNode;
+  allNode: EditableTeachingPathNode;
   isRoot?: boolean;
   nestedOrder: number;
   index?: number;
@@ -189,6 +190,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
             numberOfQuestions={item.value.numberOfQuestions}
             onDelete={this.handleDeleteItem}
             onEdit={this.handleEditItem}
+            onDrag={this.handleDragItem}
             levels={levels}
             onCLickImg={this.onCLickImg}
           />
@@ -255,6 +257,15 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     }
   }
 
+  public handleDragItem = async (itemId: number, type: string) => {
+    const { editTeachingPathStore, node, parentNode, allNode } = this.props;
+    const childrenNode = node.children;
+    const allchildren = allNode.children;
+    // create nodes drop
+    // detect steps by type
+    // allchildren
+  }
+
   public handleMergeNodes = async (event: SyntheticEvent) => {
     const { node, index, parentNode } = this.props;
 
@@ -291,7 +302,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   }
 
   public handleUnmergeNode = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { node, parentNode, editTeachingPathStore, index } = this.props;
+    const { node, parentNode, editTeachingPathStore, index, allNode } = this.props;
 
     event.preventDefault();
     const unmergeConfirm = await Notification.create({
@@ -322,6 +333,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         node={childNode as EditableTeachingPathNode}
         nestedOrder={this.props.nestedOrder! + 1}
         editTeachingPathStore={this.props.editTeachingPathStore}
+        allNode={this.props.allNode}
         readOnly={this.props.readOnly}
       />
     </div>
@@ -667,6 +679,7 @@ export class CreationPageComponent extends Component<Props> {
   public render() {
     const { editTeachingPathStore, readOnly } = this.props;
     const { teachingPathContainer, currentEntity: currentTeachingPath } = editTeachingPathStore!;
+    const allNode = currentTeachingPath!.content! as EditableTeachingPathNode;
 
     if (!teachingPathContainer) {
       return (
@@ -692,6 +705,7 @@ export class CreationPageComponent extends Component<Props> {
           <NodeContent
             isRoot
             node={currentTeachingPath!.content! as EditableTeachingPathNode}
+            allNode={allNode}
             nestedOrder={1}
             readOnly={readOnly}
           />

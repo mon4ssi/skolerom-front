@@ -725,6 +725,7 @@
     },
     "edit": "Edith Path",
     "delete": "Delete Path",
+    "drag": "Drag Path",
     "close": "Close",
     "save": "Save",
     "close_maintenance": "Close",

@@ -19,6 +19,8 @@ import thirdLevelImg from 'assets/images/level-3-blue.svg';
 import placeholderImg from 'assets/images/list-placeholder.svg';
 import placeholderDomainImg from 'assets/images/addLink_placeholder.png';
 import refresh from 'assets/images/refresh.svg';
+import drag from 'assets/images/drag.svg';
+import dragActive from 'assets/images/drag-active.svg';
 
 import './InfoCard.scss';
 
@@ -49,6 +51,7 @@ interface Props {
   onCLickImg?(url?: string): void;
   onDelete?(itemId: number): void;
   onEdit?(itemId: number, type: string): void;
+  onDrag?(itemId: number, type: string): void;
   setActiveTooltip?(): void;
   deleteTeachingPath?(): void;
   copyTeachingPath?(id: number): void;
@@ -66,6 +69,11 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
     this.props.onEdit!(this.props.id!, this.props.type!);
   }
 
+  public activeDragClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    this.props.onDrag!(this.props.id!, this.props.type!);
+  }
+
   public renderGrade = (grade: Grade) => {
     if (grade.title) {
       const title = grade.title.split('.', 1);
@@ -79,7 +87,15 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
 
   public renderActionButtons = () => (
     <div className="actionButtons flexBox">
-      {/* <img src={dragImg} alt="drag" /> */}
+      <div className="actionButtonsItem dragButtonsItem">
+        <button onClick={this.activeDragClick} title={intl.get('generals.drag')}>
+          <img
+            src={drag}
+            alt={intl.get('generals.drag')}
+            title={intl.get('generals.drag')}
+          />
+        </button>
+      </div>
       <div className="actionButtonsItem refreshButtonsItem">
         <button onClick={this.handleEditClick} title={intl.get('generals.edit')}>
           <img
