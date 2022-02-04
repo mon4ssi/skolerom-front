@@ -121,7 +121,7 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
   }
 
   public renderAssigGuidance = () => {
-    const { readOnly, drafAssignment, currentQuestionaryStore } = this.props;
+    const { readOnly, drafAssignment, currentQuestionaryStore, newAssignmentStore } = this.props;
 
     if (readOnly) {
       if (currentQuestionaryStore!.assignment !== null) {
@@ -136,6 +136,8 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
         );
       }
     } else {
+      newAssignmentStore!.setTitleButtonGuidance(drafAssignment!);
+
       return (
         <div className="modalContentTGAssig__body__row first">
           <DescriptionEditor
