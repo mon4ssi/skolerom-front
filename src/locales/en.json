@@ -628,6 +628,7 @@
     },
     "validation": {
       "title_words_count": "Title cannot be empty",
+      "title_node_words_count": "Activity header cannot be empty",
       "description_words_count": "Description cannot be empty",
       "already_editing": "Someone is already editing teaching path",
       "empty_content": "At least 1 path should be created"
@@ -742,7 +743,8 @@
     "grade": "Grade",
     "student_level": "Student level",
     "visibility": "visibility",
-    "language": "Languages"
+    "language": "Languages",
+    "downloading": "Downloading"
   },
   "activity_page": {
     "Hello": "Hello",

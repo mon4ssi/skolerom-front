@@ -175,11 +175,11 @@ class MultipleChoiceQuestionContent extends Component<Props> {
           </button>
           <div className="sectionGuidance">
             <CreateButton
-              title={intl.get('teacherGuidance.buttons.add')}
+              title={newAssignmentStore!.getTitleButtonGuidance}
               onClick={this.openModalTGAssig.bind(this, String(question.orderPosition + 1))}
             >
-              <img src={teaGuiBGImg} alt={intl.get('teacherGuidance.buttons.add')} />
-              {intl.get('teacherGuidance.buttons.add')}
+              <img src={teaGuiBGImg} alt={newAssignmentStore!.getTitleButtonGuidance} />
+              {newAssignmentStore!.getTitleButtonGuidance}
             </CreateButton>
           </div>
         </div>

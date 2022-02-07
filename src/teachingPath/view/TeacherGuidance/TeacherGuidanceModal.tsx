@@ -30,8 +30,6 @@ interface Teacherguidance {
   hasAssignmenet: boolean;
 }
 
-const downloadWait = 2000;
-
 @inject('editTeachingPathStore')
 @observer
 export class TeacherguidanceModal extends Component<Props> {
@@ -51,8 +49,7 @@ export class TeacherguidanceModal extends Component<Props> {
 
   public renderFirstNode = () => {
     const { currentEntity, readOnly } = this.props;
-    let titleTG = currentEntity.content.selectQuestion;
-    if (titleTG === intl.get('edit_teaching_path.title.title_placeholder')) { titleTG = ''; }
+    const titleTG = currentEntity.content.selectQuestion;
 
     const hasAssignmenet = (currentEntity.content.children.length > 0 && currentEntity.content.children[0].type === TeachingPathNodeType.Assignment);
     let itemTG: Teacherguidance | null = null;
@@ -155,7 +152,7 @@ export class TeacherguidanceModal extends Component<Props> {
             <div className={`modalContentTG__body__row ${item.hideBorderTop ? 'line' : ''}`} key={index}>
               <h4>
                 <div className="nestedOrderNumber">{item.nroLevel}</div>
-                {item.children.selectQuestion === intl.get('edit_teaching_path.title.title_placeholder') ? '' : item.children.selectQuestion} {item.nroChild > 1 ? `(${intl.get('teacherGuidance.option')} ${String.fromCharCode(item.nroLetter)})` : ''}
+                {item.children.selectQuestion} {item.nroChild > 1 ? `(${intl.get('teacherGuidance.option')} ${String.fromCharCode(item.nroLetter)})` : ''}
               </h4>
               <DescriptionEditor
                 className={`jr-desEdit${item.nroLevel}${String.fromCharCode(item.nroLetter)}`}
@@ -196,11 +193,23 @@ export class TeacherguidanceModal extends Component<Props> {
       </CreateButton>
     </div>
   )
-  public handleDownloadAsPDF = () => {
+
+  public handleDownloadAsPDF = async () => {
+    const { editTeachingPathStore, currentEntity, readOnly } = this.props;
+    let downloadWait = 2000;
+    if (readOnly) downloadWait = 0;
+
+    const btnDownload = document.getElementById('btnDownloadPDFTP');
+    btnDownload!.setAttribute('disabled', 'true');
+    btnDownload!.classList.add('downloading');
+    btnDownload!.firstChild!.textContent = `${intl.get('generals.downloading')} ...`;
+
     setTimeout(
-      () => {
-        const { editTeachingPathStore, currentEntity } = this.props;
-        editTeachingPathStore!.downloadTeacherGuidancePDF(currentEntity.id);
+      async () => {
+        await editTeachingPathStore!.downloadTeacherGuidancePDF(currentEntity.id);
+        btnDownload!.removeAttribute('disabled');
+        btnDownload!.classList.remove('downloading');
+        btnDownload!.firstChild!.textContent = intl.get('teacherGuidance.download_pdf');
       },
       downloadWait
     );
@@ -250,8 +259,8 @@ export class TeacherguidanceModal extends Component<Props> {
           <div className="modalContentTG__footer">
             {readOnly !== true && this.renderFooterButtons()}
             <div className="modalContentTG__footer__aligRight">
-              <button onClick={this.handleDownloadAsPDF}>
-                <span>{intl.get('teacherGuidance.download_pdf')}</span>
+              <button id="btnDownloadPDFTP" onClick={this.handleDownloadAsPDF}>
+                {intl.get('teacherGuidance.download_pdf')}
                 <img src={downloadImg} />
               </button>
             </div>

@@ -134,11 +134,16 @@
             button {
                 display:flex;
                 background: transparent;
-    
+
                 img {
                     margin-left: 5px
                 }
-
+            }
+            button.downloading {
+                cursor:progress;
+                img {
+                    visibility: hidden;
+                }
             }
         }
     }
