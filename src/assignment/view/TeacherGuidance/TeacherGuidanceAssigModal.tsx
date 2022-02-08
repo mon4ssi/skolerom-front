@@ -57,7 +57,7 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
       </CreateButton>
     </div>
   )
-  public handleDownloadAsPDF = () => {
+  public handleDownloadAsPDF = async () => {
     const { readOnly, newAssignmentStore, drafAssignment, currentQuestionaryStore } = this.props;
     let downloadWait = 2000;
     if (readOnly) downloadWait = 0;
@@ -179,7 +179,7 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
           {readOnly !== true && this.renderFooterButtons()}
             <div className="modalContentTGAssig__footer__aligRight">
               <button id="btnDownloadPDFTP" onClick={this.handleDownloadAsPDF}>
-                <span>{intl.get('teacherGuidance.download_pdf')}</span>
+                {intl.get('teacherGuidance.download_pdf')}
                 <img src={downloadImg} />
               </button>
             </div>
