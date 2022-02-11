@@ -8,9 +8,8 @@ import clone from 'lodash/clone';
 import isEqual from 'lodash/isEqual';
 import { Location } from 'history';
 
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { TouchBackend } from 'react-dnd-touch-backend';
-import { DndProvider, DragSource, useDrag, useDrop } from 'react-dnd';
+import { DndProvider, useDrag, useDrop } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
 import { EditTeachingPathStore } from '../EditTeachingPathStore';
 import { TeachingPathTitle } from '../TeachingPathTitle/TeachingPathTitle';
@@ -66,6 +65,7 @@ interface NodeContentProps {
 
 interface NodeContentState {
   numberOfTitleCols: number;
+  dragMove: boolean;
 }
 
 @inject('editTeachingPathStore')
@@ -76,7 +76,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   public insideRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
   public state = {
     numberOfTitleCols: 20,
-    EditDomain: false
+    EditDomain: false,
+    dragMove: false
   };
 
   public componentDidMount() {
@@ -106,6 +107,28 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
       this.handleChangeNumberOfTitleCols(valueLength);
     }
+  }
+
+  public dropInfoCardLeft = () => {
+    const { parentNode, readOnly, editTeachingPathStore } = this.props;
+    return (
+      <div className="dropInfoAddtional">
+        <div className="isPosibleDragInside">
+          Is posible item for Drop
+        </div>
+      </div>
+    );
+  }
+
+  public dropInfoCardRight = () => {
+    const { parentNode, readOnly, editTeachingPathStore } = this.props;
+    return (
+      <div className="dropInfoAddtional">
+        <div className="isPosibleDragInside">
+          Is posible item for Drop
+        </div>
+      </div>
+    );
   }
 
   // tslint:disable-next-line: no-any
@@ -262,8 +285,25 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     const childrenNode = node.children;
     const allchildren = allNode.children;
     // create nodes drop
+    editTeachingPathStore!.setCurrentNode(node!);
+    this.context.changeContentType(null);
+    switch (type) {
+      case 'ARTICLE':
+        editTeachingPathStore!.setArticleInEdit(itemId);
+        break;
+      case 'ASSIGNMENT':
+        editTeachingPathStore!.setAssignmentInEdit(itemId);
+        break;
+      case 'DOMAIN':
+        editTeachingPathStore!.trueIsEditDomain();
+        break;
+      default :
+        this.context.changeContentType(null);
+        break;
+    }
     // detect steps by type
     // allchildren
+    this.setState({ dragMove : true });
   }
 
   public handleMergeNodes = async (event: SyntheticEvent) => {
@@ -359,7 +399,9 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       <div
         className={containerClassNames}
       >
+        {this.state.dragMove && this.dropInfoCardLeft}
         {node.items!.map(this.renderInfoCard)}
+        {this.state.dragMove && this.dropInfoCardRight}
         {!lastItem && <div className="bottomHorizontalLine" style={{ width: horizontalLineWidth }}/>}
       </div>
     );
