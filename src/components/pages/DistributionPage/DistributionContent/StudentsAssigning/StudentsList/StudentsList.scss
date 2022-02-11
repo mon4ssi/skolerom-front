@@ -122,6 +122,14 @@
   }
 }
 
+.StudentsList .css-1y8mk30-SkeletonTheme {
+  width: 100%;
+  height: 70px;
+}
+.StudentsList .css-1y8mk30-SkeletonTheme .react-loading-skeleton {
+  height: 60px;
+}
+
 .myClassesBorder {
   border-top: none;
   border-radius: 0 0 5px 5px;

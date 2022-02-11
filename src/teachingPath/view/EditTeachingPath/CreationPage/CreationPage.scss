@@ -247,6 +247,7 @@
     .childrenContainer {
       position: relative;
       flex-direction: row;
+      z-index: 1;
     }
 
     .mergePanel {
