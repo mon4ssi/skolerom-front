@@ -7,7 +7,16 @@
     min-width: 100%;
     min-height: fit-content;
     // overflow-x: auto;
-
+    &.draggableclass {
+      .InfoCard {
+        border: dashed 1px #e2017b;
+        cursor: move;
+        button {
+          pointer-events: none;
+        }
+      }
+    }
+  
     &.rootContainer {
       padding-bottom: 50px;
       padding-top: 17px;
@@ -398,4 +407,71 @@
     }
   }
 }
-
+.dropInfoAddtional {
+  padding: 0px 20px;
+  position: relative;
+  &.posibleactive {
+    .isPosibleDragInside {
+      border: dashed 2px #e2017b;
+    }
+  }
+  &.dropLeftArticle {
+    &:before {
+      content: '';
+      position: absolute;
+      width: calc(100% + 40px);
+      height: 2px;
+      background: #d3d9de;
+      z-index: -1;
+      top: 175px;
+      left: calc(100% - 20px);
+    }
+  }
+  &.dropLeftAssignments {
+    &:before {
+      content: '';
+      position: absolute;
+      width: calc(100% + 40px);
+      height: 2px;
+      background: #d3d9de;
+      z-index: -1;
+      top: 175px;
+      left: calc(100% - 20px);
+    }
+  }
+  &.dropRightArticle {
+    &:before {
+      content: '';
+      position: absolute;
+      width: calc(100% + 40px);
+      height: 2px;
+      background: #d3d9de;
+      z-index: -1;
+      top: 175px;
+      right: calc(100% - 20px);
+    }
+  }
+  &.dropRightAssignments {
+    &:before {
+      content: '';
+      position: absolute;
+      width: calc(100% + 40px);
+      height: 2px;
+      background: #d3d9de;
+      z-index: -1;
+      top: 175px;
+      right: calc(100% - 20px);
+    }
+  }
+  .isPosibleDragInside {
+    width: 200px;
+    text-align: center;
+    border: dashed 2px black;
+    height: 344px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 5px;
+  }
+}

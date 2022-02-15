@@ -707,6 +707,7 @@
   "generals": {
     "support":"Support",
     "keyboard":"Keyboard shortcuts",
+    "dragdrop":"Is posible item for Drop",
     "accesibility_text": {
       "title_quick": "Quick Access / Keyboard shortcuts",
       "shift_t": "Teaching paths",

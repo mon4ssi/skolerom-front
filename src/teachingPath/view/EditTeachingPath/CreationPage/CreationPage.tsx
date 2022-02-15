@@ -61,11 +61,14 @@ interface NodeContentProps {
   nestedOrder: number;
   index?: number;
   readOnly?: boolean;
+  dropArticles?: boolean;
+  dropAssignments?: boolean;
+  onDrop(type: string): void;
 }
 
 interface NodeContentState {
   numberOfTitleCols: number;
-  dragMove: boolean;
+  isDraggable: boolean;
 }
 
 @inject('editTeachingPathStore')
@@ -77,7 +80,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   public state = {
     numberOfTitleCols: 20,
     EditDomain: false,
-    dragMove: false
+    isDraggable: false
   };
 
   public componentDidMount() {
@@ -109,26 +112,63 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     }
   }
 
-  public dropInfoCardLeft = () => {
+  public dropInfoCardLeftArticle = () => {
     const { parentNode, readOnly, editTeachingPathStore } = this.props;
     return (
-      <div className="dropInfoAddtional">
+      <div className="dropInfoAddtional dropLeftArticle" onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragLeave={this.handleDragLeave}>
         <div className="isPosibleDragInside">
-          Is posible item for Drop
+          {intl.get('generals.dragdrop')}
         </div>
       </div>
     );
   }
 
-  public dropInfoCardRight = () => {
+  public dropInfoCardLeftAssignment = () => {
     const { parentNode, readOnly, editTeachingPathStore } = this.props;
     return (
-      <div className="dropInfoAddtional">
+      <div className="dropInfoAddtional dropLeftAssignments" onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragLeave={this.handleDragLeave}>
         <div className="isPosibleDragInside">
-          Is posible item for Drop
+        {intl.get('generals.dragdrop')}
         </div>
       </div>
     );
+  }
+
+  public dropInfoCardRightArticle = () => {
+    const { parentNode, readOnly, editTeachingPathStore } = this.props;
+    return (
+      <div className="dropInfoAddtional dropRightArticle" onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragLeave={this.handleDragLeave}>
+        <div className="isPosibleDragInside">
+        {intl.get('generals.dragdrop')}
+        </div>
+      </div>
+    );
+  }
+
+  public dropInfoCardRightAssignment = () => {
+    const { parentNode, readOnly, editTeachingPathStore } = this.props;
+    return (
+      <div className="dropInfoAddtional dropRightAssignments" onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragLeave={this.handleDragLeave}>
+        <div className="isPosibleDragInside">
+        {intl.get('generals.dragdrop')}
+        </div>
+      </div>
+    );
+  }
+
+  public handleDragOver = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.currentTarget.classList.add('posibleactive');
+  }
+
+  public handleDragLeave = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.currentTarget.classList.remove('posibleactive');
+  }
+
+  public handleDrop = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    // items custom
   }
 
   // tslint:disable-next-line: no-any
@@ -281,29 +321,15 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   }
 
   public handleDragItem = async (itemId: number, type: string) => {
-    const { editTeachingPathStore, node, parentNode, allNode } = this.props;
+    // step 0: variables
+    const { editTeachingPathStore, node, parentNode, allNode, onDrop } = this.props;
     const childrenNode = node.children;
     const allchildren = allNode.children;
-    // create nodes drop
-    editTeachingPathStore!.setCurrentNode(node!);
-    this.context.changeContentType(null);
-    switch (type) {
-      case 'ARTICLE':
-        editTeachingPathStore!.setArticleInEdit(itemId);
-        break;
-      case 'ASSIGNMENT':
-        editTeachingPathStore!.setAssignmentInEdit(itemId);
-        break;
-      case 'DOMAIN':
-        editTeachingPathStore!.trueIsEditDomain();
-        break;
-      default :
-        this.context.changeContentType(null);
-        break;
-    }
-    // detect steps by type
-    // allchildren
-    this.setState({ dragMove : true });
+    const mytype = node.type;
+    // step 1: detect posible drop
+    onDrop(mytype);
+    // step 2: draggable
+    this.setState({ isDraggable: true });
   }
 
   public handleMergeNodes = async (event: SyntheticEvent) => {
@@ -374,7 +400,10 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         nestedOrder={this.props.nestedOrder! + 1}
         editTeachingPathStore={this.props.editTeachingPathStore}
         allNode={this.props.allNode}
+        dropArticles={this.props.dropArticles}
+        dropAssignments={this.props.dropAssignments}
         readOnly={this.props.readOnly}
+        onDrop={this.props.onDrop}
       />
     </div>
   )
@@ -399,12 +428,20 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       <div
         className={containerClassNames}
       >
-        {this.state.dragMove && this.dropInfoCardLeft}
         {node.items!.map(this.renderInfoCard)}
-        {this.state.dragMove && this.dropInfoCardRight}
         {!lastItem && <div className="bottomHorizontalLine" style={{ width: horizontalLineWidth }}/>}
       </div>
     );
+  }
+
+  public dragenterthandler = () => {
+    const { onDrop } = this.props;
+  }
+
+  public dragendhandler = () => {
+    const { onDrop } = this.props;
+    onDrop('NONE');
+    this.setState({ isDraggable: false });
   }
 
   public renderAddingButtons = (withUnmergeButton: boolean) => {
@@ -619,11 +656,18 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   }
 
   public render() {
-    const { node, parentNode, index, readOnly } = this.props;
+    const { node, parentNode, index, readOnly, dropArticles, dropAssignments } = this.props;
     const children = node.children as Array<EditableTeachingPathNode>;
+    const ifDropCant = (children.length === 0) ? false : true;
+    const ifType = (node.type === 'ROOT') ? children[0].type : node.type;
+    const accIf = (ifDropCant) ? children[0].type : node.type;
+    const ifArticles = (accIf === 'ARTICLE') ? true : false;
+    const ifAssignments = (accIf === 'ASSIGNMENT') ? true : false;
+    const myclass = (this.state.isDraggable) ? 'draggableclass' : '';
 
     const containerClassNames = classnames(
       'teachingPathItemsContainer flexBox dirColumn alignCenter',
+      myclass,
       node.type === TeachingPathNodeType.Root && 'rootContainer',
       parentNode && {
           // TOP HORIZONTAL LINES
@@ -638,7 +682,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       }
     );
     return (
-      <div className={containerClassNames}>
+      <div className={containerClassNames} draggable={this.state.isDraggable} onDragEnter={this.dragenterthandler} onDragEnd={this.dragendhandler}>
         {this.renderItems()}
 
         {!readOnly && this.renderUnmergeButton()}
@@ -648,7 +692,11 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         {!readOnly && this.renderAddingButtons(!!this.renderUnmergeButton())}
 
         <div className="childrenContainer flexBox">
+          {ifDropCant && ifArticles && dropArticles && this.dropInfoCardLeftArticle()}
+          {ifDropCant && ifAssignments && dropAssignments && this.dropInfoCardLeftAssignment()}
           {children.length ? children.map(this.renderNodeContent) : null}
+          {ifDropCant && ifArticles && dropArticles && this.dropInfoCardRightArticle()}
+          {ifDropCant && ifAssignments && dropAssignments && this.dropInfoCardRightAssignment()}
         </div>
 
         {!readOnly && this.renderMergeButton()}
@@ -670,6 +718,11 @@ interface Props extends RouteComponentProps {
 @inject('editTeachingPathStore', 'newAssignmentStore', 'teachingPathsListStore')
 @observer
 export class CreationPageComponent extends Component<Props> {
+
+  public state = {
+    valuearticles: false,
+    valueassigments: false
+  };
 
   public componentDidMount() {
     const { editTeachingPathStore, newAssignmentStore, location, history } = this.props;
@@ -705,6 +758,27 @@ export class CreationPageComponent extends Component<Props> {
     ) : (
       <Header isCreation />
     );
+  }
+
+  public onDrop = (type: string) => {
+    if (type === 'ARTICLE') {
+      this.setState({
+        valuearticles: true,
+        valueassigments: false
+      });
+    }
+    if (type === 'ASSIGNMENT') {
+      this.setState({
+        valuearticles: false,
+        valueassigments: true
+      });
+    }
+    if (type === 'NONE') {
+      this.setState({
+        valuearticles: false,
+        valueassigments: false,
+      });
+    }
   }
 
   public renderExitButton = () => (
@@ -750,6 +824,9 @@ export class CreationPageComponent extends Component<Props> {
             allNode={allNode}
             nestedOrder={1}
             readOnly={readOnly}
+            dropArticles={this.state.valuearticles}
+            dropAssignments={this.state.valueassigments}
+            onDrop={this.onDrop}
           />
 
           {readOnly && this.renderExitButton()}
