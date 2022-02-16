@@ -167,8 +167,31 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   }
 
   public handleDrop = (event: React.MouseEvent<HTMLDivElement>) => {
+    const { editTeachingPathStore, node, parentNode } = this.props;
+    editTeachingPathStore!.setCurrentNode(node!);
+    this.context.changeContentType(null);
     event.preventDefault();
+    const type = 'ARTICLE';
+    editTeachingPathStore!.trueIsEditArticles();
+    this.context.changeContentType(0);
     // items custom
+    /*switch (type) {
+      case 'ARTICLE':
+        editTeachingPathStore!.trueIsEditArticles();
+        this.context.changeContentType(0);
+        break;
+      case 'ASSIGNMENT':
+        editTeachingPathStore!.trueIsEditAssignments();
+        this.context.changeContentType(1);
+        break;
+      case 'DOMAIN':
+        editTeachingPathStore!.trueIsEditDomain();
+        this.context.changeContentType(num2);
+        break;
+      default :
+        this.context.changeContentType(null);
+        break;
+    }*/
   }
 
   // tslint:disable-next-line: no-any
