@@ -50,6 +50,8 @@ export class EditTeachingPathStore {
   @observable public selectedArticle: Article | null = null;
   @observable public teachingPathContainer: TeachingPathContainer | null = null;
   @observable public currentNode: EditableTeachingPathNode | null = null;
+  @observable public selectedDragNode: EditableTeachingPathNode | null = null;
+  @observable public selectedParentDragNode: EditableTeachingPathNode | null = null;
   @observable public searchValue: string = '';
 
   @observable public allGrades: Array<Grade> = [];
@@ -306,6 +308,22 @@ export class EditTeachingPathStore {
   }
 
   @action
+  public setSelectedDragNode = (node: EditableTeachingPathNode | null) => {
+    this.selectedDragNode = node;
+  }
+
+  @action
+  public getSelectedDragNode = () => this.selectedDragNode
+
+  @action
+  public setParentSelectedDragNode = (node: EditableTeachingPathNode | null) => {
+    this.selectedParentDragNode = node;
+  }
+
+  @action
+  public getParentSelectedDragNode = () => this.selectedParentDragNode
+
+  @action
   public addChildToCurrentNode = (node: EditableTeachingPathNode) => {
     const qqq = this.currentNode!.children
       .map(child => child.items!)
@@ -314,6 +332,16 @@ export class EditTeachingPathStore {
     if (!qqq.length) {
       this.currentNode!.setChildren([...this.currentNode!.children, node]);
     }
+  }
+
+  @action
+  public addChildToCurrentNodeNullPerItem = (node: EditableTeachingPathNode) => {
+    this.currentNode!.addChild(node);
+  }
+
+  @action
+  public removeChildToCurrentNodeNullPerItem = (node: EditableTeachingPathNode) => {
+    this.currentNode!.removeChild(node);
   }
 
   public createNewNode = (

@@ -69,6 +69,7 @@ interface NodeContentProps {
 interface NodeContentState {
   numberOfTitleCols: number;
   isDraggable: boolean;
+  myNode: EditableTeachingPathNode | null;
 }
 
 @inject('editTeachingPathStore')
@@ -80,7 +81,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   public state = {
     numberOfTitleCols: 20,
     EditDomain: false,
-    isDraggable: false
+    isDraggable: false,
+    myNode: null
   };
 
   public componentDidMount() {
@@ -113,9 +115,10 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   }
 
   public dropInfoCardLeftArticle = () => {
-    const { parentNode, readOnly, editTeachingPathStore } = this.props;
+    const { node, parentNode, readOnly, editTeachingPathStore } = this.props;
+    const classMine = (!node.children.length) ? 'dropInfoAddtional dropLeftArticle insited' : 'dropInfoAddtional dropLeftArticle ';
     return (
-      <div className="dropInfoAddtional dropLeftArticle" onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragLeave={this.handleDragLeave}>
+      <div className={classMine} onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragLeave={this.handleDragLeave}>
         <div className="isPosibleDragInside">
           {intl.get('generals.dragdrop')}
         </div>
@@ -124,9 +127,10 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   }
 
   public dropInfoCardLeftAssignment = () => {
-    const { parentNode, readOnly, editTeachingPathStore } = this.props;
+    const { node, parentNode, readOnly, editTeachingPathStore } = this.props;
+    const classMine = (!node.children.length) ? 'dropInfoAddtional dropLeftAssignments insited' : 'dropInfoAddtional dropLeftAssignments ';
     return (
-      <div className="dropInfoAddtional dropLeftAssignments" onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragLeave={this.handleDragLeave}>
+      <div className={classMine}  onDrop={this.handleDrop} onDragOver={this.handleDragOver} onDragLeave={this.handleDragLeave}>
         <div className="isPosibleDragInside">
         {intl.get('generals.dragdrop')}
         </div>
@@ -167,31 +171,20 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   }
 
   public handleDrop = (event: React.MouseEvent<HTMLDivElement>) => {
-    const { editTeachingPathStore, node, parentNode } = this.props;
-    editTeachingPathStore!.setCurrentNode(node!);
-    this.context.changeContentType(null);
+    const { editTeachingPathStore, node, parentNode, allNode, onDrop } = this.props;
+    const myNode = editTeachingPathStore!.getSelectedDragNode();
+    const myParent = editTeachingPathStore!.getParentSelectedDragNode();
+    const childrenNode = node.children;
+    const allchildren = allNode.children;
     event.preventDefault();
-    const type = 'ARTICLE';
-    editTeachingPathStore!.trueIsEditArticles();
-    this.context.changeContentType(0);
-    // items custom
-    /*switch (type) {
-      case 'ARTICLE':
-        editTeachingPathStore!.trueIsEditArticles();
-        this.context.changeContentType(0);
-        break;
-      case 'ASSIGNMENT':
-        editTeachingPathStore!.trueIsEditAssignments();
-        this.context.changeContentType(1);
-        break;
-      case 'DOMAIN':
-        editTeachingPathStore!.trueIsEditDomain();
-        this.context.changeContentType(num2);
-        break;
-      default :
-        this.context.changeContentType(null);
-        break;
-    }*/
+    if (myNode) {
+      editTeachingPathStore!.setCurrentNode(node!);
+      editTeachingPathStore!.addChildToCurrentNodeNullPerItem(myNode);
+      onDrop('NONE');
+      // delete item
+      editTeachingPathStore!.setCurrentNode(myParent);
+      editTeachingPathStore!.removeChildToCurrentNodeNullPerItem(myNode);
+    }
   }
 
   // tslint:disable-next-line: no-any
@@ -352,7 +345,26 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     // step 1: detect posible drop
     onDrop(mytype);
     // step 2: draggable
-    this.setState({ isDraggable: true });
+    this.setState(
+      {
+        isDraggable: true
+      },
+      () => {
+        document.getElementsByClassName('draggableclass')[0].closest('.childrenContainer')!.querySelectorAll('.dropInfoAddtional')[0].classList.add('deletedrop');
+      }
+    );
+    // step 3: check node
+    this.setState(
+      {
+        myNode: node
+      },
+      () => {
+        editTeachingPathStore!.setSelectedDragNode(this.state.myNode);
+        if (parentNode !== undefined) {
+          editTeachingPathStore!.setParentSelectedDragNode(parentNode);
+        }
+      }
+    );
   }
 
   public handleMergeNodes = async (event: SyntheticEvent) => {
@@ -682,7 +694,6 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     const { node, parentNode, index, readOnly, dropArticles, dropAssignments } = this.props;
     const children = node.children as Array<EditableTeachingPathNode>;
     const ifDropCant = (children.length === 0) ? false : true;
-    const ifType = (node.type === 'ROOT') ? children[0].type : node.type;
     const accIf = (ifDropCant) ? children[0].type : node.type;
     const ifArticles = (accIf === 'ARTICLE') ? true : false;
     const ifAssignments = (accIf === 'ASSIGNMENT') ? true : false;
@@ -715,11 +726,9 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         {!readOnly && this.renderAddingButtons(!!this.renderUnmergeButton())}
 
         <div className="childrenContainer flexBox">
-          {ifDropCant && ifArticles && dropArticles && this.dropInfoCardLeftArticle()}
-          {ifDropCant && ifAssignments && dropAssignments && this.dropInfoCardLeftAssignment()}
+          {ifArticles && dropArticles && this.dropInfoCardLeftArticle()}
+          {ifAssignments && dropAssignments && this.dropInfoCardLeftAssignment()}
           {children.length ? children.map(this.renderNodeContent) : null}
-          {ifDropCant && ifArticles && dropArticles && this.dropInfoCardRightArticle()}
-          {ifDropCant && ifAssignments && dropAssignments && this.dropInfoCardRightAssignment()}
         </div>
 
         {!readOnly && this.renderMergeButton()}

@@ -235,6 +235,7 @@
 
     .teachingPathButtons {
       position: relative;
+      margin-bottom: 20px;
 
       &.withUnmergeButton {
         margin-top: 15px;
@@ -409,7 +410,15 @@
 }
 .dropInfoAddtional {
   padding: 0px 20px;
+  /*position: absolute;
+  left: -240px;*/
   position: relative;
+  &.deletedrop {
+    display: none;
+  }
+  &.insited {
+    &:before {display: none}
+  }
   &.posibleactive {
     .isPosibleDragInside {
       border: dashed 2px #e2017b;
@@ -473,5 +482,11 @@
     align-items: center;
     background: white;
     border-radius: 5px;
+  }
+}
+.lastChildren {
+  .dropInfoAddtional {
+    margin-top: 20px;
+    &:before { display: none; }
   }
 }

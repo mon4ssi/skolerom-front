@@ -706,6 +706,7 @@
   "generals": {
     "support":"Support",
     "keyboard":"Tastatursnarveier",
+    "dragdrop":"Drag and drop the item here",
     "accesibility_text": {
       "title_quick": "Hurtigtaster",
       "shift_t": "Læringsstier",
