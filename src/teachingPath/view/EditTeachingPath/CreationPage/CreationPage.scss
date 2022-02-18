@@ -15,6 +15,62 @@
       &::before {
         content: none;
       }
+
+      .boxNodeOptionsRoot {
+        background: #fff;
+        margin-bottom: 27px;
+        padding: 23px 0px 0px 0px;
+        z-index: 3;
+
+        &.bnoReadOnly {
+          background:none;
+        }
+      }
+
+      .boxNodeOptionsChildren {
+        background: #fff;
+        margin: 65px 0px 27px 0px;
+        padding: 25px 0px 20px 0px;
+        position: relative;
+        z-index: 3;
+
+        .nestedOrderNumber {
+          position: absolute;
+          top: -15px !important;
+        }
+
+        &.bnoReadOnly {
+          background:none;
+        }
+
+      }
+
+      .nodeChildrenReadOnly {
+        background:transparent;
+
+        textarea {
+          visibility: hidden;
+        }
+
+        .topVerticalLine {
+          height: 90px;
+          top: -50px;
+        }
+      }
+
+      .sectImgs {
+        margin-top: -8px;
+        display: flex;
+        justify-content: center;
+
+        &.sectImgsReadOnly {
+          margin-top: -48px;
+          background: transparent;
+        }
+      }
+
+      
+
     }
 
     &::before {
@@ -23,7 +79,7 @@
       height: 2px;
       background: #D3D9DE;
       position: absolute;
-      top: -35px;
+      top: -65px;
     }
 
     &.first::before {
@@ -82,7 +138,7 @@
       background-color: #ffffff;
       font-size: 1.4375rem;
       border: none;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.0724978);
+      /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.0724978); */
       border-radius: 4px;
       resize: none;
       outline: none;
@@ -123,8 +179,8 @@
       }
 
       .topVerticalLine {
-        height: 25px;
-        min-height: 25px;
+        height: 55px;
+        min-height: 55px;
         left: 49px;
         top: -22px;
         z-index: 1;
@@ -145,7 +201,7 @@
           height: 2px;
           background: #D3D9DE;
           position: absolute;
-          top: -35px;
+          top: -65px;
         }
 
         &.first::before {
@@ -191,6 +247,7 @@
     .childrenContainer {
       position: relative;
       flex-direction: row;
+      z-index: 1;
     }
 
     .mergePanel {
@@ -299,10 +356,10 @@
 
   .topVerticalLine {
     border-left: 2px solid #D3D9DE;
-    height: 35px;
-    min-height: 35px;
+    height: 65px;
+    min-height: 65px;
     position: absolute;
-    top: -35px;
+    top: -65px;
     z-index: 1;
   }
 

@@ -25,6 +25,10 @@ export class AssignmentService {
     return this.assignmentRepo.getSubjects();
   }
 
+  public async getSources() {
+    return this.assignmentRepo.getSources();
+  }
+
   public async removeAssignment(assignmentId: number) {
     return this.assignmentRepo.removeAssignment(assignmentId);
   }
@@ -45,6 +49,10 @@ export class AssignmentService {
     return this.assignmentRepo.getStudentAssignmentList(filter);
   }
 
+  public async getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, goals? : string) {
+    return this.assignmentRepo.getGrepFiltersAssignment(grades, subjects, coreElements, goals);
+  }
+
   public async getAssignmentListOfStudentInList(studentId: number, filter: Filter) {
     return this.assignmentRepo.getAssignmentListOfStudentInList(studentId, filter);
   }
@@ -55,6 +63,10 @@ export class AssignmentService {
 
   public async copyAssignment(id: number) {
     return this.assignmentRepo.copyAssignment(id);
+  }
+
+  public async downloadTeacherGuidancePDF(id: number) {
+    return this.assignmentRepo.downloadTeacherGuidancePDF(id);
   }
 }
 
@@ -71,8 +83,10 @@ export class ArticleService {
     goal?: number | string,
     multi?: number,
     source?: number,
-    searchTitle?: string
+    searchTitle?: string,
+    lang?: string
   }): Promise<Array<Article>> {
+
     return this.articleRepo.getArticles(params);
   }
 

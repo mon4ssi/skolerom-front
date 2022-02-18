@@ -7,11 +7,12 @@ import { withResizeDetector } from 'react-resize-detector';
 import isNumber from 'lodash/isNumber';
 
 import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
-import { Grade, Subject, Greep, GreepSelectValue } from 'assignment/Assignment';
+import { Grade, Subject, Greep, GreepSelectValue, Language } from 'assignment/Assignment';
 import { sortByAlphabet } from 'utils/sortByAlphabet';
 import filterImg from 'assets/images/filter.svg';
 import filterWhiteImg from 'assets/images/filter_white.svg';
 import resetImg from 'assets/images/reset-icon.svg';
+import langImg from 'assets/images/lang.svg';
 import gradeImg from 'assets/images/grade.svg';
 import tagsImg from 'assets/images/tags.svg';
 import cogsImg from 'assets/images/cogs.svg';
@@ -41,7 +42,9 @@ interface Props {
   isAssignmentsListPage?: boolean;
   isAssignmentsListFilter?: boolean;
 
+  customLanguagesList?: Array<Language>;
   customGradesList?: Array<Grade>;
+  customGradeChildrenList?: Array<Grade>;
   customSubjectsList?: Array<Subject>;
   showSourceFilter?: boolean;
   filtersisUsed?: boolean;
@@ -51,16 +54,18 @@ interface Props {
   subjectFilterValue?: string | number | null;
   gradeFilterValue?: string | number | null;
   coreFilterValue?: string | number | null;
-  goalsFilterValue?: number | null;
-  coreFilterValueTP?: string |number | null;
+  goalsFilterValue?: string | number | null;
+  coreFilterValueTP?: string | number | null;
   mainFilterValueTP?: string | number | null;
   goalsFilterValueTP?: string | number | null;
   readingFilterValueTP?: string | number | null;
 
+  defaultValueLanguageFilter?: string | null;
   defaultValueGradeFilter?: string | null;
   defaultValueSubjectFilter?: string | null;
   defaultValueMainFilter?: string | null;
   defaultValueReadingFilter?: string | null;
+  defaultValueSourceFilter?: string | null;
 
   isAnsweredFilterValue?: string | null;
   isEvaluatedFilterValue?: string | null;
@@ -84,22 +89,23 @@ interface Props {
   handleChangeSubject?(e: ChangeEvent<HTMLSelectElement>): void;
   handleChangeActivity?(e: ChangeEvent<HTMLSelectElement>): void;
   handleChangeGrade?(e: ChangeEvent<HTMLSelectElement>): void;
-  handleChangeCore?(e: ChangeEvent<HTMLSelectElement>): void;
   switchNewestOldest?(e: ChangeEvent<HTMLSelectElement>): void;
   handleChangeSorting?(e: ChangeEvent<HTMLSelectElement>): void;
   handleChangeEvaluationStatus?(e: ChangeEvent<HTMLSelectElement>): void;
   handleChangeAnswerStatus?(e: ChangeEvent<HTMLSelectElement>): void;
-  handleChangeGoals?(e: ChangeEvent<HTMLSelectElement>): void;
   handleInputSearchQuery?(e: SyntheticEvent): void;
   handleChangeSelectCore?(e: any): void;
   handleChangeSelectGoals?(e: any): void;
 
+  handleClickLanguage?(e: SyntheticEvent): void;
   handleClickGrade?(e: SyntheticEvent): void;
+  handleClickChildrenGrade?(e: SyntheticEvent): void;
   handleClickSubject?(e: SyntheticEvent): void;
   handleClickMulti?(e: SyntheticEvent): void;
   handleClickSource?(e: SyntheticEvent): void;
   handleClickReset?(e: SyntheticEvent): void;
   handleClickReading?(e: SyntheticEvent): void;
+  highLightGradeSubject?(): void;
 }
 
 interface State {
@@ -166,7 +172,7 @@ class SearchFilter extends Component<Props, State> {
   )
 
   public renderValueOptions = (data: Array<Greep>) => {
-    const returnArray : Array<GreepSelectValue> = [];
+    const returnArray: Array<GreepSelectValue> = [];
     data.forEach((element) => {
       returnArray.push({
         // tslint:disable-next-line: variable-name
@@ -244,7 +250,6 @@ class SearchFilter extends Component<Props, State> {
     const value = orderFieldFilterValue && orderFilterValue ?
       `${orderFieldFilterValue} ${orderFilterValue}` :
       `${SortingFilter.DEADLINE} ${SortingFilter.DESC}`;
-
     return (
       <select className="SearchFilter__select SearchFilter__select_sorting" onChange={handleChangeSorting} value={value}>
         <option value={`${SortingFilter.DEADLINE} ${SortingFilter.ASC}`}>
@@ -357,9 +362,16 @@ class SearchFilter extends Component<Props, State> {
         filtersModal: false
       });
     } else {
-      this.setState({
-        filtersModal: true
-      });
+      this.setState(
+        {
+          filtersModal: true
+        },
+        () => {
+          if (this.props.highLightGradeSubject) {
+            this.props.highLightGradeSubject();
+          }
+        }
+      );
     }
   }
 
@@ -536,14 +548,157 @@ class SearchFilter extends Component<Props, State> {
     );
   }
 
+  public renderFiltersLanguage = () => {
+    const { handleClickLanguage, customLanguagesList, defaultValueLanguageFilter } = this.props;
+    const languages = (customLanguagesList!).sort((a, b) => (a.langOrder > b.langOrder) ? 1 : -1);
+    const arrayDefaults = (defaultValueLanguageFilter) ? defaultValueLanguageFilter.split(',') : [];
+
+    const visibleLang = languages!.map((lang) => {
+      const title: string = lang.description;
+      const classD = (arrayDefaults.includes(String(lang.langId))) ? 'active' : '';
+
+      return (
+        <button
+          value={lang.langId}
+          className={`itemFlexFilter languageFilterClass ${classD}`}
+          onClick={handleClickLanguage}
+          key={lang.langId}
+        >
+          {title}
+        </button>
+      );
+    });
+    if (languages!.length === 0) {
+      return (
+        <div className="minimalLoading">
+          <span /><span /><span />
+        </div>
+      );
+    }
+    return (
+      <div className="gradesItems flexFilter">
+        {visibleLang}
+      </div>
+    );
+  }
+
   public renderFiltersGrade = () => {
     const { assignmentListStore, handleClickGrade, customGradesList, gradeFilterValue, defaultValueGradeFilter } = this.props;
     const grades = (customGradesList || assignmentListStore!.getAllGrades()).sort(this.sortSelectors);
+
+    const arrayDefaults = (defaultValueGradeFilter) ? defaultValueGradeFilter.split(',') : [];
+
+    const visibleGrades = grades.map((grade) => {
+      const gradetitle: Array<string> = grade.title.split('.');
+      let title:string = gradetitle[0];
+      if (gradetitle.length > 1) { title = gradetitle[0] + intl.get('new assignment.grade'); }
+      let classD = (arrayDefaults.includes(String(grade.id))) ? 'active' : '';
+      if (grade.filterStatus === 'inactive') { classD += ' downlight'; }
+
+      return (
+        <button
+          value={grade.id}
+          className={`itemFlexFilter gradesFilterClass ${classD}`}
+          onClick={handleClickGrade}
+          key={grade.id}
+        >
+          {title}
+        </button>
+      );
+    });
+    if (this.props.filtersAjaxLoading) {
+      return (
+        <div className="minimalLoading">
+          <span /><span /><span />
+        </div>
+      );
+    }
+    if (grades.length === 0) {
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
+        </div>
+      );
+    }
+    return (
+      <div className="gradesItems flexFilter">
+        {visibleGrades}
+      </div>
+    );
+  }
+
+  public renderFiltersGradeChildren = () => {
+    const { handleClickGrade, customGradeChildrenList, defaultValueGradeFilter } = this.props;
+    const grades = customGradeChildrenList!.sort(this.sortSelectors);
     const arrayDefaults = (defaultValueGradeFilter) ? defaultValueGradeFilter.split(',') : [];
     const visibleGrades = grades.map((grade) => {
-      const title = grade.title.split('.', 1);
-      const classD = (arrayDefaults.includes(String(grade.id))) ? 'active' : '';
-      return <button value={grade.id} className={`itemFlexFilter gradesFilterClass ${classD}`} onClick={handleClickGrade} key={grade.id}>{title}{intl.get('new assignment.grade')}</button>;
+      const classD = (arrayDefaults.join() === grade.filterStatus ? 'active' : '');
+      return (
+        <button
+          value={grade.id}
+          className={`itemFlexFilter gradesFilterClass ${classD} jrGradeChild`}
+          onClick={handleClickGrade}
+          key={grade.id}
+        >
+          {grade.title}
+        </button>
+      );
+    });
+    if (grades.length === 0 || this.props.filtersAjaxLoading) {
+      return ('');
+    }
+    return (
+      <div className="FiltersModal__body__item">
+        <div className="itemFilter">
+          <div className="itemFilter__leftWithoutIcon">
+            &nbsp;
+          </div>
+          <div className="itemFilter__right">
+            <div className="itemFilter__core">
+              <div className="gradesItems flexFilter">
+                {visibleGrades}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  public renderFiltersMainGrade = () => {
+    const { assignmentListStore, handleClickGrade, customGradesList, gradeFilterValue, defaultValueGradeFilter } = this.props;
+    const grades = (customGradesList || assignmentListStore!.getAllGrades()).sort(this.sortSelectors);
+    const arrayDefaults = (defaultValueGradeFilter) ? defaultValueGradeFilter.split(',') : [];
+
+    const visibleGrades = grades.map((grade) => {
+      const gradetitle: Array<string> = grade.title.split('.');
+      let title:string = gradetitle[0];
+      if (gradetitle.length > 1) { title = gradetitle[0] + intl.get('new assignment.grade'); }
+      let classD = (arrayDefaults.includes(String(grade.id))) ? 'active' : '';
+      const arrayIds = [];
+      arrayIds.push(grade.id);
+      if (grade.filterStatus === 'inactive') { classD += ' downlight'; }
+      if (grade.grade_parent === null) {
+        grades.forEach((g) => {
+          if (g.grade_parent !== null) {
+            g.grade_parent!.forEach((gp) => {
+              if (Number(gp) === Number(grade.id)) {
+                arrayIds.push(g.id);
+              }
+            });
+          }
+        });
+        return (
+          <button
+            value={String(arrayIds)}
+            className={`itemFlexFilter gradesFilterClass ${classD}`}
+            onClick={handleClickGrade}
+            key={grade.id}
+          >
+            {title}
+          </button>
+        );
+      }
     });
     if (grades.length === 0) {
       return (
@@ -559,19 +714,91 @@ class SearchFilter extends Component<Props, State> {
     );
   }
 
+  public renderFiltersMainGradeChildren = () => {
+    const { handleClickChildrenGrade, customGradeChildrenList, defaultValueGradeFilter } = this.props;
+    const grades = customGradeChildrenList!.sort(this.sortSelectors);
+    const arrayDefaults = (defaultValueGradeFilter) ? defaultValueGradeFilter.split(',') : [];
+    const uniqueGradesSubName: Array<String> = [];
+    const visibleGrades = grades.map((grade) => {
+      let classD = (arrayDefaults[0] === String(grade.id) ? 'active' : '');
+      if (grade.filterStatus === 'inactive') { classD += ' downlight'; }
+      const arrayIds: Array<number> = [];
+      grades.forEach((g) => {
+        if (g.name_sub !== null) {
+          const gradeSubArray = g.name_sub!.split(':');
+          if (gradeSubArray.includes(grade.name_sub!)) {
+            arrayIds.push(g.id);
+          }
+        }
+      });
+      if (!uniqueGradesSubName.includes(String(arrayIds))) {
+        uniqueGradesSubName.push(String(arrayIds));
+        if (grade.name_sub!.split(':').length === 1) {
+          return (
+            <button
+              value={String(arrayIds)}
+              className={`itemFlexFilter gradesFilterClass ${classD} jrGradeChild`}
+              onClick={handleClickChildrenGrade}
+              key={grade.id}
+            >
+              {grade.name_sub}
+            </button>
+          );
+        }
+      }
+    });
+    if (grades.length === 0) {
+      return ('');
+    }
+    return (
+      <div className="gradesItems flexFilter gradesChildrenItems">
+        {visibleGrades}
+      </div>
+    );
+  }
+
   public renderFiltersSubject = () => {
     const { assignmentListStore, handleClickSubject, customSubjectsList, subjectFilterValue, defaultValueSubjectFilter } = this.props;
     const subjects = (customSubjectsList || assignmentListStore!.getAllSubjects()).sort(sortByAlphabet);
     const arrayDefaults = (defaultValueSubjectFilter) ? defaultValueSubjectFilter.split(',') : [];
+
     const visibleSubjects = subjects.map((subject) => {
+
       const title = subject.title.split('.', 1);
-      const classD = (arrayDefaults.includes(String(subject.id))) ? 'active' : '';
+      let classD = (arrayDefaults.includes(String(subject.id))) ? 'active' : '';
+      if (subject.filterStatus === 'inactive') { classD += ' downlight'; }
       return <button value={subject.id} className={`itemFlexFilter subjectsFilterClass ${classD}`} onClick={handleClickSubject} key={subject.id}>{title}</button>;
     });
-    if (subjects.length === 0) {
+    return (
+      <div className="subjectsItems flexFilter">
+        {visibleSubjects}
+      </div>
+    );
+  }
+
+  public renderFiltersSubjectMF = () => {
+    const { assignmentListStore, handleClickSubject, customSubjectsList, subjectFilterValue, defaultValueSubjectFilter } = this.props;
+    const subjects = (customSubjectsList || assignmentListStore!.getAllSubjects()).sort(sortByAlphabet);
+    const arrayDefaults = (defaultValueSubjectFilter) ? defaultValueSubjectFilter.split(',') : [];
+
+    const visibleSubjects = subjects.map((subject) => {
+
+      const title = subject.title.split('.', 1);
+      let classD = (arrayDefaults.includes(String(subject.id))) ? 'active' : '';
+      if (subject.filterStatus === 'inactive') { classD += ' downlight'; }
+      return <button value={subject.id} className={`itemFlexFilter subjectsFilterClass ${classD}`} onClick={handleClickSubject} key={subject.id}>{title}</button>;
+    });
+    if (this.props.filtersAjaxLoading) {
       return (
         <div className="minimalLoading">
           <span /><span /><span />
+        </div>
+      );
+    }
+    if (subjects.length === 0) {
+      return (
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
         </div>
       );
     }
@@ -684,7 +911,7 @@ class SearchFilter extends Component<Props, State> {
         </div>
       );
     }
-    if (typeof(options) !== 'undefined') {
+    if (typeof (options) !== 'undefined') {
       if (options.length === 0) {
         return (
           <div className="centerMin">
@@ -752,7 +979,7 @@ class SearchFilter extends Component<Props, State> {
         </div>
       );
     }
-    if (typeof(options) !== 'undefined') {
+    if (typeof (options) !== 'undefined') {
       if (options.length === 0) {
         return (
           <div className="centerMin">
@@ -785,14 +1012,17 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public renderFiltersMulti = () => {
-    const { handleClickMulti, customMultiList, mainFilterValueTP, defaultValueMainFilter } = this.props;
+    const { handleClickMulti, customMultiList, mainFilterValueTP, defaultValueMainFilter, coreFilterValue } = this.props;
     const cores = customMultiList!.sort(sortByAlphabet);
+
     const arrayDefaults = (defaultValueMainFilter) ? defaultValueMainFilter.split(',') : [];
 
     const visibleCores = cores.map((core, idx) => {
       const title = core.title;
       const classD = (arrayDefaults.includes(String(core.id))) ? 'active' : '';
-      return <button value={core.id} className={`itemFlexFilter multiFilterClass ${classD}`} onClick={handleClickMulti} key={core.id}>{title}</button>;
+      let alt = (typeof(core.alt) !== 'undefined') ? core.alt : '';
+      if (classD === '' && alt === 'jrDelItem') { alt = 'hidden'; }
+      return <button value={core.id} className={`itemFlexFilter multiFilterClass ${classD} ${alt}`} onClick={handleClickMulti} key={core.id}>{title}</button>;
     });
     if (this.props.filtersAjaxLoading) {
       return (
@@ -883,9 +1113,9 @@ class SearchFilter extends Component<Props, State> {
     }
     if (options.length === 0) {
       return (
-        <p className="NotData">
-          {intl.get('edit_teaching_path.header.notdata_goals')}
-        </p>
+        <div className="centerMin">
+          {intl.get('edit_teaching_path.no_options')}
+        </div>
       );
     }
     const NoOptionsMessage = () => {
@@ -978,11 +1208,16 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public renderFiltersSource = () => {
-    const { handleClickSource, customSourceList } = this.props;
+    const { handleClickSource, customSourceList, defaultValueSourceFilter } = this.props;
     const cores = customSourceList!.sort(sortByAlphabet);
+    const arrayDefaults = (defaultValueSourceFilter) ? defaultValueSourceFilter.split(',') : [];
+
     const visibleCores = cores.map((core) => {
       const title = core.title;
-      return <button value={core.id} className="itemFlexFilter subjectsFilterClass" onClick={handleClickSource} key={core.id}>{title}</button>;
+      const classD = (arrayDefaults.includes(String(core.id))) ? 'active' : '';
+      let alt = (typeof(core.alt) !== 'undefined') ? core.alt : '';
+      if (classD === '' && alt === 'jrDelItem') { alt = 'hidden'; }
+      return <button value={core.id} className={`itemFlexFilter sourceFilterClass ${classD} ${alt}`} onClick={handleClickSource} key={core.id}>{title}</button>;
     });
     if (this.props.filtersAjaxLoading) {
       return (
@@ -1005,24 +1240,22 @@ class SearchFilter extends Component<Props, State> {
     );
   }
 
-  public renderFiltersContentSource = () => {
-    const { showSourceFilter } = this.props;
-    return (
-      <div className="FiltersModal__body__item">
-        <div className="itemFilter">
-          <div className="itemFilter__left">
-            <img src={voiceImg} />
-          </div>
-          <div className="itemFilter__right">
-            <h3>{intl.get('new assignment.greep.source')}</h3>
-            <div className="itemFilter__core">
-              {this.renderFiltersSource()}
-            </div>
+  public renderFiltersContentSource = () =>
+  (
+    <div className="FiltersModal__body__item">
+      <div className="itemFilter">
+        <div className="itemFilter__left">
+          <img src={voiceImg} />
+        </div>
+        <div className="itemFilter__right">
+          <h3>{intl.get('new assignment.greep.source')}</h3>
+          <div className="itemFilter__core">
+            {this.renderFiltersSource()}
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  )
 
   public modalFilters() {
     const { handleClickReset, showSourceFilter } = this.props;
@@ -1036,6 +1269,19 @@ class SearchFilter extends Component<Props, State> {
           </button>
         </div>
         <div className="FiltersModal__body">
+        <div className="FiltersModal__body__item">
+            <div className="itemFilter">
+              <div className="itemFilter__left">
+                <img src={langImg} />
+              </div>
+              <div className="itemFilter__right">
+                <h3>{intl.get('generals.language')}</h3>
+                <div className="itemFilter__core">
+                  {this.renderFiltersLanguage()}
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="FiltersModal__body__item">
             <div className="itemFilter">
               <div className="itemFilter__left">
@@ -1049,6 +1295,7 @@ class SearchFilter extends Component<Props, State> {
               </div>
             </div>
           </div>
+          {this.renderFiltersGradeChildren()}
           <div className="FiltersModal__body__item">
             <div className="itemFilter">
               <div className="itemFilter__left">
@@ -1057,7 +1304,7 @@ class SearchFilter extends Component<Props, State> {
               <div className="itemFilter__right">
                 <h3>{intl.get('new assignment.Subject')}</h3>
                 <div className="itemFilter__core">
-                  {this.renderFiltersSubject()}
+                  {this.renderFiltersSubjectMF()}
                 </div>
               </div>
             </div>
@@ -1129,8 +1376,9 @@ class SearchFilter extends Component<Props, State> {
                 <div className="itemFilter__right">
                   <h3>{intl.get('generals.grade')}</h3>
                   <div className="itemFilter__core">
-                    {this.renderFiltersGrade()}
+                    {this.renderFiltersMainGrade()}
                   </div>
+                  {this.renderFiltersMainGradeChildren()}
                 </div>
               </div>
             </div>
@@ -1199,6 +1447,7 @@ class SearchFilter extends Component<Props, State> {
                 </div>
               </div>
             </div>
+            {this.renderFiltersContentSource()}
           </div>
         </div>
         <div className="filtersModalBackground" onClick={this.closeFiltersModalTp} />
@@ -1227,8 +1476,9 @@ class SearchFilter extends Component<Props, State> {
                 <div className="itemFilter__right">
                   <h3>{intl.get('generals.grade')}</h3>
                   <div className="itemFilter__core">
-                    {this.renderFiltersGrade()}
+                    {this.renderFiltersMainGrade()}
                   </div>
+                  {this.renderFiltersMainGradeChildren()}
                 </div>
               </div>
             </div>
@@ -1297,6 +1547,7 @@ class SearchFilter extends Component<Props, State> {
                 </div>
               </div>
             </div>
+            {this.renderFiltersContentSource()}
           </div>
         </div>
         <div className="filtersModalBackground" onClick={this.closeFiltersModalAssignment} />
@@ -1324,8 +1575,9 @@ class SearchFilter extends Component<Props, State> {
               <div className="itemFilter__right">
                 <h3>{intl.get('generals.grade')}</h3>
                 <div className="itemFilter__core">
-                  {this.renderFiltersGrade()}
+                  {this.renderFiltersMainGrade()}
                 </div>
+                {this.renderFiltersMainGradeChildren()}
               </div>
             </div>
           </div>
@@ -1369,31 +1621,31 @@ class SearchFilter extends Component<Props, State> {
             </div>
           </div>
           <div className="FiltersModal__body__item">
-              <div className="itemFilter">
-                <div className="itemFilter__left">
-                  <img src={goalsImg} />
-                </div>
-                <div className="itemFilter__right">
-                  <h3>{intl.get('new assignment.greep.goals')}</h3>
-                  <div className="itemFilter__core">
-                    {this.renderFiltersGoalsTP()}
-                  </div>
+            <div className="itemFilter">
+              <div className="itemFilter__left">
+                <img src={goalsImg} />
+              </div>
+              <div className="itemFilter__right">
+                <h3>{intl.get('new assignment.greep.goals')}</h3>
+                <div className="itemFilter__core">
+                  {this.renderFiltersGoalsTP()}
                 </div>
               </div>
             </div>
+          </div>
           <div className="FiltersModal__body__item">
-              <div className="itemFilter">
-                <div className="itemFilter__left">
-                  <img src={readingImg} />
-                </div>
-                <div className="itemFilter__right">
-                  <h3>{intl.get('new assignment.greep.reading')}</h3>
-                  <div className="itemFilter__core">
-                    {this.renderFilterReadingInSubject()}
-                  </div>
+            <div className="itemFilter">
+              <div className="itemFilter__left">
+                <img src={readingImg} />
+              </div>
+              <div className="itemFilter__right">
+                <h3>{intl.get('new assignment.greep.reading')}</h3>
+                <div className="itemFilter__core">
+                  {this.renderFilterReadingInSubject()}
                 </div>
               </div>
             </div>
+          </div>
         </div>
         <div className="FiltersModal__backgroundside assigFiltersModal" onClick={this.closeFiltersAssignments} />
       </div>
@@ -1417,7 +1669,7 @@ class SearchFilter extends Component<Props, State> {
       isAssignmentsListPage,
       isAssignmentsListFilter
     } = this.props;
-    let myValue : any;
+    let myValue: any;
     const searchQueryValue = searchQueryFilterValue || '';
     const searchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value;
@@ -1434,14 +1686,14 @@ class SearchFilter extends Component<Props, State> {
         {!isArticlesListPage && !isStudentTpPage && activity && this.renderActivity()}
 
         {isStudentTpPage && this.applyFiltersTeachingPathbutton()}
-        {isArticlesListPage &&  this.applyFiltersbutton()}
+        {isArticlesListPage && this.applyFiltersbutton()}
         {this.state.filtersModal && this.modalFilters()}
         {this.state.filtersModalTp && this.modalFiltersTp()}
         {isAssignmentsListPage && !isStudent && this.applyFiltersbuttonAssignments()}
         {this.state.filtersModalAssignment && this.modalFiltersAssignments()}
         {isAssignmentsListFilter && !isStudent && this.applyFiltersbuttonFilterAssignments()}
         {this.state.filtersAssignment && this.filtersAssignments()}
-        <div className="SearchFilter__space" ref={this.space}/>
+        <div className="SearchFilter__space" ref={this.space} />
 
         {!isStudent && date && this.renderDate()}
         {orderFieldFilterValue === SortingFilter.DEADLINE ? this.renderSorting() : popularity && this.renderPopularities()}

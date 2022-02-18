@@ -35,6 +35,7 @@ interface Props {
   isEvaluationStyle?: boolean;
   comment?: string;
   isReadyToEvaluate?: boolean;
+  isPreview?: boolean;
 
   handleChangeComment?(e: React.ChangeEvent<HTMLTextAreaElement>): void;
   handleShowArrowsTooltip?(value: boolean): void;
@@ -119,7 +120,7 @@ export class QuestionPreview extends Component<Props, State> {
     )
 
   public renderContentBlocks = () => {
-    const { question, isEvaluationStyle, isTeacher } = this.props;
+    const { question, isEvaluationStyle, isTeacher, isPreview } = this.props;
     const blocks = question.content;
     return blocks.map((item, index) => {
       switch (item.type) {
@@ -158,7 +159,7 @@ export class QuestionPreview extends Component<Props, State> {
   }
 
   public renderAnswerBlock = () => {
-    const { question, answer, readOnly, redirectData, isEvaluationStyle, isStudentView, handleShowArrowsTooltip } = this.props;
+    const { question, answer, readOnly, redirectData, isEvaluationStyle, isStudentView, handleShowArrowsTooltip, isPreview } = this.props;
 
     switch (question.type) {
       case QuestionType.Text:

@@ -622,6 +622,12 @@ pre {
   }
 }
 
+.MyAccountWindow__closeButton:focus {
+  outline: black;
+  outline-style: auto;
+  outline-offset: 2px;
+}
+
 @keyframes clouds {
 	0%,
 	80%,

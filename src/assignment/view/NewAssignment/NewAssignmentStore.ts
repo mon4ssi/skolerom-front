@@ -1,9 +1,9 @@
 import { action, computed, observable, reaction, toJS } from 'mobx';
 import isUndefined from 'lodash/isUndefined';
 import isNull from 'lodash/isNull';
-
+import intl from 'react-intl-universal';
 import { injector } from 'Injector';
-import { Assignment, Article, ARTICLE_SERVICE_KEY, Attachment, Grade, QuestionAttachment, QuestionType, Subject, GreepElements, FilterArticlePanel } from 'assignment/Assignment';
+import { Assignment, Article, ARTICLE_SERVICE_KEY, Attachment, Grade, QuestionAttachment, QuestionType, Subject, GreepElements, FilterArticlePanel, Source } from 'assignment/Assignment';
 import { DraftAssignment, EditableImageChoiceQuestion, EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
 import { ArticleService, ASSIGNMENT_SERVICE, AssignmentService } from 'assignment/service';
 import { DRAFT_ASSIGNMENT_SERVICE, DraftAssignmentService } from 'assignment/assignmentDraft/service';
@@ -21,6 +21,7 @@ import { TEACHING_PATH_SERVICE, TeachingPathService } from 'teachingPath/service
 const statusCode204 = 204;
 const numberOfImagesForSkeleton = 12;
 const numberOfVideosForSkeleton = 4;
+const delayFocus = 250;
 
 const getAllChildArticlesIds = (article: Article) => {
   const qwe = article.levels![0] && article.levels![0].childArticles ? article.levels![0].childArticles.map(child => child.wpId || child.id) : [];
@@ -62,7 +63,9 @@ export class NewAssignmentStore {
 
   @observable public fetchingArticles: boolean = false;
   @observable public visibilityArticles: boolean = false;
+  @observable public hiddenArticles: boolean = false;
   @observable public isActiveButtons: boolean = false;
+  @observable public isDisabledButtons: boolean = false;
   @observable public fetchingAttachments: boolean = false;
   @observable public visibilityAttachments: boolean = false;
   @observable public showValidationErrors: boolean = false;
@@ -75,12 +78,14 @@ export class NewAssignmentStore {
   public articlesForSkeleton: Array<Article> = new Array(DEFAULT_AMOUNT_ARTICLES_PER_PAGE).fill(new Article({ id: 0, title: '' }));
   @observable public allGrades: Array<Grade> = [];
   @observable public allSubjects: Array<Subject> = [];
+  @observable public allSources: Array<Source> = [];
   @observable public questionAttachments: Array<Attachment> = [];
   @observable public currentOrderOption: number = -1;
   @observable public searchValue: string = '';
   @observable public storedAssignment: Assignment | null = null;
   @observable public highlightingItem: CreationElementsType | undefined;
   @observable public allArticlePanelFilters: FilterArticlePanel | null = null;
+  @observable public titleButtonGuidance: string = '';
 
   public arrayForImagesSkeleton = new Array(numberOfImagesForSkeleton).fill('imageSkeletonLoader');
   public arrayForVideosSkeleton = new Array(numberOfVideosForSkeleton).fill('videoSkeletonLoader');
@@ -102,12 +107,50 @@ export class NewAssignmentStore {
     return !isNaN(Number(this.searchValue.charAt(0)));
   }
 
+  public get getTitleButtonGuidance() {
+    return this.titleButtonGuidance;
+  }
+
+  @action
+  public setTitleButtonGuidance(drafAssignment: DraftAssignment | undefined) {
+    let hasGuidance: boolean = false;
+    const guidanceBlank1 = '<p><br></p>';
+    const guidanceBlank2 = '';
+
+    if (drafAssignment!.guidance !== guidanceBlank1 && drafAssignment!.guidance !== guidanceBlank2) {
+      hasGuidance = true;
+    } else {
+      drafAssignment!.questions.forEach((child) => {
+        if (child.guidance !== guidanceBlank1 && child.guidance !== guidanceBlank2) {
+          hasGuidance = true;
+          return true;
+        }
+      });
+    }
+
+    this.titleButtonGuidance = hasGuidance ? intl.get('teacherGuidance.buttons.edit') : intl.get('teacherGuidance.buttons.add');
+  }
+
+  public relatedArticlesIsHidden() {
+    this.currentEntity!.relatedArticles.forEach((e) => {
+      e.isHidden = this.hiddenArticles;
+    });
+  }
+
   public setIsActiveButtons() {
     this.isActiveButtons = true;
   }
 
+  public setIsDisabledButtons() {
+    this.isDisabledButtons = true;
+  }
+
   public setIsActiveButtonsFalse() {
     this.isActiveButtons = false;
+  }
+
+  public setIsDisabledButtonsFalse() {
+    this.isDisabledButtons = false;
   }
 
   @computed
@@ -415,6 +458,10 @@ export class NewAssignmentStore {
     return toJS(this.allSubjects);
   }
 
+  public getAllSources(): Array<Source> {
+    return toJS(this.allSources);
+  }
+
   @action
   public async getArticles({
     perPage = DEFAULT_AMOUNT_ARTICLES_PER_PAGE,
@@ -428,11 +475,16 @@ export class NewAssignmentStore {
       try {
         const articles = await this.articleService!.getArticles({
           perPage,
+          page: this.currentArticlesPage,
           order: rest.order,
           grades: rest.grades,
           subjects: rest.subjects,
+          core: rest.core,
+          goal: rest.goal,
+          multi: rest.multi,
+          source: rest.source,
           searchTitle: rest.searchTitle,
-          page: this.currentArticlesPage,
+          lang: rest.lang
         });
 
         this.allArticles = isNextPage ? this.allArticles.concat(articles) : articles;
@@ -459,6 +511,10 @@ export class NewAssignmentStore {
 
   public async getSubjects() {
     this.allSubjects = await this.assignmentService.getSubjects();
+  }
+
+  public async getSources() {
+    this.allSources = await this.assignmentService.getSources();
   }
 
   public getGoalsByArticle() {
@@ -586,18 +642,49 @@ export class NewAssignmentStore {
     return toJS(this.allArticlePanelFilters);
   }
 
-  public async getFiltersArticlePanel() {
-    this.allArticlePanelFilters = await this.teachingPathService.getFiltersArticlePanel();
+  public async getFiltersArticlePanel(lang: string) {
+    this.allArticlePanelFilters = await this.teachingPathService.getFiltersArticlePanel(lang);
   }
 
   public async assignStudentToAssignment(assignmentId:string, referralToken: string) {
     return this.distributionService.assignStudentToAssignment(assignmentId, referralToken);
   }
-  public async getGrepFilters(grades: string, subjects: string, source: string) {
-    return this.teachingPathService.getGrepFilters(grades, subjects, source);
+
+  public async getGradeWpIds(gradeWpIds: Array<number>) {
+    return this.teachingPathService.getGradeWpIds(gradeWpIds);
+  }
+
+  public async getSubjectWpIds(subjectWpIds: Array<number>) {
+    return this.teachingPathService.getSubjectWpIds(subjectWpIds);
+  }
+
+  public async getGrepFilters(grades: string, subjects: string) {
+    return this.teachingPathService.getGrepFilters(grades, subjects);
+  }
+  public async getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, goals?: string) {
+    return this.assignmentService.getGrepFiltersAssignment(grades, subjects, coreElements, goals);
   }
   public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number) {
     return this.teachingPathService.getGrepGoalsFilters(grepCoreElementsIds, grepMainTopicsIds, gradesIds, subjectsIds, orderGoalsCodes, perPage, page);
   }
+  @action
+  public async downloadTeacherGuidancePDF(id: number) {
+    return this.assignmentService.downloadTeacherGuidancePDF(id);
+  }
+  @action
+  public openTeacherGuidanceAssig = (nroLevel: string): void => {
+    const modalTG = Array.from(document.getElementsByClassName('modalContentTGAssig') as HTMLCollectionOf<HTMLElement>);
+    const modalTGBack = Array.from(document.getElementsByClassName('modalContentTGAssigBackground') as HTMLCollectionOf<HTMLElement>);
+    modalTG[0].classList.add('open');
+    modalTGBack[0].classList.remove('hide');
 
+    setTimeout(
+      () => {
+        const editDescript = (document.getElementsByClassName(`jr-desEdit${nroLevel}`)[0] as HTMLDivElement);
+        const editInputText = (editDescript.getElementsByClassName('ql-editor')[0] as HTMLInputElement);
+        editInputText.focus();
+      },
+      delayFocus
+    );
+  }
 }

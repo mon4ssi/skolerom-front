@@ -15,7 +15,7 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 import linkImg from 'assets/images/link.svg';
 
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
-
+const TIMEOUT = 500;
 interface Props {
   assignmentListStore?: AssignmentListStore;
   editTeachingPathStore?: EditTeachingPathStore;
@@ -47,10 +47,13 @@ export class DomainModal extends Component<Props, State> {
   }
 
   public closeDomainModal = () => {
+    const { editTeachingPathStore } = this.props;
     if (this.state.loading) {
       this.setState({
         modalDomain: false
       });
+      this.context.changeContentType(null);
+      editTeachingPathStore!.setCurrentNode(null);
       document.removeEventListener('keyup', this.handleKeyboardControl);
     }
   }
@@ -69,12 +72,20 @@ export class DomainModal extends Component<Props, State> {
   public sendDomain = async () => {
     const { disabledbutton } = this.state;
     const { editTeachingPathStore } = this.props;
+    const { currentNode } = this.props.editTeachingPathStore!;
     if (!disabledbutton) {
       const response = await editTeachingPathStore!.sendDataDomain(this.validUrlPath(this.state.valueInputDomain));
-      editTeachingPathStore!.currentNode!.editItem(response);
-      editTeachingPathStore!.currentEntity!.save();
-      this.context.changeContentType(null);
-      editTeachingPathStore!.setCurrentNode(null);
+      setTimeout(
+        () => {
+          editTeachingPathStore!.setCurrentNode(currentNode);
+          editTeachingPathStore!.currentNode!.editItemDomain(response);
+          editTeachingPathStore!.currentEntity!.save();
+          this.context.changeContentType(null);
+          editTeachingPathStore!.setCurrentNode(null);
+          document.removeEventListener('keyup', this.handleKeyboardControl);
+        },
+        TIMEOUT
+      );
     } else {
       Notification.create({
         type: NotificationTypes.ERROR,

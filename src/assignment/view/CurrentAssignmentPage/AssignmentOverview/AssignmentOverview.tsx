@@ -20,6 +20,7 @@ interface Props {
   isReadArticles: boolean;
   redirectData?: number;
   isTeacher?: boolean;
+  isPreview?: boolean;
 }
 
 export class AssignmentOverview extends Component<Props> {
@@ -59,7 +60,7 @@ export class AssignmentOverview extends Component<Props> {
 
     const handleChangeCurrentQuestion = (event: React.SyntheticEvent) => {
       event.preventDefault();
-      if (this.isStarted) {
+      if (!this.props.isPreview && this.isStarted) {
         handleShowArrowsTooltip(false);
         setCurrentQuestion(index);
       }
@@ -97,7 +98,7 @@ export class AssignmentOverview extends Component<Props> {
 
     const handleChangeCurrentQuestion = (event: React.SyntheticEvent) => {
       event.preventDefault();
-      if (this.isStarted) {
+      if (!this.props.isPreview && this.isStarted) {
         handleShowArrowsTooltip(false);
         setCurrentQuestion(-1);
       }

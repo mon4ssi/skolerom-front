@@ -47,6 +47,20 @@
         color: #FF0000;
         text-transform: none;
       }
+
+      .sectionGuidance {
+        margin: 15px 0px 0px 0px;
+
+        button {
+          line-height:24px;
+
+          img {
+              margin-right: 8px;
+              display: initial;
+              vertical-align:bottom;
+          }
+        }
+      }
     }
   }
 }

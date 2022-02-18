@@ -16,6 +16,16 @@ import {
   Subject,
   TextQuestion,
 } from '../Assignment';
+import {
+  TeachingPath,
+  TeachingPathArgs,
+  TeachingPathNode,
+  TeachingPathItem,
+  TeachingPathItemValue,
+  TeachingPathRepo,
+  TEACHING_PATH_REPO,
+  TeachingPathNodeArgs
+} from 'teachingPath/TeachingPath';
 import { Article, GreepElements } from 'assignment/Assignment';
 import { AssertionError } from 'assert';
 import { SAVE_DELAY } from 'utils/constants';
@@ -23,6 +33,7 @@ import { EditableContentBlock, EditableImagesContentBlock, EditableTextContentBl
 import { ContentBlock, ContentBlockType } from '../ContentBlock';
 
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
+import { ConsoleView } from 'react-device-detect';
 
 const MIN_QUESTION_NUMBER = 1;
 
@@ -50,6 +61,7 @@ export interface DraftAssignmentArgs {
 
 export class DraftAssignment extends Assignment {
 
+  protected teachingPathRepo: TeachingPathRepo = injector.get<TeachingPathRepo>(TEACHING_PATH_REPO);
   protected repo: DraftAssignmentRepo = injector.get<DraftAssignmentRepo>(
     DRAFT_ASSIGNMENT_REPO
   );
@@ -202,8 +214,20 @@ export class DraftAssignment extends Assignment {
   }
 
   @action
+  public setGuidance(value: string) {
+    this._guidance = value;
+    this.save();
+  }
+
+  @action
   public setGrepCoreElementsIds = (data: Array<number>) => {
     this.grepCoreElementsIds = data;
+    this.save();
+  }
+
+  @action
+  public setGrepSourcesIds = (data: Array<number>) => {
+    this._sources = data;
     this.save();
   }
 
@@ -225,8 +249,8 @@ export class DraftAssignment extends Assignment {
   }
 
   @action
-  public setGrepReadingInSubjectId = (data: number) => {
-    this.grepReadingInSubjectId = data;
+  public setGrepReadingInSubjectId = (data: Array<number>) => {
+    this.grepReadingInSubjectsIds = data;
     this.save();
   }
 
@@ -243,7 +267,7 @@ export class DraftAssignment extends Assignment {
   }
 
   public getListOfgrepReadingInSubjectId() {
-    return this.grepReadingInSubjectId;
+    return this.grepReadingInSubjectsIds;
   }
 
   @action
@@ -393,14 +417,34 @@ export class DraftAssignment extends Assignment {
   }
 
   @action
-  public setArticle(article: Article) {
+  public setArticle = async (article: Article) => {
+    const idItems: Array<number> = [];
+    const idItemsSubejs: Array<number> = [];
     this._relatedArticles = this.relatedArticles.concat(article);
 
     const allGrades: Array<Grade> = [...this.grades, ...article.grades!];
     const allSubjects: Array<Subject> = [...this.subjects, ...article.subjects!];
 
-    this._grades = uniqBy(allGrades, 'id');
-    this._subjects = uniqBy(allSubjects, 'id');
+    allGrades.forEach((e) => {
+      idItems.push(e.id);
+    });
+
+    allSubjects.forEach((e) => {
+      idItemsSubejs.push(e.id);
+    });
+    const getGradesItems = await this.teachingPathRepo.getGradeWpIds(idItems);
+    const getSubjecsItems = await this.teachingPathRepo.getSubjectWpIds(idItemsSubejs);
+    this._grades.splice(0, this._grades.length);
+    getGradesItems!.forEach((e) => {
+      this._grades.push(e);
+    });
+    this._subjects.splice(0, this._subjects.length);
+    getSubjecsItems!.forEach((e) => {
+      this._subjects.push(e);
+    });
+
+    // this._grades = uniqBy(allGrades, 'id');
+    // this._subjects = uniqBy(allSubjects, 'id');
   }
 
   @action
@@ -521,6 +565,7 @@ export class EditableTextQuestion extends TextQuestion implements QuestionAction
     return new EditableTextQuestion({
       assignmentDraft: assignment,
       title: '',
+      guidance: '',
       order: index,
       contentBlocks: []
     });
@@ -615,6 +660,7 @@ export class EditableTextQuestion extends TextQuestion implements QuestionAction
       order,
       assignmentDraft: this.assignmentDraft!,
       title: this.title,
+      guidance: this.guidance,
       contentBlocks: this._content.map(item => cloneDeep(item))
     });
   }
@@ -635,6 +681,15 @@ export class EditableTextQuestion extends TextQuestion implements QuestionAction
 
   public set title(title: string) {
     this._title = title;
+  }
+
+  @computed
+  public get guidance() {
+    return this._guidance;
+  }
+
+  public set guidance(value: string) {
+    this._guidance = value;
   }
 
   @action
@@ -725,6 +780,12 @@ export class EditableTextQuestion extends TextQuestion implements QuestionAction
   }
 
   @action
+  public setGuidance(value: string): void {
+    this._guidance = value;
+    this.save();
+  }
+
+  @action
   public setQuestionOrderWithError(value: number | null) {
     this.assignmentDraft.setQuestionsWithError(value);
   }
@@ -806,6 +867,7 @@ export class EditableMultipleChoiceQuestion extends MultipleChoiceQuestion imple
     const question = new EditableMultipleChoiceQuestion({
       assignmentDraft,
       title: '',
+      guidance: '',
       order: index,
       options: [],
       contentBlocks: []
@@ -1047,6 +1109,12 @@ export class EditableMultipleChoiceQuestion extends MultipleChoiceQuestion imple
   }
 
   @action
+  public setGuidance(value: string): void {
+    this._guidance = value;
+    this.save();
+  }
+
+  @action
   public setOrder(order: number): void {
     this._order = order;
     this.save();
@@ -1104,6 +1172,7 @@ export class EditableMultipleChoiceQuestion extends MultipleChoiceQuestion imple
       order,
       assignmentDraft: this.assignmentDraft!,
       title: this.title,
+      guidance: this.guidance,
       options: this._options,
       contentBlocks: this._content.map(item => cloneDeep(item))
     });
@@ -1214,6 +1283,7 @@ export class EditableImageChoiceQuestion extends ImageChoiceQuestion implements 
     const question = new EditableImageChoiceQuestion({
       assignmentDraft,
       title: '',
+      guidance: '',
       order: index,
       options: [],
       contentBlocks: []
@@ -1240,6 +1310,15 @@ export class EditableImageChoiceQuestion extends ImageChoiceQuestion implements 
   @computed
   public get title() {
     return this._title;
+  }
+
+  public set guidance(value: string) {
+    this._guidance = value;
+  }
+
+  @computed
+  public get guidance() {
+    return this._guidance;
   }
 
   private validateOptionsCount() {
@@ -1459,6 +1538,12 @@ export class EditableImageChoiceQuestion extends ImageChoiceQuestion implements 
   }
 
   @action
+  public setGuidance(value: string): void {
+    this._guidance = value;
+    this.save();
+  }
+
+  @action
   public setOrder(order: number): void {
     this._order = order;
     this.save();
@@ -1520,6 +1605,7 @@ export class EditableImageChoiceQuestion extends ImageChoiceQuestion implements 
       order,
       assignmentDraft: this.assignmentDraft!,
       title: this.title,
+      guidance: this.guidance,
       options: this._options,
       contentBlocks: this._content.map(item => cloneDeep(item))
     });

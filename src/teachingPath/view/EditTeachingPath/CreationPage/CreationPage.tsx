@@ -36,6 +36,8 @@ import actualArrowLeftRounded from 'assets/images/actual-arrow-left-rounded.svg'
 import './CreationPage.scss';
 import { AppHeader } from 'components/layout/AppHeader/AppHeader';
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
+import { TeacherguidanceModal } from 'teachingPath/view/TeacherGuidance/TeacherGuidanceModal';
+import { trim } from 'lodash';
 
 const cardWidth = 322;
 const leftIndent = 160;
@@ -43,6 +45,9 @@ const leftIndent = 160;
 const minNumberOfTitleCols = 20;
 const maxNumberOfTitleCols = 50;
 const num2 = 2;
+const ENTER_SINGLE_QUOTE_CODE = 219;
+const ENTER_DOUBLE_QUOTE_CODE = 50;
+const DELAY = 100;
 
 interface NodeContentProps {
   editTeachingPathStore?: EditTeachingPathStore;
@@ -63,12 +68,14 @@ interface NodeContentState {
 class NodeContent extends Component<NodeContentProps, NodeContentState> {
   public static contextType = ItemContentTypeContext;
   public titleRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
+  public insideRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
   public state = {
     numberOfTitleCols: 20,
     EditDomain: false
   };
 
   public componentDidMount() {
+    this.props.node.improbeSubjects(this.props.node.draftTeachingPath.subjects);
     if (this.titleRef && this.titleRef.current) {
       const valueLength = this.titleRef.current.props.value!.length;
       this.handleChangeNumberOfTitleCols(valueLength);
@@ -87,9 +94,10 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
   public handleChangeTitle = (event: React.SyntheticEvent<HTMLTextAreaElement>) => {
     event.preventDefault();
-    if (lettersNoEn(event.currentTarget.value)) {
-      this.props.node.setSelectedQuestion(event.currentTarget.value);
-      const valueLength = event.currentTarget.value.length;
+    const value = this.useValuedQuotes(event.currentTarget.value);
+    if (lettersNoEn(value)) {
+      this.props.node.setSelectedQuestion(value);
+      const valueLength = value.length;
 
       this.handleChangeNumberOfTitleCols(valueLength);
     }
@@ -109,6 +117,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
             ...item.value,
             images: article.images,
             title: article.title,
+            url: article.url,
             grades: article.grades,
             levels: article.levels,
             excerpt: article.excerpt
@@ -129,10 +138,10 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         solo: parentNode!.children.length === 1 && parentNode!.children[0].items!.length === 1
       }
     );
-    const image = item.value.images ?
+    let image = item.value.images ?
       item.value.images.url : item.value.featuredImage ?
         item.value.featuredImage : item.value.relatedArticles && item.value.relatedArticles.length > 0 ?
-          item.value.relatedArticles[0].images.url : placeholderImg;
+          (item.value.relatedArticles[0].images !== undefined) ? item.value.relatedArticles[0].images.url : placeholderImg : placeholderImg;
 
     const levels = item.type === TeachingPathNodeType.Assignment ?
       item.value.levels :
@@ -150,10 +159,11 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     }
     if (item.type === TeachingPathNodeType.Assignment) {
       imagenType = assignmentImg;
-      urlBasic = `/assignments/view/${item.value.id}`;
+      urlBasic = `/assignments/view/${item.value.id}?preview`;
     }
     if (item.type === TeachingPathNodeType.Domain) {
       imagenType = domainImg;
+      image = (item.value.featuredImage !== undefined) ? item.value.featuredImage : item.value.image;
       urlBasic = item.value.url;
       urldomain = item.value.url;
     }
@@ -223,10 +233,12 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     switch (type) {
       case 'ARTICLE':
         editTeachingPathStore!.trueIsEditArticles();
+        editTeachingPathStore!.setArticleInEdit(itemId);
         this.context.changeContentType(0);
         break;
       case 'ASSIGNMENT':
         editTeachingPathStore!.trueIsEditAssignments();
+        editTeachingPathStore!.setAssignmentInEdit(itemId);
         this.context.changeContentType(1);
         break;
       case 'DOMAIN':
@@ -268,7 +280,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         );
 
         parentNode!.children[index! - 1].setChildren([...parentNode!.children[index! - 1].children, ...node.children]);
-        parentNode!.children[index! - 1].setSelectedQuestion(intl.get('edit_teaching_path.paths.teaching_path_title'));
+        parentNode!.children[index! - 1].setSelectedQuestion(intl.get('edit_teaching_path.paths.node_teaching_path_title'));
         parentNode!.removeChild(node);
       }
     }
@@ -346,7 +358,6 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       !(node.type !== TeachingPathNodeType.Root && node.items!.length > 1) && 'withPadding',
       node.type === TeachingPathNodeType.Root && 'withoutPadding'
     );
-
     return !node.children.length && (
       <div className={containerClassNames}>
         {node.type !== TeachingPathNodeType.Root && <div className="topVerticalLine"/>}
@@ -355,16 +366,57 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     );
   }
 
+  public useValuedQuotes = (value: string) => {
+    const startQuote = '«';
+    const endQuote = '»';
+    let newvalue = value;
+    if (value.split("'").length > 1 || value.split('"').length > 1) {
+      const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
+      newvalue = `${initValue}${startQuote}${endQuote}`;
+    }
+    return newvalue;
+  }
+
   public renderInput = () => {
     const { nestedOrder, node, readOnly } = this.props;
-    const placeholder = node.type === TeachingPathNodeType.Root ?
-      intl.get('edit_teaching_path.paths.main_teaching_path_title') :
-      intl.get('edit_teaching_path.paths.teaching_path_title');
+    const placeholder = intl.get('edit_teaching_path.paths.node_teaching_path_place_holder');
+    if (readOnly) {
+      if (node.selectQuestion !== intl.get('edit_teaching_path.paths.node_teaching_path_title')) {
+        return node.type === TeachingPathNodeType.Root || node.children.length ? (
+          <div className="teachingPathItemsTitleDiv" data-number={nestedOrder} >
+          <TextAreaAutosize
+            ref={this.titleRef}
+            inputRef={this.insideRef}
+            className="teachingPathItemsTitle fw500"
+            value={node.selectQuestion}
+            placeholder={placeholder}
+            onChange={this.handleChangeTitle}
+            cols={this.state.numberOfTitleCols}
+            maxLength={MAX_TITLE_LENGTH}
+            readOnly={readOnly}
+          />
+          </div>
+        ) : null;
+      }
+
+      return (
+        <div className="teachingPathItemsTitleDiv" data-number={nestedOrder} >
+          <TextAreaAutosize
+            className="teachingPathItemsTitle fw500"
+            ref={this.titleRef}
+            inputRef={this.insideRef}
+            value={node.selectQuestion}
+            readOnly={readOnly}
+          />
+        </div>
+      );
+    }
 
     return node.type === TeachingPathNodeType.Root || node.children.length ? (
       <div className="teachingPathItemsTitleDiv" data-number={nestedOrder} >
       <TextAreaAutosize
         ref={this.titleRef}
+        inputRef={this.insideRef}
         className="teachingPathItemsTitle fw500"
         value={node.selectQuestion}
         placeholder={placeholder}
@@ -372,27 +424,84 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         cols={this.state.numberOfTitleCols}
         maxLength={MAX_TITLE_LENGTH}
         readOnly={readOnly}
+        autoFocus={true}
       />
       </div>
     ) : null;
   }
 
+  public getLetterNode = (): number => {
+    const { editTeachingPathStore, node } = this.props;
+    let nroLetterLoop: number;
+
+    if (node.children.length) {
+      const firstLetterNumber: number = 97;
+
+      if (editTeachingPathStore!.currentEntity!.content === node) {
+        nroLetterLoop = firstLetterNumber;
+      } else {
+        let children: Array<EditableTeachingPathNode> = [];
+        let childrenTmp: Array<EditableTeachingPathNode> = editTeachingPathStore!.currentEntity!.content.children;
+        let continueLoop = true;
+        let nroNodes: number = 0;
+
+        //
+        while (continueLoop) {
+          nroNodes = 0;
+          children = childrenTmp;
+          childrenTmp = [];
+
+          nroLetterLoop = firstLetterNumber;
+
+          children.some((item) => {
+
+            if (item.children.length > 0) {
+              item.children.forEach((child) => {
+                if (child.children.length > 0) {
+                  childrenTmp.push(child);
+                }
+              });
+
+              nroNodes += 1;
+
+              if (item === node) {
+                nroNodes = 0;
+                return true;
+              }
+
+              nroLetterLoop += 1;
+            }
+          });
+
+          continueLoop = (nroNodes > 0);
+        }
+      }
+    }
+
+    return nroLetterLoop!;
+  }
+
   public renderNestedOrderNumber = (withUnmerge?: boolean) => {
-    const { nestedOrder, node, readOnly } = this.props;
+    const { nestedOrder, node, readOnly, editTeachingPathStore } = this.props;
+    const nroLetterLoop: number = this.getLetterNode();
+
     const containerClassName = classnames(
       'nestedOrderNumberContainer flexBox dirColumn',
       !withUnmerge && 'withoutUnmergeButton'
     );
 
+    const isFirstNodeReadOnlyBlank: boolean = (readOnly === true && node.type === TeachingPathNodeType.Root && this.haveTitleNode(node.selectQuestion));
+
     return node.children.length ? (
-      <div className={containerClassName}>
-        {node.type !== TeachingPathNodeType.Root && <div className="topVerticalLine"/>}
+      <>
+        {node.type !== TeachingPathNodeType.Root ? <div className="topVerticalLine"/> : isFirstNodeReadOnlyBlank ? <div className="topVerticalLine" style={{ top:0, height:0 }}/> : null}
         <NestedOrderNumber
           node={node}
           nestedOrderNumber={nestedOrder}
           readOnly={readOnly}
+          nroLetter={nroLetterLoop!}
         />
-      </div>
+      </>
     ) : null;
   }
 
@@ -428,6 +537,26 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     ) : null;
   }
 
+  public haveTitleNode = (value: string): boolean => {
+    const titleNode: string = trim(value);
+    return (titleNode === '' || titleNode === null || typeof (titleNode) === 'undefined');
+  }
+
+  public renderBoxNodeOptions = () => {
+    const { node, readOnly } = this.props;
+    const classNodeTransparent: string = (readOnly === true && this.haveTitleNode(node.selectQuestion)) ? 'nodeChildrenReadOnly' : '';
+
+    return node.children.length ? (
+      <div className={`${node.type === TeachingPathNodeType.Root ? 'boxNodeOptionsRoot' : 'boxNodeOptionsChildren'} ${classNodeTransparent}`}>
+        {this.renderInput()}
+        <div className={`sectImgs ${readOnly ? 'sectImgsReadOnly' : ''}`}>
+          {node.type === TeachingPathNodeType.Root && this.renderNestedOrderNumber(true)}
+          {node.type !== TeachingPathNodeType.Root && this.renderNestedOrderNumber(readOnly ? false : !!this.renderUnmergeButton())}
+        </div>
+      </div>
+    ) : null;
+  }
+
   public render() {
     const { node, parentNode, index, readOnly } = this.props;
     const children = node.children as Array<EditableTeachingPathNode>;
@@ -453,11 +582,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
         {!readOnly && this.renderUnmergeButton()}
 
-        {node.type !== TeachingPathNodeType.Root && this.renderNestedOrderNumber(readOnly ? false : !!this.renderUnmergeButton())}
-
-        {this.renderInput()}
-
-        {node.type === TeachingPathNodeType.Root && this.renderNestedOrderNumber(true)}
+        {this.renderBoxNodeOptions()}
 
         {!readOnly && this.renderAddingButtons(!!this.renderUnmergeButton())}
 
@@ -550,6 +675,12 @@ export class CreationPageComponent extends Component<Props> {
 
         <div className="main flexBox dirColumn alignCenter">
           <TeachingPathTitle readOnly={readOnly}/>
+
+          <TeacherguidanceModal
+            currentEntity={currentTeachingPath!}
+            readOnly={readOnly}
+            editTeachingPathStore={editTeachingPathStore}
+          />
 
           <NodeContent
             isRoot

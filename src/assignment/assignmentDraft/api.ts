@@ -25,13 +25,17 @@ export interface NewDraftAssignmentResponseDTO {
   grepCoreElementsIds?: Array<number>;
   grepMainTopicsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
-  grepReadingInSubjectId?: number;
+  grepReadingInSubjectsIds?: number;
+  sources?: Array<number>;
+  guidance?: string;
+  hasGuidance?: boolean;
 }
 
 export interface DraftAssignmentRequestDTO {
   uuid: string;
   title: string;
   description: string;
+  guidance: string;
   numberOfQuestions: number;
   isPrivate: boolean;
   assignmentContent: AssignmentRequestDTO;
@@ -43,7 +47,8 @@ export interface DraftAssignmentRequestDTO {
   grepCoreElementsIds?: Array<number>;
   grepMainTopicsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
-  grepReadingInSubjectId?: number;
+  grepReadingInSubjectsIds?: Array<number>;
+  sources?: Array<number>;
 }
 
 export class DraftAssignmentApi implements DraftAssignmentRepo {

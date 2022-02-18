@@ -36,16 +36,28 @@ export class TeachingPathService {
     return this.teachingPathRepo.sendDataDomain(domain);
   }
 
-  public async getFiltersArticlePanel() {
-    return this.teachingPathRepo.getFiltersArticlePanel();
+  public async getFiltersArticlePanel(lang: string) {
+    return this.teachingPathRepo.getFiltersArticlePanel(lang);
+  }
+
+  public async getGradeWpIds(gradeWpIds: Array<number>) {
+    return this.teachingPathRepo.getGradeWpIds(gradeWpIds);
+  }
+
+  public async getSubjectWpIds(subjectWpIds: Array<number>) {
+    return this.teachingPathRepo.getSubjectWpIds(subjectWpIds);
   }
 
   public async getTeachingPathDistributes(filter: Filter) {
     return this.teachingPathRepo.getTeachingPathDistributes(filter);
   }
 
-  public async getGrepFilters(grades: string, subjects: string, source: string) {
-    return this.teachingPathRepo.getGrepFilters(grades, subjects, source);
+  public async getGrepFilters(grades: string, subjects: string, coreElements?: string, goals? : string) {
+    return this.teachingPathRepo.getGrepFilters(grades, subjects, coreElements, goals);
+  }
+
+  public async getGrepFiltersTeachingPath(grades: string, subjects: string, coreElements?: string, mainTopics?:string, goals? : string, source?:string) {
+    return this.teachingPathRepo.getGrepFiltersTeachingPath(grades, subjects, coreElements, mainTopics, goals, source);
   }
 
   public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number) {
@@ -66,5 +78,9 @@ export class TeachingPathService {
 
   public async getTeachingPathListOfStudentInList(studentId: number, filter: Filter) {
     return this.teachingPathRepo.getTeachingPathListOfStudentInList(studentId, filter);
+  }
+
+  public async downloadTeacherGuidancePDF(id: number) {
+    return this.teachingPathRepo.downloadTeacherGuidancePDF(id);
   }
 }

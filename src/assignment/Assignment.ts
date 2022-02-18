@@ -19,22 +19,17 @@ export const ARTICLE_SERVICE_KEY = 'ARTICLE_SERVICE_KEY';
 export interface AssignmentRepo {
   getGrades(): Promise<Array<Grade>>;
   getSubjects(): Promise<Array<Subject>>;
+  getSources(): Promise<Array<Source>>;
   getAssignmentById(id: number): Promise<Assignment>;
-  getMyAssignmentsList(
-    filter: Filter
-  ): Promise<{
+  getMyAssignmentsList(filter: Filter): Promise<{
     myAssignments: Array<Assignment>;
     total_pages: number;
   }>;
-  getAllAssignmentsList(
-    filter: Filter
-  ): Promise<{
+  getAllAssignmentsList(filter: Filter): Promise<{
     myAssignments: Array<Assignment>;
     total_pages: number;
   }>;
-  getStudentAssignmentList(
-    filter: Filter
-  ): Promise<{
+  getStudentAssignmentList(filter: Filter): Promise<{
     myAssignments: Array<Assignment>;
     total_pages: number;
   }>;
@@ -47,36 +42,80 @@ export interface AssignmentRepo {
     total_pages: number;
   }>;
   getAssignmentDistributes(filter: Filter): Promise<{
-    distributes: Array<AssignmentDistribute>,
+    distributes: Array<AssignmentDistribute>;
     total_pages: number;
   }>;
   copyAssignment(id: number): Promise<number>;
+  getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
+  downloadTeacherGuidancePDF(id: number): Promise<void>;
 }
 
 export enum QuestionType {
   Text = 'TEXT',
   MultipleChoice = 'MULTIPLE_CHOICE',
   TeachingPath = 'TEACHING_PATH',
-  ImageChoice = 'IMAGE_CHOICE'
+  ImageChoice = 'IMAGE_CHOICE',
+}
+
+export class Language {
+  @observable public langId: string;
+  @observable public description: string;
+  @observable public slug: string;
+  @observable public langOrder: number;
+
+  constructor(langId: string, description: string, slug: string, langOrder: number) {
+    this.langId = langId;
+    this.description = description;
+    this.slug = slug;
+    this.langOrder = langOrder;
+  }
 }
 
 export class Grade {
   @observable public id: number;
   @observable public title: string;
+  @observable public filterStatus?: string | undefined | null;
+  // tslint:disable-next-line: variable-name
+  @observable public grade_parent?: Array<number | string>;
+  // tslint:disable-next-line: variable-name
+  @observable public name_sub?: string | null;
+  @observable public managementId?: number | null;
 
-  constructor(id: number, title: string) {
+  constructor(id: number, title: string, managementId?:number | undefined | null) {
     this.id = id;
     this.title = title;
+    this.filterStatus = null;
+    // tslint:disable-next-line: variable-name
+    this.grade_parent = [];
+    // tslint:disable-next-line: variable-name
+    this.name_sub = null;
+    this.managementId = managementId;
   }
 }
 
 export class Subject {
   @observable public id: number;
   @observable public title: string;
+  @observable public filterStatus?: string | undefined | null;
+  @observable public managementId?: number | undefined | null;
 
-  constructor(id: number, title: string) {
+  constructor(id: number, title: string, managementId?:number | undefined | null) {
     this.id = id;
     this.title = title;
+    this.filterStatus = null;
+    this.managementId = managementId;
+  }
+}
+
+export class Source {
+  @observable public id: number;
+  @observable public title: string;
+  @observable public default: boolean;
+
+  constructor(id: number, title: string, defaults: boolean) {
+    this.id = id;
+    this.title = title;
+    this.default = defaults;
   }
 }
 
@@ -93,10 +132,12 @@ export class GreepSelectValue {
 export class Greep {
   @observable public id: number;
   @observable public title: string;
+  @observable public alt?: string;
 
-  constructor(id: number, title: string) {
+  constructor(id: number, title: string, alt: string = '') {
     this.id = id;
     this.title = title;
+    this.alt = alt;
   }
 }
 
@@ -110,6 +151,11 @@ export interface GrepFilters {
   name: string;
   // tslint:disable-next-line: variable-name
   wp_id: number;
+  filterStatus?: any;
+  // tslint:disable-next-line: variable-name
+  grade_parent?: Array<number | string>;
+  // tslint:disable-next-line: variable-name
+  name_sub?: string | null;
 }
 
 export interface GrepElementFilters {
@@ -125,12 +171,21 @@ export interface GrepReading {
   locale_id: number;
 }
 
+export interface GrepSource {
+  id: number;
+  name: string;
+  // tslint:disable-next-line: variable-name
+  wp_id: number;
+}
+
 export class FilterGrep {
   public subjectFilters?: Array<GrepFilters>;
   public gradeFilters?: Array<GrepFilters>;
   public coreElementsFilters?: Array<GrepElementFilters>;
   public mainTopicFilters?: Array<GrepElementFilters>;
   public readingInSubjects?: Array<GrepReading>;
+  public sourceFilters?: Array<GrepSource>;
+  public goalFilters?: Array<GrepElementFilters>;
 }
 
 export class GoalsData {
@@ -147,13 +202,16 @@ export interface AssignmentArgs {
   title?: string;
   author?: string;
   description?: string;
+  guidance?: string;
+  hasGuidance?: boolean;
   questions?: Array<Question>;
   grades?: Array<Grade>;
   subjects?: Array<Subject>;
+  sources?: Array<number>;
   isPrivate?: boolean;
   relatedArticles?: Array<Article>;
   createdAt?: string;
-  updatedAt?: string ;
+  updatedAt?: string;
   publishedAt?: string;
   numberOfQuestions?: number;
   isAnswered?: boolean;
@@ -180,12 +238,11 @@ export interface AssignmentArgs {
   grepCoreElementsIds?: Array<number>;
   grepMainTopicsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
-  grepReadingInSubjectId?: number;
+  grepReadingInSubjectsIds?: Array<number>;
   grepGoals?: Array<GreepElements>;
 }
 
 export class Assignment {
-
   protected readonly _id: number;
   protected readonly _deadline: Date | undefined;
   protected readonly _ownedByMe: boolean;
@@ -193,8 +250,11 @@ export class Assignment {
   @observable private _author: string = '';
   @observable protected _questions: Array<Question> = [];
   @observable protected _description: string = '';
+  @observable protected _guidance: string;
+  @observable protected _hasGuidance: boolean = false;
   @observable protected _grades: Array<Grade> = [];
   @observable protected _subjects: Array<Subject> = [];
+  @observable protected _sources: Array<number> = [];
   @observable protected _isPrivate: boolean = false;
   @observable protected _relatedArticles: Array<Article> = [];
   @observable protected _createdAt: string = '';
@@ -225,16 +285,19 @@ export class Assignment {
   public grepCoreElementsIds?: Array<number>;
   public grepMainTopicsIds?: Array<number>;
   public grepGoalsIds?: Array<number>;
-  public grepReadingInSubjectId?: number;
+  public grepReadingInSubjectsIds?: Array<number>;
 
   constructor(args: AssignmentArgs) {
     this._id = args.id;
     this._title = args.title || '';
     this._author = args.author || '';
     this._description = args.description || '';
+    this._guidance = args.guidance || '';
+    this._hasGuidance = args.hasGuidance || false;
     this._questions = args.questions || [];
     this._grades = args.grades || [];
     this._subjects = args.subjects || [];
+    this._sources = args.sources || [];
     this._isPrivate = !isNil(args.isPrivate) ? args.isPrivate : true;
     this._relatedArticles = args.relatedArticles || [];
     this._createdAt = args.createdAt || '';
@@ -257,7 +320,8 @@ export class Assignment {
     this._isCreatedByContentManager = !!args.isCreatedByContentManager;
     this._isPublished = args.isPublished;
     this._isDistributed = args.isDistributed;
-    this._ownedByMe = typeof args.ownedByMe === 'boolean' ? args.ownedByMe : false;
+    this._ownedByMe =
+      typeof args.ownedByMe === 'boolean' ? args.ownedByMe : false;
     this._isCopy = args.isCopy || false;
     this.grepCoreelements = args.grepCoreelements;
     this.grepGoals = args.grepGoals;
@@ -266,7 +330,7 @@ export class Assignment {
     this.grepCoreElementsIds = args.grepCoreElementsIds;
     this.grepMainTopicsIds = args.grepMainTopicsIds;
     this.grepGoalsIds = args.grepGoalsIds;
-    this.grepReadingInSubjectId = args.grepReadingInSubjectId;
+    this.grepReadingInSubjectsIds = args.grepReadingInSubjectsIds;
   }
 
   public isOwnedByMe(): boolean {
@@ -324,6 +388,16 @@ export class Assignment {
   }
 
   @computed
+  public get guidance() {
+    return this._guidance;
+  }
+
+  @computed
+  public get hasGuidance() {
+    return this._hasGuidance;
+  }
+
+  @computed
   public get id() {
     return this._id;
   }
@@ -351,6 +425,11 @@ export class Assignment {
   @computed
   public get subjects() {
     return this._subjects;
+  }
+
+  @computed
+  public get sources() {
+    return this._sources;
   }
 
   @computed
@@ -431,6 +510,10 @@ export class Assignment {
     return toJS(this._subjects);
   }
 
+  public getListOfSources() {
+    return toJS(this._sources);
+  }
+
   public getListOfGrades() {
     return toJS(this._grades);
   }
@@ -448,7 +531,14 @@ export class QuestionAttachment {
   public readonly fileName: string;
   public readonly duration?: number;
 
-  constructor(params: { id: number, path: string, alt: string, title: string, fileName: string, duration: number }) {
+  constructor(params: {
+    id: number;
+    path: string;
+    alt: string;
+    title: string;
+    fileName: string;
+    duration: number;
+  }) {
     this.id = params.id;
     this.path = params.path;
     this.alt = params.alt;
@@ -461,15 +551,16 @@ export class QuestionAttachment {
 export interface QuestionParams {
   id?: number;
   title: string;
+  guidance?: string;
   order: number;
   contentBlocks: Array<ContentBlock>;
 }
 
 export abstract class Question {
-
   private readonly _id?: number;
   private readonly _type: QuestionType;
   @observable protected _title: string;
+  @observable protected _guidance: string;
   @observable protected _order: number;
   @observable protected _content: Array<ContentBlock> = [];
 
@@ -477,6 +568,7 @@ export abstract class Question {
     this._id = params.id;
     this._type = params.type;
     this._title = params.title;
+    this._guidance = params.guidance || '';
     this._order = params.order;
     this._content = params.contentBlocks;
   }
@@ -502,12 +594,19 @@ export abstract class Question {
   }
 
   @computed
+  public get guidance() {
+    return this._guidance;
+  }
+
+  @computed
   public get orderPosition() {
     return this._order;
   }
 }
 
-export type TypedQuestion = TextQuestion & MultipleChoiceQuestion & ImageChoiceQuestion;
+export type TypedQuestion = TextQuestion &
+  MultipleChoiceQuestion &
+  ImageChoiceQuestion;
 
 export class TextQuestion extends Question {
   constructor(params: QuestionParams) {
@@ -516,7 +615,6 @@ export class TextQuestion extends Question {
 }
 
 export class MultipleChoiceQuestionOption {
-
   @observable protected _title: string;
   @observable protected _isRight: boolean;
 
@@ -534,7 +632,6 @@ export class MultipleChoiceQuestionOption {
   public get isRight() {
     return this._isRight;
   }
-
 }
 
 export interface MultipleChoiceQuestionArgs extends QuestionParams {
@@ -542,7 +639,6 @@ export interface MultipleChoiceQuestionArgs extends QuestionParams {
 }
 
 export class MultipleChoiceQuestion extends Question {
-
   protected _options: Array<MultipleChoiceQuestionOption>;
 
   constructor(params: MultipleChoiceQuestionArgs) {
@@ -557,13 +653,17 @@ export class MultipleChoiceQuestion extends Question {
 }
 
 export class ImageChoiceQuestionOption {
-
   @observable protected _title: string;
   @observable protected _image: QuestionAttachment | undefined;
   @observable protected _orderPosition: number;
   @observable protected _isRight: boolean;
 
-  constructor(title: string, image: QuestionAttachment | undefined, orderPosition: number, isRight: boolean) {
+  constructor(
+    title: string,
+    image: QuestionAttachment | undefined,
+    orderPosition: number,
+    isRight: boolean
+  ) {
     this._title = title;
     this._image = image;
     this._orderPosition = orderPosition;
@@ -596,7 +696,6 @@ export interface ImageChoiceQuestionArgs extends QuestionParams {
 }
 
 export class ImageChoiceQuestion extends Question {
-
   protected _options: Array<ImageChoiceQuestionOption>;
 
   constructor(params: ImageChoiceQuestionArgs) {
@@ -618,7 +717,7 @@ export class Filter {
   @observable public order?: string | null;
   @observable public orderField?: string | null;
   @observable public grade?: string | number | null;
-  @observable public subject?:  string | number | null;
+  @observable public subject?: string | number | null;
   @observable public isAnswered?: string | null;
   @observable public searchQuery?: string | null;
   @observable public isEvaluated?: string | null;
@@ -628,113 +727,148 @@ export class Filter {
   @observable public grepMainTopicsIds?: string | number | null;
   @observable public grepGoalsIds?: string | number | null;
   @observable public grepReadingInSubject?: string | number | null;
+  @observable public source?: string | number | null;
   public showMyAssignments?: number | null;
+}
+
+export interface LanguageFilter {
+  langId: string;
+  description: string;
+  slug: string;
+  langOrder: number;
 }
 
 export interface GradeFilter {
   // tslint:disable-next-line: variable-name
-  grade_id?: string;
-  description?: string;
+  grade_id: string;
+  description: string;
+  // tslint:disable-next-line: variable-name
+  grade_parent: Array<string>;
+  // tslint:disable-next-line: variable-name
+  name_sub: string;
+  // tslint:disable-next-line: variable-name
+  term_order: string;
 }
 
 export interface SubjectFilter {
   // tslint:disable-next-line: variable-name
-  subject_id?: string;
-  description?: string;
+  subject_id: string;
+  description: string;
   // tslint:disable-next-line: variable-name
-  grade_ids?: Array<string>;
-}
-
-export interface GradeStringObject {
-  // tslint:disable-next-line: variable-name
-  grade_id?: string;
-  // tslint:disable-next-line: variable-name
-  subjects_relations?: Array<string>;
-}
-
-export interface MultidisciplinayGradeSubjectFilter {
-  // tslint:disable-next-line: variable-name
-  subject_id?: string;
-  core_elments_ids?: Array<string>;
-
-}
-
-export interface MultidisciplinayGradeFilter {
-  // tslint:disable-next-line: variable-name
-  grade_id?: string;
-  subject_ids?: Array<MultidisciplinayGradeSubjectFilter>;
-
-}
-
-export interface MultiFilter {
-  // tslint:disable-next-line: variable-name
-  main_topic_id?: string;
-  description?: string;
-  // tslint:disable-next-line: variable-name
-  grade_ids?: Array<MultidisciplinayGradeFilter>;
-}
-
-export interface CoreElementGradeFilter {
-  // tslint:disable-next-line: variable-name
-  grade_id?: string;
-  subject_ids?: Array<string>;
+  grade_ids: Array<string>;
 }
 
 export interface CoreFilter {
   // tslint:disable-next-line: variable-name
-  core_element_id?: string;
-  description?: string;
+  core_element_id: string;
+  description: string;
   // tslint:disable-next-line: variable-name
-  grade_ids?: Array<CoreElementGradeFilter>;
+  grade_ids: Array<CoreFilterItemGrades>;
 }
 
-export interface GoalsGradeSubjectCoreElementsFilter {
+export interface CoreFilterItemGrades {
   // tslint:disable-next-line: variable-name
-  core_element_id?: string;
-  // tslint:disable-next-line: variable-name
-  main_topic_ids?: Array<string>;
+  grade_id: string;
+  subject_ids: Array<string>;
 }
 
-export interface GoalsGradeSubjectFilter {
+export interface MultiFilter {
   // tslint:disable-next-line: variable-name
-  subject_id?: string;
+  main_topic_id: string;
+  description: string;
   // tslint:disable-next-line: variable-name
-  core_element_ids?: Array<GoalsGradeSubjectCoreElementsFilter>;
+  grade_ids: Array<MultiFilterItemGrades>;
 }
 
-export interface GoalsGradeFilter {
+export interface MultiFilterItemGrades {
   // tslint:disable-next-line: variable-name
-  grade_id?: string;
+  grade_id: string;
+  subject_ids: Array<MultiFilterItemGradesItemSubjects>;
+}
+
+export interface MultiFilterItemGradesItemSubjects {
   // tslint:disable-next-line: variable-name
-  subject_ids?: Array<GoalsGradeSubjectFilter>;
+  subject_id: string;
+  core_element_ids: Array<string>;
 }
 
 export interface GoalsFilter {
   // tslint:disable-next-line: variable-name
-  goal_id?: string;
-  description?: string;
+  goal_id: string;
+  description: string;
   // tslint:disable-next-line: variable-name
-  grade_ids?: Array<GoalsGradeFilter>;
+  grade_ids: Array<GoalsFilterItemGrades>;
+}
+
+export interface GoalsFilterItemGrades {
+  // tslint:disable-next-line: variable-name
+  grade_id: string;
+  // tslint:disable-next-line: variable-name
+  subject_ids?: Array<GoalsFilterItemGradesItemSubjects>;
+}
+
+export interface GoalsFilterItemGradesItemSubjects {
+  // tslint:disable-next-line: variable-name
+  subject_id: string;
+  // tslint:disable-next-line: variable-name
+  core_element_ids: Array<GoalsFilterItemGradesItemSubjectsItemCoreElements>;
+}
+
+export interface GoalsFilterItemGradesItemSubjectsItemCoreElements {
+  // tslint:disable-next-line: variable-name
+  core_element_id: string;
+  // tslint:disable-next-line: variable-name
+  main_topic_ids: Array<string>;
 }
 
 export interface SourceFilter {
   // tslint:disable-next-line: variable-name
-  term_id?: string;
+  term_id: string;
   // tslint:disable-next-line: variable-name
-  name?: string;
+  description: string;
   // tslint:disable-next-line: variable-name
-  slug?: string;
+  slug: string;
+  grade_ids: Array<SourceFilterItemGrades>;
+}
+
+export interface SourceFilterItemGrades {
+  // tslint:disable-next-line: variable-name
+  grade_id: string;
+  // tslint:disable-next-line: variable-name
+  subject_ids?: Array<SourceFilterItemGradesItemSubjects>;
+}
+
+export interface SourceFilterItemGradesItemSubjects {
+  // tslint:disable-next-line: variable-name
+  subject_id: string;
+  // tslint:disable-next-line: variable-name
+  core_element_ids: Array<SourceFilterItemGradesItemSubjectsItemCoreElements>;
+}
+
+export interface SourceFilterItemGradesItemSubjectsItemCoreElements {
+  // tslint:disable-next-line: variable-name
+  core_element_id: string;
+  // tslint:disable-next-line: variable-name
+  main_topic_ids: Array<SourceFilterItemGradesItemSubjectsItemCoreElementsItemMainTopics>;
+}
+
+export interface SourceFilterItemGradesItemSubjectsItemCoreElementsItemMainTopics {
+  // tslint:disable-next-line: variable-name
+  main_topic_id: string;
+  // tslint:disable-next-line: variable-name
+  goal_ids: Array<string>;
 }
 
 export class FilterArticlePanel {
+  public LanguageFilter?: Array<LanguageFilter>;
   // tslint:disable-next-line: variable-name
   public grade_filter?: Array<GradeFilter>;
   // tslint:disable-next-line: variable-name
   public subject_filter?: Array<SubjectFilter>;
   // tslint:disable-next-line: variable-name
-  public multidisciplinay_filter?: Array<MultiFilter>;
-  // tslint:disable-next-line: variable-name
   public core_elements_filter?: Array<CoreFilter>;
+  // tslint:disable-next-line: variable-name
+  public multidisciplinay_filter?: Array<MultiFilter>;
   // tslint:disable-next-line: variable-name
   public goals_filter?: Array<GoalsFilter>;
   // tslint:disable-next-line: variable-name
@@ -742,8 +876,8 @@ export class FilterArticlePanel {
 }
 
 export class AssignmentList {
-
-  private assignmentService: AssignmentService = injector.get<AssignmentService>(ASSIGNMENT_SERVICE);
+  private assignmentService: AssignmentService =
+    injector.get<AssignmentService>(ASSIGNMENT_SERVICE);
 
   public filter: Filter = new Filter();
 
@@ -818,9 +952,11 @@ export class AssignmentList {
   }
 
   public async getAssignmentListOfStudentInList(studentId: number) {
-    return this.assignmentService.getAssignmentListOfStudentInList(studentId, this.filter);
+    return this.assignmentService.getAssignmentListOfStudentInList(
+      studentId,
+      this.filter
+    );
   }
-
 }
 
 export class AssignmentDistribute {
@@ -842,13 +978,16 @@ export class AssignmentDistribute {
     this.answeredDistributes = dto.answeredDistributes;
     this.totalDistributes = dto.totalDistributes;
     this.deadline = moment(dto.defaultEndDate);
-    this.subjects = dto.subjects.map(subject => new Subject(subject.id, subject.title));
+    this.subjects = dto.subjects.map(
+      subject => new Subject(subject.id, subject.title)
+    );
     this.grades = dto.grades.map(grade => new Grade(grade.id, grade.title));
   }
 }
 
 export class AssignmentDistributeList {
-  private assignmentService: AssignmentService = injector.get<AssignmentService>(ASSIGNMENT_SERVICE);
+  private assignmentService: AssignmentService =
+    injector.get<AssignmentService>(ASSIGNMENT_SERVICE);
   @observable private _distributes: Array<AssignmentDistribute> = [];
   @observable private _pages: number = 0;
   @observable private _state: StoreState = StoreState.PENDING;
@@ -871,7 +1010,8 @@ export class AssignmentDistributeList {
     this._state = StoreState.LOADING;
 
     try {
-      const { distributes, total_pages } = await this.assignmentService.getAssignmentDistributes(filter);
+      const { distributes, total_pages } =
+        await this.assignmentService.getAssignmentDistributes(filter);
 
       this._distributes = distributes;
       this._pages = total_pages;
@@ -885,16 +1025,16 @@ export class AssignmentDistributeList {
 
 export interface ArticleRepo {
   getArticles(params?: {
-    page: number,
-    perPage: number,
-    order?: string,
-    grades?: number,
-    subjects?: number,
-    core?: number | string,
-    goal?: number | string,
-    multi?: number,
-    source?: number,
-    searchTitle?: string
+    page: number;
+    perPage: number;
+    order?: string;
+    grades?: number;
+    subjects?: number;
+    core?: number | string;
+    goal?: number | string;
+    multi?: number;
+    source?: number;
+    searchTitle?: string;
   }): Promise<Array<Article>>;
   getArticlesByIds(ids: Array<number>): Promise<Array<Article>>;
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
@@ -944,7 +1084,6 @@ interface ArticleLevelArgs {
 }
 
 export class ArticleLevel {
-
   public readonly wpId: number;
   public readonly name: string;
   public readonly slug: string;
@@ -990,6 +1129,7 @@ export interface ArticleArgs {
   grepCoreelements?: Array<GreepElements>;
   grepGoals?: Array<GreepElements>;
   grepMaintopic?: Array<GreepElements>;
+  isHidden?: boolean;
 }
 
 export class Article {
@@ -1009,6 +1149,7 @@ export class Article {
   public grepCoreelements?: Array<GreepElements>;
   public grepGoals?: Array<GreepElements>;
   public grepMaintopic?: Array<GreepElements>;
+  public isHidden?: boolean;
 
   constructor(args: ArticleArgs) {
     this.id = args.id;
@@ -1027,6 +1168,7 @@ export class Article {
     this.grepCoreelements = args.grepCoreelements;
     this.grepGoals = args.grepGoals;
     this.grepMaintopic = args.grepMaintopic;
+    this.isHidden = args.isHidden;
   }
 }
 
@@ -1036,6 +1178,7 @@ export interface DomainArgs {
   url?: string;
   description?: string;
   featuredImage?: string;
+  image?: string;
   grades?: Array<Grade>;
   subjects?: Array<Subject>;
   isRead?: boolean;
@@ -1050,6 +1193,7 @@ export class Domain {
   public grades?: Array<Grade>;
   public subjects?: Array<Subject>;
   public readonly featuredImage?: string;
+  public image?: string;
   public isRead?: boolean;
   public grepGoals?: Array<GreepElements>;
   constructor(args: DomainArgs) {
@@ -1058,6 +1202,7 @@ export class Domain {
     this.description = args.description;
     this.url = args.url;
     this.featuredImage = args.featuredImage;
+    this.image = args.image;
     this.grades = args.grades;
     this.subjects = args.subjects;
     this.isRead = args.isRead;

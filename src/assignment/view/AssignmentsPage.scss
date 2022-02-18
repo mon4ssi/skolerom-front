@@ -4,6 +4,9 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  .gradesChildrenItems {
+    margin-top: 15px;
+  }
 
   .NewAssignment {
     position: absolute;

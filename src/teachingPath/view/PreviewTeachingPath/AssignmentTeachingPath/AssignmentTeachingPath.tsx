@@ -20,6 +20,7 @@ interface Props {
 
 interface State {
   myAssignments: Array<Assignment>;
+  idNode: number;
 }
 
 type ComponentProps = Props & RouteComponentProps;
@@ -30,7 +31,8 @@ class AssignmentTeachingPathComponent extends Component<ComponentProps, State> {
   constructor(props: ComponentProps) {
     super(props);
     this.state = {
-      myAssignments: []
+      myAssignments: [],
+      idNode: 0
     };
   }
   public componentDidMount() {
@@ -43,19 +45,20 @@ class AssignmentTeachingPathComponent extends Component<ComponentProps, State> {
             MyAssingmentsList.push(item.value as Assignment);
           }
         }
+        this.setState({ idNode : Number(e.id) });
       });
     });
     this.setState({ myAssignments : MyAssingmentsList });
   }
 
   public goToAssignment = (id: number) => () => {
-    const { questionaryTeachingPathStore } = this.props;
+    const { questionaryTeachingPathStore, content } = this.props;
     /* console.log(this.props.idTeachingPath); */
 
-    /*this.props.history.push(`/assignments/preview/${id}`, {
+    this.props.history.push(`/assignments/preview/${id}`, {
       teachingPath: this.props.idTeachingPath,
-      node: id
-    });*/
+      node: this.state.idNode
+    });
   }
 
   public renderCards = () => {

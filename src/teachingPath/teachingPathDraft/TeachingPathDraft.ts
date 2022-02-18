@@ -8,6 +8,8 @@ import {
   TeachingPathNode,
   TeachingPathItem,
   TeachingPathItemValue,
+  TeachingPathRepo,
+  TEACHING_PATH_REPO,
   TeachingPathNodeArgs
 } from 'teachingPath/TeachingPath';
 import { SAVE_DELAY } from 'utils/constants';
@@ -38,6 +40,7 @@ interface DraftTeachingPathArgs extends TeachingPathArgs {
 export class DraftTeachingPath extends TeachingPath {
 
   protected repo: DraftTeachingPathRepo = injector.get(DRAFT_TEACHING_PATH_REPO);
+  protected teachingPathRepo: TeachingPathRepo = injector.get<TeachingPathRepo>(TEACHING_PATH_REPO);
 
   protected _uuid: string;
   @observable protected _createdAt: string;
@@ -186,8 +189,9 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
-  public addSubjectBySave() {
+  public addSubjectBySave = async () => {
     let myFirstSubjects: Array<Subject> = [];
+    const idItems: Array<number> = [];
     const firstItems = this.content;
     if (this.subjects.length === 0) {
       if (firstItems.children.length > 0) {
@@ -196,12 +200,27 @@ export class DraftTeachingPath extends TeachingPath {
           myFirstSubjects = this.anySubjects(myFirstSubjects, element);
         });
         if (typeof(myFirstSubjects) !== 'undefined') {
+          myFirstSubjects.forEach((e) => {
+            idItems.push(e.id);
+          });
+          const getSubjecsItems = await this.teachingPathRepo.getSubjectWpIds(idItems);
           this.subjects.splice(0, this.subjects.length);
-          myFirstSubjects!.forEach((e) => {
+          getSubjecsItems!.forEach((e) => {
             this.subjects.push(e);
           });
         }
       }
+    }
+  }
+
+  @action
+  public improbeSubjects(subjects: Array<Subject>) {
+    if (this.isCopy) {
+      subjects!.forEach((e) => {
+        if (!this.subjects.includes(e)) {
+          this.subjects.push(e);
+        }
+      });
     }
   }
 
@@ -256,8 +275,9 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
-  public addGradesBySave() {
+  public addGradesBySave = async () => {
     let myFirstGrades: Array<Grade> = [];
+    const idItems: Array<number> = [];
     const firstItems = this.content;
     if (this.grades.length === 0) {
       if (firstItems.children.length > 0) {
@@ -266,8 +286,12 @@ export class DraftTeachingPath extends TeachingPath {
           myFirstGrades = this.anyGrades(myFirstGrades, element);
         });
         if (typeof(myFirstGrades) !== 'undefined') {
+          myFirstGrades.forEach((e) => {
+            idItems.push(e.id);
+          });
+          const getGradesItems = await this.teachingPathRepo.getGradeWpIds(idItems);
           this.grades.splice(0, this.grades.length);
-          myFirstGrades!.forEach((e) => {
+          getGradesItems!.forEach((e) => {
             this.grades.push(e);
           });
         }
@@ -340,6 +364,73 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
+  public setGuidance = (value: string) => {
+    this._guidance = value;
+    this.save();
+  }
+
+  public setValidateHasGuidance = (value: string) => {
+    const guidanceBlank1 = '<p><br></p>';
+    const guidanceBlank2 = '';
+
+    if (value !== guidanceBlank1 && value !== guidanceBlank2) {
+      this._hasGuidance = true;
+    } else {
+      this._hasGuidance = false;
+
+      if (this.guidance !== guidanceBlank1 && this.guidance !== guidanceBlank2) {
+        this._hasGuidance = true;
+      } else {
+        if (this.content.guidance !== guidanceBlank1 && this.content.guidance !== guidanceBlank2) {
+          this._hasGuidance = true;
+        } else {
+          let children: Array<EditableTeachingPathNode> = [];
+          let childrenTmp: Array<EditableTeachingPathNode> = this.content.children;
+          let continueLoop = true;
+          let nroNodes: number = 0;
+
+          //
+          while (continueLoop) {
+            nroNodes = 0;
+            children = childrenTmp;
+            childrenTmp = [];
+
+            children.some((item) => {
+              if (item.guidance !== guidanceBlank1 && item.guidance !== guidanceBlank2) {
+                this._hasGuidance = true;
+                return true;
+              }
+
+              if (item.children.length > 0) {
+                item.children.forEach((child) => {
+                  if (child.guidance !== guidanceBlank1 && child.guidance !== guidanceBlank2) {
+                    this._hasGuidance = true;
+                    return true;
+                  }
+
+                  if (child.children.length > 0) {
+                    childrenTmp.push(child);
+                  }
+                });
+
+                nroNodes += 1;
+              }
+            });
+
+            continueLoop = (nroNodes > 0);
+          }
+        }
+      }
+    }
+  }
+
+  @action
+  public setGrepSourcesIds = (data: Array<number>) => {
+    this._sources = data;
+    this.save();
+  }
+
+  @action
   public setGrepCoreElementsIds = (data: Array<number>) => {
     this._grepCoreElementsIds = data;
     this.save();
@@ -366,8 +457,9 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
-  public setGrepReadingInSubjectId = (data: number) => {
-    this._grepReadingInSubjectId = data;
+  public setGrepReadingInSubjectId = (data: Array<number>) => {
+    this._grepReadingInSubjectsIds = data;
+    this.isRunningPublishing = true;
     this.save();
   }
 
@@ -402,7 +494,7 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   public removeGrade(removableGrade: Grade) {
-    this._grades = this.grades.filter(grade => grade.id !== removableGrade.id);
+    this._grades = this.grades.filter(grade => Number(grade.id) !== Number(removableGrade.id));
     this.save();
   }
 
@@ -438,6 +530,17 @@ export class DraftTeachingPath extends TeachingPath {
     return this.isDraftSaving;
   }
 
+  @action
+  public handleOpenTeacherGuidance = (nroLevel: string): void => {
+    const modalTG = Array.from(document.getElementsByClassName('modalContentTG') as HTMLCollectionOf<HTMLElement>);
+    const modalTGBack = Array.from(document.getElementsByClassName('modalContentTGBackground') as HTMLCollectionOf<HTMLElement>);
+    modalTG[0].classList.add('open');
+    modalTGBack[0].classList.remove('hide');
+
+    const editDescript = (document.getElementsByClassName(`jr-desEdit${nroLevel}`)[0] as HTMLDivElement);
+    const editInputText = (editDescript.getElementsByClassName('ql-editor')[0] as HTMLInputElement);
+    editInputText.focus();
+  }
 }
 
 interface EditableTeachingPathNodeArgs extends TeachingPathNodeArgs {
@@ -462,7 +565,7 @@ export class EditableTeachingPathNode extends TeachingPathNode {
   private validateTitle() {
     if (!this.selectQuestion && this.children.length) {
       throw new TeachingPathValidationError(
-        'edit_teaching_path.validation.title_words_count'
+        'edit_teaching_path.validation.title_node_words_count'
       );
     }
   }
@@ -515,13 +618,37 @@ export class EditableTeachingPathNode extends TeachingPathNode {
   }
 
   @action
+  public setGuidance = (value: string) => {
+    this._guidance = value;
+    this.draftTeachingPath.save();
+  }
+
+  @action
+  public improbeSubjects = (subjects: Array<Subject>) => {
+    this.draftTeachingPath.improbeSubjects(subjects);
+  }
+
+  @action
   public addItem = (item: TeachingPathItemValue) => {
     this._items!.push(new TeachingPathItem({ type: this.type, value: item }));
     this.draftTeachingPath.save();
   }
 
   @action
-  public editItem = (item: TeachingPathItemValue) => {
+  public editItem = (idChanged: number, item: TeachingPathItemValue) => {
+    const newItem = new TeachingPathItem({ type: this.type, value: item });
+    let itemIndex = 0;
+    this._items!.forEach((e, index) => {
+      if (Number(e.value.id) === Number(idChanged)) {
+        itemIndex = index;
+      }
+    });
+    this._items![itemIndex] = newItem;
+    this.draftTeachingPath.save();
+  }
+
+  @action
+  public editItemDomain = (item: TeachingPathItemValue) => {
     const newItem = new TeachingPathItem({ type: this.type, value: item });
     this._items![0] = newItem;
     this.draftTeachingPath.save();

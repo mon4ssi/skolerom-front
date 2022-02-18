@@ -47,7 +47,7 @@ class StudentAssignments extends Component<Props & RouteComponentProps, State> {
     filter.searchQuery = QueryStringHelper.getString(history, QueryStringKeys.SEARCH);
     filter.isEvaluated = QueryStringHelper.getString(history, QueryStringKeys.IS_EVALUATED);
     filter.isAnswered = QueryStringHelper.getString(history, QueryStringKeys.IS_ANSWERED);
-    filter.order = QueryStringHelper.getString(history, QueryStringKeys.ORDER, SortingFilter.ASC);
+    filter.order = QueryStringHelper.getString(history, QueryStringKeys.ORDER, SortingFilter.DESC);
     filter.orderField = SortingFilter.DEADLINE;
 
     assignmentListStore!.getStudentAssignmentList();

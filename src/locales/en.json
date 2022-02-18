@@ -200,7 +200,8 @@
     "active": "Active",
     "inactive": "Inactive",
     "due_first": "due first",
-    "due_last": "due last"
+    "due_last": "due last",
+    "hidden_related": "Hide articles in the student view"
   },
   "assignment list": {
     "question": "question",
@@ -463,7 +464,8 @@
       "description":"Connecting your teaching path is required when sharing publicity. Please select the appropriate educational goals below before publishing and distribution",
       "descrption_assignment":"Connecting your teaching path is required when sharing publicity. Please select the appropriate educational goals below before publishing and distribution",
       "description_privado":"Linking to the curriculum is only necessary when you publish publicly, but you are welcome to link the content to relevant competence goals below if desired."
-    }
+    },
+    "source": "Source"
   },
   "distribution_page": {
     "distribute_assignment": "Distribute assignment",
@@ -581,7 +583,8 @@
       "after_distribution": "Teaching path successfully distributed!",
       "cant_publish": "You must complete the Curriculum section before publish",
       "cant_publish_goals": "You can't publish because no educational goals are available",
-      "notdata_goals": "There are no established goals for these criteria"
+      "notdata_goals": "There are no established goals for these criteria",
+      "source_required": "Please set the source for this content"
     },
     "title": {
       "new_entity": "Publish teaching path",
@@ -625,6 +628,7 @@
     },
     "validation": {
       "title_words_count": "Title cannot be empty",
+      "title_node_words_count": "Activity header cannot be empty",
       "description_words_count": "Description cannot be empty",
       "already_editing": "Someone is already editing teaching path",
       "empty_content": "At least 1 path should be created"
@@ -642,7 +646,9 @@
     },
     "paths": {
       "main_teaching_path_title": "Teaching path",
-      "teaching_path_title": "Teaching path title"
+      "teaching_path_title": "Teaching path title",
+      "node_teaching_path_title": "Teaching path title",
+      "node_teaching_path_place_holder": "Teaching path"
     },
     "merge": "Merge path",
     "expand": "Expand path",
@@ -651,6 +657,25 @@
     "no_title": "No title",
     "No results found": "No results found",
     "no_options": "No options"
+  },
+  "teacherGuidance": {
+    "name": "Teacher guidance",
+    "download_pdf": "Download as PDF",
+    "option": "option",
+    "titleAdd": "ADD TEACHER GUIDANCE",
+    "titleEdit": "EDIT TEACHER GUIDANCE",
+    "titleRead": "TEACHER GUIDANCE",
+    "titleSub": "How is the teacher supposed to use this teaching path?",
+    "titleSubRead": "This is how you can use the teaching path",
+    "titleSubReadAssig": "This is how you can use the assignment",
+    "save_and_close": "Save and close",
+    "open": "Open teacher guidance",
+    "noAdded": "no teacher guidance added",
+    "buttons": {
+      "add": "Add teacher guidance",
+      "edit": "Edit teacher guidance",
+      "read": "Read teacher guidance"
+    }
   },
   "students_list": {
     "title":"Students",
@@ -704,6 +729,7 @@
     "edit": "Edith Path",
     "delete": "Delete Path",
     "close": "Close",
+    "save": "Save",
     "close_maintenance": "Close",
     "maintenance": "Scheduled maintenance today between 4pm and 7pm. The System can be unresponsive in this period",
     "close_assignment": "Close",
@@ -716,7 +742,9 @@
     },
     "grade": "Grade",
     "student_level": "Student level",
-    "visibility": "visibility"
+    "visibility": "visibility",
+    "language": "Languages",
+    "downloading": "Downloading"
   },
   "activity_page": {
     "Hello": "Hello",

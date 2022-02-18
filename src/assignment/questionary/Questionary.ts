@@ -5,6 +5,7 @@ import { SAVE_DELAY } from 'utils/constants';
 import { injector } from 'Injector';
 import { Assignment, TypedQuestion } from 'assignment/Assignment';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
+import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
 
 export const QUESTIONARY_REPO = 'QUESTIONARY_REPO';
 const isSavingDuration = 1000;

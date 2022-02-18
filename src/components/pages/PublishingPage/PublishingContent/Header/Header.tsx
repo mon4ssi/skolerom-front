@@ -6,6 +6,7 @@ import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentS
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
 import { DraftAssignment } from 'assignment/assignmentDraft/AssignmentDraft';
 import { EditEntityLocaleKeys } from 'utils/enums';
+import { UserType } from 'user/User';
 
 import defaultUserPhoto from 'assets/images/profile-avatar.png';
 import questionImg from 'assets/images/questions.svg';
@@ -37,11 +38,21 @@ export class Header extends Component<Props> {
     );
   }
 
+  public imgConstant() {
+    const { store } = this.props;
+    const { currentEntity } = store!;
+    const currentUser = store!.getCurrentUser()!;
+    return (
+      <img src={currentUser.photo || defaultUserPhoto} alt="teacher-img" />
+    );
+  }
+
   public render() {
     const { store } = this.props;
     const { currentEntity } = store!;
 
     const currentUser = store!.getCurrentUser()!;
+    const isContentManager = (currentUser.type === UserType.ContentManager) ?  false : true;
 
     const levelImage = currentEntity!.levels.includes(thirdLevel) ? thirdLevelImg :
     currentEntity!.levels.includes(secondLevel) ? secondLevelImg :
@@ -57,7 +68,8 @@ export class Header extends Component<Props> {
           </div>
 
           <div className="teacher flexBox spaceBetween alignCenter">
-            <img src={currentUser.photo || defaultUserPhoto} alt="teacher-img" />
+
+            {isContentManager && this.imgConstant()}
 
             <div className="teacherInfo flexBox dirColumn justifyCenter">
               <div>

@@ -79,9 +79,9 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
 
   public renderArticlesCards = (article: Article) => {
     const { readOnly } = this.props;
-    const levels = article.levels && article.levels.length && article.levels![0].childArticles!.length ? article.levels![0].childArticles!.map(
+    /* const levels = article.levels && article.levels.length && article.levels![0].childArticles!.length ? article.levels![0].childArticles!.map(
       (article: Article) => Number(article.levels![0].slug.split('-')[1])
-    ) : [Number(article.levels![0].slug.split('-')[1])];
+    ) : [Number(article.levels![0].slug.split('-')[1])]; */
     this.state.allArticles += 1;
     if (article.isRead) {
       this.state.allArticlesRead += 1;
@@ -99,7 +99,7 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
           description={article.excerpt}
           grades={article.grades}
           img={article.images && article.images!.url}
-          levels={levels || []}
+          // levels={levels || []}
         />
         <img src={article.isRead ? checkActive : checkInactive} alt="checkbox" className="AssignmentArticlesToReading__checkbox"/>
       </div>

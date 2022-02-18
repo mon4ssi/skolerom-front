@@ -1,43 +1,43 @@
 {
   "loading": "Laster...",
-  "assignment": "oppgaven",
+  "assignment": "oppgave",
   "teaching path": "læringssti",
   "login_page": {
     "Log in to Temabok": "Logg inn på Skolerom",
-    "Log in with Feide": "Logg inn via Feide",
+    "Log in with Feide": "Logg inn med Feide",
     "Feide": "Feide",
     "Or": "Eller",
-    "Log in with user": "Logg inn med bruker",
+    "Log in with user": "Logg inn med brukernavn og passord",
     "Username": "Brukernavn",
     "Password": "Passord",
     "Log in": "Logg inn",
-    "Forgot password": "Glemt passordet?",
+    "Forgot password": "Glemt passord?",
     "Log in to Skolerom": "Logg inn på Skolerom",
     "Copy url": "Kopier url",
-    "not permission": "Beklager, du har ikke tilgang til denne plattformen. Kontakt organisasjonen din for å få tilgang"
+    "not permission": "Beklager, du har ikke tilgang til denne plattformen. Kontakt organisasjonen din for å få tilgang."
   },
   "assignments_page": {
     "no_results": "Ingen resultater"
   },
   "answers": {
     "Answers": "Besvarelser",
-    "Not evaluated": "Ikke evaluert",
-    "Evaluate": "Evaluer besvarelse",
-    "Passed": "Vurdert",
-    "Not passed": "Ikke vurdert",
+    "Not evaluated": "Ikke vurdert",
+    "Evaluate": "Vurder besvarelse",
+    "Passed": "Bestått",
+    "Not passed": "Ikke bestått",
     "Correct": "Riktig",
-    "Comment to student": "Fremovermelding til eleven",
+    "Comment to student": "Melding til eleven",
     "Evaluation": "Vurdering",
     "Save changes": "Lagre endringer",
-    "Answer edited": "Svar redigert",
-    "enter your comment": "Skriv din fremovermelding",
+    "Answer edited": "Svar er endret",
+    "enter your comment": "Skriv din melding",
     "past": "Svarfrist utløpt",
     "comment answer": "Kommenter svar",
     "save comment": "Lagre kommentar",
     "teachers comment": "Kommentar fra lærer",
     "validation": {
       "markOrStatus": "Du må velge en karakter eller en status",
-      "deadline": "Du kan ikke vurdere oppgaven nå. Fristen er ennå ikke utløpt"
+      "deadline": "Du kan ikke vurdere oppgaven nå. Fristen er ennå ikke utløpt."
     },
     "Due": "Svarfrist",
     "Due in": "Svarfrist",
@@ -45,15 +45,15 @@
     "days": "dager",
     "question": "spørsmål",
     "questions": "spørsmål",
-    "step": "step",
-    "steps": "steps",
-    "summary": "Sammendrag vurdering",
-    "not comment": "har ikke kommet med noen kommentarer ennå.",
-    "view": "Les vurdering",
-    "answer_assignment": "Svar på oppgave",
-    "answer_teaching_path": "Svar på læringsstien",
+    "step": "steg",
+    "steps": "steg",
+    "summary": "Oppsummering",
+    "not comment": "Ingen kommentarer ennå.",
+    "view": "Se vurdering",
+    "answer_assignment": "Oppgavebesvarelse",
+    "answer_teaching_path": "Besvarelse læringssti",
     "back": "Tilbake til alle oppgaver",
-    "article_read": "Artikkel lest",
+    "article_read": "Artikkel er lest",
     "teaching_path_back": "Tilbake til alle læringsstier"
   },
   "header": {
@@ -72,7 +72,7 @@
     "Statictics": "Statistikk",
     "Help": "Hjelp",
     "Shortcuts": "Snarveier",
-    "Feide settings": "Feide innstillinger",
+    "Feide settings": "Feide-innstillinger",
     "Change Language": "Endre språk",
     "Log out": "Logg ut",
     "Back": "Tilbake",
@@ -90,10 +90,10 @@
       "Articles": "Les og finn artikler",
       "Publications": "Les våre temabøker",
       "Sound articles": "Lytt til våre lydartikler",
-      "About skolerom": "Les om skolerom",
+      "About skolerom": "Les om Skolerom",
       "My account": "Kontoinnstillinger",
       "Help": "Hjelp",
-      "keyboard": "keyboards"
+      "keyboard": "tastatur"
     }
   },
   "sidebar": {
@@ -106,14 +106,14 @@
     "Log out": "Logg ut",
     "Evaluation": "Vurdering",
     "alt": {
-      "Activity": "Gå til aktivitet oversikt",
+      "Activity": "Gå til aktivitetsoversikt",
       "Teaching Paths": "Gå til læringsstier",
       "Assignments": "Gå til oppgaver",
       "Students": "Gå til elevoversikten",
       "Evaluation": "Gå til vurderinger"
     },
     "title": {
-      "Activity": "Gå til aktivitet oversikt",
+      "Activity": "Gå til aktivitetsoversikt",
       "Teaching Paths": "Gå til læringsstier",
       "Assignments": "Gå til oppgaver",
       "Students": "Gå til elevoversikten",
@@ -121,8 +121,8 @@
     }
   },
   "subjects": {
-    "Science": "Vitenskap",
-    "Ethics & social responsibility": "Etikk og samfunnsansvar",
+    "Science": "Naturfag",
+    "Ethics & social responsibility": "Samfunnsfag",
     "History": "Historie",
     "Geography": "Geografi",
     "Music": "Musikk",
@@ -143,7 +143,7 @@
   },
   "assignment preview": {
     "ASSIGNMENT": "Oppgave",
-    "min completion time": "min fullføringstid",
+    "min completion time": "anslått tid for gjennomføring",
     "questions": "spørsmål",
     "By": "Av",
     "version": "versjon",
@@ -155,7 +155,7 @@
     "VIEWS": "Visninger",
     "STUDENT HAVE COMPLETED ASSIGNMENT": "Eleven har fullført oppgaven",
     "STUDENTS HAVE COMPLETED ASSIGNMENT": "Elever har fullført oppgaven",
-    "TEACHER HAVE USED ASSIGNMENT WITH THEIR STUDENTS": "Lærere har brukt oppgaven i sin undervisning",
+    "TEACHER HAVE USED ASSIGNMENT WITH THEIR STUDENTS": "Lærer har brukt oppgaven i sin undervisning",
     "TEACHERS HAVE USED ASSIGNMENT WITH THEIR STUDENTS": "Lærere har brukt oppgaven i sin undervisning",
     "View assignment": "Vis oppgave",
     "Edit assignment": "Rediger oppgave",
@@ -163,8 +163,8 @@
     "Statistics": "Statistikk",
     "Start assignment": "Start oppgave",
     "continue_assignment": "Fortsett på oppgave",
-    "Assignment articles": "Oppgave artikler",
-    "Finish reading article": "Ferdig med å lese",
+    "Assignment articles": "Artikler tilknyttet oppgave",
+    "Finish reading article": "Les ferdig",
     "Questions count": "{answeredQuestionsCount} av {totalQuestionsCount}",
     "questions answered": "spørsmål er besvart"
   },
@@ -175,32 +175,33 @@
     "Choose Core": "Velg kjerneelementer",
     "Choose Multi": "Velg tverrfaglig tema",
     "Choose reading": "Velg lesing i faget",
-    "Class": "trinn",
+    "Class": "klasse",
     "Popularity": "Popularitet",
     "Search for assignments": "Søk etter oppgaver...",
     "Search": "Søk...",
     "Grade": "trinn",
     "Newest": "Nyeste",
     "Latest": "Siste",
-    "Earliest": "Nyeste",
-    "Oldest": "Eldst",
+    "Earliest": "Første",
+    "Oldest": "Eldste",
     "Sort by deadline": "Sorter etter svarfrist",
-    "Evaluation status": "Status vurdering",
+    "Evaluation status": "Status for vurdering",
     "Answer status": "Svarstatus",
     "Choose status": "Velg status",
-    "Answered": "Levert",
-    "Not answered": "Ikke levert",
+    "Answered": "Besvart",
+    "Not answered": "Ikke besvart",
     "Assigned": "Tildelt",
     "Unassigned": "Ikke tildelt",
     "Evaluated": "Vurdert",
     "Not evaluated": "Ikke vurdert",
-    "passed": "Vurdert",
-    "not_passed": "Ikke vurdert",
+    "passed": "Bestått",
+    "not_passed": "Ikke bestått",
     "choose activity": "Velg status",
     "active": "Aktiv",
     "inactive": "Inaktiv",
     "due_first": "først",
-    "due_last": "sist"
+    "due_last": "sist",
+    "hidden_related": "Hide articles in the student view"
   },
   "assignment list": {
     "question": "spørsmål",
@@ -220,9 +221,9 @@
     "copy": "Kopi av oppgaven er opprettet"
   },  
   "spanicon": {
-    "DOMAIN": "Domain.com",
-    "ARTICLE": "Article",
-    "ASSIGNMENT": "Assignment"
+    "DOMAIN": "Domene",
+    "ARTICLE": "Artikkel",
+    "ASSIGNMENT": "Oppgave"
   },
   "new assignment": {    
     "greep": {
@@ -235,7 +236,7 @@
     "go_back": "Gå tilbake",
     "Create assignment": "Lag oppgave",
     "publish": "Publiser",
-    "Distribute": "Distribuer",
+    "Distribute": "Del ut",
     "Changes made": "Endringer utført...",
     "publish_assignment": "Publiser oppgave",
     "publish_and_distribute_assignment": "Publiser og distribuer",
@@ -246,7 +247,7 @@
       "description_placeholder": "Skriv en beskrivelse av oppgaven ..."
     },
     "New assignment": "Ny oppgave",
-    "new_assignment_draft": "Ny oppgave kladd",
+    "new_assignment_draft": "Ny oppgavekladd",
     "Add question": "Legg til spørsmål",
     "TEXT": "Tekst",
     "MULTIPLE_CHOICE": "Flervalg",
@@ -256,7 +257,7 @@
       "TEXT": "Spørsmål med tekstbesvarelse.",
       "MULTIPLE_CHOICE": "Lag flere valgalternativer og definer riktig svar.",
       "TEACHING_PATH": "Gi elevene mulighet til å velge sine neste undervisningsoppgaver.",
-      "IMAGE_CHOICE": "Velg bilder og definer riktig bilde som svar."
+      "IMAGE_CHOICE": "Velg bilder og marker riktig bilde som svar."
     },
     "text": "Tekst",
     "magazine": "Temabok",
@@ -270,11 +271,11 @@
     "Nothing to see yet": "Ingenting å se ennå!",
     "Preview assignment here": "Forhåndsvis oppgaven her når du har lagt til det første spørsmålet.",
     "Question": "Spørsmål",    
-    "type_or_paste": "Skriv eller lim inn lenken",
+    "type_or_paste": "Skriv inn eller lim inn lenken",
     "add_link": "Legg til lenke",
     "Enter a question": "Skriv inn et spørsmål",
     "enter_a_description": "Legg til beskrivelse",
-    "chose_an_images": "Velg bilder",
+    "chose_an_images": "Velg bilde",
     "chose_an_videos": "Velg video",
     "New answer": "Nytt svar",
     "Add image": "Legg til bilde",
@@ -285,18 +286,18 @@
     "Images from article": "Bilder fra artikkelen",
     "Upload images": "Last opp bilder",
     "search_for_images": "Søk etter bilder...",
-    "search_for_videos": "Søk etter video ...",
+    "search_for_videos": "Søk etter videoer…",
     "image selected": "bilde valgt",
     "images_selected": "bilder valgt",
     "image_selected": "Bilde valgt",
     "image_not_selected": "Bildet er ikke valgt",
-    "videos_selected": "video valgt",
+    "videos_selected": "Video valgt",
     "add_to_assignment": "Legg til oppgaven",
     "use_this_image": "Bruk dette bildet",
-    "Drop files to upload": "Slipp filer her som du vil laste opp",
+    "Drop files to upload": "Slipp filer du vil laste opp her",
     "or": "eller",
     "Choose files": "Velg filer",
-    "Duplicate question": "Dupliser spørsmål",
+    "Duplicate question": "Dupliser spørsmålet",
     "Remove question": "Slett spørsmålet",
     "Preview": "Forhåndsvisning",
     "Write your answer here": "Skriv svaret her...",
@@ -310,18 +311,18 @@
     "Save and distribute": "Lagre og distribuer",
     "Distribute assignment": "Distribuer oppgave",
     "Distribute to students": "Send til elevene",
-    "Assign to class": "Tildel til klassen / elevene",
+    "Assign to class": "Tildel til klassen",
     "Distribute with link": "Distribuer med lenke",
     "Subjects": "Fag",
-    "Grade": "Klasser",
+    "Grade": "Klassetrinn",
     "Student level": "Elevens spor",
     "question": "spørsmål",
     "questions": "spørsmål",
     "Assigned to": "Tilordnet",
     "This assignment is not assigned to any students yet": "Denne oppgaven er ikke tildelt noen elever ennå..",
     "Click to set due date": "Klikk for å angi forfallsdato.",
-    "My grades": "Mine klasser",
-    "Individual students": "Individuelle elever",
+    "My grades": "Mine vurderinger",
+    "Individual students": "Enkeltelever",
     "Search your classes": "Søk i klassene dine...",
     "student": "elev",
     "students": "elever",
@@ -330,34 +331,34 @@
     "Name": "Navn",
     "student selected": "elev valgt",
     "students selected": "elever valgt",
-    "Assign students": "Tildel elever",
+    "Assign students": "Tildel til elever",
     "Congratulations": "Bra jobbet, oppgaven din er nå publisert!",
-    "Starting at page": "Fra siden",
+    "Starting at page": "Start fra side",
     "Last edit was made": "Siste endring utført",
     "just now": "akkurat nå",
-    "Answer": "Spørsmål",
+    "Answer": "Svar",
     "write_your_answer_here": "Skriv ditt svar her...",
     "Done": "Ferdig",
     "after_saving": "Bra jobbet, oppgaven er lagret!",
     "no_images_found": "Ingen bilder funnet",
-    "no_videos_found": "Ingen video funnet",
-    "already_editing": "Noen redigerer akkurat nå, oppdater siden",
+    "no_videos_found": "Ingen videoer funnet",
+    "already_editing": "Andre redigerer akkurat nå. Vent litt og oppdater siden.",
     "copy_title_not_allow": "Vennligst ta bort \"Kopi\" og lag din egen tittel før publisering",
     "validation": {
-      "title_words_count": "Tittelen kan ikke være tom.",
+      "title_words_count": "Skriv inn tittel.",
       "description_words_count": "Beskrivelsen kan ikke være tom",
-      "required_grades_and_subjects": "Vennligst Velg trinn og fag!",
+      "required_grades_and_subjects": "Vennligst velg trinn og fag!",
       "number_of_questions": "Legg til minst ett spørsmål for å fortsette.",
       "question": {
         "required_title": "Alle spørsmål må ha en tittel.",
         "required_option_image": "Vennligst legg til bilde i svaret.",
         "required_option_title": "Vennligst fyll ut eller slett blanke spørsmål for å fortsette.",
-        "required_one_correct_answer": "Velg minst et riktig svaralternativ for å fortsette.",
+        "required_one_correct_answer": "Velg minst ett riktig svaralternativ for å fortsette.",
         "required_not_repeating_titles": "Alle svar må være unike.",
         "number_of_options": "Angi minst to svaralternativer for å fortsette.",
         "number_of_images": "Maksimalt 20 bilder kan benyttes.",
         "number_of_videos": "Maksimalt 10 videoer kan benyttes.",
-        "description_length": "Spørsmålets beskrivelse kan kun inneholde inntil 2000 tegn.",
+        "description_length": "Beskrivelsen kan være på maksimalt 2000 tegn.",
         "required_all_fields": "Alle aktuelle felt må fylles ut."
       }
     },
@@ -365,7 +366,7 @@
     "Set as related articles": "Angi som relaterte artikler",
     "Change related article": {
       "single": "Endre relatert artikkel",
-      "plural": "Endre relatert artikler"
+      "plural": "Endre relaterte artikler"
     },
     "No results found": "Søket ditt ga ingen resultater",
     "articles selected": "artikler valgt",
@@ -373,7 +374,7 @@
     "grade": " trinn",
     "indicadorgrade": ".",
     "go_back_to_teaching_path": "Oppgaven ble ikke publisert og vil ikke bli lagt til i læringsstien. Er du sikker på at du vil tilbake til læringsstien?",
-    "specify": "Spesifiser 1 eller flere relaterte artikler for å få forslag til bilder, PDF-er, videoer og lyd.",
+    "specify": "Spesifiser en eller flere relaterte artikler for å få forslag til bilder, PDF-er, videoer og lyd.",
     "no_title": "Uten tittel"
   },
   "evaluation_page": {
@@ -413,7 +414,7 @@
   "current_assignment_page": {
     "Assignment overview": "Oppgaveoversikt",
     "readNotArticles": "Det er nødvendig å lese alle artiklene for å fullføre oppgaven",
-    "Exit": "Gå tilbake",
+    "Exit": "Avslutt",
     "Exit assignment": "Avslutt oppgave",
     "Click to view full size version of images": "Klikk for å se fullversjon av bilder",
     "Press Shift + Arrow Right for next question": "Trykk Shift + \u2192 for neste spørsmål",
@@ -424,25 +425,25 @@
     "submit_all_questions_answered": "Alle spørsmål besvart!",
     "submit": "Send inn svar",
     "complete_and_submit_button": "Send inn oppgaven",
-    "exit_confirm": "Er du sikker på at du vil lukke?",
+    "exit_confirm": "Er du sikker på at du vil avslutte?",
     "save_confirm": "Ønsker du å lagre endringene?",
     "submited_title": "Ditt svar har blitt sendt inn!",
     "submited_description_part_1": "Læreren din har fått beskjed om din besvarelse.",
     "submited_description_part_2": "s sekunder.",
     "submitted_description": "Læreren din har fått beskjed om din besvarelse.",
-    "after_article_submit": "Artikkelnavnet er merket som lest!",
+    "after_article_submit": "Artikkel er merket som lest!",
     "submited_button_title": "Gå til min side",
     "delete_all_answers": "Slett alle besvarelser",
     "revert_button": "Tilbakestill til tidligere innsendt versjon",
-    "saved_successfuly": "Lagret vellykket"
+    "saved_successfuly": "Lagring vellykket"
   },
   "publishing_page": {
     "publish_assignment": "Publiser oppgave",
     "subject": "fag",
     "grade": "trinn",
-    "student_level": "Nivå",
+    "student_level": "Spor",
     "visibility": "Synlighet",
-    "visibility_description":"Velg offentlig dersom du vil dele innholdet med alle Skoleroms brukere, eller privat hvis du vil begrense det til deg selv og de du velger å dele det med senere.",
+    "visibility_description":"Velg privat om du kun skal dele innholdet med dine elever. Velg offentlig for å dele med alle Skolerom sine brukere.",
     "public": "Offentlig",
     "private": "Privat",
     "teacher": "Lærer: ",
@@ -459,10 +460,11 @@
     "grep": {
       "title":"Koble til læreplanen",
       "title_private":"Velg trinn og fag",
-      "description":"Når du deler offentlig må du koble læringsstien til læreplanen. Velg relevante kompetansemål her under før publisering og distribusjon.",
-      "descrption_assignment":"Når du deler offentlig må du koble oppgaven til læreplanen. Velg relevante kompetansemål her under før publisering og distribusjon.",
-      "description_privado":"Kobling til læreplanen er kun nødvendig når du publiserer offentlig, men du kan gjerne koble innholdet til relevante kompetansemål her under hvis ønskelig."
-    }
+      "description":"Når du deler offentlig, må du koble læringssti til læreplan. Velg relevante fag, klassetrinn, kompetansemål, kjerneelementer og lesing i fag for å kunne lagre og distribuere læringsstien.",
+      "descrption_assignment":"Når du deler offentlig, må du koble oppgaven til læreplan. Velg relevante fag, klassetrinn, kompetansemål, kjerneelementer og lesing i fag for å kunne lagre og distribuere oppgaven.",
+      "description_privado":"Kobling til læreplan er bare obligatorisk når du deler offentlig. For å lettere kunne søke i ditt eget innhold kan du velge å legge til kompetansemål her."
+    },
+    "source": "Kilde"
   },
   "distribution_page": {
     "distribute_assignment": "Distribuer oppgave",
@@ -470,7 +472,7 @@
     "distribute_to_students": "Distribuer til elever",
     "assign_to": "Tilordnet",
     "distribute_with_link": "Del oppgave via lenke",
-    "summary": "Sammendrag",
+    "summary": "Oppsummering",
     "assigned_to": "Tildelt til",
     "click_to_set_due_date": "(Klikk for å angi innleveringsfrist)",
     "include_exclude": "Inkluder / Ekskluder",
@@ -480,21 +482,21 @@
     "level": "Spor",
     "name": "Navn",
     "students_selected": "{numberOfSelectedStudents} elever valgt",
-    "assign_students": "Tildel elever",
+    "assign_students": "Tildel til elever",
     "number_of_questions": " spørsmål",
-    "due_date": "Tidsfrist",
+    "due_date": "Innleveringsfrist",
     "distribution_validation": "Vennligst velg elevene som skal motta oppgaven.",
-    "due_today": "Innleveringsfrist i dag ",
+    "due_today": "Innleveringsfrist er i dag ",
     "from_now": "fra nå ",
     "search_placeholder": "Søk etter klasser eller elever...",
     "change": "endre",
     "assignment_is_assigned_to_user": "Oppgave har blitt lagt til under Mine oppgaver",
     "assignment_is_already_assigned": "Oppgaven er allerede tildelt eleven",
-    "assignment_cannot_be_assigned": "Oppgaven kan ikke tildeles deg",
+    "assignment_cannot_be_assigned": "Oppgaven kan ikke tildeles",
     "teaching_path_is_assigned_to_user": "Læringsstien er allerede lagt til i oversikten Mine læringsstier",
     "teaching_path_is_already_assigned": "Læringsstien er allerede tildelt eleven",
     "teaching_path_cannot_be_assigned": "Læringsstien kan ikke tildeles deg",
-    "current_date_validation": "Du kan ikke velge gjeldende dato",
+    "current_date_validation": "Velg en annen dato enn i dag",
     "copy_tooltip_title": "Lenke kopiert",
     "new assignment": {
       "no_assigned_students": "Denne oppgaven er ikke tildelt noen elever ennå.",
@@ -502,7 +504,7 @@
     },
     "edit_teaching_path": {
       "no_assigned_students": "Velg elevene som skal motta læringsstien.",
-      "distribute_entity": "Distribuer læringssti"
+      "distribute_entity": "Tildel læringssti"
     },
     "after_distribution": {
       "title": "Din {entity} har blitt distribuert!",
@@ -519,8 +521,8 @@
     "new teaching path": "Opprett læringssti"
   },
   "teaching path preview": {
-    "Start teaching path": "Start på læringsstien",
-    "steps": "spor"
+    "Start teaching path": "Start læringssti",
+    "steps": "steg"
   },
   "teaching path search": {
     "Search for teaching paths": "Søk etter læringsstier...",
@@ -541,7 +543,7 @@
       "description_preview": "Bruk navigasjonen i bunnen av siden til å gå gjennom hvert steg. Kom tilbake hit og trykk «Registrer og send inn» for å sende besvarelsen til læreren din.",
       "button_preview": "Registrer og send inn"
     },
-    "submitted": "Besvarelsen din er sendt!",
+    "submitted": "Besvarelsen din er levert!",
     "next": "Neste",
     "exit": "Avslutt læringssti",
     "validation": {
@@ -549,21 +551,21 @@
     },
     "breadcrumbs": {
       "start": "Startside",
-      "finish": "Gå gjennom og send inn"
+      "finish": "Gå gjennom besvarelsen og send inn"
     },
-    "confirm_exit": "Er du sikker på at du vil stenge? Alle endringer blir lagret.",
+    "confirm_exit": "Er du sikker på at du vil avslutte? Alle endringer blir lagret.",
     "not for you": "Læringsstien er ikke tildelt deg"
   },
   "teaching_paths_list": {
     "validation": {
       "not_teaching_path_creator": "Læringsstien kan ikke åpnes."
     },
-    "delete": "Slett læringssti",
-    "view": "Vis læringssti",
+    "delete": "Slett læringsstien",
+    "view": "Vis læringsstien",
     "edit": "Rediger læringsstien",
     "view answers": "Se svarene",
     "copy": "Kopier læringsstien",
-    "copy successfully": "Kopi av undervisningsstien er opprettet"
+    "copy successfully": "Kopi av læringsstien er opprettet"
   },
   "edit_teaching_path": {
     "header": {
@@ -580,7 +582,8 @@
       "after_distribution": "Læringsstien har blitt distribuert!",
       "cant_publish": "Du må fullføre læreplandelen før du publiserer",
       "cant_publish_goals": "Du kan ikke publisere uten kobling av kompetansemål",
-      "notdata_goals": "Det er ingen etablerte mål for disse kriteriene"
+      "notdata_goals": "Det er ingen etablerte mål for disse kriteriene",
+      "source_required": "Vennligst angi kilden for dette innholdet"
     },
     "title": {
       "new_entity": "Ny læringssti",
@@ -593,22 +596,22 @@
       "add_assignments": "Legg til oppgaver",
       "add_domain": "Legg til lenke",
       "create_assignment": "Lag oppgave",
-      "loading": "Laster...",
+      "loading": "Laster inn innhold…",
       "nothing_found": "Ingenting funnet...",
       "articles_selected": "{number} artikler valgt",
       "all_assignments": "Alle oppgaver",
       "my_assignments": "Mine oppgaver",
       "articles": "Artikler",
-      "articles_title": "Artikkelinformasjon",
+      "articles_title": "Informasjon om artikkel",
       "articles_default": "Velg en artikkel for mer informasjon",
       "articles_read": "Les artikkel",
-      "assignments_title": "Oppgaveinformasjon",
-      "assignments_default": "Velg en oppgaver for mer informasjon ",
-      "assignments_read": "Les artikkel",
+      "assignments_title": "Informasjon om oppgave",
+      "assignments_default": "Velg en oppgave for mer informasjon ",
+      "assignments_read": "Les oppgave",
       "assignmetns": "Oppgaver",
       "assignments_selected": "{number} oppgaver valgt",
       "search_for_articles": "Søk etter artikler...",
-      "expand": "Utvid alle",
+      "expand": "Vis mer",
       "expandclose": "Lukk alle",
       "search": {
         "buttons": {
@@ -624,9 +627,10 @@
     },
     "validation": {
       "title_words_count": "Tittelen kan ikke være tom",
+      "title_node_words_count": "Overskrift til aktivitet kan ikke være tom",
       "description_words_count": "Beskrivelsen kan ikke være tom",
       "already_editing": "Noen redigerer læringsstien akkurat nå",
-      "empty_content": "Minst 1 sti må opprettes"
+      "empty_content": "Minst én sti må opprettes"
     },
     "notifications": {
       "delete_path": "Er du sikker på at du vil slette denne stien?",
@@ -636,20 +640,41 @@
       "merge_paths": "Er du sikker på at du vil slå sammen stiene?",
       "unmerge_path": "Er du sikker på at du vil slette stien?",
       "unable_to_merge": "Du kan ikke slå sammen artikler og oppgaver!",
-      "neccesary_edit": "Vennligst velg bort den nåværende artikkelen, før du velger en ny",
-      "neccesary_edit_asignment": "ennligst velg bort den nåværende oppgaven, før du velger en ny"
+      "neccesary_edit": "Vennligst velg bort den nåværende artikkelen før du velger en ny.",
+      "neccesary_edit_asignment": "Vennligst velg bort den nåværende oppgaven før du velger en ny."
     },
     "paths": {
       "main_teaching_path_title": "Læringssti",
-      "teaching_path_title": "Læringssti tittel"
+      "teaching_path_title": "Legg til undertittel",
+      "node_teaching_path_title": "Neste aktivitet",
+      "node_teaching_path_place_holder": "Legg til overskrift til aktivitet"
     },
-    "merge": "Slå sammen stien",
+    "merge": "Slå sammen stiene",
     "expand": "Utvid stien",
-    "Step overview": "Oversikt over stien",
-    "Submit": "Registrer læringssti",
+    "Step overview": "Oversikt over læringssti",
+    "Submit": "Lever læringssti",
     "no_title": "Uten tittel",
     "No results found": "Søket ditt ga ingen resultater",
     "no_options": "Ingen treff"
+  },
+  "teacherGuidance": {
+    "name": "Lærerveiledning",
+    "download_pdf": "Last ned PDF",
+    "option": "valg",
+    "titleAdd": "OPPRETT LÆRERVEILEDNING",
+    "titleEdit": "REDIGER LÆRERVEILEDNING",
+    "titleRead": "LÆRERVEILEDNING",
+    "titleSub": "Hvordan brukes læringsstien i undervisning?",
+    "titleSubRead": "Slik kan du bruke læringsstien i undervisning",
+    "titleSubReadAssig": "Slik kan du bruke oppgaven i undervisning",
+    "save_and_close": "Lagre og lukk",
+    "open": "Åpne lærerveiledning",
+    "noAdded": "Ingen lærerveiledning lagt til",
+    "buttons": {
+      "add": "Opprett lærerveiledning",
+      "edit": "Rediger lærerveiledning",
+      "read": "Les lærerveiledning"
+    }
   },
   "students_list": {
     "title":"Elever",
@@ -668,22 +693,22 @@
       },
       "student_settings": {
         "settings": "Innstillinger",
-        "student_level": "Elevnivå",
-        "text_1": "{name}s elevnivå er satt til ",
-        "level": "nivå",
-        "text_2": "Bytt elevnivå nedenfor.",
+        "student_level": "Elevspor",
+        "text_1": "{name}s elevspor er satt til ",
+        "level": "spor",
+        "text_2": "Bytt elevspor nedenfor.",
         "confirm_message": "Vil du endre elevens spor?"
       }
     }
   },
   "ie_message": {
     "warning": "Varsel",
-    "part1": "Din nettleser kan ikke bruke denne applikasjonen.",
+    "part1": "Din nettleser kan ikke bruke denne tjenesten.",
     "part2": "Følgende nettlesere er støttet: Firefox, Opera, Edge og Google Chrome."
   },
   "generals": {
     "support":"Support",
-    "keyboard":"Keyboard shortcuts",
+    "keyboard":"Tastatursnarveier",
     "accesibility_text": {
       "title_quick": "Hurtigtaster",
       "shift_t": "Læringsstier",
@@ -691,8 +716,8 @@
       "shift_r": "Artikler",
       "shift_u": "Temabøker",
       "shift_o": "Lydartikler",
-      "shift_f": "Fullfør lese artikkelen",
-      "title_when_editing": "Ved redigering av læringsstier og oppgaver",
+      "shift_f": "Fullfør lesing av artikkel",
+      "title_when_editing": "Redigering av læringsstier og oppgaver",
       "shift_c": "Opprett ny læringssti",
       "shift_g": "Opprett ny oppgave",
       "shift_a": "Legg til valgt element",
@@ -703,50 +728,53 @@
     "edit": "Rediger sti",
     "delete": "Slett sti",
     "close": "Lukk artikkelvisning",
+    "save": "Lagre",
     "close_maintenance": "Lukk melding",
-    "maintenance": "Scheduled maintenance today between 4pm and 7pm. The System can be unresponsive in this period",
-    "close_assignment": "Lukk oppgave vinduet",
-    "selected_assignment": "Velg oppgave",
-    "unselected_assignment": "Velg oppgave",
+    "maintenance": "Planlagt vedlikehold i dag mellom kl. 16 og kl. 19. Vi beklager ulempen.",
+    "close_assignment": "Lukk oppgavevinduet",
+    "selected_assignment": "Oppgave valgt",
+    "unselected_assignment": "Du har ikke valgt oppgave",
     "addQuestion_buttons": {
       "TEXT": "Tekst spørsmål",
-      "MULTIPLE_CHOICE": "Flervalgsspørsmål",
-      "IMAGE_CHOICE": "Bildevalg spørsmål"
+      "MULTIPLE_CHOICE": "Flervalgsoppgave",
+      "IMAGE_CHOICE": "Bildevalgsoppgave"
     },
     "grade": "Klassetrinn",
-    "student_level": "Velg elevnivå",
-    "visibility": "visibility"
+    "student_level": "Velg elevspor",
+    "visibility": "synlighet",
+    "language": "Språk",
+    "downloading": "Laster ned"
   },
   "activity_page": {
     "Hello": "Hei",
     "pause":"Sett på pause",
     "play":"Spill av",
-    "options":"Modul valg",
+    "options":"Alternativer",
     "No available content": "Ikke tilgjengelig innhold",
-    "Widget failed to load": "Modulen ble ikke lastet",
+    "Widget failed to load": "Skjermelementet ble ikke lastet",
     "active assignments":  "Aktive oppgaver",
     "View assignments": "Vis oppgaver",
     "Create assignment": "Lag oppgave",
     "active teaching paths":  "Aktive læringsstier",
     "View teaching paths": "Vis læringsstier",
     "Create teaching path": "Lag læringssti",
-    "answers unevaluated":  "Svar til vurdering",
+    "answers unevaluated":  "Besvarelser til vurdering",
     "View answers": "Vis besvarelser",
     "new_articles": "Nye artikler",
     "new_teaching_path": "Nye læringsstier",
     "new_assignments": "Nye oppgaver",
     "recent_activity": {
-      "header": "Siste hendelser",
-      "no_results": "Ingenting å sjå her akkurat no",
+      "header": "Nylig aktivitet",
+      "no_results": "Ingenting å vise",
       "give_answer": "Elev {userName} har besvart {taskType}",
       "update_answer": "Elev {userName} har besvart {taskType}",
       "past_deadline_part1": "Innleveringsfristen for {userName} for {taskType}",
-      "past_deadline_part2": "har utløpt og kan evalueres"
+      "past_deadline_part2": "har utløpt og kan vurderes"
     },
     "teacher’s_view": "Lærer - Banner",
     "student’s_view": "Elev - Banner",
-    "collapse": "Skjul widgeten",
-    "expand": "Utvid widgeten"
+    "collapse": "Skjul skjermelement",
+    "expand": "Vis skjermelement"
   },
   "notifications": {
     "ok": "Ok",
@@ -762,6 +790,6 @@
     "title": "Ingenting å se her",
     "description1": "Det virker som om siden du leter",
     "description2": "etter ikke lenger er her...",
-    "back": "Ta meg hjem"
+    "back": "Gå tilbake"
   }
 }

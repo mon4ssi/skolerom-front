@@ -86,12 +86,14 @@ $my-account-padding: 19px;
 }
 
 .MyAccountWindow__closeButton {
-  width: 15.19px;
-  height: 15.19px;
   position: absolute;
   top: 4px;
   right: -1px;
   cursor: pointer;
+  img {    
+    width: 15.19px;
+    height: 15.19px;
+  }
 }
 
 .MyAccountWindow__backButton {

@@ -1,6 +1,6 @@
 import { injector } from 'Injector';
 import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteractor';
-import { API } from 'utils/api';
+import { API, ARTICLE_API } from 'utils/api';
 import {
   Article,
   ArticleRepo,
@@ -12,7 +12,10 @@ import {
   Grade,
   QuestionAttachment,
   Subject,
-  WPLocale
+  WPLocale,
+  Source,
+  FilterGrep,
+  GoalsData
 } from './Assignment';
 import {
   AssignmentDistributeDTO,
@@ -24,9 +27,10 @@ import {
   buildStudentAssignmentList,
   GradeDTO,
   SubjectDTO,
-  GreepElements
+  GreepElements,
+  SourceDTO
 } from './factory';
-import { DEFAULT_AMOUNT_ARTICLES_PER_PAGE } from 'utils/constants';
+import { DEFAULT_AMOUNT_ARTICLES_PER_PAGE, LOCALES_MAPPING_FOR_BACKEND } from 'utils/constants';
 import { ContentBlockType } from './ContentBlock';
 import { Locales } from 'utils/enums';
 
@@ -86,6 +90,7 @@ export interface QuestionDTO {
   id?: number;
   type: string;
   title: string;
+  guidance: string;
   orderPosition: number;
   options?: Array<OptionDTO>;
   content?: Array<ContentBlockDTO>;
@@ -170,6 +175,8 @@ interface AssignmentByIdResponseDTO {
 }
 
 export class AssignmentApi implements AssignmentRepo {
+  private storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
+  private currentLocale = this.storageInteractor.getCurrentLocale()!;
 
   public async getAssignmentById(id: number): Promise<Assignment> {
     const assignmentDTO: AssignmentByIdResponseDTO = (await API.get(`api/teacher/assignments/${id}`)).data;
@@ -189,13 +196,26 @@ export class AssignmentApi implements AssignmentRepo {
 
   public async getGrades(): Promise<Array<Grade>> {
     return (await API.get('api/classes')).data.data.map(
-      (item: GradeDTO) => new Grade(item.id, item.title)
+      (item: GradeDTO) => new Grade(item.id, item.title, item.managementId)
     );
   }
 
   public async getSubjects(): Promise<Array<Subject>> {
     return (await API.get('api/subjects')).data.data.map(
-      (item: SubjectDTO) => new Subject(item.id, item.title)
+      (item: SubjectDTO) => new Subject(item.id, item.title, item.managementId)
+    );
+  }
+
+  public async getSources(): Promise<Array<Source>> {
+    const locale = this.storageInteractor.getCurrentLocale() as Locales;
+
+    return (await API.get('api/sources', {
+      params:
+      {
+        locale: this.currentLocale === Locales.EN ? null :  LOCALES_MAPPING_FOR_BACKEND[locale]
+      }
+    })).data.data.map(
+      (item: SourceDTO) => new Source(item.id, item.title, item.default)
     );
   }
 
@@ -244,6 +264,18 @@ export class AssignmentApi implements AssignmentRepo {
         total_pages: 0
       };
     }
+  }
+
+  public async getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep>  {
+    const response = await API.get('api/teacher/assignments/grep/filters', {
+      params: {
+        grades,
+        subjects,
+        coreElements,
+        goals
+      }
+    });
+    return response.data;
   }
 
   public async getStudentAssignmentList(filter: Filter) {
@@ -295,6 +327,28 @@ export class AssignmentApi implements AssignmentRepo {
       total_pages: response.meta.pagination.total_pages,
     };
   }
+  public async downloadTeacherGuidancePDF(id: number): Promise<void> {
+    try {
+      const response = await API.get(`api/teacher/assignments/${id}/guidance/download`, {
+        responseType: 'blob',
+        headers: { Accept: 'application/octet-stream' },
+      });
+
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const a = document.createElement('a');
+      a.download = 'Assignment-Guidance';
+      a.href = window.URL.createObjectURL(blob);
+      const clickEvt = new MouseEvent('click', {
+        view: window,
+        bubbles: true,
+        cancelable: true,
+      });
+      a.dispatchEvent(clickEvt);
+      a.remove();
+    } catch (e) {
+      throw new Error(`download Assignment Guidance pdf ${e}`);
+    }
+  }
 }
 
 enum AttachmentType {
@@ -318,27 +372,36 @@ export class WPApi implements ArticleRepo {
     multi,
     source,
     subjects,
-    searchTitle
-  }: { page: number, perPage: number, order: string, grades?: number, subjects?: number, searchTitle?: string, core?: number | string, goal?: number | string, multi?: number, source?: number }): Promise<Array<Article>> {
-    return (
-      await API.get(`${process.env.REACT_APP_WP_URL}/wp-articles/api/filterarticle/v1/post`, {
-        params:
-        {
-          page,
-          order_by: order,
-          per_page: perPage,
-          student_grade_id: grades || null,
-          student_subject_id: subjects || null,
-          core_id: core || null,
-          goal_id: goal || null,
-          student_disciplin_id: multi || null,
-          student_source_id: source || null,
-          search_title: searchTitle || null,
-          lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
-        }
-      },
-      )
-    ).data.data.map(buildArticle);
+    searchTitle,
+    lang,
+  }: { page: number, perPage: number, order: string, grades?: number, subjects?: number, searchTitle?: string, core?: number | string, goal?: number | string, multi?: number, source?: number, lang: string }): Promise<Array<Article>> {
+
+    let langParmeter = lang;
+    if (lang === '' || (typeof(lang) === 'undefined')) langParmeter = this.storageInteractor.getArticlesLocaleId()!;
+
+    try {
+      return (
+        await API.get(`${process.env.REACT_APP_WP_URL}/wp-articles/api/filterarticle/v1/post`, {
+          params:
+          {
+            page,
+            order_by: order,
+            per_page: perPage,
+            student_grade_id: grades || null,
+            student_subject_id: subjects || null,
+            core_id: core || null,
+            goal_id: goal || null,
+            student_disciplin_id: multi || null,
+            student_source_id: source || null,
+            search_title: searchTitle || null,
+            lang: langParmeter || null
+          }
+        },
+        )
+      ).data.data.map(buildArticle);
+    } catch {
+      return [];
+    }
   }
 
   public async getArticlesByIds(ids: Array<number>): Promise<Array<Article>> {

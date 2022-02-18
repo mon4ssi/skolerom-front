@@ -18,8 +18,12 @@ import { MAX_DESCRIPTION_LENGTH } from 'utils/constants';
 
 import imageChoiceLight from 'assets/images/image-choice-light.svg';
 import imageChoiceLightPink from 'assets/images/image-choice-light-pink.svg';
+import teaGuiBGImg from 'assets/images/guidance-bg.svg';
 
 import './ImageChoiceQuestion.scss';
+const ENTER_SINGLE_QUOTE_CODE = 219;
+const ENTER_DOUBLE_QUOTE_CODE = 50;
+const DELAY = 100;
 interface Props {
   question: EditableImageChoiceQuestion;
   newAssignmentStore?: NewAssignmentStore;
@@ -30,6 +34,7 @@ interface Props {
 class ImageChoiceQuestion extends Component<Props> {
   public static contextType = AttachmentContentTypeContext;
   private refbutton = createRef<HTMLButtonElement>();
+  private titleRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
 
   private addNewOption = () => {
     const { question } = this.props;
@@ -45,9 +50,37 @@ class ImageChoiceQuestion extends Component<Props> {
 
   private handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { question } = this.props;
-    if (lettersNoEn(e.target.value)) {
-      question.setTitle(e.target.value);
+    e.preventDefault();
+    const value = this.useValuedQuotes(e.currentTarget.value);
+    if (lettersNoEn(value)) {
+      question.setTitle(value);
     }
+  }
+
+  private focusTextField  = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+    const startQuote = '«»';
+    const isDoubleQuote = (e.shiftKey && e.keyCode === ENTER_DOUBLE_QUOTE_CODE) ? true : false;
+    if (isDoubleQuote || e.keyCode === ENTER_SINGLE_QUOTE_CODE) {
+      setTimeout(
+        () => {
+          this.titleRef.current!.selectionEnd = Number(this.titleRef.current!.value!.split(startQuote)[0].length) + 1;
+          this.titleRef.current!.focus();
+        },
+        DELAY
+      );
+    }
+  }
+
+  public useValuedQuotes = (value: string) => {
+    const startQuote = '«';
+    const endQuote = '»';
+    let newvalue = value;
+    if (value.split("'").length > 1 || value.split('"').length > 1) {
+      const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
+      const secondValue = (value.split("'").length > 1) ? value.split("'")[1] : value.split('"')[1];
+      newvalue = `${initValue}${startQuote}${endQuote}${secondValue}`;
+    }
+    return newvalue;
   }
 
   public async componentDidUpdate() {
@@ -81,6 +114,10 @@ class ImageChoiceQuestion extends Component<Props> {
     );
   }
 
+  public openModalTGAssig = (nroLevel: string) => {
+    this.props.newAssignmentStore!.openTeacherGuidanceAssig(nroLevel);
+  }
+
   public render() {
     const { question, newAssignmentStore } = this.props;
     const lightItem = newAssignmentStore!.isHighlightedItem(CreationElements.Questions, question.orderPosition) ? 'lightItem' : '';
@@ -101,6 +138,8 @@ class ImageChoiceQuestion extends Component<Props> {
           placeholder={intl.get('new assignment.Enter a question')}
           value={question.title}
           onChange={this.handleChangeTitle}
+          onKeyUp={this.focusTextField}
+          inputRef={this.titleRef}
           maxLength={MAX_DESCRIPTION_LENGTH}
           autoFocus
         />
@@ -135,6 +174,15 @@ class ImageChoiceQuestion extends Component<Props> {
           >
             {intl.get('new assignment.Add image')}
           </button>
+          <div className="sectionGuidance">
+            <CreateButton
+              title={newAssignmentStore!.getTitleButtonGuidance}
+              onClick={this.openModalTGAssig.bind(this, String(question.orderPosition + 1))}
+            >
+              <img src={teaGuiBGImg} alt={newAssignmentStore!.getTitleButtonGuidance} />
+              {newAssignmentStore!.getTitleButtonGuidance}
+            </CreateButton>
+          </div>
         </div>
       </div>
     );

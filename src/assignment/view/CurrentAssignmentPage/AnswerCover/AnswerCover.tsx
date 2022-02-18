@@ -15,7 +15,7 @@ import level3 from 'assets/images/level-3-blue.svg';
 import user from 'assets/images/user-placeholder.png';
 
 import './AnswerCover.scss';
-
+const DELAY = 800;
 interface Props {
   currentQuestionaryStore?: CurrentQuestionaryStore;
   switchCover(): void;
@@ -32,6 +32,7 @@ export class AnswerCover extends Component<Props> {
     if (this.ref.current) {
       this.ref.current!.focus();
       this.refEl.current!.scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => { this.refEl.current!.focus(); }, DELAY);
     }
   }
   public getStartButtonTitle = () => {
@@ -130,30 +131,6 @@ export class AnswerCover extends Component<Props> {
     return (
       <div className="AnswerCover">
         {this.renderImage()}
-        <div className="AnswerCover__teacherInfo">
-          <img src={user} alt="Author" className="AnswerCover__teacherLogo"/>
-          <span className="AnswerCover__teacherName">{assignment!.author}</span>
-        </div>
-
-        <div className="AnswerCover__assignmentInfo">
-          {/*<div className="AnswerCover__infoBlock">*/}
-          {/*  <img className="AnswerCover__blockImage" src={clock} alt="clock"/>*/}
-          {/*  <span className="AnswerCover__blockText">17 {intl.get('assignment preview.min completion time')}</span>*/}
-          {/*</div>*/}
-          <div className="AnswerCover__infoBlock">
-            <img className="AnswerCover__blockImage" src={question} alt="question"/>
-            <span className="AnswerCover__blockText">
-              {currentQuestionaryStore!.questions.length} {intl.get('assignment preview.questions')}
-            </span>
-          </div>
-          <div className="AnswerCover__infoBlock">
-            <img className="AnswerCover__blockImage" src={this.getLevelIcon()} alt="level"/>
-            <span className="AnswerCover__blockText">
-              {this.getLevels()}
-            </span>
-          </div>
-        </div>
-
         <span className="AnswerCover__title">{assignment!.title}</span>
         {assignment!.description && <span className="AnswerCover__description">{assignment!.description}</span>}
         {this.getAnsweredQuestionsCount()}

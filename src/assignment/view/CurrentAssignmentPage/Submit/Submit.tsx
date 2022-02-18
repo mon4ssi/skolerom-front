@@ -20,14 +20,17 @@ type LocataionProps = Location<{ readOnly: boolean } & LocationState>;
 interface Props extends RouteComponentProps<{}, {}, LocationState> {
   numberOfQuestions: number;
   numberOfAnsweredQuestions: number;
+  isPreview?: boolean;
   publishQuestionary: () => Promise<void>;
   redirectData?: RedirectData;
   readOnly: boolean;
   questionaryTeachingPathStore?: QuestionaryTeachingPathStore;
   currentQuestionaryStore?: CurrentQuestionaryStore;
   location: LocataionProps;
+  isIdTeachingPath?: number;
   deleteQuestionary: () => void;
   revertQuestionary: () => void;
+  finishPreviewSubmit?: () => void;
 }
 
 @inject('currentQuestionaryStore', 'questionaryTeachingPathStore')
@@ -78,6 +81,13 @@ export class SubmitComponent extends Component<Props> {
       });
   }
 
+  public reloadToPreview = async () => {
+    const { isPreview, finishPreviewSubmit } = this.props;
+    if (isPreview) {
+      finishPreviewSubmit!();
+    }
+  }
+
   public validArticles = (article: Article) => {
     this.state.sumArticlesTotal += 1;
     if (article.isRead) {
@@ -95,26 +105,63 @@ export class SubmitComponent extends Component<Props> {
   }
 
   public componentDidMount() {
-    const { numberOfQuestions, numberOfAnsweredQuestions, currentQuestionaryStore } = this.props;
+    const { numberOfQuestions, numberOfAnsweredQuestions, currentQuestionaryStore, readOnly } = this.props;
     currentQuestionaryStore!.relatedAllArticles.map(this.validArticles);
     const redirectData = (currentQuestionaryStore!.currentQuestionary && currentQuestionaryStore!.currentQuestionary.redirectData)
       ? currentQuestionaryStore!.currentQuestionary.redirectData
       : undefined;
+    if (readOnly) {
+      this.setState({ disablebutton: false });
+      setTimeout(
+        () => {
+          if (this.refbutton.current) {
+            this.refbutton.current!.focus();
+          }
+        },
+        showDelay
+      );
+    }
     this.sendValidArticlesRead();
-    if (redirectData === undefined) {
-      if (currentQuestionaryStore!.relatedAllArticles.length) {
-        if (numberOfAnsweredQuestions === numberOfQuestions && currentQuestionaryStore!.allArticlesread) {
-          this.setState({ disablebutton : false });
-          setTimeout(
-            () => {
-              if (this.refbutton.current) {
-                this.refbutton.current!.focus();
-              }
-            },
-            showDelay
-          );
+    if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles.length > 0 && currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden) {
+      this.setState({ disablebutton : false });
+      setTimeout(
+        () => {
+          if (this.refbutton.current) {
+            this.refbutton.current!.focus();
+          }
+        },
+        showDelay
+      );
+    } else {
+      if (redirectData === undefined) {
+        if (currentQuestionaryStore!.relatedAllArticles.length) {
+          if (numberOfAnsweredQuestions === numberOfQuestions && currentQuestionaryStore!.allArticlesread) {
+            this.setState({ disablebutton : false });
+            setTimeout(
+              () => {
+                if (this.refbutton.current) {
+                  this.refbutton.current!.focus();
+                }
+              },
+              showDelay
+            );
+          } else {
+            if (!readOnly) {
+              this.setState({ disablebutton : true });
+            }
+          }
         } else {
-          this.setState({ disablebutton : true });
+          if (numberOfAnsweredQuestions === numberOfQuestions) {
+            this.setState({ disablebutton : false });
+            setTimeout(
+              () => {
+                if (this.refbutton.current) {
+                  this.refbutton.current!.focus();
+                }
+              },
+              showDelay
+            );
+          }
         }
       } else {
         if (numberOfAnsweredQuestions === numberOfQuestions) {
@@ -129,25 +176,46 @@ export class SubmitComponent extends Component<Props> {
           );
         }
       }
-    } else {
-      if (numberOfAnsweredQuestions === numberOfQuestions) {
-        this.setState({ disablebutton : false });
-        setTimeout(
-          () => {
-            if (this.refbutton.current) {
-              this.refbutton.current!.focus();
-            }
-          },
-          showDelay
-        );
-      }
     }
   }
 
   public msjeArticles() {
-    const { sumArticlesRead, sumArticlesTotal } = this.state;
+    const { readOnly } = this.props;
     return (
       <p className="sumMsj">{intl.get('current_assignment_page.readNotArticles')}</p>
+    );
+  }
+
+  public generateButton = () => {
+    const { isPreview } = this.props;
+    if (isPreview) {
+      return (
+        <button
+          className="CreateButton Submit__button"
+          onClick={this.reloadToPreview}
+          title={intl.get('current_assignment_page.complete_and_submit_button')}
+          ref={this.refbutton}
+        >
+          <>
+            <img className="Submit__image" src={check} alt={intl.get('current_assignment_page.submit')} />
+          {intl.get('current_assignment_page.complete_and_submit_button')}
+          </>
+        </button>
+      );
+    }
+    return (
+      <button
+        disabled={this.state.disablebutton}
+        className="CreateButton Submit__button"
+        onClick={this.publishQuestionary}
+        title={intl.get('current_assignment_page.complete_and_submit_button')}
+        ref={this.refbutton}
+      >
+        <>
+          <img className="Submit__image" src={check} alt={intl.get('current_assignment_page.submit')} />
+        {intl.get('current_assignment_page.complete_and_submit_button')}
+        </>
+      </button>
     );
   }
 
@@ -170,20 +238,8 @@ export class SubmitComponent extends Component<Props> {
         {/*<div className={`Submit__delete ${readOnly && 'Submit__defaultCursor'}`} onClick={this.deleteAnswers}>*/}
         {/*  {intl.get('current_assignment_page.delete_all_answers')}*/}
         {/*</div>*/}
-
-        <button
-          disabled={this.state.disablebutton}
-          className="CreateButton Submit__button"
-          onClick={this.publishQuestionary}
-          title={intl.get('current_assignment_page.complete_and_submit_button')}
-          ref={this.refbutton}
-        >
-          <>
-            <img className="Submit__image" src={check} alt={intl.get('current_assignment_page.submit')} />
-          {intl.get('current_assignment_page.complete_and_submit_button')}
-          </>
-        </button>
-        {this.state.disablebutton && this.msjeArticles()}
+        {this.generateButton()}
+        {!this.props.isPreview && !this.props.readOnly && this.state.disablebutton && this.msjeArticles()}
       </div>
     );
   }

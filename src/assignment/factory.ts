@@ -30,12 +30,22 @@ export interface SubjectDTO {
   id: number;
   name: string;
   title: string;
+  filterStatus: string | undefined | null;
+  managementId: number | null;
+}
+
+export interface SourceDTO {
+  id: number;
+  name: string;
+  title: string;
+  default: boolean;
 }
 
 export interface GradeDTO {
   id: number;
   title: string;
   name: string;
+  managementId: number | null;
 }
 
 export interface GreepElements {
@@ -87,6 +97,7 @@ export interface TeacherAssignmentResponseDTO {
   id: number;
   title: string;
   description: string;
+  hasGuidance?: boolean;
   numberOfQuestions: number;
   view: string;
   grades: Array<GradeDTO>;
@@ -156,6 +167,10 @@ export const buildFilterDTO = (filter: Filter): Object => {
     filterDTO.grepReadingInSubject = filter.grepReadingInSubject;
   }
 
+  if (filter.source) {
+    filterDTO.source = filter.source;
+  }
+
   if (filter.isEvaluated) {
     filterDTO.isEvaluated = filter.isEvaluated;
   }
@@ -183,6 +198,7 @@ export const buildQuestionDTO = (question: Question): QuestionDTO => {
   const dto: QuestionDTO = {
     type: question.type,
     title: question.title,
+    guidance: question.guidance,
     orderPosition: question.orderPosition,
     content: question.content.map(buildContentBlockDTO),
   };
@@ -232,7 +248,7 @@ const buildRelatedArticleDTO = (articles: Array<Article>) => (
     })),
     wpId: article.id,
     title: article.title,
-
+    isHidden: article.isHidden
   }))
 );
 
@@ -253,6 +269,7 @@ export const buildAssignmentDTO = (assignment: Assignment): AssignmentRequestDTO
 export const buildSubject = (subject: SubjectDTO): Subject => ({
   id: subject.id,
   title: subject.title || subject.name,
+  filterStatus: subject.filterStatus,
 });
 
 export const buildGrade = (grade: GradeDTO): Grade => ({
@@ -294,6 +311,7 @@ export const buildAllAssignmentsList = (item: TeacherAssignmentResponseDTO) => (
       id: item.id,
       title: item.title,
       description: item.description,
+      hasGuidance: item.hasGuidance || false,
       numberOfQuestions: item.numberOfQuestions,
       grades: item.grades.map(grade => buildGrade(grade)) || [],
       subjects: item.subjects.map(subject => buildSubject(subject)) || [],
@@ -330,7 +348,8 @@ export const buildStudentAssignmentList = (item: StudentAssignmentResponseDTO) =
   })
 );
 
-export const buildArticle = (item: ArticleDTO) => (
+export const buildArticle = (item: ArticleDTO) =>
+
   new Article({
     id: Number(item.id),
     title: item.title,
@@ -357,8 +376,7 @@ export const buildArticle = (item: ArticleDTO) => (
     ] :
                     [],
 
-  })
-);
+  });
 
 const buildArticleLevel = (levels: Array<StudentLevelDTO>) => (
   new ArticleLevel({

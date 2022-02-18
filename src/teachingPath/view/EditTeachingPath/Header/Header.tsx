@@ -38,7 +38,10 @@ export class HeaderComponent extends Component<Props> {
   private refGoDistribution = React.createRef<HTMLButtonElement>();
   private refFinalDistribution = React.createRef<HTMLButtonElement>();
   private isDisabledSaveButton = () => false;
-  private isDisabledPublishButton = () => false;
+  private isDisabledPublishButton = (): boolean => {
+    const { isDisabledButtons } = this.props.editTeachingPathStore!;
+    return !isDisabledButtons;
+  }
 
   private onSave = async (): Promise<void> => {
     const { editTeachingPathStore, history } = this.props;
@@ -71,6 +74,7 @@ export class HeaderComponent extends Component<Props> {
     const tpTitle = editTeachingPathStore!.teachingPathContainer!.teachingPath!.title;
     const isPrivate = editTeachingPathStore!.teachingPathContainer!.teachingPath!.isPrivate;
     const isCopy = editTeachingPathStore!.teachingPathContainer!.teachingPath!.isCopy;
+    const sources = editTeachingPathStore!.teachingPathContainer!.teachingPath!.sources;
 
     if (!editTeachingPathStore!.isActiveButtons) {
       const grepGoals = editTeachingPathStore!.teachingPathContainer!.teachingPath.grepGoalsIds;
@@ -78,6 +82,14 @@ export class HeaderComponent extends Component<Props> {
       Notification.create({
         type: NotificationTypes.ERROR,
         title: msj
+      });
+      return;
+    }
+
+    if (userType === UserType.ContentManager && !isPrivate && sources.length === 0) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('edit_teaching_path.header.source_required')
       });
       return;
     }

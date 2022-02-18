@@ -13,14 +13,17 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 import editImg from 'assets/images/edit-tp.svg';
 import deleteImg from 'assets/images/trash-tp.svg';
 import addArticleImg from 'assets/images/add-article.svg';
+import guidanceEditImg from 'assets/images/guidance-edit.svg';
 
 import './NestedOrderNumber.scss';
+const TIMEOUT = 800;
 
 interface Props {
   editTeachingPathStore?: EditTeachingPathStore;
   node: EditableTeachingPathNode;
   nestedOrderNumber: number;
   readOnly?: boolean;
+  nroLetter?: number;
 }
 
 @inject('editTeachingPathStore')
@@ -88,24 +91,40 @@ export class NestedOrderNumber extends Component<Props> {
 
   public sendDomain = async () => {
     const { editTeachingPathStore, node } = this.props;
-    this.setState({ loading: false });
     this.setState({ disabledbutton: true });
     const response = await editTeachingPathStore!.sendDataDomain(this.validUrlPath(this.state.valueInputDomain));
-    this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
-    const newChildren = this.state.itemsForNewChildren.map(
-      item => editTeachingPathStore!.createNewNode(
-        item,
-        TeachingPathNodeType.Domain
-      )
-    );
-    let idNode = 0;
-    editTeachingPathStore!.currentNode!.children.forEach(
-      (child) => {
-        idNode = child.items![0].value.id;
-        node.removeChild(child);
-      }
-    );
-    node.addChild(newChildren[0], idNode);
+    if (node !== null) {
+      editTeachingPathStore!.setCurrentNode(node!);
+      editTeachingPathStore!.currentNode!.children[0].editItemDomain(response);
+      editTeachingPathStore!.currentEntity!.save();
+      editTeachingPathStore!.setCurrentNode(null);
+      this.setState({
+        modalDomain: false
+      });
+      document.removeEventListener('keyup', this.handleKeyboardControl);
+      /*this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
+      const newChildren = this.state.itemsForNewChildren.map(
+        item => editTeachingPathStore!.createNewNode(
+          item,
+          TeachingPathNodeType.Domain
+        )
+      );
+      let idNode = 0;
+      editTeachingPathStore!.currentNode!.children.forEach(
+        (child) => {
+          idNode = child.items![0].value.id;
+          node.removeChild(child);
+        }
+      );*/
+      setTimeout(
+        () => {
+          /*node.addChild(newChildren[0], idNode);
+          editTeachingPathStore!.setCurrentNode(null);
+          document.removeEventListener('keyup', this.handleKeyboardControl);*/
+        },
+        TIMEOUT
+      );
+    }
   }
 
   public renderModalDomain = () => {
@@ -151,9 +170,14 @@ export class NestedOrderNumber extends Component<Props> {
     event.preventDefault();
     editTeachingPathStore!.setCurrentNode(node!);
     if (node.children[0].type === TeachingPathNodeType.Domain) {
-      this.setState({
-        modalDomain: true
-      });
+      this.setState(
+        {
+          modalDomain: true
+        },
+        () => {
+          document.addEventListener('keyup', this.handleKeyboardControl);
+        }
+      );
     } else {
       this.context.changeContentType(node.children[0].type === TeachingPathNodeType.Article ? 0 : 1);
     }
@@ -174,8 +198,13 @@ export class NestedOrderNumber extends Component<Props> {
     }
   }
 
+  public handleOpenModalTG = (nroLevel: string) => {
+    const { editTeachingPathStore } = this.props;
+    editTeachingPathStore!.currentEntity!.handleOpenTeacherGuidance(nroLevel);
+  }
+
   public renderEditIcon = () => (
-    <button onClick={this.handleEditClick} title={intl.get('generals.edit')} ref={this.buttonref}>
+    <button onClick={this.handleEditClick} title={intl.get('generals.edit')}>
       <img
         src={editImg}
         alt={intl.get('generals.edit')}
@@ -194,6 +223,20 @@ export class NestedOrderNumber extends Component<Props> {
     </button>
   )
 
+  public renderEditTGIcon = () => {
+    const { nestedOrderNumber, nroLetter } = this.props;
+
+    return (
+      <button onClick={this.handleOpenModalTG.bind(this, `${String(nestedOrderNumber)}${String.fromCharCode(nroLetter!)}`)} title={intl.get('teacherGuidance.buttons.edit')}>
+        <img
+          src={guidanceEditImg}
+          alt={intl.get('teacherGuidance.buttons.edit')}
+          title={intl.get('teacherGuidance.buttons.edit')}
+        />
+      </button>
+    );
+  }
+
   public render() {
     const { nestedOrderNumber, readOnly } = this.props;
 
@@ -205,6 +248,7 @@ export class NestedOrderNumber extends Component<Props> {
     return (
       <div className={numberAndActionsClassnames}>
         {!readOnly && this.renderEditIcon()}
+        {!readOnly && this.renderEditTGIcon()}
         {this.state.modalDomain && this.renderModalDomain()}
         <div className="nestedOrderNumber">
           {nestedOrderNumber}

@@ -39,8 +39,11 @@ export const buildDraftAssignment = (dto: DraftAssignmentResponseDTO): DraftAssi
     isCopy:dto.isCopy,
     grepCoreElementsIds:dto.grepCoreElementsIds,
     grepMainTopicsIds:dto.grepMainTopicsIds,
-    grepReadingInSubjectId:dto.grepReadingInSubjectId,
+    grepReadingInSubjectsIds:dto.grepReadingInSubjectsIds,
     grepGoalsIds:dto.grepGoalsIds,
+    sources:dto.sources,
+    guidance:dto.guidance,
+    hasGuidance:dto.hasGuidance,
   });
 
   const draftAssignment = new DraftAssignment({ assignment, sessionId: dto.uuid, questionsWithError: null });
@@ -58,6 +61,7 @@ const buildEditableQuestion = (
 ): EditableQuestion => {
 
   const title = dto.title;
+  const guidance = dto.guidance;
   const order = dto.orderPosition || index;
   const contentBlocks = dto.content;
 
@@ -65,6 +69,7 @@ const buildEditableQuestion = (
     case QuestionType.Text: {
       const question: EditableTextQuestion = new EditableTextQuestion({
         title,
+        guidance,
         order,
         assignmentDraft,
         contentBlocks: []
@@ -85,6 +90,7 @@ const buildEditableQuestion = (
       const question: EditableMultipleChoiceQuestion = new EditableMultipleChoiceQuestion(
         {
           title,
+          guidance,
           order,
           assignmentDraft,
           contentBlocks: [],
@@ -111,6 +117,7 @@ const buildEditableQuestion = (
       const question: EditableImageChoiceQuestion = new EditableImageChoiceQuestion(
         {
           title,
+          guidance,
           order,
           assignmentDraft,
           contentBlocks: [],
@@ -190,6 +197,7 @@ export const buildDraftAssignmentDTO = (
   uuid: draftAssignment.sessionId,
   title: draftAssignment.title,
   description: draftAssignment.description,
+  guidance: draftAssignment.guidance,
   numberOfQuestions: draftAssignment.numberOfQuestions || draftAssignment.questions.length,
   isPrivate: draftAssignment.isPrivate,
   subjects: draftAssignment.subjects,
@@ -200,5 +208,6 @@ export const buildDraftAssignmentDTO = (
   grepCoreElementsIds: draftAssignment.grepCoreElementsIds,
   grepGoalsIds: draftAssignment.grepGoalsIds,
   grepMainTopicsIds: draftAssignment.grepMainTopicsIds,
-  grepReadingInSubjectId: draftAssignment.grepReadingInSubjectId,
+  grepReadingInSubjectsIds: draftAssignment.grepReadingInSubjectsIds,
+  sources: draftAssignment.sources
 });

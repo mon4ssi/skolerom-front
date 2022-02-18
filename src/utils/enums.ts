@@ -65,4 +65,5 @@ export enum QueryStringKeys {
   GREPMAINTOPICSIDS = 'grepMainTopicsIds',
   GREEPGOALSIDS = 'grepGoalsIds',
   GREPREADINGINSUBJECT = 'grepReadingInSubject',
+  SOURCE = 'source',
 }

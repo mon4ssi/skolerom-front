@@ -7,19 +7,28 @@ import { CreationElements, NewAssignmentStore } from '../NewAssignmentStore';
 import { Article } from '../../../Assignment';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 import { AttachmentContentType, AttachmentContentTypeContext } from '../AttachmentContentTypeContext';
+import checkInactive from 'assets/images/ckeck-inactive.svg';
+import checkActive from 'assets/images/check-active.svg';
 
 import './SetRelatedArticles.scss';
 
 import icon from 'assets/images/reading-icon.svg';
+import { toJS } from 'mobx';
 
 interface Props {
   newAssignmentStore?: NewAssignmentStore;
 }
+interface State {
+  hiddenArticles: boolean;
+}
 
 @inject('newAssignmentStore')
 @observer
-export class SetRelatedArticles extends Component<Props> {
+export class SetRelatedArticles extends Component<Props, State> {
   public static contextType = AttachmentContentTypeContext;
+  public state = {
+    hiddenArticles: false
+  };
   public refButton = createRef<HTMLButtonElement>();
 
   private renderButtonTitle() {
@@ -71,6 +80,26 @@ export class SetRelatedArticles extends Component<Props> {
     }
   }
 
+  public async componentDidMount() {
+    let valueHidden = false;
+    const selectedArticles = this.props.newAssignmentStore!.currentEntity!.getListOfArticles();
+    selectedArticles.forEach((article) => {
+      valueHidden = (article.isHidden) ? true : false;
+    });
+    if (!valueHidden) {
+      this.setState({
+        hiddenArticles: false
+      });
+      this.props.newAssignmentStore!.hiddenArticles = false;
+    } else {
+      this.setState({
+        hiddenArticles: true
+      });
+      this.props.newAssignmentStore!.hiddenArticles = true;
+    }
+    this.props.newAssignmentStore!.relatedArticlesIsHidden();
+  }
+
   public componentWillUnmount(): void {
     this.props.newAssignmentStore!.resetCurrentArticlesPage();
   }
@@ -82,6 +111,22 @@ export class SetRelatedArticles extends Component<Props> {
   public setHighlightedItem = () => {
     this.props.newAssignmentStore!.setPreviewQuestionByIndex(0);
     this.props.newAssignmentStore!.setHighlightingItem(CreationElements.Articles);
+  }
+
+  public toggleHiddenArticles = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    if (this.state.hiddenArticles) {
+      this.setState({
+        hiddenArticles: false
+      });
+      this.props.newAssignmentStore!.hiddenArticles = false;
+    } else {
+      this.setState({
+        hiddenArticles: true
+      });
+      this.props.newAssignmentStore!.hiddenArticles = true;
+    }
+    this.props.newAssignmentStore!.relatedArticlesIsHidden();
   }
 
   public render() {
@@ -100,12 +145,19 @@ export class SetRelatedArticles extends Component<Props> {
         </div>
 
         <div className="articlesWrapper">
+          <div className="checkRelated">
+            <button className="CreateButton newAnswerButton" id="newAnswerRelatedButton" title={this.renderButtonTitle()} onClick={this.handleRelatedArticles}>
+              {this.renderButtonTitle()}
+            </button>
+            <div className="hiddenRelatedCheck" onClick={this.toggleHiddenArticles}>
+              <img src={this.state.hiddenArticles ? checkActive : checkInactive} alt="checkbox" className="AssignmentArticlesToReading__checkbox"/>
+              <div>
+                {intl.get('assignments search.hidden_related')}
+              </div>
+            </div>
+          </div>
           {this.renderArticleInput(selectedArticles)}
-          <button className="CreateButton newAnswerButton" id="newAnswerRelatedButton" title={this.renderButtonTitle()} onClick={this.handleRelatedArticles}>
-            {this.renderButtonTitle()}
-          </button>
         </div>
-
       </div>
     );
   }

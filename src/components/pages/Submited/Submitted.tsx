@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { inject } from 'mobx-react';
 import intl from 'react-intl-universal';
 import { withRouter, RouteComponentProps, Redirect } from 'react-router-dom';
@@ -27,7 +27,7 @@ interface Props extends RouteComponentProps {
 
 @inject('currentQuestionaryStore')
 class Submitted extends Component<Props> {
-
+  public refbutton = createRef<HTMLButtonElement>();
   private goToDashboard = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     this.props.history.push(this.props.location.state!.originPath);
@@ -38,6 +38,12 @@ class Submitted extends Component<Props> {
       {intl.get('current_assignment_page.submited_description_part_1')}
     </div>
   )
+
+  public componentDidMount() {
+    if (this.refbutton.current) {
+      this.refbutton.current!.focus();
+    }
+  }
 
   public render() {
     const { state } = this.props.location;
@@ -53,6 +59,7 @@ class Submitted extends Component<Props> {
             className="Submitted__button"
             onClick={this.goToDashboard}
             title={intl.get('current_assignment_page.submited_button_title')}
+            ref={this.refbutton}
           >
             <img className="Submitted__buttonImage" src={goToAccountIcon} title={intl.get('current_assignment_page.submited_button_title')} alt="Go to account" />
             {intl.get('current_assignment_page.submited_button_title')}

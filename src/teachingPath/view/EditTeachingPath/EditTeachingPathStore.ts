@@ -4,7 +4,7 @@ import { debounce } from 'utils/debounce';
 import { injector } from 'Injector';
 import { ArticleService, ASSIGNMENT_SERVICE, AssignmentService } from 'assignment/service';
 import { DRAFT_TEACHING_PATH_SERVICE, DraftTeachingPathService } from 'teachingPath/teachingPathDraft/service';
-import { Article, ARTICLE_SERVICE_KEY, Grade, Subject, FilterArticlePanel } from 'assignment/Assignment';
+import { Article, ARTICLE_SERVICE_KEY, Grade, Subject, FilterArticlePanel, Source } from 'assignment/Assignment';
 import { TeachingPathContainer } from 'teachingPath/teachingPathContainer/teachingPathContainer';
 import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
 import { TeachingPathItemValue, TeachingPathNodeType } from 'teachingPath/TeachingPath';
@@ -33,8 +33,12 @@ export class EditTeachingPathStore {
   @observable public fetchingArticles: boolean = false;
   @observable public isFetchedArticlesListFinished: boolean = false;
   @observable public isActiveButtons: boolean = false;
+  @observable public isDisabledButtons: boolean = false;
   @observable public hasMoreArticles: boolean = true;
   @observable public isEditArticles: boolean = false;
+  @observable public articleInEdit: number = 0;
+  @observable public assingmentInEdit: number = 0;
+
   @observable public isEditAssignments: boolean = false;
   @observable public isEditDomain: boolean = false;
   @observable public articlesList: Array<Article> = [];
@@ -50,9 +54,9 @@ export class EditTeachingPathStore {
 
   @observable public allGrades: Array<Grade> = [];
   @observable public allSubjects: Array<Subject> = [];
+  @observable public allSources: Array<Source> = [];
   @observable public allGoals: Array<GreepElements> = [];
   @observable public allArticlePanelFilters: FilterArticlePanel | null = null;
-
   @observable public isAssignmentCreating: boolean = false;
 
   public localeKey: string = EditEntityLocaleKeys.EDIT_TEACHING_PATH;
@@ -89,8 +93,16 @@ export class EditTeachingPathStore {
     this.isActiveButtons = true;
   }
 
+  public setIsDisabledButtons() {
+    this.isDisabledButtons = true;
+  }
+
   public setIsActiveButtonsFalse() {
     this.isActiveButtons = false;
+  }
+
+  public setIsDisabledButtonsFalse() {
+    this.isDisabledButtons = false;
   }
 
   public getGoalsByArticle() {
@@ -115,6 +127,22 @@ export class EditTeachingPathStore {
 
   public trueIsEditArticles() {
     this.isEditArticles = true;
+  }
+
+  public setArticleInEdit(idArticle:number) {
+    this.articleInEdit = idArticle;
+  }
+
+  public getArticleInEdit() {
+    return this.articleInEdit;
+  }
+
+  public setAssignmentInEdit(idAssingment:number) {
+    this.assingmentInEdit = idAssingment;
+  }
+
+  public getAssignmentInEdit() {
+    return this.assingmentInEdit;
   }
 
   public falseIsEditArticles() {
@@ -249,6 +277,7 @@ export class EditTeachingPathStore {
           multi: rest.multi,
           source: rest.source,
           searchTitle: rest.searchTitle,
+          lang: rest.lang
         });
         this.articlesList = isNextPage ? this.articlesList.concat(articles) : articles;
         if (articles.length < perPage) {
@@ -295,6 +324,7 @@ export class EditTeachingPathStore {
     children: [],
     draftTeachingPath: this.currentNode!.draftTeachingPath,
     selectQuestion: '',
+    guidance: '',
     parentNode: this.currentNode!
   })
 
@@ -350,8 +380,8 @@ export class EditTeachingPathStore {
     return this.currentEntity!.getIsDraftSaving();
   }
 
-  public async getFiltersArticlePanel() {
-    this.allArticlePanelFilters = await this.teachingPathService.getFiltersArticlePanel();
+  public async getFiltersArticlePanel(lang: string) {
+    this.allArticlePanelFilters = await this.teachingPathService.getFiltersArticlePanel(lang);
   }
 
   public async getGrades() {
@@ -362,12 +392,20 @@ export class EditTeachingPathStore {
     this.allSubjects = await this.assignmentService.getSubjects();
   }
 
+  public async getSources() {
+    this.allSources = await this.assignmentService.getSources();
+  }
+
   public getAllGrades(): Array<Grade> {
     return toJS(this.allGrades);
   }
 
   public getAllSubjects(): Array<Subject> {
     return toJS(this.allSubjects);
+  }
+
+  public getAllSources(): Array<Source> {
+    return toJS(this.allSources);
   }
 
   public getAllArticlePanelFilters() {
@@ -418,13 +456,33 @@ export class EditTeachingPathStore {
   }
 
   @action
-  public async getGrepFilters(grades: string, subjects: string, source: string) {
-    return this.teachingPathService.getGrepFilters(grades, subjects, source);
+  public async getGradeWpIds(gradeWpIds: Array<number>) {
+    return this.teachingPathService.getGradeWpIds(gradeWpIds);
+  }
+
+  @action
+  public async getSubjectWpIds(subjectWpIds: Array<number>) {
+    return this.teachingPathService.getSubjectWpIds(subjectWpIds);
+  }
+
+  @action
+  public async getGrepFilters(grades: string, subjects: string, coreElements?: string, goals?: string) {
+    return this.teachingPathService.getGrepFilters(grades, subjects, coreElements, goals);
+  }
+
+  @action
+  public async getGrepFiltersTeachingPath(grades: string, subjects: string, coreElements?: string, mainTopics?:string, goals?: string, source?: string) {
+    return this.teachingPathService.getGrepFiltersTeachingPath(grades, subjects, coreElements, mainTopics, goals, source);
   }
 
   @action
   public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number) {
     return this.teachingPathService.getGrepGoalsFilters(grepCoreElementsIds, grepMainTopicsIds, gradesIds, subjectsIds, orderGoalsCodes, perPage, page);
+  }
+
+  @action
+  public async downloadTeacherGuidancePDF(id: number) {
+    return this.teachingPathService.downloadTeacherGuidancePDF(id);
   }
 
 }

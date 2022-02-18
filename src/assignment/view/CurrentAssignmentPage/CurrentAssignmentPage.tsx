@@ -28,6 +28,7 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 
 import './CurrentAssignmentPage.scss';
 import { AssignmentListStore } from '../AssignmentsList/AssignmentListStore';
+import { TeacherGuidanceAssigModal } from '../TeacherGuidance/TeacherGuidanceAssigModal';
 
 const COVER_INDEX = -2;
 const animationInDuration = 500;
@@ -104,12 +105,16 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     document.addEventListener('keyup', this.handleKeyboardControl);
     const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
     headerArray[0].style.display = 'none';
+    const search = (history.location.search === '?preview' || history.location.search === '?preview&open=tg') ? true : false;
 
     if (isTeacher) {
       await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
       await currentQuestionaryStore.getRelatedArticles();
-
-      if (currentQuestionaryStore.assignment && currentQuestionaryStore.assignment.isOwnedByMe()) {
+      if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles.length > 0 && currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden) {
+        currentQuestionaryStore!.setCurrentQuestion(0);
+        return this.updateQueryString();
+      }
+      if (currentQuestionaryStore.assignment && currentQuestionaryStore.assignment.isOwnedByMe() && !search) {
         this.props.history.replace(`/assignments/edit/${Number(match.params.id)}`);
         return;
       }
@@ -118,12 +123,12 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
       const redirectData = teachingPath && node ? { teachingPath, node } : undefined;
       await currentQuestionaryStore.createQuestionaryByAssignmentId(Number(match.params.id), redirectData);
     }
-    if (!this.isReadOnly) {
+    if (!this.isReadOnly && !search) {
       this.setState({ showCover: true });
       this.props.currentQuestionaryStore!.setCurrentQuestion(COVER_INDEX);
       return this.updateQueryString();
     }
-    if (currentQuestionaryStore.assignment!.relatedArticles.length > 0) {
+    if (currentQuestionaryStore.assignment!.relatedArticles.length > 0 && !search) {
       this.props.currentQuestionaryStore.setCurrentQuestion(-1);
       return this.updateQueryString();
     }
@@ -227,7 +232,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
         return this.updateQueryString();
       }
 
-      if (currentQuestionaryStore!.assignment!.relatedArticles.length > 0) {
+      if (currentQuestionaryStore!.assignment!.relatedArticles.length > 0 && !currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden) {
         currentQuestionaryStore!.setCurrentQuestion(-1);
         return this.updateQueryString();
       }
@@ -248,7 +253,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
       currentPage = ContentType.COVER;
       questionId = null;
     } else if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles.length > 0
-      && currentQuestionaryStore!.currentQuestionIndex < 0 && redirectData === undefined) {
+      && !currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden && currentQuestionaryStore!.currentQuestionIndex < 0 && redirectData === undefined) {
       currentPage = ContentType.ARTICLE_LIST;
       questionId = null;
     } else if (currentQuestionaryStore.currentAnswer) {
@@ -423,6 +428,8 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     if (currentAnswer) {
       isVisibleButtonRender = true;
     }
+    const url: URL = new URL(window.location.href);
+    const openTeacherGuidance: boolean = (url.searchParams.get('open') === 'tg' ? true : false);
 
     return !isLoading && (
       <div tabIndex={0} className="CurrentAssignmentPage">
@@ -431,6 +438,12 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
           onLogoClick={this.handleExit(ExitEventTarget.HEADER_LOGO)}
           entityStore={assignmentListStore!}
           currentEntityId={Number(match.params.id)}
+        />
+
+        <TeacherGuidanceAssigModal
+          currentQuestionaryStore={this.props.currentQuestionaryStore}
+          openGuidance={openTeacherGuidance}
+          readOnly={true}
         />
 
         {this.props.uiStore!.sidebarShown && <div className="CurrentAssignmentPage__overlay" onClick={uiStore!.hideSidebar}/>}

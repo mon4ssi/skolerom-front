@@ -28,11 +28,25 @@
       margin: 10px 0 20px;
     }
   }
-
+  .checkRelated {
+    display: flex;
+    align-items: center;
+    .hiddenRelatedCheck {
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      margin-left: 40px;
+      img {
+        margin: 5px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
   .articlesWrapper {
 
     .relatedArticleContent {
-      padding: 0 0 16px 0;
+      padding-top: 16px;
     }
 
     button{

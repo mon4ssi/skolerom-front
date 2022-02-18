@@ -26,12 +26,14 @@ export interface TeachingPathNodeItemResponseDTO {
   images?: { id: number, url: string };
   relatedArticles?: Array<Article>;
   isSelected?: boolean;
+  hasGuidance?: boolean;
 }
 
 export interface TeachingPathNodeResponseDTO {
   id?: number;
   type: TeachingPathNodeType;
   selectQuestion: string | null;
+  guidance: string | null;
   items: Array<TeachingPathNodeItemResponseDTO>;
   children: Array<TeachingPathNodeResponseDTO>;
 }
@@ -228,11 +230,15 @@ export class TeachingPathApi implements TeachingPathRepo {
     }
   }
 
-  public async getFiltersArticlePanel() {
+  public async getFiltersArticlePanel(lang: string) {
+    let langParmeter = lang;
+    if (lang === '' || (typeof(lang) === 'undefined')) langParmeter = this.storageInteractor.getArticlesLocaleId()!;
+
     const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/filterarticlepanel/v1/get/`, {
       params:
       {
-        lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
+        lang: langParmeter,
+        lc: this.storageInteractor.getArticlesLocaleId()
       }
     });
     return response.data;
@@ -249,12 +255,27 @@ export class TeachingPathApi implements TeachingPathRepo {
     };
   }
 
-  public async getGrepFilters(grades: string, subjects: string, source: string): Promise<FilterGrep>  {
+  public async getGrepFiltersTeachingPath(grades: string, subjects: string, coreElements?: string, mainTopics?:string, goals?: string, source?:string): Promise<FilterGrep>  {
     const response = await API.get('api/teacher/teaching-paths/grep/filters', {
       params: {
         grades,
         subjects,
+        coreElements,
+        mainTopics,
+        goals,
         source
+      }
+    });
+    return response.data;
+  }
+
+  public async getGrepFilters(grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep>  {
+    const response = await API.get('api/teacher/grep/filters', {
+      params: {
+        grades,
+        subjects,
+        coreElements,
+        goals
       }
     });
     return response.data;
@@ -298,6 +319,26 @@ export class TeachingPathApi implements TeachingPathRepo {
     }
   }
 
+  public async getGradeWpIds(gradeWpIds: Array<number>): Promise<Array<Grade>> {
+    const response = await API.get('/api/teacher/classes/lang', {
+      params:
+      {
+        gradeWpIds
+      }
+    });
+    return response.data.data;
+  }
+
+  public async getSubjectWpIds(subjectWpIds: Array<number>): Promise<Array<Grade>> {
+    const response = await API.get('/api/teacher/subjects/lang', {
+      params:
+      {
+        subjectWpIds
+      }
+    });
+    return response.data.data;
+  }
+
   public async finishTeachingPath(id: number): Promise<void> {
     await API.get(`api/student/teaching-paths/${id}/finish`);
   }
@@ -316,4 +357,26 @@ export class TeachingPathApi implements TeachingPathRepo {
     }
   }
 
+  public async downloadTeacherGuidancePDF(id: number): Promise<void> {
+    try {
+      const response = await API.get(`api/teacher/teaching-paths/${id}/guidance/download`, {
+        responseType: 'blob',
+        headers: { Accept: 'application/octet-stream' },
+      });
+
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const a = document.createElement('a');
+      a.download = 'TeachingPath-Guidance';
+      a.href = window.URL.createObjectURL(blob);
+      const clickEvt = new MouseEvent('click', {
+        view: window,
+        bubbles: true,
+        cancelable: true,
+      });
+      a.dispatchEvent(clickEvt);
+      a.remove();
+    } catch (e) {
+      throw new Error(`download Teaching Path Guidance pdf ${e}`);
+    }
+  }
 }

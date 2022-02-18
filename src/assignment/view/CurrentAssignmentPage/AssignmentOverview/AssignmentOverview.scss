@@ -26,6 +26,16 @@
   position: relative;
   padding-left: 30px;
   padding-bottom: 1px;
+  a {
+    &:focus {
+      color: #e2017b;
+      .AssignmentOverview__order {
+        border-color: #e2017b;
+        background: #e2017b;
+        color: white;
+      }
+    }
+  }
 }
 
 .AssignmentOverview__question_disabled {

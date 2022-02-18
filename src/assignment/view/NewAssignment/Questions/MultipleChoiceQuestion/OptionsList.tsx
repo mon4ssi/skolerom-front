@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import { SortableContainer, SortableElement, SortEnd } from 'react-sortable-hoc';
 import intl from 'react-intl-universal';
@@ -11,9 +11,12 @@ import { NewAssignmentStore } from '../../NewAssignmentStore';
 import checkActiveIcon from 'assets/images/check-active.svg';
 import checkInactiveIcon from 'assets/images/ckeck-inactive.svg';
 import deleteIcon from 'assets/images/delete.svg';
+import { lettersNoEn } from 'utils/lettersNoEn';
 
 import './OptionsList.scss';
-
+const ENTER_SINGLE_QUOTE_CODE = 219;
+const ENTER_DOUBLE_QUOTE_CODE = 50;
+const DELAY = 100;
 type OptionDeleteHandler = (index: number) => void;
 
 interface OptionComponentProps {
@@ -28,8 +31,13 @@ interface OptionComponentProps {
 @inject('newAssignmentStore')
 @observer
 class OptionComponent extends Component<OptionComponentProps> {
+  private titleRef = createRef<HTMLInputElement>();
   private onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.props.option.setTitle(e.target.value);
+    e.preventDefault();
+    const value = this.useValuedQuotes(e.currentTarget.value);
+    if (lettersNoEn(value)) {
+      this.props.option.setTitle(value);
+    }
   }
 
   private toggleIsRight = () => {
@@ -41,6 +49,31 @@ class OptionComponent extends Component<OptionComponentProps> {
     const { indexAsProp, onDelete } = this.props;
     this.props.newAssignmentStore!.showDeleteButton = true;
     onDelete(indexAsProp);
+  }
+
+  private focusTextField  = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+    const startQuote = '«»';
+    if (e.keyCode === ENTER_SINGLE_QUOTE_CODE || e.keyCode === ENTER_DOUBLE_QUOTE_CODE) {
+      setTimeout(
+        () => {
+          this.titleRef.current!.selectionEnd = Number(this.titleRef.current!.value!.split(startQuote)[0].length) + 1;
+          this.titleRef.current!.focus();
+        },
+        DELAY
+      );
+    }
+  }
+
+  public useValuedQuotes = (value: string) => {
+    const startQuote = '«';
+    const endQuote = '»';
+    let newvalue = value;
+    if (value.split("'").length > 1 || value.split('"').length > 1) {
+      const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
+      const secondValue = (value.split("'").length > 1) ? value.split("'")[1] : value.split('"')[1];
+      newvalue = `${initValue}${startQuote}${endQuote}${secondValue}`;
+    }
+    return newvalue;
   }
 
   public render() {
@@ -56,10 +89,12 @@ class OptionComponent extends Component<OptionComponentProps> {
         <input
           value={option.title}
           onChange={this.onTitleChange}
+          onKeyUp={this.focusTextField}
           style={option.isRight ? { color: '#0A7B24' } : undefined}
           placeholder={placeholder}
           aria-required="true"
           aria-invalid="false"
+          ref={this.titleRef}
           autoFocus={optionLengthBoolean && true}
         />
 

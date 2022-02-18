@@ -144,7 +144,7 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
           </div>
         </li>
 
-        <img className="MyAccountWindow__closeButton" src={closeIcon} alt="Close" onClick={closeMyAccountWindow} />
+        <a href="javascript:void(0)" className="MyAccountWindow__closeButton" onClick={closeMyAccountWindow}><img src={closeIcon} alt="Close"  /></a>
       </ul>
     );
   }
@@ -242,7 +242,7 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
               {intl.get('header.Change Language')}
             </div>
 
-            <img className="MyAccountWindow__closeButton" src={closeIcon} alt="Close" onClick={closeMyAccountWindow} />
+            <a href="javascript:void(0)" onClick={closeMyAccountWindow} className="MyAccountWindow__closeButton"><img src={closeIcon} alt="Close" /></a>
           </li>
         </ul>
         <div id="aux4" className="hidden">Not name</div>
@@ -305,7 +305,7 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
               {intl.get('header.change_font_size')}
             </div>
 
-            <img className="MyAccountWindow__closeButton" src={closeIcon} alt="Close" onClick={closeMyAccountWindow} />
+            <a href="javascript:void(0)" className="MyAccountWindow__closeButton" onClick={closeMyAccountWindow}><img src={closeIcon} alt="Close" /></a>
           </li>
         </ul>
         <div id="aux3" className="hidden">Not name</div>

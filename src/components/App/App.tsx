@@ -23,6 +23,7 @@ import { LogOutPage } from 'user/view/LogOutPage/LogOutPage';
 import { FeideCodeGetter } from 'user/view/FeideCodeGetter/FeideCodeGetter';
 import { NewAssignment } from 'assignment/view/NewAssignment/NewAssignment';
 import { CurrentAssignmentPage } from 'assignment/view/CurrentAssignmentPage/CurrentAssignmentPage';
+import { CurrentAssignmentPagePreview } from 'assignment/view/CurrentAssignmentPage/CurrentAssignmentPagePreview';
 import { CreateNewAssignmentFromArticle } from 'assignment/view/CreateNewAssignmentFromArticle/CreateNewAssignmentFromArticle';
 import { PassageTeachingPath } from 'teachingPath/view/PassageTeachingPath/PassageTeachingPath';
 import { PreviewTeachingPath } from 'teachingPath/view/PreviewTeachingPath/PreviewTeachingPath';
@@ -54,7 +55,7 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 
 // tslint:disable-next-line: no-any
 const CurrentAssignmentPageView = (props: any) => <CurrentAssignmentPage {...props} isTeacher />;
-const CurrentAssignmentPagePreview = (props: any) => <CurrentAssignmentPagePreview {...props} isTeacher />;
+const CurrentAssignmentPagePreviewView = (props: any) => <CurrentAssignmentPagePreview {...props} isTeacher />;
 
 // tslint:disable-next-line: no-any
 const ViewTeachingPath = (props: any) => <EditTeachingPath {...props} readOnly />;
@@ -230,7 +231,7 @@ class LocalizedApp extends Component<Props> {
         <Route
           exact
           path="/assignments/preview/:id"
-          component={CurrentAssignmentPagePreview}
+          component={CurrentAssignmentPagePreviewView}
         />
 
         <Route
@@ -264,7 +265,7 @@ class LocalizedApp extends Component<Props> {
         <Route
           exact
           path="/assignments/preview/:id"
-          component={CurrentAssignmentPagePreview}
+          component={CurrentAssignmentPagePreviewView}
         />
 
         <Route

@@ -192,6 +192,10 @@
             height: 25px;
           }
         }
+        &__leftWithoutIcon {
+          margin-right: 10px;
+          margin-left: 20px;
+        }
         &__right {
           h3 {
             margin-top: 2px;
@@ -219,7 +223,10 @@
             &:focus {
               outline-offset: 2px;
             }
-          }        
+            &.downlight {
+              color: #808080b8;
+            }
+          }
         }
         &__core {
           min-width: 300px;

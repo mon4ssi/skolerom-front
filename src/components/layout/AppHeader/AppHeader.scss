@@ -42,7 +42,7 @@
       }
     }
     &.helpNavigation {
-      margin-left: 50px;
+      margin-left: 20px;
       margin-right: 10px;
       .AppHeader__dropdown::after {
         display: none !important;
@@ -142,6 +142,10 @@
 }
 
 .AppHeader__headerOverlay {
+  display: none;
+}
+
+.AppHeader__btnHeaderGuidance {
   display: none;
 }
 

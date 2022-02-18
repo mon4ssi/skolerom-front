@@ -18,6 +18,7 @@ import { QuestionaryTeachingPathStore } from 'teachingPath/questionaryTeachingPa
 interface Props extends RouteComponentProps {
   currentQuestionaryStore?: CurrentQuestionaryStore;
   questionaryTeachingPathStore?: QuestionaryTeachingPathStore;
+  isPreview?: boolean;
   answer: Answer;
   numberOfQuestions: number;
   numberOfAnsweredQuestions: number;
@@ -27,6 +28,8 @@ interface Props extends RouteComponentProps {
   showCover: boolean;
   isTeachingPath?: boolean;
   location: Location<LocationState>;
+  isIdTeachingPath?: number;
+  finishPreviewSubmit?: () => void;
 }
 
 @inject('currentQuestionaryStore', 'questionaryTeachingPathStore')
@@ -84,7 +87,10 @@ class AnswerCurrentQuestion extends Component<Props> {
       numberOfQuestions,
       numberOfAnsweredQuestions,
       publishQuestionary,
+      finishPreviewSubmit,
       currentQuestionaryStore,
+      isPreview,
+      isIdTeachingPath
     } = this.props;
 
     if (!readOnly && this.props.showCover) {
@@ -92,13 +98,11 @@ class AnswerCurrentQuestion extends Component<Props> {
         <AnswerCover switchCover={this.props.switchCover}/>
       );
     }
-
     const redirectData = (currentQuestionaryStore!.currentQuestionary && currentQuestionaryStore!.currentQuestionary.redirectData)
       ? currentQuestionaryStore!.currentQuestionary.redirectData
       : undefined;
-
     if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles.length > 0
-      && currentQuestionaryStore!.currentQuestionIndex < 0 && redirectData === undefined) {
+      && !currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden && currentQuestionaryStore!.currentQuestionIndex < 0 && redirectData === undefined) {
       return <AssignmentArticlesToReading readOnly={readOnly} />;
     }
 
@@ -113,16 +117,20 @@ class AnswerCurrentQuestion extends Component<Props> {
         redirectData={redirectData}
         readOnly={readOnly}
         handleShowArrowsTooltip={currentQuestionaryStore!.handleShowArrowsTooltip}
+        isPreview={isPreview}
       />
     ) :  (
       <Submit
         numberOfQuestions={numberOfQuestions}
         numberOfAnsweredQuestions={numberOfAnsweredQuestions}
         publishQuestionary={publishQuestionary}
+        finishPreviewSubmit={finishPreviewSubmit}
         redirectData={redirectData}
         deleteQuestionary={this.deleteQuestionary}
         revertQuestionary={this.revertQuestionary}
         readOnly={readOnly}
+        isPreview={isPreview}
+        isIdTeachingPath={isIdTeachingPath}
       />
     );
   }
