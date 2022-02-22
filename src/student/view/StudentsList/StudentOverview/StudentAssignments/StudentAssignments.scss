@@ -21,6 +21,14 @@
 .StudentAssignments__filterPanel {
 
 }
+.StudentAssignments .css-1y8mk30-SkeletonTheme {
+  width: 100%;
+  height: 50px;
+  margin-bottom: 10px;
+}
+.StudentAssignments .css-1y8mk30-SkeletonTheme .StudentAssignment__skeleton {
+  height: 50px;
+}
 
 .StudentAssignments__selectBlock {
   display: flex;
