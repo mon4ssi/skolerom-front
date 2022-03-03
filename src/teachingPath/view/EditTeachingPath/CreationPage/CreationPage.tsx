@@ -351,12 +351,6 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     this.setState(
       {
         isDraggable: true
-      },
-      () => {
-        const draggableClass = document.getElementsByClassName('draggableclass')[0].closest('.childrenContainer')!.querySelectorAll('.dropInfoAddtional');
-        if (draggableClass.length > 1) {
-          draggableClass[0].classList.add('deletedrop');
-        }
       }
     );
     // step 3: check node
@@ -478,12 +472,14 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
   public dragenterthandler = () => {
     const { onDrop } = this.props;
+    this.setState({ isDrop: true });
   }
 
   public dragendhandler = () => {
     const { onDrop } = this.props;
     onDrop('NONE');
     this.setState({ isDraggable: false });
+    this.setState({ isDrop: false });
   }
 
   public renderAddingButtons = (withUnmergeButton: boolean) => {
