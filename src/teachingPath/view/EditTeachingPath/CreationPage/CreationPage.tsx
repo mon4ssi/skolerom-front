@@ -69,6 +69,7 @@ interface NodeContentProps {
 interface NodeContentState {
   numberOfTitleCols: number;
   isDraggable: boolean;
+  isDrop: boolean;
   myNode: EditableTeachingPathNode | null;
 }
 
@@ -78,10 +79,12 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   public static contextType = ItemContentTypeContext;
   public titleRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
   public insideRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
+  public divRef = React.createRef<HTMLDivElement>();
   public state = {
     numberOfTitleCols: 20,
     EditDomain: false,
     isDraggable: false,
+    isDrop: false,
     myNode: null
   };
 
@@ -350,7 +353,10 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         isDraggable: true
       },
       () => {
-        document.getElementsByClassName('draggableclass')[0].closest('.childrenContainer')!.querySelectorAll('.dropInfoAddtional')[0].classList.add('deletedrop');
+        const draggableClass = document.getElementsByClassName('draggableclass')[0].closest('.childrenContainer')!.querySelectorAll('.dropInfoAddtional');
+        if (draggableClass.length > 1) {
+          draggableClass[0].classList.add('deletedrop');
+        }
       }
     );
     // step 3: check node
@@ -365,6 +371,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         }
       }
     );
+    // this.divRef.current!.ondrag(DragEvent, true);
   }
 
   public handleMergeNodes = async (event: SyntheticEvent) => {
@@ -716,7 +723,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       }
     );
     return (
-      <div className={containerClassNames} draggable={this.state.isDraggable} onDragEnter={this.dragenterthandler} onDragEnd={this.dragendhandler}>
+      <div className={containerClassNames} draggable={this.state.isDraggable} onDragEnter={this.dragenterthandler} onDragEnd={this.dragendhandler} ref={this.divRef}>
         {this.renderItems()}
 
         {!readOnly && this.renderUnmergeButton()}
@@ -726,8 +733,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         {!readOnly && this.renderAddingButtons(!!this.renderUnmergeButton())}
 
         <div className="childrenContainer flexBox">
-          {ifArticles && dropArticles && this.dropInfoCardLeftArticle()}
-          {ifAssignments && dropAssignments && this.dropInfoCardLeftAssignment()}
+          {this.state.isDrop && ifArticles && dropArticles && this.dropInfoCardLeftArticle()}
+          {this.state.isDrop && ifAssignments && dropAssignments && this.dropInfoCardLeftAssignment()}
           {children.length ? children.map(this.renderNodeContent) : null}
         </div>
 
