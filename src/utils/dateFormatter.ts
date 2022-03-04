@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 export const getYearMonthDayDate = (date: Date) => {
-  const isDate = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+  const isDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
   return new Date(isDate.replace(/-/g, '/'));
 };
 
