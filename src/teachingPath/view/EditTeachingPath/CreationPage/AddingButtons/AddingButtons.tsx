@@ -180,7 +180,7 @@ class AddingButtonsContainer extends Component<Props> {
   private renderButtonDomain = () => {
     const { disabledbutton } = this.state;
     return (
-    <div className="addingButton" onClick={this.openDomainModal}>
+    <div className="addingButton addExternalArtikle" onClick={this.openDomainModal}>
       <button title={intl.get('edit_teaching_path.modals.add_domain')}>
         <img src={addDomainImg} alt="add-article" />
         {intl.get('edit_teaching_path.modals.add_domain')}

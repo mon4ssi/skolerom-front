@@ -640,6 +640,7 @@
       "merge_paths": "Are you sure you want to merge these paths?",
       "unmerge_path": "Are you sure you want to unmerge this path?",
       "unable_to_merge": "You can't merge articles and assignments!",
+      "unable_to_drop": "Unable to perform action",
       "neccesary_edit": "Please unselect the current article, and then select the new one",
       "neccesary_edit_asignment": "Please unselect the current assignment, and then select the new one"
     },

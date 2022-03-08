@@ -640,6 +640,7 @@
       "merge_paths": "Er du sikker på at du vil slå saman stiane?",
       "unmerge_path": "Er du sikker på at du vil slette stien?",
       "unable_to_merge": "Du kan ikkje slå saman artiklar og oppgåver!",
+      "unable_to_drop": "Kan ikke utføre handlingen",
       "neccesary_edit": "Ver vennleg og vel bort den noverande artikkelen før du vel ein ny",
       "neccesary_edit_asignment": "Ver vennleg og vel bort den noverande oppgåva før du vel ei ny"
     },

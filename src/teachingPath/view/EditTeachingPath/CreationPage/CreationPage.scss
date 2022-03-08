@@ -30,7 +30,19 @@
         margin-bottom: 27px;
         padding: 23px 0px 0px 0px;
         z-index: 3;
-
+        &.imposibleDrop {
+          border: dashed 1px #ff4545;
+          background: #ffebeb;
+          .teachingPathItemsTitle {
+            background: transparent !important;
+          }
+          .numberAndActions button {
+            background: transparent !important;
+          }
+        }
+        &.posibleDrop {
+          border: dashed 1px #e2017b;
+        }
         &.bnoReadOnly {
           background:none;
         }
@@ -42,6 +54,19 @@
         padding: 25px 0px 20px 0px;
         position: relative;
         z-index: 3;
+        &.imposibleDrop {
+          border: dashed 1px #ff4545;
+          background: #ffebeb;
+          .teachingPathItemsTitle {
+            background: transparent !important;
+          }
+          .numberAndActions button {
+            background: transparent !important;
+          }
+        }
+        &.posibleDrop {
+          border: dashed 1px #e2017b;
+        }
 
         .nestedOrderNumber {
           position: absolute;
@@ -235,7 +260,7 @@
 
     .teachingPathButtons {
       position: relative;
-      margin-bottom: 20px;
+      margin-bottom: 20px;      
 
       &.withUnmergeButton {
         margin-top: 15px;
@@ -247,7 +272,7 @@
 
       &.withoutPadding {
         margin-top: 15px !important;
-      }
+      }      
     }
 
     .InfoCard {
@@ -409,10 +434,9 @@
   }
 }
 .dropInfoAddtional {
-  padding: 0px 20px;
-  /*position: absolute;
-  left: -240px;*/
-  position: relative;
+  position: absolute;
+  width: calc(100% - 74px);
+  bottom: 0;
   &.deletedrop {
     display: none;
   }
@@ -473,10 +497,10 @@
     }
   }
   .isPosibleDragInside {
-    width: 200px;
+    width: 100%;
     text-align: center;
     border: dashed 2px black;
-    height: 344px;
+    height: 269px;
     padding: 20px;
     display: flex;
     align-items: center;

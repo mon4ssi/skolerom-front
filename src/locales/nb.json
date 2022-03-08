@@ -639,6 +639,7 @@
       "merge_paths": "Er du sikker på at du vil slå sammen stiene?",
       "unmerge_path": "Er du sikker på at du vil slette stien?",
       "unable_to_merge": "Du kan ikke slå sammen artikler og oppgaver!",
+      "unable_to_drop": "Kan ikke utføre handlingen",
       "neccesary_edit": "Vennligst velg bort den nåværende artikkelen før du velger en ny.",
       "neccesary_edit_asignment": "Vennligst velg bort den nåværende oppgaven før du velger en ny."
     },
