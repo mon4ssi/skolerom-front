@@ -397,7 +397,8 @@
     "Close": "Lukk",
     "Choose assignment": "Velg oppgave",
     "Choose article": "Velg artikkel",
-    "Choose domain": "Velg ekstern artikkel"
+    "Choose domain": "Velg ekstern artikkel",    
+    "not possible to evaluate": "Det er ikke mulig å evaluere en oppgave før svarfristen er utløpt"
   },
   "months": {
     "January": "Januar",

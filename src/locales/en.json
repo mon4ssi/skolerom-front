@@ -397,7 +397,8 @@
     "Close": "Close",
     "Choose assignment": "Choose Assignment",
     "Choose article": "Choose Article",
-    "Choose domain": "Choose External link"
+    "Choose domain": "Choose External link",
+    "not possible to evaluate": "It’s not possible to evaluate this assignment before the due date has passed"
   },
   "months": {
     "January": "January",

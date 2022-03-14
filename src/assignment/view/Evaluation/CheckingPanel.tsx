@@ -5,6 +5,7 @@ import isNil from 'lodash/isNil';
 import TextAreaAutosize from 'react-textarea-autosize';
 import isNull from 'lodash/isNull';
 
+import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { AssignmentEvaluationStore } from '../../EvaluationDraft/AssignmentEvaluationStore';
 import { Subject } from 'assignment/Assignment';
 import { EntityType } from 'utils/enums';
@@ -44,8 +45,11 @@ export class CheckingPanel extends Component<Props> {
 
   public setMark = (mark: number) => () => {
     const { store } = this.props;
-
     if (!store!.currentEvaluation!.isReadyToEvaluate) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('evaluation_page.not possible to evaluate')
+      });
       return;
     }
 
@@ -58,7 +62,12 @@ export class CheckingPanel extends Component<Props> {
 
   public setStatus = (status: boolean) => () => {
     const { store } = this.props;
-
+    if (store!.currentEvaluation && !store!.currentEvaluation.isReadyToEvaluate) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('evaluation_page.not possible to evaluate')
+      });
+    }
     if (!store!.currentEvaluation!.isReadyToEvaluate || isNil(store!.currentEvaluation!.mark)) {
       return;
     }
@@ -77,7 +86,6 @@ export class CheckingPanel extends Component<Props> {
 
   public renderSavePanel = () => {
     const { store, save } = this.props;
-
     if (store!.currentEvaluation && store!.currentEvaluation.isReadyToEvaluate) {
       return (
         <div className="controlPanel">
@@ -90,7 +98,12 @@ export class CheckingPanel extends Component<Props> {
 
   public setPassedStatus = (status: boolean) => () => {
     const { store } = this.props;
-
+    if (store!.currentEvaluation && !store!.currentEvaluation.isReadyToEvaluate) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('evaluation_page.not possible to evaluate')
+      });
+    }
     if (!store!.currentEvaluation!.isReadyToEvaluate) {
       return;
     }

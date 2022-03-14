@@ -166,7 +166,7 @@
     "Start assignment": "Start oppgåva",
     "continue_assignment": "Fortset på oppgåva",
     "Assignment articles": "Oppgåve til artiklar",
-    "Finish reading article": "Lest artikkel",
+    "Finish reading article": "Fortsett med oppgave",
     "Questions count": "{answeredQuestionsCount} av {totalQuestionsCount}",
     "questions answered": "spørsmål er svart på"
   },
@@ -397,7 +397,8 @@
     "Close": "Lukk",
     "Choose assignment": "Vel oppgåve",
     "Choose article": "Vel artikkel",
-    "Choose domain": "Vel ekstern artikkel"
+    "Choose domain": "Vel ekstern artikkel",    
+    "not possible to evaluate": "Det er ikke mulig å evaluere en oppgave før svarfristen er utløpt"
   },
   "months": {
     "January": "Januar",
