@@ -467,6 +467,20 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     event.currentTarget.classList.remove('posibleDrop');
   }
 
+  public validChildrenOnType = (node : EditableTeachingPathNode, myNode : EditableTeachingPathNode) => {
+    let returnIfhaveChildren = false;
+    if (node === myNode) {
+      returnIfhaveChildren = true;
+      return returnIfhaveChildren;
+    }
+    if (node.children!.length > 0) {
+      node.children.forEach((child) => {
+        this.validChildrenOnType(child, myNode);
+      });
+    }
+    return returnIfhaveChildren;
+  }
+
   public ondroptitle = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     const { editTeachingPathStore, node, parentNode, allNode, onDrop } = this.props;
