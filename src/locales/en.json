@@ -642,7 +642,8 @@
       "unable_to_merge": "You can't merge articles and assignments!",
       "unable_to_drop": "Unable to perform action",
       "neccesary_edit": "Please unselect the current article, and then select the new one",
-      "neccesary_edit_asignment": "Please unselect the current assignment, and then select the new one"
+      "neccesary_edit_asignment": "Please unselect the current assignment, and then select the new one",
+      "onlydraggable": "Please select first and then drag the item you need"
     },
     "paths": {
       "main_teaching_path_title": "Teaching path",

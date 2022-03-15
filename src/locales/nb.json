@@ -641,7 +641,8 @@
       "unable_to_merge": "Du kan ikke slå sammen artikler og oppgaver!",
       "unable_to_drop": "Kan ikke utføre handlingen",
       "neccesary_edit": "Vennligst velg bort den nåværende artikkelen før du velger en ny.",
-      "neccesary_edit_asignment": "Vennligst velg bort den nåværende oppgaven før du velger en ny."
+      "neccesary_edit_asignment": "Vennligst velg bort den nåværende oppgaven før du velger en ny.",
+      "onlydraggable": "Velg først og dra deretter elementet du trenger"
     },
     "paths": {
       "main_teaching_path_title": "Læringssti",

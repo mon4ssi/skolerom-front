@@ -72,6 +72,7 @@ interface NodeContentState {
   isDrop: boolean;
   myNode: EditableTeachingPathNode | null;
   isPosibleDrop: boolean;
+  isDropInit: boolean;
 }
 
 @inject('editTeachingPathStore')
@@ -87,7 +88,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     isDraggable: false,
     isDrop: false,
     myNode: null,
-    isPosibleDrop: false
+    isPosibleDrop: false,
+    isDropInit: false
   };
 
   public componentDidMount() {
@@ -149,16 +151,27 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     const childrenNode = node.children;
     const allchildren = allNode.children;
     event.preventDefault();
+    this.setState({
+      isDrop: false,
+      isDropInit: false
+    });
     if (myNode) {
       editTeachingPathStore!.setCurrentNode(node!);
       editTeachingPathStore!.addChildToCurrentNodeNullPerItem(myNode);
-      this.setState({
-        isDrop: false
-      });
 
       // delete item
       editTeachingPathStore!.setCurrentNode(myParent);
       editTeachingPathStore!.removeChildToCurrentNodeNullPerItem(myNode);
+
+      // format items
+      editTeachingPathStore!.setCurrentNode(null);
+      editTeachingPathStore!.setSelectedDragNode(null);
+      editTeachingPathStore!.setParentSelectedDragNode(null);
+    } else {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('edit_teaching_path.notifications.onlydraggable')
+      });
     }
   }
 
@@ -467,9 +480,22 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       if (myNode) {
         editTeachingPathStore!.setCurrentNode(node!);
         editTeachingPathStore!.addChildToCurrentNodeNullPerItem(myNode);
+        this.setState({
+          isDrop: false,
+          isDropInit: false
+        });
         // delete item
         editTeachingPathStore!.setCurrentNode(myParent);
         editTeachingPathStore!.removeChildToCurrentNodeNullPerItem(myNode);
+        // format items
+        editTeachingPathStore!.setCurrentNode(null);
+        editTeachingPathStore!.setSelectedDragNode(null);
+        editTeachingPathStore!.setParentSelectedDragNode(null);
+      } else {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('edit_teaching_path.notifications.onlydraggable')
+        });
       }
     } else {
       Notification.create({
@@ -488,20 +514,26 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     const myChildren = (node.children.length > 0) ? node.children[0] : '';
     const myid = node.id;
     const myNode = editTeachingPathStore!.getSelectedDragNode();
-    if (myChildren === myNode) {
-      event.currentTarget.classList.add('imposibleDrop');
-    } else {
-      if (mytype === myNode!.type) {
-        event.currentTarget.classList.add('posibleDrop');
-        this.setState({ isPosibleDrop: true });
-      } else {
+    if (myNode) {
+      if (myChildren === myNode) {
         event.currentTarget.classList.add('imposibleDrop');
+      } else {
+        if (mytype === myNode!.type) {
+          event.currentTarget.classList.add('posibleDrop');
+          this.setState({ isPosibleDrop: true });
+        } else {
+          event.currentTarget.classList.add('imposibleDrop');
+        }
       }
     }
   }
 
   public dragleavethandler = () => {
     const { onDrop } = this.props;
+  }
+
+  public dragStart = () => {
+    this.setState({ isDropInit: true });
   }
 
   public dragendhandler = () => {
@@ -748,7 +780,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       }
     );
     return (
-      <div className={containerClassNames} draggable={this.state.isDraggable} onDragLeave={this.dragleavethandler} onDragEnd={this.dragendhandler} ref={this.divRef}>
+      <div className={containerClassNames} draggable={this.state.isDraggable} onDragStart={this.dragStart} onDragLeave={this.dragleavethandler} onDragEnd={this.dragendhandler} ref={this.divRef}>
         {this.renderItems()}
 
         {!readOnly && this.renderUnmergeButton()}
