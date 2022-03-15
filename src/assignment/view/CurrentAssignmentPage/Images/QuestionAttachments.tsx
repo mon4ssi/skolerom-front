@@ -38,9 +38,10 @@ export class QuestionAttachments extends Component<ImagesProps> {
   }
 
   public setCurrentAttachmentByIndex = (index: number) => {
-    if (!this.props.isEvaluationStyle) {
+    /* if (!this.props.isEvaluationStyle) {
       this.setState({ currentAttachmentIndex: index, isLightBoxOpen: true });
-    }
+    } */
+    this.setState({ currentAttachmentIndex: index, isLightBoxOpen: true });
   }
 
   public onMovePrevRequest = () => {
