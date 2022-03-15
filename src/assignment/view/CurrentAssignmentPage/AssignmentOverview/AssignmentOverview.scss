@@ -26,6 +26,14 @@
   position: relative;
   padding-left: 30px;
   padding-bottom: 1px;
+  &.question_in {
+    color: #e2017b;
+    .AssignmentOverview__order {
+      background: #e2017b;
+      color: white;
+      border-color: #e2017b;
+    }
+  }
   a {
     &:focus {
       color: #e2017b;
@@ -62,4 +70,5 @@
 .AssignmentOverview__question_answered {
   color: $color-green;
   border-color: $color-green;
+  
 }

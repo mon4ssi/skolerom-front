@@ -44,7 +44,9 @@ export class AssignmentOverview extends Component<Props> {
       (!!answers[index].value.length) :
       numberOfAnsweredQuestions === questionsList.length - 1;
 
-    const questionClassname = classnames('AssignmentOverview__question', {
+    const indexInsideClass = (Number(currentQuestion) === Number(index)) ? 'question_in' : '' ;
+
+    const questionClassname = classnames('AssignmentOverview__question', indexInsideClass, {
       AssignmentOverview__question_answered: currentQuestionAnswerStatus,
       AssignmentOverview__question_disabled: !this.isStarted,
       AssignmentOverview__text: currentQuestion !== index,
@@ -54,7 +56,7 @@ export class AssignmentOverview extends Component<Props> {
       AssignmentOverview__question_answered: currentQuestionAnswerStatus,
     });
 
-    const questionLinkClassname = classnames({
+    const questionLinkClassname = classnames(indexInsideClass, {
       AssignmentOverview__questionLink_disabled: !this.isStarted,
     });
 
