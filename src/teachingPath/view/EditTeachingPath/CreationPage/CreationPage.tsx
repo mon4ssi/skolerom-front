@@ -153,7 +153,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     event.preventDefault();
     this.setState({
       isDrop: false,
-      isDropInit: false
+      isDropInit: false,
+      isPosibleDrop: false
     });
     if (myNode) {
       editTeachingPathStore!.setCurrentNode(node!);
@@ -331,7 +332,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     const allchildren = allNode.children;
     const mytype = node.type;
     // step 1: detect posible drop
-    this.setState({ isDrop: false });
+    this.setState({ isDrop: false, isPosibleDrop: false });
     onDrop(mytype);
     // step 2: draggable
     this.setState(
@@ -525,11 +526,13 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     const childrenNode = node.children;
     const allchildren = allNode.children;
     const mytype = (node.children.length > 0) ? node.children[0].type : 'none';
-    const myChildren = (node.children.length > 0) ? node.children[0] : '';
+    const myChildrens = (node.children.length > 0) ? node.children : [];
     const myid = node.id;
     const myNode = editTeachingPathStore!.getSelectedDragNode();
+    const myParent = editTeachingPathStore!.getParentSelectedDragNode();
+    this.setState({ isPosibleDrop: false });
     if (myNode) {
-      if (myChildren === myNode) {
+      if (myChildrens.includes(myNode)) {
         event.currentTarget.classList.add('imposibleDrop');
       } else {
         if (mytype === myNode!.type) {
