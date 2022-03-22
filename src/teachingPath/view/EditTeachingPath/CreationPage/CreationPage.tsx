@@ -98,6 +98,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       const valueLength = this.titleRef.current.props.value!.length;
       this.handleChangeNumberOfTitleCols(valueLength);
     }
+    const headerArray = Array.from(document.getElementsByClassName('header') as HTMLCollectionOf<HTMLElement>);
+    headerArray[0].style.display = 'flex';
   }
 
   public handleChangeNumberOfTitleCols = (valueLength: number) => {
@@ -338,6 +340,10 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     this.setState(
       {
         isDraggable: true
+      },
+      () => {
+        const headerArray = Array.from(document.getElementsByClassName('header') as HTMLCollectionOf<HTMLElement>);
+        headerArray[0].style.display = 'none';
       }
     );
     // step 3: check node
@@ -556,7 +562,15 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   public dragendhandler = () => {
     const { onDrop } = this.props;
     onDrop('NONE');
-    this.setState({ isDraggable: false });
+    this.setState(
+      {
+        isDraggable: false
+      },
+      () => {
+        const headerArray = Array.from(document.getElementsByClassName('header') as HTMLCollectionOf<HTMLElement>);
+        headerArray[0].style.display = 'flex';
+      }
+    );
     this.setState({ isDrop: false });
   }
 
