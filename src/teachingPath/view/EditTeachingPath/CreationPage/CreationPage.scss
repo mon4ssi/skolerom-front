@@ -30,8 +30,9 @@
         margin-bottom: 27px;
         padding: 23px 0px 0px 0px;
         z-index: 3;
+        position: relative !important;
         &.imposibleDrop {
-          border: dashed 1px #ff4545;
+          border: dashed 3px #ff4545;
           background: #ffebeb;
           .teachingPathItemsTitle {
             background: transparent !important;
@@ -41,7 +42,11 @@
           }
         }
         &.posibleDrop {
-          border: dashed 1px #e2017b;
+          border: dashed 3px #4baf50;
+        }
+        .nestedOrderNumber {
+          position: absolute;
+          top: -15px !important;
         }
         &.bnoReadOnly {
           background:none;
@@ -55,7 +60,7 @@
         position: relative;
         z-index: 3;
         &.imposibleDrop {
-          border: dashed 1px #ff4545;
+          border: dashed 3px #ff4545;
           background: #ffebeb;
           .teachingPathItemsTitle {
             background: transparent !important;
@@ -65,7 +70,7 @@
           }
         }
         &.posibleDrop {
-          border: dashed 1px #e2017b;
+          border: dashed 3px #4baf50;
         }
 
         .nestedOrderNumber {
@@ -445,7 +450,7 @@
   }
   &.posibleactive {
     .isPosibleDragInside {
-      border: dashed 2px #e2017b;
+      border: dashed 3px #4baf50;
     }
   }
   &.dropLeftArticle {
@@ -514,3 +519,22 @@
     &:before { display: none; }
   }
 }
+
+.boxInformationDrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: -3px;
+  margin-top: -3px;
+  width: calc(100% + 6px);
+  height: calc(100% + 6px);
+  background-color: white;
+  z-index: 4;
+  border: dashed 3px green;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+

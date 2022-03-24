@@ -640,6 +640,7 @@
       "unmerge_path": "Er du sikker på at du vil slette stien?",
       "unable_to_merge": "Du kan ikke slå sammen artikler og oppgaver!",
       "unable_to_drop": "Kan ikke utføre handlingen",
+      "unable_to_mix_different_natures": "Du kan ikke blande ulike typer innhold på samme rad.",
       "neccesary_edit": "Vennligst velg bort den nåværende artikkelen før du velger en ny.",
       "neccesary_edit_asignment": "Vennligst velg bort den nåværende oppgaven før du velger en ny.",
       "onlydraggable": "Velg først og dra deretter elementet du trenger"

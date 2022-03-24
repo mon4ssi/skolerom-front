@@ -244,28 +244,28 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     }
 
     return (
-        <div className={containerClassNames} key={`${item.id}-${index}`}>
-          <div className="topVerticalLine" style={{ left: leftIndent }}/>
-          <InfoCard
-            withButtons={!readOnly}
-            id={item.value.id}
-            type={item.type}
-            icon={imagenType}
-            title={item.value.title}
-            description={item.value.excerpt || item.value.description}
-            img={image}
-            url={urlBasic}
-            urldomain={urldomain}
-            grades={item.value.grades}
-            numberOfQuestions={item.value.numberOfQuestions}
-            onDelete={this.handleDeleteItem}
-            onEdit={this.handleEditItem}
-            onDrag={this.handleDragItem}
-            levels={levels}
-            onCLickImg={this.onCLickImg}
-          />
-          {!withoutBottomVerticalLine && <div className="bottomVerticalLine" style={{ left: leftIndent }}/>}
-        </div>
+      <div className={containerClassNames} key={`${item.id}-${index}`}>
+        <div className="topVerticalLine" style={{ left: leftIndent }} />
+        <InfoCard
+          withButtons={!readOnly}
+          id={item.value.id}
+          type={item.type}
+          icon={imagenType}
+          title={item.value.title}
+          description={item.value.excerpt || item.value.description}
+          img={image}
+          url={urlBasic}
+          urldomain={urldomain}
+          grades={item.value.grades}
+          numberOfQuestions={item.value.numberOfQuestions}
+          onDelete={this.handleDeleteItem}
+          onEdit={this.handleEditItem}
+          onDrag={this.handleDragItem}
+          levels={levels}
+          onCLickImg={this.onCLickImg}
+        />
+        {!withoutBottomVerticalLine && <div className="bottomVerticalLine" style={{ left: leftIndent }} />}
+      </div>
     );
   }
 
@@ -298,7 +298,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     }
   }
 
-  public onCLickImg = async(url: string) => {
+  public onCLickImg = async (url: string) => {
     window.open(`${url}`, '_blank');
   }
 
@@ -321,7 +321,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         editTeachingPathStore!.trueIsEditDomain();
         this.context.changeContentType(num2);
         break;
-      default :
+      default:
         this.context.changeContentType(null);
         break;
     }
@@ -458,7 +458,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         className={containerClassNames}
       >
         {node.items!.map(this.renderInfoCard)}
-        {!lastItem && <div className="bottomHorizontalLine" style={{ width: horizontalLineWidth }}/>}
+        {!lastItem && <div className="bottomHorizontalLine" style={{ width: horizontalLineWidth }} />}
       </div>
     );
   }
@@ -472,9 +472,10 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     event.preventDefault();
     event.currentTarget.classList.remove('imposibleDrop');
     event.currentTarget.classList.remove('posibleDrop');
+    this.setState({ isPosibleDrop: false });
   }
 
-  public validChildrenOnType = (node : EditableTeachingPathNode, myNode : EditableTeachingPathNode) => {
+  public validChildrenOnType = (node: EditableTeachingPathNode, myNode: EditableTeachingPathNode) => {
     let returnIfhaveChildren = false;
     if (node === myNode) {
       returnIfhaveChildren = true;
@@ -495,6 +496,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     const myParent = editTeachingPathStore!.getParentSelectedDragNode();
     const childrenNode = node.children;
     const allchildren = allNode.children;
+    const mytypeFirstChildNode = (node.children.length > 0) ? node.children[0].type : 'none';
     event.currentTarget.classList.remove('imposibleDrop');
     event.currentTarget.classList.remove('posibleDrop');
     if (this.state.isPosibleDrop) {
@@ -503,7 +505,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         editTeachingPathStore!.addChildToCurrentNodeNullPerItem(myNode);
         this.setState({
           isDrop: false,
-          isDropInit: false
+          isDropInit: false,
+          isPosibleDrop: false,
         });
         // delete item
         editTeachingPathStore!.setCurrentNode(myParent);
@@ -519,10 +522,17 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         });
       }
     } else {
-      Notification.create({
-        type: NotificationTypes.ERROR,
-        title: intl.get('edit_teaching_path.notifications.unable_to_drop')
-      });
+      if (node!.type === mytypeFirstChildNode) {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('edit_teaching_path.notifications.unable_to_drop')
+        });
+      } else {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('edit_teaching_path.notifications.unable_to_mix_different_natures')
+        });
+      }
     }
   }
   public ondragovertitle = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -564,7 +574,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     onDrop('NONE');
     this.setState(
       {
-        isDraggable: false
+        isDraggable: false,
       },
       () => {
         const headerArray = Array.from(document.getElementsByClassName('header') as HTMLCollectionOf<HTMLElement>);
@@ -585,8 +595,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     );
     return !node.children.length && (
       <div className={containerClassNames} onDragEnter={this.dragenterthandler}>
-        {node.type !== TeachingPathNodeType.Root && <div className="topVerticalLine"/>}
-        <AddingButtons node={node} nester={nestedOrder}/>
+        {node.type !== TeachingPathNodeType.Root && <div className="topVerticalLine" />}
+        <AddingButtons node={node} nester={nestedOrder} />
       </div>
     );
   }
@@ -602,6 +612,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     return newvalue;
   }
 
+  public informativeBox = () => (<div className="boxInformationDrop">{intl.get('generals.dragdrop')}</div>);
+
   public renderInput = () => {
     const { nestedOrder, node, readOnly } = this.props;
     const placeholder = node.type === TeachingPathNodeType.Root ?
@@ -611,17 +623,17 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       if (node.selectQuestion !== intl.get('edit_teaching_path.paths.main_teaching_path_title') && node.selectQuestion !== intl.get('edit_teaching_path.paths.teaching_path_title')) {
         return node.type === TeachingPathNodeType.Root || node.children.length ? (
           <div className="teachingPathItemsTitleDiv" data-number={nestedOrder} >
-          <TextAreaAutosize
-            ref={this.titleRef}
-            inputRef={this.insideRef}
-            className="teachingPathItemsTitle fw500"
-            value={node.selectQuestion}
-            placeholder={placeholder}
-            onChange={this.handleChangeTitle}
-            cols={this.state.numberOfTitleCols}
-            maxLength={MAX_TITLE_LENGTH}
-            readOnly={readOnly}
-          />
+            <TextAreaAutosize
+              ref={this.titleRef}
+              inputRef={this.insideRef}
+              className="teachingPathItemsTitle fw500"
+              value={node.selectQuestion}
+              placeholder={placeholder}
+              onChange={this.handleChangeTitle}
+              cols={this.state.numberOfTitleCols}
+              maxLength={MAX_TITLE_LENGTH}
+              readOnly={readOnly}
+            />
           </div>
         ) : null;
       }
@@ -639,20 +651,21 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       );
     }
 
+    // if it is not readonly mode
     return node.type === TeachingPathNodeType.Root || node.children.length ? (
       <div className="teachingPathItemsTitleDiv" data-number={nestedOrder} >
-      <TextAreaAutosize
-        ref={this.titleRef}
-        inputRef={this.insideRef}
-        className="teachingPathItemsTitle fw500"
-        value={node.selectQuestion}
-        placeholder={placeholder}
-        onChange={this.handleChangeTitle}
-        cols={this.state.numberOfTitleCols}
-        maxLength={MAX_TITLE_LENGTH}
-        readOnly={readOnly}
-        autoFocus={true}
-      />
+        <TextAreaAutosize
+          ref={this.titleRef}
+          inputRef={this.insideRef}
+          className="teachingPathItemsTitle fw500"
+          value={node.selectQuestion}
+          placeholder={placeholder}
+          onChange={this.handleChangeTitle}
+          cols={this.state.numberOfTitleCols}
+          maxLength={MAX_TITLE_LENGTH}
+          readOnly={readOnly}
+          autoFocus={true}
+        />
       </div>
     ) : null;
   }
@@ -721,7 +734,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
     return node.children.length ? (
       <>
-        {node.type !== TeachingPathNodeType.Root ? <div className="topVerticalLine"/> : isFirstNodeReadOnlyBlank ? <div className="topVerticalLine" style={{ top:0, height:0 }}/> : null}
+        {node.type !== TeachingPathNodeType.Root ? <div className="topVerticalLine" /> : isFirstNodeReadOnlyBlank ? <div className="topVerticalLine" style={{ top: 0, height: 0 }} /> : null}
         <NestedOrderNumber
           node={node}
           nestedOrderNumber={nestedOrder}
@@ -743,7 +756,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     return !!index && (
       <div className="mergePanel">
         <div className={mergeTooltipClassnames}>{intl.get('edit_teaching_path.merge')}</div>
-        <button className="mergeButton" onClick={this.handleMergeNodes} title={intl.get('edit_teaching_path.merge')}/>
+        <button className="mergeButton" onClick={this.handleMergeNodes} title={intl.get('edit_teaching_path.merge')} />
       </div>
     );
   }
@@ -776,6 +789,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
     return node.children.length ? (
       <div className={`${node.type === TeachingPathNodeType.Root ? 'boxNodeOptionsRoot' : 'boxNodeOptionsChildren'} ${classNodeTransparent}`} onDragOver={this.ondragovertitle} onDrop={this.ondroptitle} onDragLeave={this.ondragleavetitle}>
+
+        {this.state.isPosibleDrop && this.informativeBox()}
         {this.renderInput()}
         <div className={`sectImgs ${readOnly ? 'sectImgsReadOnly' : ''}`}>
           {node.type === TeachingPathNodeType.Root && this.renderNestedOrderNumber(true)}
@@ -799,12 +814,12 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       myclass,
       node.type === TeachingPathNodeType.Root && 'rootContainer',
       parentNode && {
-          // TOP HORIZONTAL LINES
+        // TOP HORIZONTAL LINES
         first: index === 0 && index !== parentNode.children.length - 1,
         last: index !== 0 && index === parentNode.children.length - 1,
         solo: index === 0 && index === parentNode.children.length - 1 && parentNode.type !== TeachingPathNodeType.Root,
         contentNone: parentNode.children.length === 1,
-          // MERGE LINES
+        // MERGE LINES
         mergeLineBeforeButton: index === 0 && parentNode.children.length > 1 && !readOnly,
         mergeLineFullWidth: index !== 0 && index !== parentNode.children.length - 1 && !readOnly,
         mergeLineAfterButton: index === parentNode.children.length - 1 && parentNode.children.length > 1 && !readOnly
@@ -908,15 +923,15 @@ export class CreationPageComponent extends Component<Props> {
   }
 
   public renderExitButton = () => (
-      <div className={'exitButton'}>
-        <Link to={'/teaching-paths/all'}>
-          <div className={'flexBox alignCenter exitTeachingPath'}>
-            <img src={actualArrowLeftRounded} alt="actualArrowLeftRounded"/>
-            <span>{intl.get('teaching path passing.exit')}</span>
-          </div>
-        </Link>
-      </div>
-    )
+    <div className={'exitButton'}>
+      <Link to={'/teaching-paths/all'}>
+        <div className={'flexBox alignCenter exitTeachingPath'}>
+          <img src={actualArrowLeftRounded} alt="actualArrowLeftRounded" />
+          <span>{intl.get('teaching path passing.exit')}</span>
+        </div>
+      </Link>
+    </div>
+  )
 
   public render() {
     const { editTeachingPathStore, readOnly } = this.props;
@@ -936,7 +951,7 @@ export class CreationPageComponent extends Component<Props> {
         <AddItemModal />
 
         <div className="main flexBox dirColumn alignCenter">
-          <TeachingPathTitle readOnly={readOnly}/>
+          <TeachingPathTitle readOnly={readOnly} />
 
           <TeacherguidanceModal
             currentEntity={currentTeachingPath!}
