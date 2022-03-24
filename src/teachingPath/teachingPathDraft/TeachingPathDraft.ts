@@ -437,6 +437,12 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
+  public setOpen = (data: boolean) => {
+    this._open = data;
+    this.save();
+  }
+
+  @action
   public setGrepMainTopicsIds = (data: Array<number>) => {
     this._grepMainTopicsIds = data;
     this.save();

@@ -29,6 +29,7 @@ export interface NewDraftAssignmentResponseDTO {
   sources?: Array<number>;
   guidance?: string;
   hasGuidance?: boolean;
+  open?: boolean;
 }
 
 export interface DraftAssignmentRequestDTO {

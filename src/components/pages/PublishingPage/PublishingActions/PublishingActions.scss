@@ -5,6 +5,21 @@
   font-size: 14px;
 }
 
+.filterCheck {
+  display: flex;
+  align-items: center;
+  img {
+    margin-right: 5px;
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+  p {
+    font-size: 14px;
+    cursor: pointer;
+  }
+}
+
 .PublishingActions {
   background-color: #ffffff;
 

@@ -226,6 +226,12 @@ export class DraftAssignment extends Assignment {
   }
 
   @action
+  public setOpen = (data: boolean) => {
+    this._open = data;
+    this.save();
+  }
+
+  @action
   public setGrepSourcesIds = (data: Array<number>) => {
     this._sources = data;
     this.save();

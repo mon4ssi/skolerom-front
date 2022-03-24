@@ -19,6 +19,7 @@ import secondLevelImg from 'assets/images/level-2-blue.svg';
 import thirdLevelImg from 'assets/images/level-3-blue.svg';
 import publicIconImg from 'assets/images/teacher-public.svg';
 import privateIconImg from 'assets/images/private.svg';
+
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 
 import { TagInputComponent, TagProp } from 'components/common/TagInput/TagInput';
@@ -734,12 +735,24 @@ export class PublishingActions extends Component<Props, State> {
     );
   }
 
+  public toggleisOpen = () => {
+    const { store, from } = this.props;
+    const isOpen = store!.currentEntity!.open;
+    if (isOpen) {
+      store!.currentEntity!.setOpen(false);
+    } else {
+      store!.currentEntity!.setOpen(true);
+    }
+  }
+
   public renderSourceInput = () => {
-    const { store } = this.props;
+    const { store, from } = this.props;
     const sources = store!.getAllSources().map(this.sourceToTagProp);
     const selectedSources = this.grepNumbersToTagprop(store!.currentEntity!.getListOfSources(), sources);
     const myplaceholder = (selectedSources.length > 0) ? '' : intl.get('publishing_page.source');
-
+    const isOpen = store!.currentEntity!.open;
+    const isChecked = (isOpen) ? checkActive : checkRounded ;
+    const textIsOpen = (from === 'TEACHINGPATH') ? intl.get('publishing_page.source_is_open') : intl.get('publishing_page.source_is_open_assig');
     let classHidden = 'itemsFlex subject hidden';
     if (store!.getCurrentUser()!.type === UserType.ContentManager) { classHidden = 'itemsFlex subject'; }
 
@@ -756,6 +769,10 @@ export class PublishingActions extends Component<Props, State> {
           listView
           temporaryTagsArray
         />
+        <div className="filterCheck isOpen" onClick={this.toggleisOpen}>
+            <img src={isChecked} />
+            <p>{textIsOpen}</p>
+        </div>
       </div>
     );
   }

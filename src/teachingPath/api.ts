@@ -27,6 +27,7 @@ export interface TeachingPathNodeItemResponseDTO {
   relatedArticles?: Array<Article>;
   isSelected?: boolean;
   hasGuidance?: boolean;
+  open?: boolean;
 }
 
 export interface TeachingPathNodeResponseDTO {

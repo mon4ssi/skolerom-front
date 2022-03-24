@@ -467,6 +467,8 @@
       "descrption_assignment":"Når du deler offentlig, må du koble oppgaven til læreplan. Velg relevante fag, klassetrinn, kompetansemål, kjerneelementer og lesing i fag for å kunne lagre og distribuere oppgaven.",
       "description_privado":"Kobling til læreplan er bare obligatorisk når du deler offentlig. For å lettere kunne søke i ditt eget innhold kan du velge å legge til kompetansemål her."
     },
+    "source_is_open": "Undervisningsveien er åpen",
+    "source_is_open_assig": "Oppgaven er åpen",
     "source": "Kilde"
   },
   "distribution_page": {

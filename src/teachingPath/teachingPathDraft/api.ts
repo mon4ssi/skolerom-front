@@ -47,6 +47,7 @@ export interface DraftTeachingPathResponseDTO {
   grepReadingInSubjectsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
   sources?: Array<number>;
+  open?: boolean;
 }
 
 export interface TeachingPathItemRequestDTO {
@@ -74,6 +75,7 @@ export interface TeachingPathItemSaveResponseDTO {
   images?: { id: number, url: string };
   featuredImage?: string;
   hasGuidance?: boolean;
+  open?: boolean;
 }
 
 export interface TeachingPathNodeSaveResponseDTO {

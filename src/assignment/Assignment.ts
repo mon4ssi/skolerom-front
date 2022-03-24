@@ -240,6 +240,7 @@ export interface AssignmentArgs {
   grepGoalsIds?: Array<number>;
   grepReadingInSubjectsIds?: Array<number>;
   grepGoals?: Array<GreepElements>;
+  open?: boolean;
 }
 
 export class Assignment {
@@ -286,6 +287,7 @@ export class Assignment {
   public grepMainTopicsIds?: Array<number>;
   public grepGoalsIds?: Array<number>;
   public grepReadingInSubjectsIds?: Array<number>;
+  public _open?: boolean;
 
   constructor(args: AssignmentArgs) {
     this._id = args.id;
@@ -331,6 +333,7 @@ export class Assignment {
     this.grepMainTopicsIds = args.grepMainTopicsIds;
     this.grepGoalsIds = args.grepGoalsIds;
     this.grepReadingInSubjectsIds = args.grepReadingInSubjectsIds;
+    this._open = args.open;
   }
 
   public isOwnedByMe(): boolean {
@@ -395,6 +398,11 @@ export class Assignment {
   @computed
   public get hasGuidance() {
     return this._hasGuidance;
+  }
+
+  @computed
+  public get open() {
+    return this._open;
   }
 
   @computed

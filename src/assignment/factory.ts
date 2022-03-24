@@ -111,6 +111,7 @@ export interface TeacherAssignmentResponseDTO {
   grepGoals?: Array<GreepElements>;
   grepMaintopic?: Array<GreepElements>;
   grepReadinginsubject?: string;
+  open?: boolean;
 }
 
 export const buildFilterDTO = (filter: Filter): Object => {
@@ -324,7 +325,8 @@ export const buildAllAssignmentsList = (item: TeacherAssignmentResponseDTO) => (
       grepCoreelements: item.grepCoreelements,
       grepGoals: item.grepGoals,
       grepMaintopic: item.grepMaintopic,
-      grepReadingInsubject: item.grepReadinginsubject
+      grepReadingInsubject: item.grepReadinginsubject,
+      open: item.open || false
     })
 );
 

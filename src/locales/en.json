@@ -468,6 +468,8 @@
       "descrption_assignment":"Connecting your teaching path is required when sharing publicity. Please select the appropriate educational goals below before publishing and distribution",
       "description_privado":"Linking to the curriculum is only necessary when you publish publicly, but you are welcome to link the content to relevant competence goals below if desired."
     },
+    "source_is_open": "Teaching path is Open",
+    "source_is_open_assig": "Assignment is Open",
     "source": "Source"
   },
   "distribution_page": {
