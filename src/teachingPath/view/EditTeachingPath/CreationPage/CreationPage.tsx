@@ -522,7 +522,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         });
       }
     } else {
-      if (node!.type === mytypeFirstChildNode) {
+      if (myNode!.type === mytypeFirstChildNode) {
         Notification.create({
           type: NotificationTypes.ERROR,
           title: intl.get('edit_teaching_path.notifications.unable_to_drop')
