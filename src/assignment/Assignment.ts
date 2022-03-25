@@ -333,7 +333,7 @@ export class Assignment {
     this.grepMainTopicsIds = args.grepMainTopicsIds;
     this.grepGoalsIds = args.grepGoalsIds;
     this.grepReadingInSubjectsIds = args.grepReadingInSubjectsIds;
-    this._open = args.open;
+    this._open = args.open || false;
   }
 
   public isOwnedByMe(): boolean {

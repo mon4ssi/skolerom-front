@@ -524,6 +524,10 @@ export class DraftTeachingPath extends TeachingPath {
     await this.repo.saveTeachingPath(this);
   }
 
+  public getOpen() {
+    return this._open;
+  }
+
   @action
   public async publish() {
     this.validate('publish');

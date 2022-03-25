@@ -210,5 +210,6 @@ export const buildDraftAssignmentDTO = (
   grepGoalsIds: draftAssignment.grepGoalsIds,
   grepMainTopicsIds: draftAssignment.grepMainTopicsIds,
   grepReadingInSubjectsIds: draftAssignment.grepReadingInSubjectsIds,
-  sources: draftAssignment.sources
+  sources: draftAssignment.sources,
+  open: draftAssignment._open
 });

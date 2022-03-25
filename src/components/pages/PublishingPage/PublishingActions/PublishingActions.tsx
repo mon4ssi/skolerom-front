@@ -65,6 +65,7 @@ interface State {
   isValid: boolean;
   isValidPrivate: boolean;
   loadingGoals: boolean;
+  isOpen: boolean | undefined;
 }
 
 export interface TagPropSource {
@@ -103,7 +104,8 @@ export class PublishingActions extends Component<Props, State> {
       isValidPrivate: true,
       page: MAGICNUMBER1,
       pageCurrent: MAGICNUMBER1,
-      loadingGoals: true
+      loadingGoals: true,
+      isOpen: false
     };
   }
 
@@ -147,6 +149,7 @@ export class PublishingActions extends Component<Props, State> {
         listGoals = store!.getGoalsByArticle().split(',');
       }
     }
+    this.setState({ isOpen : store!.currentEntity!.open });
     await new Promise(resolve => setTimeout(resolve, SETTIMEOUT));
     const selectedGradesNature = store!.currentEntity!.getListOfGrades();
     const selectedSubjectsNature = store!.currentEntity!.getListOfSubjects();
@@ -737,11 +740,13 @@ export class PublishingActions extends Component<Props, State> {
 
   public toggleisOpen = () => {
     const { store, from } = this.props;
-    const isOpen = store!.currentEntity!.open;
-    if (isOpen) {
+    const myisOpen = this.state.isOpen;
+    if (myisOpen) {
       store!.currentEntity!.setOpen(false);
+      this.setState({ isOpen : false });
     } else {
       store!.currentEntity!.setOpen(true);
+      this.setState({ isOpen : true });
     }
   }
 
@@ -750,7 +755,7 @@ export class PublishingActions extends Component<Props, State> {
     const sources = store!.getAllSources().map(this.sourceToTagProp);
     const selectedSources = this.grepNumbersToTagprop(store!.currentEntity!.getListOfSources(), sources);
     const myplaceholder = (selectedSources.length > 0) ? '' : intl.get('publishing_page.source');
-    const isOpen = store!.currentEntity!.open;
+    const isOpen = this.state.isOpen;
     const isChecked = (isOpen) ? checkActive : checkRounded ;
     const textIsOpen = (from === 'TEACHINGPATH') ? intl.get('publishing_page.source_is_open') : intl.get('publishing_page.source_is_open_assig');
     let classHidden = 'itemsFlex subject hidden';

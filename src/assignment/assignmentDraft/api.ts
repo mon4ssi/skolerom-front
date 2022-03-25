@@ -50,6 +50,7 @@ export interface DraftAssignmentRequestDTO {
   grepGoalsIds?: Array<number>;
   grepReadingInSubjectsIds?: Array<number>;
   sources?: Array<number>;
+  open?: boolean;
 }
 
 export class DraftAssignmentApi implements DraftAssignmentRepo {

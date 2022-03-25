@@ -276,6 +276,10 @@ export class DraftAssignment extends Assignment {
     return this.grepReadingInSubjectsIds;
   }
 
+  public getOpen() {
+    return this._open;
+  }
+
   @action
   public setFeaturedImage() {
     this._featuredImage = this.relatedArticles[0] && this.relatedArticles[0].images && this.relatedArticles[0].images.url;

@@ -69,7 +69,7 @@ export class NewAssignmentStore {
   @observable public fetchingAttachments: boolean = false;
   @observable public visibilityAttachments: boolean = false;
   @observable public showValidationErrors: boolean = false;
-  @observable public open: boolean = false;
+  // @observable public open: boolean = false;
   @observable public showDeleteButton: boolean = false;
   @observable public assignmentContainer: AssignmentContainer | null = null;
   @observable public currentPreviewQuestion: number = -1;
@@ -463,9 +463,9 @@ export class NewAssignmentStore {
     return toJS(this.allSources);
   }
 
-  public getIsOpen(): boolean {
+  /*public getIsOpen(): boolean {
     return this.open;
-  }
+  }*/
 
   @action
   public async getArticles({
