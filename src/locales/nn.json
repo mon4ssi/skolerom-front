@@ -468,8 +468,9 @@
       "descrption_assignment":"Når du deler offentleg, må du kople oppgåva til læreplan. Vel relevante fag, klassetrinn, kompetansemål, kjerneelement og lesing i fag før publisering og distribusjon.",
       "description_privado":"Kopling til læreplanen er berre nødvendig når du deler offentleg. Du kan gjerne kople innhaldet til relevante kompetansemål her om du ønskjer det."
     },
-    "source_is_open": "Undervisningsveien er åpen",
-    "source_is_open_assig": "Oppgaven er åpen",
+    "source_is_open": "Vis i Open Site",
+    "source_is_open_assig": "Vis i Open Site",
+    "source_is_open_title": "Synlighetsinnstillinger",
     "source": "Kilde"
   },
   "distribution_page": {

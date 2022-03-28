@@ -758,25 +758,30 @@ export class PublishingActions extends Component<Props, State> {
     const isOpen = this.state.isOpen;
     const isChecked = (isOpen) ? checkActive : checkRounded ;
     const textIsOpen = (from === 'TEACHINGPATH') ? intl.get('publishing_page.source_is_open') : intl.get('publishing_page.source_is_open_assig');
-    let classHidden = 'itemsFlex subject hidden';
-    if (store!.getCurrentUser()!.type === UserType.ContentManager) { classHidden = 'itemsFlex subject'; }
+    let classHidden = 'InformationSource hidden';
+    if (store!.getCurrentUser()!.type === UserType.ContentManager) { classHidden = 'InformationSource'; }
 
     return (
       <div className={classHidden}>
-        <TagInputComponent
-          className="filterBy darkTheme"
-          tags={sources}
-          addTag={this.addSource}
-          currentTags={selectedSources}
-          orderbyid={false}
-          removeTag={this.removeSource}
-          placeholder={myplaceholder}
-          listView
-          temporaryTagsArray
-        />
-        <div className="filterCheck isOpen" onClick={this.toggleisOpen}>
-            <img src={isChecked} />
-            <p>{textIsOpen}</p>
+        <div className="infoContainer__secondTitle">
+          <h2>{intl.get('publishing_page.source_is_open_title')}</h2>
+          <div className="itemsFlex subject">
+            <TagInputComponent
+              className="filterBy darkTheme"
+              tags={sources}
+              addTag={this.addSource}
+              currentTags={selectedSources}
+              orderbyid={false}
+              removeTag={this.removeSource}
+              placeholder={myplaceholder}
+              listView
+              temporaryTagsArray
+            />
+            <div className="filterCheck isOpen" onClick={this.toggleisOpen}>
+                <img src={isChecked} />
+                <p>{textIsOpen}</p>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -1615,6 +1620,7 @@ export class PublishingActions extends Component<Props, State> {
             {this.renderLevelChoice()}
           </div>
           <div className="infoContainer__bottom">
+            {!this.state.isValidPrivate && this.renderSourceInput()}
             <div className="infoContainer__secondTitle">
               <h2>{titleSimple}</h2>
               <p>{!this.state.isValidPrivate && descriptionText}</p>
@@ -1625,7 +1631,6 @@ export class PublishingActions extends Component<Props, State> {
               {!this.state.isValidPrivate && this.renderCoreElements()}
               {!this.state.isValidPrivate && this.renderMultiDisciplinary()}
               {!this.state.isValidPrivate && this.renderReadingInSubject()}
-              {!this.state.isValidPrivate && this.renderSourceInput()}
             </div>
             {!this.state.isValidPrivate && this.renderGoals()}
           </div>
