@@ -16,6 +16,12 @@
         }
       }
     }
+    &.dragged {
+      .topVerticalLine, .bottomVerticalLine, .bottomHorizontalLine, .teachingPathButtons {
+        opacity: 0;
+        display: none;
+      }
+    }
   
     &.rootContainer {
       padding-bottom: 50px;

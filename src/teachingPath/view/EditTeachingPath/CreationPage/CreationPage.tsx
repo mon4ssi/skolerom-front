@@ -337,6 +337,14 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     this.setState({ isDrop: false, isPosibleDrop: false });
     onDrop(mytype);
     // step 2: draggable
+    const allContainers = Array.from(document.getElementsByClassName('teachingPathItemsContainer') as HTMLCollectionOf<HTMLElement>);
+    if (allContainers.length > 0) {
+      allContainers.forEach((container) => {
+        container.classList.remove('draggableclass');
+        container.setAttribute('draggable', 'false');
+      });
+    }
+    this.setState({ isDraggable: false });
     this.setState(
       {
         isDraggable: true
@@ -561,17 +569,24 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     }
   }
 
-  public dragleavethandler = () => {
+  public dragleavethandler = (event: React.MouseEvent<HTMLDivElement>) => {
     const { onDrop } = this.props;
+
   }
 
-  public dragStart = () => {
+  public dragStart = (event: React.MouseEvent<HTMLDivElement>) => {
     this.setState({ isDropInit: true });
+    if (this.state.isDraggable) {
+      event.currentTarget.classList.add('dragged');
+    }
   }
 
-  public dragendhandler = () => {
+  public dragendhandler = (event: React.MouseEvent<HTMLDivElement>) => {
     const { onDrop } = this.props;
     onDrop('NONE');
+    if (this.state.isDraggable) {
+      event.currentTarget.classList.remove('dragged');
+    }
     this.setState(
       {
         isDraggable: false,
