@@ -13,7 +13,6 @@ import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTe
 import { Link } from 'react-router-dom';
 import { TeachingPathNodeType } from 'teachingPath/TeachingPath';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
-import { Assignment } from 'assignment/Assignment';
 
 interface Props {
   editTeachingPathStore?: EditTeachingPathStore;
@@ -88,10 +87,10 @@ export class TeacherguidanceModal extends Component<Props> {
     const countChildren = itemTG.children.children.length;
     if (countChildren > 0) {
       if (itemTG.children.children[0].type ===  TeachingPathNodeType.Assignment) {
-        return itemTG.children.children.map((itemAssignment: any, index) => (
-          <Link key={index} to={`/assignments/view/${itemAssignment.items![0].value.id}?preview${itemAssignment.items![0].value.hasGuidance ? '&open=tg' : ''}`} target="_blank">
-            {itemAssignment.items![0].value.hasGuidance ? `${itemAssignment.items![0].value.title} - ${intl.get('teacherGuidance.name')}` : `${itemAssignment.items![0].value.title} - (${intl.get('teacherGuidance.noAdded')})`}
-            {itemAssignment.items![0].value.hasGuidance ? <img src={openTGImg} alt={intl.get('teacherGuidance.nane')} /> : ''}
+        return itemTG.children.children[0].items!.map((itemAssignment: any, index) => (
+          <Link key={index} to={`/assignments/view/${itemAssignment.value.id}?preview${itemAssignment.value.hasGuidance ? '&open=tg' : ''}`} target="_blank">
+            {itemAssignment.value.hasGuidance ? `${itemAssignment.value.title} - ${intl.get('teacherGuidance.name')}` : `${itemAssignment.value.title} - (${intl.get('teacherGuidance.noAdded')})`}
+            {itemAssignment.value.hasGuidance ? <img src={openTGImg} alt={intl.get('teacherGuidance.nane')} /> : ''}
           </Link>
         ));
       }
