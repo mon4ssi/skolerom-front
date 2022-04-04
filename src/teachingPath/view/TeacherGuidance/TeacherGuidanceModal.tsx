@@ -89,7 +89,7 @@ export class TeacherguidanceModal extends Component<Props> {
       if (itemTG.children.children[0].type ===  TeachingPathNodeType.Assignment) {
         return itemTG.children.children[0].items!.map((itemAssignment: any, index) => (
           <Link key={index} to={`/assignments/view/${itemAssignment.value.id}?preview${itemAssignment.value.hasGuidance ? '&open=tg' : ''}`} target="_blank">
-            {itemAssignment.value.hasGuidance ? `${itemAssignment.value.title} - ${intl.get('teacherGuidance.name')}` : `${itemAssignment.value.title} - (${intl.get('teacherGuidance.noAdded')})`}
+            {itemAssignment.value.hasGuidance ? `${itemAssignment.value.title} — ${intl.get('teacherGuidance.name')}` : `${itemAssignment.value.title} — (${intl.get('teacherGuidance.noAdded')})`}
             {itemAssignment.value.hasGuidance ? <img src={openTGImg} alt={intl.get('teacherGuidance.nane')} /> : ''}
           </Link>
         ));
