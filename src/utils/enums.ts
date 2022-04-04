@@ -67,3 +67,8 @@ export enum QueryStringKeys {
   GREPREADINGINSUBJECT = 'grepReadingInSubject',
   SOURCE = 'source',
 }
+
+export enum ReturnUrl {
+  RETURN_URL = 'return_url',
+  TIME_EXPIRED = 'return_url_expired'
+}
