@@ -59,7 +59,7 @@ export class LoginStore {
       if (sReturnUrl !== null) {
         const dDateNow = new Date().valueOf();
         const dDateExpiredUrl = window.localStorage.getItem(ReturnUrl.TIME_EXPIRED);
-        const diffExpiredNow = BigInt(dDateExpiredUrl!) - BigInt(dDateNow);
+        const diffExpiredNow = BigInt(dDateNow) - BigInt(dDateExpiredUrl!);
         const maxMinutesExprired: number = 300000;
 
         window.localStorage.removeItem(ReturnUrl.RETURN_URL);
