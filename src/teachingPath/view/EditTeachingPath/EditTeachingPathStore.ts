@@ -36,6 +36,7 @@ export class EditTeachingPathStore {
   @observable public isDisabledButtons: boolean = false;
   @observable public hasMoreArticles: boolean = true;
   @observable public isEditArticles: boolean = false;
+  @observable public isDraggable: boolean = false;
   @observable public articleInEdit: number = 0;
   @observable public assingmentInEdit: number = 0;
 
@@ -121,6 +122,18 @@ export class EditTeachingPathStore {
 
   public falseIsEditAssignments() {
     this.isEditAssignments = false;
+  }
+
+  public trueIsDraggable() {
+    this.isDraggable = true;
+  }
+
+  public falseIsDraggable() {
+    this.isDraggable = false;
+  }
+
+  public returnIsDraggable() {
+    return this.isDraggable;
   }
 
   public returnIsEditArticles() {

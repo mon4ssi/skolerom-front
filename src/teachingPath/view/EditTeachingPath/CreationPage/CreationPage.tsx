@@ -63,6 +63,7 @@ interface NodeContentProps {
   readOnly?: boolean;
   dropArticles?: boolean;
   dropAssignments?: boolean;
+  dragCards?: boolean;
   onDrop(type: string): void;
 }
 
@@ -100,6 +101,12 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     }
     const headerArray = Array.from(document.getElementsByClassName('header') as HTMLCollectionOf<HTMLElement>);
     headerArray[0].style.display = 'flex';
+  }
+
+  public onClean() {
+    this.setState({
+      isDraggable: false
+    });
   }
 
   public handleChangeNumberOfTitleCols = (valueLength: number) => {
@@ -170,6 +177,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       editTeachingPathStore!.setCurrentNode(null);
       editTeachingPathStore!.setSelectedDragNode(null);
       editTeachingPathStore!.setParentSelectedDragNode(null);
+      editTeachingPathStore!.falseIsDraggable();
     } else {
       Notification.create({
         type: NotificationTypes.ERROR,
@@ -335,15 +343,20 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     const mytype = node.type;
     // step 1: detect posible drop
     this.setState({ isDrop: false, isPosibleDrop: false });
+    editTeachingPathStore!.trueIsDraggable();
     onDrop(mytype);
     // step 2: draggable
+
     const allContainers = Array.from(document.getElementsByClassName('teachingPathItemsContainer') as HTMLCollectionOf<HTMLElement>);
     if (allContainers.length > 0) {
       allContainers.forEach((container) => {
         container.classList.remove('draggableclass');
         container.setAttribute('draggable', 'false');
       });
+      this.divRef.current!.classList.add('draggableclass');
+      this.divRef.current!.setAttribute('draggable', 'true');
     }
+
     this.setState({ isDraggable: false });
     this.setState(
       {
@@ -430,18 +443,19 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       key={index}
       className={`flexBox ${this.props.isRoot ? 'dirColumn' : 'dirRow alingBaseLine'}`}
     >
-      <NodeContent
-        index={index}
-        parentNode={this.props.node}
-        node={childNode as EditableTeachingPathNode}
-        nestedOrder={this.props.nestedOrder! + 1}
-        editTeachingPathStore={this.props.editTeachingPathStore}
-        allNode={this.props.allNode}
-        dropArticles={this.props.dropArticles}
-        dropAssignments={this.props.dropAssignments}
-        readOnly={this.props.readOnly}
-        onDrop={this.props.onDrop}
-      />
+    <NodeContent
+      index={index}
+      parentNode={this.props.node}
+      node={childNode as EditableTeachingPathNode}
+      nestedOrder={this.props.nestedOrder! + 1}
+      editTeachingPathStore={this.props.editTeachingPathStore}
+      allNode={this.props.allNode}
+      dropArticles={this.props.dropArticles}
+      dropAssignments={this.props.dropAssignments}
+      readOnly={this.props.readOnly}
+      dragCards={this.props.dragCards}
+      onDrop={this.props.onDrop}
+    />
     </div>
   )
 
@@ -516,6 +530,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
           isDropInit: false,
           isPosibleDrop: false,
         });
+        editTeachingPathStore!.falseIsDraggable();
         // delete item
         editTeachingPathStore!.setCurrentNode(myParent);
         editTeachingPathStore!.removeChildToCurrentNodeNullPerItem(myNode);
@@ -582,7 +597,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   }
 
   public dragendhandler = (event: React.MouseEvent<HTMLDivElement>) => {
-    const { onDrop } = this.props;
+    const { editTeachingPathStore, onDrop } = this.props;
     onDrop('NONE');
     if (this.state.isDraggable) {
       event.currentTarget.classList.remove('dragged');
@@ -597,6 +612,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       }
     );
     this.setState({ isDrop: false });
+    // editTeachingPathStore!.falseIsDraggable();
   }
 
   public renderAddingButtons = (withUnmergeButton: boolean) => {
@@ -816,7 +832,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   }
 
   public render() {
-    const { node, parentNode, index, readOnly, dropArticles, dropAssignments } = this.props;
+    const { node, parentNode, index, readOnly, dropArticles, dropAssignments, editTeachingPathStore } = this.props;
     const children = node.children as Array<EditableTeachingPathNode>;
     const ifDropCant = (children.length === 0) ? false : true;
     const accIf = (ifDropCant) ? children[0].type : node.type;
@@ -853,7 +869,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         <div className="childrenContainer flexBox">
           {children.length ? children.map(this.renderNodeContent) : null}
         </div>
-        {!this.state.isDraggable && this.state.isDrop && !ifDropCant && this.dropInfoCard()}
+        {editTeachingPathStore!.returnIsDraggable() && !this.state.isDraggable && !ifDropCant && this.dropInfoCard()}
 
         {!readOnly && this.renderMergeButton()}
       </div>
@@ -973,7 +989,6 @@ export class CreationPageComponent extends Component<Props> {
             readOnly={readOnly}
             editTeachingPathStore={editTeachingPathStore}
           />
-
           <NodeContent
             isRoot
             node={currentTeachingPath!.content! as EditableTeachingPathNode}
@@ -982,6 +997,7 @@ export class CreationPageComponent extends Component<Props> {
             readOnly={readOnly}
             dropArticles={this.state.valuearticles}
             dropAssignments={this.state.valueassigments}
+            dragCards={editTeachingPathStore!.returnIsDraggable()}
             onDrop={this.onDrop}
           />
 
