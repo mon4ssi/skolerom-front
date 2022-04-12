@@ -68,6 +68,7 @@ export class HeaderComponent extends Component<Props> {
   }
 
   private onPublish = (onlyPublish: boolean) => async () => {
+    /* console.log('publish'); */
     const { editTeachingPathStore, history } = this.props;
     const { id } = editTeachingPathStore!.currentEntity!;
     const userType = editTeachingPathStore!.getCurrentUser()!.type;
@@ -78,7 +79,7 @@ export class HeaderComponent extends Component<Props> {
 
     if (!editTeachingPathStore!.isActiveButtons) {
       const grepGoals = editTeachingPathStore!.teachingPathContainer!.teachingPath.grepGoalsIds;
-      const msj = (typeof(grepGoals) === 'undefined') ? intl.get('edit_teaching_path.header.cant_publish_goals') : (grepGoals!.length === 0) ? intl.get('edit_teaching_path.header.cant_publish_goals') : intl.get('edit_teaching_path.header.cant_publish');
+      const msj = (typeof (grepGoals) === 'undefined') ? intl.get('edit_teaching_path.header.cant_publish_goals') : (grepGoals!.length === 0) ? intl.get('edit_teaching_path.header.cant_publish_goals') : intl.get('edit_teaching_path.header.cant_publish');
       Notification.create({
         type: NotificationTypes.ERROR,
         title: msj
@@ -113,18 +114,29 @@ export class HeaderComponent extends Component<Props> {
 
     try {
       await editTeachingPathStore!.publish();
+      /* console.log('ssdfdsfsdfdsfd'); */
 
+      const url: string = localStorage!.getItem('url') !== null ? localStorage!.getItem('url')!.toString().split('?')[1] : '';
       Notification.create({
         type: NotificationTypes.SUCCESS,
         title: intl.get('edit_teaching_path.header.after_publishing')
       });
-
       if (userType === UserType.Teacher) {
-        onlyPublish ? history.push('/teaching-paths/all') : history.push(`/teaching-paths/edit/${id}/distribute`);
+        if (onlyPublish) {
+          /* console.log('publish!!!');
+          console.log(url); */
+          this.props.history.push(`/teaching-paths/all?${url}`);
+          localStorage.removeItem('url');
+        } else {
+          history.push(`/teaching-paths/edit/${id}/distribute`);
+        }
+        /* onlyPublish ? history.push('/teaching-paths/all') : history.push(`/teaching-paths/edit/${id}/distribute`); */
       }
 
       if (userType === UserType.ContentManager) {
-        history.push('/teaching-paths/all');
+        /* history.push('/teaching-paths/all'); */
+        this.props.history.push(`/teaching-paths/all?${url}`);
+        localStorage.removeItem('url');
       }
 
     } catch (e) {
@@ -138,6 +150,7 @@ export class HeaderComponent extends Component<Props> {
   }
 
   private onDistribute = async () => {
+    /* console.log('distribute'); */
     const { editTeachingPathStore, history } = this.props;
 
     editTeachingPathStore!.distribute()
@@ -177,7 +190,11 @@ export class HeaderComponent extends Component<Props> {
     const { isCreation, isPublishing, isDistribution, teachingPathsListStore } = this.props;
 
     if (isCreation) {
-      this.props.history.push(`/teaching-paths/${teachingPathsListStore!.typeOfTeachingPathsList}`);
+      /* this.props.history.push(`/teaching-paths/${teachingPathsListStore!.typeOfTeachingPathsList}`); */
+      const url: string = localStorage!.getItem('url') !== null ? localStorage!.getItem('url')!.toString().toString().split('?')[1] : '';
+      this.props.history.push(`/teaching-paths/all?${url}`);
+      localStorage.removeItem('url');
+      /* localStorage.clear(); */
     }
     if (isPublishing) {
       this.props.history.push(`/teaching-paths/edit/${this.props.match.params.id}/`);

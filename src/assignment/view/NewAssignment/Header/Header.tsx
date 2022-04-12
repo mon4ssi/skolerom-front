@@ -87,7 +87,7 @@ class HeaderWrapper extends Component<Props> {
 
     if (!newAssignmentStore!.isActiveButtons) {
       const grepGoals = newAssignmentStore!.assignmentContainer!.assignment.grepGoalsIds;
-      const msj = (typeof(grepGoals) === 'undefined') ? intl.get('edit_teaching_path.header.cant_publish_goals') : (grepGoals!.length === 0) ? intl.get('edit_teaching_path.header.cant_publish_goals') : intl.get('edit_teaching_path.header.cant_publish');
+      const msj = (typeof (grepGoals) === 'undefined') ? intl.get('edit_teaching_path.header.cant_publish_goals') : (grepGoals!.length === 0) ? intl.get('edit_teaching_path.header.cant_publish_goals') : intl.get('edit_teaching_path.header.cant_publish');
       Notification.create({
         type: NotificationTypes.ERROR,
         title: msj
@@ -200,7 +200,6 @@ class HeaderWrapper extends Component<Props> {
 
   private onGoBack = async () => {
     const { isCreation, isPublishing, isDistribution, location, assignmentListStore } = this.props;
-
     if (isCreation) {
       if (location.state && location.state.fromTeachingPath) {
         const goBackConfirm = await Notification.create({
@@ -211,7 +210,11 @@ class HeaderWrapper extends Component<Props> {
           this.props.history.push(`/teaching-paths/edit/${location.state.teachingPathId}`);
         }
       } else {
-        this.props.history.push(`/assignments/${assignmentListStore!.typeOfAssignmentsList}`);
+        /* this.props.history.push(`/assignments/${assignmentListStore!.typeOfAssignmentsList}`); */
+        const url: string = localStorage!.getItem('url') !== null ? localStorage!.getItem('url')!.toString().split('?')[1] : '';
+        this.props.history.push(`/assignments/all?${url}`);
+        localStorage.removeItem('url');
+        /* localStorage.clear(); */
       }
     }
 

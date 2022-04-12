@@ -315,6 +315,8 @@ class TeachingPathsListComponent extends Component<Props, State> {
   }
 
   public async componentDidMount() {
+    localStorage.removeItem('url');
+    /* console.log(localStorage.getItem('url')); */
     const { editTeachingPathStore } = this.props;
     const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions } = this.state;
     this.setCurrentTab();
