@@ -106,6 +106,7 @@
             color: #ffffff;
             font-size: 1.0625rem;
             margin: 0 12px 0 0;
+            padding: 0px 10px;
             float: left;
         }
     }
@@ -134,11 +135,16 @@
             button {
                 display:flex;
                 background: transparent;
-    
+
                 img {
                     margin-left: 5px
                 }
-
+            }
+            button.downloading {
+                cursor:progress;
+                img {
+                    visibility: hidden;
+                }
             }
         }
     }

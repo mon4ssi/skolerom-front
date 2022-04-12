@@ -61,6 +61,7 @@
     "contact_menu": "Contact",
     "about_menu": "About Skoleroom",
     "logg_in": "Log with Feide",
+    "School Articles": "School Articles",
     "Articles": "Articles",
     "Article":  "Article",
     "teacher_room": "Teacher's Room",
@@ -81,6 +82,7 @@
     "About skolerom": "About skolerom",
     "School": "School",
     "Library": "Library",
+    "For foresatte": "For foresatte",
     "teacher": "Teacher",
     "student": "Student",
     "content_manager": "Content manager",
@@ -395,7 +397,8 @@
     "Close": "Close",
     "Choose assignment": "Choose Assignment",
     "Choose article": "Choose Article",
-    "Choose domain": "Choose External link"
+    "Choose domain": "Choose External link",
+    "not possible to evaluate": "It’s not possible to evaluate this assignment before the due date has passed"
   },
   "months": {
     "January": "January",
@@ -465,6 +468,9 @@
       "descrption_assignment":"Connecting your teaching path is required when sharing publicity. Please select the appropriate educational goals below before publishing and distribution",
       "description_privado":"Linking to the curriculum is only necessary when you publish publicly, but you are welcome to link the content to relevant competence goals below if desired."
     },
+    "source_is_open": "Display in Open Site",    
+    "source_is_open_title": "Visiblity Settings",
+    "source_is_open_assig": "Display in Open Site",
     "source": "Source"
   },
   "distribution_page": {
@@ -628,6 +634,7 @@
     },
     "validation": {
       "title_words_count": "Title cannot be empty",
+      "title_node_words_count": "Activity header cannot be empty",
       "description_words_count": "Description cannot be empty",
       "already_editing": "Someone is already editing teaching path",
       "empty_content": "At least 1 path should be created"
@@ -648,7 +655,9 @@
     },
     "paths": {
       "main_teaching_path_title": "Teaching path",
-      "teaching_path_title": "Teaching path title"
+      "teaching_path_title": "Teaching path title",
+      "node_teaching_path_title": "Teaching path title",
+      "node_teaching_path_place_holder": "Teaching path"
     },
     "merge": "Merge path",
     "expand": "Expand path",
@@ -745,7 +754,8 @@
     "grade": "Grade",
     "student_level": "Student level",
     "visibility": "visibility",
-    "language": "Languages"
+    "language": "Languages",
+    "downloading": "Downloading"
   },
   "activity_page": {
     "Hello": "Hello",

@@ -55,6 +55,7 @@ export type TeachingPathItemValueArgs = {
   featuredImage?: string;
   grepGoals?: Array<GreepElements>;
   hasGuidance?: boolean;
+  open?: boolean;
 };
 
 export type TeachingPathItemValue = Article | Assignment | Domain;
@@ -120,7 +121,7 @@ export class TeachingPathNode {
     this._type = args.type;
     this._items = args.items && args.items.map(value => new TeachingPathItem({ value, type: args.type }));
     this._children = args.children ? args.children.map(node => new TeachingPathNode(node)) : [];
-    this._selectQuestion = args.selectQuestion || intl.get('edit_teaching_path.paths.teaching_path_title');
+    this._selectQuestion = args.selectQuestion || intl.get('edit_teaching_path.paths.node_teaching_path_title');
     this._guidance = args.guidance || '';
     this._breadcrumbs = args.breadcrumbs;
   }
@@ -203,6 +204,7 @@ export interface TeachingPathArgs {
   grepReadingInSubjectsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
   grepGoals?: Array<GreepElements>;
+  open?: boolean;
 }
 
 export class TeachingPath {
@@ -247,6 +249,7 @@ export class TeachingPath {
   @observable protected _grepReadingInSubjectsIds?: Array<number>;
   @observable protected _grepGoalsIds?: Array<number>;
   @observable protected _grepGoals?: Array<GreepElements> = [];
+  @observable protected _open?: boolean = false;
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;
@@ -291,6 +294,7 @@ export class TeachingPath {
     this._grepReadingInSubjectsIds = args.grepReadingInSubjectsIds;
     this._grepGoalsIds = args.grepGoalsIds;
     this._grepGoals = args.grepGoals || [];
+    this._open = args.open || false;
   }
 
   @computed
@@ -316,6 +320,11 @@ export class TeachingPath {
   @computed
   public get grepGoalsIds() {
     return this._grepGoalsIds;
+  }
+
+  @computed
+  public get open() {
+    return this._open;
   }
 
   @computed

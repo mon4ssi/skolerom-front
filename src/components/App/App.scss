@@ -425,6 +425,9 @@ pre {
   opacity: 1;
   pointer-events: all;
 }
+.AssignmentsList .css-1y8mk30-SkeletonTheme {
+  width: 100% !important;
+}
 .generalTitle {
   font-size: 1.625rem;
   margin: 0px;
@@ -437,6 +440,11 @@ pre {
     text-align: center;
   }
 }
+
+.ReactModalPortal .ril-inner.ril__inner img {
+  background: white !important;
+}
+
 //focus event
 .AppHeader__block a:focus {
   outline: solid;
@@ -625,6 +633,12 @@ pre {
       animation-delay: 0.32s;
     }
   }
+}
+
+.MyAccountWindow__closeButton:focus {
+  outline: black;
+  outline-style: auto;
+  outline-offset: 2px;
 }
 
 @keyframes clouds {

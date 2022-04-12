@@ -1,9 +1,10 @@
 import moment from 'moment';
 
-export const getYearMonthDayDate = (date: Date) => (
-  new Date(date.getFullYear(), date.getMonth(), date.getDate())
-);
+export const getYearMonthDayDate = (date: Date) => {
+  const isDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  return new Date(isDate.replace(/-/g, '/'));
+};
 
 export const formatDeadline = (date: Date | null) => (
-  date && moment(date).format('(DD/MM-YYYY)')
+  date && moment(date, 'DD/MM-YYYY').format('(DD/MM-YYYY)')
 );

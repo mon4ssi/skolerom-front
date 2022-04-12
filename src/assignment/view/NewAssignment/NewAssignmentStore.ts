@@ -1,7 +1,7 @@
 import { action, computed, observable, reaction, toJS } from 'mobx';
 import isUndefined from 'lodash/isUndefined';
 import isNull from 'lodash/isNull';
-
+import intl from 'react-intl-universal';
 import { injector } from 'Injector';
 import { Assignment, Article, ARTICLE_SERVICE_KEY, Attachment, Grade, QuestionAttachment, QuestionType, Subject, GreepElements, FilterArticlePanel, Source } from 'assignment/Assignment';
 import { DraftAssignment, EditableImageChoiceQuestion, EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
@@ -69,6 +69,7 @@ export class NewAssignmentStore {
   @observable public fetchingAttachments: boolean = false;
   @observable public visibilityAttachments: boolean = false;
   @observable public showValidationErrors: boolean = false;
+  // @observable public open: boolean = false;
   @observable public showDeleteButton: boolean = false;
   @observable public assignmentContainer: AssignmentContainer | null = null;
   @observable public currentPreviewQuestion: number = -1;
@@ -85,6 +86,7 @@ export class NewAssignmentStore {
   @observable public storedAssignment: Assignment | null = null;
   @observable public highlightingItem: CreationElementsType | undefined;
   @observable public allArticlePanelFilters: FilterArticlePanel | null = null;
+  @observable public titleButtonGuidance: string = '';
 
   public arrayForImagesSkeleton = new Array(numberOfImagesForSkeleton).fill('imageSkeletonLoader');
   public arrayForVideosSkeleton = new Array(numberOfVideosForSkeleton).fill('videoSkeletonLoader');
@@ -104,6 +106,30 @@ export class NewAssignmentStore {
   @computed
   public get ifSearchValueIsNumber() {
     return !isNaN(Number(this.searchValue.charAt(0)));
+  }
+
+  public get getTitleButtonGuidance() {
+    return this.titleButtonGuidance;
+  }
+
+  @action
+  public setTitleButtonGuidance(drafAssignment: DraftAssignment | undefined) {
+    let hasGuidance: boolean = false;
+    const guidanceBlank1 = '<p><br></p>';
+    const guidanceBlank2 = '';
+
+    if (drafAssignment!.guidance !== guidanceBlank1 && drafAssignment!.guidance !== guidanceBlank2) {
+      hasGuidance = true;
+    } else {
+      drafAssignment!.questions.forEach((child) => {
+        if (child.guidance !== guidanceBlank1 && child.guidance !== guidanceBlank2) {
+          hasGuidance = true;
+          return true;
+        }
+      });
+    }
+
+    this.titleButtonGuidance = hasGuidance ? intl.get('teacherGuidance.buttons.edit') : intl.get('teacherGuidance.buttons.add');
   }
 
   public relatedArticlesIsHidden() {
@@ -436,6 +462,10 @@ export class NewAssignmentStore {
   public getAllSources(): Array<Source> {
     return toJS(this.allSources);
   }
+
+  /*public getIsOpen(): boolean {
+    return this.open;
+  }*/
 
   @action
   public async getArticles({

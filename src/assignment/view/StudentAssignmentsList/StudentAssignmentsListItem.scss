@@ -22,6 +22,15 @@ $image-height: 60px;
   min-width: 0;
 }
 
+.assignmentList .css-1y8mk30-SkeletonTheme {
+  width: 100%;
+  height: 70px;
+}
+.assignmentList .css-1y8mk30-SkeletonTheme .react-loading-skeleton {
+  height: 60px;
+}
+
+
 .StudentAssignmentsListItem__blockMain {
   flex-shrink: 10;
 }

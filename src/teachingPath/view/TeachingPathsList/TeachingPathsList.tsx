@@ -29,6 +29,7 @@ const MAGICNUMBER100 = -1;
 const MAGICNUMBER1 = 1;
 const limitSplicePathname = 4;
 const limitIndex = 2;
+const heightMin = 250;
 const SOURCE = 'TEACHING_PATH';
 
 interface Props extends RouteComponentProps {
@@ -1021,7 +1022,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
   public renderTeachingPathCards = () => {
     const { teachingPathsListStore } = this.props;
     const { idActiveCard } = this.state;
-
+    const heightSkeletom = Number(heightMin);
     const currentUserType = teachingPathsListStore!.getCurrentUser()!.type;
 
     const teachingPaths = teachingPathsListStore!.teachingPathsState === StoreState.LOADING ?
@@ -1036,7 +1037,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
     }
     return teachingPaths.map((item, index) => (
       teachingPathsListStore!.teachingPathsState === StoreState.LOADING ? (
-        <SkeletonLoader key={index} className="InfoCard" />
+        <SkeletonLoader height={heightSkeletom} key={index} className="SkeletonCard" />
       ) : (
         <InfoCard
           isTeachingPath

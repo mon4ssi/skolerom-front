@@ -35,25 +35,36 @@ const ANIMATION_TIMEOUT = 200;
 
 const headerLinks: Array<HeaderNavigationLink> = [
   {
-    name: 'School',
-    url: `${process.env.REACT_APP_WP_URL}/undervisning/`
-  },
-  {
     name: 'Library',
     url: '#',
     dropdown: true,
     submenuItems: [
       {
-        name: 'Articles',
-        url: `${process.env.REACT_APP_WP_URL}/artikler/`
+        name: 'School Articles',
+        url: `${process.env.REACT_APP_WP_URL}/undervisning/`
       },
       {
         name: 'Publications',
         url: `${process.env.REACT_APP_WP_URL}/temaboker/`
       },
       {
+        name: 'Articles',
+        url: `${process.env.REACT_APP_WP_URL}/artikler/`
+      },
+      {
         name: 'Sound articles',
         url: `${process.env.REACT_APP_WP_URL}/lydartikler/`
+      }
+    ]
+  },
+  {
+    name: 'School',
+    url: '#',
+    dropdown: true,
+    submenuItems: [
+      {
+        name: 'For foresatte',
+        url: `${process.env.REACT_APP_WP_URL}/for-foresatte/`
       }
     ]
   },

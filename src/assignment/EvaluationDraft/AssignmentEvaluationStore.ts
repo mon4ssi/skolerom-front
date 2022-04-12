@@ -170,16 +170,17 @@ export class AssignmentEvaluationStore {
 
   @action
   public getAnswersById = async () => {
-    this._evaluationAnswers = await this.evaluationService.getAnswersById(this._currentAssignment!.id, this._currentEvaluation!.answerId);
-    if (this._evaluationAnswers!.comment) {
-      this._currentEvaluation!.setCommentToEntity(this._evaluationAnswers!.comment);
-    }
-    this._evaluationAnswers!.revisionContent.answers.forEach((answer) => {
-      if (answer.comment) {
-        this._currentEvaluation!.setCommentToAnswer(answer.comment, answer.answerBlock.key.id!);
+    if (this._currentEvaluation) {
+      this._evaluationAnswers = await this.evaluationService.getAnswersById(this._currentAssignment!.id, this._currentEvaluation!.answerId);
+      if (this._evaluationAnswers!.comment) {
+        this._currentEvaluation!.setCommentToEntity(this._evaluationAnswers!.comment);
       }
-    });
-
+      this._evaluationAnswers!.revisionContent.answers.forEach((answer) => {
+        if (answer.comment) {
+          this._currentEvaluation!.setCommentToAnswer(answer.comment, answer.answerBlock.key.id!);
+        }
+      });
+    }
     this.getRelatedArticles();
   }
 
@@ -211,8 +212,10 @@ export class AssignmentEvaluationStore {
   }
 
   public async saveEvaluation() {
-    await this.evaluationService.saveEvaluation(this._currentAssignment!.id, this._currentEvaluation!.answerId, this.currentEvaluation!);
-    this.showSaveMessage();
+    if (this._currentEvaluation) {
+      await this.evaluationService.saveEvaluation(this._currentAssignment!.id, this._currentEvaluation!.answerId, this.currentEvaluation!);
+      this.showSaveMessage();
+    }
   }
 
   @action

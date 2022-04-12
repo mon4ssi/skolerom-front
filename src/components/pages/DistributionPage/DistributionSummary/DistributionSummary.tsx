@@ -71,7 +71,6 @@ export class DistributionSummary extends Component<Props> {
     const dueDate = moment(currentDistribution.startDate).isSame(getYearMonthDayDate(currentDistribution.endDate)) ?
       intl.get('distribution_page.due_today') :
       `${this.generateDeadline()} ${intl.get('distribution_page.from_now')}`;
-
     return (
       <div className="summary">
 

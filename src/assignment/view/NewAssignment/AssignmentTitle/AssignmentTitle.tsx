@@ -140,11 +140,11 @@ export class AssignmentTitle extends Component<Props> {
           />
           <div className="sectionGuidance">
             <CreateButton
-              title={intl.get('teacherGuidance.buttons.add')}
+              title={newAssignmentStore!.getTitleButtonGuidance}
               onClick={this.openModalTGAssig.bind(this, '0')}
             >
-              <img src={teaGuiBGImg} alt={intl.get('teacherGuidance.buttons.add')} />
-              {intl.get('teacherGuidance.buttons.add')}
+              <img src={teaGuiBGImg} alt={newAssignmentStore!.getTitleButtonGuidance} />
+              {newAssignmentStore!.getTitleButtonGuidance}
             </CreateButton>
           </div>
         </div>

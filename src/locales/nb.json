@@ -61,7 +61,8 @@
     "contact_menu": "Kontakt oss",
     "about_menu": "Hva er skolerom.no?",
     "logg_in": "Logg inn med Feide",
-    "Articles": "Artikler",
+    "School Articles": "Skoleartikler",
+    "Articles": "Featureartikler",
     "Article": "Artikkel",
     "teacher_room": "Lærerrom",
     "student_room": "Elevrom",
@@ -79,8 +80,9 @@
     "selected": "valgt",
     "Log in": "Logg inn",
     "About skolerom": "Hva er Skolerom?",
-    "School": "Skoleartikler",
-    "Library": "Biblioteket",
+    "School": "Støttemateriell",
+    "Library": "Skolebibliotek",
+    "For foresatte": "For foresatte",
     "teacher": "Lærer",
     "student": "Elev",
     "content_manager": "Redaktør",
@@ -164,7 +166,7 @@
     "Start assignment": "Start oppgave",
     "continue_assignment": "Fortsett på oppgave",
     "Assignment articles": "Artikler tilknyttet oppgave",
-    "Finish reading article": "Les ferdig",
+    "Finish reading article": "Fortsett med oppgave",
     "Questions count": "{answeredQuestionsCount} av {totalQuestionsCount}",
     "questions answered": "spørsmål er besvart"
   },
@@ -395,7 +397,8 @@
     "Close": "Lukk",
     "Choose assignment": "Velg oppgave",
     "Choose article": "Velg artikkel",
-    "Choose domain": "Velg ekstern artikkel"
+    "Choose domain": "Velg ekstern artikkel",    
+    "not possible to evaluate": "Det er ikke mulig å evaluere en oppgave før svarfristen er utløpt"
   },
   "months": {
     "January": "Januar",
@@ -464,6 +467,9 @@
       "descrption_assignment":"Når du deler offentlig, må du koble oppgaven til læreplan. Velg relevante fag, klassetrinn, kompetansemål, kjerneelementer og lesing i fag for å kunne lagre og distribuere oppgaven.",
       "description_privado":"Kobling til læreplan er bare obligatorisk når du deler offentlig. For å lettere kunne søke i ditt eget innhold kan du velge å legge til kompetansemål her."
     },
+    "source_is_open": "Vis i Open Site",    
+    "source_is_open_title": "Synlighetsinnstillinger",
+    "source_is_open_assig": "Vis i Open Site",
     "source": "Kilde"
   },
   "distribution_page": {
@@ -627,6 +633,7 @@
     },
     "validation": {
       "title_words_count": "Tittelen kan ikke være tom",
+      "title_node_words_count": "Overskrift til aktivitet kan ikke være tom",
       "description_words_count": "Beskrivelsen kan ikke være tom",
       "already_editing": "Noen redigerer læringsstien akkurat nå",
       "empty_content": "Minst én sti må opprettes"
@@ -647,7 +654,9 @@
     },
     "paths": {
       "main_teaching_path_title": "Læringssti",
-      "teaching_path_title": "Legg til undertittel"
+      "teaching_path_title": "Legg til undertittel",
+      "node_teaching_path_title": "Neste aktivitet",
+      "node_teaching_path_place_holder": "Legg til overskrift til aktivitet"
     },
     "merge": "Slå sammen stiene",
     "expand": "Utvid stien",
@@ -744,7 +753,8 @@
     "grade": "Klassetrinn",
     "student_level": "Velg elevspor",
     "visibility": "synlighet",
-    "language": "Språk"
+    "language": "Språk",
+    "downloading": "Laster ned"
   },
   "activity_page": {
     "Hello": "Hei",

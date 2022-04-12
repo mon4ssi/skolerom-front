@@ -28,7 +28,9 @@ interface Props {
 class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps<{}, {}, LocationState>> {
   private titleRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
   public componentDidUpdate() {
-    this.titleRef.current!.focus();
+    if (this.titleRef.current) {
+      this.titleRef.current!.focus();
+    }
   }
   public handleChangeAnswer = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { redirectData, answer, handleShowArrowsTooltip } = this.props;

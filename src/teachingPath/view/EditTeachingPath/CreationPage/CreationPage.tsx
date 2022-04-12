@@ -411,7 +411,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         );
 
         parentNode!.children[index! - 1].setChildren([...parentNode!.children[index! - 1].children, ...node.children]);
-        parentNode!.children[index! - 1].setSelectedQuestion(intl.get('edit_teaching_path.paths.teaching_path_title'));
+        parentNode!.children[index! - 1].setSelectedQuestion(intl.get('edit_teaching_path.paths.node_teaching_path_title'));
         parentNode!.removeChild(node);
       }
     }
@@ -647,11 +647,9 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
   public renderInput = () => {
     const { nestedOrder, node, readOnly } = this.props;
-    const placeholder = node.type === TeachingPathNodeType.Root ?
-      intl.get('edit_teaching_path.paths.main_teaching_path_title') :
-      intl.get('edit_teaching_path.paths.teaching_path_title');
+    const placeholder = intl.get('edit_teaching_path.paths.node_teaching_path_place_holder');
     if (readOnly) {
-      if (node.selectQuestion !== intl.get('edit_teaching_path.paths.main_teaching_path_title') && node.selectQuestion !== intl.get('edit_teaching_path.paths.teaching_path_title')) {
+      if (node.selectQuestion !== intl.get('edit_teaching_path.paths.node_teaching_path_title')) {
         return node.type === TeachingPathNodeType.Root || node.children.length ? (
           <div className="teachingPathItemsTitleDiv" data-number={nestedOrder} >
             <TextAreaAutosize
@@ -810,8 +808,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
   public haveTitleNode = (value: string): boolean => {
     const titleNode: string = trim(value);
-    return (titleNode === '' || titleNode === null || typeof (titleNode) === 'undefined'
-      || titleNode === intl.get('edit_teaching_path.paths.main_teaching_path_title') || titleNode === intl.get('edit_teaching_path.paths.teaching_path_title'));
+    return (titleNode === '' || titleNode === null || typeof (titleNode) === 'undefined');
   }
 
   public renderBoxNodeOptions = () => {

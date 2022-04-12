@@ -195,7 +195,6 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
     const selectedItem = questionaryTeachingPathStore!.pickedItemArticle && item.id === questionaryTeachingPathStore!.pickedItemArticle.item.wpId
       ? 'selectedItem'
       : '';
-
     return (
       <div key={item.id} className={'questionWrapper'}>
         <span className={`questionNumber ${selectedItem}-circle`}>{index + 1}</span>

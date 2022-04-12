@@ -57,15 +57,31 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
       </CreateButton>
     </div>
   )
-  public handleDownloadAsPDF = () => {
+  public handleDownloadAsPDF = async () => {
     const { readOnly, newAssignmentStore, drafAssignment, currentQuestionaryStore } = this.props;
-    if (readOnly) {
-      if (currentQuestionaryStore!.assignment !== null) {
-        currentQuestionaryStore!.downloadTeacherGuidancePDF(currentQuestionaryStore!.assignment.id);
-      }
-    } else {
-      newAssignmentStore!.downloadTeacherGuidancePDF(drafAssignment!.id);
-    }
+    let downloadWait = 2000;
+    if (readOnly) downloadWait = 0;
+
+    const btnDownload = document.getElementById('btnDownloadPDFTP');
+    btnDownload!.setAttribute('disabled', 'true');
+    btnDownload!.classList.add('downloading');
+    btnDownload!.firstChild!.textContent = `${intl.get('generals.downloading')} ...`;
+
+    setTimeout(
+      async () => {
+        if (readOnly) {
+          if (currentQuestionaryStore!.assignment !== null) {
+            await currentQuestionaryStore!.downloadTeacherGuidancePDF(currentQuestionaryStore!.assignment.id);
+          }
+        } else {
+          await newAssignmentStore!.downloadTeacherGuidancePDF(drafAssignment!.id);
+        }
+        btnDownload!.removeAttribute('disabled');
+        btnDownload!.classList.remove('downloading');
+        btnDownload!.firstChild!.textContent = intl.get('teacherGuidance.download_pdf');
+      },
+      downloadWait
+    );
   }
   public renderQuestions = () => {
     const { readOnly, drafAssignment, currentQuestionaryStore } = this.props;
@@ -105,7 +121,7 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
   }
 
   public renderAssigGuidance = () => {
-    const { readOnly, drafAssignment, currentQuestionaryStore } = this.props;
+    const { readOnly, drafAssignment, currentQuestionaryStore, newAssignmentStore } = this.props;
 
     if (readOnly) {
       if (currentQuestionaryStore!.assignment !== null) {
@@ -120,6 +136,8 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
         );
       }
     } else {
+      newAssignmentStore!.setTitleButtonGuidance(drafAssignment!);
+
       return (
         <div className="modalContentTGAssig__body__row first">
           <DescriptionEditor
@@ -160,8 +178,8 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
           <div className="modalContentTGAssig__footer">
           {readOnly !== true && this.renderFooterButtons()}
             <div className="modalContentTGAssig__footer__aligRight">
-              <button onClick={this.handleDownloadAsPDF}>
-                <span>{intl.get('teacherGuidance.download_pdf')}</span>
+              <button id="btnDownloadPDFTP" onClick={this.handleDownloadAsPDF}>
+                {intl.get('teacherGuidance.download_pdf')}
                 <img src={downloadImg} />
               </button>
             </div>

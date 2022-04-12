@@ -27,7 +27,7 @@ export const buildNewTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
 
 const buildNewRootDraftTeachingPathNodeArgs = {
   type: TeachingPathNodeType.Root,
-  selectQuestion: intl.get('edit_teaching_path.paths.main_teaching_path_title'),
+  selectQuestion: intl.get('edit_teaching_path.paths.node_teaching_path_title'),
   guidance: '',
   items: [],
   children: [],
@@ -64,6 +64,7 @@ export const buildDraftTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     grepReadingInSubjectsIds: dto.grepReadingInSubjectsIds,
     grepGoalsIds: dto.grepGoalsIds,
     sources: dto.sources,
+    open: dto.open
   });
 
   draftTeachingPath.setContent(buildEditableNode(dto.content!, draftTeachingPath));
@@ -130,7 +131,8 @@ const buildAssignmentItemDTO = (
   grepGoals: item.grepGoals,
   grepMaintopic: item.grepMaintopic,
   grepReadingInsubject: item.grepReadingInsubject,
-  hasGuidance: item.hasGuidance
+  hasGuidance: item.hasGuidance,
+  open: item.open
 });
 
 const buildDomainItemDTO = (
@@ -232,5 +234,6 @@ export const buildTeachingPathRequestDTO = (teachingPath: DraftTeachingPath) => 
   grepMainTopicsIds: teachingPath.grepMainTopicsIds,
   grepReadingInSubjectsIds: teachingPath.grepReadingInSubjectsIds,
   grepGoalsIds: teachingPath.grepGoalsIds,
-  sources: teachingPath.sources
+  sources: teachingPath.sources,
+  open: teachingPath.open
 });

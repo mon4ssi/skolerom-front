@@ -12,6 +12,7 @@
   outline: 0;
   z-index: 9;
   display: none;
+  word-break: break-all;
 
   &__header {
       padding: 1rem;
@@ -85,12 +86,13 @@
           width: 31px;
           height: 31px;
           min-height: 31px;
-          background: #fff;
+          background: #e2017b;
           border-radius: 50%;
-          color: #000;
+          color: #ffffff;
           font-size: 1.0625rem;
           margin: 0 12px 0 0;
-          border: 2px solid #000;
+          padding: 0px 10px;
+          border: 2px solid #e2017b;
           float: left;
       }
   }
@@ -113,18 +115,24 @@
       }
 
       &__aligRight {
-          margin-top: 9px;
-          margin-right: 25px;
+        margin-top: 9px;
+        margin-right: 25px;
 
-          button {
-              display:flex;
-              background: transparent;
-  
-              img {
-                  margin-left: 5px
-              }
+        button {
+            display:flex;
+            background: transparent;
 
-          }
+            img {
+                margin-left: 5px
+            }
+        }
+
+        button.downloading {
+            cursor: progress;
+        img {
+            visibility: hidden;
+        }
+        }
       }
   }
 }

@@ -10,6 +10,12 @@
   z-index: 7;
   cursor: move;
   overflow: hidden;
+  &.inputRight {
+    border: solid 2px #0a7b24;
+    .ImageOption__button {
+      border: solid 2px #0a7b24;
+    }
+  }
   button {
     background: transparent;
     padding: 0px;

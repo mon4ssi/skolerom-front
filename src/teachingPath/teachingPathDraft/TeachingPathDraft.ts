@@ -437,6 +437,12 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
+  public setOpen = (data: boolean) => {
+    this._open = data;
+    this.save();
+  }
+
+  @action
   public setGrepMainTopicsIds = (data: Array<number>) => {
     this._grepMainTopicsIds = data;
     this.save();
@@ -518,6 +524,10 @@ export class DraftTeachingPath extends TeachingPath {
     await this.repo.saveTeachingPath(this);
   }
 
+  public getOpen() {
+    return this._open;
+  }
+
   @action
   public async publish() {
     this.validate('publish');
@@ -565,7 +575,7 @@ export class EditableTeachingPathNode extends TeachingPathNode {
   private validateTitle() {
     if (!this.selectQuestion && this.children.length) {
       throw new TeachingPathValidationError(
-        'edit_teaching_path.validation.title_words_count'
+        'edit_teaching_path.validation.title_node_words_count'
       );
     }
   }

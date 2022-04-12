@@ -61,7 +61,8 @@
     "contact_menu": "Kontakt oss",
     "about_menu": "Kva er skolerom.no?",
     "logg_in": "Logg inn med Feide",
-    "Articles": "Artiklar",
+    "Articles": "Featureartikler",
+    "School Articles": "Skoleartikler",
     "Article": "Artikkel",
     "teacher_room": "Lærarrom",
     "student_room": "Elevrom",
@@ -79,8 +80,9 @@
     "selected": "valt",
     "Log in": "Logg inn",
     "About skolerom": "Kva er Skolerom?",
-    "School": "Skoleartiklar",
-    "Library": "Biblioteket",
+    "School": "Støttemateriell",
+    "Library": "Skolebibliotek",
+    "For foresatte": "For foresatte",
     "teacher": " Lærar",
     "student": "Elev",
     "content_manager": "Redaktør",
@@ -164,7 +166,7 @@
     "Start assignment": "Start oppgåva",
     "continue_assignment": "Fortset på oppgåva",
     "Assignment articles": "Oppgåve til artiklar",
-    "Finish reading article": "Lest artikkel",
+    "Finish reading article": "Fortsett med oppgave",
     "Questions count": "{answeredQuestionsCount} av {totalQuestionsCount}",
     "questions answered": "spørsmål er svart på"
   },
@@ -395,7 +397,8 @@
     "Close": "Lukk",
     "Choose assignment": "Vel oppgåve",
     "Choose article": "Vel artikkel",
-    "Choose domain": "Vel ekstern artikkel"
+    "Choose domain": "Vel ekstern artikkel",    
+    "not possible to evaluate": "Det er ikke mulig å evaluere en oppgave før svarfristen er utløpt"
   },
   "months": {
     "January": "Januar",
@@ -465,6 +468,9 @@
       "descrption_assignment":"Når du deler offentleg, må du kople oppgåva til læreplan. Vel relevante fag, klassetrinn, kompetansemål, kjerneelement og lesing i fag før publisering og distribusjon.",
       "description_privado":"Kopling til læreplanen er berre nødvendig når du deler offentleg. Du kan gjerne kople innhaldet til relevante kompetansemål her om du ønskjer det."
     },
+    "source_is_open": "Vis i Open Site",
+    "source_is_open_assig": "Vis i Open Site",
+    "source_is_open_title": "Synlighetsinnstillinger",
     "source": "Kilde"
   },
   "distribution_page": {
@@ -628,6 +634,7 @@
     },
     "validation": {
       "title_words_count": "Tittelen kan ikkje vere tom",
+      "title_node_words_count": "Overskrift til aktivitet kan ikke være tom",
       "description_words_count": "Beskrivinga kan ikkje vere tom",
       "already_editing": "Nokon redigerer læringsstien akkurat no",
       "empty_content": "Minst ein sti må lagast"
@@ -648,7 +655,9 @@
     },
     "paths": {
       "main_teaching_path_title": "Læringssti",
-      "teaching_path_title": "Tittel på læringsstien"
+      "teaching_path_title": "Tittel på læringsstien",
+      "node_teaching_path_title": "Neste aktivitet",
+      "node_teaching_path_place_holder": "Legg til overskrift til aktivitet"
     },
     "merge": "Slå saman stien",
     "expand": "Utvid stien",
@@ -746,7 +755,8 @@
     "grade": "Klassetrinn",
     "student_level": "Vel elevspor",
     "visibility": "synlegheit",
-    "language": "Språk"
+    "language": "Språk",
+    "downloading": "Laster ned"
   },
   "activity_page": {
     "Hello": "Hei",
