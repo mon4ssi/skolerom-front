@@ -264,9 +264,17 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     if (!isInclude) {
       currentTarget.classList.add('active');
       valueSelectedGrades = NumberArrayMyValue;
+      this.setState({ filtersisUsed: true });
+
     } else {
       currentTarget.classList.remove('active');
       valueSelectedGrades = [];
+      if (this.state.myValueSubject.length > 0 || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti.length > 0 || this.state.myValueReading.length > 0 || valueSelectedGrades.length > 0) {
+        this.setState({ filtersisUsed: true });
+      } else {
+        this.setState({ filtersisUsed: false });
+      }
+
       /*const indexSelected = valueSelectedGrades!.indexOf(Number(value));
       if (indexSelected > -1) {
         valueSelectedGrades!.splice(indexSelected, 1);
@@ -392,7 +400,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       if (indexSelected > -1) {
         valueSelectedSubjects!.splice(indexSelected, 1);
       }
-      if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+      if (this.state.myValueSubject.length > 0 || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti.length > 0 || this.state.myValueReading.length > 0 || this.state.myValueGrade.length > 0) {
         this.setState({ filtersisUsed: true });
       } else {
         this.setState({ filtersisUsed: false });
@@ -437,7 +445,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       if (indexSelected > -1) {
         valueSelectedMulti!.splice(indexSelected, 1);
       }
-      if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+      if (this.state.myValueSubject.length > 0 || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti.length > 0 || this.state.myValueReading.length > 0 || this.state.myValueGrade.length > 0) {
         this.setState({ filtersisUsed: true });
       } else {
         this.setState({ filtersisUsed: false });
@@ -470,7 +478,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       if (indexSelected > -1) {
         valueSelectedReading!.splice(indexSelected, 1);
       }
-      if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+      if (this.state.myValueSubject.length > 0 || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti.length > 0 || this.state.myValueReading.length > 0 || this.state.myValueGrade.length > 0) {
         this.setState({ filtersisUsed: true });
       } else {
         this.setState({ filtersisUsed: false });
@@ -499,7 +507,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       if (indexSelected > -1) {
         valueSelectedSource!.splice(indexSelected, 1);
       }
-      if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+      if (this.state.myValueSubject.length > 0 || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti.length > 0 || this.state.myValueReading.length > 0 || this.state.myValueGrade.length > 0) {
         this.setState({ filtersisUsed: true });
       } else {
         this.setState({ filtersisUsed: false });
@@ -525,7 +533,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
         myValueCore : newValue
       },
       () => {
-        if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+        if (this.state.myValueSubject.length > 0 || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti.length > 0 || this.state.myValueReading.length > 0 || this.state.myValueGrade.length > 0) {
           this.setState({ filtersisUsed: true });
         } else {
           this.setState({ filtersisUsed: false });
@@ -564,7 +572,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
         myValueGoal : newValue
       },
       () => {
-        if (this.state.myValueSubject || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti || this.state.myValueReading || this.state.myValueGrade) {
+        if (this.state.myValueSubject.length > 0 || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti.length > 0 || this.state.myValueReading.length > 0 || this.state.myValueGrade.length > 0) {
           this.setState({ filtersisUsed: true });
         } else {
           this.setState({ filtersisUsed: false });

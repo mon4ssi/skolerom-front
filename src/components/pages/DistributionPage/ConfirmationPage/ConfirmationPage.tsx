@@ -34,17 +34,19 @@ class ConfirmationPageComponent extends Component<Props> {
     const { history, location: { state } } = this.props;
     /* console.log(state!.exitPath); */
     history.push(state.exitPath);
+    /* console.log('going back!!');
+    console.log(state!.exitPath);
     const url: string = localStorage!.getItem('url') !== null ? localStorage!.getItem('url')!.toString().split('?')[1] : '';
-    /* console.log(url); */
+    console.log(url);
     if (url !== null && url !== '' && url !== undefined) {
-      /* console.log('es trueeee'); */
-      /* console.log(url); */
+      console.log('es trueeee');
+      console.log(url);
       this.props.history.push(`/teaching-paths/all?${url}`);
       localStorage.removeItem('url');
     } else {
-      /* console.log('es falseee'); */
+      console.log('es falseee');
       localStorage.removeItem('url');
-    }
+    } */
   }
 
   public render() {

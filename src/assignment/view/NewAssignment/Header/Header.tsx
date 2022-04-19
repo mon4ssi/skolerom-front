@@ -210,10 +210,10 @@ class HeaderWrapper extends Component<Props> {
           this.props.history.push(`/teaching-paths/edit/${location.state.teachingPathId}`);
         }
       } else {
-        /* this.props.history.push(`/assignments/${assignmentListStore!.typeOfAssignmentsList}`); */
-        const url: string = localStorage!.getItem('url') !== null ? localStorage!.getItem('url')!.toString().split('?')[1] : '';
+        this.props.history.push(`/assignments/${assignmentListStore!.typeOfAssignmentsList}`);
+        /* const url: string = localStorage!.getItem('url') !== null ? localStorage!.getItem('url')!.toString().split('?')[1] : '';
         this.props.history.push(`/assignments/all?${url}`);
-        localStorage.removeItem('url');
+        localStorage.removeItem('url'); */
         /* localStorage.clear(); */
       }
     }

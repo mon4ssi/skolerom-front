@@ -11,6 +11,8 @@ import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteract
 import { ArticleService, AssignmentService, ASSIGNMENT_SERVICE } from '../../service';
 import { USER_SERVICE, UserService } from '../../../user/UserService';
 
+const COVER_INDEX = -2;
+
 export class CurrentQuestionaryStore {
 
   private questionaryService: QuestionaryService = injector.get<QuestionaryService>(QUESTIONARY_SERVICE);
@@ -142,6 +144,7 @@ export class CurrentQuestionaryStore {
 
   @action
   public async getRelatedArticles() {
+    this.setCurrentQuestion(COVER_INDEX);
     try {
       const ids = this.assignment!.relatedArticles.map(i => i.id);
       if (ids && ids.length > 0) {
