@@ -106,18 +106,21 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
     headerArray[0].style.display = 'none';
     const search = (history.location.search === '?preview' || history.location.search === '?preview&open=tg') ? true : false;
-
+    /* currentQuestionaryStore!.setCurrentQuestion(-2); */
+    await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
     if (isTeacher) {
-      await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
-      await currentQuestionaryStore.getRelatedArticles();
       if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles.length > 0 && currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden) {
         currentQuestionaryStore!.setCurrentQuestion(0);
-        return this.updateQueryString();
+        this.updateQueryString();
+      } else {
+        await currentQuestionaryStore.getRelatedArticles();
+        currentQuestionaryStore!.setCurrentQuestion(-1);
+        this.updateQueryString();
       }
-      if (currentQuestionaryStore.assignment && currentQuestionaryStore.assignment.isOwnedByMe() && !search) {
+      /* if (currentQuestionaryStore.assignment && currentQuestionaryStore.assignment.isOwnedByMe() && !search) {
         this.props.history.replace(`/assignments/edit/${Number(match.params.id)}`);
         return;
-      }
+      } */
     } else {
       const { teachingPath, node } = (history.location.state || {}) as RedirectData;
       const redirectData = teachingPath && node ? { teachingPath, node } : undefined;
@@ -132,7 +135,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
       this.props.currentQuestionaryStore.setCurrentQuestion(-1);
       return this.updateQueryString();
     }
-    this.props.currentQuestionaryStore.setCurrentQuestion(0);
+    /* this.props.currentQuestionaryStore.setCurrentQuestion(0); */
     return this.updateQueryString();
   }
 
@@ -351,9 +354,9 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     </div>
   )
 
-  public renderBreadcrumbsIfNeeded = () => this.props.location.state &&  this.props.location.state.node && (
+  public renderBreadcrumbsIfNeeded = () => this.props.location.state && this.props.location.state.node && (
     <div className="CurrentAssignmentPage__breadcrumbs">
-      <BreadcrumbsTeachingPath getCurrentNodeFromAssignment={this.redirectToCurrentNode}/>
+      <BreadcrumbsTeachingPath getCurrentNodeFromAssignment={this.redirectToCurrentNode} />
     </div>
   )
 
@@ -414,7 +417,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
       match
     } = this.props;
 
-    const isShowAssignmentArticles = !!(assignment && assignment!.relatedArticles.length > 0);
+    const isShowAssignmentArticles = !!(assignment && !assignment!.relatedArticles[0].isHidden);
     const isReadArticles = getIsReadArticles();
     toJS(this.props.currentQuestionaryStore); // VALUES OF ANSWERS WILL NOT WORK WITHOUT THIS STRING
     const navBarClasses = classNames('CurrentAssignmentPage__navBar', {
@@ -446,7 +449,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
           readOnly={true}
         />
 
-        {this.props.uiStore!.sidebarShown && <div className="CurrentAssignmentPage__overlay" onClick={uiStore!.hideSidebar}/>}
+        {this.props.uiStore!.sidebarShown && <div className="CurrentAssignmentPage__overlay" onClick={uiStore!.hideSidebar} />}
 
         <div className="CurrentAssignmentPage__content">
           <div className={navBarClasses}>
