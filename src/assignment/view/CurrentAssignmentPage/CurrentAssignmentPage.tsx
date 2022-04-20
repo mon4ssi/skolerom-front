@@ -107,7 +107,11 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     headerArray[0].style.display = 'none';
     const search = (history.location.search === '?preview' || history.location.search === '?preview&open=tg') ? true : false;
     /* currentQuestionaryStore!.setCurrentQuestion(-2); */
-    await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
+    try {
+      await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
+    } catch (error) {
+      const errorMsj = 'error';
+    }
     if (isTeacher) {
       if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles.length > 0 && currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden) {
         currentQuestionaryStore!.setCurrentQuestion(0);
