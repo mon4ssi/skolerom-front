@@ -38,8 +38,8 @@ export class CurrentQuestionaryStore {
   public async createQuestionaryByAssignmentId(id: number, redirectData?: RedirectData) {
     this.isLoading = true;
     const questionary = redirectData !== undefined
-    ? await this.questionaryService.getNewQuestionaryByAssignmentIdFromTeachingPath(id, redirectData)
-    : await this.questionaryService.getNewQuestionaryByAssignmentId(id);
+      ? await this.questionaryService.getNewQuestionaryByAssignmentIdFromTeachingPath(id, redirectData)
+      : await this.questionaryService.getNewQuestionaryByAssignmentId(id);
     this.currentQuestionary = questionary;
     this.assignment = questionary.assignment;
     this.questions = questionary.assignment.questions;
@@ -145,27 +145,32 @@ export class CurrentQuestionaryStore {
   @action
   public async getRelatedArticles() {
     this.setCurrentQuestion(COVER_INDEX);
-    try {
-      const ids = this.assignment!.relatedArticles.map(i => i.id);
-      if (ids && ids.length > 0) {
-        this.isLoadingArticles = false;
-        const articles = await this.articleService.getArticlesByIds(ids);
-        const allArticles = this.assignment!.relatedArticles.map((article) => {
-          const fullArticles = articles.find(item => item.id === article.id);
-          return {
-            ...article,
-            ...fullArticles,
-            correspondingLevelArticleId: article.correspondingLevelArticleId,
-            isRead: article.isRead
-          };
-        });
-        this.isLoadingArticles = true;
-        return this.relatedArticles = allArticles;
+    if (this.assignment!) {
+      try {
+        const ids = this.assignment!.relatedArticles ? this.assignment!.relatedArticles.map(i => i.id) : [];
+        if (ids && ids.length && ids.length > 0) {
+          this.isLoadingArticles = false;
+          const articles = await this.articleService.getArticlesByIds(ids);
+          const allArticles = this.assignment!.relatedArticles.map((article) => {
+            const fullArticles = articles.find(item => item.id === article.id);
+            return {
+              ...article,
+              ...fullArticles,
+              correspondingLevelArticleId: article.correspondingLevelArticleId,
+              isRead: article.isRead
+            };
+          });
+          this.isLoadingArticles = true;
+          return this.relatedArticles = allArticles;
+        }
+        return this.relatedArticles = [];
+      } catch (e) {
+        throw Error(`fetch related articles: ${e}`);
       }
+    } else {
       return this.relatedArticles = [];
-    } catch (e) {
-      throw Error(`fetch related articles: ${e}`);
     }
+
   }
 
   @action
