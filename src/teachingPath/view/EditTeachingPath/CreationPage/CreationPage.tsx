@@ -612,7 +612,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       }
     );
     this.setState({ isDrop: false });
-    // editTeachingPathStore!.falseIsDraggable();
+    editTeachingPathStore!.falseIsDraggable();
   }
 
   public renderAddingButtons = (withUnmergeButton: boolean) => {
