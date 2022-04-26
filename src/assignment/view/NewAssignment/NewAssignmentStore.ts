@@ -576,6 +576,11 @@ export class NewAssignmentStore {
             )) || [];
           break;
         }
+        case AttachmentContentType.customImage: {
+          this.questionAttachments =
+            (await this.articleService.fetchCustomImages()) || [];
+          break;
+        }
         case AttachmentContentType.video: {
           this.questionAttachments =
             (await this.articleService.fetchVideos(

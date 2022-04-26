@@ -352,6 +352,7 @@ export class AssignmentApi implements AssignmentRepo {
 }
 
 enum AttachmentType {
+  customImage = 'customimg',
   image = 'img',
   video = 'video',
   sound = 'sound',
@@ -443,6 +444,13 @@ export class WPApi implements ArticleRepo {
           },
         }
       )
+    ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
+  }
+
+  public async fetchCustomImages(): Promise<Array<Attachment>> {
+    return (
+      await API.get(
+        `${process.env.REACT_APP_BASE_URL}/api/teacher/images`)
     ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
   }
 

@@ -102,6 +102,10 @@ export class ArticleService {
     return this.articleRepo.fetchImages(postIds);
   }
 
+  public async fetchCustomImages(): Promise<Array<Attachment>> {
+    return this.articleRepo.fetchCustomImages();
+  }
+
   public async getLocaleData(locale: Locales): Promise<Array<WPLocale>> {
     return this.articleRepo.getLocaleData(locale);
   }

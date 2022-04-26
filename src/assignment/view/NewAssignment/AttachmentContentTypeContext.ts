@@ -3,6 +3,7 @@ import React from 'react';
 export enum AttachmentContentType {
   text,
   magazine,
+  customImage,
   image,
   video,
   sound,

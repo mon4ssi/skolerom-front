@@ -64,7 +64,6 @@ class NewAssignmentComponent extends Component<Props & RouteComponentProps, Stat
     const { newAssignmentStore, location } = this.props;
     const { contentType } = this.state;
     const currentAssignment = newAssignmentStore!.currentEntity!;
-
     const backdrop = (!isNull(contentType) && Number(contentType) > 0) ? 'backdrop' : '';
 
     return !location!.pathname.includes('distribute') &&
@@ -120,7 +119,6 @@ class NewAssignmentComponent extends Component<Props & RouteComponentProps, Stat
         <div className={'loading'}><Loader /></div>
       );
     }
-
     return (
       <div className="NewAssignment flexBox dirColumn">
         <AttachmentContentTypeContext.Provider value={{ contentType, changeContentType: this.changeContentType }}>

@@ -23,6 +23,7 @@ import searchIcon from 'assets/images/search.svg';
 
 import './AttachmentsList.scss';
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
+import { CustomImageAttachments } from './Attachments/CustomImageAttachments';
 
 export interface AttachmentsListProps {
   context: {
@@ -34,6 +35,7 @@ export interface AttachmentsListProps {
 
 interface State {
   selectedTab: string;
+  selectedTabId: number;
   query: string;
   errMsg: string;
 }
@@ -57,14 +59,21 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
   public state: State = {
     selectedTab: '',
     query: '',
+    selectedTabId: 0,
     errMsg: '',
   };
+
+  public TWO = 2;
+  public THREE = 3;
 
   private async fetchAttachments(): Promise<void> {
     const { newAssignmentStore } = this.props;
     try {
       if (this.context.contentType === AttachmentContentType.image) {
         await newAssignmentStore!.fetchQuestionAttachments(AttachmentContentType.image);
+      }
+      if (this.context.contentType === AttachmentContentType.customImage) {
+        await newAssignmentStore!.fetchQuestionAttachments(AttachmentContentType.customImage);
       }
       if (this.context.contentType === AttachmentContentType.video) {
         await newAssignmentStore!.fetchQuestionAttachments(AttachmentContentType.video);
@@ -87,13 +96,19 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     const currentQuestion = newAssignmentStore!.currentQuestion as EditableImageChoiceQuestion;
     const currentOption = newAssignmentStore!.currentOrderOption;
     return (currentQuestion && currentQuestion.options && currentQuestion.options[currentOption].image)
-        && currentQuestion.options[currentOption].image.id === id;
+      && currentQuestion.options[currentOption].image.id === id;
   }
 
   private getSelectedAttachments = (id: number) => {
     const { newAssignmentStore } = this.props;
 
     if (this.context.contentType === AttachmentContentType.image) {
+      const editableImageBlock = newAssignmentStore!.getAttachmentsFromCurrentBlock() as EditableImagesContentBlock;
+      if (editableImageBlock && editableImageBlock.images && editableImageBlock.images.length > 0) {
+        return editableImageBlock.images.some(item => item.id === id);
+      }
+    }
+    if (this.context.contentType === AttachmentContentType.customImage) {
       const editableImageBlock = newAssignmentStore!.getAttachmentsFromCurrentBlock() as EditableImagesContentBlock;
       if (editableImageBlock && editableImageBlock.images && editableImageBlock.images.length > 0) {
         return editableImageBlock.images.some(item => item.id === id);
@@ -121,6 +136,14 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     const { newAssignmentStore } = this.props;
 
     if (this.context.contentType === AttachmentContentType.image) {
+      if (newAssignmentStore!.currentOrderOption >= 0) {
+        return newAssignmentStore!.setImageCurrentOption(attachment);
+      }
+      const editableImageBlock = newAssignmentStore!.getAttachmentsFromCurrentBlock() as EditableImagesContentBlock;
+      return editableImageBlock && editableImageBlock.addImageToContentBlock(attachment);
+    }
+
+    if (this.context.contentType === AttachmentContentType.customImage) {
       if (newAssignmentStore!.currentOrderOption >= 0) {
         return newAssignmentStore!.setImageCurrentOption(attachment);
       }
@@ -216,6 +239,18 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
       }
     }
 
+    if (this.context.contentType === AttachmentContentType.customImage) {
+      const currentBlock = this.props.newAssignmentStore!.getAttachmentsFromCurrentBlock() as EditableImagesContentBlock;
+      if (currentBlock && currentBlock.images && currentBlock.images.length > 0) {
+        const isSelectedA = currentBlock.images.findIndex(image => image.id === attachmentA.id);
+        const isSelectedB = currentBlock.images.findIndex(image => image.id === attachmentB.id);
+        if (isSelectedA >= 0 && isSelectedB >= 0) {
+          return isSelectedA - isSelectedB;
+        }
+        return isSelectedA >= 0 ? -1 : 1;
+      }
+    }
+
     if (this.context.contentType === AttachmentContentType.video) {
       const currentBlock = this.props.newAssignmentStore!.getAttachmentsFromCurrentBlock() as EditableVideosContentBlock;
       if (currentBlock && currentBlock.videos && currentBlock.videos.length > 0) {
@@ -272,27 +307,6 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
   }
 
-  private renderAttachments = () => {
-    if (this.context.contentType === AttachmentContentType.image) {
-      return (
-        <ImageAttachments
-          filterAttachments={this.filterAttachments}
-          renderAttachment={this.renderAttachment}
-          sortAttachments={this.sortAttachments}
-        />
-      );
-    }
-    if (this.context.contentType === AttachmentContentType.video) {
-      return (
-        <VideosAttachments
-          filterAttachments={this.filterAttachments}
-          renderAttachment={this.renderAttachment}
-          sortAttachments={this.sortAttachments}
-        />
-      );
-    }
-  }
-
   public handleKeyboardControl = (event: KeyboardEvent) => {
     const classDivPath = (event.composedPath()[0] as Element).className;
     const htmlPathArea = String(event.composedPath()[0]);
@@ -327,9 +341,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
       if (!isNull(this.props.newAssignmentStore!.currentEntity!.relatedArticles)) {
         return this.props.newAssignmentStore!.currentEntity!.relatedArticles;
       }
-    },                       () => {
-      this.fetchAttachments();
-    });
+    }, () => { this.fetchAttachments(); });
     this.props.newAssignmentStore!.visibilityAttachments = true;
   }
 
@@ -398,7 +410,22 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
 
   public renderAttachmentTab = () => {
     if (this.context.contentType === AttachmentContentType.image) {
-      return <span>{intl.get('new assignment.images_from_article')}</span>;
+      return (
+        <div>
+          <span onClick={() => { this.setState({ selectedTabId: 1 }); }} className="image_Option">{intl.get('new assignment.images_options.images_from_article')}</span>
+          <span onClick={() => { this.setState({ selectedTabId: 2 }); this.props.context.changeContentType(AttachmentContentType.customImage); }} className="image_Option">{intl.get('new assignment.images_options.custom_images')}</span>
+          <span onClick={() => { this.setState({ selectedTabId: 3 }); }} className="image_Option">{intl.get('new assignment.images_options.upload_image')}</span>
+        </div>
+      );
+    }
+    if (this.context.contentType === AttachmentContentType.customImage) {
+      return (
+        <div>
+          <span onClick={() => { this.setState({ selectedTabId: 1 }); this.props.context.changeContentType(AttachmentContentType.image); }} className="image_Option">{intl.get('new assignment.images_options.images_from_article')}</span>
+          <span onClick={() => { this.setState({ selectedTabId: 2 }); }} className="image_Option">{intl.get('new assignment.images_options.custom_images')}</span>
+          <span onClick={() => { this.setState({ selectedTabId: 3 }); }} className="image_Option">{intl.get('new assignment.images_options.upload_image')}</span>
+        </div>
+      );
     }
     if (this.context.contentType === AttachmentContentType.video) {
       return <span>{intl.get('new assignment.videos_from_article')}</span>;
@@ -455,6 +482,84 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     return intl.get('new assignment.image_not_selected');
   }
 
+  public renderAttachments = () => {
+    if (this.context.contentType === AttachmentContentType.image) {
+      return (
+        <ImageAttachments
+          filterAttachments={this.filterAttachments}
+          renderAttachment={this.renderAttachment}
+          sortAttachments={this.sortAttachments}
+        />
+      );
+    }
+    if (this.context.contentType === AttachmentContentType.customImage) {
+      return (
+        <CustomImageAttachments
+          filterAttachments={this.filterAttachments}
+          renderAttachment={this.renderAttachment}
+          sortAttachments={this.sortAttachments}
+        />
+      );
+    }
+    if (this.context.contentType === AttachmentContentType.video) {
+      return (
+        <VideosAttachments
+          filterAttachments={this.filterAttachments}
+          renderAttachment={this.renderAttachment}
+          sortAttachments={this.sortAttachments}
+        />
+      );
+    }
+  }
+
+  public renderCustomImages = () => {
+    if (this.context.contentType === AttachmentContentType.customImage) {
+      return (
+        <CustomImageAttachments
+          filterAttachments={this.filterAttachments}
+          renderAttachment={this.renderAttachment}
+          sortAttachments={this.sortAttachments}
+        />
+      );
+    }
+  }
+
+  public renderUploadImageForm = () => {
+    if (true) {
+      return (
+        <div>
+          <div>
+            <input multiple onChange={(e) => { /* console.log(e.target.files); */ }} className="inputFileImages" type="file" accept="image/png, image/jpg, image/jpeg" />
+          </div>
+          <div>
+            Title: {document.getElementsByClassName('inputFileImages').item.toString()}
+          </div>
+          <div>
+            Source: <input type="text" />
+          </div>
+        </div>
+      );
+    }
+  }
+
+  public renderTabByOption = () => {
+    const { selectedTabId } = this.state;
+    switch (selectedTabId!) {
+      case 1:
+        return this.renderAttachments();
+        break;
+      case this.TWO:
+        return this.renderCustomImages();
+        break;
+      case this.THREE:
+        return this.renderUploadImageForm();
+        break;
+      default:
+        return this.renderAttachments();
+        break;
+    }
+  }
+
   public render() {
     const { query } = this.state;
     const { newAssignmentStore } = this.props;
@@ -465,7 +570,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
       <div className="attachments-list-container">
         <div className="attachments-tabs">
           <div className={'wrapper-tabs'}>
-            <div className="attachments-tab imgs-from-article selected">
+            <div className="attachments-tab imgs-from-article">
               {this.renderAttachmentTab()}
             </div>
 
@@ -495,7 +600,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
           </div>
 
           {isLoading && this.renderSkeletonLoader()}
-          {!isLoading && this.renderAttachments()}
+          {!isLoading && this.renderTabByOption()}
         </div>
 
         <div className="attachment-info">

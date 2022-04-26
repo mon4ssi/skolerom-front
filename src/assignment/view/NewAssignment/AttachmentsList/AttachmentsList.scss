@@ -46,10 +46,6 @@
         font-weight: 500;
         font-size: 0.9375rem;
 
-        &:hover, &.selected {
-          border-bottom: solid #e2017b 4px;
-        }
-
         &.disabled {
           cursor: not-allowed;
 
@@ -338,4 +334,12 @@
 .attachments-list__video-wrap button:focus {
   outline: black;
   outline-style: auto;
+}
+
+.image_Option {
+  padding: 10px;
+
+  &:hover, &.selected {
+    border-bottom: solid #e2017b 4px;
+  }
 }

@@ -1047,6 +1047,7 @@ export interface ArticleRepo {
   getArticlesByIds(ids: Array<number>): Promise<Array<Article>>;
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
+  fetchCustomImages(): Promise<Array<Attachment>>;
   getLocaleData(locale: Locales): Promise<Array<WPLocale>>;
 }
 
