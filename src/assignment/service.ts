@@ -8,6 +8,7 @@ import {
   ASSIGNMENT_REPO,
   ARTICLE_REPO_KEY,
   WPLocale,
+  CustomImgAttachment,
 } from './Assignment';
 import { Locales } from 'utils/enums';
 
@@ -102,7 +103,7 @@ export class ArticleService {
     return this.articleRepo.fetchImages(postIds);
   }
 
-  public async fetchCustomImages(): Promise<Array<Attachment>> {
+  public async fetchCustomImages(): Promise<Array<CustomImgAttachment>> {
     return this.articleRepo.fetchCustomImages();
   }
 

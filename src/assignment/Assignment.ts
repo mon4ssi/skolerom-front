@@ -1047,7 +1047,7 @@ export interface ArticleRepo {
   getArticlesByIds(ids: Array<number>): Promise<Array<Article>>;
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
-  fetchCustomImages(): Promise<Array<Attachment>>;
+  fetchCustomImages(): Promise<Array<CustomImgAttachment>>;
   getLocaleData(locale: Locales): Promise<Array<WPLocale>>;
 }
 
@@ -1082,6 +1082,27 @@ export class Attachment {
     this.title = title;
     this.duration = duration;
     this.src = src;
+  }
+}
+
+export class CustomImgAttachment {
+  public readonly fileName?: string;
+  public readonly path: string;
+  public readonly source?: Array<string>;
+  public readonly title: string;
+  public readonly id?: number;
+
+  constructor(
+    path: string,
+    title: string,
+    id?: number,
+    fileName?: string,
+    source?: Array<string>
+  ) {
+    this.path = path;
+    this.fileName = fileName;
+    this.title = title;
+    this.source = source;
   }
 }
 

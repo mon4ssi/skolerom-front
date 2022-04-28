@@ -343,3 +343,59 @@
     border-bottom: solid #e2017b 4px;
   }
 }
+
+input[type="file"] {
+  display: none;
+}
+
+.custom-file-upload {
+  cursor: pointer;
+  height: 40px;
+  min-height: 40px;
+  background: #0b2541;
+  color: #E7ECEF;
+  border-radius: 20px;
+  padding: 8px 23px;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.spaced {
+  padding-left : 0px;
+  padding-right : 10px;
+  padding-top : 20px;
+  padding-bottom : 10px;
+  // padding: 20px 20px 20px 0px;
+}
+
+.right {
+  text-align: right;
+}
+
+.custom-input-image { 
+  background-color: #d3d9de;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.0625rem;
+  width: calc(100%);
+  padding: 10px 0 10px 10px;
+  height: 43px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.createButton {
+  cursor: pointer;
+  height: 40px;
+  min-height: 40px;
+  background: #0b2541;
+  color: #E7ECEF;
+  border-radius: 20px;
+  padding: 8px 23px;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  transition: 0.3s;
+  position: relative;
+  
+}

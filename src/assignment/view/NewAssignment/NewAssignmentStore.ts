@@ -3,7 +3,7 @@ import isUndefined from 'lodash/isUndefined';
 import isNull from 'lodash/isNull';
 import intl from 'react-intl-universal';
 import { injector } from 'Injector';
-import { Assignment, Article, ARTICLE_SERVICE_KEY, Attachment, Grade, QuestionAttachment, QuestionType, Subject, GreepElements, FilterArticlePanel, Source } from 'assignment/Assignment';
+import { Assignment, Article, ARTICLE_SERVICE_KEY, Attachment, Grade, QuestionAttachment, QuestionType, Subject, GreepElements, FilterArticlePanel, Source, CustomImgAttachment } from 'assignment/Assignment';
 import { DraftAssignment, EditableImageChoiceQuestion, EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
 import { ArticleService, ASSIGNMENT_SERVICE, AssignmentService } from 'assignment/service';
 import { DRAFT_ASSIGNMENT_SERVICE, DraftAssignmentService } from 'assignment/assignmentDraft/service';
@@ -81,6 +81,7 @@ export class NewAssignmentStore {
   @observable public allSubjects: Array<Subject> = [];
   @observable public allSources: Array<Source> = [];
   @observable public questionAttachments: Array<Attachment> = [];
+  @observable public questionCustomAttachments: Array<CustomImgAttachment> = [];
   @observable public currentOrderOption: number = -1;
   @observable public searchValue: string = '';
   @observable public storedAssignment: Assignment | null = null;
@@ -249,9 +250,9 @@ export class NewAssignmentStore {
   @action
   public getFilteredGroups = () => {
     const filteredGroups = this.currentDistribution!.groups
-    .filter(
-      group => group.name.toLowerCase().search(this.searchValue) !== -1
-    );
+      .filter(
+        group => group.name.toLowerCase().search(this.searchValue) !== -1
+      );
 
     return filteredGroups;
   }
@@ -397,7 +398,7 @@ export class NewAssignmentStore {
         return result;
       }
 
-    },       (isValid, reactionDisposer) => {
+    }, (isValid, reactionDisposer) => {
       if (isValid) {
         this.showValidationErrors = false;
         this.currentEntity!.setQuestionsWithError(null);
@@ -523,7 +524,7 @@ export class NewAssignmentStore {
   }
 
   public getGoalsByArticle() {
-    const arrayGoals :Array<String> = [];
+    const arrayGoals: Array<String> = [];
     if (this.currentEntity!.relatedArticles.length > 0) {
       this.currentEntity!.relatedArticles.forEach((element) => {
         if (element.grepGoals!.length > 0) {
@@ -566,7 +567,6 @@ export class NewAssignmentStore {
     }
 
     this.fetchingAttachments = true;
-
     try {
       switch (typeAttachments) {
         case AttachmentContentType.image: {
@@ -577,8 +577,8 @@ export class NewAssignmentStore {
           break;
         }
         case AttachmentContentType.customImage: {
-          this.questionAttachments =
-            (await this.articleService.fetchCustomImages()) || [];
+          this.questionCustomAttachments =
+            (await this.articleService.fetchCustomImages()).map(item => item).flat() || [];
           break;
         }
         case AttachmentContentType.video: {
@@ -594,6 +594,7 @@ export class NewAssignmentStore {
 
     } catch (e) {
       this.questionAttachments = [];
+      this.questionCustomAttachments = [];
       this.fetchingAttachments = false;
       throw Error(`fetch question attachments: ${e}`);
     }
@@ -656,7 +657,7 @@ export class NewAssignmentStore {
     this.allArticlePanelFilters = await this.teachingPathService.getFiltersArticlePanel(lang);
   }
 
-  public async assignStudentToAssignment(assignmentId:string, referralToken: string) {
+  public async assignStudentToAssignment(assignmentId: string, referralToken: string) {
     return this.distributionService.assignStudentToAssignment(assignmentId, referralToken);
   }
 

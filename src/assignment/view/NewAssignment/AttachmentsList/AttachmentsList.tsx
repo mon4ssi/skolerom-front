@@ -24,6 +24,7 @@ import searchIcon from 'assets/images/search.svg';
 import './AttachmentsList.scss';
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
 import { CustomImageAttachments } from './Attachments/CustomImageAttachments';
+import { CustomImageForm } from './CustomImageForm/CustomImageForm';
 
 export interface AttachmentsListProps {
   context: {
@@ -527,17 +528,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
   public renderUploadImageForm = () => {
     if (true) {
       return (
-        <div>
-          <div>
-            <input multiple onChange={(e) => { /* console.log(e.target.files); */ }} className="inputFileImages" type="file" accept="image/png, image/jpg, image/jpeg" />
-          </div>
-          <div>
-            Title: {document.getElementsByClassName('inputFileImages').item.toString()}
-          </div>
-          <div>
-            Source: <input type="text" />
-          </div>
-        </div>
+        <CustomImageForm />
       );
     }
   }

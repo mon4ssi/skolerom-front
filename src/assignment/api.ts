@@ -15,7 +15,8 @@ import {
   WPLocale,
   Source,
   FilterGrep,
-  GoalsData
+  GoalsData,
+  CustomImgAttachment
 } from './Assignment';
 import {
   AssignmentDistributeDTO,
@@ -42,6 +43,13 @@ export interface AttachmentDTO {
   title: string;
   duration?: number;
   src?: Array<string>;
+}
+
+export interface CustomImgAttachmentDTO {
+  path: string;
+  title: string;
+  filename?: string;
+  source?: Array<string>;
 }
 
 export interface ImageArticleDTO {
@@ -447,11 +455,25 @@ export class WPApi implements ArticleRepo {
     ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
   }
 
-  public async fetchCustomImages(): Promise<Array<Attachment>> {
+  public async fetchCustomImages(): Promise<Array<CustomImgAttachment>> {
     return (
       await API.get(
         `${process.env.REACT_APP_BASE_URL}/api/teacher/images`)
-    ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
+    ).data.map((item: CustomImgAttachmentDTO) => new CustomImgAttachment(item.path, item.title));
+  }
+
+  public async createCustomImage(): Promise<any> {
+    return (
+      await API.post(
+        `${process.env.REACT_APP_BASE_URL}/api/teacher/images`), {
+          params: {
+            image: '',
+            id: 0,
+            title: '',
+            source: ''
+          },
+        }
+    )/* .data.map((item: CustomImgAttachmentDTO) => new CustomImgAttachment(item.path, item.title)) */;
   }
 
   public async getLocaleData(locale: Locales): Promise<Array<WPLocale>> {

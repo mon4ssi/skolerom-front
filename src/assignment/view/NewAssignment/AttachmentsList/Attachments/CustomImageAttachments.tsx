@@ -19,13 +19,13 @@ export class CustomImageAttachments extends Component<Props> {
   public render() {
     const { newAssignmentStore } = this.props;
     const attachments: Array<FilterableAttachment> = [];
-
-    if (newAssignmentStore!.currentOrderOption >= 0) {
+    /* console.log(newAssignmentStore!.questionCustomAttachments!); */
+    /* if (newAssignmentStore!.currentOrderOption >= 0) {
       const currentQuestion = newAssignmentStore!.currentQuestion as EditableImageChoiceQuestion;
       if (currentQuestion && currentQuestion.options && currentQuestion.options.length > 0) {
         currentQuestion.options.forEach((item) => {
           if (item.image) {
-            const existingImage = newAssignmentStore!.questionAttachments!
+            const existingImage = newAssignmentStore!.questionCustomAttachments!
                                           .find(attachment => attachment.id === item.image.id);
             if (!existingImage) {
               attachments.push(item.image);
@@ -38,22 +38,19 @@ export class CustomImageAttachments extends Component<Props> {
       const currentBlock = newAssignmentStore!.getAttachmentsFromCurrentBlock() as EditableImagesContentBlock;
       if (currentBlock && currentBlock.images && currentBlock.images.length > 0) {
         currentBlock.images.forEach((image) => {
-          const existingImage = newAssignmentStore!.questionAttachments!.find(attachment => attachment.id === image.id);
+          const existingImage = newAssignmentStore!.questionCustomAttachments!.find(attachment => attachment.id === image.id);
 
           if (!existingImage) {
             attachments.push(image);
           }
         });
       }
-    }
+    } */
 
-    const renderedAttachments = attachments
-      .concat(newAssignmentStore!.questionAttachments)
-      .filter(this.props.filterAttachments)
-      .sort(this.props.sortAttachments)
-      .map(this.props.renderAttachment);
+    const renderedAttachments = newAssignmentStore!.questionCustomAttachments;
+    const element = renderedAttachments.length > 0 ? renderedAttachments[0].title : 'No elements.';
 
-    if (renderedAttachments.length <= 0) {
+    if (renderedAttachments.length === 0) {
       return (
         <div className="message">
           {intl.get('new assignment.no_custom_images_found')}
@@ -63,7 +60,7 @@ export class CustomImageAttachments extends Component<Props> {
 
     return (
     <div className="attachments-list">
-      {renderedAttachments}
+      {element}
     </div>
     );
   }
