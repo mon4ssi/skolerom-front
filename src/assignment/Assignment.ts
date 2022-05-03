@@ -1051,6 +1051,9 @@ export interface ArticleRepo {
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchCustomImages(): Promise<Array<CustomImgAttachment>>;
   createCustomImage(fd: FormData): Promise<any>;
+  deleteCustomImage(imageId: number): Promise<any>;
+  increaseUse(imageId: number): Promise<any>;
+  decreaseUse(imageId: number): Promise<any>;
   getLocaleData(locale: Locales): Promise<Array<WPLocale>>;
 }
 

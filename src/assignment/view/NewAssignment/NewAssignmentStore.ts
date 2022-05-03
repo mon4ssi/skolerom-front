@@ -17,6 +17,7 @@ import { Distribution } from 'distribution/Distribution';
 import { AttachmentContentType } from './AttachmentContentTypeContext';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from 'teachingPath/service';
+import { contextType } from 'react-copy-to-clipboard';
 
 const statusCode204 = 204;
 const numberOfImagesForSkeleton = 12;
@@ -67,6 +68,7 @@ export class NewAssignmentStore {
   @observable public isActiveButtons: boolean = false;
   @observable public isDisabledButtons: boolean = false;
   @observable public fetchingAttachments: boolean = false;
+  @observable public fetchingCustomImageAttachments: boolean = false;
   @observable public visibilityAttachments: boolean = false;
   @observable public showValidationErrors: boolean = false;
   // @observable public open: boolean = false;
@@ -567,6 +569,7 @@ export class NewAssignmentStore {
     }
 
     this.fetchingAttachments = true;
+    this.fetchingCustomImageAttachments = true;
     try {
       switch (typeAttachments) {
         case AttachmentContentType.image: {
@@ -596,10 +599,32 @@ export class NewAssignmentStore {
       this.questionAttachments = [];
       this.questionCustomAttachments = [];
       this.fetchingAttachments = false;
+      this.fetchingCustomImageAttachments = false;
       throw Error(`fetch question attachments: ${e}`);
     }
 
     this.fetchingAttachments = false;
+    this.fetchingCustomImageAttachments = false;
+  }
+
+  public async fetchQuestionCustomImagesAttachments(typeAttachments: AttachmentContentType): Promise<void> {
+    this.fetchingCustomImageAttachments = true;
+    try {
+      switch (typeAttachments) {
+        case AttachmentContentType.customImage: {
+          this.questionCustomAttachments =
+            (await this.articleService.fetchCustomImages()).map(item => item).flat() || [];
+          break;
+        }
+        default:
+          break;
+      }
+    } catch (e) {
+      this.questionCustomAttachments = [];
+      this.fetchingCustomImageAttachments = false;
+      throw Error(`fetch question custom images attachments: ${e}`);
+    }
+    this.fetchingCustomImageAttachments = false;
   }
 
   public getUpdatedAt() {

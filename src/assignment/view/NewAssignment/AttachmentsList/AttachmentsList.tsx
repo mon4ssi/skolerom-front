@@ -25,6 +25,7 @@ import './AttachmentsList.scss';
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
 import { CustomImageAttachments } from './Attachments/CustomImageAttachments';
 import { CustomImageForm } from './CustomImageForm/CustomImageForm';
+import { UserType } from 'user/User';
 
 export interface AttachmentsListProps {
   context: {
@@ -74,7 +75,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
         await newAssignmentStore!.fetchQuestionAttachments(AttachmentContentType.image);
       }
       if (this.context.contentType === AttachmentContentType.customImage) {
-        await newAssignmentStore!.fetchQuestionAttachments(AttachmentContentType.customImage);
+        await newAssignmentStore!.fetchQuestionCustomImagesAttachments(AttachmentContentType.customImage);
       }
       if (this.context.contentType === AttachmentContentType.video) {
         await newAssignmentStore!.fetchQuestionAttachments(AttachmentContentType.video);
@@ -161,7 +162,6 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
   private onSelectAttachment = async (id: number) => {
     const { newAssignmentStore } = this.props;
     const attachment = newAssignmentStore!.questionAttachmentsList.find(item => item.id === id);
-
     if (attachment) {
       try {
         await newAssignmentStore!.saveAttachment(attachment.id);
@@ -287,11 +287,40 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     />
   )
 
+  private renderSearchBar = () => {
+    const { selectedTabId } = this.state;
+    const { query } = this.state;
+
+    if (selectedTabId !== this.THREE) {
+      return (
+        <div className="search-field-block">
+          <input
+            className="search-input"
+            type="text"
+            name="query"
+            placeholder={this.renderPlaceholder()}
+            value={query}
+            onChange={this.handleSearch}
+            aria-required="true"
+            aria-invalid="false"
+          />
+          <img src={searchIcon} alt="search-icon" />
+        </div>
+      );
+    }
+  }
+
   private renderSkeletonLoader = () => {
     const { arrayForImagesSkeleton, arrayForVideosSkeleton } = this.props.newAssignmentStore!;
 
     switch (this.context.contentType) {
       case (AttachmentContentType.image):
+        return (
+          <div className="skeleton-images-attachments-list">
+            {arrayForImagesSkeleton.map(this.renderSkeletonItem)}
+          </div>
+        );
+      case (AttachmentContentType.customImage):
         return (
           <div className="skeleton-images-attachments-list">
             {arrayForImagesSkeleton.map(this.renderSkeletonItem)}
@@ -413,27 +442,50 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
   }
 
   public renderAttachmentTab = () => {
-    if (this.context.contentType === AttachmentContentType.image) {
-      return (
-        <div>
-          <span onClick={() => { this.setState({ selectedTabId: 1 }); }} className="image_Option">{intl.get('new assignment.images_options.images_from_article')}</span>
-          <span onClick={() => { this.setState({ selectedTabId: 2 }); this.props.context.changeContentType(AttachmentContentType.customImage); }} className="image_Option">{intl.get('new assignment.images_options.custom_images')}</span>
-          <span onClick={() => { this.setState({ selectedTabId: 3 }); }} className="image_Option">{intl.get('new assignment.images_options.upload_image')}</span>
-        </div>
-      );
+    const { newAssignmentStore } = this.props;
+    const userType = newAssignmentStore!.getCurrentUser()!.type;
+    if (userType === UserType.ContentManager) {
+      if (this.context.contentType === AttachmentContentType.image) {
+        return (
+          <div>
+            <span onClick={() => { this.setState({ selectedTabId: 1 }); }} className="image_Option">{intl.get('new assignment.images_options.images_from_article')}</span>
+            <span onClick={() => { this.setState({ selectedTabId: 2 }); this.props.context.changeContentType(AttachmentContentType.customImage); }} className="image_Option">{intl.get('new assignment.images_options.custom_images')}</span>
+            <span onClick={() => { this.setState({ selectedTabId: 3 }); }} className="image_Option">{intl.get('new assignment.images_options.upload_image')}</span>
+          </div>
+        );
+      }
+      if (this.context.contentType === AttachmentContentType.customImage) {
+        return (
+          <div>
+            <span onClick={() => { this.setState({ selectedTabId: 1 }); this.props.context.changeContentType(AttachmentContentType.image); }} className="image_Option">{intl.get('new assignment.images_options.images_from_article')}</span>
+            <span onClick={() => { this.setState({ selectedTabId: 2 }); }} className="image_Option">{intl.get('new assignment.images_options.custom_images')}</span>
+            <span onClick={() => { this.setState({ selectedTabId: 3 }); }} className="image_Option">{intl.get('new assignment.images_options.upload_image')}</span>
+          </div>
+        );
+      }
+      if (this.context.contentType === AttachmentContentType.video) {
+        return <span>{intl.get('new assignment.videos_from_article')}</span>;
+      }
+    } else {
+      if (this.context.contentType === AttachmentContentType.image) {
+        return (
+          <div>
+            <span onClick={() => { this.setState({ selectedTabId: 1 }); }} className="image_Option">{intl.get('new assignment.images_options.images_from_article')}</span>
+          </div>
+        );
+      }
+      if (this.context.contentType === AttachmentContentType.customImage) {
+        return (
+          <div>
+            <span onClick={() => { this.setState({ selectedTabId: 1 }); this.props.context.changeContentType(AttachmentContentType.image); }} className="image_Option">{intl.get('new assignment.images_options.images_from_article')}</span>
+          </div>
+        );
+      }
+      if (this.context.contentType === AttachmentContentType.video) {
+        return <span>{intl.get('new assignment.videos_from_article')}</span>;
+      }
     }
-    if (this.context.contentType === AttachmentContentType.customImage) {
-      return (
-        <div>
-          <span onClick={() => { this.setState({ selectedTabId: 1 }); this.props.context.changeContentType(AttachmentContentType.image); }} className="image_Option">{intl.get('new assignment.images_options.images_from_article')}</span>
-          <span onClick={() => { this.setState({ selectedTabId: 2 }); }} className="image_Option">{intl.get('new assignment.images_options.custom_images')}</span>
-          <span onClick={() => { this.setState({ selectedTabId: 3 }); }} className="image_Option">{intl.get('new assignment.images_options.upload_image')}</span>
-        </div>
-      );
-    }
-    if (this.context.contentType === AttachmentContentType.video) {
-      return <span>{intl.get('new assignment.videos_from_article')}</span>;
-    }
+
   }
 
   public renderAttachmentsStockTab = () => {
@@ -452,6 +504,10 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     if (editableBlock && editableBlock.type) {
       switch (editableBlock.type) {
         case ContentBlockType.Images: {
+          const block = editableBlock as EditableImagesContentBlock;
+          return block.images.length;
+        }
+        case ContentBlockType.CustomImages: {
           const block = editableBlock as EditableImagesContentBlock;
           return block.images.length;
         }
@@ -554,12 +610,29 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
   }
 
-  public render() {
-    const { query } = this.state;
+  public renderBottomInfoAndAddBar = () => {
     const { newAssignmentStore } = this.props;
-    const isLoading = newAssignmentStore!.fetchingAttachments || false;
     const isMultipleChoice = newAssignmentStore!.isMultipleChoice();
-    const onThirdTab = this.state.selectedTabId !== this.THREE;
+    const onThirdTab = this.state.selectedTabId === this.THREE;
+
+    if (!onThirdTab) {
+      return (
+        <div className="attachment-info">
+          <div className="images-count">
+            {isMultipleChoice ? this.renderSelectedImageChoiceAttachment() : this.renderSelectedAttachmentsCount()}
+          </div>
+          <CreateButton onClick={this.closeAttachmentsList} disabled={this.calcDisabledAttachmentButton()} title={isMultipleChoice ? intl.get('new assignment.use_this_image') : intl.get('new assignment.add_to_assignment')}>
+            {isMultipleChoice ? intl.get('new assignment.use_this_image') : intl.get('new assignment.add_to_assignment')}
+          </CreateButton>
+        </div>
+      );
+    }
+  }
+
+  public render() {
+
+    const { newAssignmentStore } = this.props;
+    const isLoading = newAssignmentStore!.fetchingAttachments || newAssignmentStore!.fetchingAttachments || false;
 
     return (
       <div className="attachments-list-container">
@@ -579,33 +652,13 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
         </div>
 
         <div className="contentWrapper">
-          <div className="search-field-block">
-            <input
-              className="search-input"
-              type="text"
-              name="query"
-              placeholder={this.renderPlaceholder()}
-              value={query}
-              onChange={this.handleSearch}
-              aria-required="true"
-              aria-invalid="false"
-            />
-            <img src={searchIcon} alt="search-icon" />
-          </div>
+          {this.renderSearchBar()}
 
           {isLoading && this.renderSkeletonLoader()}
           {!isLoading && this.renderTabByOption()}
         </div>
 
-        <div className="attachment-info">
-          <div className="images-count">
-            {isMultipleChoice ? this.renderSelectedImageChoiceAttachment() : this.renderSelectedAttachmentsCount()}
-          </div>
-
-          <CreateButton onClick={this.closeAttachmentsList} disabled={this.calcDisabledAttachmentButton()} title={isMultipleChoice ? intl.get('new assignment.use_this_image') : intl.get('new assignment.add_to_assignment')}>
-            {isMultipleChoice ? intl.get('new assignment.use_this_image') : intl.get('new assignment.add_to_assignment')}
-          </CreateButton>
-        </div>
+        {this.renderBottomInfoAndAddBar()}
 
       </div>
     );
