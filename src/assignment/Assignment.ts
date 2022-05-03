@@ -10,6 +10,8 @@ import moment, { Moment } from 'moment';
 
 import { AssignmentDistributeDTO } from './factory';
 import { isNil } from 'lodash';
+import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
+import { createContext } from 'vm';
 
 export const ASSIGNMENT_REPO = 'ASSIGNMENT_REPO';
 
@@ -1048,6 +1050,7 @@ export interface ArticleRepo {
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchCustomImages(): Promise<Array<CustomImgAttachment>>;
+  createCustomImage(fd: FormData): Promise<any>;
   getLocaleData(locale: Locales): Promise<Array<WPLocale>>;
 }
 
@@ -1087,7 +1090,7 @@ export class Attachment {
 
 export class CustomImgAttachment {
   public readonly fileName?: string;
-  public readonly path: string;
+  public readonly path?: string;
   public readonly source?: Array<string>;
   public readonly title: string;
   public readonly id?: number;

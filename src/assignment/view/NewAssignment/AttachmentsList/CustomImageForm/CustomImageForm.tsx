@@ -1,21 +1,25 @@
-import React, { useState } from 'react';
+import { ARTICLE_REPO_KEY } from 'assignment/Assignment';
+import { ArticleService } from 'assignment/service';
+import { injector } from 'Injector';
+import React, { useContext, useState } from 'react';
 
 import './CustomImageForm.scss';
 
 export interface CustomImage {
-  file: string;
+  image: File | string | null;
   title: string;
   source: string;
+  id?: number;
 }
 
 export const CustomImageForm = () => {
-
-  const [file, setFile] = useState('');
+  const articleService: ArticleService = injector.get(ARTICLE_REPO_KEY);
+  const [image, setImage] = useState('');
   const [title, setTitle] = useState('');
   const [source, setSource] = useState('');
 
   const handleChangeFile = (e: any) => {
-    setFile(e.target.files!.length > 0 ? e.target.files![0].name : 'Image not selected yet.');
+    setImage(e.target.files!.length > 0 ? e.target.files![0] : 'Image not selected yet.');
   };
 
   const handleChangeTitle = (e: any) => {
@@ -27,11 +31,17 @@ export const CustomImageForm = () => {
   };
 
   const saveImage = () => {
-    const newCustomImage: CustomImage = {
-      file: file.toString(),
-      title: title.toString(),
-      source: source.toString()
-    };
+    const formdata: FormData = new FormData;
+    formdata.append('image', image);
+    formdata.append('title', title);
+    formdata.append('source', source);
+    formdata.append('id', '0');
+    /* console.log(formdata);
+    console.log(formdata.get('image'));
+    console.log(formdata.get('title'));
+    console.log(formdata.get('source')); */
+    articleService.createCustomImage(formdata);
+
   };
 
   return (
@@ -41,7 +51,7 @@ export const CustomImageForm = () => {
           <input onChange={(e) => { handleChangeFile(e); }} className="inputFileImages" type="file" accept="image/png, image/jpg, image/jpeg" />
           Select a new image
         </label>
-        <span className="filenameSpan">{file}</span>
+        <span className="filenameSpan">{image.length}</span>
 
       </div>
       <div className="spaced">
@@ -53,11 +63,6 @@ export const CustomImageForm = () => {
       </div>
       <div className="spaced right">
         <button className="createButton" onClick={saveImage}>Save image</button>
-      </div>
-      <div style={{ margin: '40px' }}>
-        {file} <br />
-        {title} <br />
-        {source} <br />
       </div>
     </div>
   );

@@ -404,6 +404,9 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     if (this.context.contentType === AttachmentContentType.image) {
       return intl.get('new assignment.search_for_images');
     }
+    if (this.context.contentType === AttachmentContentType.customImage) {
+      return intl.get('new assignment.search_for_images');
+    }
     if (this.context.contentType === AttachmentContentType.video) {
       return intl.get('new assignment.search_for_videos');
     }
@@ -556,6 +559,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     const { newAssignmentStore } = this.props;
     const isLoading = newAssignmentStore!.fetchingAttachments || false;
     const isMultipleChoice = newAssignmentStore!.isMultipleChoice();
+    const onThirdTab = this.state.selectedTabId !== this.THREE;
 
     return (
       <div className="attachments-list-container">
@@ -586,7 +590,6 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
               aria-required="true"
               aria-invalid="false"
             />
-
             <img src={searchIcon} alt="search-icon" />
           </div>
 

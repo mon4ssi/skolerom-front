@@ -11,6 +11,8 @@ import {
   CustomImgAttachment,
 } from './Assignment';
 import { Locales } from 'utils/enums';
+import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
+import { createContext } from 'react';
 
 export const ASSIGNMENT_SERVICE = 'ASSIGNMENT_SERVICE';
 
@@ -105,6 +107,10 @@ export class ArticleService {
 
   public async fetchCustomImages(): Promise<Array<CustomImgAttachment>> {
     return this.articleRepo.fetchCustomImages();
+  }
+
+  public async createCustomImage(fd: FormData): Promise<any> {
+    return this.articleRepo.createCustomImage(fd);
   }
 
   public async getLocaleData(locale: Locales): Promise<Array<WPLocale>> {

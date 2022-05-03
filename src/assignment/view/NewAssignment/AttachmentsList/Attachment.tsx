@@ -113,6 +113,12 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
         selected: isSelected,
       });
     }
+    if (this.context.contentType === AttachmentContentType.customImage) {
+      wrapClass = classnames('attachments-list__img-wrap', {
+        disabled: isProcessing,
+        selected: isSelected,
+      });
+    }
     if (this.context.contentType === AttachmentContentType.video) {
       wrapClass = classnames('attachments-list__video-wrap', {
         disabled: isProcessing,

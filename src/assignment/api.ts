@@ -34,6 +34,7 @@ import {
 import { DEFAULT_AMOUNT_ARTICLES_PER_PAGE, LOCALES_MAPPING_FOR_BACKEND } from 'utils/constants';
 import { ContentBlockType } from './ContentBlock';
 import { Locales } from 'utils/enums';
+import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
 
 export interface AttachmentDTO {
   id: number;
@@ -462,15 +463,16 @@ export class WPApi implements ArticleRepo {
     ).data.map((item: CustomImgAttachmentDTO) => new CustomImgAttachment(item.path, item.title));
   }
 
-  public async createCustomImage(): Promise<any> {
+  public async createCustomImage(fd: FormData): Promise<any> {
+    /* console.log(fd.get('image')); */
     return (
       await API.post(
         `${process.env.REACT_APP_BASE_URL}/api/teacher/images`), {
           params: {
-            image: '',
-            id: 0,
-            title: '',
-            source: ''
+            image: fd.get('image'),
+            title: fd.get('title'),
+            source: fd.get('source'),
+            id: fd.get('id'),
           },
         }
     )/* .data.map((item: CustomImgAttachmentDTO) => new CustomImgAttachment(item.path, item.title)) */;
