@@ -100,7 +100,9 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       this.handleChangeNumberOfTitleCols(valueLength);
     }
     const headerArray = Array.from(document.getElementsByClassName('header') as HTMLCollectionOf<HTMLElement>);
-    headerArray[0].style.display = 'flex';
+    if (headerArray.length > 0) {
+      headerArray[0].style.display = 'flex';
+    }
   }
 
   public onClean() {
