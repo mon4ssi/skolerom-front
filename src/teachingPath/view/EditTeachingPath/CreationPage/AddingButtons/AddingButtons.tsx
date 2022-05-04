@@ -191,6 +191,7 @@ class AddingButtonsContainer extends Component<Props> {
 
   public render() {
     return (
+      <div>
       <div className="AddingButtons flexBox dirColumn">
         <div
           className="addingButton"
@@ -202,7 +203,6 @@ class AddingButtonsContainer extends Component<Props> {
           </button>
         </div>
         {this.renderButtonDomain()}
-        {this.state.modalDomain && this.renderModalDomain()}
         <div
           className="addingButton"
           onClick={this.openAssignmentsList}
@@ -221,6 +221,8 @@ class AddingButtonsContainer extends Component<Props> {
             {intl.get('edit_teaching_path.modals.create_assignment')}
           </button>
         </div>
+      </div>
+      {this.state.modalDomain && this.renderModalDomain()}
       </div>
     );
   }

@@ -117,6 +117,7 @@ class Sidebar extends Component<Props> {
     const { uiStore } = this.props;
     if (link.url.includes(uiStore!.currentActiveTab)) {
       event.preventDefault();
+      window.location.href = `${window.location.origin}${link.url}`;
     } else {
       uiStore!.setCurrentActiveTab(link.url.split('/')[1]);
     }

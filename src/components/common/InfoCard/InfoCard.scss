@@ -12,10 +12,11 @@
   button {
     padding: 0;
     width: 100%;
-    min-height: 50%;
+    min-height: 60%;
     background: #939fa7;
     border-radius: 5px 5px 0 0;
-    object-fit: cover;
+    object-fit: cover;    
+    position: relative;
     overflow: hidden;
     &:focus {
       outline: auto;
@@ -74,13 +75,15 @@
   .cardImage {
     width: 100%;
     min-height: 100%;
-    background: #939FA7;
-    border-radius: 5px 5px 0px 0px;
+    background: #939fa7;
+    border-radius: 5px 5px 0 0;
     object-fit: cover;
+    position: absolute;
+    bottom: 0;
   }
 
   .cardInfo {
-    min-height: 50%;
+    min-height: 40%;
     height: auto;
     position: relative;
     padding: 15px;
@@ -294,7 +297,7 @@
 
     .cardDescription {
       @include text-shrink-multiline(3);
-      margin-top: 4px;
+      margin-top: 5px;
       font-size: 0.9375rem;
       font-weight: 300;
     }
