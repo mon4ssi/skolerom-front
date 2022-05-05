@@ -3,6 +3,7 @@ import { ArticleService } from 'assignment/service';
 import { injector } from 'Injector';
 import { values } from 'lodash';
 import React, { useContext, useState } from 'react';
+import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 
 import './CustomImageForm.scss';
 
@@ -18,10 +19,10 @@ export const CustomImageForm = () => {
   const [image, setImage] = useState('');
   const [title, setTitle] = useState('');
   const [source, setSource] = useState('');
-  const [fileName, setFileName] = useState('');
+  const [fileName, setFileName] = useState('Image not selected yet.');
 
   const handleChangeFile = (e: any) => {
-    setImage(e.target.files!.length > 0 ? e.target.files![0] : 'Image not selected yet.');
+    setImage(e.target.files!.length > 0 ? e.target.files![0] : '');
     setFileName(e.target.files!.length > 0 ? e.target.files![0].name : 'Image not selected yet.');
   };
 
@@ -34,15 +35,46 @@ export const CustomImageForm = () => {
   };
 
   const saveImage = () => {
-    const formdata: FormData = new FormData;
-    formdata.append('image', image);
-    formdata.append('title', title);
-    formdata.append('source', source);
-    formdata.append('id', '0');
-    articleService.createCustomImage(formdata).then(
-      clearFormFields,
-      /* clearInputs, */
-    );
+    if (validateFields()) {
+      const formdata: FormData = new FormData;
+      formdata.append('image', image);
+      formdata.append('title', title);
+      formdata.append('source', source);
+      formdata.append('id', '0');
+      articleService.createCustomImage(formdata).then(
+        clearFormFields,
+        /* clearInputs, */
+      ).then(showCustomImageUploadMessage);
+    }
+  };
+
+  const validateFields = () => {
+    let emptyFormFields = '';
+    if (image === undefined || image === null || image === '') {
+      emptyFormFields = emptyFormFields !== '' ? `${emptyFormFields}, image` : 'image';
+    }
+    if (title === null || title === '') {
+      emptyFormFields = emptyFormFields !== '' ? `${emptyFormFields}, title` : 'title';
+    }
+    if (source === null || source === '') {
+      emptyFormFields = emptyFormFields !== '' ? `${emptyFormFields}, source` : 'source';
+    }
+
+    if (emptyFormFields !== '') {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: `Please check this fields: ${emptyFormFields}`,
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const showCustomImageUploadMessage = () => {
+    Notification.create({
+      type: false ? NotificationTypes.ERROR : NotificationTypes.SUCCESS,
+      title: '' || 'Image uploaded succesfully'
+    });
   };
 
   /* const clearInputs = () => {
@@ -67,11 +99,13 @@ export const CustomImageForm = () => {
 
       </div>
       <div className="spaced">
-        Title: <input id="title" onChange={(e) => { handleChangeTitle(e); }} className="custom-input-image" type="text" />
+        <label className="label" htmlFor="title">Title: </label>
+        <input id="title" value={title} onChange={(e) => { handleChangeTitle(e); }} className="custom-input-image" type="text" />
 
       </div>
       <div className="spaced">
-        Source: <input id="source" onChange={(e) => { handleChangeSource(e); }} className="custom-input-image" type="text" />
+        <label className="label" htmlFor="source">Source: </label>
+        <input id="source" value={source} onChange={(e) => { handleChangeSource(e); }} className="custom-input-image" type="text" />
       </div>
       <div className="spaced right">
         <button className="createButton" onClick={saveImage}>Save image</button>
