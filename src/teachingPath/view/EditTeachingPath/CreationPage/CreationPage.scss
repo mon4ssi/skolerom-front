@@ -13,6 +13,13 @@
         cursor: move;
         button {
           pointer-events: none;
+          &.activeDragButton {
+            display: none;
+          }
+          &.desactiveDragButton {
+            display: block;
+            pointer-events: all;
+          }
         }
       }
     }
@@ -399,7 +406,11 @@
 
 
   }
-
+  .dragButtonsItem {
+    .desactiveDragButton {
+      display: none;
+    }
+  }
   .topVerticalLine {
     border-left: 2px solid #D3D9DE;
     height: 65px;

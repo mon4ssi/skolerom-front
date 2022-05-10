@@ -52,6 +52,7 @@ interface Props {
   onDelete?(itemId: number): void;
   onEdit?(itemId: number, type: string): void;
   onDrag?(itemId: number, type: string): void;
+  onCancelDrag?(itemId: number, type: string): void;
   setActiveTooltip?(): void;
   deleteTeachingPath?(): void;
   copyTeachingPath?(id: number): void;
@@ -74,6 +75,11 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
     this.props.onDrag!(this.props.id!, this.props.type!);
   }
 
+  public desactiveDragClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    this.props.onCancelDrag!(this.props.id!, this.props.type!);
+  }
+
   public renderGrade = (grade: Grade) => {
     if (grade.title) {
       const title = grade.title.split('.', 1);
@@ -88,9 +94,16 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
   public renderActionButtons = () => (
     <div className="actionButtons flexBox">
       <div className="actionButtonsItem dragButtonsItem">
-        <button onClick={this.activeDragClick} title={intl.get('generals.drag')}>
+        <button onClick={this.activeDragClick} title={intl.get('generals.drag')} className="activeDragButton">
           <img
             src={drag}
+            alt={intl.get('generals.drag')}
+            title={intl.get('generals.drag')}
+          />
+        </button>
+        <button onClick={this.desactiveDragClick} title={intl.get('generals.drag')} className="desactiveDragButton">
+          <img
+            src={dragActive}
             alt={intl.get('generals.drag')}
             title={intl.get('generals.drag')}
           />

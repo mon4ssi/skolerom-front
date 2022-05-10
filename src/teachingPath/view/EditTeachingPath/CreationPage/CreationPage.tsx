@@ -100,9 +100,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       this.handleChangeNumberOfTitleCols(valueLength);
     }
     const headerArray = Array.from(document.getElementsByClassName('header') as HTMLCollectionOf<HTMLElement>);
-    if (headerArray.length > 0) {
-      headerArray[0].style.display = 'flex';
-    }
+    headerArray[0].style.display = 'flex';
   }
 
   public onClean() {
@@ -271,6 +269,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
           onDelete={this.handleDeleteItem}
           onEdit={this.handleEditItem}
           onDrag={this.handleDragItem}
+          onCancelDrag={this.handleCancelDragItem}
           levels={levels}
           onCLickImg={this.onCLickImg}
         />
@@ -335,6 +334,25 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         this.context.changeContentType(null);
         break;
     }
+  }
+
+  public handleCancelDragItem = async (itemId: number, type: string) => {
+    const { editTeachingPathStore, onDrop } = this.props;
+    onDrop('NONE');
+    if (this.state.isDraggable) {
+      this.divRef.current!.classList.remove('dragged');
+    }
+    this.setState(
+      {
+        isDraggable: false,
+      },
+      () => {
+        const headerArray = Array.from(document.getElementsByClassName('header') as HTMLCollectionOf<HTMLElement>);
+        headerArray[0].style.display = 'flex';
+      }
+    );
+    this.setState({ isDrop: false });
+    editTeachingPathStore!.falseIsDraggable();
   }
 
   public handleDragItem = async (itemId: number, type: string) => {
