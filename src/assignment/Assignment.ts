@@ -1092,23 +1092,30 @@ export class Attachment {
 }
 
 export class CustomImgAttachment {
-  public readonly fileName?: string;
-  public readonly path?: string;
-  public readonly source?: Array<string>;
+  public readonly id: number;
+  public readonly path: string;
+  public readonly alt: string;
+  public readonly fileName: string;
   public readonly title: string;
-  public readonly id?: number;
+  public readonly duration?: number;
+  public readonly src?: Array<string>;
 
   constructor(
+    id: number,
     path: string,
+    alt: string,
+    fileName: string,
     title: string,
-    id?: number,
-    fileName?: string,
-    source?: Array<string>
+    duration?: number,
+    src?: Array<string>
   ) {
+    this.id = id;
     this.path = path;
+    this.alt = alt;
     this.fileName = fileName;
     this.title = title;
-    this.source = source;
+    this.duration = duration;
+    this.src = src;
   }
 }
 

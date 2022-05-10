@@ -21,6 +21,7 @@ import { contextType } from 'react-copy-to-clipboard';
 
 const statusCode204 = 204;
 const numberOfImagesForSkeleton = 12;
+const numberOfCustomImagesForSkeleton = 12;
 const numberOfVideosForSkeleton = 4;
 const delayFocus = 250;
 
@@ -92,6 +93,7 @@ export class NewAssignmentStore {
   @observable public titleButtonGuidance: string = '';
 
   public arrayForImagesSkeleton = new Array(numberOfImagesForSkeleton).fill('imageSkeletonLoader');
+  public arrayForCustomImagesSkeleton = new Array(numberOfCustomImagesForSkeleton).fill('imageSkeletonLoader');
   public arrayForVideosSkeleton = new Array(numberOfVideosForSkeleton).fill('videoSkeletonLoader');
 
   public localeKey: string = EditEntityLocaleKeys.NEW_ASSIGNMENT;
@@ -291,6 +293,13 @@ export class NewAssignmentStore {
   public setImageCurrentOption(image: QuestionAttachment) {
     const currentImageChoiceQuestion = this.currentQuestion as EditableImageChoiceQuestion;
     const currentOption = currentImageChoiceQuestion!._options.find(option => option.order === this.currentOrderOption);
+    currentOption!.setImage(image);
+  }
+
+  @action
+  public setCustomImageCurrentOption(image: QuestionAttachment) {
+    const currentCustomImageChoiceQuestion = this.currentQuestion as EditableImageChoiceQuestion;
+    const currentOption = currentCustomImageChoiceQuestion!._options.find(option => option.order === this.currentOrderOption);
     currentOption!.setImage(image);
   }
 

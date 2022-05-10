@@ -36,14 +36,9 @@ export class CustomImageAttachments extends Component<Props> {
   public render() {
     const { newAssignmentStore } = this.props;
     const attachments: Array<FilterableAttachment> = [];
-    /* console.log(newAssignmentStore!.questionCustomAttachments);
-    console.log(newAssignmentStore!.currentOrderOption); */
     if (newAssignmentStore!.currentOrderOption >= 0) {
-      /* console.log('executing A') */
       const currentQuestion = newAssignmentStore!.currentQuestion as EditableImageChoiceQuestion;
       if (currentQuestion && currentQuestion.options && currentQuestion.options.length > 0) {
-        /* console.log('executing A.1');
-        console.log(currentQuestion); */
         currentQuestion.options.forEach((item) => {
           if (item.image) {
             const existingImage = newAssignmentStore!.questionCustomAttachments!
@@ -54,7 +49,6 @@ export class CustomImageAttachments extends Component<Props> {
           }
         }
         );
-        /* console.log(attachments); */
       }
     } else {
       /* console.log('executing b'); */
@@ -70,7 +64,7 @@ export class CustomImageAttachments extends Component<Props> {
       }
     }
 
-    const renderedAttachments = newAssignmentStore!.questionCustomAttachments;
+    /* const renderedAttachments = newAssignmentStore!.questionCustomAttachments;
     const element = renderedAttachments.length > 0 ? renderedAttachments[0].title : 'No elements.';
     const elements: Array<any> = renderedAttachments.map(item => item);
 
@@ -85,6 +79,25 @@ export class CustomImageAttachments extends Component<Props> {
       <div className="attachments-list">
         {this.renderCustomImagesAttachments(elements)}
       </div>
+    ); */
+    const renderedAttachments = attachments
+      .concat(newAssignmentStore!.questionCustomAttachments)
+      .filter(this.props.filterAttachments)
+      .sort(this.props.sortAttachments)
+      .map(this.props.renderAttachment);
+
+    if (renderedAttachments.length <= 0) {
+      return (
+        <div className="message">
+          {intl.get('new assignment.no_images_found')}
+        </div>
+      );
+    }
+
+    return (
+    <div className="attachments-list">
+      {renderedAttachments}
+    </div>
     );
   }
 }

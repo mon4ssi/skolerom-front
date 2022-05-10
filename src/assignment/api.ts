@@ -49,6 +49,7 @@ export interface AttachmentDTO {
 export interface CustomImgAttachmentDTO {
   path: string;
   title: string;
+  id?: number;
   filename?: string;
   source?: Array<string>;
 }
@@ -459,8 +460,13 @@ export class WPApi implements ArticleRepo {
   public async fetchCustomImages(): Promise<Array<CustomImgAttachment>> {
     return (
       await API.get(
-        `${process.env.REACT_APP_BASE_URL}/api/teacher/images`)
-    ).data.map((item: CustomImgAttachmentDTO) => new CustomImgAttachment(item.path, item.title));
+        `${process.env.REACT_APP_BASE_URL}/api/teacher/images`, {
+          params: {
+            page: 1,
+            perPage: DEFAULT_AMOUNT_ARTICLES_PER_PAGE,
+          },
+        })
+    ).data.data.map((item: CustomImgAttachmentDTO) => new CustomImgAttachment(item.id!, item.path, '', item.title, '', 0, item.source));
   }
 
   public async createCustomImage(fd: FormData): Promise<any> {

@@ -36,7 +36,6 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
   private toggleAttachment = async () => {
     const { isSelected, attachment } = this.props;
     const { isProcessing } = this.state;
-
     if (isProcessing) { return; }
 
     this.setState({ isProcessing: true });
@@ -70,13 +69,12 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
       );
     }
     if (this.context.contentType === AttachmentContentType.customImage) {
-      /* console.log('es custom image'); */
       return (
         <button title="Attachment Media">
           <img
             src={attachment.path}
             alt={attachment.alt}
-            srcSet={attachment.src && attachment.src[1] && attachment.src[1]}
+            srcSet={attachment.path}
             sizes={'(min-width: 320px) 300px'}
           />
         </button>
