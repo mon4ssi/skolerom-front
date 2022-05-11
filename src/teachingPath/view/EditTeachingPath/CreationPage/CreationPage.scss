@@ -300,7 +300,7 @@
     .childrenContainer {
       position: relative;
       flex-direction: row;
-      // z-index: 1;
+      //z-index: 1;
     }
 
     .mergePanel {
@@ -354,7 +354,7 @@
         width: 40px;
         height: 40px;
         position: absolute;
-        top: 384px;
+        top: 385px;
         left: -20px;
         cursor: pointer;
         z-index: 3;
@@ -417,7 +417,7 @@
     min-height: 65px;
     position: absolute;
     top: -65px;
-    z-index: 1;
+    z-index: -1;
   }
 
   .bottomVerticalLine {

@@ -246,14 +246,16 @@ export class NestedOrderNumber extends Component<Props> {
     );
 
     return (
-      <div className={numberAndActionsClassnames}>
-        {!readOnly && this.renderEditIcon()}
-        {!readOnly && this.renderEditTGIcon()}
-        {this.state.modalDomain && this.renderModalDomain()}
-        <div className="nestedOrderNumber">
-          {nestedOrderNumber}
+      <div>
+        <div className={numberAndActionsClassnames}>
+          {!readOnly && this.renderEditIcon()}
+          {!readOnly && this.renderEditTGIcon()}
+          <div className="nestedOrderNumber">
+            {nestedOrderNumber}
+          </div>
+          {!readOnly && this.renderDeleteIcon()}
         </div>
-        {!readOnly && this.renderDeleteIcon()}
+        {this.state.modalDomain && this.renderModalDomain()}
       </div>
     );
   }
