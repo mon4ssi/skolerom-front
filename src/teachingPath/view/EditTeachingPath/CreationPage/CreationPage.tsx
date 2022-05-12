@@ -355,6 +355,25 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     editTeachingPathStore!.falseIsDraggable();
   }
 
+  public onCancelDrag = async () => {
+    const { editTeachingPathStore, onDrop } = this.props;
+    onDrop('NONE');
+    if (this.state.isDraggable) {
+      this.divRef.current!.classList.remove('dragged');
+    }
+    this.setState(
+      {
+        isDraggable: false,
+      },
+      () => {
+        const headerArray = Array.from(document.getElementsByClassName('header') as HTMLCollectionOf<HTMLElement>);
+        headerArray[0].style.display = 'flex';
+      }
+    );
+    this.setState({ isDrop: false });
+    editTeachingPathStore!.falseIsDraggable();
+  }
+
   public handleDragItem = async (itemId: number, type: string) => {
     // step 0: variables
     const { editTeachingPathStore, node, parentNode, allNode, onDrop } = this.props;
@@ -647,7 +666,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     return !node.children.length && (
       <div className={containerClassNames} onDragEnter={this.dragenterthandler}>
         {node.type !== TeachingPathNodeType.Root && <div className="topVerticalLine" />}
-        <AddingButtons node={node} nester={nestedOrder} />
+        <AddingButtons node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
       </div>
     );
   }
@@ -789,6 +808,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
           nestedOrderNumber={nestedOrder}
           readOnly={readOnly}
           nroLetter={nroLetterLoop!}
+          onCancelDrag={this.onCancelDrag}
         />
       </>
     ) : null;
@@ -832,13 +852,23 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   }
 
   public renderBoxNodeOptions = () => {
-    const { node, readOnly } = this.props;
+    const { node, allNode, readOnly, editTeachingPathStore } = this.props;
     const classNodeTransparent: string = (readOnly === true && this.haveTitleNode(node.selectQuestion)) ? 'nodeChildrenReadOnly' : '';
-
+    const childrenNode = node.children;
+    const allchildren = allNode.children;
+    const mytype = (node.children.length > 0) ? node.children[0].type : 'none';
+    const myChildrens = (node.children.length > 0) ? node.children : [];
+    const myid = node.id;
+    const myNode = editTeachingPathStore!.getSelectedDragNode();
+    const myParent = editTeachingPathStore!.getParentSelectedDragNode();
+    let isposible = true;
+    if (this.state.myNode) {
+      isposible = false;
+    }
     return node.children.length ? (
       <div className={`${node.type === TeachingPathNodeType.Root ? 'boxNodeOptionsRoot' : 'boxNodeOptionsChildren'} ${classNodeTransparent}`} onDragOver={this.ondragovertitle} onDrop={this.ondroptitle} onDragLeave={this.ondragleavetitle}>
 
-        {this.state.isPosibleDrop && this.informativeBox()}
+        {isposible && editTeachingPathStore!.returnIsDraggable() && this.informativeBox()}
         {this.renderInput()}
         <div className={`sectImgs ${readOnly ? 'sectImgsReadOnly' : ''}`}>
           {node.type === TeachingPathNodeType.Root && this.renderNestedOrderNumber(true)}
