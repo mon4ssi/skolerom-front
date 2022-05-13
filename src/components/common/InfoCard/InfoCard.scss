@@ -2,8 +2,8 @@
 
 .InfoCard {
   width: 282px;
-  height: 370px;
-  min-height: 370px;
+  height: 350px;
+  min-height: 350px;
   box-sizing: content-box;
   background: #FFFFFF;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.100661);
@@ -12,7 +12,7 @@
   button {
     padding: 0;
     width: 100%;
-    min-height: 60%;
+    min-height: 50%;
     background: #939fa7;
     border-radius: 5px 5px 0 0;
     object-fit: cover;    
@@ -83,7 +83,7 @@
   }
 
   .cardInfo {
-    min-height: 40%;
+    min-height: 50%;
     height: auto;
     position: relative;
     padding: 15px;

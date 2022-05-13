@@ -179,6 +179,7 @@
 .RelatedArticlesCard {
   display: flex;
   width: calc(100% / 5 - 20px);
+  min-width: 255px;
   flex-direction: column;
   border-radius: 6px;
   box-shadow: 0 0 13px -4px rgba(87, 87, 87, 1);
@@ -303,6 +304,12 @@
   left: 0;
   z-index: 2;
   border-radius: 6px;
+}
+
+@media screen and (max-width: 1755px) {
+  .RelatedArticlesCard {    
+    width: calc(100% / 4 - 20px);
+  }
 }
 
 @media screen and (max-width: $screen-dimension-desktop) {
