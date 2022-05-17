@@ -4,14 +4,13 @@ import { USER_SERVICE, UserService } from 'user/UserService';
 import { injector } from 'Injector';
 
 import { debounce } from 'utils/debounce';
-import { DEBOUNCE_TIME } from 'utils/constants';
+import { DEBOUNCE_TIME, postperpage } from 'utils/constants';
 import { Filter } from 'assignment/Assignment';
 import { UserType } from 'user/User';
 import { SortingFilter, StoreState } from 'utils/enums';
 import { Notification, NotificationTypes } from '../../../components/common/Notification/Notification';
 import intl from 'react-intl-universal';
-
-const TEACHING_PATHS_PER_PAGE_IN_LIST = 20;
+const TEACHING_PATHS_PER_PAGE_IN_LIST = postperpage;
 
 export class TeachingPathsListStore {
 

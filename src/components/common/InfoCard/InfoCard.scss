@@ -2,8 +2,8 @@
 
 .InfoCard {
   width: 282px;
-  height: 350px;
-  min-height: 350px;
+  height: 344px;
+  min-height: 344px;
   box-sizing: content-box;
   background: #FFFFFF;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.100661);
@@ -12,8 +12,6 @@
   button {
     padding: 0;
     width: 100%;
-    min-height: 50%;
-    background: #939fa7;
     border-radius: 5px 5px 0 0;
     object-fit: cover;    
     position: relative;
@@ -74,19 +72,15 @@
 
   .cardImage {
     width: 100%;
-    min-height: 100%;
-    background: #939fa7;
+    height: 185px;
     border-radius: 5px 5px 0 0;
     object-fit: cover;
-    position: absolute;
-    bottom: 0;
   }
 
   .cardInfo {
-    min-height: 50%;
     height: auto;
     position: relative;
-    padding: 15px;
+    padding: 15px 20px;
 
     .cardTitle {
       flex: 1 1;
@@ -99,7 +93,8 @@
         @include text-shrink-multiline(2);
         margin: 0;
         font-size: 1.05rem;
-        font-weight: 500;
+        font-weight: 500;        
+        margin-bottom: 10px;
       }
 
       .levelIcon{
@@ -127,7 +122,7 @@
           outline: black;
           outline-style: auto;
         }
-        &:before {
+        /*&:before {
           position: absolute;
           box-shadow: 0 2px 2px #00000021;
           margin-top: 20px;
@@ -164,7 +159,7 @@
           z-index: 1;
           opacity: 0;
           pointer-events: none;
-        }
+        }*/
         &:hover {
           &:before, &:after {
             opacity: 1;
@@ -296,7 +291,7 @@
     }
 
     .cardDescription {
-      @include text-shrink-multiline(2);
+      @include text-shrink-multiline(3);
       margin-top: 5px;
       font-size: 0.9375rem;
       font-weight: 300;
