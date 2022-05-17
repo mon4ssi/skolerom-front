@@ -28,6 +28,7 @@ import { CustomImageForm } from './CustomImageForm/CustomImageForm';
 import { UserType } from 'user/User';
 import { ArticleService } from 'assignment/service';
 import { injector } from 'Injector';
+import { CustomImageFormSimple } from './CustomImageFormSimple/CustomImageFormSimple';
 
 export interface AttachmentsListProps {
   context: {
@@ -489,10 +490,10 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
       const optionImage = question.options[newAssignmentStore!.getCurrentOption];
 
       if (optionImage && optionImage.image) {
-        return `1 ${intl.get('new assignment.images_selected')} gaaaaa`;
+        return `1 ${intl.get('new assignment.images_selected')}`;
       }
       if (optionImage) {
-        return `0 ${intl.get('new assignment.images_selected')} gaaaa`;
+        return `0 ${intl.get('new assignment.images_selected')}`;
       }
     }
 
@@ -688,7 +689,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
   public renderUploadImageForm = () => {
     if (true) {
       return (
-        <CustomImageForm />
+        <CustomImageFormSimple />
       );
     }
   }
@@ -745,8 +746,9 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
   public render() {
 
     const { newAssignmentStore } = this.props;
+    const { selectedTabId } = this.state;
     const isLoading = newAssignmentStore!.fetchingAttachments || newAssignmentStore!.fetchingAttachments || false;
-
+    const classNameWrapper = selectedTabId === this.THREE ? 'contentWrapperExpanded' : 'contentWrapper';
     return (
       <div className="attachments-list-container">
         <div className="attachments-tabs">
@@ -764,7 +766,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
           </button>
         </div>
 
-        <div className="contentWrapper">
+        <div className={classNameWrapper}>
           {this.renderSearchBar()}
 
           {isLoading && this.renderSkeletonLoader()}
