@@ -365,9 +365,9 @@ export class TeachingPathApi implements TeachingPathRepo {
         headers: { Accept: 'application/octet-stream' },
       });
 
-      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const blob = new Blob([response.data], { type: 'text/plain' });
       const a = document.createElement('a');
-      a.download = 'TeachingPath-Guidance';
+      a.download = 'TeachingPath-Guidance.pdf';
       a.href = window.URL.createObjectURL(blob);
       const clickEvt = new MouseEvent('click', {
         view: window,
