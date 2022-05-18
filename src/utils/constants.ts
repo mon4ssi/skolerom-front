@@ -65,6 +65,9 @@ export const STATUS_BACKEND_ERROR = 400;
 let insidenumber = 1;
 const widthWin = window.innerWidth;
 switch (true) {
+  case (widthWin > N2350):
+    insidenumber = rows * N7;
+    break;
   case (widthWin < N2350 && widthWin > N2150):
     insidenumber = rows * N7;
     break;
