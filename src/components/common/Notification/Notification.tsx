@@ -25,6 +25,8 @@ export enum NotificationTypes {
 export type Props = {
   type: NotificationTypes;
   title: string;
+  isTitleHTML?: boolean;
+  hideIcon?: boolean;
   submitButtonTitle?: string;
   cancelButtonTitle?: string;
   onSubmitClick?(): void;
@@ -180,7 +182,13 @@ export class Notification extends Component<Props, State> {
   }
 
   public renderTitle = () => {
-    const { title } = this.props;
+    const { title, isTitleHTML } = this.props;
+
+    if (isTitleHTML) {
+      return (
+        <p className="Notification_title" dangerouslySetInnerHTML={{ __html: title }} />
+      );
+    }
 
     return (
       <p className="Notification_title">{title}</p>
@@ -211,7 +219,7 @@ export class Notification extends Component<Props, State> {
   }
 
   public render() {
-    const { type } = this.props;
+    const { type, hideIcon } = this.props;
 
     const { isAnimated } = this.state;
 
@@ -232,7 +240,7 @@ export class Notification extends Component<Props, State> {
           ref={this.forwardRef}
         >
           <section className="Notification_content">
-            {this.renderIcon()}
+            {!hideIcon! && this.renderIcon()}
             {this.renderTitle()}
             {this.renderCloseIcon()}
           </section>
