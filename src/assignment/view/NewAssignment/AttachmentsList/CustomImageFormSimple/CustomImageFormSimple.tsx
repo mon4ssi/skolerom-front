@@ -1,4 +1,4 @@
-import { ARTICLE_REPO_KEY } from 'assignment/Assignment';
+import { ArticleLevel, ARTICLE_REPO_KEY } from 'assignment/Assignment';
 import { ArticleService } from 'assignment/service';
 import { injector } from 'Injector';
 import React, { useContext, useState } from 'react';
@@ -18,6 +18,7 @@ export interface CustomImage {
 export const CustomImageFormSimple = () => {
   const THOUSAND = 1000;
   const HUNDRED = 100;
+  const THREE_SECONDS = 3000;
   const articleService: ArticleService = injector.get(ARTICLE_REPO_KEY);
   const fileArray: Array<File> = [];
   const filenames: Array<string> = [];
@@ -25,6 +26,8 @@ export const CustomImageFormSimple = () => {
   const [imageFileArray, setImageFileArray] = useState(fileArray);
   const [value, setValue] = useState(0);
   const [fileNames, setFileNames] = useState(filenames);
+  const [progressBar, setProgressBar] = useState(0);
+  const [inProgress, setInProgress] = useState(false);
 
   const isNotEmpty = imageFileArray!.length !== 0;
 
@@ -67,27 +70,40 @@ export const CustomImageFormSimple = () => {
 
   const uploadImages = () => {
     let percentage = 0;
+    setInProgress(true);
     const amount = HUNDRED / imageFileArray.length;
-    imageFileArray.forEach((image) => {
+    imageFileArray.forEach(async (image) => {
       const formData = new FormData();
       formData.append('image', image);
       formData.append('title', image.name);
       formData.append('source', image.lastModified.toString());
-      articleService.createCustomImage(formData).then(() => { percentage = +amount; });
+      await articleService.createCustomImage(formData).then(() => {
+        percentage = percentage + amount;
+        setProgressBar(percentage);
+      });
+      if (percentage >= HUNDRED) {
+        setTimeout(() => {
+          setProgressBar(0);
+          setInProgress(false);
+          setImageFileArray([]);
+          setValue(0);
+          articleService.fetchCustomImages();
+        }, THREE_SECONDS);
+      }
     });
   };
 
-  const validateFields = () => {
+  /* const validateFields = () => {
     const emptyFormFields = '';
-    /* if (image === undefined || image === null || image === '') {
+    if (image === undefined || image === null || image === '') {
       emptyFormFields = emptyFormFields !== '' ? `${emptyFormFields}, image` : 'image';
-    } */
-    /* if (title === null || title === '') {
+    }
+    if (title === null || title === '') {
       emptyFormFields = emptyFormFields !== '' ? `${emptyFormFields}, title` : 'title';
     }
     if (source === null || source === '') {
       emptyFormFields = emptyFormFields !== '' ? `${emptyFormFields}, source` : 'source';
-    } */
+    }
 
     if (emptyFormFields !== '') {
       Notification.create({
@@ -97,7 +113,7 @@ export const CustomImageFormSimple = () => {
       return false;
     }
     return true;
-  };
+  }; */
 
   const showCustomImageUploadMessage = () => {
     Notification.create({
@@ -133,6 +149,13 @@ export const CustomImageFormSimple = () => {
     );
   };
 
+  const renderProgressBar = () => (
+    <div style={{ display: 'flex' }}>
+      <div style={{ marginRight: '0px' }}>{Math.floor(progressBar)}%</div>
+      <div style={{ borderRadius: '4px', marginRight: '3px', marginLeft: '4px', height: '20px', background: '#0b2541', width: `${progressBar}%`, transition: '0.3s' }} />
+    </div>
+  );
+
   return (
     <div>
       <div className="spaced">
@@ -147,7 +170,10 @@ export const CustomImageFormSimple = () => {
 
       {renderPreviewImages()}
       {/* {renderImgFilesPreview(imagesFileList!)} */}
-      {isNotEmpty && renderUploadImagesButton()}
+      <div style={{ display: 'inline' }}>
+        <div>{inProgress && renderProgressBar()}</div>
+        <div>{isNotEmpty && renderUploadImagesButton()}</div>
+      </div>
     </div>
   );
 };

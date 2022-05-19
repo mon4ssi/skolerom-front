@@ -13,6 +13,7 @@ import {
 import { Locales } from 'utils/enums';
 import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
 import { createContext } from 'react';
+import { CustomImgAttachmentResponse } from './api';
 
 export const ASSIGNMENT_SERVICE = 'ASSIGNMENT_SERVICE';
 
@@ -109,7 +110,7 @@ export class ArticleService {
     return this.articleRepo.fetchCustomImages();
   }
 
-  public async createCustomImage(fd: FormData): Promise<any> {
+  public async createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse> {
     return this.articleRepo.createCustomImage(fd);
   }
 

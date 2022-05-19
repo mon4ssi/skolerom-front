@@ -31,7 +31,7 @@ import {
   GreepElements,
   SourceDTO
 } from './factory';
-import { DEFAULT_AMOUNT_ARTICLES_PER_PAGE, LOCALES_MAPPING_FOR_BACKEND } from 'utils/constants';
+import { DEFAULT_AMOUNT_ARTICLES_PER_PAGE, DEFAULT_CUSTOM_IMAGES_PER_PAGE, LOCALES_MAPPING_FOR_BACKEND } from 'utils/constants';
 import { ContentBlockType } from './ContentBlock';
 import { Locales } from 'utils/enums';
 import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
@@ -52,6 +52,13 @@ export interface CustomImgAttachmentDTO {
   id?: number;
   filename?: string;
   source?: Array<string>;
+}
+
+export interface CustomImgAttachmentResponse {
+  id: number;
+  image_url: string;
+  source: string;
+  title: string;
 }
 
 export interface ImageArticleDTO {
@@ -463,13 +470,13 @@ export class WPApi implements ArticleRepo {
         `${process.env.REACT_APP_BASE_URL}/api/teacher/images`, {
           params: {
             page: 1,
-            perPage: DEFAULT_AMOUNT_ARTICLES_PER_PAGE,
+            per_page: DEFAULT_CUSTOM_IMAGES_PER_PAGE,
           },
         })
-    ).data.data.map((item: CustomImgAttachmentDTO) => new CustomImgAttachment(item.id!, item.path, '', item.title, '', 0, item.source));
+    ).data.data.map((item: CustomImgAttachmentDTO) => new CustomImgAttachment(item.id!, item.path, item.title, item.title, item.title, 0, item.source));
   }
 
-  public async createCustomImage(fd: FormData): Promise<any> {
+  public async createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse> {
     return (
       /* await */ API.post(
       `${process.env.REACT_APP_BASE_URL}/api/teacher/images`, fd).then()
@@ -478,8 +485,8 @@ export class WPApi implements ArticleRepo {
 
   public async deleteCustomImage(imageId: number): Promise<any> {
     return (
-      /* await */ API.post(
-      `${process.env.REACT_APP_BASE_URL}/api/teacher/images/${imageId}`, null).then()
+      /* await */ API.delete(
+      `${process.env.REACT_APP_BASE_URL}/api/teacher/images/${imageId}`)
     );
   }
 

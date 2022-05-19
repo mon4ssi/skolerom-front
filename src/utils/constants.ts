@@ -3,6 +3,7 @@ import { Locales } from './enums';
 export const SAVE_DELAY = 2000;
 export const DEBOUNCE_TIME = 500;
 export const DEFAULT_AMOUNT_ARTICLES_PER_PAGE = 30;
+export const DEFAULT_CUSTOM_IMAGES_PER_PAGE = 120;
 export const SHOW_MESSAGE_DELAY = 3500;
 export const SCROLL_OFFSET = 6;
 

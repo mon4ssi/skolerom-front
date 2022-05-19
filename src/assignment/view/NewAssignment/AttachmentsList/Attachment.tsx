@@ -5,12 +5,18 @@ import { observer } from 'mobx-react';
 import activeIcon from 'assets/images/check-active.svg';
 import play from 'assets/images/play.svg';
 import clock from 'assets/images/clock-dark.svg';
+import settingsIcon from 'assets/images/more-with-bg.svg';
+import duplicateIcon from 'assets/images/duplicate-question.svg';
+import deleteIcon from 'assets/images/delete-question.svg';
 
 import { FilterableAttachment } from './AttachmentsList';
 import { AttachmentContentType, AttachmentContentTypeContext } from '../AttachmentContentTypeContext';
 import { mxSingleNumber } from '../../../../components/common/QuestionPreview/QuestionPreview';
 
 import './AttachmentsList.scss';
+import { ArticleService } from 'assignment/service';
+import { injector } from 'Injector';
+import { ARTICLE_SERVICE_KEY } from 'assignment/Assignment';
 
 export const fullMinute = 60;
 
@@ -23,28 +29,37 @@ interface IProps {
 
 interface AttachmentComponentState {
   isProcessing: boolean;
+  showMoreOptions: boolean;
+  waitingForOption: boolean;
 }
 
 @observer
 export class AttachmentComponent extends Component<IProps, AttachmentComponentState> {
   public static contextType = AttachmentContentTypeContext;
+  public articleService: ArticleService = injector.get<ArticleService>(ARTICLE_SERVICE_KEY);
 
   public state = {
     isProcessing: false,
+    showMoreOptions: false,
+    waitingForOption: false,
   };
 
   private toggleAttachment = async () => {
     const { isSelected, attachment } = this.props;
-    const { isProcessing } = this.state;
+    const { isProcessing, showMoreOptions, waitingForOption } = this.state;
     if (isProcessing) { return; }
 
     this.setState({ isProcessing: true });
 
     try {
-      if (!isSelected) {
-        await this.props.onSelect(attachment.id);
-      } else {
-        await this.props.onRemove(attachment.id);
+      /* console.log(showMoreOptions!);
+      console.log(waitingForOption!); */
+      if (!(showMoreOptions && !waitingForOption)) {
+        if (!isSelected) {
+          await this.props.onSelect(attachment.id);
+        } else {
+          await this.props.onRemove(attachment.id);
+        }
       }
     } catch (e) {
       console.error(e.message);
@@ -53,8 +68,28 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     }
   }
 
-  public renderAttachments = () => {
+  private removeItem = async () => {
     const { attachment } = this.props;
+    await this.articleService.deleteCustomImage(attachment.id);
+    await this.articleService.fetchCustomImages()!;
+  }
+
+  /* private editItem = async () => {
+
+  } */
+
+  public toggleMoreOptions = () => {
+    const { showMoreOptions } = this.state;
+    if (!showMoreOptions) {
+      this.setState({ showMoreOptions: true });
+    } else {
+      this.setState({ showMoreOptions: false });
+    }
+  }
+
+  public renderAttachments = () => {
+    const { attachment, isSelected } = this.props;
+    const { isProcessing, showMoreOptions } = this.state;
 
     if (this.context.contentType === AttachmentContentType.image) {
       return (
@@ -69,22 +104,48 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
       );
     }
     if (this.context.contentType === AttachmentContentType.customImage) {
+      const selectedItem = isSelected ? '190px' : '200px';
       return (
-        <button title="Attachment Media">
-          <img
-            src={attachment.path}
-            alt={attachment.alt}
-            srcSet={attachment.path}
-            sizes={'(min-width: 320px) 300px'}
-          />
-        </button>
+        <div>
+          <div>
+            <div style={{ position: 'absolute', zIndex: 0 }}>
+              <button title={attachment.title}>
+                <img
+                  style={{ height: selectedItem }}
+                  src={attachment.path}
+                  alt={attachment.alt}
+                  srcSet={attachment.path}
+                  sizes={'(min-width: 320px) 300px'}
+                />
+              </button>
+            </div>
+            <div style={{ fontSize: 10, padding: '14px', position: 'relative', lineBreak: 'anywhere', background: '#d3d9de', opacity: '76%', color: 'white' }}>
+              <div style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'auto' }} >Title: {attachment.title}</div>
+              <div>Source: {attachment.src}</div>
+            </div>
+
+          </div >
+          <div>
+            <div className="MoreOptions">
+              <button onClick={() => { this.toggleMoreOptions(); this.setState({ waitingForOption: true }); /* console.log(showMoreOptions) */ }}>
+                <img
+                  src={settingsIcon}
+                  alt="active"
+                  className={'moreIcon'}
+                  style={{ top: '5px', maxHeight: 40, maxWidth: 40, position: 'relative', zIndex: 12 }}
+                />
+              </button>
+              {showMoreOptions && this.renderMoreOptions()}
+            </div>
+          </div>
+        </div>
       );
     }
     if (this.context.contentType === AttachmentContentType.video) {
       return (
         <button title="Attachment Media">
           <div className={'playButton'}>
-            <img src={play} alt="play"/>
+            <img src={play} alt="play" />
           </div>
           <video width="100%" height="100%" style={{ objectFit: 'cover' }}>
             <source src={attachment.path} type="video/mp4" />
@@ -92,6 +153,32 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
         </button>
       );
     }
+  }
+
+  public renderMoreOptions = () => {
+    const { attachment, isSelected } = this.props;
+    return (
+      <div className="tooltip">
+        <div className="bottom">
+          <ul className="flexBox dirColumn">
+            <li>
+              <a href="javascript:void(0)" onClick={() => { /* console.log(`edit: ${attachment.id}`); */ this.setState({ showMoreOptions: false }); this.setState({ waitingForOption: true }); }} className="flexBox" >
+                <span>Edit </span>
+                <img src={duplicateIcon} alt="Edit custom image" />
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0)" onClick={() => { /* console.log(`delete: ${attachment.id}`); */ this.removeItem(); this.setState({ showMoreOptions: false }); this.setState({ waitingForOption: true }); }} className="flexBox">
+                <span style={{ color: '#E2017B' }}>Remove </span>
+                <img src={deleteIcon} alt="Delete custom image" />
+              </a>
+            </li>
+          </ul>
+
+          {/* <i /> */}
+        </div>
+      </div>
+    );
   }
 
   public renderDurationAndTitle = () => {
@@ -107,7 +194,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
         </div>
 
         <div className={'flexBox duration'}>
-          <img src={clock} alt="clock" className={'clockDuration'}/>
+          <img src={clock} alt="clock" className={'clockDuration'} />
           <span className={'fs15 fw300'}>{minutes}:{sec}</span>
         </div>
       </div>
@@ -160,7 +247,13 @@ const ActiveIcon = () => (
     <img
       src={activeIcon}
       alt="active"
-      style={{ maxHeight: 40, maxWidth: 40 }}
+      style={{ maxHeight: 40, maxWidth: 40, position: 'relative', zIndex: 4, top: '30%' }}
     />
+  </div>
+);
+
+const SettingsIcon = () => (
+  <div>
+    <img src={settingsIcon} alt="Settings" style={{ maxHeight: 40, maxWidth: 40, position: 'relative', zIndex: 200 }} />
   </div>
 );

@@ -573,7 +573,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     if (this.context.contentType === AttachmentContentType.customImage) {
       return (
         <div>
-          <span onClick={() => { this.setState({ selectedTabId: 1 }); this.props.context.changeContentType(AttachmentContentType.image); }} className="image_Option">{intl.get('new assignment.images_options.images_from_article')}</span>
+          <span onClick={() => { this.setState({ selectedTabId: 2 }); this.props.context.changeContentType(AttachmentContentType.image); }} className="image_Option">{intl.get('new assignment.images_options.images_from_article')}</span>
         </div>
       );
     }
