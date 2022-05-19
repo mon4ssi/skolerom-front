@@ -80,7 +80,7 @@
   .cardInfo {
     height: auto;
     position: relative;
-    padding: 10px 20px;
+    padding: 20px;
 
     .cardTitle {
       flex: 1 1;
@@ -94,7 +94,7 @@
         margin: 0;
         font-size: 1.05rem;
         font-weight: 500;        
-        margin-bottom: 5px;
+        margin-bottom: 15px;
       }
 
       .levelIcon{
@@ -341,6 +341,11 @@
 }
 .tpIcon-DOMAIN {
   cursor: pointer;
+}
+@media screen and (max-width: 1550px) {
+  .InfoCard .cardImage {
+    height: 195px;
+  }
 }
 @media screen and (max-width: $screen-dimension-desktop) {
   .InfoCard {
