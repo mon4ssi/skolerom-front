@@ -23,6 +23,11 @@ interface MatchProps {
   id: string;
 }
 
+let continueValidateOpenAssignments = true;
+let cantAssigmentsResp = 0;
+let listItemAssignmentResp: Array<Assignment> = [];
+const waitTimeOut: number = 100;
+
 interface Props extends RouteComponentProps<MatchProps> {
   editTeachingPathStore?: EditTeachingPathStore;
   teachingPathsListStore?: TeachingPathsListStore;
@@ -82,28 +87,37 @@ export class HeaderComponent extends Component<Props> {
       children = childrenTmp;
       childrenTmp = [];
 
-      children.forEach((item) => {
-        if (item.children.length > 0) {
-          item.children.forEach((child) => {
+      ////
+      children.some((itemNode) => {
+        itemNode.items!.forEach((itemAssig) => {
+          if (itemAssig.type === TeachingPathNodeType.Assignment) {
+            if (!listItemAssignmentById.includes(itemAssig.value.id)) {
+              listItemAssignmentById.push(itemAssig.value.id);
+              listItemAssignment.push(itemAssig);
+            }
+          }
+        });
+
+        if (itemNode.children.length > 0) {
+          itemNode.children.forEach((child) => {
+            child.items!.forEach((item) => {
+              if (item.type === TeachingPathNodeType.Assignment) {
+                if (!listItemAssignmentById.includes(item.value.id)) {
+                  listItemAssignmentById.push(item.value.id);
+                  listItemAssignment.push(item);
+                }
+              }
+            });
+
             if (child.children.length > 0) {
               childrenTmp.push(child);
             }
           });
 
-          if (item.children.length > 0 && item.children[0].type === TeachingPathNodeType.Assignment) {
-            item.children.forEach((child) => {
-              child.items!.forEach((item) => {
-                if (!listItemAssignmentById.includes(item.value.id)) {
-                  listItemAssignmentById.push(item.value.id);
-                  listItemAssignment.push(item);
-                }
-              });
-            });
-          }
-
           nroNodes += 1;
         }
       });
+      ///
 
       continueLoop = (nroNodes > 0);
     }
@@ -139,20 +153,50 @@ export class HeaderComponent extends Component<Props> {
       return;
     }
 
+    if (
+      !isPrivate &&
+      isCopy && (
+        /Copy$/.test(tpTitle) ||
+        /Kopi$/.test(tpTitle) ||
+        /copy$/.test(tpTitle) ||
+        /kopi$/.test(tpTitle)
+      )
+    ) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('new assignment.copy_title_not_allow')
+      });
+
+      return;
+    }
+
     if (userType === UserType.ContentManager && !isPrivate && displayInOpenSite) {
       const listItemAssignment: Array<TeachingPathItem> = this.getListOfAssignmentsWithoutRepeat(editTeachingPathStore!.teachingPathContainer!.teachingPath!);
       const cantAssigments = listItemAssignment.length;
 
       if (cantAssigments > 0) {
+        if (continueValidateOpenAssignments) {
+
+          cantAssigmentsResp = 0;
+          listItemAssignmentResp = [];
+
+          this.validateIfExistsOpenAssignments(onlyPublish, true, listItemAssignment);
+          return;
+        }
         let cantAssigmentsOpen = 0;
+        continueValidateOpenAssignments = true;
+
         let msjNotExistsEnabledOpenSite: string = intl.get('edit_teaching_path.header.assignmets_not_enabled_open_site');
         let msjAssigments: string = '<ul style="list-style-type:disc;margin:8px 0px 8px 20px; ">';
 
-        listItemAssignment.forEach((assig: any) => {
-          if (assig.value!.open) {
+        listItemAssignmentResp.forEach((assig: Assignment) => {
+          if (assig.open) {
             cantAssigmentsOpen += 1;
+          } else {
+            msjAssigments += `<li>${assig.title}</li>`;
           }
         });
+
         msjAssigments += '</ul>';
         msjNotExistsEnabledOpenSite = msjNotExistsEnabledOpenSite.replace('[|content|]', msjAssigments);
 
@@ -171,23 +215,6 @@ export class HeaderComponent extends Component<Props> {
           }
         }
       }
-    }
-
-    if (
-      !isPrivate &&
-      isCopy && (
-        /Copy$/.test(tpTitle) ||
-        /Kopi$/.test(tpTitle) ||
-        /copy$/.test(tpTitle) ||
-        /kopi$/.test(tpTitle)
-      )
-    ) {
-      Notification.create({
-        type: NotificationTypes.ERROR,
-        title: intl.get('new assignment.copy_title_not_allow')
-      });
-
-      return;
     }
 
     try {
@@ -223,6 +250,27 @@ export class HeaderComponent extends Component<Props> {
           type: NotificationTypes.ERROR,
           title: intl.get(e.localizationKey)
         });
+      }
+    }
+  }
+
+  private validateIfExistsOpenAssignments = (onlyPublish: boolean, isFirstCall: boolean, listItemAssignment: Array<TeachingPathItem>) => {
+    const { editTeachingPathStore } = this.props;
+
+    if (isFirstCall) {
+      listItemAssignment.forEach((assig: any) => {
+        editTeachingPathStore!.getAssignmentById(assig.value!.id).then((itemAssignment) => {
+          listItemAssignmentResp.push(itemAssignment);
+        });
+      });
+
+      setTimeout(() => { this.validateIfExistsOpenAssignments(onlyPublish, false, listItemAssignment); }, waitTimeOut);
+    } else {
+      if (listItemAssignmentResp!.length === listItemAssignment!.length) {
+        continueValidateOpenAssignments = false;
+        this.ref.current!.click();
+      } else {
+        setTimeout(() => { this.validateIfExistsOpenAssignments(onlyPublish, false, listItemAssignment); }, waitTimeOut);
       }
     }
   }
