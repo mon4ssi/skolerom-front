@@ -342,11 +342,7 @@
 .tpIcon-DOMAIN {
   cursor: pointer;
 }
-@media screen and (max-width: 1550px) {
-  .InfoCard .cardImage {
-    height: 195px;
-  }
-}
+
 @media screen and (max-width: $screen-dimension-desktop) {
   .InfoCard {
     .cardInfo {
