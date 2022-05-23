@@ -35,25 +35,36 @@ const ANIMATION_TIMEOUT = 200;
 
 const headerLinks: Array<HeaderNavigationLink> = [
   {
-    name: 'School',
-    url: `${process.env.REACT_APP_WP_URL}/undervisning/`
-  },
-  {
     name: 'Library',
     url: '#',
     dropdown: true,
     submenuItems: [
       {
-        name: 'Articles',
-        url: `${process.env.REACT_APP_WP_URL}/artikler/`
+        name: 'School Articles',
+        url: `${process.env.REACT_APP_WP_URL}/undervisning/`
       },
       {
         name: 'Publications',
         url: `${process.env.REACT_APP_WP_URL}/temaboker/`
       },
       {
+        name: 'Articles',
+        url: `${process.env.REACT_APP_WP_URL}/artikler/`
+      },
+      {
         name: 'Sound articles',
         url: `${process.env.REACT_APP_WP_URL}/lydartikler/`
+      }
+    ]
+  },
+  {
+    name: 'School',
+    url: '#',
+    dropdown: true,
+    submenuItems: [
+      {
+        name: 'For foresatte',
+        url: `${process.env.REACT_APP_WP_URL}/for-foresatte/`
       }
     ]
   },
@@ -531,7 +542,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   }
 
   public renderCopyButton = (intlKey: string) => (
-    <div className="doneBox flexBox alignCenter">
+    <div className="doneBox flexBox alignCenter copyButton">
       <CreateButton
         onClick={this.handleCopy}
         title={intl.get(intlKey)}
@@ -549,7 +560,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   }
 
   public renderGuidanceAndCopyButton = () => (
-    <div className="doneBox flexBox alignCenter">
+    <div className="doneBox flexBox alignCenter copyButton">
       <CreateButton
         className="jr-btnHeaderTeacherGuidance AppHeader__btnHeaderGuidance"
         onClick={this.openModalTGAssig.bind(this, '0')}
@@ -557,7 +568,6 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       >
         {intl.get('teacherGuidance.name')}
       </CreateButton>
-      &nbsp;
       <CreateButton
         onClick={this.handleCopy}
         title={intl.get('assignment list.Copy assignment')}

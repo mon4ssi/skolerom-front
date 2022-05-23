@@ -32,7 +32,7 @@
         margin: 65px 0px 27px 0px;
         padding: 25px 0px 20px 0px;
         position: relative;
-        z-index: 3;
+        z-index: 2;
 
         .nestedOrderNumber {
           position: absolute;
@@ -106,7 +106,7 @@
       width: 50%;
       border-top: 2px dashed #D3D9DE;
       position: absolute;
-      top: 377px;
+      top: 414px;
       transform: translateX(50%);
     }
 
@@ -115,7 +115,7 @@
       width: 100%;
       border-top: 2px dashed #D3D9DE;
       position: absolute;
-      top: 377px;
+      top: 414px;
       transform: translateX(0);
     }
 
@@ -124,7 +124,7 @@
       width: 50%;
       border-top: 2px dashed #D3D9DE;
       position: absolute;
-      top: 377px;
+      top: 414px;
       transform: translateX(-50%);
     }
     .teachingPathItemsTitleDiv {
@@ -247,7 +247,7 @@
     .childrenContainer {
       position: relative;
       flex-direction: row;
-      z-index: 1;
+      //z-index: 1;
     }
 
     .mergePanel {
@@ -301,7 +301,7 @@
         width: 40px;
         height: 40px;
         position: absolute;
-        top: 358px;
+        top: 395px;
         left: -20px;
         cursor: pointer;
         z-index: 3;
@@ -360,7 +360,7 @@
     min-height: 65px;
     position: absolute;
     top: -65px;
-    z-index: 1;
+    z-index: -1;
   }
 
   .bottomVerticalLine {

@@ -32,6 +32,19 @@ class ConfirmationPageComponent extends Component<Props> {
   private handleGoBackClick = () => {
     const { history, location: { state } } = this.props;
     history.push(state.exitPath);
+    /* console.log('going back!!');
+    console.log(state!.exitPath);
+    const url: string = localStorage!.getItem('url') !== null ? localStorage!.getItem('url')!.toString().split('?')[1] : '';
+    console.log(url);
+    if (url !== null && url !== '' && url !== undefined) {
+      console.log('es trueeee');
+      console.log(url);
+      this.props.history.push(`/teaching-paths/all?${url}`);
+      localStorage.removeItem('url');
+    } else {
+      console.log('es falseee');
+      localStorage.removeItem('url');
+    } */
   }
 
   public render() {

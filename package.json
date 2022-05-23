@@ -127,9 +127,12 @@
     "build:local": "env-cmd -f devops/.env.local npm run build",
     "build:development": "env-cmd -f devops/.env.development npm run build",
     "build:staging": "env-cmd -f devops/.env.staging npm run build",
-    "build:test": "env-cmd -f devops/.env.test npm run build",
     "build:production": "env-cmd -f devops/.env.production npm run build",
     "build:sand": "env-cmd -f devops/.env.sand npm run build",
+    "build:kfbeta": "env-cmd -f devops/.env.kf_beta_mainapp npm run build",
+    "build:kfprod": "env-cmd -f devops/.env.kf_prod_mainapp npm run build",
+    "build:test": "env-cmd -f devops/.env.staging_test_mainapp npm run build",
+    "build:beta": "env-cmd -f devops/.env.staging2_beta_mainapp npm run build",
     "test": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "lint": "tslint --project ./tsconfig.json",
     "lint:fix": "tslint --project ./tsconfig.json --fix"

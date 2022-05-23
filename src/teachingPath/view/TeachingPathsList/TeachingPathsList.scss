@@ -13,30 +13,27 @@
     flex-flow: row wrap;
     width: auto;
     overflow: auto;
-    height: 100%;
     margin-top: 10px;
     justify-content: start;
     padding-top: 5px;
     transition: 0.3s;
     padding-left: 5px;
     .InfoCard {
-      width: calc(20% - 15px);
-      min-height: 300px;
+      width: calc(100% / 7 - 30px);
       margin-bottom: 20px;
-      margin-right: 14px;
+      margin-right: 30px;
+      height: auto;
+      min-height: auto;
       &:hover {
         box-shadow: 0 8px 10px #00000061;
       }
       .cardTitle {
-        height: 44px;
         padding-right: 28px;
       }
-
       .cardDescription {
         @include text-shrink-multiline(3);
         margin-top: 10px;
       }
-
       .grades {
         height: 25px;
       }
@@ -56,7 +53,8 @@
       width: calc(100% - 290px);
       margin-left: 290px;
       .InfoCard {
-        width: calc(25% - 15px);
+        width: calc(100%/ 7 - 10px);
+        margin-right: 10px;
       }
     }
   }
@@ -72,31 +70,116 @@
   margin-right: 20px;
 }
 
+@media screen and (max-width: 2350px) {
+  .teachingPathsList .cardList .InfoCard {
+    width: calc(100% / 7 - 10px);
+    margin-right: 10px;
+  }
+  .teachingPathsList.moveListBySearchFilter.active .InfoCard {
+    width: calc(100%/ 6 - 20px);
+    margin-right: 20px;
+  }
+}
+
+@media screen and (max-width: 2150px) {
+  .teachingPathsList .cardList .InfoCard {
+    width: calc(100% / 6 - 20px);
+    margin-right: 20px;
+  }
+  .teachingPathsList.moveListBySearchFilter.active .InfoCard {
+    width: calc(100%/ 5 - 20px);
+    margin-right: 20px;
+  }
+}
+
+@media screen and (max-width: 2000px) {
+  .teachingPathsList .cardList .InfoCard {
+    width: calc(100% / 6 - 10px);
+    margin-right: 10px;
+  }
+  .teachingPathsList.moveListBySearchFilter.active .InfoCard {
+    width: calc(100%/ 5 - 10px);
+    margin-right: 10px;
+  }
+}
 
 @media screen and (max-width: 1800px) {
   .teachingPathsList .cardList .InfoCard {
-    width: calc(20% - 15px);
+    width: calc(100% / 5 - 20px);
+    margin-right: 20px;
   }
-  .teachingPathsList.moveListBySearchFilter.active .cardList .InfoCard {
-    width: calc(25% - 15px);
+  .teachingPathsList.moveListBySearchFilter.active .InfoCard {
+    width: calc(100%/ 4 - 20px);
+    margin-right: 20px;
   }
 }
-@media screen and (max-width: 1450px) {
+
+@media screen and (max-width: 1600px) {
   .teachingPathsList .cardList .InfoCard {
-    width: calc(25% - 15px);
+    width: calc(100% / 4 - 20px);
+    margin-right: 20px;
   }
-  .teachingPathsList.moveListBySearchFilter.active .cardList .InfoCard {
-    width: calc(33.33% - 15px);
+  .teachingPathsList.moveListBySearchFilter.active .InfoCard {
+    width: calc(100% / 4 - 10px);
+    margin-right: 10px;
   }
 }
+
+@media screen and (max-width: 1500px) {
+  .teachingPathsList .cardList .InfoCard {
+    width: calc(100% / 4 - 10px);
+    margin-right: 10px;
+  }
+  .teachingPathsList.moveListBySearchFilter.active .InfoCard {
+    width: calc(100% / 3 - 20px);
+    margin-right: 20px;
+  }
+}
+
 @media screen and (max-width: 1200px) {
   .teachingPathsList .cardList .InfoCard {
-    width: calc(33.33% - 15px);
+    width: calc(100% / 3 - 20px);
+    margin-right: 20px;
   }
-  .teachingPathsList.moveListBySearchFilter.active .cardList .InfoCard {
-    width: calc(50% - 15px);
+  .teachingPathsList.moveListBySearchFilter.active .InfoCard {
+    width: calc(100% / 2 - 20px);
+    margin-right: 20px;
   }
 }
+
+@media screen and (max-width: 1100px) {
+  .teachingPathsList.moveListBySearchFilter.active .InfoCard {
+    width: calc(100% / 2 - 10px);
+    margin-right: 10px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .teachingPathsList.moveListBySearchFilter.active {
+    width: 100%;
+    margin-left: 0px;
+  }
+  .teachingPathsList.moveListBySearchFilter.active .InfoCard {
+    width: calc(100% / 3 - 20px);
+    margin-right: 20px;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .teachingPathsList .cardList .InfoCard {
+    width: calc(100% / 2 - 20px);
+    margin-right: 20px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .teachingPathsList .cardList .InfoCard {
+    width: calc(100% / 2 - 10px);
+    margin-right: 10px;
+  }
+}
+
+
 @media screen and (max-width: 575px) {
   .teachingPathsList {
     height: auto;
@@ -109,6 +192,10 @@
         flex: none;
         margin-right: 10px;
         margin-bottom: 5px;
+        height: auto;
+        .cardImage {
+          height: auto;
+        }
         &:hover {
           box-shadow: none;
         }
@@ -117,13 +204,13 @@
   } 
   .teachingPathsList.moveListBySearchFilter.active .cardList .InfoCard {
     width: calc(100% - 50px);
-  } 
+  }
 }
 @media screen and (min-width: 576px) and (max-width: 767px) {
-  .teachingPathsList .cardList .InfoCard {
+  /*.teachingPathsList .cardList .InfoCard {
     width: calc(50% - 15px);
   }
   .teachingPathsList.moveListBySearchFilter.active .cardList .InfoCard {
     width: calc(50% - 15px);
-  }
+  }*/
 }

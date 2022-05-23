@@ -110,7 +110,7 @@ export class DistributionStudent {
   constructor(args: DistributionStudentArgs) {
     this._id = args.id;
     this._name = args.name;
-    this._endDate = args.endDate && getYearMonthDayDate(new Date(args.endDate));
+    this._endDate = args.endDate && getYearMonthDayDate(new Date(String(args.endDate).replace(/ /g, 'T')));
     this._isSelected = !!args.endDate;
     this._level = new StudentLevel(args.level);
   }
@@ -192,7 +192,7 @@ export class DistributionGroup {
     this._school = args.school && new School(args.school);
     this._grepData = args.grepData && new GrepData(args.grepData);
     this._startDate = args.startDate;
-    this._endDate = args.endDate && getYearMonthDayDate(new Date(args.endDate));
+    this._endDate = args.endDate && getYearMonthDayDate(new Date(String(args.endDate).replace(/ /g, 'T')));
     this._assignedStudents = args.students.map(
       student => new DistributionStudent(student)
     );
@@ -308,7 +308,7 @@ export class Distribution {
     this._id = args.id;
     this._startDate = getYearMonthDayDate(new Date());
     this._endDate = args.endDate ?
-      getYearMonthDayDate(new Date(args.endDate)) :
+      getYearMonthDayDate(new Date(String(args.endDate).replace(/ /g, 'T'))) :
       getYearMonthDayDate(moment().add(1, 'w').toDate());
     this._groups = args.groups.map(
       group => new DistributionGroup(group)

@@ -7,6 +7,7 @@ import { TeachingPath, TeachingPathsList } from 'teachingPath/TeachingPath';
 import * as QueryStringHelper from 'utils/QueryStringHelper';
 import { InfoCard } from 'components/common/InfoCard/InfoCard';
 import { StoreState, QueryStringKeys } from 'utils/enums';
+import { postperpage } from 'utils/constants';
 import teachingPathIcon from 'assets/images/teaching-path.svg';
 import listPlaceholderImg from 'assets/images/list-placeholder.svg';
 
@@ -15,7 +16,7 @@ import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader'
 import './TeachingPathDistributeList.scss';
 
 const ITEMS_PER_PAGE = 8;
-const MAGIC_VEINTE = 20;
+const MAGIC_VEINTE = postperpage;
 const DEFAULT_ORDER_FIELD = 'deadline';
 const DEFAULT_ORDER = 'desc';
 const DEBOUNCE_TIME = 500;

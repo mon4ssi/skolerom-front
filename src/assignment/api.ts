@@ -334,9 +334,9 @@ export class AssignmentApi implements AssignmentRepo {
         headers: { Accept: 'application/octet-stream' },
       });
 
-      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const blob = new Blob([response.data], { type: 'text/plain' });
       const a = document.createElement('a');
-      a.download = 'Assignment-Guidance';
+      a.download = 'Assignment-Guidance.pdf';
       a.href = window.URL.createObjectURL(blob);
       const clickEvt = new MouseEvent('click', {
         view: window,

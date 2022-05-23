@@ -114,17 +114,28 @@ export class HeaderComponent extends Component<Props> {
     try {
       await editTeachingPathStore!.publish();
 
+     /*  const url: string = localStorage!.getItem('url') !== null ? localStorage!.getItem('url')!.toString().split('?')[1] : ''; */
       Notification.create({
         type: NotificationTypes.SUCCESS,
         title: intl.get('edit_teaching_path.header.after_publishing')
       });
 
       if (userType === UserType.Teacher) {
+        /* if (onlyPublish) {
+          console.log('publish!!!');
+          console.log(url);
+          this.props.history.push(`/teaching-paths/all?${url}`);
+          localStorage.removeItem('url');
+        } else {
+          history.push(`/teaching-paths/edit/${id}/distribute`);
+        } */
         onlyPublish ? history.push('/teaching-paths/all') : history.push(`/teaching-paths/edit/${id}/distribute`);
       }
 
       if (userType === UserType.ContentManager) {
         history.push('/teaching-paths/all');
+        /* this.props.history.push(`/teaching-paths/all?${url}`);
+        localStorage.removeItem('url'); */
       }
 
     } catch (e) {
@@ -178,6 +189,10 @@ export class HeaderComponent extends Component<Props> {
 
     if (isCreation) {
       this.props.history.push(`/teaching-paths/${teachingPathsListStore!.typeOfTeachingPathsList}`);
+      /* const url: string = localStorage!.getItem('url') !== null ? localStorage!.getItem('url')!.toString().toString().split('?')[1] : '';
+      this.props.history.push(`/teaching-paths/all?${url}`);
+      localStorage.removeItem('url'); */
+      /* localStorage.clear(); */
     }
     if (isPublishing) {
       this.props.history.push(`/teaching-paths/edit/${this.props.match.params.id}/`);

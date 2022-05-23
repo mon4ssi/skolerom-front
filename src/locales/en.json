@@ -50,8 +50,8 @@
     "summary": "Evaluation summary",
     "not comment": "haven't made any comments yet.",
     "view": "View evaluation",
-    "answer_assignment": "Answer assignment",
-    "answer_teaching_path": "Answer teaching path",
+    "answer_assignment": "Start assignment",
+    "answer_teaching_path": "Start teaching path",
     "back": "Back to all assignments",
     "article_read": "Article Read",
     "teaching_path_back": "Back to all teaching paths"
@@ -61,6 +61,7 @@
     "contact_menu": "Contact",
     "about_menu": "About Skoleroom",
     "logg_in": "Log with Feide",
+    "School Articles": "School Articles",
     "Articles": "Articles",
     "Article":  "Article",
     "teacher_room": "Teacher's Room",
@@ -81,6 +82,7 @@
     "About skolerom": "About skolerom",
     "School": "School",
     "Library": "Library",
+    "For foresatte": "For foresatte",
     "teacher": "Teacher",
     "student": "Student",
     "content_manager": "Content manager",
@@ -395,7 +397,8 @@
     "Close": "Close",
     "Choose assignment": "Choose Assignment",
     "Choose article": "Choose Article",
-    "Choose domain": "Choose External link"
+    "Choose domain": "Choose External link",
+    "not possible to evaluate": "It’s not possible to evaluate this assignment before the due date has passed"
   },
   "months": {
     "January": "January",
@@ -465,6 +468,9 @@
       "descrption_assignment":"Connecting your teaching path is required when sharing publicity. Please select the appropriate educational goals below before publishing and distribution",
       "description_privado":"Linking to the curriculum is only necessary when you publish publicly, but you are welcome to link the content to relevant competence goals below if desired."
     },
+    "source_is_open": "Display in Open Site",    
+    "source_is_open_title": "Visiblity Settings",
+    "source_is_open_assig": "Display in Open Site",
     "source": "Source"
   },
   "distribution_page": {

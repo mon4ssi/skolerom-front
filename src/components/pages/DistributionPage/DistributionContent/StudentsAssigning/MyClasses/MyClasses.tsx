@@ -123,9 +123,8 @@ class MyClass extends Component<MyClassProps, MyClassState> {
       endDateFromOutside: !myClass.endDate,
       disabled: readOnly,
     });
-
     return (
-      <div className={deadLineClassname} onClick={this.toggleOpenCalendar}>
+      <div className={deadLineClassname} onClick={this.toggleOpenCalendar} data-role={myClass.endDate}>
         {formatDeadline(myClass.endDate || defaultDeadline)}
         <img src={myClass.endDate ? clockImg : greyClockImg} alt="deadline"/>
         {isCalendarOpened && this.renderCalendar()}

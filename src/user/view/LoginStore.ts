@@ -10,7 +10,7 @@ import { USER_SERVICE, UserService } from 'user/UserService';
 import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteractor';
 import { ArticleService } from 'assignment/service';
 import { ARTICLE_SERVICE_KEY } from 'assignment/Assignment';
-import { Locales } from 'utils/enums';
+import { Locales, ReturnUrl } from 'utils/enums';
 
 const payload = {};
 
@@ -53,6 +53,24 @@ export class LoginStore {
 
     const response = await this.userService.getUserWithToken(code);
     if (response && !isNull(response)) {
+      // Validate return url;
+      const sReturnUrl = window.localStorage.getItem(ReturnUrl.RETURN_URL);
+
+      if (sReturnUrl !== null) {
+        const dDateNow = new Date().valueOf();
+        const dDateExpiredUrl = window.localStorage.getItem(ReturnUrl.TIME_EXPIRED);
+        const diffExpiredNow = BigInt(dDateNow) - BigInt(dDateExpiredUrl!);
+        const maxMinutesExprired: number = 300000;
+
+        window.localStorage.removeItem(ReturnUrl.RETURN_URL);
+        window.localStorage.removeItem(ReturnUrl.TIME_EXPIRED);
+
+        if (diffExpiredNow < maxMinutesExprired) {
+          window.location.href = sReturnUrl!;
+          return;
+        }
+      }
+
       this.currentUser = this.storageInteractor.getUser();
     }
 
