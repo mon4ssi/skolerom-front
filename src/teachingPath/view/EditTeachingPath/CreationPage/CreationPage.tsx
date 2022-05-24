@@ -99,7 +99,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       const valueLength = this.titleRef.current.props.value!.length;
       this.handleChangeNumberOfTitleCols(valueLength);
     }
-    const headerArray = Array.from(document.getElementsByClassName('header') as HTMLCollectionOf<HTMLElement>);
+    const classheader = this.props.readOnly ? 'header' : 'creationHeader';
+    const headerArray = Array.from(document.getElementsByClassName(classheader) as HTMLCollectionOf<HTMLElement>);
     headerArray[0].style.display = 'flex';
     this.props.editTeachingPathStore!.falseIsDraggable();
   }
@@ -348,7 +349,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         isDraggable: false,
       },
       () => {
-        const headerArray = Array.from(document.getElementsByClassName('header') as HTMLCollectionOf<HTMLElement>);
+        const classheader = this.props.readOnly ? 'header' : 'creationHeader';
+        const headerArray = Array.from(document.getElementsByClassName(classheader) as HTMLCollectionOf<HTMLElement>);
         headerArray[0].style.display = 'flex';
       }
     );
@@ -367,7 +369,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         isDraggable: false,
       },
       () => {
-        const headerArray = Array.from(document.getElementsByClassName('header') as HTMLCollectionOf<HTMLElement>);
+        const classheader = this.props.readOnly ? 'header' : 'creationHeader';
+        const headerArray = Array.from(document.getElementsByClassName(classheader) as HTMLCollectionOf<HTMLElement>);
         headerArray[0].style.display = 'flex';
       }
     );
@@ -403,7 +406,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         isDraggable: true
       },
       () => {
-        const headerArray = Array.from(document.getElementsByClassName('header') as HTMLCollectionOf<HTMLElement>);
+        const classheader = this.props.readOnly ? 'header' : 'creationHeader';
+        const headerArray = Array.from(document.getElementsByClassName(classheader) as HTMLCollectionOf<HTMLElement>);
         headerArray[0].style.display = 'none';
       }
     );
@@ -651,7 +655,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         isDraggable: false,
       },
       () => {
-        const headerArray = Array.from(document.getElementsByClassName('header') as HTMLCollectionOf<HTMLElement>);
+        const classheader = this.props.readOnly ? 'header' : 'creationHeader';
+        const headerArray = Array.from(document.getElementsByClassName(classheader) as HTMLCollectionOf<HTMLElement>);
         headerArray[0].style.display = 'flex';
       }
     );

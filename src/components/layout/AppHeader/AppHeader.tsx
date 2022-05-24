@@ -666,8 +666,10 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       ifLogin = false;
     }
 
+    const classCreation = (fromTeachingPathPassing) ? 'AppHeader creationHeader' : 'AppHeader';
+
     return (
-      <header className="AppHeader">
+      <header className={classCreation}>
         {this.renderUserModalIfNeeded()}
         {this.state.modalVisible !== Modals.NONE && <div className="AppHeader__headerOverlay" onClick={this.closeModals} />}
         {!fromAssignmentPassing && !fromTeachingPathPassing && <p id="LogoDescription" className="hidden">Logo Skolerom</p>}

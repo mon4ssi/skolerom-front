@@ -387,7 +387,7 @@ export class HeaderComponent extends Component<Props> {
 
   public render() {
     return (
-      <div className="header flexBox spaceBetween alignCenter fw500">
+      <div className="header creationHeader flexBox spaceBetween alignCenter fw500">
         <div className="flexBox alignCenter back-button fs15" onClick={this.onGoBack}>
           <img src={backImg} alt="Back" />
           {intl.get('edit_teaching_path.header.go_back')}
