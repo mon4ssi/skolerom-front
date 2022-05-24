@@ -101,7 +101,9 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     }
     const classheader = this.props.readOnly ? 'header' : 'creationHeader';
     const headerArray = Array.from(document.getElementsByClassName(classheader) as HTMLCollectionOf<HTMLElement>);
-    headerArray[0].style.display = 'flex';
+    if (headerArray.length > 0) {
+      headerArray[0].style.display = 'flex';
+    }
     this.props.editTeachingPathStore!.falseIsDraggable();
   }
 
