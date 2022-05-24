@@ -249,7 +249,7 @@ export class TeachingPathEvaluationStore {
           wpIds.push(Number(articleItem.wpId));
         }));
 
-        const selectedArticle = response.selectedArticles.find(item => item.node_id === node);
+        const selectedArticle = (response.selectedArticles) ? response.selectedArticles.find(item => item.node_id === node) : null;
         let selectedWpId: number;
 
         if (selectedArticle && selectedArticle.article_id) {
