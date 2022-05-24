@@ -68,6 +68,10 @@
   width: calc(25% - 20px);
   height: 300px;
   margin-right: 20px;
+  span {
+    width: 100% !important;
+    height: 250px !important;
+  }
 }
 
 @media screen and (max-width: 2350px) {

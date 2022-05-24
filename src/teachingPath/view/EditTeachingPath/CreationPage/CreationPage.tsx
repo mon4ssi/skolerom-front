@@ -101,6 +101,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     }
     const headerArray = Array.from(document.getElementsByClassName('header') as HTMLCollectionOf<HTMLElement>);
     headerArray[0].style.display = 'flex';
+    this.props.editTeachingPathStore!.falseIsDraggable();
   }
 
   public onClean() {
@@ -418,6 +419,10 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         }
       }
     );
+    editTeachingPathStore!.setSelectedDragNode(node);
+    if (parentNode !== undefined) {
+      editTeachingPathStore!.setParentSelectedDragNode(parentNode);
+    }
     // this.divRef.current!.ondrag(DragEvent, true);
   }
 
@@ -861,10 +866,19 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     const myid = node.id;
     const myNode = editTeachingPathStore!.getSelectedDragNode();
     const myParent = editTeachingPathStore!.getParentSelectedDragNode();
-    let isposible = true;
-    if (this.state.myNode) {
-      isposible = false;
-    }
+    // let isposible = true;
+    const isposible = (myNode) ? (myChildrens.includes(myNode)) ? false : (mytype === myNode!.type) ? true : false : true;
+    /* if (myNode) {
+      if (myChildrens.includes(myNode)) {
+        isposible = false;
+      } else {
+        if (mytype === myNode!.type) {
+          isposible = true;
+        } else {
+          isposible = false;
+        }
+      }
+    } */
     return node.children.length ? (
       <div className={`${node.type === TeachingPathNodeType.Root ? 'boxNodeOptionsRoot' : 'boxNodeOptionsChildren'} ${classNodeTransparent}`} onDragOver={this.ondragovertitle} onDrop={this.ondroptitle} onDragLeave={this.ondragleavetitle}>
 
