@@ -590,7 +590,8 @@
       "cant_publish": "You must complete the Curriculum section before publish",
       "cant_publish_goals": "You can't publish because no educational goals are available",
       "notdata_goals": "There are no established goals for these criteria",
-      "source_required": "Please set the source for this content"
+      "source_required": "Please set the source for this content",
+      "assignmets_not_enabled_open_site": "The following assignments are not enabled to display in the Open site [|content|] Continue anyway?"
     },
     "title": {
       "new_entity": "Publish teaching path",
@@ -795,7 +796,9 @@
     "copy": "Copy",
     "revert": "Revert",
     "are_you_sure": "Are you sure?",
-    "landscapeMode": "Hi! The teaching room works best in landscape mode. Please turn the device back to landscape mode."
+    "landscapeMode": "Hi! The teaching room works best in landscape mode. Please turn the device back to landscape mode.",
+    "yes": "Yes",
+    "no": "No"
   },
   "not found": {
     "title": "Nothing to see here",

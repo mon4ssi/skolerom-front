@@ -590,7 +590,8 @@
       "cant_publish": "Du må fullføre læreplandelen før du publiserer",
       "cant_publish_goals": "Du kan ikkje publisere utan kopling av kompetansemål",
       "notdata_goals": "Det er ingen etablerte mål for desse kriteria",
-      "source_required": "Vennligst gje opp kjelda for dette innhaldet"
+      "source_required": "Vennligst gje opp kjelda for dette innhaldet",
+      "assignmets_not_enabled_open_site": "Følgende oppgaver er ikke aktivert for visning i den åpne løsningen [|content|] Fortsett uansett?"
     },
     "title": {
       "new_entity": "Ny læringssti",
@@ -796,7 +797,9 @@
     "copy": "Kopier",
     "revert": "Tilbakestill",
     "are_you_sure": "Er du sikker?",
-    "landscapeMode": "Hei! Skolerom fungerer best i liggjande format. Snu gjerne brettet ditt."
+    "landscapeMode": "Hei! Skolerom fungerer best i liggjande format. Snu gjerne brettet ditt.",
+    "yes": "Ja",
+    "no": "Nei"
   },
   "not found": {
     "title": "Ingenting å sjå her",
