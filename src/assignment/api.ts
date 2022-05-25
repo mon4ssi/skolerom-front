@@ -172,6 +172,7 @@ interface AssignmentByIdResponseDTO {
   questions: Array<QuestionDTO>;
   relatedArticles: Array<ArticleRequestDTO>;
   subjects: Array<SubjectDTO>;
+  open?: boolean;
 }
 
 export class AssignmentApi implements AssignmentRepo {
@@ -191,6 +192,7 @@ export class AssignmentApi implements AssignmentRepo {
       isPrivate: assignmentDTO.isPrivate,
       levels: assignmentDTO.levels,
       subjects: assignmentDTO.subjects,
+      open: assignmentDTO.open
     });
   }
 

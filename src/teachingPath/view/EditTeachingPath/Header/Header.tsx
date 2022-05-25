@@ -7,7 +7,7 @@ import moment from 'moment';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 import { EditTeachingPathStore } from '../EditTeachingPathStore';
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
-import { TeachingPathValidationError } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
+import { DraftTeachingPath, EditableTeachingPathNode, TeachingPathValidationError } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
 import { DistributionValidationError } from 'distribution/Distribution';
 import { UserType } from 'user/User';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
@@ -15,11 +15,18 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 import backImg from 'assets/images/back-arrow.svg';
 
 import './Header.scss';
+import { TeachingPathItem, TeachingPathNodeType } from 'teachingPath/TeachingPath';
+import { Assignment } from 'assignment/Assignment';
 const PATHLENGTH1 = 11;
 const PATHLENGTH2 = 12;
 interface MatchProps {
   id: string;
 }
+
+let continueValidateOpenAssignments = true;
+let cantAssigmentsResp = 0;
+let listItemAssignmentResp: Array<Assignment> = [];
+const waitTimeOut: number = 100;
 
 interface Props extends RouteComponentProps<MatchProps> {
   editTeachingPathStore?: EditTeachingPathStore;
@@ -67,6 +74,57 @@ export class HeaderComponent extends Component<Props> {
     }
   }
 
+  private getListOfAssignmentsWithoutRepeat = (itemTP: DraftTeachingPath) => {
+    let children: Array<EditableTeachingPathNode> = [];
+    let childrenTmp: Array<EditableTeachingPathNode> = itemTP.content.children;
+    let continueLoop = true;
+    let nroNodes: number = 0;
+    const listItemAssignment: Array<TeachingPathItem> = [];
+    const listItemAssignmentById: Array<number> = [];
+
+    while (continueLoop) {
+      nroNodes = 0;
+      children = childrenTmp;
+      childrenTmp = [];
+
+      ////
+      children.some((itemNode) => {
+        itemNode.items!.forEach((itemAssig) => {
+          if (itemAssig.type === TeachingPathNodeType.Assignment) {
+            if (!listItemAssignmentById.includes(itemAssig.value.id)) {
+              listItemAssignmentById.push(itemAssig.value.id);
+              listItemAssignment.push(itemAssig);
+            }
+          }
+        });
+
+        if (itemNode.children.length > 0) {
+          itemNode.children.forEach((child) => {
+            child.items!.forEach((item) => {
+              if (item.type === TeachingPathNodeType.Assignment) {
+                if (!listItemAssignmentById.includes(item.value.id)) {
+                  listItemAssignmentById.push(item.value.id);
+                  listItemAssignment.push(item);
+                }
+              }
+            });
+
+            if (child.children.length > 0) {
+              childrenTmp.push(child);
+            }
+          });
+
+          nroNodes += 1;
+        }
+      });
+      ///
+
+      continueLoop = (nroNodes > 0);
+    }
+
+    return listItemAssignment;
+  }
+
   private onPublish = (onlyPublish: boolean) => async () => {
     const { editTeachingPathStore, history } = this.props;
     const { id } = editTeachingPathStore!.currentEntity!;
@@ -75,6 +133,7 @@ export class HeaderComponent extends Component<Props> {
     const isPrivate = editTeachingPathStore!.teachingPathContainer!.teachingPath!.isPrivate;
     const isCopy = editTeachingPathStore!.teachingPathContainer!.teachingPath!.isCopy;
     const sources = editTeachingPathStore!.teachingPathContainer!.teachingPath!.sources;
+    const displayInOpenSite = editTeachingPathStore!.teachingPathContainer!.teachingPath!.open;
 
     if (!editTeachingPathStore!.isActiveButtons) {
       const grepGoals = editTeachingPathStore!.teachingPathContainer!.teachingPath.grepGoalsIds;
@@ -111,6 +170,53 @@ export class HeaderComponent extends Component<Props> {
       return;
     }
 
+    if (userType === UserType.ContentManager && !isPrivate && displayInOpenSite) {
+      const listItemAssignment: Array<TeachingPathItem> = this.getListOfAssignmentsWithoutRepeat(editTeachingPathStore!.teachingPathContainer!.teachingPath!);
+      const cantAssigments = listItemAssignment.length;
+
+      if (cantAssigments > 0) {
+        if (continueValidateOpenAssignments) {
+
+          cantAssigmentsResp = 0;
+          listItemAssignmentResp = [];
+
+          this.validateIfExistsOpenAssignments(onlyPublish, true, listItemAssignment);
+          return;
+        }
+        let cantAssigmentsOpen = 0;
+        continueValidateOpenAssignments = true;
+
+        let msjNotExistsEnabledOpenSite: string = intl.get('edit_teaching_path.header.assignmets_not_enabled_open_site');
+        let msjAssigments: string = '<ul style="list-style-type:disc;margin:8px 0px 8px 20px; ">';
+
+        listItemAssignmentResp.forEach((assig: Assignment) => {
+          if (assig.open) {
+            cantAssigmentsOpen += 1;
+          } else {
+            msjAssigments += `<li>${assig.title}</li>`;
+          }
+        });
+
+        msjAssigments += '</ul>';
+        msjNotExistsEnabledOpenSite = msjNotExistsEnabledOpenSite.replace('[|content|]', msjAssigments);
+
+        if (cantAssigments !== cantAssigmentsOpen) {
+          const isDisplayInOpenSite = await Notification.create({
+            type: NotificationTypes.CONFIRM,
+            title: msjNotExistsEnabledOpenSite,
+            isTitleHTML: true,
+            hideIcon: true,
+            submitButtonTitle: intl.get('notifications.yes'),
+            cancelButtonTitle: intl.get('notifications.no')
+          });
+
+          if (!isDisplayInOpenSite) {
+            return;
+          }
+        }
+      }
+    }
+
     try {
       await editTeachingPathStore!.publish();
 
@@ -144,6 +250,27 @@ export class HeaderComponent extends Component<Props> {
           type: NotificationTypes.ERROR,
           title: intl.get(e.localizationKey)
         });
+      }
+    }
+  }
+
+  private validateIfExistsOpenAssignments = (onlyPublish: boolean, isFirstCall: boolean, listItemAssignment: Array<TeachingPathItem>) => {
+    const { editTeachingPathStore } = this.props;
+
+    if (isFirstCall) {
+      listItemAssignment.forEach((assig: any) => {
+        editTeachingPathStore!.getAssignmentById(assig.value!.id).then((itemAssignment) => {
+          listItemAssignmentResp.push(itemAssignment);
+        });
+      });
+
+      setTimeout(() => { this.validateIfExistsOpenAssignments(onlyPublish, false, listItemAssignment); }, waitTimeOut);
+    } else {
+      if (listItemAssignmentResp!.length === listItemAssignment!.length) {
+        continueValidateOpenAssignments = false;
+        this.ref.current!.click();
+      } else {
+        setTimeout(() => { this.validateIfExistsOpenAssignments(onlyPublish, false, listItemAssignment); }, waitTimeOut);
       }
     }
   }
