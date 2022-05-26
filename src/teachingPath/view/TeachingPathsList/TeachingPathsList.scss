@@ -71,6 +71,14 @@
   span {
     width: 100% !important;
     height: 250px !important;
+    &.skeletonAssignmentItem  {
+      height: 60px !important;
+    }
+  }
+}
+.addItemModal  {
+  .css-1y8mk30-SkeletonTheme {
+    height: 80px;
   }
 }
 

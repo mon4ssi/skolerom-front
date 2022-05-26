@@ -133,9 +133,16 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
   public renderDomainButtons = () => (
     <div className="actionButtons flexBox">
       <div className="actionButtonsItem dragButtonsItem">
-        <button onClick={this.activeDragClick} title={intl.get('generals.drag')}>
+        <button onClick={this.activeDragClick} title={intl.get('generals.drag')} className="activeDragButton">
           <img
             src={drag}
+            alt={intl.get('generals.drag')}
+            title={intl.get('generals.drag')}
+          />
+        </button>
+        <button onClick={this.desactiveDragClick} title={intl.get('generals.drag')} className="desactiveDragButton">
+          <img
+            src={dragActive}
             alt={intl.get('generals.drag')}
             title={intl.get('generals.drag')}
           />

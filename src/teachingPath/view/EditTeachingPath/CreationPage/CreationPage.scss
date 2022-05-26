@@ -22,6 +22,9 @@
           }
         }
       }
+      .boxNodeOptionsChildren {
+        pointer-events: none;
+      }
     }
     &.dragged {
       .topVerticalLine, .bottomVerticalLine, .bottomHorizontalLine, .teachingPathButtons {
@@ -551,11 +554,12 @@
   height: calc(100% + 6px);
   background-color: white;
   z-index: 4;
-  border: dashed 3px green;
+  border: dashed 2px black;
   text-align: center;
   align-items: center;
   display: flex;
   justify-content: center;
   pointer-events: none;
+  border-radius: 5px;
 }
 

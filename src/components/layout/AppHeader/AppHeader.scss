@@ -337,6 +337,10 @@
         color: white;
         padding: 10px 20px;
         font-weight: 300;
+        &.btnDisabled {
+          pointer-events: none;
+          opacity: 0.4;
+        }
         img {
           width: 19px;
           margin-right: 8px;
