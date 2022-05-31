@@ -17,7 +17,10 @@
     "not permission": "Du har diverre ikkje tilgang til denne plattforma. Kontakt organisasjonen din for å få tilgang."
   },
   "assignments_page": {
-    "no_results": "Ingen resultat"
+    "no_results": "No results found",
+    "title": "Tittel",
+    "source": "Kilde",    
+    "img_not": "Bildet er ikke valgt ennå"
   },
   "answers": {
     "Answers": "Svar",

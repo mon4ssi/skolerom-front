@@ -30,6 +30,10 @@ import { ArticleService } from 'assignment/service';
 import { injector } from 'Injector';
 import { CustomImageFormSimple } from './CustomImageFormSimple/CustomImageFormSimple';
 
+const const1 = 1;
+const const2 = 2;
+const const3 = 3;
+
 export interface AttachmentsListProps {
   context: {
     contentType: AttachmentContentType;
@@ -552,6 +556,42 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
   }
 
+  public selectClassOption = (tabid : number, position : number) => {
+    const { newAssignmentStore } = this.props;
+    switch (tabid) {
+      case 0:
+        if (position === 1) {
+          return 'active';
+        }
+        return '';
+        break;
+      case 1:
+        if (position === 1) {
+          return 'active';
+        }
+        return '';
+        break;
+      case const2:
+        if (position === const2) {
+          return 'active';
+        }
+        return '';
+        break;
+      case const3:
+        if (position === const3) {
+          return 'active';
+        }
+        return '';
+        break;
+      default:
+        if (position === 1) {
+          return 'active';
+        }
+        return '';
+        break;
+    }
+  }
+
   public renderAttachmentTab = () => {
     const { newAssignmentStore } = this.props;
     const userType = newAssignmentStore!.getCurrentUser()!.type;
@@ -559,18 +599,18 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
       if (this.context.contentType === AttachmentContentType.image) {
         return (
           <div>
-            <span onClick={() => { this.setState({ selectedTabId: 1 }); }} className="image_Option">{intl.get('new assignment.images_options.images_from_article')}</span>
-            <span onClick={() => { this.setState({ selectedTabId: 2 }); this.props.context.changeContentType(AttachmentContentType.customImage); }} className="image_Option">{intl.get('new assignment.images_options.custom_images')}</span>
-            <span onClick={() => { this.setState({ selectedTabId: 3 }); }} className="image_Option">{intl.get('new assignment.images_options.upload_image')}</span>
+            <span onClick={() => { this.setState({ selectedTabId: 1 }); }} className={`image_Option ${this.selectClassOption(this.state.selectedTabId, 1)}`}>{intl.get('new assignment.images_options.images_from_article')}</span>
+            <span onClick={() => { this.setState({ selectedTabId: 2 }); this.props.context.changeContentType(AttachmentContentType.customImage); }} className={`image_Option ${this.selectClassOption(this.state.selectedTabId, const2)}`}>{intl.get('new assignment.images_options.custom_images')}</span>
+            <span onClick={() => { this.setState({ selectedTabId: 3 }); }} className={`image_Option ${this.selectClassOption(this.state.selectedTabId, const3)}`}>{intl.get('new assignment.images_options.upload_image')}</span>
           </div>
         );
       }
       if (this.context.contentType === AttachmentContentType.customImage) {
         return (
           <div>
-            <span onClick={() => { this.setState({ selectedTabId: 1 }); this.props.context.changeContentType(AttachmentContentType.image); }} className="image_Option">{intl.get('new assignment.images_options.images_from_article')}</span>
-            <span onClick={() => { this.setState({ selectedTabId: 2 }); }} className="image_Option">{intl.get('new assignment.images_options.custom_images')}</span>
-            <span onClick={() => { this.setState({ selectedTabId: 3 }); }} className="image_Option">{intl.get('new assignment.images_options.upload_image')}</span>
+            <span onClick={() => { this.setState({ selectedTabId: 1 }); this.props.context.changeContentType(AttachmentContentType.image); }} className={`image_Option ${this.selectClassOption(this.state.selectedTabId, 1)}`}>{intl.get('new assignment.images_options.images_from_article')}</span>
+            <span onClick={() => { this.setState({ selectedTabId: 2 }); }} className={`image_Option ${this.selectClassOption(this.state.selectedTabId, const2)}`}>{intl.get('new assignment.images_options.custom_images')}</span>
+            <span onClick={() => { this.setState({ selectedTabId: 3 }); }} className={`image_Option ${this.selectClassOption(this.state.selectedTabId, const3)}`}>{intl.get('new assignment.images_options.upload_image')}</span>
           </div>
         );
       }
@@ -579,9 +619,9 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
       }
       return (
         <div>
-          <span onClick={() => { this.setState({ selectedTabId: 1 }); this.props.context.changeContentType(AttachmentContentType.image); }} className="image_Option">{intl.get('new assignment.images_options.images_from_article')}</span>
-          <span onClick={() => { this.setState({ selectedTabId: 2 }); this.props.context.changeContentType(AttachmentContentType.customImage); }} className="image_Option">{intl.get('new assignment.images_options.custom_images')}</span>
-          <span onClick={() => { this.setState({ selectedTabId: 3 }); }} className="image_Option">{intl.get('new assignment.images_options.upload_image')}</span>
+          <span onClick={() => { this.setState({ selectedTabId: 1 }); this.props.context.changeContentType(AttachmentContentType.image); }} className={`image_Option ${this.selectClassOption(this.state.selectedTabId, 1)}`}>{intl.get('new assignment.images_options.images_from_article')}</span>
+          <span onClick={() => { this.setState({ selectedTabId: 2 }); this.props.context.changeContentType(AttachmentContentType.customImage); }} className={`image_Option ${this.selectClassOption(this.state.selectedTabId, const2)}`}>{intl.get('new assignment.images_options.custom_images')}</span>
+          <span onClick={() => { this.setState({ selectedTabId: 3 }); }} className={`image_Option ${this.selectClassOption(this.state.selectedTabId, const3)}`}>{intl.get('new assignment.images_options.upload_image')}</span>
         </div>
       );
 

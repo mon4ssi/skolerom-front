@@ -1,6 +1,7 @@
 import { ARTICLE_REPO_KEY } from 'assignment/Assignment';
 import { ArticleService } from 'assignment/service';
 import { injector } from 'Injector';
+import intl from 'react-intl-universal';
 import { values } from 'lodash';
 import React, { useContext, useState } from 'react';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
@@ -19,11 +20,11 @@ export const CustomImageForm = () => {
   const [image, setImage] = useState('');
   const [title, setTitle] = useState('');
   const [source, setSource] = useState('');
-  const [fileName, setFileName] = useState('Image not selected yet.');
+  const [fileName, setFileName] = useState(intl.get('assignments_page.img_not'));
 
   const handleChangeFile = (e: any) => {
     setImage(e.target.files!.length > 0 ? e.target.files![0] : '');
-    setFileName(e.target.files!.length > 0 ? e.target.files![0].name : 'Image not selected yet.');
+    setFileName(e.target.files!.length > 0 ? e.target.files![0].name.split('.')[0] : intl.get('assignments_page.img_not'));
   };
 
   const handleChangeTitle = (e: any) => {

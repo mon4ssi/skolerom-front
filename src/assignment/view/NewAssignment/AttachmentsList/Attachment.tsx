@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import { observer } from 'mobx-react';
+import intl from 'react-intl-universal';
 
 import activeIcon from 'assets/images/check-active.svg';
 import play from 'assets/images/play.svg';
@@ -117,39 +118,31 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
       );
     }
     if (this.context.contentType === AttachmentContentType.customImage) {
-      const selectedItem = isSelected ? '190px' : '200px';
+      const selectedItem = isSelected ? 'customImageComponente active' : 'customImageComponente';
       return (
-        <div>
-          <div>
-            <div style={{ position: 'absolute', zIndex: 0 }}>
-              <button title={attachment.title}>
-                <img
-                  style={{ height: selectedItem }}
-                  src={attachment.path}
-                  alt={attachment.alt}
-                  srcSet={attachment.path}
-                  sizes={'(min-width: 320px) 300px'}
-                />
-              </button>
-            </div>
-            <div style={{ fontSize: 10, padding: '14px', position: 'relative', lineBreak: 'anywhere', background: '#d3d9de', opacity: '76%', color: 'white' }}>
-              <div style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'auto' }} >Title: {attachment.title}</div>
-              <div>Source: {attachment.src}</div>
-            </div>
-
-          </div >
-          <div>
+        <div className={selectedItem}>
+          <div className="customImageComponente__image">
+            <button title={attachment.title} className="customImageComponente__image__button" onClick={this.toggleAttachment}>
+              <img
+                src={attachment.path}
+                alt={attachment.alt}
+                srcSet={attachment.path}
+              />
+            </button>
             <div className="MoreOptions">
-              <button onClick={() => { this.toggleMoreOptions(); this.setState({ waitingForOption: true }); /* console.log(showMoreOptions) */ }}>
+              <button onClick={() => { this.toggleMoreOptions(); this.setState({ waitingForOption: true }); }}>
                 <img
                   src={settingsIcon}
                   alt="active"
                   className={'moreIcon'}
-                  style={{ top: '5px', maxHeight: 40, maxWidth: 40, position: 'relative', zIndex: 12 }}
                 />
               </button>
               {showMoreOptions && this.renderMoreOptions()}
             </div>
+          </div>
+          <div className="customImageComponente__content" onClick={this.toggleAttachment}>
+            <div className="customImageComponente__content__item"><strong>{intl.get('assignments_page.title')}:</strong> {attachment.title}</div>
+            <div className="customImageComponente__content__item"><strong>{intl.get('assignments_page.source')}:</strong> {attachment.src}</div>
           </div>
         </div>
       );
@@ -248,7 +241,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     }
 
     return (
-      <div className={wrapClass} onClick={this.toggleAttachment}>
+      <div className={wrapClass}>
         {isSelected && (<ActiveIcon />)}
         {this.renderAttachments()}
       </div>

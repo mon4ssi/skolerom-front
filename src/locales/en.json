@@ -17,7 +17,10 @@
     "not permission": "Sorry, you don't have access to this platform. Please contact your organization to gain access"
   },
   "assignments_page": {
-    "no_results": "No results found"
+    "no_results": "No results found",
+    "title": "Title",
+    "source": "Source",
+    "img_not": "Image not selected yet."
   },
   "answers": {
     "Answers": "Answers",
