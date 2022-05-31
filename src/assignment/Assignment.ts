@@ -10,6 +10,9 @@ import moment, { Moment } from 'moment';
 
 import { AssignmentDistributeDTO } from './factory';
 import { isNil } from 'lodash';
+import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
+import { createContext } from 'vm';
+import { CustomImgAttachmentResponse } from './api';
 
 export const ASSIGNMENT_REPO = 'ASSIGNMENT_REPO';
 
@@ -1047,6 +1050,12 @@ export interface ArticleRepo {
   getArticlesByIds(ids: Array<number>): Promise<Array<Article>>;
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
+  fetchCustomImages(): Promise<Array<CustomImgAttachment>>;
+  createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse>;
+  deleteCustomImage(imageId: number): Promise<any>;
+  updateCustomImage(customImageId: number, formData: FormData): Promise<any>;
+  increaseUse(imageId: number): Promise<any>;
+  decreaseUse(imageId: number): Promise<any>;
   getLocaleData(locale: Locales): Promise<Array<WPLocale>>;
 }
 
@@ -1057,6 +1066,34 @@ export interface WPLocale {
 }
 
 export class Attachment {
+  public readonly id: number;
+  public readonly path: string;
+  public readonly alt: string;
+  public readonly fileName: string;
+  public readonly title: string;
+  public readonly duration?: number;
+  public readonly src?: Array<string>;
+
+  constructor(
+    id: number,
+    path: string,
+    alt: string,
+    fileName: string,
+    title: string,
+    duration?: number,
+    src?: Array<string>
+  ) {
+    this.id = id;
+    this.path = path;
+    this.alt = alt;
+    this.fileName = fileName;
+    this.title = title;
+    this.duration = duration;
+    this.src = src;
+  }
+}
+
+export class CustomImgAttachment {
   public readonly id: number;
   public readonly path: string;
   public readonly alt: string;

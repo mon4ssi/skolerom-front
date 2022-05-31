@@ -24,7 +24,6 @@ interface Props {
 @observer
 export class Preview extends Component<Props> {
   public static contextType = AttachmentContentTypeContext;
-
   private renderAttachmentsList() {
     return (
       <AttachmentsListWrapper context={this.context}/>
@@ -83,7 +82,7 @@ export class Preview extends Component<Props> {
   public render() {
     const { newAssignmentStore } = this.props;
     const isAttachmentsListVisible =
-      this.context.contentType === AttachmentContentType.image || this.context.contentType === AttachmentContentType.video;
+      this.context.contentType === AttachmentContentType.image || this.context.contentType === AttachmentContentType.customImage || this.context.contentType === AttachmentContentType.video;
     const isRelatedArticlesVisible = this.context.contentType === AttachmentContentType.articles;
     const isQuestionsVisible = !isAttachmentsListVisible && newAssignmentStore!.currentQuestion;
     const isVisiblePagination =

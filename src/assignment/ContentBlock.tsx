@@ -4,6 +4,7 @@ import { QuestionAttachment } from './Assignment';
 export enum ContentBlockType {
   Text = 'TEXT',
   Images = 'IMAGES',
+  CustomImages = 'CUSTOMIMGS',
   Videos = 'VIDEOS'
 }
 

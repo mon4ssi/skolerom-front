@@ -4,6 +4,7 @@
     "tslint-react"
   ],
   "rules": {
+    "align": false,
     "ban-ts-ignore": "true",
     "no-empty-interface": true,
     "no-import-side-effect": [true, { "ignore-module": "(\\.scss)$" }],

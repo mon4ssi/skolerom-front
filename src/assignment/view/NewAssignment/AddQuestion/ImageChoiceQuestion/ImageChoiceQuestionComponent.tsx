@@ -101,7 +101,7 @@ class ImageChoiceQuestion extends Component<Props> {
 
   public isDisabledButton = () => {
     const { newAssignmentStore } = this.props;
-    return this.context.contentType === AttachmentContentType.image && newAssignmentStore!.currentOrderOption >= 0;
+    return this.context.contentType === AttachmentContentType.image || this.context.contentType === AttachmentContentType.customImage && newAssignmentStore!.currentOrderOption >= 0;
   }
 
   public onSortEnd = (data: SortEnd, event: SortEvent) => {

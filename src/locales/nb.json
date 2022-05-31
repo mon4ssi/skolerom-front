@@ -17,7 +17,10 @@
     "not permission": "Beklager, du har ikke tilgang til denne plattformen. Kontakt organisasjonen din for å få tilgang."
   },
   "assignments_page": {
-    "no_results": "Ingen resultater"
+    "no_results": "No results found",
+    "title": "Tittel",
+    "source": "Kilde",
+    "img_not": "Bildet er ikke valgt ennå"
   },
   "answers": {
     "Answers": "Besvarelser",
@@ -266,7 +269,12 @@
     "image": "Bilde",
     "video": "Video",
     "sound": "Lyd",
-    "images_from_article": "Bilder fra artikkel",
+    "images_options": {
+      "images_from_article": "Bilder fra artikkel",
+      "custom_images": "Custom images",
+      "upload_image": "Upload image"
+    },
+    "images_empty_list": "No images available, please upload a custom image",
     "videos_from_article": "Video fra artikkel",
     "stock_images": "Arkivbilder",
     "stock_videos": "Videoarkiv",
@@ -343,6 +351,7 @@
     "Done": "Ferdig",
     "after_saving": "Bra jobbet, oppgaven er lagret!",
     "no_images_found": "Ingen bilder funnet",
+    "no_custom_images_found": "No custom images found",
     "no_videos_found": "Ingen videoer funnet",
     "already_editing": "Andre redigerer akkurat nå. Vent litt og oppdater siden.",
     "copy_title_not_allow": "Vennligst ta bort \"Kopi\" og lag din egen tittel før publisering",
