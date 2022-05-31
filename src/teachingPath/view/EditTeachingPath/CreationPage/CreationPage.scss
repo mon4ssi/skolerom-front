@@ -463,6 +463,7 @@
   position: absolute;
   width: calc(100% - 74px);
   bottom: 0;
+  max-width: 248px;
   &.deletedrop {
     display: none;
   }
