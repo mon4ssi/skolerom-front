@@ -15,7 +15,7 @@ export interface CustomImage {
   id?: number;
 }
 
-export const CustomImageFormSimple = () => {
+export const CustomImageFormSimple = (props: any) => {
   const THOUSAND = 1000;
   const HUNDRED = 100;
   const THREE_SECONDS = 3000;
@@ -75,7 +75,7 @@ export const CustomImageFormSimple = () => {
     imageFileArray.forEach(async (image) => {
       const formData = new FormData();
       formData.append('image', image);
-      formData.append('title', image.name);
+      formData.append('title', image.name.split('.')[0]);
       formData.append('source', image.lastModified.toString());
       await articleService.createCustomImage(formData).then(() => {
         percentage = percentage + amount;
@@ -89,6 +89,7 @@ export const CustomImageFormSimple = () => {
           setValue(0);
           articleService.fetchCustomImages();
         }, THREE_SECONDS);
+        props.onRedirectToList();
       }
     });
   };

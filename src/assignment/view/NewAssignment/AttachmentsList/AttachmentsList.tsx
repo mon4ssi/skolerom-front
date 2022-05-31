@@ -214,7 +214,6 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     if (this.context.contentType === AttachmentContentType.customImage) {
       attachment = newAssignmentStore!.questionCustomAttachments.find(item => item.id === id);
     }
-
     if (attachment) {
       try {
         if (this.context.contentType === AttachmentContentType.image) {
@@ -281,6 +280,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
         onSelect={this.onSelectAttachment}
         onEditActionSelected={this.onEditActionSelected}
         onRenderThirdTab={this.onRenderThirdTab}
+        onRedirectToList={this.goToCustomImgAttachmentList}
         isSelected={isSelected}
       />
     );
@@ -296,6 +296,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
         onSelect={this.onSelectAttachment}
         onEditActionSelected={this.onEditActionSelected}
         onRenderThirdTab={this.onRenderThirdTab}
+        onRedirectToList={this.goToCustomImgAttachmentList}
         isSelected={isSelected}
       />
     );
@@ -600,6 +601,14 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
   }
 
+  public goToCustomImgAttachmentList = async() => {
+    const { newAssignmentStore } = this.props;
+    this.setState({ selectedTabId: 2, currentId: 0, currentAttachment: undefined });
+    newAssignmentStore!.fetchingCustomImageAttachments = true;
+    newAssignmentStore!.fetchQuestionAttachments(AttachmentContentType.customImage);
+    newAssignmentStore!.fetchingCustomImageAttachments = false;
+  }
+
   public renderAttachmentTab = () => {
     const { newAssignmentStore } = this.props;
     const userType = newAssignmentStore!.getCurrentUser()!.type;
@@ -762,11 +771,11 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     const { currentAttachment } = this.state;
     if (id === null || id === undefined) {
       return (
-        <CustomImageFormSimple />
+        <CustomImageFormSimple onRedirectToList={this.goToCustomImgAttachmentList} />
       );
     }
     return (
-      <CustomImageForm attachment={currentAttachment!} />
+      <CustomImageForm attachment={currentAttachment!} onRedirectToList={this.goToCustomImgAttachmentList} />
     );
 
   }

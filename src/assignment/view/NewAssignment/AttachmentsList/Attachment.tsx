@@ -20,6 +20,7 @@ import { injector } from 'Injector';
 import { ARTICLE_SERVICE_KEY } from 'assignment/Assignment';
 import { isThisHour } from 'date-fns';
 import { MoreOptionsCustomImage } from './Attachments/MoreOptionsCustomImage/MoreOptionsCustomImage';
+import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 
 export const fullMinute = 60;
 
@@ -29,6 +30,7 @@ interface IProps {
   onRemove: (id: number) => Promise<void>;
   onEditActionSelected: (id: number) => Promise<void>;
   onRenderThirdTab: (id: number) => Promise<void>;
+  onRedirectToList: () => Promise<void>;
   isSelected?: boolean;
 }
 
@@ -57,13 +59,12 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     this.setState({ isProcessing: true });
 
     try {
-      if (!(showMoreOptions && !waitingForOption)) {
-        if (!isSelected) {
-          await this.props.onSelect(attachment.id);
-        } else {
-          await this.props.onRemove(attachment.id);
-        }
+      if (!isSelected) {
+        await this.props.onSelect(attachment.id);
+      } else {
+        await this.props.onRemove(attachment.id);
       }
+
     } catch (e) {
       console.error(e.message);
     } finally {
@@ -74,7 +75,11 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
   private removeItem = async () => {
     const { attachment } = this.props;
     await this.articleService.deleteCustomImage(attachment.id);
-    await this.articleService.fetchCustomImages()!;
+    Notification.create({
+      type: NotificationTypes.SUCCESS,
+      title: 'Image removed succesfully',
+    });
+    this.props.onRedirectToList();
   }
 
   private editItem = async () => {
@@ -107,7 +112,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
 
     if (this.context.contentType === AttachmentContentType.image) {
       return (
-        <button title="Attachment Media">
+        <button title="Attachment Media" onClick={this.toggleAttachment}>
           <img
             src={attachment.path}
             alt={attachment.alt}
@@ -220,11 +225,5 @@ const ActiveIcon = () => (
       alt="active"
       style={{ maxHeight: 40, maxWidth: 40, position: 'relative', zIndex: 4, top: '30%' }}
     />
-  </div>
-);
-
-const SettingsIcon = () => (
-  <div>
-    <img src={settingsIcon} alt="Settings" style={{ maxHeight: 40, maxWidth: 40, position: 'relative', zIndex: 200 }} />
   </div>
 );

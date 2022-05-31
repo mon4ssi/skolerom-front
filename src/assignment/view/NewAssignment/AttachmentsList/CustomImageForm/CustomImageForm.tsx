@@ -7,7 +7,6 @@ import React, { useContext, useState } from 'react';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 
 import './CustomImageForm.scss';
-import { CustomImageAttachments } from '../Attachments/CustomImageAttachments';
 
 export interface CustomImage {
   image: File | string | null;
@@ -20,7 +19,7 @@ export const CustomImageForm = (props: any) => {
   const articleService: ArticleService = injector.get(ARTICLE_REPO_KEY);
   const [image, setImage] = useState('');
   const [title, setTitle] = useState(props.attachment.title);
-  const [source, setSource] = useState(props.attachment.path);
+  const [source, setSource] = useState(props.attachment.src);
   const [fileName, setFileName] = useState(intl.get('assignments_page.img_not'));
 
   const handleChangeFile = (e: any) => {
@@ -36,15 +35,16 @@ export const CustomImageForm = (props: any) => {
     setSource(e.target.value);
   };
 
-  const saveImage = () => {
+  const saveImage = async () => {
     if (validateFields()) {
       const formdata: FormData = new FormData;
       formdata.append('title', title);
       formdata.append('source', source);
-      articleService.updateCustomImage(props.attachment!.id, formdata).then(
+      await articleService.updateCustomImage(props.attachment!.id, formdata).then(
         clearFormFields,
         /* clearInputs, */
       ).then(showCustomImageUploadMessage);
+      props.onRedirectToList();
     }
   };
 
@@ -73,7 +73,7 @@ export const CustomImageForm = (props: any) => {
   const showCustomImageUploadMessage = () => {
     Notification.create({
       type: false ? NotificationTypes.ERROR : NotificationTypes.SUCCESS,
-      title: '' || 'Image uploaded succesfully'
+      title: '' || 'Image updated succesfully'
     });
   };
 
@@ -92,7 +92,6 @@ export const CustomImageForm = (props: any) => {
     <div>
       <div className="spaced">
         <img src={props.attachment.path} alt={props.attachment.title} style={{ maxWidth: 180 }} />
-
       </div>
       <div className="spaced">
         <label className="label" htmlFor="title">Title: </label>

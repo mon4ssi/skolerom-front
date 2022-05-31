@@ -572,7 +572,7 @@ export class NewAssignmentStore {
   }
 
   public async fetchQuestionAttachments(typeAttachments: AttachmentContentType): Promise<void> {
-    if (this.currentEntity!.relatedArticles.length <= 0) {
+    if (this.currentEntity!.relatedArticles.length <= 0 && typeAttachments === AttachmentContentType.image) {
       this.questionAttachments = [];
       return;
     }

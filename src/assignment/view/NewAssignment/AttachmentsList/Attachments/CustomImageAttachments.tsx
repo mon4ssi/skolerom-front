@@ -51,7 +51,6 @@ export class CustomImageAttachments extends Component<Props> {
         );
       }
     } else {
-      /* console.log('executing b'); */
       const currentBlock = newAssignmentStore!.getAttachmentsFromCurrentBlock() as EditableImagesContentBlock;
       if (currentBlock && currentBlock.images && currentBlock.images.length > 0) {
         currentBlock.images.forEach((image) => {
