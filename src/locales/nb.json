@@ -271,8 +271,12 @@
     "sound": "Lyd",
     "images_options": {
       "images_from_article": "Bilder fra artikkel",
-      "custom_images": "Custom images",
-      "upload_image": "Upload image"
+      "custom_images": "Egendefinerte bilder",
+      "upload_image": "Last opp bilde"
+    },
+    "notification": {
+      "error": "Feil ved opplasting av gjeldende bilder",
+      "success": "Bilder ble lastet opp"
     },
     "images_empty_list": "No images available, please upload a custom image",
     "videos_from_article": "Video fra artikkel",

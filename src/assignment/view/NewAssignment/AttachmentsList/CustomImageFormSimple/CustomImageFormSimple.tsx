@@ -3,6 +3,7 @@ import { ArticleService } from 'assignment/service';
 import { injector } from 'Injector';
 import React, { useContext, useState } from 'react';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
+import intl from 'react-intl-universal';
 
 import './CustomImageFormSimple.scss';
 
@@ -77,10 +78,21 @@ export const CustomImageFormSimple = (props: any) => {
       formData.append('image', image);
       formData.append('title', image.name.split('.')[0]);
       formData.append('source', image.lastModified.toString());
-      await articleService.createCustomImage(formData).then(() => {
-        percentage = percentage + amount;
-        setProgressBar(percentage);
-      });
+      try {
+        await articleService.createCustomImage(formData).then(() => {
+          percentage = percentage + amount;
+          setProgressBar(percentage);
+        });
+      } catch (error) {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('new assignment.notification.error'),
+        });
+        setProgressBar(0);
+        setInProgress(false);
+        setImageFileArray([]);
+        setValue(0);
+      }
       if (percentage >= HUNDRED) {
         setTimeout(() => {
           setProgressBar(0);

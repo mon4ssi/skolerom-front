@@ -274,6 +274,10 @@
       "custom_images": "Custom images",
       "upload_image": "Upload image"
     },
+    "notification": {
+      "error": "Error uploading the current image(s)",
+      "success": "Images uploaded successfuly"
+    },
     "images_empty_list": "No images available, please upload a custom image",
     "videos_from_article": "Videos from article",
     "stock_images": "Stock Images",
