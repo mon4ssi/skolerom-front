@@ -7,6 +7,7 @@ import React, { useContext, useState } from 'react';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 
 import './CustomImageForm.scss';
+import { CustomImageAttachments } from '../Attachments/CustomImageAttachments';
 
 export interface CustomImage {
   image: File | string | null;
@@ -15,11 +16,11 @@ export interface CustomImage {
   id?: number;
 }
 
-export const CustomImageForm = () => {
+export const CustomImageForm = (props: any) => {
   const articleService: ArticleService = injector.get(ARTICLE_REPO_KEY);
   const [image, setImage] = useState('');
-  const [title, setTitle] = useState('');
-  const [source, setSource] = useState('');
+  const [title, setTitle] = useState(props.attachment.title);
+  const [source, setSource] = useState(props.attachment.path);
   const [fileName, setFileName] = useState(intl.get('assignments_page.img_not'));
 
   const handleChangeFile = (e: any) => {
@@ -38,11 +39,9 @@ export const CustomImageForm = () => {
   const saveImage = () => {
     if (validateFields()) {
       const formdata: FormData = new FormData;
-      formdata.append('image', image);
       formdata.append('title', title);
       formdata.append('source', source);
-      formdata.append('id', '0');
-      articleService.createCustomImage(formdata).then(
+      articleService.updateCustomImage(props.attachment!.id, formdata).then(
         clearFormFields,
         /* clearInputs, */
       ).then(showCustomImageUploadMessage);
@@ -51,9 +50,9 @@ export const CustomImageForm = () => {
 
   const validateFields = () => {
     let emptyFormFields = '';
-    if (image === undefined || image === null || image === '') {
+    /* if (image === undefined || image === null || image === '') {
       emptyFormFields = emptyFormFields !== '' ? `${emptyFormFields}, image` : 'image';
-    }
+    } */
     if (title === null || title === '') {
       emptyFormFields = emptyFormFields !== '' ? `${emptyFormFields}, title` : 'title';
     }
@@ -92,11 +91,7 @@ export const CustomImageForm = () => {
   return (
     <div>
       <div className="spaced">
-        <label className="custom-file-upload">
-          <input onChange={(e) => { handleChangeFile(e); }} className="inputFileImages" type="file" accept="image/png, image/jpg, image/jpeg" />
-          Select a new image
-        </label>
-        <span className="filenameSpan">{fileName}</span>
+        <img src={props.attachment.path} alt={props.attachment.title} style={{ maxWidth: 180 }} />
 
       </div>
       <div className="spaced">
