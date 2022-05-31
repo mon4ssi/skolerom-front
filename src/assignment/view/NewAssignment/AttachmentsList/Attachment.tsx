@@ -17,6 +17,8 @@ import './AttachmentsList.scss';
 import { ArticleService } from 'assignment/service';
 import { injector } from 'Injector';
 import { ARTICLE_SERVICE_KEY } from 'assignment/Assignment';
+import { isThisHour } from 'date-fns';
+import { MoreOptionsCustomImage } from './Attachments/MoreOptionsCustomImage/MoreOptionsCustomImage';
 
 export const fullMinute = 60;
 
@@ -54,8 +56,6 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     this.setState({ isProcessing: true });
 
     try {
-      /* console.log(showMoreOptions!);
-      console.log(waitingForOption!); */
       if (!(showMoreOptions && !waitingForOption)) {
         if (!isSelected) {
           await this.props.onSelect(attachment.id);
@@ -78,8 +78,8 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
 
   private editItem = async () => {
     const { attachment } = this.props;
-    await this.props.onEditActionSelected(attachment.id);
-    await this.props.onRenderThirdTab(attachment!.id);
+    await this.props.onEditActionSelected(attachment!.id);
+    /* await this.renderThirdTab(); */
   }
 
   private sendEdition = async (customImageId: number, formData: FormData) => {
@@ -118,6 +118,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     }
     if (this.context.contentType === AttachmentContentType.customImage) {
       const selectedItem = isSelected ? '190px' : '200px';
+      const moreOptionsIcon = settingsIcon;
       return (
         <div>
           <div>
@@ -137,19 +138,9 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
               <div>Source: {attachment.src}</div>
             </div>
 
-          </div >
+          </div>
           <div>
-            <div className="MoreOptions">
-              <button onClick={() => { this.toggleMoreOptions(); this.setState({ waitingForOption: true }); /* console.log(showMoreOptions) */ }}>
-                <img
-                  src={settingsIcon}
-                  alt="active"
-                  className={'moreIcon'}
-                  style={{ top: '5px', maxHeight: 40, maxWidth: 40, position: 'relative', zIndex: 12 }}
-                />
-              </button>
-              {showMoreOptions && this.renderMoreOptions()}
-            </div>
+            <MoreOptionsCustomImage attachmentId={0} onEdit={this.editItem} onRemove={this.removeItem} />
           </div>
         </div>
       );
@@ -166,32 +157,6 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
         </button>
       );
     }
-  }
-
-  public renderMoreOptions = () => {
-    const { attachment, isSelected } = this.props;
-    return (
-      <div className="tooltip">
-        <div className="bottom">
-          <ul className="flexBox dirColumn">
-            <li>
-              <a href="javascript:void(0)" onClick={() => { this.editItem(); this.setState({ showMoreOptions: false }); this.setState({ waitingForOption: true }); }} className="flexBox" >
-                <span>Edit </span>
-                <img src={duplicateIcon} alt="Edit custom image" />
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" onClick={() => { /* console.log(`delete: ${attachment.id}`); */ this.removeItem(); this.setState({ showMoreOptions: false }); this.setState({ waitingForOption: true }); }} className="flexBox">
-                <span style={{ color: '#E2017B' }}>Remove </span>
-                <img src={deleteIcon} alt="Delete custom image" />
-              </a>
-            </li>
-          </ul>
-
-          {/* <i /> */}
-        </div>
-      </div>
-    );
   }
 
   public renderDurationAndTitle = () => {

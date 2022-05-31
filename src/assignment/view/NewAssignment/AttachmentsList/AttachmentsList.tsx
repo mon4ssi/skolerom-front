@@ -28,7 +28,8 @@ import { CustomImageForm } from './CustomImageForm/CustomImageForm';
 import { UserType } from 'user/User';
 import { ArticleService } from 'assignment/service';
 import { injector } from 'Injector';
-import { CustomImageFormSimple } from './CustomImageFormSimple/CustomImageFormSimple';
+import { CustomImage, CustomImageFormSimple } from './CustomImageFormSimple/CustomImageFormSimple';
+import { runInThisContext } from 'vm';
 
 export interface AttachmentsListProps {
   context: {
@@ -41,6 +42,8 @@ export interface AttachmentsListProps {
 interface State {
   selectedTab: string;
   selectedTabId: number;
+  currentId: number;
+  currentAttachment: undefined | FilterableCustomImageAttachment;
   query: string;
   errMsg: string;
 }
@@ -75,7 +78,9 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     selectedTab: '',
     query: '',
     selectedTabId: 0,
+    currentId: 0,
     errMsg: '',
+    currentAttachment: undefined
   };
 
   public TWO = 2;
@@ -180,6 +185,9 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     if (this.context.contentType === AttachmentContentType.customImage) {
       attachment = newAssignmentStore!.questionCustomAttachments.find(item => item.id === id);
       if (attachment!) {
+        this.setState({ currentId: attachment!.id });
+        this.setState({ currentAttachment: attachment! });
+        this.onRenderThirdTab(id);
         /* this.setState({ selectedTabId: 3 }); */
       }
     }
@@ -711,59 +719,38 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
 
   public renderUploadImageForm = (id?: number) => {
     const { newAssignmentStore } = this.props;
-    /* console.log(id!); */
-    /* if (id === null || id === undefined) {
-      console.log(1);
+    const { currentAttachment } = this.state;
+    if (id === null || id === undefined) {
       return (
         <CustomImageFormSimple />
       );
-    } else { */
+    }
     return (
-      <CustomImageForm />
+      <CustomImageForm attachment={currentAttachment!} />
     );
-    /* } */
+
   }
 
   public renderTabByOption = (id?: number) => {
-    const { selectedTabId } = this.state;
+    const { selectedTabId, currentId } = this.state;
     const { newAssignmentStore } = this.props;
-    if (id) {
-      const attachment = newAssignmentStore!.questionCustomAttachments.find(item => item.id === id);
-      if (id!) {
-        switch (selectedTabId!) {
-          case 1:
-            return this.renderAttachments();
-            break;
-          case this.TWO:
-            return this.renderAttachments();
-            break;
-          case this.THREE:
-            if (id !== null && id !== undefined) {
-              return this.renderUploadImageForm(id!);
-            }
-            return this.renderUploadImageForm();
-            break;
-          default:
-            return this.renderAttachments();
-            break;
-        }
-      }
 
-    } else {
-      switch (selectedTabId!) {
-        case 1:
-          return this.renderAttachments();
-          break;
-        case this.TWO:
-          return this.renderAttachments();
-          break;
-        case this.THREE:
-          return this.renderUploadImageForm();
-          break;
-        default:
-          return this.renderAttachments();
-          break;
-      }
+    switch (selectedTabId!) {
+      case 1:
+        return this.renderAttachments();
+        break;
+      case this.TWO:
+        return this.renderAttachments();
+        break;
+      case this.THREE:
+        if (currentId !== 0 && currentId !== null && currentId !== undefined) {
+          return this.renderUploadImageForm(currentId!);
+        }
+        return this.renderUploadImageForm();
+        break;
+      default:
+        return this.renderAttachments();
+        break;
     }
 
   }

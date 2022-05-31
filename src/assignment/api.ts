@@ -492,14 +492,8 @@ export class WPApi implements ArticleRepo {
 
   public async updateCustomImage(customImageId: number, formData: FormData): Promise<any> {
     return (
-      /* await */ API.delete(
-      `${process.env.REACT_APP_BASE_URL}/api/teacher/images/${customImageId}`, {
-        params: {
-          title: formData.get('title'),
-          source: formData.get('source'),
-        },
-      }
-    )
+      /* await */ API.put(
+      `${process.env.REACT_APP_BASE_URL}/api/teacher/images/${customImageId}`, formData)
     );
   }
 
