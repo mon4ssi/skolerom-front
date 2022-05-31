@@ -129,16 +129,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
                 srcSet={attachment.path}
               />
             </button>
-            <div className="MoreOptions">
-              <button onClick={() => { this.toggleMoreOptions(); this.setState({ waitingForOption: true }); }}>
-                <img
-                  src={settingsIcon}
-                  alt="active"
-                  className={'moreIcon'}
-                />
-              </button>
-              <MoreOptionsCustomImage attachmentId={0} onEdit={this.editItem} onRemove={this.removeItem} />
-            </div>
+            <MoreOptionsCustomImage attachmentId={0} onEdit={this.editItem} onRemove={this.removeItem} />
           </div>
           <div className="customImageComponente__content" >
             <div className="customImageComponente__content__item"><strong>{intl.get('assignments_page.title')}:</strong> {attachment.title}</div>

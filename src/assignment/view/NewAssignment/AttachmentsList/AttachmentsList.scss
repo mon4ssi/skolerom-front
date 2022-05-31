@@ -592,7 +592,7 @@
         left: 0;
       }
     }
-    .MoreOptions {
+    .MoreOptionsCustomImage {
       position: absolute;
       top: 10px;
       left: 10px;
@@ -602,7 +602,8 @@
       .tooltip {
         .bottom {
           right: auto;
-          top: 30px;
+          top: 40px;
+          left: -4px;
         }
       }
     }
