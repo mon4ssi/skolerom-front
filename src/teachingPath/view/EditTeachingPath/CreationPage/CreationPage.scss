@@ -24,6 +24,9 @@
       }
       .boxNodeOptionsChildren {
         pointer-events: none;
+        .boxInformationDrop {
+          display: none;
+        }
       }
     }
     &.dragged {
