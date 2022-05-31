@@ -156,24 +156,27 @@ export const CustomImageFormSimple = () => {
     </div>
   );
 
+  const renderInputFile = () => (
+    <label className="custom-file-upload">
+      <input onChange={(e) => { handleChangeFile(e); }} multiple className="inputFileImages" type="file" accept="image/png, image/jpg, image/jpeg" />
+      Add new images
+    </label>
+  );
+
   return (
     <div>
       <div className="spaced">
-        <label className="custom-file-upload">
-          <input onChange={(e) => { handleChangeFile(e); }} multiple className="inputFileImages" type="file" accept="image/png, image/jpg, image/jpeg" />
-          Add new images
-        </label>
+        {!isNotEmpty && renderInputFile()}
         <span className="filenameSpan">You have chosen {value} image(s).</span>
-
       </div>
       {/* {renderImagesFile(imageFileArray)} */}
-
+      <div style={{ display: 'inline' }}>
+        <div>{isNotEmpty && renderUploadImagesButton()}</div>
+        <div>{inProgress && renderProgressBar()}</div>
+      </div>
       {renderPreviewImages()}
       {/* {renderImgFilesPreview(imagesFileList!)} */}
-      <div style={{ display: 'inline' }}>
-        <div>{inProgress && renderProgressBar()}</div>
-        <div>{isNotEmpty && renderUploadImagesButton()}</div>
-      </div>
+
     </div>
   );
 };

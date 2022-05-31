@@ -24,6 +24,8 @@ interface IProps {
   attachment: FilterableAttachment;
   onSelect: (id: number) => Promise<void>;
   onRemove: (id: number) => Promise<void>;
+  onEditActionSelected: (id: number) => Promise<void>;
+  onRenderThirdTab: (id: number) => Promise<void>;
   isSelected?: boolean;
 }
 
@@ -74,9 +76,20 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     await this.articleService.fetchCustomImages()!;
   }
 
-  /* private editItem = async () => {
+  private editItem = async () => {
+    const { attachment } = this.props;
+    await this.props.onEditActionSelected(attachment.id);
+    await this.props.onRenderThirdTab(attachment!.id);
+  }
 
-  } */
+  private sendEdition = async (customImageId: number, formData: FormData) => {
+    await this.articleService.updateCustomImage(customImageId, formData);
+  }
+
+  private renderThirdTab = async () => {
+    const { attachment } = this.props;
+    await this.props.onRenderThirdTab(attachment.id);
+  }
 
   public toggleMoreOptions = () => {
     const { showMoreOptions } = this.state;
@@ -162,7 +175,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
         <div className="bottom">
           <ul className="flexBox dirColumn">
             <li>
-              <a href="javascript:void(0)" onClick={() => { /* console.log(`edit: ${attachment.id}`); */ this.setState({ showMoreOptions: false }); this.setState({ waitingForOption: true }); }} className="flexBox" >
+              <a href="javascript:void(0)" onClick={() => { this.editItem(); this.setState({ showMoreOptions: false }); this.setState({ waitingForOption: true }); }} className="flexBox" >
                 <span>Edit </span>
                 <img src={duplicateIcon} alt="Edit custom image" />
               </a>

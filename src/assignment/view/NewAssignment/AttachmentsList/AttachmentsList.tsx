@@ -174,6 +174,25 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
   }
 
+  private onEditActionSelected = async (id: number) => {
+    const { newAssignmentStore } = this.props;
+    let attachment = null;
+    if (this.context.contentType === AttachmentContentType.customImage) {
+      attachment = newAssignmentStore!.questionCustomAttachments.find(item => item.id === id);
+      if (attachment!) {
+        /* this.setState({ selectedTabId: 3 }); */
+      }
+    }
+
+  }
+
+  private onRenderThirdTab = async (id: number) => {
+    const { newAssignmentStore } = this.props;
+    this.setState({ selectedTabId: 3 });
+    this.renderTabByOption(id);
+
+  }
+
   private onSelectAttachment = async (id: number) => {
     const { newAssignmentStore } = this.props;
     let attachment = null;
@@ -248,6 +267,8 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
         attachment={item}
         onRemove={this.onRemoveAttachment}
         onSelect={this.onSelectAttachment}
+        onEditActionSelected={this.onEditActionSelected}
+        onRenderThirdTab={this.onRenderThirdTab}
         isSelected={isSelected}
       />
     );
@@ -261,6 +282,8 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
         attachment={item}
         onRemove={this.onRemoveAttachment}
         onSelect={this.onSelectAttachment}
+        onEditActionSelected={this.onEditActionSelected}
+        onRenderThirdTab={this.onRenderThirdTab}
         isSelected={isSelected}
       />
     );
@@ -686,30 +709,63 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
   }
 
-  public renderUploadImageForm = () => {
-    if (true) {
+  public renderUploadImageForm = (id?: number) => {
+    const { newAssignmentStore } = this.props;
+    /* console.log(id!); */
+    /* if (id === null || id === undefined) {
+      console.log(1);
       return (
         <CustomImageFormSimple />
       );
-    }
+    } else { */
+    return (
+      <CustomImageForm />
+    );
+    /* } */
   }
 
-  public renderTabByOption = () => {
+  public renderTabByOption = (id?: number) => {
     const { selectedTabId } = this.state;
-    switch (selectedTabId!) {
-      case 1:
-        return this.renderAttachments();
-        break;
-      case this.TWO:
-        return this.renderAttachments();
-        break;
-      case this.THREE:
-        return this.renderUploadImageForm();
-        break;
-      default:
-        return this.renderAttachments();
-        break;
+    const { newAssignmentStore } = this.props;
+    if (id) {
+      const attachment = newAssignmentStore!.questionCustomAttachments.find(item => item.id === id);
+      if (id!) {
+        switch (selectedTabId!) {
+          case 1:
+            return this.renderAttachments();
+            break;
+          case this.TWO:
+            return this.renderAttachments();
+            break;
+          case this.THREE:
+            if (id !== null && id !== undefined) {
+              return this.renderUploadImageForm(id!);
+            }
+            return this.renderUploadImageForm();
+            break;
+          default:
+            return this.renderAttachments();
+            break;
+        }
+      }
+
+    } else {
+      switch (selectedTabId!) {
+        case 1:
+          return this.renderAttachments();
+          break;
+        case this.TWO:
+          return this.renderAttachments();
+          break;
+        case this.THREE:
+          return this.renderUploadImageForm();
+          break;
+        default:
+          return this.renderAttachments();
+          break;
+      }
     }
+
   }
 
   public renderBottomInfoAndAddBar = () => {
@@ -747,7 +803,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
 
     const { newAssignmentStore } = this.props;
     const { selectedTabId } = this.state;
-    const isLoading = newAssignmentStore!.fetchingAttachments || newAssignmentStore!.fetchingAttachments || false;
+    const isLoading = newAssignmentStore!.fetchingAttachments || newAssignmentStore!.fetchingCustomImageAttachments || false;
     const classNameWrapper = selectedTabId === this.THREE ? 'contentWrapperExpanded' : 'contentWrapper';
     return (
       <div className="attachments-list-container">

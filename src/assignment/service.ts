@@ -118,6 +118,10 @@ export class ArticleService {
     return this.articleRepo.deleteCustomImage(imageId);
   }
 
+  public async updateCustomImage(customImageId: number, formData: FormData): Promise<any> {
+    return this.articleRepo.updateCustomImage(customImageId, formData);
+  }
+
   public async increaseUse(imageId: number): Promise<any> {
     return this.articleRepo.increaseUse(imageId);
   }

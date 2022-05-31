@@ -1053,6 +1053,7 @@ export interface ArticleRepo {
   fetchCustomImages(): Promise<Array<CustomImgAttachment>>;
   createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse>;
   deleteCustomImage(imageId: number): Promise<any>;
+  updateCustomImage(customImageId: number, formData: FormData): Promise<any>;
   increaseUse(imageId: number): Promise<any>;
   decreaseUse(imageId: number): Promise<any>;
   getLocaleData(locale: Locales): Promise<Array<WPLocale>>;
