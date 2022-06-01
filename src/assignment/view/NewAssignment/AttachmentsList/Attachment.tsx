@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import { observer } from 'mobx-react';
+import intl from 'react-intl-universal';
 
 import activeIcon from 'assets/images/check-active.svg';
 import play from 'assets/images/play.svg';
@@ -17,6 +18,9 @@ import './AttachmentsList.scss';
 import { ArticleService } from 'assignment/service';
 import { injector } from 'Injector';
 import { ARTICLE_SERVICE_KEY } from 'assignment/Assignment';
+import { isThisHour } from 'date-fns';
+import { MoreOptionsCustomImage } from './Attachments/MoreOptionsCustomImage/MoreOptionsCustomImage';
+import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 
 export const fullMinute = 60;
 
@@ -24,6 +28,9 @@ interface IProps {
   attachment: FilterableAttachment;
   onSelect: (id: number) => Promise<void>;
   onRemove: (id: number) => Promise<void>;
+  onEditActionSelected: (id: number) => Promise<void>;
+  onRenderThirdTab: (id: number) => Promise<void>;
+  onRedirectToList: () => Promise<void>;
   isSelected?: boolean;
 }
 
@@ -52,15 +59,12 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     this.setState({ isProcessing: true });
 
     try {
-      /* console.log(showMoreOptions!);
-      console.log(waitingForOption!); */
-      if (!(showMoreOptions && !waitingForOption)) {
-        if (!isSelected) {
-          await this.props.onSelect(attachment.id);
-        } else {
-          await this.props.onRemove(attachment.id);
-        }
+      if (!isSelected) {
+        await this.props.onSelect(attachment.id);
+      } else {
+        await this.props.onRemove(attachment.id);
       }
+
     } catch (e) {
       console.error(e.message);
     } finally {
@@ -71,12 +75,27 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
   private removeItem = async () => {
     const { attachment } = this.props;
     await this.articleService.deleteCustomImage(attachment.id);
-    await this.articleService.fetchCustomImages()!;
+    Notification.create({
+      type: NotificationTypes.SUCCESS,
+      title: 'Image removed succesfully',
+    });
+    this.props.onRedirectToList();
   }
 
-  /* private editItem = async () => {
+  private editItem = async () => {
+    const { attachment } = this.props;
+    await this.props.onEditActionSelected(attachment.id);
+    /* await this.props.onRenderThirdTab(attachment!.id); */
+  }
 
-  } */
+  private sendEdition = async (customImageId: number, formData: FormData) => {
+    await this.articleService.updateCustomImage(customImageId, formData);
+  }
+
+  private renderThirdTab = async () => {
+    const { attachment } = this.props;
+    await this.props.onRenderThirdTab(attachment.id);
+  }
 
   public toggleMoreOptions = () => {
     const { showMoreOptions } = this.state;
@@ -93,7 +112,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
 
     if (this.context.contentType === AttachmentContentType.image) {
       return (
-        <button title="Attachment Media">
+        <button title="Attachment Media" onClick={this.toggleAttachment}>
           <img
             src={attachment.path}
             alt={attachment.alt}
@@ -104,39 +123,22 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
       );
     }
     if (this.context.contentType === AttachmentContentType.customImage) {
-      const selectedItem = isSelected ? '190px' : '200px';
+      const selectedItem = isSelected ? 'customImageComponente active' : 'customImageComponente';
       return (
-        <div>
-          <div>
-            <div style={{ position: 'absolute', zIndex: 0 }}>
-              <button title={attachment.title}>
-                <img
-                  style={{ height: selectedItem }}
-                  src={attachment.path}
-                  alt={attachment.alt}
-                  srcSet={attachment.path}
-                  sizes={'(min-width: 320px) 300px'}
-                />
-              </button>
-            </div>
-            <div style={{ fontSize: 10, padding: '14px', position: 'relative', lineBreak: 'anywhere', background: '#d3d9de', opacity: '76%', color: 'white' }}>
-              <div style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'auto' }} >Title: {attachment.title}</div>
-              <div>Source: {attachment.src}</div>
-            </div>
-
-          </div >
-          <div>
-            <div className="MoreOptions">
-              <button onClick={() => { this.toggleMoreOptions(); this.setState({ waitingForOption: true }); /* console.log(showMoreOptions) */ }}>
-                <img
-                  src={settingsIcon}
-                  alt="active"
-                  className={'moreIcon'}
-                  style={{ top: '5px', maxHeight: 40, maxWidth: 40, position: 'relative', zIndex: 12 }}
-                />
-              </button>
-              {showMoreOptions && this.renderMoreOptions()}
-            </div>
+        <div className={selectedItem}>
+          <div className="customImageComponente__image">
+            <button title={attachment.title} className="customImageComponente__image__button" onClick={this.toggleAttachment}>
+              <img
+                src={attachment.path}
+                alt={attachment.alt}
+                srcSet={attachment.path}
+              />
+            </button>
+            <MoreOptionsCustomImage attachmentId={0} onEdit={this.editItem} onRemove={this.removeItem} />
+          </div>
+          <div className="customImageComponente__content" >
+            <div className="customImageComponente__content__item"><strong>{intl.get('assignments_page.title')}:</strong> {attachment.title}</div>
+            <div className="customImageComponente__content__item"><strong>{intl.get('assignments_page.source')}:</strong> {attachment.src}</div>
           </div>
         </div>
       );
@@ -153,32 +155,6 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
         </button>
       );
     }
-  }
-
-  public renderMoreOptions = () => {
-    const { attachment, isSelected } = this.props;
-    return (
-      <div className="tooltip">
-        <div className="bottom">
-          <ul className="flexBox dirColumn">
-            <li>
-              <a href="javascript:void(0)" onClick={() => { /* console.log(`edit: ${attachment.id}`); */ this.setState({ showMoreOptions: false }); this.setState({ waitingForOption: true }); }} className="flexBox" >
-                <span>Edit </span>
-                <img src={duplicateIcon} alt="Edit custom image" />
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0)" onClick={() => { /* console.log(`delete: ${attachment.id}`); */ this.removeItem(); this.setState({ showMoreOptions: false }); this.setState({ waitingForOption: true }); }} className="flexBox">
-                <span style={{ color: '#E2017B' }}>Remove </span>
-                <img src={deleteIcon} alt="Delete custom image" />
-              </a>
-            </li>
-          </ul>
-
-          {/* <i /> */}
-        </div>
-      </div>
-    );
   }
 
   public renderDurationAndTitle = () => {
@@ -235,7 +211,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     }
 
     return (
-      <div className={wrapClass} onClick={this.toggleAttachment}>
+      <div className={wrapClass}>
         {isSelected && (<ActiveIcon />)}
         {this.renderAttachments()}
       </div>
@@ -249,11 +225,5 @@ const ActiveIcon = () => (
       alt="active"
       style={{ maxHeight: 40, maxWidth: 40, position: 'relative', zIndex: 4, top: '30%' }}
     />
-  </div>
-);
-
-const SettingsIcon = () => (
-  <div>
-    <img src={settingsIcon} alt="Settings" style={{ maxHeight: 40, maxWidth: 40, position: 'relative', zIndex: 200 }} />
   </div>
 );

@@ -110,7 +110,7 @@
         margin: 17px 10px 0;
         width: calc(100% * (1 / 4) - 20px);
         background-color: rgba(0, 0, 0, 0.3);
-        height: 200px;
+        min-height: 200px;
         position: relative;
 
         button {
@@ -135,7 +135,6 @@
         }
 
         &.selected {
-          border: #03203f solid 5px;
 
           .videoDuration {
             margin: 10px 0 0 -5px;
@@ -159,6 +158,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
+          padding-bottom: 50px;
         }
       }
 
@@ -578,6 +578,51 @@
   }
 }
 
+.customImageComponente {
+  box-shadow: 0px 2px 4px #00000026;
+  &__image {
+    &__button {
+      position: relative;
+      min-height: 200px;
+      overflow: hidden;
+      width: 100%;
+      img {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    }
+    .MoreOptionsCustomImage {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      button {
+        margin: 0;
+      }
+      .tooltip {
+        .bottom {
+          right: auto;
+          top: 40px;
+          left: -4px;
+        }
+      }
+    }
+  }
+  &__content {
+    background: white;
+    padding: 5px 10px;
+    font-size: 14px;
+    &__item {
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      width: 100%;
+      overflow: hidden;
+      margin: 5px 0px;
+    }
+  }
+}
+
 .attachments-list__video-wrap button:focus {
   outline: black;
   outline-style: auto;
@@ -587,7 +632,8 @@
   padding: 10px;
 
   &:hover,
-  &.selected {
+  &.selected,
+  &.active {
     border-bottom: solid #e2017b 4px;
   }
 }
@@ -734,5 +780,16 @@ input[type="file"] {
         border: 1px solid #596A75;
       }
     }
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  .attachments-list-container .contentWrapper .attachments-list__img-wrap {
+    width: calc(100% * (1 / 3) - 20px);
+  }
+}
+@media screen and (max-width: 1100px) {
+  .attachments-list-container .contentWrapper .attachments-list__img-wrap {
+    width: calc(100% * (1 / 2) - 20px);
   }
 }

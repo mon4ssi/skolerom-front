@@ -431,7 +431,7 @@ export class WPApi implements ArticleRepo {
       `${process.env.REACT_APP_WP_URL}/wp-json/getarticles/v1/post/`, {
         params: {
           ids: includes,
-        // lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
+          // lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
         }
       }
     );
@@ -492,6 +492,14 @@ export class WPApi implements ArticleRepo {
     );
   }
 
+  public async updateCustomImage(customImageId: number, formData: FormData): Promise<any> {
+    const formDataJSON = JSON.stringify(Object.fromEntries(formData));
+    return (
+      /* await */ API.put(
+      `${process.env.REACT_APP_BASE_URL}/api/teacher/images/${customImageId}`, formDataJSON)
+    );
+  }
+
   public async increaseUse(imageId: number): Promise<any> {
     return (
       /* await */ API.post(
@@ -503,8 +511,8 @@ export class WPApi implements ArticleRepo {
   public async decreaseUse(imageId: number): Promise<any> {
     return (
       /* await */ API.delete(
-        `${process.env.REACT_APP_BASE_URL}/api/teacher/images/${imageId}/using`
-      ).then()
+      `${process.env.REACT_APP_BASE_URL}/api/teacher/images/${imageId}/using`
+    ).then()
     );
   }
 

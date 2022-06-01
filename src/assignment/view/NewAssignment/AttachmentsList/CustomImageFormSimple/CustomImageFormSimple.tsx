@@ -3,6 +3,7 @@ import { ArticleService } from 'assignment/service';
 import { injector } from 'Injector';
 import React, { useContext, useState } from 'react';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
+import intl from 'react-intl-universal';
 
 import './CustomImageFormSimple.scss';
 
@@ -15,7 +16,7 @@ export interface CustomImage {
   id?: number;
 }
 
-export const CustomImageFormSimple = () => {
+export const CustomImageFormSimple = (props: any) => {
   const THOUSAND = 1000;
   const HUNDRED = 100;
   const THREE_SECONDS = 3000;
@@ -75,12 +76,23 @@ export const CustomImageFormSimple = () => {
     imageFileArray.forEach(async (image) => {
       const formData = new FormData();
       formData.append('image', image);
-      formData.append('title', image.name);
+      formData.append('title', image.name.split('.')[0]);
       formData.append('source', image.lastModified.toString());
-      await articleService.createCustomImage(formData).then(() => {
-        percentage = percentage + amount;
-        setProgressBar(percentage);
-      });
+      try {
+        await articleService.createCustomImage(formData).then(() => {
+          percentage = percentage + amount;
+          setProgressBar(percentage);
+        });
+      } catch (error) {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('new assignment.notification.error'),
+        });
+        setProgressBar(0);
+        setInProgress(false);
+        setImageFileArray([]);
+        setValue(0);
+      }
       if (percentage >= HUNDRED) {
         setTimeout(() => {
           setProgressBar(0);
@@ -89,6 +101,7 @@ export const CustomImageFormSimple = () => {
           setValue(0);
           articleService.fetchCustomImages();
         }, THREE_SECONDS);
+        props.onRedirectToList();
       }
     });
   };
@@ -156,24 +169,27 @@ export const CustomImageFormSimple = () => {
     </div>
   );
 
+  const renderInputFile = () => (
+    <label className="custom-file-upload">
+      <input onChange={(e) => { handleChangeFile(e); }} multiple className="inputFileImages" type="file" accept="image/png, image/jpg, image/jpeg" />
+      Add new images
+    </label>
+  );
+
   return (
     <div>
       <div className="spaced">
-        <label className="custom-file-upload">
-          <input onChange={(e) => { handleChangeFile(e); }} multiple className="inputFileImages" type="file" accept="image/png, image/jpg, image/jpeg" />
-          Add new images
-        </label>
+        {!isNotEmpty && renderInputFile()}
         <span className="filenameSpan">You have chosen {value} image(s).</span>
-
       </div>
       {/* {renderImagesFile(imageFileArray)} */}
-
+      <div style={{ display: 'inline' }}>
+        <div>{isNotEmpty && renderUploadImagesButton()}</div>
+        <div>{inProgress && renderProgressBar()}</div>
+      </div>
       {renderPreviewImages()}
       {/* {renderImgFilesPreview(imagesFileList!)} */}
-      <div style={{ display: 'inline' }}>
-        <div>{inProgress && renderProgressBar()}</div>
-        <div>{isNotEmpty && renderUploadImagesButton()}</div>
-      </div>
+
     </div>
   );
 };

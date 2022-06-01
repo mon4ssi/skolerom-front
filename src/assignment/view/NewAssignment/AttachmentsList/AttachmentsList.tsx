@@ -28,7 +28,12 @@ import { CustomImageForm } from './CustomImageForm/CustomImageForm';
 import { UserType } from 'user/User';
 import { ArticleService } from 'assignment/service';
 import { injector } from 'Injector';
-import { CustomImageFormSimple } from './CustomImageFormSimple/CustomImageFormSimple';
+import { CustomImage, CustomImageFormSimple } from './CustomImageFormSimple/CustomImageFormSimple';
+import { runInThisContext } from 'vm';
+
+const const1 = 1;
+const const2 = 2;
+const const3 = 3;
 
 export interface AttachmentsListProps {
   context: {
@@ -41,6 +46,8 @@ export interface AttachmentsListProps {
 interface State {
   selectedTab: string;
   selectedTabId: number;
+  currentId: number;
+  currentAttachment: undefined | FilterableCustomImageAttachment;
   query: string;
   errMsg: string;
 }
@@ -75,7 +82,9 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     selectedTab: '',
     query: '',
     selectedTabId: 0,
+    currentId: 0,
     errMsg: '',
+    currentAttachment: undefined
   };
 
   public TWO = 2;
@@ -174,6 +183,28 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
   }
 
+  private onEditActionSelected = async (id: number) => {
+    const { newAssignmentStore } = this.props;
+    let attachment = null;
+    if (this.context.contentType === AttachmentContentType.customImage) {
+      attachment = newAssignmentStore!.questionCustomAttachments.find(item => item.id === id);
+      if (attachment!) {
+        this.setState({ currentId: attachment!.id });
+        this.setState({ currentAttachment: attachment! });
+        this.onRenderThirdTab(id);
+        /* this.setState({ selectedTabId: 3 }); */
+      }
+    }
+
+  }
+
+  private onRenderThirdTab = async (id: number) => {
+    const { newAssignmentStore } = this.props;
+    this.setState({ selectedTabId: 3 });
+    this.renderTabByOption(id);
+
+  }
+
   private onSelectAttachment = async (id: number) => {
     const { newAssignmentStore } = this.props;
     let attachment = null;
@@ -183,7 +214,6 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     if (this.context.contentType === AttachmentContentType.customImage) {
       attachment = newAssignmentStore!.questionCustomAttachments.find(item => item.id === id);
     }
-
     if (attachment) {
       try {
         if (this.context.contentType === AttachmentContentType.image) {
@@ -248,6 +278,9 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
         attachment={item}
         onRemove={this.onRemoveAttachment}
         onSelect={this.onSelectAttachment}
+        onEditActionSelected={this.onEditActionSelected}
+        onRenderThirdTab={this.onRenderThirdTab}
+        onRedirectToList={this.goToCustomImgAttachmentList}
         isSelected={isSelected}
       />
     );
@@ -261,6 +294,9 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
         attachment={item}
         onRemove={this.onRemoveAttachment}
         onSelect={this.onSelectAttachment}
+        onEditActionSelected={this.onEditActionSelected}
+        onRenderThirdTab={this.onRenderThirdTab}
+        onRedirectToList={this.goToCustomImgAttachmentList}
         isSelected={isSelected}
       />
     );
@@ -529,6 +565,50 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
   }
 
+  public selectClassOption = (tabid : number, position : number) => {
+    const { newAssignmentStore } = this.props;
+    switch (tabid) {
+      case 0:
+        if (position === 1) {
+          return 'active';
+        }
+        return '';
+        break;
+      case 1:
+        if (position === 1) {
+          return 'active';
+        }
+        return '';
+        break;
+      case const2:
+        if (position === const2) {
+          return 'active';
+        }
+        return '';
+        break;
+      case const3:
+        if (position === const3) {
+          return 'active';
+        }
+        return '';
+        break;
+      default:
+        if (position === 1) {
+          return 'active';
+        }
+        return '';
+        break;
+    }
+  }
+
+  public goToCustomImgAttachmentList = async() => {
+    const { newAssignmentStore } = this.props;
+    this.setState({ selectedTabId: 2, currentId: 0, currentAttachment: undefined });
+    newAssignmentStore!.fetchingCustomImageAttachments = true;
+    newAssignmentStore!.fetchQuestionAttachments(AttachmentContentType.customImage);
+    newAssignmentStore!.fetchingCustomImageAttachments = false;
+  }
+
   public renderAttachmentTab = () => {
     const { newAssignmentStore } = this.props;
     const userType = newAssignmentStore!.getCurrentUser()!.type;
@@ -536,18 +616,18 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
       if (this.context.contentType === AttachmentContentType.image) {
         return (
           <div>
-            <span onClick={() => { this.setState({ selectedTabId: 1 }); }} className="image_Option">{intl.get('new assignment.images_options.images_from_article')}</span>
-            <span onClick={() => { this.setState({ selectedTabId: 2 }); this.props.context.changeContentType(AttachmentContentType.customImage); }} className="image_Option">{intl.get('new assignment.images_options.custom_images')}</span>
-            <span onClick={() => { this.setState({ selectedTabId: 3 }); }} className="image_Option">{intl.get('new assignment.images_options.upload_image')}</span>
+            <span onClick={() => { this.setState({ selectedTabId: 1 }); }} className={`image_Option ${this.selectClassOption(this.state.selectedTabId, 1)}`}>{intl.get('new assignment.images_options.images_from_article')}</span>
+            <span onClick={() => { this.setState({ selectedTabId: 2 }); this.props.context.changeContentType(AttachmentContentType.customImage); }} className={`image_Option ${this.selectClassOption(this.state.selectedTabId, const2)}`}>{intl.get('new assignment.images_options.custom_images')}</span>
+            <span onClick={() => { this.setState({ selectedTabId: 3 }); }} className={`image_Option ${this.selectClassOption(this.state.selectedTabId, const3)}`}>{intl.get('new assignment.images_options.upload_image')}</span>
           </div>
         );
       }
       if (this.context.contentType === AttachmentContentType.customImage) {
         return (
           <div>
-            <span onClick={() => { this.setState({ selectedTabId: 1 }); this.props.context.changeContentType(AttachmentContentType.image); }} className="image_Option">{intl.get('new assignment.images_options.images_from_article')}</span>
-            <span onClick={() => { this.setState({ selectedTabId: 2 }); }} className="image_Option">{intl.get('new assignment.images_options.custom_images')}</span>
-            <span onClick={() => { this.setState({ selectedTabId: 3 }); }} className="image_Option">{intl.get('new assignment.images_options.upload_image')}</span>
+            <span onClick={() => { this.setState({ selectedTabId: 1 }); this.props.context.changeContentType(AttachmentContentType.image); }} className={`image_Option ${this.selectClassOption(this.state.selectedTabId, 1)}`}>{intl.get('new assignment.images_options.images_from_article')}</span>
+            <span onClick={() => { this.setState({ selectedTabId: 2 }); }} className={`image_Option ${this.selectClassOption(this.state.selectedTabId, const2)}`}>{intl.get('new assignment.images_options.custom_images')}</span>
+            <span onClick={() => { this.setState({ selectedTabId: 3 }); }} className={`image_Option ${this.selectClassOption(this.state.selectedTabId, const3)}`}>{intl.get('new assignment.images_options.upload_image')}</span>
           </div>
         );
       }
@@ -556,9 +636,9 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
       }
       return (
         <div>
-          <span onClick={() => { this.setState({ selectedTabId: 1 }); this.props.context.changeContentType(AttachmentContentType.image); }} className="image_Option">{intl.get('new assignment.images_options.images_from_article')}</span>
-          <span onClick={() => { this.setState({ selectedTabId: 2 }); this.props.context.changeContentType(AttachmentContentType.customImage); }} className="image_Option">{intl.get('new assignment.images_options.custom_images')}</span>
-          <span onClick={() => { this.setState({ selectedTabId: 3 }); }} className="image_Option">{intl.get('new assignment.images_options.upload_image')}</span>
+          <span onClick={() => { this.setState({ selectedTabId: 1 }); this.props.context.changeContentType(AttachmentContentType.image); }} className={`image_Option ${this.selectClassOption(this.state.selectedTabId, 1)}`}>{intl.get('new assignment.images_options.images_from_article')}</span>
+          <span onClick={() => { this.setState({ selectedTabId: 2 }); this.props.context.changeContentType(AttachmentContentType.customImage); }} className={`image_Option ${this.selectClassOption(this.state.selectedTabId, const2)}`}>{intl.get('new assignment.images_options.custom_images')}</span>
+          <span onClick={() => { this.setState({ selectedTabId: 3 }); }} className={`image_Option ${this.selectClassOption(this.state.selectedTabId, const3)}`}>{intl.get('new assignment.images_options.upload_image')}</span>
         </div>
       );
 
@@ -686,16 +766,24 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
   }
 
-  public renderUploadImageForm = () => {
-    if (true) {
+  public renderUploadImageForm = (id?: number) => {
+    const { newAssignmentStore } = this.props;
+    const { currentAttachment } = this.state;
+    if (id === null || id === undefined) {
       return (
-        <CustomImageFormSimple />
+        <CustomImageFormSimple onRedirectToList={this.goToCustomImgAttachmentList} />
       );
     }
+    return (
+      <CustomImageForm attachment={currentAttachment!} onRedirectToList={this.goToCustomImgAttachmentList} />
+    );
+
   }
 
-  public renderTabByOption = () => {
-    const { selectedTabId } = this.state;
+  public renderTabByOption = (id?: number) => {
+    const { selectedTabId, currentId } = this.state;
+    const { newAssignmentStore } = this.props;
+
     switch (selectedTabId!) {
       case 1:
         return this.renderAttachments();
@@ -704,12 +792,16 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
         return this.renderAttachments();
         break;
       case this.THREE:
+        if (currentId !== 0 && currentId !== null && currentId !== undefined) {
+          return this.renderUploadImageForm(currentId!);
+        }
         return this.renderUploadImageForm();
         break;
       default:
         return this.renderAttachments();
         break;
     }
+
   }
 
   public renderBottomInfoAndAddBar = () => {
@@ -747,7 +839,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
 
     const { newAssignmentStore } = this.props;
     const { selectedTabId } = this.state;
-    const isLoading = newAssignmentStore!.fetchingAttachments || newAssignmentStore!.fetchingAttachments || false;
+    const isLoading = newAssignmentStore!.fetchingAttachments || newAssignmentStore!.fetchingCustomImageAttachments || false;
     const classNameWrapper = selectedTabId === this.THREE ? 'contentWrapperExpanded' : 'contentWrapper';
     return (
       <div className="attachments-list-container">

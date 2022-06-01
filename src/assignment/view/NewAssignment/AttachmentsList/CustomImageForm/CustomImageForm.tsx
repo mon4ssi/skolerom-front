@@ -1,6 +1,7 @@
 import { ARTICLE_REPO_KEY } from 'assignment/Assignment';
 import { ArticleService } from 'assignment/service';
 import { injector } from 'Injector';
+import intl from 'react-intl-universal';
 import { values } from 'lodash';
 import React, { useContext, useState } from 'react';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
@@ -14,16 +15,16 @@ export interface CustomImage {
   id?: number;
 }
 
-export const CustomImageForm = () => {
+export const CustomImageForm = (props: any) => {
   const articleService: ArticleService = injector.get(ARTICLE_REPO_KEY);
   const [image, setImage] = useState('');
-  const [title, setTitle] = useState('');
-  const [source, setSource] = useState('');
-  const [fileName, setFileName] = useState('Image not selected yet.');
+  const [title, setTitle] = useState(props.attachment.title);
+  const [source, setSource] = useState(props.attachment.src);
+  const [fileName, setFileName] = useState(intl.get('assignments_page.img_not'));
 
   const handleChangeFile = (e: any) => {
     setImage(e.target.files!.length > 0 ? e.target.files![0] : '');
-    setFileName(e.target.files!.length > 0 ? e.target.files![0].name : 'Image not selected yet.');
+    setFileName(e.target.files!.length > 0 ? e.target.files![0].name.split('.')[0] : intl.get('assignments_page.img_not'));
   };
 
   const handleChangeTitle = (e: any) => {
@@ -34,25 +35,24 @@ export const CustomImageForm = () => {
     setSource(e.target.value);
   };
 
-  const saveImage = () => {
+  const saveImage = async () => {
     if (validateFields()) {
       const formdata: FormData = new FormData;
-      formdata.append('image', image);
       formdata.append('title', title);
       formdata.append('source', source);
-      formdata.append('id', '0');
-      articleService.createCustomImage(formdata).then(
+      await articleService.updateCustomImage(props.attachment!.id, formdata).then(
         clearFormFields,
         /* clearInputs, */
       ).then(showCustomImageUploadMessage);
+      props.onRedirectToList();
     }
   };
 
   const validateFields = () => {
     let emptyFormFields = '';
-    if (image === undefined || image === null || image === '') {
+    /* if (image === undefined || image === null || image === '') {
       emptyFormFields = emptyFormFields !== '' ? `${emptyFormFields}, image` : 'image';
-    }
+    } */
     if (title === null || title === '') {
       emptyFormFields = emptyFormFields !== '' ? `${emptyFormFields}, title` : 'title';
     }
@@ -73,7 +73,7 @@ export const CustomImageForm = () => {
   const showCustomImageUploadMessage = () => {
     Notification.create({
       type: false ? NotificationTypes.ERROR : NotificationTypes.SUCCESS,
-      title: '' || 'Image uploaded succesfully'
+      title: '' || 'Image updated succesfully'
     });
   };
 
@@ -91,12 +91,7 @@ export const CustomImageForm = () => {
   return (
     <div>
       <div className="spaced">
-        <label className="custom-file-upload">
-          <input onChange={(e) => { handleChangeFile(e); }} className="inputFileImages" type="file" accept="image/png, image/jpg, image/jpeg" />
-          Select a new image
-        </label>
-        <span className="filenameSpan">{fileName}</span>
-
+        <img src={props.attachment.path} alt={props.attachment.title} style={{ maxWidth: 180 }} />
       </div>
       <div className="spaced">
         <label className="label" htmlFor="title">Title: </label>

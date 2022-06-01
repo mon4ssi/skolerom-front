@@ -19,18 +19,17 @@ export class ImageAttachments extends Component<Props> {
   public render() {
     const { newAssignmentStore } = this.props;
     const attachments: Array<FilterableAttachment> = [];
-    /* console.log(newAssignmentStore!.questionAttachments!); */
     if (newAssignmentStore!.currentOrderOption >= 0) {
       const currentQuestion = newAssignmentStore!.currentQuestion as EditableImageChoiceQuestion;
       if (currentQuestion && currentQuestion.options && currentQuestion.options.length > 0) {
         currentQuestion.options.forEach((item) => {
-          if (item.image) {
+          /* if (item.image) {
             const existingImage = newAssignmentStore!.questionAttachments!
                                           .find(attachment => attachment.id === item.image.id);
             if (!existingImage) {
               attachments.push(item.image);
             }
-          }
+          } */
         }
     );
       }

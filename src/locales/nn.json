@@ -17,7 +17,10 @@
     "not permission": "Du har dessverre ikkje tilgang til denne plattforma. Kontakt organisasjonen din for å få tilgang."
   },
   "assignments_page": {
-    "no_results": "Ingen resultat"
+    "no_results": "No results found",
+    "title": "Tittel",
+    "source": "Kilde",    
+    "img_not": "Bildet er ikke valgt ennå"
   },
   "answers": {
     "Answers": "Svar",
@@ -268,8 +271,12 @@
     "sound": "Lyd",
     "images_options": {
       "images_from_article": "Bilde frå artikkel",
-      "custom_images": "Custom images",
-      "upload_image": "Upload image"
+      "custom_images": "Egendefinerte bilder",
+      "upload_image": "Last opp bilde"
+    },
+    "notification": {
+      "error": "Feil ved opplasting av gjeldende bilder",
+      "success": "Bilder ble lastet opp"
     },
     "images_empty_list": "No images available, please upload a custom image",
     "videos_from_article": "Video frå artikkel",
