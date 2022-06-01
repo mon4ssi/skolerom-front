@@ -106,17 +106,31 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     }
   }
 
+  public renderTitleInfo = (title: string | undefined, src: string) => {
+    const { attachment, isSelected } = this.props;
+    return (
+      <div className="customImageComponente__content" >
+        <div className="customImageComponente__content__item"><strong>{intl.get('assignments_page.title')}:</strong> {title}</div>
+        <div className="customImageComponente__content__item"><strong>{intl.get('assignments_page.source')}:</strong> {src}</div>
+      </div>
+    );
+  }
+
   public renderAttachments = () => {
     const { attachment, isSelected } = this.props;
     const { isProcessing, showMoreOptions } = this.state;
 
     if (this.context.contentType === AttachmentContentType.image) {
+      let arraySrc = attachment.src && attachment.src[1] && attachment.src[1];
+      if (!Array.isArray(attachment.src)) {
+        arraySrc = attachment.path;
+      }
       return (
         <button title="Attachment Media" onClick={this.toggleAttachment}>
           <img
             src={attachment.path}
             alt={attachment.alt}
-            srcSet={attachment.src && attachment.src[1] && attachment.src[1]}
+            srcSet={arraySrc}
             sizes={'(min-width: 320px) 300px'}
           />
         </button>
@@ -124,9 +138,11 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     }
     if (this.context.contentType === AttachmentContentType.customImage) {
       const selectedItem = isSelected ? 'customImageComponente active' : 'customImageComponente';
+      const isCustomImg = (attachment.path!.split(String(process.env.REACT_APP_WP_URL)).length > 1) ? false : true;
+      const isCustomImgClass = (isCustomImg) ? 'customImageComponente__image' : 'customImageComponente__image heightfull';
       return (
         <div className={selectedItem}>
-          <div className="customImageComponente__image">
+          <div className={isCustomImgClass}>
             <button title={attachment.title} className="customImageComponente__image__button" onClick={this.toggleAttachment}>
               <img
                 src={attachment.path}
@@ -134,12 +150,9 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
                 srcSet={attachment.path}
               />
             </button>
-            <MoreOptionsCustomImage attachmentId={0} onEdit={this.editItem} onRemove={this.removeItem} />
+            {isCustomImg && <MoreOptionsCustomImage attachmentId={0} onEdit={this.editItem} onRemove={this.removeItem} />}
           </div>
-          <div className="customImageComponente__content" >
-            <div className="customImageComponente__content__item"><strong>{intl.get('assignments_page.title')}:</strong> {attachment.title}</div>
-            <div className="customImageComponente__content__item"><strong>{intl.get('assignments_page.source')}:</strong> {attachment.src}</div>
-          </div>
+          {isCustomImg && this.renderTitleInfo(attachment.title, String(attachment.src))}
         </div>
       );
     }

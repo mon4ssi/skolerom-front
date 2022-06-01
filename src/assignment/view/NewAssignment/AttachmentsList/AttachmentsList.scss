@@ -159,6 +159,7 @@
           justify-content: center;
           align-items: center;
           padding-bottom: 50px;
+          pointer-events: none;
         }
       }
 
@@ -590,6 +591,11 @@
         position: absolute;
         top: 0;
         left: 0;
+      }
+    }
+    &.heightfull {
+      .customImageComponente__image__button {
+        min-height: 261px;
       }
     }
     .MoreOptionsCustomImage {
