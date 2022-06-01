@@ -147,7 +147,7 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
     if (teachingPath) {
       this.props.history.push(`/teaching-path/preview/${teachingPath}`, {
         node,
-        teachingPath : -1
+        teachingPath: -1
       });
     } else {
       if (exitQuestionary) {
@@ -159,7 +159,9 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
             node: questionaryTeachingPathStore!.currentNode.id
           });
         } else {
-          history.push(exitEventTarget === ExitEventTarget.EXIT_BUTTON ? '/assignments' : '/activity');
+          const url: string = localStorage!.getItem('url') !== null ? localStorage!.getItem('url')!.toString().split('?')[1] : '';
+          history.push(exitEventTarget === ExitEventTarget.EXIT_BUTTON ?
+            'assignment' : '/activity');
         }
       } else {
         // history.push('/assignments');
@@ -316,9 +318,9 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
     </div>
   )
 
-  public renderBreadcrumbsIfNeeded = () => this.props.location.state &&  this.props.location.state.node && (
+  public renderBreadcrumbsIfNeeded = () => this.props.location.state && this.props.location.state.node && (
     <div className="CurrentAssignmentPage__breadcrumbs">
-      <BreadcrumbsTeachingPath getCurrentNodeFromAssignment={this.redirectToCurrentNode}/>
+      <BreadcrumbsTeachingPath getCurrentNodeFromAssignment={this.redirectToCurrentNode} />
     </div>
   )
 
@@ -405,7 +407,7 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
           currentEntityId={Number(match.params.id)}
         />
 
-        {this.props.uiStore!.sidebarShown && <div className="CurrentAssignmentPage__overlay" onClick={uiStore!.hideSidebar}/>}
+        {this.props.uiStore!.sidebarShown && <div className="CurrentAssignmentPage__overlay" onClick={uiStore!.hideSidebar} />}
 
         <div className="CurrentAssignmentPage__content">
           <div className={navBarClasses}>

@@ -47,6 +47,7 @@ export class AssignmentListStore {
   public async getAssignmentsList() {
     // this.assignmentList.setFiltersPage(0); // Pagination doesn't work with this row
     this.assignmentsState = StoreState.LOADING;
+    this.assignmentList.setFiltersSorting(SortingFilter.CREATION_DATE, SortingFilter.DESC);
 
     if (this.fromTeachingPath) {
       this.assignmentsForSkeleton = new Array(ASSIGNMENTS_PER_PAGE_FOR_TEACHING_PATH).fill(new Assignment({ id: 0 }));

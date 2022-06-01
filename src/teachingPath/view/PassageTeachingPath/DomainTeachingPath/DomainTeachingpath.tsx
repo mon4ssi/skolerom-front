@@ -43,7 +43,7 @@ export class DomainTeachingPath extends Component<Props, State> {
     const { questionaryTeachingPathStore } = this.props;
     const length = questionaryTeachingPathStore!.currentDomainList.length;
     return questionaryTeachingPathStore!.currentDomainList.map((item, index) => {
-      if (index === length - 1) {
+      if (item) {
         const passedStyle = item.isRead ? 'passedStyle' : '';
         return (
           <div className={passedStyle} key={item.id} role="region" aria-live="polite" aria-atomic="true">

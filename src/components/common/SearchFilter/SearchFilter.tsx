@@ -133,6 +133,7 @@ class SearchFilter extends Component<Props, State> {
   };
 
   public componentDidMount() {
+    /* localStorage.removeItem('url'); */
     const { isStudent, isAssignmentsPathPage, isTeachingPathPage, assignmentListStore, customGradesList, customSubjectsList } = this.props;
     if (!customGradesList) {
       assignmentListStore!.getGrades();
@@ -162,7 +163,23 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public componentWillUnmount(): void {
+    localStorage.getItem('url');
     window.removeEventListener('resize', this.handleResize);
+  }
+
+  public componentDidUpdate(): void {
+    /* console.log(localStorage.getItem('url')); */
+    const { filtersisUsed, defaultValueGradeFilter, defaultValueMainFilter, defaultValueReadingFilter, defaultValueSourceFilter, defaultValueSubjectFilter } = this.props;
+    const url = window.location.href;
+    if (filtersisUsed! && (defaultValueGradeFilter !== undefined || defaultValueGradeFilter !== null
+      || defaultValueMainFilter !== undefined || defaultValueMainFilter !== null
+      || defaultValueReadingFilter !== undefined || defaultValueReadingFilter !== null
+      || defaultValueSourceFilter !== undefined || defaultValueSourceFilter !== null
+      || defaultValueSubjectFilter !== undefined || defaultValueSubjectFilter !== null)) {
+      if (url.includes('all?')) {
+        localStorage.setItem('url', url);
+      }
+    }
   }
 
   public sortSelectors = (a: Grade, b: Grade) => a.id > b.id ? 1 : -1;

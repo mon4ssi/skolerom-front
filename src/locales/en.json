@@ -596,7 +596,8 @@
       "cant_publish": "You must complete the Curriculum section before publish",
       "cant_publish_goals": "You can't publish because no educational goals are available",
       "notdata_goals": "There are no established goals for these criteria",
-      "source_required": "Please set the source for this content"
+      "source_required": "Please set the source for this content",
+      "assignmets_not_enabled_open_site": "The following assignments are not enabled to display in the Open site [|content|] Continue anyway?"
     },
     "title": {
       "new_entity": "Publish teaching path",
@@ -653,8 +654,11 @@
       "merge_paths": "Are you sure you want to merge these paths?",
       "unmerge_path": "Are you sure you want to unmerge this path?",
       "unable_to_merge": "You can't merge articles and assignments!",
+      "unable_to_drop": "Unable to perform action",
+      "unable_to_mix_different_natures": "Cannot mix items with different types in the same node",
       "neccesary_edit": "Please unselect the current article, and then select the new one",
-      "neccesary_edit_asignment": "Please unselect the current assignment, and then select the new one"
+      "neccesary_edit_asignment": "Please unselect the current assignment, and then select the new one",
+      "onlydraggable": "Please select first and then drag the item you need"
     },
     "paths": {
       "main_teaching_path_title": "Teaching path",
@@ -722,6 +726,7 @@
   "generals": {
     "support":"Support",
     "keyboard":"Keyboard shortcuts",
+    "dragdrop":"Drag and drop the item here",
     "accesibility_text": {
       "title_quick": "Quick Access / Keyboard shortcuts",
       "shift_t": "Teaching paths",
@@ -740,6 +745,7 @@
     },
     "edit": "Edith Path",
     "delete": "Delete Path",
+    "drag": "Drag Path",
     "close": "Close",
     "save": "Save",
     "close_maintenance": "Close",
@@ -796,7 +802,9 @@
     "copy": "Copy",
     "revert": "Revert",
     "are_you_sure": "Are you sure?",
-    "landscapeMode": "Hi! The teaching room works best in landscape mode. Please turn the device back to landscape mode."
+    "landscapeMode": "Hi! The teaching room works best in landscape mode. Please turn the device back to landscape mode.",
+    "yes": "Yes",
+    "no": "No"
   },
   "not found": {
     "title": "Nothing to see here",

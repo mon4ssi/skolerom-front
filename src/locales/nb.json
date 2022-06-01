@@ -203,7 +203,7 @@
     "inactive": "Inaktiv",
     "due_first": "først",
     "due_last": "sist",
-    "hidden_related": "Hide articles in the student view"
+    "hidden_related": "Skjul artikkel i elevvisningen"
   },
   "assignment list": {
     "question": "spørsmål",
@@ -595,7 +595,8 @@
       "cant_publish": "Du må fullføre læreplandelen før du publiserer",
       "cant_publish_goals": "Du kan ikke publisere uten kobling av kompetansemål",
       "notdata_goals": "Det er ingen etablerte mål for disse kriteriene",
-      "source_required": "Vennligst angi kilden for dette innholdet"
+      "source_required": "Vennligst angi kilden for dette innholdet",
+      "assignmets_not_enabled_open_site": "Følgende oppgaver er ikke aktivert for visning i den åpne løsningen [|content|] Fortsett uansett?"
     },
     "title": {
       "new_entity": "Ny læringssti",
@@ -652,8 +653,11 @@
       "merge_paths": "Er du sikker på at du vil slå sammen stiene?",
       "unmerge_path": "Er du sikker på at du vil slette stien?",
       "unable_to_merge": "Du kan ikke slå sammen artikler og oppgaver!",
+      "unable_to_drop": "Kan ikke utføre handlingen",
+      "unable_to_mix_different_natures": "Du kan ikke blande ulike typer innhold på samme rad.",
       "neccesary_edit": "Vennligst velg bort den nåværende artikkelen før du velger en ny.",
-      "neccesary_edit_asignment": "Vennligst velg bort den nåværende oppgaven før du velger en ny."
+      "neccesary_edit_asignment": "Vennligst velg bort den nåværende oppgaven før du velger en ny.",
+      "onlydraggable": "Velg først og dra deretter elementet du trenger"
     },
     "paths": {
       "main_teaching_path_title": "Læringssti",
@@ -721,6 +725,7 @@
   "generals": {
     "support":"Support",
     "keyboard":"Tastatursnarveier",
+    "dragdrop":"Drag and drop the item here",
     "accesibility_text": {
       "title_quick": "Hurtigtaster",
       "shift_t": "Læringsstier",
@@ -739,6 +744,7 @@
     },
     "edit": "Rediger sti",
     "delete": "Slett sti",
+    "drag": "Drag sti",
     "close": "Lukk artikkelvisning",
     "save": "Lagre",
     "close_maintenance": "Lukk melding",
@@ -796,7 +802,9 @@
     "copy": "Kopier",
     "revert": "Tilbakestill",
     "are_you_sure": "Er du sikker?",
-    "landscapeMode": "Hei! Skolerom fungerer best i liggende format. Snu gjerne brettet ditt."
+    "landscapeMode": "Hei! Skolerom fungerer best i liggende format. Snu gjerne brettet ditt.",
+    "yes": "Ja",
+    "no": "Nei"
   },
   "not found": {
     "title": "Ingenting å se her",

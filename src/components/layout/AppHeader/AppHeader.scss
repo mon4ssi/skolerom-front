@@ -235,6 +235,9 @@
   .AppHeader__navigation_tablet {
     display: none;
   }
+  .copyButton {
+    display: none !important;
+  }
 }
 
 .modalKeyboard {
@@ -257,7 +260,7 @@
     padding: 20px 30px;
     left: 50%;
     top: 50%;
-    transform: translateX(-50%)translateY(-50%);
+    transform: translate(-50%,-50%);
     border-radius: 10px;
     min-width: 330px;
     padding-top: 15px;
@@ -334,6 +337,10 @@
         color: white;
         padding: 10px 20px;
         font-weight: 300;
+        &.btnDisabled {
+          pointer-events: none;
+          opacity: 0.4;
+        }
         img {
           width: 19px;
           margin-right: 8px;

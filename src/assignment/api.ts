@@ -189,6 +189,7 @@ interface AssignmentByIdResponseDTO {
   questions: Array<QuestionDTO>;
   relatedArticles: Array<ArticleRequestDTO>;
   subjects: Array<SubjectDTO>;
+  open?: boolean;
 }
 
 export class AssignmentApi implements AssignmentRepo {
@@ -208,6 +209,7 @@ export class AssignmentApi implements AssignmentRepo {
       isPrivate: assignmentDTO.isPrivate,
       levels: assignmentDTO.levels,
       subjects: assignmentDTO.subjects,
+      open: assignmentDTO.open
     });
   }
 
@@ -351,9 +353,9 @@ export class AssignmentApi implements AssignmentRepo {
         headers: { Accept: 'application/octet-stream' },
       });
 
-      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const blob = new Blob([response.data], { type: 'text/plain' });
       const a = document.createElement('a');
-      a.download = 'Assignment-Guidance';
+      a.download = 'Assignment-Guidance.pdf';
       a.href = window.URL.createObjectURL(blob);
       const clickEvt = new MouseEvent('click', {
         view: window,

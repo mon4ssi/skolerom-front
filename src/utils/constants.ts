@@ -1,5 +1,20 @@
 import { Locales } from './enums';
 
+const N2350 = 2350;
+const N2150 = 2150;
+const N1800 = 1800;
+const N1600 = 1600;
+const N1200 = 1200;
+const N1100 = 1100;
+const rows = 4;
+const rowsresponsive = 6;
+const N7 = 7;
+const N6 = 6;
+const N5 = 5;
+const N4 = 4;
+const N3 = 3;
+const N20 = 20;
+
 export const SAVE_DELAY = 2000;
 export const DEBOUNCE_TIME = 500;
 export const DEFAULT_AMOUNT_ARTICLES_PER_PAGE = 30;
@@ -46,3 +61,34 @@ export const STATUS_BADREQUEST = 402;
 export const STATUS_UNAUTHORIZED = 401;
 export const STATUS_SERVER_ERROR = 500;
 export const STATUS_BACKEND_ERROR = 400;
+
+// constans by responsively
+let insidenumber = 1;
+const widthWin = window.innerWidth;
+switch (true) {
+  case (widthWin > N2350):
+    insidenumber = rows * N7;
+    break;
+  case (widthWin < N2350 && widthWin > N2150):
+    insidenumber = rows * N7;
+    break;
+  case (widthWin < N2150 && widthWin > N1800):
+    insidenumber = rows * N6;
+    break;
+  case (widthWin < N1800 && widthWin > N1600):
+    insidenumber = rows * N5;
+    break;
+  case (widthWin < N1600 && widthWin > N1200):
+    insidenumber = rowsresponsive * N4;
+    break;
+  case (widthWin < N1200 && widthWin > N1100):
+    insidenumber = rowsresponsive * N3;
+    break;
+  case (widthWin < N1100):
+    insidenumber = rowsresponsive * N4;
+    break;
+  default:
+    insidenumber = N20;
+    break;
+}
+export const postperpage = insidenumber;
