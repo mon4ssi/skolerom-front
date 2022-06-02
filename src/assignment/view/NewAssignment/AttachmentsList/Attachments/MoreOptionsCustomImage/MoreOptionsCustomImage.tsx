@@ -47,13 +47,13 @@ class MoreOptionsCustomImageWrapper extends Component<MoreOptionsCustomImageWrap
         <ul className="flexBox dirColumn">
           <li>
             <a href="javascript:void(0)" onClick={this.edit} className="flexBox" >
-              <span>Edit</span>
+              <span>{intl.get('generals.edit')}</span>
               <img src={duplicateIcon} alt="Duplicate qustion" />
             </a>
           </li>
           <li>
             <a href="javascript:void(0)" onClick={this.remove} className="flexBox">
-              <span style={{ color: '#E2017B' }}>Remove</span>
+              <span style={{ color: '#E2017B' }}>{intl.get('generals.delete')}</span>
               <img src={deleteIcon} alt="Delete qustion" />
             </a>
           </li>

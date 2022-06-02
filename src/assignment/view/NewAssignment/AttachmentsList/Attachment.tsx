@@ -74,6 +74,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
 
   private removeItem = async () => {
     const { attachment } = this.props;
+    this.toggleAttachment();
     await this.articleService.deleteCustomImage(attachment.id);
     Notification.create({
       type: NotificationTypes.SUCCESS,
@@ -84,6 +85,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
 
   private editItem = async () => {
     const { attachment } = this.props;
+    this.toggleAttachment();
     await this.props.onEditActionSelected(attachment.id);
     /* await this.props.onRenderThirdTab(attachment!.id); */
   }
