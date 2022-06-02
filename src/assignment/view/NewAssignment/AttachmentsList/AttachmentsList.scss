@@ -103,9 +103,8 @@
       display: flex;
       flex-wrap: wrap;
       margin: 10px 0 0 0;
-      overflow: auto;
-      height: 100%;
-
+      overflow: auto;      
+      padding-bottom: 10px;
       &__img-wrap {
         margin: 17px 10px 0;
         width: calc(100% * (1 / 4) - 20px);
@@ -703,7 +702,7 @@ input[type="file"] {
 .MoreOptions {
   cursor: pointer;
   position: relative;
-
+  z-index: 1;
   button {
     padding: 0px;
     background: transparent;
