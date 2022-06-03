@@ -35,6 +35,7 @@ import { DEFAULT_AMOUNT_ARTICLES_PER_PAGE, DEFAULT_CUSTOM_IMAGES_PER_PAGE, LOCAL
 import { ContentBlockType } from './ContentBlock';
 import { Locales } from 'utils/enums';
 import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
+import { CustomImageAttachments } from './view/NewAssignment/AttachmentsList/Attachments/CustomImageAttachments';
 
 export interface AttachmentDTO {
   id: number;
@@ -466,16 +467,20 @@ export class WPApi implements ArticleRepo {
     ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
   }
 
-  public async fetchCustomImages(): Promise<Array<CustomImgAttachment>> {
-    return (
-      await API.get(
-        `${process.env.REACT_APP_BASE_URL}/api/teacher/images`, {
-          params: {
-            page: 1,
-            per_page: DEFAULT_CUSTOM_IMAGES_PER_PAGE,
-          },
-        })
-    ).data.data.map((item: CustomImgAttachmentDTO) => new CustomImgAttachment(item.id!, item.path, item.title, item.title, item.title, 0, item.source));
+  public async fetchCustomImages(page: number): Promise<ResponseFetchCustomImages> {
+
+    const response = await API.get(
+      `${process.env.REACT_APP_BASE_URL}/api/teacher/images`, {
+        params: {
+          page: page!,
+          per_page: DEFAULT_CUSTOM_IMAGES_PER_PAGE,
+        },
+      });
+    const customImages = response.data.data.map((item: CustomImgAttachmentDTO) => new CustomImgAttachment(item.id!, item.path, item.title, item.title, item.title, 0, item.source));
+    return {
+      myCustomImages: customImages,
+      total_pages: Math.round(response.data.meta.pagination.total / DEFAULT_CUSTOM_IMAGES_PER_PAGE),
+    };
   }
 
   public async createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse> {
@@ -523,4 +528,9 @@ export class WPApi implements ArticleRepo {
       }
     })).data;
   }
+}
+
+export interface ResponseFetchCustomImages {
+  myCustomImages: Array<CustomImgAttachment>;
+  total_pages: number;
 }

@@ -12,7 +12,7 @@ import { AssignmentDistributeDTO } from './factory';
 import { isNil } from 'lodash';
 import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
 import { createContext } from 'vm';
-import { CustomImgAttachmentResponse } from './api';
+import { CustomImgAttachmentResponse, ResponseFetchCustomImages } from './api';
 
 export const ASSIGNMENT_REPO = 'ASSIGNMENT_REPO';
 
@@ -1050,7 +1050,7 @@ export interface ArticleRepo {
   getArticlesByIds(ids: Array<number>): Promise<Array<Article>>;
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
-  fetchCustomImages(): Promise<Array<CustomImgAttachment>>;
+  fetchCustomImages(page: number): Promise<ResponseFetchCustomImages>;
   createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse>;
   deleteCustomImage(imageId: number): Promise<any>;
   updateCustomImage(customImageId: number, formData: FormData): Promise<any>;

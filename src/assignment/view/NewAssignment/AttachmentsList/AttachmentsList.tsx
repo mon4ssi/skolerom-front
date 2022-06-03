@@ -30,6 +30,7 @@ import { ArticleService } from 'assignment/service';
 import { injector } from 'Injector';
 import { CustomImage, CustomImageFormSimple } from './CustomImageFormSimple/CustomImageFormSimple';
 import { runInThisContext } from 'vm';
+import { Pagination } from 'components/common/Pagination/Pagination';
 
 const const1 = 1;
 const const2 = 2;
@@ -48,6 +49,7 @@ interface State {
   selectedTabId: number;
   currentId: number;
   currentAttachment: undefined | FilterableCustomImageAttachment;
+  currentPage: number;
   query: string;
   errMsg: string;
 }
@@ -84,7 +86,8 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     selectedTabId: 0,
     currentId: 0,
     errMsg: '',
-    currentAttachment: undefined
+    currentAttachment: undefined,
+    currentPage: 1,
   };
 
   public TWO = 2;
@@ -240,6 +243,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     const { newAssignmentStore } = this.props;
     if (this.context.contentType === AttachmentContentType.image) {
       const editableImageBlock = newAssignmentStore!.getAttachmentsFromCurrentBlock() as EditableImagesContentBlock;
+      const isSelectedAttachment = this.checkIsAttachmentSelected(id!);
       if (editableImageBlock) {
         const image: QuestionAttachment | undefined = editableImageBlock.images.find(im => im.id === id);
         if (image) {
@@ -251,6 +255,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
 
     if (this.context.contentType === AttachmentContentType.customImage) {
       const editableImageBlock = newAssignmentStore!.getAttachmentsFromCurrentBlock() as EditableImagesContentBlock;
+      const isSelectedAttachment = this.checkIsAttachmentSelected(id!);
       if (editableImageBlock) {
         const image: QuestionAttachment | undefined = editableImageBlock.images.find(im => im.id === id);
         if (image) {
@@ -565,7 +570,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
   }
 
-  public selectClassOption = (tabid : number, position : number) => {
+  public selectClassOption = (tabid: number, position: number) => {
     const { newAssignmentStore } = this.props;
     switch (tabid) {
       case 0:
@@ -601,7 +606,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
   }
 
-  public goToCustomImgAttachmentList = async() => {
+  public goToCustomImgAttachmentList = async () => {
     const { newAssignmentStore } = this.props;
     this.setState({ selectedTabId: 2, currentId: 0, currentAttachment: undefined });
     newAssignmentStore!.fetchingCustomImageAttachments = true;
@@ -835,6 +840,32 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
   }
 
+  public onChangePage = async({ selected }: { selected: number }) => {
+    const { newAssignmentStore } = this.props;
+    this.setState({ currentPage: selected + 1 });
+    newAssignmentStore!.currentPage = selected + 1;
+    newAssignmentStore!.fetchingCustomImageAttachments = true;
+    newAssignmentStore!.fetchQuestionCustomImagesAttachments(AttachmentContentType.customImage);
+    /* this.render(); */
+    newAssignmentStore!.fetchingCustomImageAttachments = false;
+  }
+
+  public renderPagination = () => {
+    /* const { assignmentListStore, location } = this.props; */
+    const { newAssignmentStore } = this.props;
+    const { currentPage } = this.state;
+    const pages = newAssignmentStore!.numberOfPages;
+    if (pages > 1) {
+      return (
+        <Pagination
+          pageCount={pages}
+          onChangePage={this.onChangePage}
+          page={currentPage}
+        />
+      );
+    }
+  }
+
   public render() {
 
     const { newAssignmentStore } = this.props;
@@ -863,6 +894,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
 
           {isLoading && this.renderSkeletonLoader()}
           {!isLoading && this.renderTabByOption()}
+          {selectedTabId === this.TWO && this.renderPagination()}
         </div>
 
         {this.renderBottomInfoAndAddBar()}

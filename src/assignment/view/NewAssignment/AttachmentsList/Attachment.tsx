@@ -72,15 +72,35 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     }
   }
 
-  private removeItem = async () => {
-    const { attachment } = this.props;
-    this.toggleAttachment();
-    await this.articleService.deleteCustomImage(attachment.id);
-    Notification.create({
-      type: NotificationTypes.SUCCESS,
-      title: 'Image removed succesfully',
+  private confirmDeleteListItem = async () => {
+    const { attachment, isSelected } = this.props;
+    /* this.closeActionMenu(); */
+
+    const isDeletionApproved = await Notification.create({
+      type: NotificationTypes.CONFIRM,
+      title: intl.get('assignment list.Are you sure'),
+      submitButtonTitle: intl.get('notifications.delete')
     });
-    this.props.onRedirectToList();
+
+    if (isDeletionApproved) {
+      return true;
+    }
+  }
+
+  private removeItem = async () => {
+    const { attachment, isSelected } = this.props;
+    const deleteConfirmation = await this.confirmDeleteListItem();
+    if (isSelected!) {
+      this.toggleAttachment();
+    }
+    if (deleteConfirmation!) {
+      await this.articleService.deleteCustomImage(attachment.id);
+      Notification.create({
+        type: NotificationTypes.SUCCESS,
+        title: 'Image removed succesfully',
+      });
+      this.props.onRedirectToList();
+    }
   }
 
   private editItem = async () => {

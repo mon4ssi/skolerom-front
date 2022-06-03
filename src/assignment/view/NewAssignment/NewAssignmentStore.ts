@@ -91,6 +91,8 @@ export class NewAssignmentStore {
   @observable public highlightingItem: CreationElementsType | undefined;
   @observable public allArticlePanelFilters: FilterArticlePanel | null = null;
   @observable public titleButtonGuidance: string = '';
+  @observable public numberOfPages: number = 0;
+  @observable public currentPage: number = 1;
 
   public arrayForImagesSkeleton = new Array(numberOfImagesForSkeleton).fill('imageSkeletonLoader');
   public arrayForCustomImagesSkeleton = new Array(numberOfCustomImagesForSkeleton).fill('imageSkeletonLoader');
@@ -589,8 +591,9 @@ export class NewAssignmentStore {
           break;
         }
         case AttachmentContentType.customImage: {
+          const response = await this.articleService.fetchCustomImages(this.currentPage);
           this.questionCustomAttachments =
-            (await this.articleService.fetchCustomImages()).map(item => item).flat() || [];
+            (response.myCustomImages).map(item => item).flat() || [];
           break;
         }
         case AttachmentContentType.video: {
@@ -621,8 +624,10 @@ export class NewAssignmentStore {
     try {
       switch (typeAttachments) {
         case AttachmentContentType.customImage: {
+          const response = await this.articleService.fetchCustomImages(this.currentPage);
           this.questionCustomAttachments =
-            (await this.articleService.fetchCustomImages()).map(item => item).flat() || [];
+            (response.myCustomImages).map(item => item).flat() || [];
+          this.numberOfPages = response.total_pages;
           break;
         }
         default:

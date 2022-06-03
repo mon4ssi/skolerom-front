@@ -1,13 +1,13 @@
 import { ArticleLevel, ARTICLE_REPO_KEY } from 'assignment/Assignment';
 import { ArticleService } from 'assignment/service';
 import { injector } from 'Injector';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import intl from 'react-intl-universal';
 
 import './CustomImageFormSimple.scss';
 
-import trashIcon from 'assets/images/trash.svg';
+import trashIcon from 'assets/images/trash-image.svg';
 
 export interface CustomImage {
   imagesFileList: FileList | any | null;
@@ -17,13 +17,14 @@ export interface CustomImage {
 }
 
 export const CustomImageFormSimple = (props: any) => {
-  const THOUSAND = 1000;
+  const THOUSAND = 1024;
   const HUNDRED = 100;
   const THREE_SECONDS = 3000;
   const articleService: ArticleService = injector.get(ARTICLE_REPO_KEY);
   const fileArray: Array<File> = [];
   const filenames: Array<string> = [];
-  const [imagesFileList, setImagesFileList] = useState();
+
+  const [imagesFileList, setImagesFileList] = useState(fileArray);
   const [imageFileArray, setImageFileArray] = useState(fileArray);
   const [value, setValue] = useState(0);
   const [fileNames, setFileNames] = useState(filenames);
@@ -55,17 +56,25 @@ export const CustomImageFormSimple = (props: any) => {
     renderFileArray(imageFileArray!);
   }; */
 
-  /* const renderTrashIcon = () => {
-    return (
-      <div className="is-selected-icon">
-        <img
-          src={trashIcon}
-          alt="active"
-          style={{ maxHeight: 60, maxWidth: 60 }}
-        />
-      </div>
-    );
-  } */
+  const renderTrashIcon = (fileName: string) => (
+    <div className="is-selectedImage-icon">
+      <img
+        onClick={() => removeFromImagesArray(fileName)}
+        src={trashIcon}
+        alt={fileName}
+        style={{ maxHeight: 80, maxWidth: 80 }}
+      />
+    </div>
+  );
+
+  const removeFromImagesArray = (fileName: string) => {
+    const temporalArray = imageFileArray;
+    const imageForRemoving: number = imageFileArray.findIndex(element => element.name === fileName);
+    temporalArray.splice(imageForRemoving, 1);
+    setImagesFileList(temporalArray!);
+    setImageFileArray(temporalArray!);
+    setValue(value - 1);
+  };
 
   const renderUploadImagesButton = () => <div className="spaced right"><button className="createButton" onClick={uploadImages}>Upload image(s)</button></div>;
 
@@ -99,7 +108,7 @@ export const CustomImageFormSimple = (props: any) => {
           setInProgress(false);
           setImageFileArray([]);
           setValue(0);
-          articleService.fetchCustomImages();
+          articleService.fetchCustomImages(1);
         }, THREE_SECONDS);
         props.onRedirectToList();
       }
@@ -135,23 +144,22 @@ export const CustomImageFormSimple = (props: any) => {
     });
   };
 
-  const itemImageFile = (file: File) => (
-    <div key={file.name} className="imageListItem">
-      {/* <div className='icon'></div> */}
-      <div className="imageData">
-        <img className="previewImage" src={URL.createObjectURL(file)} alt="" />
-        <div>
-          <div className="filename">{file.name}</div>
-          <div className="filesize">({file.size / THOUSAND} MB)</div>
-        </div>
-        <div>
+  const itemImageFile = (file: File) => {
+    const size = ((file.size) / THOUSAND) / THOUSAND;
+    return (
+      <div key={file.name} className="imageListItem">
+        {/* <div className='icon'></div> */}
+        <div className="imageData">
+          {renderTrashIcon(file.name)}
+          <img className="previewImage" src={URL.createObjectURL(file)} alt="" />
           <div>
-            {/* {renderTrashIcon()} */}
+            <div className="filename">{file.name}</div>
+            <div className="filesize">({parseFloat((size).toFixed(2))} MB)</div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderPreviewImages = () => {
     if (!imageFileArray.length) {
