@@ -147,16 +147,22 @@ export const CustomImageFormSimple = (props: any) => {
   const itemImageFile = (file: File) => {
     const size = ((file.size) / THOUSAND) / THOUSAND;
     return (
-      <div key={file.name} className="imageListItem">
-        {/* <div className='icon'></div> */}
-        <div className="imageData">
-          {renderTrashIcon(file.name)}
-          <img className="previewImage" src={URL.createObjectURL(file)} alt="" />
-          <div>
-            <div className="filename">{file.name}</div>
-            <div className="filesize">({parseFloat((size).toFixed(2))} MB)</div>
+      <div className="image">
+        <div key={file.name} className="imageListItem">
+          {/* <div className='icon'></div> */}
+
+          <div className="imageData">
+
+            <img className="previewImage" src={URL.createObjectURL(file)} alt="" />
+            <div className="infoImage">
+              <div className="filename">{file.name}</div>
+              <div className="filesize">({parseFloat((size).toFixed(2))} MB)</div>
+              {renderTrashIcon(file.name)}
+            </div>
           </div>
+
         </div>
+
       </div>
     );
   };
@@ -195,7 +201,10 @@ export const CustomImageFormSimple = (props: any) => {
         <div>{isNotEmpty && renderUploadImagesButton()}</div>
         <div>{inProgress && renderProgressBar()}</div>
       </div>
-      {renderPreviewImages()}
+      <div className="imagesList">
+        {renderPreviewImages()}
+      </div>
+
       {/* {renderImgFilesPreview(imagesFileList!)} */}
 
     </div>
