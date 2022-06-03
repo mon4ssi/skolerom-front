@@ -160,7 +160,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     }
     if (this.context.contentType === AttachmentContentType.customImage) {
       const selectedItem = isSelected ? 'customImageComponente active' : 'customImageComponente';
-      const isCustomImg = (attachment.deleteddate !== null || attachment.deleteddate !== undefined) ? false : (attachment.path!.split(String(process.env.REACT_APP_WP_URL)).length > 1) ? false : true;
+      const isCustomImg = (attachment.deleteddate) ? false : (attachment.path!.split(String(process.env.REACT_APP_WP_URL)).length > 1) ? false : true;
       const isCustomImgClass = (isCustomImg) ? 'customImageComponente__image' : 'customImageComponente__image heightfull';
       return (
         <div className={selectedItem}>
