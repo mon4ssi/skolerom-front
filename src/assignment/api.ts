@@ -53,6 +53,7 @@ export interface CustomImgAttachmentDTO {
   id?: number;
   filename?: string;
   source?: Array<string>;
+  deletedAt?: string | undefined | null;
 }
 
 export interface CustomImgAttachmentResponse {
@@ -467,16 +468,21 @@ export class WPApi implements ArticleRepo {
     ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
   }
 
-  public async fetchCustomImages(page: number): Promise<ResponseFetchCustomImages> {
-
+  public async fetchCustomImages(ids:string, page: number): Promise<ResponseFetchCustomImages> {
+    const parameters = (ids) ? {
+      page: page!,
+      per_page: DEFAULT_CUSTOM_IMAGES_PER_PAGE,
+      selectedImages: ids,
+    } : {
+      page: page!,
+      per_page: DEFAULT_CUSTOM_IMAGES_PER_PAGE,
+    };
     const response = await API.get(
       `${process.env.REACT_APP_BASE_URL}/api/teacher/images`, {
-        params: {
-          page: page!,
-          per_page: DEFAULT_CUSTOM_IMAGES_PER_PAGE,
-        },
+        params: parameters,
       });
-    const customImages = response.data.data.map((item: CustomImgAttachmentDTO) => new CustomImgAttachment(item.id!, item.path, item.title, item.title, item.title, 0, item.source));
+    const customImages = response.data.data.map((item: CustomImgAttachmentDTO) => new CustomImgAttachment(item.id!, item.path, item.title, item.title, item.title, 0, item.source, item.deletedAt));
+
     return {
       myCustomImages: customImages,
       total_pages: Math.round(response.data.meta.pagination.total / DEFAULT_CUSTOM_IMAGES_PER_PAGE),

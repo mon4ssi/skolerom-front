@@ -108,7 +108,7 @@ export const CustomImageFormSimple = (props: any) => {
           setInProgress(false);
           setImageFileArray([]);
           setValue(0);
-          articleService.fetchCustomImages(1);
+          articleService.fetchCustomImages('', 1);
         }, THREE_SECONDS);
         props.onRedirectToList();
       }

@@ -110,13 +110,14 @@
         width: calc(100% * (1 / 4) - 20px);
         background-color: rgba(0, 0, 0, 0.3);
         min-height: 200px;
+        max-height: 300px;
         position: relative;
 
         button {
           padding: 0px;
           height: 100%;
           display: block;
-
+          width: 100%;
           &:focus {
             outline: auto;
             outline-style: auto;

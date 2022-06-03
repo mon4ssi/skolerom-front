@@ -591,7 +591,7 @@ export class NewAssignmentStore {
           break;
         }
         case AttachmentContentType.customImage: {
-          const response = await this.articleService.fetchCustomImages(this.currentPage);
+          const response = await this.articleService.fetchCustomImages('', this.currentPage);
           this.questionCustomAttachments =
             (response.myCustomImages).map(item => item).flat() || [];
           break;
@@ -619,12 +619,42 @@ export class NewAssignmentStore {
     this.fetchingCustomImageAttachments = false;
   }
 
-  public async fetchQuestionCustomImagesAttachments(typeAttachments: AttachmentContentType): Promise<void> {
+  public async searchIdInExist(id: number, listids: string) {
+    const response = await this.articleService.fetchCustomImages(listids, this.currentPage);
+    const allAttachments = (response.myCustomImages).map(item => item).flat() || [];
+    let valueresponse = false;
+    if (allAttachments) {
+      allAttachments.forEach((element) => {
+        if (element.id === id) {
+          valueresponse =  true;
+        }
+      });
+    }
+    return valueresponse;
+  }
+
+  public async searchIdInDeletes(id: number, listids: string) {
+    const response = await this.articleService.fetchCustomImages(listids, this.currentPage);
+    const allAttachments = (response.myCustomImages).map(item => item).flat() || [];
+    let valueresponse = false;
+    if (allAttachments) {
+      allAttachments.forEach((element) => {
+        if (element.id === id) {
+          if (element.deleteddate !== null || element.deleteddate !== undefined) {
+            valueresponse =  true;
+          }
+        }
+      });
+    }
+    return valueresponse;
+  }
+
+  public async fetchQuestionCustomImagesAttachments(listids: string, typeAttachments: AttachmentContentType): Promise<void> {
     this.fetchingCustomImageAttachments = true;
     try {
       switch (typeAttachments) {
         case AttachmentContentType.customImage: {
-          const response = await this.articleService.fetchCustomImages(this.currentPage);
+          const response = await this.articleService.fetchCustomImages(listids, this.currentPage);
           this.questionCustomAttachments =
             (response.myCustomImages).map(item => item).flat() || [];
           this.numberOfPages = response.total_pages;

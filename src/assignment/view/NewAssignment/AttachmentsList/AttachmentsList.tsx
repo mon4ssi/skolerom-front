@@ -52,6 +52,7 @@ interface State {
   currentPage: number;
   query: string;
   errMsg: string;
+  listIdsSelected: Array<number>;
 }
 
 export interface FilterableAttachment {
@@ -62,6 +63,7 @@ export interface FilterableAttachment {
   alt?: string;
   duration?: number;
   src?: Array<string>;
+  deleteddate?: string | undefined | null;
 }
 
 export interface FilterableCustomImageAttachment {
@@ -88,6 +90,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     errMsg: '',
     currentAttachment: undefined,
     currentPage: 1,
+    listIdsSelected: []
   };
 
   public TWO = 2;
@@ -102,7 +105,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
         await newAssignmentStore!.fetchQuestionAttachments(AttachmentContentType.image);
       }
       if (this.context.contentType === AttachmentContentType.customImage) {
-        await newAssignmentStore!.fetchQuestionCustomImagesAttachments(AttachmentContentType.customImage);
+        await newAssignmentStore!.fetchQuestionCustomImagesAttachments(String(this.state.listIdsSelected), AttachmentContentType.customImage);
       }
       if (this.context.contentType === AttachmentContentType.video) {
         await newAssignmentStore!.fetchQuestionAttachments(AttachmentContentType.video);
@@ -241,6 +244,12 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
 
   private onRemoveAttachment = async (id: number) => {
     const { newAssignmentStore } = this.props;
+    const ifIdInArray = (this.state.listIdsSelected.includes(id)) ? true : false;
+    // const searchIdInCustom = await newAssignmentStore!.searchIdInExist(id, '');
+    // const searchIdInDeletes = await newAssignmentStore!.searchIdInDeletes(id, String(id));
+    this.setState({
+      listIdsSelected: []
+    });
     if (this.context.contentType === AttachmentContentType.image) {
       const editableImageBlock = newAssignmentStore!.getAttachmentsFromCurrentBlock() as EditableImagesContentBlock;
       const isSelectedAttachment = this.checkIsAttachmentSelected(id!);
@@ -248,7 +257,11 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
         const image: QuestionAttachment | undefined = editableImageBlock.images.find(im => im.id === id);
         if (image) {
           editableImageBlock.removeImage(image.id);
-          await this.props.newAssignmentStore!.removeAttachment(image.id);
+          if (ifIdInArray) {
+            await this.articleService.decreaseUse(image.id);
+          } else {
+            await this.props.newAssignmentStore!.removeAttachment(image.id);
+          }
         }
       }
     }
@@ -258,9 +271,14 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
       const isSelectedAttachment = this.checkIsAttachmentSelected(id!);
       if (editableImageBlock) {
         const image: QuestionAttachment | undefined = editableImageBlock.images.find(im => im.id === id);
+        const pathifArticle = (image && image.path) ? (image.path!.split(String(process.env.REACT_APP_WP_URL)).length > 1) ? true : false : false ;
         if (image) {
           editableImageBlock.removeImage(image.id);
-          await this.articleService.decreaseUse(image.id);
+          if (pathifArticle) {
+            await this.props.newAssignmentStore!.removeAttachment(image.id);
+          } else {
+            await this.articleService.decreaseUse(image.id);
+          }
         }
       }
     }
@@ -291,8 +309,20 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     );
   }
 
+  private createArrayForAttachment = (item: FilterableAttachment) => {
+    const isCustomImg = (item.path!.split(String(process.env.REACT_APP_WP_URL)).length > 1) ? false : true;
+    if (isCustomImg) {
+      if (!this.state.listIdsSelected.includes(item.id)) {
+        this.state.listIdsSelected.push(item.id);
+      }
+    }
+  }
+
   private renderCustomImageAttachment = (item: FilterableAttachment) => {
     const isSelected = this.checkIsAttachmentSelected(item.id);
+    if (isSelected) {
+      this.createArrayForAttachment(item);
+    }
     return (
       <AttachmentComponent
         key={item.id}
@@ -845,7 +875,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     this.setState({ currentPage: selected + 1 });
     newAssignmentStore!.currentPage = selected + 1;
     newAssignmentStore!.fetchingCustomImageAttachments = true;
-    newAssignmentStore!.fetchQuestionCustomImagesAttachments(AttachmentContentType.customImage);
+    newAssignmentStore!.fetchQuestionCustomImagesAttachments(String(this.state.listIdsSelected), AttachmentContentType.customImage);
     /* this.render(); */
     newAssignmentStore!.fetchingCustomImageAttachments = false;
   }
