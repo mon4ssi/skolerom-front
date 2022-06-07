@@ -59,7 +59,6 @@ interface Props {
 }
 
 class InfoCardComponent extends Component<Props & RouteComponentProps> {
-
   private handleClickDelete = (event: React.SyntheticEvent<HTMLButtonElement>) => {
     event.preventDefault();
     this.props.onDelete!(this.props.id!);
@@ -363,6 +362,10 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
     history.push(`/teaching-paths/answers/${id}`);
   }
 
+  public isErrorImg = (e: SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = placeholderImg;
+  }
+
   public render() {
     const { title, img, withButtons, onClick, isTeachingPath, withTooltip, type } = this.props;
     const isDomain = type === 'DOMAIN' ? true : false;
@@ -376,7 +379,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
         {!isDomain && withButtons && this.renderActionButtons()}
         {isDomain && withButtons && this.renderDomainButtons()}
         <button title={title}>
-          <img src={img || placeholderImgDefault} alt={title} title={title} className="cardImage" onClick={this.onCardImgClick}/>
+          <img src={img || placeholderImgDefault} alt={title} title={title} className="cardImage" onClick={this.onCardImgClick} onError={this.isErrorImg}/>
         </button>
         <div className="cardInfo flexBox dirColumn spaceBetween">
           <div>
