@@ -937,7 +937,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         <div className="childrenContainer flexBox">
           {children.length ? children.map(this.renderNodeContent) : null}
         </div>
-        {editTeachingPathStore!.returnIsDraggable() && !this.state.isDraggable && !ifDropCant && this.dropInfoCard()}
+        {editTeachingPathStore!.returnIsDraggable() && !this.state.isDraggable  && !ifDropCant && this.dropInfoCard()}
 
         {!readOnly && this.renderMergeButton()}
       </div>
@@ -1009,8 +1009,8 @@ export class CreationPageComponent extends Component<Props> {
     }
     if (type === 'ASSIGNMENT') {
       this.setState({
-        valuearticles: false,
-        valueassigments: true
+        valuearticles: true,
+        valueassigments: false
       });
     }
     if (type === 'NONE') {
