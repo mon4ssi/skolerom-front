@@ -87,7 +87,7 @@ export class CustomImageAttachments extends Component<Props> {
 
     if (renderedAttachments.length <= 0) {
       return (
-        <div className="message">
+        <div className="message messageExpanded">
           {intl.get('new assignment.no_images_found')}
         </div>
       );

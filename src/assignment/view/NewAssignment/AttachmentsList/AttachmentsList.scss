@@ -1,3 +1,8 @@
+.container-expanded {
+  height: 100%;
+  overflow: auto;
+}
+
 .attachments-list-container {
   flex: 1;
   width: 100%;
@@ -15,6 +20,10 @@
     align-items: center;
     font-size: 1.375rem;
     font-weight: 500;
+  }
+
+  .messageExpanded {
+    height: 100%;
   }
 
   .attachments-tabs {
@@ -562,7 +571,7 @@
 
   .attachment-info {
     display: flex;
-    padding: 0 20px;
+    padding: 15px 20px;
     height: 76px;
     align-items: center;
     justify-content: space-between;
