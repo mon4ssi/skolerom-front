@@ -110,6 +110,7 @@ export const CustomImageFormSimple = (props: any) => {
           setValue(0);
           articleService.fetchCustomImages('', 1);
         }, THREE_SECONDS);
+        showCustomImageUploadMessage();
         props.onRedirectToList();
       }
     });
@@ -140,7 +141,7 @@ export const CustomImageFormSimple = (props: any) => {
   const showCustomImageUploadMessage = () => {
     Notification.create({
       type: false ? NotificationTypes.ERROR : NotificationTypes.SUCCESS,
-      title: '' || 'Image uploaded succesfully'
+      title: '' || intl.get('new assignment.uploadCustomImages.message_success')
     });
   };
 
@@ -186,7 +187,7 @@ export const CustomImageFormSimple = (props: any) => {
   const renderInputFile = () => (
     <label className="custom-file-upload">
       <input onChange={(e) => { handleChangeFile(e); }} multiple className="inputFileImages" type="file" accept="image/png, image/jpg, image/jpeg" />
-      Add new images
+      {intl.get('new assignment.uploadCustomImages.message_success')}
     </label>
   );
 
@@ -194,7 +195,7 @@ export const CustomImageFormSimple = (props: any) => {
     <div>
       <div className="spaced">
         {!isNotEmpty && renderInputFile()}
-        <span className="filenameSpan">You have chosen {value} image(s).</span>
+        <span className="filenameSpan">{`${intl.get('new assignment.uploadCustomImages.counter_message_1')} ${value} ${intl.get('new assignment.uploadCustomImages.counter_message_2')}`}</span>
       </div>
       {/* {renderImagesFile(imageFileArray)} */}
       <div style={{ display: 'inline' }}>

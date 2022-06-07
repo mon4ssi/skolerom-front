@@ -482,10 +482,11 @@ export class WPApi implements ArticleRepo {
         params: parameters,
       });
     const customImages = response.data.data.map((item: CustomImgAttachmentDTO) => new CustomImgAttachment(item.id!, item.path, item.title, item.title, item.title, 0, item.source, item.deletedAt));
-
+    const entirePage = Math.floor((response.data.meta.pagination.total / DEFAULT_CUSTOM_IMAGES_PER_PAGE));
+    const modulePage = Math.floor((response.data.meta.pagination.total % DEFAULT_CUSTOM_IMAGES_PER_PAGE));
     return {
       myCustomImages: customImages,
-      total_pages: Math.round(response.data.meta.pagination.total / DEFAULT_CUSTOM_IMAGES_PER_PAGE),
+      total_pages: modulePage !== 0 ? entirePage + 1 : entirePage,
     };
   }
 

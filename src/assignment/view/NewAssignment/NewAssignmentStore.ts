@@ -349,8 +349,7 @@ export class NewAssignmentStore {
   public async removeAttachment(attachmentId: number) {
     try {
       const statusCode = await this.draftAssignmentService.removeAttachment(this.currentEntity!.id, attachmentId);
-
-      if (statusCode === statusCode204) {
+      if (statusCode! === statusCode204) {
         this.questionAttachments = this.questionAttachments.filter(
           attachment => attachment.id !== attachmentId
         );
@@ -626,7 +625,7 @@ export class NewAssignmentStore {
     if (allAttachments) {
       allAttachments.forEach((element) => {
         if (element.id === id) {
-          valueresponse =  true;
+          valueresponse = true;
         }
       });
     }
@@ -641,7 +640,7 @@ export class NewAssignmentStore {
       allAttachments.forEach((element) => {
         if (element.id === id) {
           if (element.deleteddate !== null || element.deleteddate !== undefined) {
-            valueresponse =  true;
+            valueresponse = true;
           }
         }
       });

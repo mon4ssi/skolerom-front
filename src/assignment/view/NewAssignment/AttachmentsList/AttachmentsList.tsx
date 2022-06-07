@@ -275,17 +275,24 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
         const image: QuestionAttachment | undefined = editableImageBlock.images.find(im => im.id === id);
         const pathifArticle = (image && image.path) ? (image.path!.split(String(process.env.REACT_APP_WP_URL)).length > 1) ? true : false : false;
         if (image) {
-          editableImageBlock.removeImage(image.id);
+          /* newAssignmentStore!.fetchingCustomImageAttachments = true;
+          editableImageBlock.removeImage(image.id); */
           if (pathifArticle) {
+            editableImageBlock.removeImage(image.id);
             await this.props.newAssignmentStore!.removeAttachment(image.id);
           } else {
-            /* try { */
-            await this.articleService.decreaseUse(image.id);
-            /* } catch (error) {
-            } */
-            /* await this.articleService.decreaseUse(image.id); */
             newAssignmentStore!.fetchingCustomImageAttachments = true;
-            await this.articleService.fetchCustomImages('', currentPage!);
+            editableImageBlock.removeImage(image.id);
+            try {
+              await this.articleService.decreaseUse(image.id);
+            } catch (error) {
+              /* console.log(error); */
+            }
+            /* await this.articleService.decreaseUse(image.id); */
+
+            editableImageBlock.removeImage(image.id);
+            /* await this.articleService.fetchCustomImages('', currentPage!); */
+            this.goToCustomImgAttachmentList();
             newAssignmentStore!.fetchingCustomImageAttachments = false;
           }
         }

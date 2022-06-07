@@ -278,6 +278,19 @@
       "error": "Error uploading the current image(s)",
       "success": "Images uploaded successfuly"
     },
+    "updateCustomImagesForm": {
+      "title": "Title",
+      "source": "Source",
+      "save_changes": "Save changes",
+      "message_error_void_fields": "Please check this fields",
+      "message_success": "Image updated succesfully"
+    },
+    "uploadCustomImages": {
+      "select_images": "Select images",
+      "counter_message_1": "You have chosen",
+      "counter_message_2": "image(s).",
+      "message_success": "Image uploaded succesfully"
+    },
     "images_empty_list": "No images available, please upload a custom image",
     "videos_from_article": "Videos from article",
     "stock_images": "Stock Images",
