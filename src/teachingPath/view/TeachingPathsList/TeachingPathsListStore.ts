@@ -36,15 +36,29 @@ export class TeachingPathsListStore {
   @action
   public async getTeachingPathsList() {
     this.teachingPathsState = StoreState.LOADING;
-
     this.listTeachingPaths.setFiltersPerPage(TEACHING_PATHS_PER_PAGE_IN_LIST);
     let response;
     if (this.userService.getCurrentUser()!.type === UserType.Student) {
       response = await this.listTeachingPaths.getStudentTeachingPathsList();
     } else {
-      response = this.typeOfTeachingPathsList === 'all' ?
-        await this.listTeachingPaths.getAllTeachingPathsList() :
-        await this.listTeachingPaths.getMyTeachingPathsList();
+      switch (this.typeOfTeachingPathsList) {
+        case 'all':
+          this.listTeachingPaths.setFilterSchoolTeachingPath(0);
+          response =  await this.listTeachingPaths.getAllTeachingPathsList();
+          break;
+        case 'my':
+          this.listTeachingPaths.setFilterSchoolTeachingPath(0);
+          response =  await this.listTeachingPaths.getMyTeachingPathsList();
+          break;
+        case 'myschool':
+          this.listTeachingPaths.setFilterSchoolTeachingPath(1);
+          response =  await this.listTeachingPaths.getMySchoolTeachingPathsList();
+          break;
+        default:
+          this.listTeachingPaths.setFilterSchoolTeachingPath(0);
+          response =  await this.listTeachingPaths.getAllTeachingPathsList();
+          break;
+      }
     }
     this.teachingPathList = response.teachingPathsList;
     this.paginationTotalPages = response.total_pages;

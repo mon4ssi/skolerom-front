@@ -10,6 +10,7 @@ import { StudentEvaluation } from './Evaluation/StudentEvaluation/StudentEvaluat
 const renderRedirect = () => <Redirect to="/teaching-paths/all" />;
 const renderAllTeachingPaths = () => <TeachingPathsList typeOfTeachingPathsList="all" isNotStudent/>;
 const renderMyTeachingPaths = () => <TeachingPathsList typeOfTeachingPathsList="my" isNotStudent />;
+const renderMySchoolTeachingPaths = () => <TeachingPathsList typeOfTeachingPathsList="school" isNotStudent />;
 
 const renderStudentTeachingPaths = () => <TeachingPathsList readOnly />;
 const renderStudentEvaluation = () => <StudentEvaluation />;
@@ -32,6 +33,10 @@ const contentManagerRoutes = (
     <Route
       path="/teaching-paths/my"
       render={renderMyTeachingPaths}
+    />
+    <Route
+      path="/teaching-paths/myschool"
+      render={renderMySchoolTeachingPaths}
     />
     <Route
       path="/*"

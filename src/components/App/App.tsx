@@ -77,6 +77,7 @@ const routesWithoutSidebar = [
 const routesWithSidebar = [
   '/teaching-paths/my',
   '/teaching-paths/all',
+  '/teaching-paths/myschool',
   '/teaching-paths/answers/:entityId'
 ];
 

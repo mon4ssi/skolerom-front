@@ -103,6 +103,27 @@ export class TeachingPathApi implements TeachingPathRepo {
     };
   }
 
+  public async getMySchoolTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
+    const response = await API.get('api/teacher/teaching-paths', {
+      params: buildFilterDTO(filter)
+    });
+    return {
+      teachingPathsList: response.data.data.map((item: TeacherTeachingPathResponseDTO) => new TeachingPath({
+        id: item.id,
+        title: item.title,
+        description: item.description,
+        grades: isNil(item.grades) ? undefined : item.grades.map(grade => new Grade(grade.id, grade.title)),
+        view: item.view,
+        levels: item.levels,
+        featuredImage: item.featuredImage,
+        url: item.url,
+        isPublished: item.isPublished,
+        isDistributed: item.isDistributed
+      })),
+      total_pages: response.data.meta.pagination.total_pages
+    };
+  }
+
   public async getMyTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
     const response = await API.get('api/teacher/teaching-paths/draft', {
       params: buildFilterDTO(filter)

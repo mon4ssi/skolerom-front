@@ -285,6 +285,24 @@ export class AssignmentApi implements AssignmentRepo {
     }
   }
 
+  public async getAllSchoolAssignmentsList(filter: Filter) {
+    try {
+      const response = await API.get('api/teacher/assignments', {
+        params: buildFilterDTO(filter)
+      });
+
+      return {
+        myAssignments: response.data.data.map(buildAllAssignmentsList),
+        total_pages: response.data.meta.pagination.total_pages
+      };
+    } catch {
+      return {
+        myAssignments: [],
+        total_pages: 0
+      };
+    }
+  }
+
   public async getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep> {
     const response = await API.get('api/teacher/assignments/grep/filters', {
       params: {

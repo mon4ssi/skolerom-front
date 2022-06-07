@@ -180,6 +180,10 @@ export const buildFilterDTO = (filter: Filter): Object => {
     filterDTO.showMyAssignments = filter.showMyAssignments;
   }
 
+  if (filter.showMySchoolTeachingpath) {
+    filterDTO.onlyOwnSchools = filter.showMySchoolTeachingpath;
+  }
+
   return filterDTO;
 };
 

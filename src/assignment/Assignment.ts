@@ -32,6 +32,10 @@ export interface AssignmentRepo {
     myAssignments: Array<Assignment>;
     total_pages: number;
   }>;
+  getAllSchoolAssignmentsList(filter: Filter): Promise<{
+    myAssignments: Array<Assignment>;
+    total_pages: number;
+  }>;
   getStudentAssignmentList(filter: Filter): Promise<{
     myAssignments: Array<Assignment>;
     total_pages: number;
@@ -740,6 +744,9 @@ export class Filter {
   @observable public grepReadingInSubject?: string | number | null;
   @observable public source?: string | number | null;
   public showMyAssignments?: number | null;
+  public showMySchoolTeachingpath?: number | null;
+  public showMySchoolAssignments?: number | null;
+  public onlyOwnSchools?: number | null;
 }
 
 export interface LanguageFilter {
@@ -896,6 +903,10 @@ export class AssignmentList {
     this.filter.page = number;
   }
 
+  public setFilterSchoolAssignments(number: number) {
+    this.filter.showMySchoolAssignments = number;
+  }
+
   @action
   public setFiltersPerPage(number: number) {
     this.filter.per_page = number;
@@ -952,6 +963,10 @@ export class AssignmentList {
 
   public async getAllAssignmentsList() {
     return this.assignmentService.getAllAssignmentsList(this.filter);
+  }
+
+  public async getAllSchoolAssignmentsList() {
+    return this.assignmentService.getAllSchoolAssignmentsList(this.filter);
   }
 
   public async getMyAssignmentsList() {
