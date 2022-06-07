@@ -661,6 +661,8 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     const { newAssignmentStore } = this.props;
     this.setState({ selectedTabId: 2, currentId: 0, currentAttachment: undefined });
     newAssignmentStore!.fetchingCustomImageAttachments = true;
+    /* this.renderAttachmentTab(); */
+    this.props.context.changeContentType(AttachmentContentType.customImage);
     newAssignmentStore!.fetchQuestionAttachments(AttachmentContentType.customImage);
     newAssignmentStore!.fetchingCustomImageAttachments = false;
   }

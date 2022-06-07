@@ -76,7 +76,7 @@ export const CustomImageFormSimple = (props: any) => {
     setValue(value - 1);
   };
 
-  const renderUploadImagesButton = () => <div className="spaced right"><button className="createButton" onClick={uploadImages}>Upload image(s)</button></div>;
+  const renderUploadImagesButton = () => <div className="spaced right"><button className="createButton" onClick={uploadImages}>{intl.get('new assignment.uploadCustomImages.upload_images')}</button></div>;
 
   const uploadImages = () => {
     let percentage = 0;

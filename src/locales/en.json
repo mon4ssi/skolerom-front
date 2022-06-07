@@ -289,6 +289,7 @@
       "select_images": "Select images",
       "counter_message_1": "You have chosen",
       "counter_message_2": "image(s).",
+      "upload_images": "Upload",
       "message_success": "Image uploaded succesfully"
     },
     "images_empty_list": "No images available, please upload a custom image",
