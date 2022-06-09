@@ -175,6 +175,8 @@ export interface TeachingPathArgs {
   guidance?: string;
   hasGuidance?: boolean;
   isPrivate?: boolean;
+  isMySchool?: boolean;
+  mySchools?: string | undefined;
   isFinished?: boolean;
   maxNumberOfSteps?: number;
   minNumberOfSteps?: number;
@@ -219,6 +221,8 @@ export class TeachingPath {
   @observable protected _rootNodeId: number | undefined;
   @observable protected _lastSelectedNodeId: number | undefined;
   @observable protected _isPrivate: boolean = false;
+  @observable protected _isMySchool?: boolean = false;
+  @observable protected _mySchools?: string | undefined = '';
   @observable protected _isFinished: boolean = false;
   @observable protected _content: TeachingPathNode | null = null;
   protected readonly _maxNumberOfSteps: number | undefined;
@@ -262,6 +266,8 @@ export class TeachingPath {
     this._guidance = args.guidance || '';
     this._hasGuidance = args.hasGuidance || false;
     this._isPrivate = !isNil(args.isPrivate) ? args.isPrivate : true;
+    this._isMySchool = args.isMySchool || false;
+    this._mySchools = args.mySchools;
     this._isFinished = args.isFinished || false;
     this._content = args.content ? new TeachingPathNode(args.content) : null;
     this._minNumberOfSteps = args.minNumberOfSteps;
@@ -384,6 +390,16 @@ export class TeachingPath {
   @computed
   public get isPrivate() {
     return this._isPrivate;
+  }
+
+  @computed
+  public get mySchools() {
+    return this._mySchools;
+  }
+
+  @computed
+  public get isMySchool() {
+    return this._isMySchool;
   }
 
   @computed

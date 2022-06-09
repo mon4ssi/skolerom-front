@@ -483,7 +483,8 @@
     "source_is_open": "Vis i Open Site",    
     "source_is_open_title": "Synlighetsinnstillinger",
     "source_is_open_assig": "Vis i Open Site",
-    "source": "Kilde"
+    "source": "Kilde",
+    "selected_myschools": "Velg skole"
   },
   "distribution_page": {
     "distribute_assignment": "Distribuer oppgave",

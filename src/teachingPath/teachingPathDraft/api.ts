@@ -33,6 +33,8 @@ export interface DraftTeachingPathResponseDTO {
   guidance?: string;
   hasGuidance?: boolean;
   isPrivate?: boolean;
+  isMySchool?: boolean;
+  mySchools?: string | undefined;
   content: TeachingPathNodeResponseDTO | null;
   createdAt: string;
   updatedAt: string | null;

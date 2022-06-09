@@ -484,7 +484,8 @@
     "source_is_open": "Vis i Open Site",
     "source_is_open_assig": "Vis i Open Site",
     "source_is_open_title": "Synlegheitsinnstillingar",
-    "source": "Kjelde"
+    "source": "Kjelde",
+    "selected_myschools": "Velg skole"
   },
   "distribution_page": {
     "distribute_assignment": "Distribuer oppgåva",

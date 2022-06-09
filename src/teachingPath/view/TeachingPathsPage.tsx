@@ -35,10 +35,6 @@ const contentManagerRoutes = (
       render={renderMyTeachingPaths}
     />
     <Route
-      path="/teaching-paths/myschool"
-      render={renderMySchoolTeachingPaths}
-    />
-    <Route
       path="/*"
       component={Page404}
     />
@@ -59,6 +55,10 @@ const teacherRoutes = (
     <Route
       path="/teaching-paths/my"
       render={renderMyTeachingPaths}
+    />
+    <Route
+      path="/teaching-paths/myschool"
+      render={renderMySchoolTeachingPaths}
     />
     <Route
       path="/teaching-paths/answers/:entityId"

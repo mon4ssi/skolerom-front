@@ -100,6 +100,15 @@ export class Grade {
   }
 }
 
+export class NowSchool {
+  @observable public id: number;
+  @observable public name: string;
+  constructor(id: number, name: string) {
+    this.id = id;
+    this.name = name;
+  }
+}
+
 export class Subject {
   @observable public id: number;
   @observable public title: string;
@@ -216,6 +225,8 @@ export interface AssignmentArgs {
   subjects?: Array<Subject>;
   sources?: Array<number>;
   isPrivate?: boolean;
+  isMySchool?: boolean;
+  mySchools?: string | undefined;
   relatedArticles?: Array<Article>;
   createdAt?: string;
   updatedAt?: string;
@@ -264,6 +275,8 @@ export class Assignment {
   @observable protected _subjects: Array<Subject> = [];
   @observable protected _sources: Array<number> = [];
   @observable protected _isPrivate: boolean = false;
+  @observable protected _isMySchool: boolean = false;
+  @observable protected _mySchools: string | undefined = '';
   @observable protected _relatedArticles: Array<Article> = [];
   @observable protected _createdAt: string = '';
   @observable protected _updatedAt: string = '';
@@ -308,6 +321,8 @@ export class Assignment {
     this._subjects = args.subjects || [];
     this._sources = args.sources || [];
     this._isPrivate = !isNil(args.isPrivate) ? args.isPrivate : true;
+    this._mySchools = args.mySchools;
+    this._isMySchool = args.isMySchool || false;
     this._relatedArticles = args.relatedArticles || [];
     this._createdAt = args.createdAt || '';
     this._updatedAt = args.updatedAt || '';
@@ -450,6 +465,16 @@ export class Assignment {
   @computed
   public get isPrivate() {
     return this._isPrivate;
+  }
+
+  @computed
+  public get isMySchool() {
+    return this._isMySchool;
+  }
+
+  @computed
+  public get mySchools() {
+    return this._mySchools;
   }
 
   @computed

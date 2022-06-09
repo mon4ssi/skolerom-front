@@ -343,6 +343,16 @@ export class DraftAssignment extends Assignment {
     this.save();
   }
 
+  public setMySchool = (schools: string) => {
+    this._mySchools = schools;
+    this.save();
+  }
+
+  public setIsMySchool(isSchool: boolean) {
+    this._isMySchool = isSchool;
+    this.save();
+  }
+
   public setUpdatedAt(updatedAt: string) {
     this._updatedAt = updatedAt;
   }

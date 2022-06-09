@@ -11,6 +11,8 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 
 export interface DraftAssignmentResponseDTO extends NewDraftAssignmentResponseDTO {
   isPrivate: boolean;
+  isMySchool: boolean;
+  mySchools: string | undefined;
   grades: Array<Grade>;
   subjects: Array<Subject>;
   levels: Array<number>;
@@ -39,6 +41,8 @@ export interface DraftAssignmentRequestDTO {
   guidance: string;
   numberOfQuestions: number;
   isPrivate: boolean;
+  isMySchool: boolean;
+  mySchools: string | undefined;
   assignmentContent: AssignmentRequestDTO;
   featuredImage?: string;
   subjects: Array<Subject>;

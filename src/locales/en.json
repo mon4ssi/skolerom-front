@@ -484,7 +484,8 @@
     "source_is_open": "Display in Open Site",    
     "source_is_open_title": "Visiblity Settings",
     "source_is_open_assig": "Display in Open Site",
-    "source": "Source"
+    "source": "Source",
+    "selected_myschools": "Select school"
   },
   "distribution_page": {
     "distribute_assignment": "Distribute assignment",
