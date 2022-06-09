@@ -13,6 +13,14 @@
         outline-style: auto;
       }
     }
+
+    .moreIcon{
+      top: 1px;
+      max-height: 25px;
+      max-width: 25px;
+      position: relative;
+      z-index: 1;
+    }
   
     .tooltip .bottom {
       top: 45px;
@@ -21,7 +29,7 @@
       background: #fff;
       border-radius: 8px;
       border: 1px solid #596A75;
-      padding: 6px;
+      padding: 11px;
       cursor: default;
       z-index: 34;
       ul {
@@ -46,14 +54,14 @@
           }
   
           span {
-            font-size: 0.6375rem;
+            font-size: 0.7825rem;
             font-weight: 400;
           }
   
           img {
             margin-left: 13px;
-            width: 12px;
-            height: 14px;
+            width: 18px;
+            height: 18px;
           }
   
           &:last-child {
@@ -87,10 +95,4 @@
     }
   }
 
-  .moreIcon{
-    top: 1px;
-    max-height: 25px;
-    max-width: 25px;
-    position: relative;
-    z-index: 60;
-  }
+  

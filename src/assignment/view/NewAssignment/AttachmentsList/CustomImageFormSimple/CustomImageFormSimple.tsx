@@ -19,7 +19,7 @@ export interface CustomImage {
 export const CustomImageFormSimple = (props: any) => {
   const THOUSAND = 1024;
   const HUNDRED = 100;
-  const THREE_SECONDS = 3000;
+  const THREE_SECONDS = 0;
   const articleService: ArticleService = injector.get(ARTICLE_REPO_KEY);
   const fileArray: Array<File> = [];
   const filenames: Array<string> = [];
@@ -46,16 +46,6 @@ export const CustomImageFormSimple = (props: any) => {
     setFileNames(filenames!);
   };
 
-  /* const renderImgFilesPreview = (files: FileList) => {
-    const filesArray: Array<File> = [];
-    if (files) {
-      for (let i = 0; i < files.length; i++) {
-        filesArray.push(files[i]);
-      }
-    }
-    renderFileArray(imageFileArray!);
-  }; */
-
   const renderTrashIcon = (fileName: string) => (
     <div className="is-selectedImage-icon">
       <img
@@ -79,6 +69,55 @@ export const CustomImageFormSimple = (props: any) => {
   const renderUploadImagesButton = () => <div className="spaced right"><button className="createButton" onClick={uploadImages}>{intl.get('new assignment.uploadCustomImages.upload_images')}</button></div>;
 
   const uploadImages = () => {
+
+    if (value === 1) {
+      uploadSingleImage();
+    } else {
+      uploadMultipleImages();
+    }
+
+  };
+
+  const uploadSingleImage = () => {
+    let percentage = 0;
+    setInProgress(true);
+    const amount = HUNDRED / imageFileArray.length;
+    imageFileArray.forEach(async (image) => {
+      const formData = new FormData();
+      formData.append('image', image);
+      formData.append('title', image.name.split('.')[0]);
+      formData.append('source', image.lastModified.toString());
+      try {
+        await articleService.createCustomImage(formData).then(() => {
+          for (let i = 1; i <= amount; i += 1) {
+            setProgressBar(i);
+            if (i === HUNDRED) {
+              percentage = i;
+            }
+          }
+        });
+      } catch (error) {
+        showCustomImageUploadMessageError();
+        setProgressBar(0);
+        setInProgress(false);
+        setImageFileArray([]);
+        setValue(0);
+      }
+      if (percentage >= HUNDRED) {
+        setTimeout(async () => {
+          await articleService.fetchCustomImages('', 1);
+          setProgressBar(0);
+          setInProgress(false);
+          setImageFileArray([]);
+          setValue(0);
+          showCustomImageUploadMessageSuccess();
+          props.onRedirectToList();
+        }, THREE_SECONDS);
+      }
+    });
+  };
+
+  const uploadMultipleImages = async () => {
     let percentage = 0;
     setInProgress(true);
     const amount = HUNDRED / imageFileArray.length;
@@ -93,25 +132,22 @@ export const CustomImageFormSimple = (props: any) => {
           setProgressBar(percentage);
         });
       } catch (error) {
-        Notification.create({
-          type: NotificationTypes.ERROR,
-          title: intl.get('new assignment.notification.error'),
-        });
+        showCustomImageUploadMessageError();
         setProgressBar(0);
         setInProgress(false);
         setImageFileArray([]);
         setValue(0);
       }
       if (percentage >= HUNDRED) {
-        setTimeout(() => {
+        setTimeout(async () => {
+          await articleService.fetchCustomImages('', 1);
           setProgressBar(0);
           setInProgress(false);
           setImageFileArray([]);
           setValue(0);
-          articleService.fetchCustomImages('', 1);
+          showCustomImageUploadMessageSuccess();
+          props.onRedirectToList();
         }, THREE_SECONDS);
-        showCustomImageUploadMessage();
-        props.onRedirectToList();
       }
     });
   };
@@ -138,11 +174,32 @@ export const CustomImageFormSimple = (props: any) => {
     return true;
   }; */
 
-  const showCustomImageUploadMessage = () => {
-    Notification.create({
-      type: false ? NotificationTypes.ERROR : NotificationTypes.SUCCESS,
-      title: '' || intl.get('new assignment.uploadCustomImages.message_success')
-    });
+  const showCustomImageUploadMessageError = () => {
+    if (value === 1) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: '' || intl.get('new assignment.notification.error_single_upload')
+      });
+    } else {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: '' || intl.get('new assignment.notification.error_multiple_upload')
+      });
+    }
+  };
+
+  const showCustomImageUploadMessageSuccess = () => {
+    if (value === 1) {
+      Notification.create({
+        type: false ? NotificationTypes.ERROR : NotificationTypes.SUCCESS,
+        title: '' || intl.get('new assignment.uploadCustomImages.message_success_single')
+      });
+    } else {
+      Notification.create({
+        type: false ? NotificationTypes.ERROR : NotificationTypes.SUCCESS,
+        title: '' || intl.get('new assignment.uploadCustomImages.message_success_multiple')
+      });
+    }
   };
 
   const itemImageFile = (file: File) => {
@@ -178,7 +235,7 @@ export const CustomImageFormSimple = (props: any) => {
   };
 
   const renderProgressBar = () => (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: 'flex', padding: '6px' }}>
       <div style={{ marginRight: '0px' }}>{Math.floor(progressBar)}%</div>
       <div style={{ borderRadius: '4px', marginRight: '3px', marginLeft: '4px', height: '20px', background: '#0b2541', width: `${progressBar}%`, transition: '0.3s' }} />
     </div>
@@ -187,7 +244,7 @@ export const CustomImageFormSimple = (props: any) => {
   const renderInputFile = () => (
     <label className="custom-file-upload">
       <input onChange={(e) => { handleChangeFile(e); }} multiple className="inputFileImages" type="file" accept="image/png, image/jpg, image/jpeg" />
-      {intl.get('new assignment.uploadCustomImages.message_success')}
+      {intl.get('new assignment.uploadCustomImages.select_images')}
     </label>
   );
 
@@ -197,7 +254,6 @@ export const CustomImageFormSimple = (props: any) => {
         {!isNotEmpty && renderInputFile()}
         <span className="filenameSpan">{`${intl.get('new assignment.uploadCustomImages.counter_message_1')} ${value} ${intl.get('new assignment.uploadCustomImages.counter_message_2')}`}</span>
       </div>
-      {/* {renderImagesFile(imageFileArray)} */}
       <div style={{ display: 'inline' }}>
         <div>{isNotEmpty && renderUploadImagesButton()}</div>
         <div>{inProgress && renderProgressBar()}</div>
@@ -205,9 +261,6 @@ export const CustomImageFormSimple = (props: any) => {
       <div className="imagesList">
         {renderPreviewImages()}
       </div>
-
-      {/* {renderImgFilesPreview(imagesFileList!)} */}
-
     </div>
   );
 };
