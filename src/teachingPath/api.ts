@@ -149,6 +149,41 @@ export class TeachingPathApi implements TeachingPathRepo {
     };
   }
 
+  public async getTeachingPathDataById(id: number): Promise<TeachingPath> {
+    try {
+      const { data } = await API.get(`api/teacher/teaching-paths/${id}`);
+      return new TeachingPath({
+        id: data.id,
+        title: data.title,
+        description: data.description,
+        isPrivate: data.isPrivate,
+        isFinished: data.isFinished,
+        rootNodeId: data.rootNodeId,
+        lastSelectedNodeId: data.lastSelectedNodeId,
+        minNumberOfSteps: data.minNumberOfSteps,
+        maxNumberOfSteps: data.maxNumberOfSteps,
+        author: data.author,
+        levels: data.levels,
+        answerId: data.answerId,
+        isCopy: data.isCopy,
+      });
+    } catch (error) {
+      if (error.response.data.message === 'Teaching path not assigned to you') {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('teaching path passing.not for you')
+        });
+      } else if (error.response.data.message === 'Teaching path deadline passed') {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('teaching path passing.validation.deadline')
+        });
+      }
+      throw error;
+    }
+
+  }
+
   public async getTeachingPathById(id: number): Promise<TeachingPath> {
     try {
       const { data } = await API.get(`api/student/teaching-paths/${id}`);

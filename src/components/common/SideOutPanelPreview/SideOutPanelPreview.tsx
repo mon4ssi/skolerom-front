@@ -1,7 +1,7 @@
 import React, { Component, SyntheticEvent } from 'react';
 import intl from 'react-intl-universal';
 import moment from 'moment';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
@@ -19,19 +19,43 @@ import close from 'assets/images/close.svg';
 import user from 'assets/images/user-placeholder.png';
 
 import './SideOutPanelPreview.scss';
+import { TeachingPath, TeachingPathRepo, TEACHING_PATH_REPO } from 'teachingPath/TeachingPath';
+import { injector } from 'Injector';
+import { TeachingPathService, TEACHING_PATH_SERVICE } from 'teachingPath/service';
+import { TeachingPathApi } from 'teachingPath/api';
 
 interface Props {
   store?: AssignmentListStore | TeachingPathsListStore;
   onClose?(e: SyntheticEvent): void;
 }
 
+interface SideOutPanelPreviewState {
+  currentTeachingPath: undefined | TeachingPath;
+}
+
+export const USER_SERVICE = 'TEACHING_PATH_SERVICE';
+
 @observer
-class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps> {
+class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps, SideOutPanelPreviewState> {
+  private teachingPathService: TeachingPathService = injector.get(TEACHING_PATH_SERVICE);
+
+  public state = {
+    currentTeachingPath: undefined,
+  };
 
   private onClose = (e: SyntheticEvent) => {
     if (this.props.onClose) {
       this.props.onClose(e);
     }
+  }
+
+  public componentDidMount = async() => {
+    const { currentEntity } = this.props.store!;
+    const {  } = this.state;
+    const { store } = this.props;
+    /* const response = await this.teachingPathService.getTeachingPathDataById(id);
+    console.log(response); */
+    /* console.log(currentEntity); */
   }
 
   public answerEntity = () => {
@@ -77,6 +101,9 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
       } = currentEntity;
     const isPassedDeadline = moment(deadline).format('YYYY-MM-DD') < moment().format('YYYY-MM-DD');
     const disableViewButton = (!isAnswered && isPassedDeadline) || !isPassedDeadline;
+    const { currentEntity: { id }, currentEntityTypeRoute } = this.props.store!;
+    /* const response = await this.teachingPathService.getTeachingPathDataById(id);
+    console.log(response); */
 
     const numberOfParts = currentEntity instanceof Assignment ?
       currentEntity!.numberOfQuestions :
@@ -89,6 +116,11 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
     const buttonTitle = currentEntity instanceof Assignment ?
       intl.get('answers.answer_assignment') :
       intl.get('answers.answer_teaching_path');
+
+    const view = currentEntity instanceof Assignment ? 'View assignment' : 'View teaching path';
+    const guidance = currentEntity instanceof Assignment ? 'Teacher guidance' : 'Teacher guidance';
+    const edit = currentEntity instanceof Assignment ? 'Edit assignment' : 'Edit teaching path';
+    const duplicate = currentEntity instanceof Assignment ? 'Duplicate' : 'Duplicate';
 
     return (
       <div className={'evaluationInfo'} onClick={this.stopPropagation} tabIndex={0}>
@@ -153,8 +185,17 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
         </div>
 
         <div className={'answerButton'}>
-          <CreateButton disabled={isPassedDeadline} onClick={this.answerEntity} title={buttonTitle} >
-            {buttonTitle}
+          <CreateButton disabled={isPassedDeadline} onClick={this.answerEntity} title={view} >
+            {view}
+          </CreateButton>
+          <CreateButton disabled={isPassedDeadline} onClick={this.answerEntity} title={guidance} >
+            {guidance}
+          </CreateButton>
+          <CreateButton disabled={isPassedDeadline} onClick={this.answerEntity} title={edit} >
+            {edit}
+          </CreateButton>
+          <CreateButton disabled={isPassedDeadline} onClick={this.answerEntity} title={duplicate} >
+            {duplicate}
           </CreateButton>
         </div>
       </div>

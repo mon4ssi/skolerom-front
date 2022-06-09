@@ -1120,7 +1120,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
 
   public renderSlideOutPanelTeacherCM = () => {
     const { teachingPathsListStore } = this.props;
-
     return (
       <div className="dark" onClick={this.closeSlideOutPanel}>
         <SideOutPanelPreview

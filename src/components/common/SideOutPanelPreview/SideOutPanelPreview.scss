@@ -3,7 +3,7 @@
 .evaluationInfo {
   display: flex;
   flex-direction: column;
-  width: 580px;
+  width: 831px;
   background: white;
   height: calc(100% - #{$header-height});
   right: 0;
@@ -38,7 +38,7 @@
 
         .shadow {
           background: #0B2541;
-          opacity: 0.8;
+          opacity: 1.0;
           position: absolute;
           z-index: 1;
           width: 100%;
@@ -111,12 +111,20 @@
       padding: 20px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
+
+      .description {
+        margin-top: 7px;
+        margin-bottom: 7px;
+        
+      }
 
       .deadline {
         display: flex;
         font-size: 0.9375rem;
         align-items: center;
+        margin-left: 9px;
+        margin-right: 9px;
 
         img {
           margin-right: 10px;
@@ -128,6 +136,8 @@
       }
 
       .partsInfo {
+        margin-left: 9px;
+        margin-right: 9px;
         display: flex;
         font-size: 0.9375rem;
 
@@ -245,4 +255,3 @@
     }
   }
 }
-

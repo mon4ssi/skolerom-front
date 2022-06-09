@@ -142,6 +142,11 @@ export class TeachingPathsListStore {
     this.teachingPathList = [];
   }
 
+  @action
+  public getTeachingPathDataById = async (id: number) => {
+    this.currentTeachingPath = await this.listTeachingPaths.getTeachingPathDataById(id);
+  }
+
   public setFiltersGradeID(gradeID: number | null) {
     this.listTeachingPaths.setFiltersGradeID(gradeID);
     this.listTeachingPaths.setFiltersPage(1);
