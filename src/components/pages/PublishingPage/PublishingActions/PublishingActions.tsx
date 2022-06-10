@@ -368,7 +368,9 @@ export class PublishingActions extends Component<Props, State> {
       arraySchoolIds.push(school.id);
     });
     this.setState({ optionsMySchool : arraySchoolIds });
-    store!.currentEntity!.setMySchool(String(arraySchoolIds));
+    if (store!.currentEntity!.mySchools && store!.currentEntity!.mySchools.length === 0) {
+      store!.currentEntity!.setMySchool(String(arraySchoolIds));
+    }
   }
 
   public handerScroll = async () => {
@@ -1722,18 +1724,24 @@ export class PublishingActions extends Component<Props, State> {
     const skole = myschools.find(skole => skole.id === id);
     const arrayRemove: Array<number> = [];
     if (skole) {
-      // if (this.state.optionsMySchool.length > 1) {
-      this.state.optionsMySchool.forEach((e) => {
-        if (e !== skole.id) { arrayRemove.push(e); }
-      });
-      this.setState(
-        {
-          optionsMySchool : arrayRemove
-        },
-        () => {
-          store!.currentEntity!.setMySchool(String(this.state.optionsMySchool));
-        }
-      );
+      if (this.state.optionsMySchool.length > 1) {
+        this.state.optionsMySchool.forEach((e) => {
+          if (e !== skole.id) { arrayRemove.push(e); }
+        });
+        this.setState(
+          {
+            optionsMySchool : arrayRemove
+          },
+          () => {
+            store!.currentEntity!.setMySchool(String(this.state.optionsMySchool));
+          }
+        );
+      } else {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('publishing_page.dont_empty')
+        });
+      }
     }
   }
 
@@ -1781,7 +1789,7 @@ export class PublishingActions extends Component<Props, State> {
       });
     });
 
-    if (isTeacher) {
+    if (isTeacher && myschools.length > 1) {
       return (
         <div className="infoContainer__top__skole">
           <p>{intl.get('publishing_page.selected_myschools')}</p>

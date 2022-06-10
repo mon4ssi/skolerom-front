@@ -485,7 +485,8 @@
     "source_is_open_assig": "Vis i Open Site",
     "source_is_open_title": "Synlegheitsinnstillingar",
     "source": "Kjelde",
-    "selected_myschools": "Velg skole"
+    "selected_myschools": "Velg skole",    
+    "dont_empty": "Skolefeltet kan ikke stå tomt"
   },
   "distribution_page": {
     "distribute_assignment": "Distribuer oppgåva",

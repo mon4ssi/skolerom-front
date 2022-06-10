@@ -485,7 +485,8 @@
     "source_is_open_title": "Visiblity Settings",
     "source_is_open_assig": "Display in Open Site",
     "source": "Source",
-    "selected_myschools": "Select school"
+    "selected_myschools": "Select school",
+    "dont_empty": "The School field cannot be left empty"
   },
   "distribution_page": {
     "distribute_assignment": "Distribute assignment",
