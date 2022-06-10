@@ -50,7 +50,7 @@
         position: absolute;
         top: 0;
         width: 100%;
-        z-index: 2;
+        z-index: 1;
         height: calc(100vh / 3);
         padding: 19px;
         overflow: hidden;
@@ -151,7 +151,8 @@
       display: flex;
       padding: 20px;
       background: white;
-      height: calc(100% - (calc(100% / 3)) - 120px);
+      /* height: calc(100% - (calc(100% / 3)) - 120px); */
+      height: calc(67%);
 
       .commentToEntity {
         font-weight: 300;
@@ -173,6 +174,19 @@
     border-top: 1px solid #D3D9DE;
     width: 100%;
     background-color: $color-white;
+  }
+
+  .footerButtons {
+    display: flex;
+    flex: 0;
+    padding: 20px;
+    border-top: 1px solid #D3D9DE;
+    width: 100%;
+    background-color: $color-white;
+
+    .actionButton {
+      margin-right: 8px;
+    }
   }
 }
 

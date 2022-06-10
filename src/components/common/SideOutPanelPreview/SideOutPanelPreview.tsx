@@ -24,7 +24,7 @@ import { injector } from 'Injector';
 import { TeachingPathService, TEACHING_PATH_SERVICE } from 'teachingPath/service';
 import { TeachingPathApi } from 'teachingPath/api';
 
-interface Props {
+interface Props extends RouteComponentProps{
   store?: AssignmentListStore | TeachingPathsListStore;
   onClose?(e: SyntheticEvent): void;
 }
@@ -93,6 +93,7 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
         mark,
         isPassed,
         description,
+        isPublished,
         grades,
         deadline,
         status,
@@ -102,6 +103,9 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
     const isPassedDeadline = moment(deadline).format('YYYY-MM-DD') < moment().format('YYYY-MM-DD');
     const disableViewButton = (!isAnswered && isPassedDeadline) || !isPassedDeadline;
     const { currentEntity: { id }, currentEntityTypeRoute } = this.props.store!;
+    /* console.log(currentEntity!); */
+
+    const { history } = this.props;
     /* const response = await this.teachingPathService.getTeachingPathDataById(id);
     console.log(response); */
 
@@ -175,7 +179,6 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
             <div className="commentToEntity">
               {comment ? comment : `${author} ${intl.get('answers.not comment')}`}
             </div>
-
             <div className={'view'}>
               <CreateButton disabled={disableViewButton} green onClick={this.viewEvaluation} title={intl.get('answers.view')}>
                 {intl.get('answers.view')}
@@ -184,19 +187,27 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
           </div>
         </div>
 
-        <div className={'answerButton'}>
-          <CreateButton disabled={isPassedDeadline} onClick={this.answerEntity} title={view} >
+        <div className="footerButtons">
+          <div className="actionButton">
+          <CreateButton disabled={!isPublished} onClick={() => { history.push(`/teaching-paths/view/${id}`); }} title={view} >
             {view}
           </CreateButton>
+          </div>
+          <div className="actionButton">
           <CreateButton disabled={isPassedDeadline} onClick={this.answerEntity} title={guidance} >
             {guidance}
           </CreateButton>
-          <CreateButton disabled={isPassedDeadline} onClick={this.answerEntity} title={edit} >
+          </div>
+          <div className="actionButton">
+          <CreateButton disabled={false} onClick={() => { history.push(`/teaching-paths/edit/${id}`); }} title={edit} >
             {edit}
           </CreateButton>
+          </div>
+          <div className="actionButton">
           <CreateButton disabled={isPassedDeadline} onClick={this.answerEntity} title={duplicate} >
             {duplicate}
           </CreateButton>
+          </div>
         </div>
       </div>
     );
