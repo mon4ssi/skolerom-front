@@ -453,7 +453,7 @@ export class TeachingPathEvaluationStore {
         undefined
     });
 
-    if (currentNode.children.length) {
+    if (currentNode && currentNode.children && currentNode.children.length) {
       generateEvaluationStep();
     }
 
