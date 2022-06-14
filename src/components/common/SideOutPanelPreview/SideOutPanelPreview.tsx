@@ -63,9 +63,9 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
     const { } = this.state;
     const { store } = this.props;
     const { currentEntity: { id }, currentEntityTypeRoute } = this.props.store!;
-    const response = await this.teachingPathService.getTeachingPathDataById(id);
+    const response: TeachingPath = await this.teachingPathService.getTeachingPathDataById(id);
+    this.setState({ currentTeachingPath: response! });
     const responseType = response!.hasGuidance;
-    /* console.log(currentEntity); */
   }
 
   public answerEntity = () => {
@@ -151,6 +151,9 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
     const edit = currentEntity instanceof Assignment ? 'Edit assignment' : 'Edit teaching path';
     const duplicate = currentEntity instanceof Assignment ? 'Duplicate' : 'Duplicate';
 
+    const selectedTeachingPath: TeachingPath = this.state.currentTeachingPath!;
+    /* console.log(selectedTeachingPath!); */
+
     return (
       <div className={'previewModalInfo'} onClick={this.stopPropagation} tabIndex={0}>
         <div className="contentContainer">
@@ -184,7 +187,7 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
             </div>
             <div className="partsInfo">
               <img src={question} alt="question" />
-              By Kari Nordmann <span className={'name'}>{author}</span>
+              By {selectedTeachingPath ? selectedTeachingPath!.author : ''} <span className={'name'}>{author}</span>
             </div>
             <div className={`deadline ${isPassedDeadline && 'passed'}`}>
               <img src={clock} alt="clock" />
@@ -194,8 +197,8 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
           <div className="entityDescription">
 
             <div className="partsInfo">
-              {/* {description} */}
-              Bli med på innsiden av kroppens immunsystem – ditt eget fantastiske forsvarsverk som holder deg frisk og rask.
+               {selectedTeachingPath ? selectedTeachingPath!.description : ''}
+              {/* Bli med på innsiden av kroppens immunsystem – ditt eget fantastiske forsvarsverk som holder deg frisk og rask. */}
             </div>
           </div>
 
