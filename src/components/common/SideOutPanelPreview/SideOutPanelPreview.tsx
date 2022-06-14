@@ -10,21 +10,30 @@ import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentL
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
 import { Assignment } from 'assignment/Assignment';
 
-import { deadlineDateFormat } from 'utils/constants';
+import { deadlineDateFormat, thirdLevel } from 'utils/constants';
 
 import clock from 'assets/images/clock.svg';
-import bg from 'assets/images/bg-default.svg';
-import question from 'assets/images/questions.svg';
 import close from 'assets/images/close.svg';
-import user from 'assets/images/user-placeholder.png';
+
+import question from 'assets/images/questions.svg';
+/* import articles from 'assets/images'; */
+/* import user from 'assets/images/user-placeholder.png'; */
+/* import calendar from 'assets/images/user-placeholder.png'; */
+import subject from 'assets/images/tags.svg';
+import coreElement from 'assets/images/core.svg';
+import multiSubject from 'assets/images/cogs.svg';
+import source from 'assets/images/voice.svg';
+import goals from 'assets/images/goals.svg';
 
 import './SideOutPanelPreview.scss';
 import { TeachingPath, TeachingPathRepo, TEACHING_PATH_REPO } from 'teachingPath/TeachingPath';
 import { injector } from 'Injector';
 import { TeachingPathService, TEACHING_PATH_SERVICE } from 'teachingPath/service';
 import { TeachingPathApi } from 'teachingPath/api';
+import { UserType } from 'user/User';
+import { Notification, NotificationTypes } from '../Notification/Notification';
 
-interface Props extends RouteComponentProps{
+interface Props extends RouteComponentProps {
   store?: AssignmentListStore | TeachingPathsListStore;
   onClose?(e: SyntheticEvent): void;
 }
@@ -49,12 +58,13 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
     }
   }
 
-  public componentDidMount = async() => {
+  public componentDidMount = async () => {
     const { currentEntity } = this.props.store!;
-    const {  } = this.state;
+    const { } = this.state;
     const { store } = this.props;
-    /* const response = await this.teachingPathService.getTeachingPathDataById(id);
-    console.log(response); */
+    const { currentEntity: { id }, currentEntityTypeRoute } = this.props.store!;
+    const response = await this.teachingPathService.getTeachingPathDataById(id);
+    const responseType = response!.hasGuidance;
     /* console.log(currentEntity); */
   }
 
@@ -83,6 +93,24 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
     e.stopPropagation();
   }
 
+  public handleCopy = async () => {
+    const { history } = this.props;
+    const { currentEntity: { id } } = this.props.store!;
+    const { currentEntity } = this.props.store!;
+
+    const isCopyApproved = await Notification.create({
+      type: NotificationTypes.CONFIRM,
+      title: intl.get('assignment list.Are you sure'),
+      submitButtonTitle: intl.get('notifications.copy')
+    });
+
+    if (isCopyApproved) {
+      /* const currentEntityRoute = entityStore instanceof AssignmentListStore ? 'assignments' : 'teaching-paths'; */
+      const copyId = await this.teachingPathService.copyTeachingPath(id!);
+      history.push(`/teaching-paths/edit/${copyId}`);
+    }
+  }
+
   public render() {
     const { currentEntity } = this.props.store!;
     const
@@ -103,11 +131,8 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
     const isPassedDeadline = moment(deadline).format('YYYY-MM-DD') < moment().format('YYYY-MM-DD');
     const disableViewButton = (!isAnswered && isPassedDeadline) || !isPassedDeadline;
     const { currentEntity: { id }, currentEntityTypeRoute } = this.props.store!;
-    /* console.log(currentEntity!); */
 
     const { history } = this.props;
-    /* const response = await this.teachingPathService.getTeachingPathDataById(id);
-    console.log(response); */
 
     const numberOfParts = currentEntity instanceof Assignment ?
       currentEntity!.numberOfQuestions :
@@ -127,7 +152,7 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
     const duplicate = currentEntity instanceof Assignment ? 'Duplicate' : 'Duplicate';
 
     return (
-      <div className={'evaluationInfo'} onClick={this.stopPropagation} tabIndex={0}>
+      <div className={'previewModalInfo'} onClick={this.stopPropagation} tabIndex={0}>
         <div className="contentContainer">
           <div className="close-panel">
             <img
@@ -139,74 +164,150 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
           </div>
           <div className={'headerPanel'}>
             <div className="imageBlock">
-              <div className={'shadow'}/>
-            {/* <img src={featuredImage ? featuredImage : bg} alt="img" className={'imagePlaceholder'}/> */}
+              <div className={'shadow'} />
+              {/* <img src={featuredImage ? featuredImage : bg} alt="img" className={'imagePlaceholder'}/> */}
             </div>
             <div className={'subjectInfo'}>
-              {/* <div className={'subject'}>6A | History</div> */}
               <div className={'entityTitle'}>{title}</div>
-              <div className={'infoTeacher'}>
-                {/* <img className={'userPhoto'} src={user} alt="user"/> */}
-                <span className={'name'}>{author}</span>
-                {/* <span className={'lesson'}>6A/History</span> */}
-              </div>
             </div>
           </div>
           <div id="aux1" className="hidden">Not name</div>
-          <input type="text" aria-labelledby="aux1" autoFocus className="hidden"/>
+          <input type="text" aria-labelledby="aux1" autoFocus className="hidden" />
           <div className="entityInfo">
             <div className="partsInfo">
               <img src={question} alt="question" />
-              {numberOfParts} {stepsOrQuestionsTitle} <span className={'name'}>{author}</span>
+              13 questions <span className={'name'}>{author}</span>
+            </div>
+            <div className="partsInfo">
+              <img src={question} alt="question" />
+              3 articles <span className={'name'}>{author}</span>
+            </div>
+            <div className="partsInfo">
+              <img src={question} alt="question" />
+              By Kari Nordmann <span className={'name'}>{author}</span>
             </div>
             <div className={`deadline ${isPassedDeadline && 'passed'}`}>
-              <img src={clock} alt="clock"/>
+              <img src={clock} alt="clock" />
               {isPassedDeadline ? intl.get('answers.past') : `${intl.get('answers.Due')} ${moment(deadline).format(deadlineDateFormat)}`}
             </div>
           </div>
-          <div className="entityInfo">
+          <div className="entityDescription">
 
             <div className="partsInfo">
-              {description}
+              {/* {description} */}
+              Bli med på innsiden av kroppens immunsystem – ditt eget fantastiske forsvarsverk som holder deg frisk og rask.
             </div>
           </div>
 
           <div className="summary">
-            <span>{intl.get('answers.summary')}</span>
 
-            <EvaluationLabel isPassed={isPassed} mark={mark} status={status} />
-
-            <div className="commentToEntity">
-              {comment ? comment : `${author} ${intl.get('answers.not comment')}`}
+            <div className="entityInfoBlock">
+              <div className="image">
+                <img className="imgInfo" src={subject} />
+              </div>
+              <div>
+                <div className="title">{'Subject'}</div>
+                <div>
+                  <ul className="listItem">
+                    <li className="item">
+                      {'Science'}
+                    </li>
+                    <li className="item">
+                      {'Health'}
+                    </li>
+                    <li className="item">
+                      {'Mathematics'}
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
-            <div className={'view'}>
-              <CreateButton disabled={disableViewButton} green onClick={this.viewEvaluation} title={intl.get('answers.view')}>
-                {intl.get('answers.view')}
-              </CreateButton>
+
+            <div className="entityInfoBlock">
+              <div className="image">
+                <img className="imgInfo" src={coreElement} />
+              </div>
+              <div>
+                <div className="title">{'Core Element'}</div>
+                <div>
+                  <ul className="listItem">
+                    <li className="item">
+                      {'Naturvitenskapelige praksiser og tenkemåter'}
+                    </li>
+                    <li className="item">
+                      {'Test med 7 stk'}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className="entityInfoBlock">
+              <div className="image">
+                <img className="imgInfo" src={multiSubject} />
+              </div>
+              <div>
+                <div className="title">{'Multidisciplinary subjects'}</div>
+                <div>
+                  <ul className="listItem">
+                    <li className="item">
+                      {'Bærekraftig utvikling'}
+                    </li>
+                    <li className="item">
+                      {'Demokrati og medborgerskap'}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+            <div className="entityInfoBlock">
+              <div className="image">
+                <img className="imgInfo" src={source} />
+              </div>
+              <div>
+                <div className="title">{'Source'}</div>
+                <div>
+                  <ul className="listItem">
+                    <li className="item">
+                      {'Hjernelæring'}
+                    </li>
+                    <li className="item">
+                      {'RS Sjøredningsskolen'}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+            <div className="entityInfoBlock">
+              <div className="image">
+                <img className="imgInfo" src={goals} />
+              </div>
+              <div className="title">{'Educational goals'}</div>
             </div>
           </div>
         </div>
 
         <div className="footerButtons">
           <div className="actionButton">
-          <CreateButton disabled={!isPublished} onClick={() => { history.push(`/teaching-paths/view/${id}`); }} title={view} >
-            {view}
-          </CreateButton>
+            <CreateButton disabled={!isPublished} onClick={() => { history.push(`/teaching-paths/view/${id}`); }} title={view} >
+              {view}
+            </CreateButton>
           </div>
           <div className="actionButton">
-          <CreateButton disabled={isPassedDeadline} onClick={this.answerEntity} title={guidance} >
-            {guidance}
-          </CreateButton>
+            <CreateButton disabled={isPassedDeadline} onClick={this.answerEntity} title={guidance} >
+              {guidance}
+            </CreateButton>
           </div>
           <div className="actionButton">
-          <CreateButton disabled={false} onClick={() => { history.push(`/teaching-paths/edit/${id}`); }} title={edit} >
-            {edit}
-          </CreateButton>
+            <CreateButton disabled={false} onClick={() => { history.push(`/teaching-paths/edit/${id}`); }} title={edit} >
+              {edit}
+            </CreateButton>
           </div>
           <div className="actionButton">
-          <CreateButton disabled={isPassedDeadline} onClick={this.answerEntity} title={duplicate} >
-            {duplicate}
-          </CreateButton>
+            <CreateButton disabled={isPassedDeadline} onClick={this.handleCopy} title={duplicate} >
+              {duplicate}
+            </CreateButton>
           </div>
         </div>
       </div>

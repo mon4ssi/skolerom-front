@@ -1,6 +1,6 @@
 @import "style";
 
-.evaluationInfo {
+.previewModalInfo {
   display: flex;
   flex-direction: column;
   width: 831px;
@@ -147,12 +147,107 @@
       }
     }
 
-    .summary {
+    .entityDescription {
+      height: 67px;
+      border-bottom: 1px solid #D3D9DE;
+      padding: 20px;
       display: flex;
+      align-items: left;
+      justify-content: left;
+
+      .description {
+        margin-top: 7px;
+        margin-bottom: 7px;
+        
+      }
+
+      .deadline {
+        display: flex;
+        font-size: 0.9375rem;
+        align-items: center;
+        margin-left: 9px;
+        margin-right: 9px;
+
+        img {
+          margin-right: 10px;
+        }
+      }
+
+      .passed {
+        color: #E2017B;
+      }
+
+      .partsInfo {
+        margin-left: 9px;
+        margin-right: 9px;
+        display: flex;
+        font-size: 0.9375rem;
+
+        img {
+          margin-right: 10px;
+        }
+      }
+    }
+
+    .summary {
+      /* display: flex;
       padding: 20px;
       background: white;
-      /* height: calc(100% - (calc(100% / 3)) - 120px); */
       height: calc(67%);
+      overflow: auto; */
+      display: block;
+      padding: 20px;
+      background: white;
+      overflow: auto;
+      height: 482px;
+
+      .entityInfoBlock {
+        /* display: flex;
+        background-color: #E2017B;
+        max-width: 50%;
+        padding: 10px 0px;
+        margin: 10px; */
+        display: -webkit-inline-box;
+        max-width: 46%;
+        min-width: 46%;
+        vertical-align: top;
+        padding: 10px 0px;
+        margin: 10px;
+
+        .title {
+          color: rgb(11, 37, 65);
+          font-size: 16px;
+          font-weight: 500;
+          height: 20px;
+          width: 56px;
+          white-space: nowrap;
+        }
+
+        .image {
+          margin-right: 10px;
+
+          .imgInfo {
+            width: 21px;
+            height: 21px;
+          }
+        }
+
+        .listItem {
+          .item {
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            display: inline-block;
+            background-color: #d3d9de;
+            border-radius: 4px;
+            color: #0b2541;
+            font-size: 13px;
+            font-weight: 300;
+            padding: 4px;
+            margin: 5px 5px 5px 0px;
+          }
+        }
+      }
 
       .commentToEntity {
         font-weight: 300;
@@ -191,13 +286,18 @@
 }
 
 @media screen and (max-width: $screen-dimension-desktop) {
-  .evaluationInfo .contentContainer .summary .commentToEntity {
+  .previewModalInfo .contentContainer .summary .commentToEntity {
     max-height: none;
+  }
+
+  .listItem {
+    min-height: 68px;
+    padding-right: 0px !important;
   }
 }
 
 @media screen and (max-width: $screen-dimension-tablet) {
-  .evaluationInfo {
+  .previewModalInfo {
     left: 0;
     right: 0;
     top: $header-height-tablet;
@@ -264,8 +364,26 @@
       }
     }
 
+    .listItem {
+      min-height: 68px;
+      padding-right: 0px !important;
+    }
+
     .answerButton {
       position: static;
+    }
+
+    .footerButtons {
+      display: inline-block;
+      flex: 0;
+      padding: 20px;
+      border-top: 1px solid #D3D9DE;
+      width: 100%;
+      background-color: $color-white;
+  
+      .actionButton {
+        margin-right: 8px;
+      }
     }
   }
 }
