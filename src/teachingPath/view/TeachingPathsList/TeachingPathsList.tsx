@@ -25,6 +25,7 @@ import listPlaceholderImg from 'assets/images/list-placeholder.svg';
 
 import './TeachingPathsList.scss';
 import { SideOutPanelPreview } from 'components/common/SideOutPanelPreview/SideOutPanelPreview';
+import { SideOutPanelPreviewTeachingPath } from 'components/common/SideOutPanelPreviewTeachingPath/SideOutPanelPreviewTeachingPath';
 
 const MAGICNUMBER100 = -1;
 const MAGICNUMBER1 = 1;
@@ -1122,7 +1123,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
     const { teachingPathsListStore } = this.props;
     return (
       <div className="dark" onClick={this.closeSlideOutPanel}>
-        <SideOutPanelPreview
+        <SideOutPanelPreviewTeachingPath
           store={teachingPathsListStore}
           onClose={this.closeSlideOutPanel}
         />

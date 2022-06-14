@@ -8,6 +8,7 @@ import { injector } from '../Injector';
 import { secondLevel } from 'utils/constants';
 import { Breadcrumbs } from './teachingPathDraft/TeachingPathDraft';
 import { isNil } from 'lodash';
+import { timeStamp } from 'console';
 
 export const TEACHING_PATH_REPO = 'TEACHING_PATH_REPO';
 
@@ -52,11 +53,12 @@ export type TeachingPathItemValueArgs = {
   imageUrl?: string;
   wpId?: number;
   isAnswered?: boolean;
-  numberOfQuestions?: number;
   featuredImage?: string;
   grepGoals?: Array<GreepElements>;
   hasGuidance?: boolean;
   open?: boolean;
+  numberOfArticles?: number;
+  numberOfQuestions?: number;
 };
 
 export type TeachingPathItemValue = Article | Assignment | Domain;
@@ -206,6 +208,8 @@ export interface TeachingPathArgs {
   grepGoalsIds?: Array<number>;
   grepGoals?: Array<GreepElements>;
   open?: boolean;
+  numberOfQuestions?: number;
+  numberOfArticles?: number;
 }
 
 export class TeachingPath {
@@ -251,6 +255,8 @@ export class TeachingPath {
   @observable protected _grepGoalsIds?: Array<number>;
   @observable protected _grepGoals?: Array<GreepElements> = [];
   @observable protected _open?: boolean = false;
+  protected readonly _numberOfQuestions?: number = 0;
+  protected readonly _numberOfArticles?: number = 0;
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;
@@ -296,6 +302,8 @@ export class TeachingPath {
     this._grepGoalsIds = args.grepGoalsIds;
     this._grepGoals = args.grepGoals || [];
     this._open = args.open || false;
+    this._numberOfQuestions = args.numberOfQuestions || 0;
+    this._numberOfArticles = args.numberOfArticles || 0;
   }
 
   @computed
@@ -326,6 +334,16 @@ export class TeachingPath {
   @computed
   public get open() {
     return this._open;
+  }
+
+  @computed
+  public get numberOfArticles() {
+    return this._numberOfArticles;
+  }
+
+  @computed
+  public get numberOfQuestions() {
+    return this._numberOfQuestions;
   }
 
   @computed

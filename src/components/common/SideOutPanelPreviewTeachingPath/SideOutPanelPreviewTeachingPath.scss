@@ -152,7 +152,7 @@
     }
 
     .entityDescription {
-      height: 82px;
+      height: 67px;
       border-bottom: 1px solid #D3D9DE;
       padding: 20px;
       display: flex;
@@ -198,7 +198,7 @@
       padding: 20px;
       background: white;
       overflow: auto;
-      height: calc(100% - 276px);
+      height: calc(100% - 290px);
 
       .entityInfoBlock {
         display: -webkit-inline-box;
@@ -274,7 +274,7 @@
             padding-bottom: 10px;
 
             .goalGrade {
-              width: 64px;
+              width: 82px;
               display: table-cell;
               height: 42px;
               white-space: nowrap;

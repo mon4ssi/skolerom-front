@@ -25,13 +25,14 @@ import multiSubject from 'assets/images/cogs.svg';
 import source from 'assets/images/voice.svg';
 import goals from 'assets/images/goals.svg';
 
-import './SideOutPanelPreview.scss';
 import { TeachingPath, TeachingPathRepo, TEACHING_PATH_REPO } from 'teachingPath/TeachingPath';
 import { injector } from 'Injector';
 import { TeachingPathService, TEACHING_PATH_SERVICE } from 'teachingPath/service';
 import { TeachingPathApi } from 'teachingPath/api';
 import { UserType } from 'user/User';
 import { Notification, NotificationTypes } from '../Notification/Notification';
+
+import './SideOutPanelPreviewTeachingPath.scss';
 
 interface Props extends RouteComponentProps {
   store?: AssignmentListStore | TeachingPathsListStore;
@@ -45,7 +46,7 @@ interface SideOutPanelPreviewState {
 export const USER_SERVICE = 'TEACHING_PATH_SERVICE';
 
 @observer
-class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps, SideOutPanelPreviewState> {
+class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteComponentProps, SideOutPanelPreviewState> {
   private teachingPathService: TeachingPathService = injector.get(TEACHING_PATH_SERVICE);
 
   public state = {
@@ -111,7 +112,29 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
     e.stopPropagation();
   }
 
-  public renderGrepSubject = () =>
+  public handleTeacherGuidance = async () => {
+    /* console.log('e'); */
+  }
+
+  public handleCopy = async () => {
+    const { history } = this.props;
+    const { currentEntity: { id } } = this.props.store!;
+    const { currentEntity } = this.props.store!;
+
+    const isCopyApproved = await Notification.create({
+      type: NotificationTypes.CONFIRM,
+      title: intl.get('assignment list.Are you sure'),
+      submitButtonTitle: intl.get('notifications.copy')
+    });
+
+    if (isCopyApproved) {
+      /* const currentEntityRoute = entityStore instanceof AssignmentListStore ? 'assignments' : 'teaching-paths'; */
+      const copyId = await this.teachingPathService.copyTeachingPath(id!);
+      history.push(`/teaching-paths/edit/${copyId}`);
+    }
+  }
+
+  public renderGrepSubjects = () =>
   (
     <div className="entityInfoBlock">
       <div className="image">
@@ -136,27 +159,116 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
     </div>
   )
 
-  public handleTeacherGuidance = async () => {
-    /* console.log('a') */
-  }
+  public renderGrepCoreElements = () =>
+  (
+    <div className="entityInfoBlock">
+      <div className="image">
+        <img className="imgInfo" src={coreElement} />
+      </div>
+      <div>
+        <div className="title">{'Core Element'}</div>
+        <div>
+          <ul className="listItem">
+            <li className="item">
+              {'Naturvitenskapelige praksiser og tenkemåter'}
+            </li>
+            <li className="item">
+              {'Test med 7 stk'}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  )
 
-  public handleCopy = async () => {
-    const { history } = this.props;
-    const { currentEntity: { id } } = this.props.store!;
-    const { currentEntity } = this.props.store!;
+  public renderGrepMultiSubjects = () =>
+  (
+    <div className="entityInfoBlock">
+      <div className="image">
+        <img className="imgInfo" src={multiSubject} />
+      </div>
+      <div>
+        <div className="title">{'Multidisciplinary subjects'}</div>
+        <div>
+          <ul className="listItem">
+            <li className="item">
+              {'Bærekraftig utvikling'}
+            </li>
+            <li className="item">
+              {'Demokrati og medborgerskap'}
+            </li>
+          </ul>
+        </div>
+      </div>
 
-    const isCopyApproved = await Notification.create({
-      type: NotificationTypes.CONFIRM,
-      title: intl.get('assignment list.Are you sure'),
-      submitButtonTitle: intl.get('notifications.copy')
-    });
+    </div>
+  )
 
-    if (isCopyApproved) {
-      /* const currentEntityRoute = entityStore instanceof AssignmentListStore ? 'assignments' : 'teaching-paths'; */
-      const copyId = await this.teachingPathService.copyTeachingPath(id!);
-      history.push(`/teaching-paths/edit/${copyId}`);
-    }
-  }
+  public renderGrepSources = () =>
+  (
+    <div className="entityInfoBlock">
+      <div className="image">
+        <img className="imgInfo" src={source} />
+      </div>
+      <div>
+        <div className="title">{'Source'}</div>
+        <div>
+          <ul className="listItem">
+            <li className="item">
+              {'Hjernelæring'}
+            </li>
+            <li className="item">
+              {'RS Sjøredningsskolen'}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  )
+
+  public renderGrepEducationalGoals = () =>
+  (
+    <>
+      <div className="entityInfoBlockExpanded">
+        <div className="image">
+          <img className="imgInfo" src={goals} />
+        </div>
+        <div className="title">{'Educational goals'}</div>
+      </div>
+      <div className="flexContainer">
+        <ul className="listItem">
+          <li className="itemExpanded">
+            <div className="goalGrade">
+              {'7th grade'}
+            </div>
+            <div className="goalDescription">
+              {'Bruke og vurdere modeller som representerer fenomener man ikke kan observere direkte, og gjøre rede for hvorfor det brukes modeller i naturfag'}
+            </div>
+          </li>
+
+          <li className="itemExpanded">
+            <div className="goalGrade">
+              {'8th grade'}
+            </div>
+            <div className="goalDescription">
+              {'Bruke og vurdere modeller som representerer fenomener man ikke kan observere direkte, og gjøre rede for hvorfor det brukes modeller i naturfag'}
+            </div>
+          </li>
+
+          <li className="itemExpanded">
+            <div className="goalGrade">
+              {'10th grade'}
+            </div>
+            <div className="goalDescription">
+              {'Bruke og vurdere modeller som representerer fenomener man ikke kan observere direkte, og gjøre rede for hvorfor det brukes modeller i naturfag'}
+            </div>
+          </li>
+        </ul>
+
+      </div>
+    </>
+  )
 
   public render() {
     const { currentEntity } = this.props.store!;
@@ -233,102 +345,12 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
 
           <div className="summary">
 
-            {this.renderGrepSubject}
+            {this.renderGrepSubjects()}
+            {this.renderGrepCoreElements()}
+            {this.renderGrepMultiSubjects()}
+            {this.renderGrepSources()}
+            {this.renderGrepEducationalGoals()}
 
-            <div className="entityInfoBlock">
-              <div className="image">
-                <img className="imgInfo" src={coreElement} />
-              </div>
-              <div>
-                <div className="title">{'Core Element'}</div>
-                <div>
-                  <ul className="listItem">
-                    <li className="item">
-                      {'Naturvitenskapelige praksiser og tenkemåter'}
-                    </li>
-                    <li className="item">
-                      {'Test med 7 stk'}
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="entityInfoBlock">
-              <div className="image">
-                <img className="imgInfo" src={multiSubject} />
-              </div>
-              <div>
-                <div className="title">{'Multidisciplinary subjects'}</div>
-                <div>
-                  <ul className="listItem">
-                    <li className="item">
-                      {'Bærekraftig utvikling'}
-                    </li>
-                    <li className="item">
-                      {'Demokrati og medborgerskap'}
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-            </div>
-            <div className="entityInfoBlock">
-              <div className="image">
-                <img className="imgInfo" src={source} />
-              </div>
-              <div>
-                <div className="title">{'Source'}</div>
-                <div>
-                  <ul className="listItem">
-                    <li className="item">
-                      {'Hjernelæring'}
-                    </li>
-                    <li className="item">
-                      {'RS Sjøredningsskolen'}
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-            </div>
-            <div className="entityInfoBlockExpanded">
-              <div className="image">
-                <img className="imgInfo" src={goals} />
-              </div>
-              <div className="title">{'Educational goals'}</div>
-
-            </div>
-            <div className="flexContainer">
-              <ul className="listItem">
-                <li className="itemExpanded">
-                  <div className="goalGrade">
-                    {'7th grade'}
-                  </div>
-                  <div className="goalDescription">
-                    {'Bruke og vurdere modeller som representerer fenomener man ikke kan observere direkte, og gjøre rede for hvorfor det brukes modeller i naturfag'}
-                  </div>
-                </li>
-
-                <li className="itemExpanded">
-                  <div className="goalGrade">
-                    {'7th grade'}
-                  </div>
-                  <div className="goalDescription">
-                    {'Bruke og vurdere modeller som representerer fenomener man ikke kan observere direkte, og gjøre rede for hvorfor det brukes modeller i naturfag'}
-                  </div>
-                </li>
-
-                <li className="itemExpanded">
-                  <div className="goalGrade">
-                    {'7th grade'}
-                  </div>
-                  <div className="goalDescription">
-                    {'Bruke og vurdere modeller som representerer fenomener man ikke kan observere direkte, og gjøre rede for hvorfor det brukes modeller i naturfag'}
-                  </div>
-                </li>
-              </ul>
-
-            </div>
           </div>
         </div >
 
@@ -345,4 +367,4 @@ class SideOutPanelPreviewComponent extends Component<Props & RouteComponentProps
 
 }
 
-export const SideOutPanelPreview = withRouter(SideOutPanelPreviewComponent);
+export const SideOutPanelPreviewTeachingPath = withRouter(SideOutPanelPreviewTeachingPathComponent);

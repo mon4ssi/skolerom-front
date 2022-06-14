@@ -22,12 +22,13 @@ export interface TeachingPathNodeItemResponseDTO {
   excerpt?: string;
   grades: Array<Grade>;
   url?: string;
-  numberOfQuestions?: number;
   images?: { id: number, url: string };
   relatedArticles?: Array<Article>;
   isSelected?: boolean;
   hasGuidance?: boolean;
   open?: boolean;
+  numberOfQuestions?: number;
+  numberOfArticles?: number;
 }
 
 export interface TeachingPathNodeResponseDTO {
@@ -46,6 +47,7 @@ export interface StudentTeachingPathNodeResponseDTO extends TeachingPathNodeResp
 
 export interface TeacherTeachingPathResponseDTO {
   id: number;
+  author: string;
   title: string;
   description: string;
   view: string;
@@ -55,6 +57,7 @@ export interface TeacherTeachingPathResponseDTO {
   url?: string;
   isPublished?: boolean;
   isDistributed?: boolean;
+  hasGuidance?: boolean;
 }
 
 export interface StudentTeachingPathResponseDTO extends TeacherTeachingPathResponseDTO {
@@ -89,6 +92,7 @@ export class TeachingPathApi implements TeachingPathRepo {
     return {
       teachingPathsList: response.data.data.map((item: TeacherTeachingPathResponseDTO) => new TeachingPath({
         id: item.id,
+        author: item.author,
         title: item.title,
         description: item.description,
         grades: isNil(item.grades) ? undefined : item.grades.map(grade => new Grade(grade.id, grade.title)),
@@ -97,7 +101,8 @@ export class TeachingPathApi implements TeachingPathRepo {
         featuredImage: item.featuredImage,
         url: item.url,
         isPublished: item.isPublished,
-        isDistributed: item.isDistributed
+        isDistributed: item.isDistributed,
+        hasGuidance: item.hasGuidance,
       })),
       total_pages: response.data.meta.pagination.total_pages
     };
@@ -117,7 +122,8 @@ export class TeachingPathApi implements TeachingPathRepo {
         featuredImage: item.featuredImage,
         url: item.url,
         isPublished: item.isPublished,
-        isDistributed: item.isDistributed
+        isDistributed: item.isDistributed,
+        hasGuidance: item.hasGuidance,
       })),
       total_pages: response.data.meta.pagination.total_pages
     };
@@ -166,6 +172,9 @@ export class TeachingPathApi implements TeachingPathRepo {
         levels: data.levels,
         answerId: data.answerId,
         isCopy: data.isCopy,
+        numberOfArticles: data.numberOfArticles,
+        numberOfQuestions: data.numberOfQuestions,
+        hasGuidance: data.hasGuidance,
       });
     } catch (error) {
       if (error.response.data.message === 'Teaching path not assigned to you') {
