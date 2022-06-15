@@ -41,7 +41,7 @@ const headerLinks: Array<HeaderNavigationLink> = [
     submenuItems: [
       {
         name: 'School Articles',
-        url: `${process.env.REACT_APP_WP_URL}/undervisning/`
+        url: `${process.env.REACT_APP_WP_URL}/undervisning/`,
       },
       {
         name: 'Publications',
@@ -71,6 +71,10 @@ const headerLinks: Array<HeaderNavigationLink> = [
   {
     name: 'About skolerom',
     url: `${process.env.REACT_APP_WP_URL}/hva-er-skolerom/`
+  },
+  {
+    name: 'contact',
+    url: `${process.env.REACT_APP_WP_URL}/kontakt-oss/`
   }
 ];
 const tabletHeaderLinks: Array<HeaderNavigationLink> = [
@@ -93,6 +97,10 @@ const tabletHeaderLinks: Array<HeaderNavigationLink> = [
   {
     name: 'About skolerom',
     url: `${process.env.REACT_APP_WP_URL}/hva-er-skolerom/`
+  },
+  {
+    name: 'contact',
+    url: `${process.env.REACT_APP_WP_URL}/kontakt-oss/`
   }
 ];
 const nynorskHeaderLinks: Array<HeaderNavigationLink> = [
@@ -104,11 +112,28 @@ const nynorskHeaderLinks: Array<HeaderNavigationLink> = [
 
 const renderHeaderLink = (link: HeaderNavigationLink) => {
   if (link.dropdown) {
-    const renderSubmenu = (item: HeaderNavigationLink) => (
-      <li key={item.name} className={'AppHeader__dropdownItem'}>
-        <a href={item.url} title={intl.get(`header.title.${item.name}`)}>{intl.get(`header.${item.name}`)}</a>
-      </li>
+    const renderSubMenuSubMenu = (item: HeaderNavigationLink) => (
+        <li key={item.name} className={'AppHeader__dropdownItem__subItem'}>
+          <a href={item.url} title={intl.get(`header.title.${item.name}`)}>{intl.get(`header.${item.name}`)}</a>
+        </li>
     );
+    const renderSubmenu = (item: HeaderNavigationLink) => {
+      if (item.dropdown) {
+        return (
+          <li key={item.name} className={'AppHeader__dropdownItem'}>
+            <a href={item.url} title={intl.get(`header.title.${item.name}`)}>{intl.get(`header.${item.name}`)}</a>
+            <ul className="AppHeader__dropdownItem__subMenu">
+              {item.submenuItems!.map(renderSubMenuSubMenu)}
+            </ul>
+          </li>
+        );
+      }
+      return (
+        <li key={item.name} className={'AppHeader__dropdownItem'}>
+          <a href={item.url} title={intl.get(`header.title.${item.name}`)}>{intl.get(`header.${item.name}`)}</a>
+        </li>
+      );
+    };
 
     return (
       <li key={link.name} className="AppHeader__navigationItem tc1 fs17 fw500">
@@ -525,6 +550,25 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     );
   }
 
+  public renderNavigationNotLogin = () => {
+    const { uiStore } = this.props;
+    const linksList = uiStore!.currentLocale === 'nn' ? nynorskHeaderLinks : headerLinks;
+    const tabletLinksList = uiStore!.currentLocale === 'nn' ? nynorskHeaderLinks : headerLinks;
+
+    return (
+      <>
+        <ul className="AppHeader__navigation">
+          {linksList.map(renderHeaderLink)}
+          {this.renderItemsNotLogin()}
+        </ul>
+        <ul className="AppHeader__navigation AppHeader__navigation_tablet">
+          {tabletLinksList.map(renderHeaderLink)}
+          {this.renderItemsNotLogin()}
+        </ul>
+      </>
+    );
+  }
+
   public handleCopy = async () => {
     const { entityStore, currentEntityId, history } = this.props;
 
@@ -627,20 +671,12 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   public renderItemsNotLogin = () => {
     const classTemplar = (this.props.loginStore!.isCurrentUserFetching) ? 'BtnFinal btnDisabled' : 'BtnFinal';
     return (
-      <ul className="singleListElements">
-        <li>
-          <a href={`${process.env.REACT_APP_WP_URL}/kontakt-oss/`}>{intl.get('header.contact_menu')}</a>
-        </li>
-        <li>
-          <a href={`${process.env.REACT_APP_WP_URL}/hva-er-skolerom-no/`}>{intl.get('header.about_menu')}</a>
-        </li>
-        <li>
-          <a href={`${process.env.REACT_APP_BASE_URL}/api/dataporten/auth`} className={classTemplar}>
-            <img src={loginBtnIcon} />
-            <p>{intl.get('header.logg_in')}</p>
-          </a>
-        </li>
-      </ul>
+      <li className="singleListElementsSimple">
+        <a href={`${process.env.REACT_APP_BASE_URL}/api/dataporten/auth`} className={classTemplar}>
+          <img src={loginBtnIcon} />
+          <p>{intl.get('header.logg_in')}</p>
+        </a>
+      </li>
     );
   }
 
@@ -688,7 +724,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         {this.props.loginStore!.currentUser && !fromAssignmentPassing && !fromTeachingPathPassing && this.renderNavigation()}
         {!this.props.isPreview && this.props.loginStore!.currentUser && !isStudent && fromAssignmentPassing && this.renderGuidanceAndCopyButton()}
         {!this.props.isPreview && this.props.loginStore!.currentUser && !isStudent && fromTeachingPathPassing && this.renderCopyButton('teaching_paths_list.copy')}
-        {ifLogin && this.renderLineMobileButton()}
+        {ifLogin && this.renderNavigationNotLogin()}
 
         {this.props.loginStore!.currentUser &&  this.renderBurgerButton()}
         <div className="AppHeader__block AppHeader__block_mobile">
