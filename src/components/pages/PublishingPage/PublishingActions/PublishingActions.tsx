@@ -237,22 +237,24 @@ export class PublishingActions extends Component<Props, State> {
       );
       this.props.store!.currentEntity!.setIsMySchool(false);
     } else {
-      this.sendValidbutton();
-      this.setState(
-        {
-          isValidPrivate: false,
-          isMyStateSchool: false
-        }
-      );
-      this.props.store!.currentEntity!.setIsMySchool(false);
       if (store!.currentEntity!.isMySchool) {
         this.setState(
           {
+            isValidPrivate: false,
             isMyStateSchool: true
           }
         );
         this.props.store!.currentEntity!.setIsMySchool(true);
+      } else {
+        this.setState(
+          {
+            isValidPrivate: false,
+            isMyStateSchool: false
+          }
+        );
+        this.props.store!.currentEntity!.setIsMySchool(false);
       }
+      this.sendValidbutton();
     }
     if (typeof(store!.currentEntity!.getListOfSources()) !== 'undefined') {
       this.setState(
@@ -368,9 +370,7 @@ export class PublishingActions extends Component<Props, State> {
       arraySchoolIds.push(school.id);
     });
     this.setState({ optionsMySchool : arraySchoolIds });
-    if (store!.currentEntity!.mySchools && store!.currentEntity!.mySchools.length === 0) {
-      store!.currentEntity!.setMySchool(String(arraySchoolIds));
-    }
+    this.props.store!.currentEntity!.setMySchool(String(arraySchoolIds));
   }
 
   public handerScroll = async () => {
