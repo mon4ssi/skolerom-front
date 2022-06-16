@@ -54,16 +54,16 @@ export const CustomImageForm = (props: any) => {
       emptyFormFields = emptyFormFields !== '' ? `${emptyFormFields}, image` : 'image';
     } */
     if (title === null || title === '') {
-      emptyFormFields = emptyFormFields !== '' ? `${emptyFormFields}, title` : 'title';
+      emptyFormFields = emptyFormFields !== '' ? `${emptyFormFields}, ${intl.get('new assignment.updateCustomImagesForm.title')}` : intl.get('new assignment.updateCustomImagesForm.title');
     }
     if (source === null || source === '') {
-      emptyFormFields = emptyFormFields !== '' ? `${emptyFormFields}, source` : 'source';
+      emptyFormFields = emptyFormFields !== '' ? `${emptyFormFields}, ${intl.get('new assignment.updateCustomImagesForm.source')}` : intl.get('new assignment.updateCustomImagesForm.source');
     }
 
     if (emptyFormFields !== '') {
       Notification.create({
         type: NotificationTypes.ERROR,
-        title: `Please check this fields: ${emptyFormFields}`,
+        title: `${intl.get('new assignment.updateCustomImagesForm.message_error_void_fields')}: ${emptyFormFields}`,
       });
       return false;
     }
@@ -73,7 +73,7 @@ export const CustomImageForm = (props: any) => {
   const showCustomImageUploadMessage = () => {
     Notification.create({
       type: false ? NotificationTypes.ERROR : NotificationTypes.SUCCESS,
-      title: '' || 'Image updated succesfully'
+      title: '' || intl.get('new assignment.updateCustomImagesForm.message_success')
     });
   };
 
@@ -94,16 +94,16 @@ export const CustomImageForm = (props: any) => {
         <img src={props.attachment.path} alt={props.attachment.title} style={{ maxWidth: 180 }} />
       </div>
       <div className="spaced">
-        <label className="label" htmlFor="title">Title: </label>
+        <label className="label" htmlFor="title">{intl.get('new assignment.updateCustomImagesForm.title')}: </label>
         <input id="title" value={title} onChange={(e) => { handleChangeTitle(e); }} className="custom-input-image" type="text" />
 
       </div>
       <div className="spaced">
-        <label className="label" htmlFor="source">Source: </label>
+        <label className="label" htmlFor="source">{intl.get('new assignment.updateCustomImagesForm.source')}: </label>
         <input id="source" value={source} onChange={(e) => { handleChangeSource(e); }} className="custom-input-image" type="text" />
       </div>
       <div className="spaced right">
-        <button className="createButton" onClick={saveImage}>Save image</button>
+        <button className="createButton" onClick={saveImage}>{intl.get('new assignment.updateCustomImagesForm.save_changes')}</button>
       </div>
     </div>
   );

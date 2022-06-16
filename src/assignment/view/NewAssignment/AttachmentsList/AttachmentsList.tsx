@@ -30,6 +30,7 @@ import { ArticleService } from 'assignment/service';
 import { injector } from 'Injector';
 import { CustomImage, CustomImageFormSimple } from './CustomImageFormSimple/CustomImageFormSimple';
 import { runInThisContext } from 'vm';
+import { Pagination } from 'components/common/Pagination/Pagination';
 
 const const1 = 1;
 const const2 = 2;
@@ -48,8 +49,10 @@ interface State {
   selectedTabId: number;
   currentId: number;
   currentAttachment: undefined | FilterableCustomImageAttachment;
+  currentPage: number;
   query: string;
   errMsg: string;
+  listIdsSelected: Array<number>;
 }
 
 export interface FilterableAttachment {
@@ -60,6 +63,7 @@ export interface FilterableAttachment {
   alt?: string;
   duration?: number;
   src?: Array<string>;
+  deleteddate?: string | undefined | null;
 }
 
 export interface FilterableCustomImageAttachment {
@@ -84,7 +88,9 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     selectedTabId: 0,
     currentId: 0,
     errMsg: '',
-    currentAttachment: undefined
+    currentAttachment: undefined,
+    currentPage: 1,
+    listIdsSelected: []
   };
 
   public TWO = 2;
@@ -99,7 +105,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
         await newAssignmentStore!.fetchQuestionAttachments(AttachmentContentType.image);
       }
       if (this.context.contentType === AttachmentContentType.customImage) {
-        await newAssignmentStore!.fetchQuestionCustomImagesAttachments(AttachmentContentType.customImage);
+        await newAssignmentStore!.fetchQuestionCustomImagesAttachments(String(this.state.listIdsSelected), AttachmentContentType.customImage);
       }
       if (this.context.contentType === AttachmentContentType.video) {
         await newAssignmentStore!.fetchQuestionAttachments(AttachmentContentType.video);
@@ -238,24 +244,57 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
 
   private onRemoveAttachment = async (id: number) => {
     const { newAssignmentStore } = this.props;
+    const ifIdInArray = (this.state.listIdsSelected.includes(id)) ? true : false;
+    // const searchIdInCustom = await newAssignmentStore!.searchIdInExist(id, '');
+    // const searchIdInDeletes = await newAssignmentStore!.searchIdInDeletes(id, String(id));
+    this.setState({
+      listIdsSelected: []
+    });
     if (this.context.contentType === AttachmentContentType.image) {
       const editableImageBlock = newAssignmentStore!.getAttachmentsFromCurrentBlock() as EditableImagesContentBlock;
+      const isSelectedAttachment = this.checkIsAttachmentSelected(id!);
       if (editableImageBlock) {
         const image: QuestionAttachment | undefined = editableImageBlock.images.find(im => im.id === id);
         if (image) {
           editableImageBlock.removeImage(image.id);
-          await this.props.newAssignmentStore!.removeAttachment(image.id);
+          if (ifIdInArray) {
+            await this.articleService.decreaseUse(image.id);
+          } else {
+            await this.props.newAssignmentStore!.removeAttachment(image.id);
+          }
         }
       }
     }
 
     if (this.context.contentType === AttachmentContentType.customImage) {
+      const { currentPage } = this.state;
+      const { newAssignmentStore } = this.props;
       const editableImageBlock = newAssignmentStore!.getAttachmentsFromCurrentBlock() as EditableImagesContentBlock;
+      const isSelectedAttachment = this.checkIsAttachmentSelected(id!);
       if (editableImageBlock) {
         const image: QuestionAttachment | undefined = editableImageBlock.images.find(im => im.id === id);
+        const pathifArticle = (image && image.path) ? (image.path!.split(String(process.env.REACT_APP_WP_URL)).length > 1) ? true : false : false;
         if (image) {
-          editableImageBlock.removeImage(image.id);
-          await this.articleService.decreaseUse(image.id);
+          /* newAssignmentStore!.fetchingCustomImageAttachments = true;
+          editableImageBlock.removeImage(image.id); */
+          if (pathifArticle) {
+            editableImageBlock.removeImage(image.id);
+            await this.props.newAssignmentStore!.removeAttachment(image.id);
+          } else {
+            newAssignmentStore!.fetchingCustomImageAttachments = true;
+            editableImageBlock.removeImage(image.id);
+            try {
+              await this.articleService.decreaseUse(image.id);
+            } catch (error) {
+              /* console.log(error); */
+            }
+            /* await this.articleService.decreaseUse(image.id); */
+
+            editableImageBlock.removeImage(image.id);
+            /* await this.articleService.fetchCustomImages('', currentPage!); */
+            this.goToCustomImgAttachmentList();
+            newAssignmentStore!.fetchingCustomImageAttachments = false;
+          }
         }
       }
     }
@@ -286,8 +325,20 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     );
   }
 
+  private createArrayForAttachment = (item: FilterableAttachment) => {
+    const isCustomImg = (item.path!.split(String(process.env.REACT_APP_WP_URL)).length > 1) ? false : true;
+    if (isCustomImg) {
+      if (!this.state.listIdsSelected.includes(item.id)) {
+        this.state.listIdsSelected.push(item.id);
+      }
+    }
+  }
+
   private renderCustomImageAttachment = (item: FilterableAttachment) => {
     const isSelected = this.checkIsAttachmentSelected(item.id);
+    if (isSelected) {
+      this.createArrayForAttachment(item);
+    }
     return (
       <AttachmentComponent
         key={item.id}
@@ -454,7 +505,12 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     document.addEventListener('keyup', this.handleKeyboardControl);
     await this.fetchAttachments();
     this.reaction = reaction(() => {
-      if (!isNull(this.props.newAssignmentStore!.currentEntity!.relatedArticles)) {
+      /* console.log(this.props.newAssignmentStore!.currentEntity!);
+      console.log(this.props.newAssignmentStore!.currentEntity!.relatedArticles);
+      console.log(!isNull(this.props.newAssignmentStore!.currentEntity!.relatedArticles)); */
+      if (this.props.newAssignmentStore!.currentEntity! &&
+        this.props.newAssignmentStore!.currentEntity!.relatedArticles !== null
+        && this.props.newAssignmentStore!.currentEntity!.relatedArticles !== undefined && this.props.newAssignmentStore!.currentEntity!.relatedArticles.length !== 0) {
         return this.props.newAssignmentStore!.currentEntity!.relatedArticles;
       }
     }, () => { this.fetchAttachments(); });
@@ -565,7 +621,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
   }
 
-  public selectClassOption = (tabid : number, position : number) => {
+  public selectClassOption = (tabid: number, position: number) => {
     const { newAssignmentStore } = this.props;
     switch (tabid) {
       case 0:
@@ -601,10 +657,12 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
   }
 
-  public goToCustomImgAttachmentList = async() => {
+  public goToCustomImgAttachmentList = async () => {
     const { newAssignmentStore } = this.props;
     this.setState({ selectedTabId: 2, currentId: 0, currentAttachment: undefined });
     newAssignmentStore!.fetchingCustomImageAttachments = true;
+    /* this.renderAttachmentTab(); */
+    this.props.context.changeContentType(AttachmentContentType.customImage);
     newAssignmentStore!.fetchQuestionAttachments(AttachmentContentType.customImage);
     newAssignmentStore!.fetchingCustomImageAttachments = false;
   }
@@ -736,11 +794,13 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
     if (this.context.contentType === AttachmentContentType.customImage) {
       return (
-        <CustomImageAttachments
-          filterAttachments={this.filterAttachments}
-          renderAttachment={this.renderCustomImageAttachment}
-          sortAttachments={this.sortAttachments}
-        />
+        <div className="container-expanded">
+          <CustomImageAttachments
+            filterAttachments={this.filterAttachments}
+            renderAttachment={this.renderCustomImageAttachment}
+            sortAttachments={this.sortAttachments}
+          />
+        </div>
       );
     }
     if (this.context.contentType === AttachmentContentType.video) {
@@ -835,11 +895,38 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
   }
 
+  public onChangePage = async ({ selected }: { selected: number }) => {
+    const { newAssignmentStore } = this.props;
+    this.setState({ currentPage: selected + 1 });
+    newAssignmentStore!.currentPage = selected + 1;
+    newAssignmentStore!.fetchingCustomImageAttachments = true;
+    newAssignmentStore!.fetchQuestionCustomImagesAttachments(String(this.state.listIdsSelected), AttachmentContentType.customImage);
+    /* this.render(); */
+    newAssignmentStore!.fetchingCustomImageAttachments = false;
+  }
+
+  public renderPagination = () => {
+    /* const { assignmentListStore, location } = this.props; */
+    const { newAssignmentStore } = this.props;
+    const { currentPage } = this.state;
+    const pages = newAssignmentStore!.numberOfPages;
+    if (pages > 1) {
+      return (
+        <Pagination
+          pageCount={pages}
+          onChangePage={this.onChangePage}
+          page={currentPage}
+        />
+      );
+    }
+  }
+
   public render() {
 
     const { newAssignmentStore } = this.props;
     const { selectedTabId } = this.state;
     const isLoading = newAssignmentStore!.fetchingAttachments || newAssignmentStore!.fetchingCustomImageAttachments || false;
+    const numberOfItems = newAssignmentStore!.currentPage;
     const classNameWrapper = selectedTabId === this.THREE ? 'contentWrapperExpanded' : 'contentWrapper';
     return (
       <div className="attachments-list-container">
@@ -863,6 +950,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
 
           {isLoading && this.renderSkeletonLoader()}
           {!isLoading && this.renderTabByOption()}
+          {selectedTabId === this.TWO && this.renderPagination()}
         </div>
 
         {this.renderBottomInfoAndAddBar()}

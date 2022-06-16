@@ -35,6 +35,7 @@ import { DEFAULT_AMOUNT_ARTICLES_PER_PAGE, DEFAULT_CUSTOM_IMAGES_PER_PAGE, LOCAL
 import { ContentBlockType } from './ContentBlock';
 import { Locales } from 'utils/enums';
 import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
+import { CustomImageAttachments } from './view/NewAssignment/AttachmentsList/Attachments/CustomImageAttachments';
 
 export interface AttachmentDTO {
   id: number;
@@ -52,6 +53,7 @@ export interface CustomImgAttachmentDTO {
   id?: number;
   filename?: string;
   source?: Array<string>;
+  deletedAt?: string | undefined | null;
 }
 
 export interface CustomImgAttachmentResponse {
@@ -466,16 +468,26 @@ export class WPApi implements ArticleRepo {
     ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
   }
 
-  public async fetchCustomImages(): Promise<Array<CustomImgAttachment>> {
-    return (
-      await API.get(
-        `${process.env.REACT_APP_BASE_URL}/api/teacher/images`, {
-          params: {
-            page: 1,
-            per_page: DEFAULT_CUSTOM_IMAGES_PER_PAGE,
-          },
-        })
-    ).data.data.map((item: CustomImgAttachmentDTO) => new CustomImgAttachment(item.id!, item.path, item.title, item.title, item.title, 0, item.source));
+  public async fetchCustomImages(ids:string, page: number): Promise<ResponseFetchCustomImages> {
+    const parameters = (ids) ? {
+      page: page!,
+      per_page: DEFAULT_CUSTOM_IMAGES_PER_PAGE,
+      selectedImages: ids,
+    } : {
+      page: page!,
+      per_page: DEFAULT_CUSTOM_IMAGES_PER_PAGE,
+    };
+    const response = await API.get(
+      `${process.env.REACT_APP_BASE_URL}/api/teacher/images`, {
+        params: parameters,
+      });
+    const customImages = response.data.data.map((item: CustomImgAttachmentDTO) => new CustomImgAttachment(item.id!, item.path, item.title, item.title, item.title, 0, item.source, item.deletedAt));
+    const entirePage = Math.floor((response.data.meta.pagination.total / DEFAULT_CUSTOM_IMAGES_PER_PAGE));
+    const modulePage = Math.floor((response.data.meta.pagination.total % DEFAULT_CUSTOM_IMAGES_PER_PAGE));
+    return {
+      myCustomImages: customImages,
+      total_pages: modulePage !== 0 ? entirePage + 1 : entirePage,
+    };
   }
 
   public async createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse> {
@@ -523,4 +535,9 @@ export class WPApi implements ArticleRepo {
       }
     })).data;
   }
+}
+
+export interface ResponseFetchCustomImages {
+  myCustomImages: Array<CustomImgAttachment>;
+  total_pages: number;
 }

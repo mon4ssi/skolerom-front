@@ -91,6 +91,8 @@ export class NewAssignmentStore {
   @observable public highlightingItem: CreationElementsType | undefined;
   @observable public allArticlePanelFilters: FilterArticlePanel | null = null;
   @observable public titleButtonGuidance: string = '';
+  @observable public numberOfPages: number = 0;
+  @observable public currentPage: number = 1;
 
   public arrayForImagesSkeleton = new Array(numberOfImagesForSkeleton).fill('imageSkeletonLoader');
   public arrayForCustomImagesSkeleton = new Array(numberOfCustomImagesForSkeleton).fill('imageSkeletonLoader');
@@ -347,8 +349,7 @@ export class NewAssignmentStore {
   public async removeAttachment(attachmentId: number) {
     try {
       const statusCode = await this.draftAssignmentService.removeAttachment(this.currentEntity!.id, attachmentId);
-
-      if (statusCode === statusCode204) {
+      if (statusCode! === statusCode204) {
         this.questionAttachments = this.questionAttachments.filter(
           attachment => attachment.id !== attachmentId
         );
@@ -589,8 +590,9 @@ export class NewAssignmentStore {
           break;
         }
         case AttachmentContentType.customImage: {
+          const response = await this.articleService.fetchCustomImages('', this.currentPage);
           this.questionCustomAttachments =
-            (await this.articleService.fetchCustomImages()).map(item => item).flat() || [];
+            (response.myCustomImages).map(item => item).flat() || [];
           break;
         }
         case AttachmentContentType.video: {
@@ -616,13 +618,45 @@ export class NewAssignmentStore {
     this.fetchingCustomImageAttachments = false;
   }
 
-  public async fetchQuestionCustomImagesAttachments(typeAttachments: AttachmentContentType): Promise<void> {
+  public async searchIdInExist(id: number, listids: string) {
+    const response = await this.articleService.fetchCustomImages(listids, this.currentPage);
+    const allAttachments = (response.myCustomImages).map(item => item).flat() || [];
+    let valueresponse = false;
+    if (allAttachments) {
+      allAttachments.forEach((element) => {
+        if (element.id === id) {
+          valueresponse = true;
+        }
+      });
+    }
+    return valueresponse;
+  }
+
+  public async searchIdInDeletes(id: number, listids: string) {
+    const response = await this.articleService.fetchCustomImages(listids, this.currentPage);
+    const allAttachments = (response.myCustomImages).map(item => item).flat() || [];
+    let valueresponse = false;
+    if (allAttachments) {
+      allAttachments.forEach((element) => {
+        if (element.id === id) {
+          if (element.deleteddate !== null || element.deleteddate !== undefined) {
+            valueresponse = true;
+          }
+        }
+      });
+    }
+    return valueresponse;
+  }
+
+  public async fetchQuestionCustomImagesAttachments(listids: string, typeAttachments: AttachmentContentType): Promise<void> {
     this.fetchingCustomImageAttachments = true;
     try {
       switch (typeAttachments) {
         case AttachmentContentType.customImage: {
+          const response = await this.articleService.fetchCustomImages(listids, this.currentPage);
           this.questionCustomAttachments =
-            (await this.articleService.fetchCustomImages()).map(item => item).flat() || [];
+            (response.myCustomImages).map(item => item).flat() || [];
+          this.numberOfPages = response.total_pages;
           break;
         }
         default:
