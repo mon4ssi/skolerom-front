@@ -5,8 +5,8 @@ import onClickOutside from 'react-onclickoutside';
 import moreOptionsCustomImageIcon from 'assets/images/more-with-bg.svg';
 import moreOptionsCustomImageIconLight from 'assets/images/more-options-question-light.svg';
 import moreOptionsCustomImageIconPink from 'assets/images/more-options-question-pink.svg';
-import duplicateIcon from 'assets/images/duplicate-question.svg';
-import deleteIcon from 'assets/images/delete-question.svg';
+import editIcon from 'assets/images/edit-image.svg';
+import deleteIcon from 'assets/images/trash-image.svg';
 
 import { CreationElements, NewAssignmentStore } from '../../../NewAssignmentStore';
 import { EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
@@ -47,13 +47,13 @@ class MoreOptionsCustomImageWrapper extends Component<MoreOptionsCustomImageWrap
         <ul className="flexBox dirColumn">
           <li>
             <a href="javascript:void(0)" onClick={this.edit} className="flexBox" >
-              <span>Edit</span>
-              <img src={duplicateIcon} alt="Duplicate qustion" />
+              <span>{intl.get('new assignment.images_options.edit')}</span>
+              <img src={editIcon} alt="Duplicate qustion" />
             </a>
           </li>
           <li>
             <a href="javascript:void(0)" onClick={this.remove} className="flexBox">
-              <span style={{ color: '#E2017B' }}>Remove</span>
+              <span style={{ color: '#E2017B' }}>{intl.get('new assignment.images_options.delete')}</span>
               <img src={deleteIcon} alt="Delete qustion" />
             </a>
           </li>

@@ -1,3 +1,8 @@
+.container-expanded {
+  height: 100%;
+  overflow: auto;
+}
+
 .attachments-list-container {
   flex: 1;
   width: 100%;
@@ -15,6 +20,10 @@
     align-items: center;
     font-size: 1.375rem;
     font-weight: 500;
+  }
+
+  .messageExpanded {
+    height: 100%;
   }
 
   .attachments-tabs {
@@ -103,21 +112,21 @@
       display: flex;
       flex-wrap: wrap;
       margin: 10px 0 0 0;
-      overflow: auto;
-      height: 100%;
-
+      overflow: auto;      
+      padding-bottom: 10px;
       &__img-wrap {
         margin: 17px 10px 0;
         width: calc(100% * (1 / 4) - 20px);
         background-color: rgba(0, 0, 0, 0.3);
         min-height: 200px;
+        max-height: 300px;
         position: relative;
 
         button {
           padding: 0px;
           height: 100%;
           display: block;
-
+          width: 100%;
           &:focus {
             outline: auto;
             outline-style: auto;
@@ -562,7 +571,7 @@
 
   .attachment-info {
     display: flex;
-    padding: 0 20px;
+    padding: 15px 20px;
     height: 76px;
     align-items: center;
     justify-content: space-between;
@@ -703,7 +712,7 @@ input[type="file"] {
 .MoreOptions {
   cursor: pointer;
   position: relative;
-
+  z-index: 1;
   button {
     padding: 0px;
     background: transparent;

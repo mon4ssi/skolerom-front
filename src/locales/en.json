@@ -272,11 +272,29 @@
     "images_options": {
       "images_from_article": "Images from article",
       "custom_images": "Custom images",
+      "edit": "Edit image",
+      "delete": "Delete image",
       "upload_image": "Upload image"
     },
     "notification": {
-      "error": "Error uploading the current image(s)",
+      "error_single_upload": "Error uploading the current image",
+      "error_multiple_upload": "Error uploading the current images",
       "success": "Images uploaded successfuly"
+    },
+    "updateCustomImagesForm": {
+      "title": "Title",
+      "source": "Source",
+      "save_changes": "Save changes",
+      "message_error_void_fields": "Please check this fields",
+      "message_success": "Image updated succesfully"
+    },
+    "uploadCustomImages": {
+      "select_images": "Select images",
+      "counter_message_1": "You have chosen",
+      "counter_message_2": "image(s).",
+      "upload_images": "Upload",
+      "message_success_single": "Image uploaded succesfully",
+      "message_success_multiple": "Images uploaded succesfully"
     },
     "images_empty_list": "No images available, please upload a custom image",
     "videos_from_article": "Videos from article",
