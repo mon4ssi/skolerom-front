@@ -105,7 +105,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
 
   private editItem = async () => {
     const { attachment } = this.props;
-    this.toggleAttachment();
+    /* this.toggleAttachment(); */
     await this.props.onEditActionSelected(attachment.id);
     /* await this.props.onRenderThirdTab(attachment!.id); */
   }

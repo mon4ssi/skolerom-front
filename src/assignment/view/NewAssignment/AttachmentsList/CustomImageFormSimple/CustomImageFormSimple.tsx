@@ -86,7 +86,7 @@ export const CustomImageFormSimple = (props: any) => {
       const formData = new FormData();
       formData.append('image', image);
       formData.append('title', image.name.split('.')[0]);
-      formData.append('source', image.lastModified.toString());
+      /* formData.append('source', image.lastModified.toString()); */
       try {
         await articleService.createCustomImage(formData).then(() => {
           for (let i = 1; i <= amount; i += 1) {
