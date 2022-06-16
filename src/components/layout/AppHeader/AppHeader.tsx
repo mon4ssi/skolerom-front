@@ -624,22 +624,25 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     );
   }
 
-  public renderItemsNotLogin = () => (
-    <ul className="singleListElements">
-      <li>
-        <a href={`${process.env.REACT_APP_WP_URL}/kontakt-oss/`}>{intl.get('header.contact_menu')}</a>
-      </li>
-      <li>
-        <a href={`${process.env.REACT_APP_WP_URL}/hva-er-skolerom-no/`}>{intl.get('header.about_menu')}</a>
-      </li>
-      <li>
-        <a href={`${process.env.REACT_APP_BASE_URL}/api/dataporten/auth`} className="BtnFinal">
-          <img src={loginBtnIcon} />
-          <p>{intl.get('header.logg_in')}</p>
-        </a>
-      </li>
-    </ul>
-  )
+  public renderItemsNotLogin = () => {
+    const classTemplar = (this.props.loginStore!.isCurrentUserFetching) ? 'BtnFinal btnDisabled' : 'BtnFinal';
+    return (
+      <ul className="singleListElements">
+        <li>
+          <a href={`${process.env.REACT_APP_WP_URL}/kontakt-oss/`}>{intl.get('header.contact_menu')}</a>
+        </li>
+        <li>
+          <a href={`${process.env.REACT_APP_WP_URL}/hva-er-skolerom-no/`}>{intl.get('header.about_menu')}</a>
+        </li>
+        <li>
+          <a href={`${process.env.REACT_APP_BASE_URL}/api/dataporten/auth`} className={classTemplar}>
+            <img src={loginBtnIcon} />
+            <p>{intl.get('header.logg_in')}</p>
+          </a>
+        </li>
+      </ul>
+    );
+  }
 
   public renderLineMobileButton = () => (
     <div className="singleFlexElements AppHeader__block">
@@ -666,8 +669,10 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       ifLogin = false;
     }
 
+    const classCreation = (fromTeachingPathPassing) ? 'AppHeader creationHeader' : 'AppHeader';
+
     return (
-      <header className="AppHeader">
+      <header className={classCreation}>
         {this.renderUserModalIfNeeded()}
         {this.state.modalVisible !== Modals.NONE && <div className="AppHeader__headerOverlay" onClick={this.closeModals} />}
         {!fromAssignmentPassing && !fromTeachingPathPassing && <p id="LogoDescription" className="hidden">Logo Skolerom</p>}

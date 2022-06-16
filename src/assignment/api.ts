@@ -15,7 +15,8 @@ import {
   WPLocale,
   Source,
   FilterGrep,
-  GoalsData
+  GoalsData,
+  CustomImgAttachment
 } from './Assignment';
 import {
   AssignmentDistributeDTO,
@@ -30,9 +31,10 @@ import {
   GreepElements,
   SourceDTO
 } from './factory';
-import { DEFAULT_AMOUNT_ARTICLES_PER_PAGE, LOCALES_MAPPING_FOR_BACKEND } from 'utils/constants';
+import { DEFAULT_AMOUNT_ARTICLES_PER_PAGE, DEFAULT_CUSTOM_IMAGES_PER_PAGE, LOCALES_MAPPING_FOR_BACKEND } from 'utils/constants';
 import { ContentBlockType } from './ContentBlock';
 import { Locales } from 'utils/enums';
+import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
 
 export interface AttachmentDTO {
   id: number;
@@ -42,6 +44,21 @@ export interface AttachmentDTO {
   title: string;
   duration?: number;
   src?: Array<string>;
+}
+
+export interface CustomImgAttachmentDTO {
+  path: string;
+  title: string;
+  id?: number;
+  filename?: string;
+  source?: Array<string>;
+}
+
+export interface CustomImgAttachmentResponse {
+  id: number;
+  image_url: string;
+  source: string;
+  title: string;
 }
 
 export interface ImageArticleDTO {
@@ -172,6 +189,7 @@ interface AssignmentByIdResponseDTO {
   questions: Array<QuestionDTO>;
   relatedArticles: Array<ArticleRequestDTO>;
   subjects: Array<SubjectDTO>;
+  open?: boolean;
 }
 
 export class AssignmentApi implements AssignmentRepo {
@@ -191,6 +209,7 @@ export class AssignmentApi implements AssignmentRepo {
       isPrivate: assignmentDTO.isPrivate,
       levels: assignmentDTO.levels,
       subjects: assignmentDTO.subjects,
+      open: assignmentDTO.open
     });
   }
 
@@ -212,7 +231,7 @@ export class AssignmentApi implements AssignmentRepo {
     return (await API.get('api/sources', {
       params:
       {
-        locale: this.currentLocale === Locales.EN ? null :  LOCALES_MAPPING_FOR_BACKEND[locale]
+        locale: this.currentLocale === Locales.EN ? null : LOCALES_MAPPING_FOR_BACKEND[locale]
       }
     })).data.data.map(
       (item: SourceDTO) => new Source(item.id, item.title, item.default)
@@ -266,7 +285,7 @@ export class AssignmentApi implements AssignmentRepo {
     }
   }
 
-  public async getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep>  {
+  public async getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep> {
     const response = await API.get('api/teacher/assignments/grep/filters', {
       params: {
         grades,
@@ -352,6 +371,7 @@ export class AssignmentApi implements AssignmentRepo {
 }
 
 enum AttachmentType {
+  customImage = 'customimg',
   image = 'img',
   video = 'video',
   sound = 'sound',
@@ -377,7 +397,7 @@ export class WPApi implements ArticleRepo {
   }: { page: number, perPage: number, order: string, grades?: number, subjects?: number, searchTitle?: string, core?: number | string, goal?: number | string, multi?: number, source?: number, lang: string }): Promise<Array<Article>> {
 
     let langParmeter = lang;
-    if (lang === '' || (typeof(lang) === 'undefined')) langParmeter = this.storageInteractor.getArticlesLocaleId()!;
+    if (lang === '' || (typeof (lang) === 'undefined')) langParmeter = this.storageInteractor.getArticlesLocaleId()!;
 
     try {
       return (
@@ -423,7 +443,7 @@ export class WPApi implements ArticleRepo {
     return (
       await API.get(
         `${process.env.REACT_APP_WP_URL}/wp-json/media/v1/post/`, {
-          params:  {
+          params: {
             id: postIds.join(),
             content: AttachmentType.video
           }
@@ -444,6 +464,56 @@ export class WPApi implements ArticleRepo {
         }
       )
     ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
+  }
+
+  public async fetchCustomImages(): Promise<Array<CustomImgAttachment>> {
+    return (
+      await API.get(
+        `${process.env.REACT_APP_BASE_URL}/api/teacher/images`, {
+          params: {
+            page: 1,
+            per_page: DEFAULT_CUSTOM_IMAGES_PER_PAGE,
+          },
+        })
+    ).data.data.map((item: CustomImgAttachmentDTO) => new CustomImgAttachment(item.id!, item.path, item.title, item.title, item.title, 0, item.source));
+  }
+
+  public async createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse> {
+    return (
+      /* await */ API.post(
+      `${process.env.REACT_APP_BASE_URL}/api/teacher/images`, fd).then()
+    );
+  }
+
+  public async deleteCustomImage(imageId: number): Promise<any> {
+    return (
+      /* await */ API.delete(
+      `${process.env.REACT_APP_BASE_URL}/api/teacher/images/${imageId}`)
+    );
+  }
+
+  public async updateCustomImage(customImageId: number, formData: FormData): Promise<any> {
+    const formDataJSON = JSON.stringify(Object.fromEntries(formData));
+    return (
+      /* await */ API.put(
+      `${process.env.REACT_APP_BASE_URL}/api/teacher/images/${customImageId}`, formDataJSON)
+    );
+  }
+
+  public async increaseUse(imageId: number): Promise<any> {
+    return (
+      /* await */ API.post(
+      `${process.env.REACT_APP_BASE_URL}/api/teacher/images/${imageId}/using`
+    )
+    );
+  }
+
+  public async decreaseUse(imageId: number): Promise<any> {
+    return (
+      /* await */ API.delete(
+      `${process.env.REACT_APP_BASE_URL}/api/teacher/images/${imageId}/using`
+    ).then()
+    );
   }
 
   public async getLocaleData(locale: Locales): Promise<Array<WPLocale>> {

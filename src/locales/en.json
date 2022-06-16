@@ -17,7 +17,10 @@
     "not permission": "Sorry, you don't have access to this platform. Please contact your organization to gain access"
   },
   "assignments_page": {
-    "no_results": "No results found"
+    "no_results": "No results found",
+    "title": "Title",
+    "source": "Source",
+    "img_not": "Image not selected yet."
   },
   "answers": {
     "Answers": "Answers",
@@ -266,7 +269,16 @@
     "image": "Image",
     "video": "Video",
     "sound": "Sound",
-    "images_from_article": "Images from article",
+    "images_options": {
+      "images_from_article": "Images from article",
+      "custom_images": "Custom images",
+      "upload_image": "Upload image"
+    },
+    "notification": {
+      "error": "Error uploading the current image(s)",
+      "success": "Images uploaded successfuly"
+    },
+    "images_empty_list": "No images available, please upload a custom image",
     "videos_from_article": "Videos from article",
     "stock_images": "Stock Images",
     "stock_videos": "Stock Videos",
@@ -343,6 +355,7 @@
     "Done": "Done!",
     "after_saving": "Congratulations, your assignment has been saved!",
     "no_images_found": "No photos found",
+    "no_custom_images_found": "No custom images found",
     "no_videos_found": "No videos found",
     "already_editing": "Someone already editing assignment, please refresh the page",
     "copy_title_not_allow": "Please remove \"Copy\" from the end of title",
@@ -590,7 +603,8 @@
       "cant_publish": "You must complete the Curriculum section before publish",
       "cant_publish_goals": "You can't publish because no educational goals are available",
       "notdata_goals": "There are no established goals for these criteria",
-      "source_required": "Please set the source for this content"
+      "source_required": "Please set the source for this content",
+      "assignmets_not_enabled_open_site": "The following assignments are not enabled to display in the Open site [|content|] Continue anyway?"
     },
     "title": {
       "new_entity": "Publish teaching path",
@@ -647,8 +661,11 @@
       "merge_paths": "Are you sure you want to merge these paths?",
       "unmerge_path": "Are you sure you want to unmerge this path?",
       "unable_to_merge": "You can't merge articles and assignments!",
+      "unable_to_drop": "Unable to perform action",
+      "unable_to_mix_different_natures": "Cannot mix items with different types in the same node",
       "neccesary_edit": "Please unselect the current article, and then select the new one",
-      "neccesary_edit_asignment": "Please unselect the current assignment, and then select the new one"
+      "neccesary_edit_asignment": "Please unselect the current assignment, and then select the new one",
+      "onlydraggable": "Please select first and then drag the item you need"
     },
     "paths": {
       "main_teaching_path_title": "Teaching path",
@@ -716,6 +733,7 @@
   "generals": {
     "support":"Support",
     "keyboard":"Keyboard shortcuts",
+    "dragdrop":"Drag and drop the item here",
     "accesibility_text": {
       "title_quick": "Quick Access / Keyboard shortcuts",
       "shift_t": "Teaching paths",
@@ -734,6 +752,7 @@
     },
     "edit": "Edith Path",
     "delete": "Delete Path",
+    "drag": "Drag Path",
     "close": "Close",
     "save": "Save",
     "close_maintenance": "Close",
@@ -790,7 +809,9 @@
     "copy": "Copy",
     "revert": "Revert",
     "are_you_sure": "Are you sure?",
-    "landscapeMode": "Hi! The teaching room works best in landscape mode. Please turn the device back to landscape mode."
+    "landscapeMode": "Hi! The teaching room works best in landscape mode. Please turn the device back to landscape mode.",
+    "yes": "Yes",
+    "no": "No"
   },
   "not found": {
     "title": "Nothing to see here",

@@ -229,6 +229,7 @@ export class QuestionaryTeachingPathStore {
             const domain = i.value as Domain;
             if (domain.id === idItem) {
               this.pickedItemDomain = { idNode: child.id!, item: new Domain(domain) };
+              domain.isRead = true;
             }
             return null;
           }
