@@ -8,8 +8,12 @@ import {
   ASSIGNMENT_REPO,
   ARTICLE_REPO_KEY,
   WPLocale,
+  CustomImgAttachment,
 } from './Assignment';
 import { Locales } from 'utils/enums';
+import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
+import { createContext } from 'react';
+import { CustomImgAttachmentResponse } from './api';
 
 export const ASSIGNMENT_SERVICE = 'ASSIGNMENT_SERVICE';
 
@@ -49,7 +53,7 @@ export class AssignmentService {
     return this.assignmentRepo.getStudentAssignmentList(filter);
   }
 
-  public async getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, goals? : string) {
+  public async getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, goals?: string) {
     return this.assignmentRepo.getGrepFiltersAssignment(grades, subjects, coreElements, goals);
   }
 
@@ -100,6 +104,29 @@ export class ArticleService {
 
   public async fetchImages(postIds: Array<number>): Promise<Array<Attachment>> {
     return this.articleRepo.fetchImages(postIds);
+  }
+
+  public async fetchCustomImages(): Promise<Array<CustomImgAttachment>> {
+    return this.articleRepo.fetchCustomImages();
+  }
+
+  public async createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse> {
+    return this.articleRepo.createCustomImage(fd);
+  }
+
+  public async deleteCustomImage(imageId: number): Promise<any> {
+    return this.articleRepo.deleteCustomImage(imageId);
+  }
+
+  public async updateCustomImage(customImageId: number, formData: FormData): Promise<any> {
+    return this.articleRepo.updateCustomImage(customImageId, formData);
+  }
+
+  public async increaseUse(imageId: number): Promise<any> {
+    return this.articleRepo.increaseUse(imageId);
+  }
+  public async decreaseUse(imageId: number): Promise<any> {
+    return this.articleRepo.decreaseUse(imageId);
   }
 
   public async getLocaleData(locale: Locales): Promise<Array<WPLocale>> {

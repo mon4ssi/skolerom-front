@@ -24,6 +24,7 @@ interface Props {
   nestedOrderNumber: number;
   readOnly?: boolean;
   nroLetter?: number;
+  onCancelDrag?(): void;
 }
 
 @inject('editTeachingPathStore')
@@ -166,7 +167,7 @@ export class NestedOrderNumber extends Component<Props> {
 
   public handleEditClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { editTeachingPathStore, node } = this.props;
-
+    this.props.onCancelDrag!();
     event.preventDefault();
     editTeachingPathStore!.setCurrentNode(node!);
     if (node.children[0].type === TeachingPathNodeType.Domain) {
@@ -185,7 +186,7 @@ export class NestedOrderNumber extends Component<Props> {
 
   public handleDeleteClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-
+    this.props.onCancelDrag!();
     const deleteConfirm = await Notification.create({
       type: NotificationTypes.CONFIRM,
       title: intl.get('edit_teaching_path.notifications.delete_path')

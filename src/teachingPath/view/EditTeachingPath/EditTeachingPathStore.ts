@@ -4,7 +4,7 @@ import { debounce } from 'utils/debounce';
 import { injector } from 'Injector';
 import { ArticleService, ASSIGNMENT_SERVICE, AssignmentService } from 'assignment/service';
 import { DRAFT_TEACHING_PATH_SERVICE, DraftTeachingPathService } from 'teachingPath/teachingPathDraft/service';
-import { Article, ARTICLE_SERVICE_KEY, Grade, Subject, FilterArticlePanel, Source } from 'assignment/Assignment';
+import { Article, ARTICLE_SERVICE_KEY, Grade, Subject, FilterArticlePanel, Source, Assignment } from 'assignment/Assignment';
 import { TeachingPathContainer } from 'teachingPath/teachingPathContainer/teachingPathContainer';
 import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
 import { TeachingPathItemValue, TeachingPathNodeType } from 'teachingPath/TeachingPath';
@@ -36,6 +36,7 @@ export class EditTeachingPathStore {
   @observable public isDisabledButtons: boolean = false;
   @observable public hasMoreArticles: boolean = true;
   @observable public isEditArticles: boolean = false;
+  @observable public isDraggable: boolean = false;
   @observable public articleInEdit: number = 0;
   @observable public assingmentInEdit: number = 0;
 
@@ -50,6 +51,8 @@ export class EditTeachingPathStore {
   @observable public selectedArticle: Article | null = null;
   @observable public teachingPathContainer: TeachingPathContainer | null = null;
   @observable public currentNode: EditableTeachingPathNode | null = null;
+  @observable public selectedDragNode: EditableTeachingPathNode | null = null;
+  @observable public selectedParentDragNode: EditableTeachingPathNode | null = null;
   @observable public searchValue: string = '';
 
   @observable public allGrades: Array<Grade> = [];
@@ -119,6 +122,18 @@ export class EditTeachingPathStore {
 
   public falseIsEditAssignments() {
     this.isEditAssignments = false;
+  }
+
+  public trueIsDraggable() {
+    this.isDraggable = true;
+  }
+
+  public falseIsDraggable() {
+    this.isDraggable = false;
+  }
+
+  public returnIsDraggable() {
+    return this.isDraggable;
   }
 
   public returnIsEditArticles() {
@@ -306,6 +321,22 @@ export class EditTeachingPathStore {
   }
 
   @action
+  public setSelectedDragNode = (node: EditableTeachingPathNode | null) => {
+    this.selectedDragNode = node;
+  }
+
+  @action
+  public getSelectedDragNode = () => this.selectedDragNode
+
+  @action
+  public setParentSelectedDragNode = (node: EditableTeachingPathNode | null) => {
+    this.selectedParentDragNode = node;
+  }
+
+  @action
+  public getParentSelectedDragNode = () => this.selectedParentDragNode
+
+  @action
   public addChildToCurrentNode = (node: EditableTeachingPathNode) => {
     const qqq = this.currentNode!.children
       .map(child => child.items!)
@@ -314,6 +345,16 @@ export class EditTeachingPathStore {
     if (!qqq.length) {
       this.currentNode!.setChildren([...this.currentNode!.children, node]);
     }
+  }
+
+  @action
+  public addChildToCurrentNodeNullPerItem = (node: EditableTeachingPathNode) => {
+    this.currentNode!.addChild(node);
+  }
+
+  @action
+  public removeChildToCurrentNodeNullPerItem = (node: EditableTeachingPathNode) => {
+    this.currentNode!.removeChild(node);
   }
 
   public createNewNode = (
@@ -394,6 +435,10 @@ export class EditTeachingPathStore {
 
   public async getSources() {
     this.allSources = await this.assignmentService.getSources();
+  }
+
+  public async getAssignmentById(id: number): Promise<Assignment> {
+    return this.assignmentService.getAssignmentById(id);
   }
 
   public getAllGrades(): Array<Grade> {

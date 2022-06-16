@@ -30,7 +30,9 @@ class ConfirmationPageComponent extends Component<Props> {
   }
 
   private handleGoBackClick = () => {
+    /* console.log('going back!!'); */
     const { history, location: { state } } = this.props;
+    /* console.log(state!.exitPath); */
     history.push(state.exitPath);
     /* console.log('going back!!');
     console.log(state!.exitPath);

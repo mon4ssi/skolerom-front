@@ -14,7 +14,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps> {
 
   public render() {
     const { contentType } = this.context;
-    return (contentType === AttachmentContentType.image || contentType === AttachmentContentType.video) && <AttachmentsList {...this.props} />;
+    return (contentType === AttachmentContentType.image || contentType === AttachmentContentType.customImage || contentType === AttachmentContentType.video) && <AttachmentsList {...this.props} />;
   }
 }
 
