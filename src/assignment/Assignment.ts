@@ -12,7 +12,7 @@ import { AssignmentDistributeDTO } from './factory';
 import { isNil } from 'lodash';
 import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
 import { createContext } from 'vm';
-import { CustomImgAttachmentResponse } from './api';
+import { CustomImgAttachmentResponse, ResponseFetchCustomImages } from './api';
 
 export const ASSIGNMENT_REPO = 'ASSIGNMENT_REPO';
 
@@ -570,6 +570,7 @@ export class QuestionAttachment {
   public readonly title: string;
   public readonly fileName: string;
   public readonly duration?: number;
+  public readonly deleteddate?: string | undefined | null;
 
   constructor(params: {
     id: number;
@@ -578,6 +579,7 @@ export class QuestionAttachment {
     title: string;
     fileName: string;
     duration: number;
+    deleteddate?: string | undefined | null;
   }) {
     this.id = params.id;
     this.path = params.path;
@@ -585,6 +587,7 @@ export class QuestionAttachment {
     this.title = params.title;
     this.fileName = params.fileName;
     this.duration = params.duration;
+    this.deleteddate = params.deleteddate;
   }
 }
 
@@ -1090,7 +1093,7 @@ export interface ArticleRepo {
   getArticlesByIds(ids: Array<number>): Promise<Array<Article>>;
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
-  fetchCustomImages(): Promise<Array<CustomImgAttachment>>;
+  fetchCustomImages(ids:string, page: number): Promise<ResponseFetchCustomImages>;
   createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse>;
   deleteCustomImage(imageId: number): Promise<any>;
   updateCustomImage(customImageId: number, formData: FormData): Promise<any>;
@@ -1141,6 +1144,7 @@ export class CustomImgAttachment {
   public readonly title: string;
   public readonly duration?: number;
   public readonly src?: Array<string>;
+  public readonly deleteddate?: string | undefined | null;
 
   constructor(
     id: number,
@@ -1149,7 +1153,8 @@ export class CustomImgAttachment {
     fileName: string,
     title: string,
     duration?: number,
-    src?: Array<string>
+    src?: Array<string>,
+    deleteddate?: string | undefined | null
   ) {
     this.id = id;
     this.path = path;
@@ -1158,6 +1163,7 @@ export class CustomImgAttachment {
     this.title = title;
     this.duration = duration;
     this.src = src;
+    this.deleteddate = deleteddate;
   }
 }
 

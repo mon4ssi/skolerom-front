@@ -72,18 +72,40 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     }
   }
 
-  private removeItem = async () => {
-    const { attachment } = this.props;
-    await this.articleService.deleteCustomImage(attachment.id);
-    Notification.create({
-      type: NotificationTypes.SUCCESS,
-      title: 'Image removed succesfully',
+  private confirmDeleteListItem = async () => {
+    const { attachment, isSelected } = this.props;
+    /* this.closeActionMenu(); */
+
+    const isDeletionApproved = await Notification.create({
+      type: NotificationTypes.CONFIRM,
+      title: intl.get('assignment list.Are you sure'),
+      submitButtonTitle: intl.get('notifications.delete')
     });
-    this.props.onRedirectToList();
+
+    if (isDeletionApproved) {
+      return true;
+    }
+  }
+
+  private removeItem = async () => {
+    const { attachment, isSelected } = this.props;
+    const deleteConfirmation = await this.confirmDeleteListItem();
+    if (isSelected!) {
+      this.toggleAttachment();
+    }
+    if (deleteConfirmation!) {
+      await this.articleService.deleteCustomImage(attachment.id);
+      Notification.create({
+        type: NotificationTypes.SUCCESS,
+        title: 'Image removed succesfully',
+      });
+      this.props.onRedirectToList();
+    }
   }
 
   private editItem = async () => {
     const { attachment } = this.props;
+    /* this.toggleAttachment(); */
     await this.props.onEditActionSelected(attachment.id);
     /* await this.props.onRenderThirdTab(attachment!.id); */
   }
@@ -138,7 +160,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     }
     if (this.context.contentType === AttachmentContentType.customImage) {
       const selectedItem = isSelected ? 'customImageComponente active' : 'customImageComponente';
-      const isCustomImg = (attachment.path!.split(String(process.env.REACT_APP_WP_URL)).length > 1) ? false : true;
+      const isCustomImg = (attachment.deleteddate) ? false : (attachment.path!.split(String(process.env.REACT_APP_WP_URL)).length > 1) ? false : true;
       const isCustomImgClass = (isCustomImg) ? 'customImageComponente__image' : 'customImageComponente__image heightfull';
       return (
         <div className={selectedItem}>

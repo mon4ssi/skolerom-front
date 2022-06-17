@@ -40,13 +40,13 @@ export class CustomImageAttachments extends Component<Props> {
       const currentQuestion = newAssignmentStore!.currentQuestion as EditableImageChoiceQuestion;
       if (currentQuestion && currentQuestion.options && currentQuestion.options.length > 0) {
         currentQuestion.options.forEach((item) => {
-          if (item.image) {
+          /* if (item.image) {
             const existingImage = newAssignmentStore!.questionCustomAttachments!
               .find(attachment => attachment.id === item.image.id);
             if (!existingImage) {
               attachments.push(item.image);
             }
-          }
+          } */
         }
         );
       }
@@ -87,7 +87,7 @@ export class CustomImageAttachments extends Component<Props> {
 
     if (renderedAttachments.length <= 0) {
       return (
-        <div className="message">
+        <div className="message messageExpanded">
           {intl.get('new assignment.no_images_found')}
         </div>
       );
