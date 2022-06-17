@@ -652,6 +652,12 @@ export class PublishingActions extends Component<Props, State> {
       () => {
         this.validateAddTeacherContentDefault(true);
         this.sendValidbutton();
+        // check only contentCM
+        if (this.props.store!.getCurrentUser()!.type === UserType.ContentManager) {
+          this.props.store!.currentEntity!.setGrepSourcesIds([]);
+          this.props.store!.currentEntity!.setOpen(false);
+          this.setState({ isOpen : false });
+        }
       }
     );
 
