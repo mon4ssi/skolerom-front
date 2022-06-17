@@ -448,6 +448,9 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         <div className="AppHeader__submenuWrapper">
           <ul className="AppHeader__submenu">
             <li className="AppHeader__dropdownItem">
+              <a href={`${process.env.REACT_APP_WP_URL}/hva-er-skolerom`} title={intl.get('header.About skolerom')} target="_blank">{intl.get('header.About skolerom')}</a>
+            </li>
+            <li className="AppHeader__dropdownItem">
               <a href={`${process.env.REACT_APP_WP_URL}/support-skolerom`} title={intl.get('generals.support')} target="_blank">{intl.get('generals.support')}</a>
             </li>
             <li className="AppHeader__dropdownItem">
