@@ -449,6 +449,10 @@ export class TeachingPath {
     return this._grepGoalsIds;
   }
 
+  public setListgrepGoalsIds(data: Array<number>): void {
+    this._grepGoalsIds = data;
+  }
+
   public getListOfgrepMainTopicsIds() {
     return this._grepMainTopicsIds;
   }

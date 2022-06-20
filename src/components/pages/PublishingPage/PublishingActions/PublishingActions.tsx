@@ -652,6 +652,12 @@ export class PublishingActions extends Component<Props, State> {
       () => {
         this.validateAddTeacherContentDefault(true);
         this.sendValidbutton();
+        // check only contentCM
+        if (this.props.store!.getCurrentUser()!.type === UserType.ContentManager) {
+          this.props.store!.currentEntity!.setGrepSourcesIds([]);
+          this.props.store!.currentEntity!.setOpen(false);
+          this.setState({ isOpen : false });
+        }
       }
     );
 
@@ -1461,13 +1467,13 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public comparativeGoalsValueToFilter = () => {
-    const { optionsGoals, valueGoalsOptions } = this.state;
+    const { optionsGoals } = this.state;
     const { currentEntity } = this.props.store!;
     const returnArray : Array<number> = [];
     optionsGoals!.forEach((element) => {
-      for (let i = 0; i < valueGoalsOptions.length; i = i + 1) {
-        if (element.id === valueGoalsOptions[i]) {
-          returnArray.push(valueGoalsOptions[i]);
+      for (let i = 0; i < this.state.valueGoalsOptions.length; i = i + 1) {
+        if (element.id === this.state.valueGoalsOptions[i]) {
+          returnArray.push(this.state.valueGoalsOptions[i]);
         }
       }
     });
@@ -1476,7 +1482,10 @@ export class PublishingActions extends Component<Props, State> {
         valueGoalsOptions : returnArray
       },
       () => {
-        currentEntity!.setGrepGoalsIds(valueGoalsOptions);
+        currentEntity!.setGrepGoalsIds(this.state.valueGoalsOptions);
+        if (this.props.from === 'TEACHINGPATH') {
+          currentEntity!.setListgrepGoalsIds(this.state.valueGoalsOptions);
+        }
         this.sendValidbutton();
       }
     );

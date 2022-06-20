@@ -19,6 +19,8 @@ import thirdLevelImg from 'assets/images/level-3-blue.svg';
 import placeholderImg from 'assets/images/list-placeholder.svg';
 import placeholderDomainImg from 'assets/images/addLink_placeholder.png';
 import refresh from 'assets/images/refresh.svg';
+import drag from 'assets/images/drag.svg';
+import dragActive from 'assets/images/drag-active.svg';
 
 import './InfoCard.scss';
 
@@ -49,13 +51,14 @@ interface Props {
   onCLickImg?(url?: string): void;
   onDelete?(itemId: number): void;
   onEdit?(itemId: number, type: string): void;
+  onDrag?(itemId: number, type: string): void;
+  onCancelDrag?(itemId: number, type: string): void;
   setActiveTooltip?(): void;
   deleteTeachingPath?(): void;
   copyTeachingPath?(id: number): void;
 }
 
 class InfoCardComponent extends Component<Props & RouteComponentProps> {
-
   private handleClickDelete = (event: React.SyntheticEvent<HTMLButtonElement>) => {
     event.preventDefault();
     this.props.onDelete!(this.props.id!);
@@ -64,6 +67,16 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
   public handleEditClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     this.props.onEdit!(this.props.id!, this.props.type!);
+  }
+
+  public activeDragClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    this.props.onDrag!(this.props.id!, this.props.type!);
+  }
+
+  public desactiveDragClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    this.props.onCancelDrag!(this.props.id!, this.props.type!);
   }
 
   public renderGrade = (grade: Grade) => {
@@ -79,7 +92,22 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
 
   public renderActionButtons = () => (
     <div className="actionButtons flexBox">
-      {/* <img src={dragImg} alt="drag" /> */}
+      <div className="actionButtonsItem dragButtonsItem">
+        <button onClick={this.activeDragClick} title={intl.get('generals.drag')} className="activeDragButton">
+          <img
+            src={drag}
+            alt={intl.get('generals.drag')}
+            title={intl.get('generals.drag')}
+          />
+        </button>
+        <button onClick={this.desactiveDragClick} title={intl.get('generals.drag')} className="desactiveDragButton">
+          <img
+            src={dragActive}
+            alt={intl.get('generals.drag')}
+            title={intl.get('generals.drag')}
+          />
+        </button>
+      </div>
       <div className="actionButtonsItem refreshButtonsItem">
         <button onClick={this.handleEditClick} title={intl.get('generals.edit')}>
           <img
@@ -103,7 +131,22 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
 
   public renderDomainButtons = () => (
     <div className="actionButtons flexBox">
-      {/* <img src={dragImg} alt="drag" /> */}
+      <div className="actionButtonsItem dragButtonsItem">
+        <button onClick={this.activeDragClick} title={intl.get('generals.drag')} className="activeDragButton">
+          <img
+            src={drag}
+            alt={intl.get('generals.drag')}
+            title={intl.get('generals.drag')}
+          />
+        </button>
+        <button onClick={this.desactiveDragClick} title={intl.get('generals.drag')} className="desactiveDragButton">
+          <img
+            src={dragActive}
+            alt={intl.get('generals.drag')}
+            title={intl.get('generals.drag')}
+          />
+        </button>
+      </div>
       <div className="actionButtonsItem refreshButtonsItem">
         <button onClick={this.handleEditClick} title={intl.get('generals.edit')}>
           <img
@@ -319,6 +362,10 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
     history.push(`/teaching-paths/answers/${id}`);
   }
 
+  public isErrorImg = (e: SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = placeholderImg;
+  }
+
   public render() {
     const { title, img, withButtons, onClick, isTeachingPath, withTooltip, type } = this.props;
     const isDomain = type === 'DOMAIN' ? true : false;
@@ -332,7 +379,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
         {!isDomain && withButtons && this.renderActionButtons()}
         {isDomain && withButtons && this.renderDomainButtons()}
         <button title={title}>
-          <img src={img || placeholderImgDefault} alt={title} title={title} className="cardImage" onClick={this.onCardImgClick}/>
+          <img src={img || placeholderImgDefault} alt={title} title={title} className="cardImage" onClick={this.onCardImgClick} onError={this.isErrorImg}/>
         </button>
         <div className="cardInfo flexBox dirColumn spaceBetween">
           <div>

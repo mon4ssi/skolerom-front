@@ -3,7 +3,7 @@ import isUndefined from 'lodash/isUndefined';
 import isNull from 'lodash/isNull';
 import intl from 'react-intl-universal';
 import { injector } from 'Injector';
-import { Assignment, Article, ARTICLE_SERVICE_KEY, Attachment, Grade, QuestionAttachment, QuestionType, Subject, GreepElements, FilterArticlePanel, Source } from 'assignment/Assignment';
+import { Assignment, Article, ARTICLE_SERVICE_KEY, Attachment, Grade, QuestionAttachment, QuestionType, Subject, GreepElements, FilterArticlePanel, Source, CustomImgAttachment } from 'assignment/Assignment';
 import { DraftAssignment, EditableImageChoiceQuestion, EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
 import { ArticleService, ASSIGNMENT_SERVICE, AssignmentService } from 'assignment/service';
 import { DRAFT_ASSIGNMENT_SERVICE, DraftAssignmentService } from 'assignment/assignmentDraft/service';
@@ -17,9 +17,11 @@ import { Distribution } from 'distribution/Distribution';
 import { AttachmentContentType } from './AttachmentContentTypeContext';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from 'teachingPath/service';
+import { contextType } from 'react-copy-to-clipboard';
 
 const statusCode204 = 204;
 const numberOfImagesForSkeleton = 12;
+const numberOfCustomImagesForSkeleton = 12;
 const numberOfVideosForSkeleton = 4;
 const delayFocus = 250;
 
@@ -67,6 +69,7 @@ export class NewAssignmentStore {
   @observable public isActiveButtons: boolean = false;
   @observable public isDisabledButtons: boolean = false;
   @observable public fetchingAttachments: boolean = false;
+  @observable public fetchingCustomImageAttachments: boolean = false;
   @observable public visibilityAttachments: boolean = false;
   @observable public showValidationErrors: boolean = false;
   // @observable public open: boolean = false;
@@ -81,14 +84,18 @@ export class NewAssignmentStore {
   @observable public allSubjects: Array<Subject> = [];
   @observable public allSources: Array<Source> = [];
   @observable public questionAttachments: Array<Attachment> = [];
+  @observable public questionCustomAttachments: Array<CustomImgAttachment> = [];
   @observable public currentOrderOption: number = -1;
   @observable public searchValue: string = '';
   @observable public storedAssignment: Assignment | null = null;
   @observable public highlightingItem: CreationElementsType | undefined;
   @observable public allArticlePanelFilters: FilterArticlePanel | null = null;
   @observable public titleButtonGuidance: string = '';
+  @observable public numberOfPages: number = 0;
+  @observable public currentPage: number = 1;
 
   public arrayForImagesSkeleton = new Array(numberOfImagesForSkeleton).fill('imageSkeletonLoader');
+  public arrayForCustomImagesSkeleton = new Array(numberOfCustomImagesForSkeleton).fill('imageSkeletonLoader');
   public arrayForVideosSkeleton = new Array(numberOfVideosForSkeleton).fill('videoSkeletonLoader');
 
   public localeKey: string = EditEntityLocaleKeys.NEW_ASSIGNMENT;
@@ -249,9 +256,9 @@ export class NewAssignmentStore {
   @action
   public getFilteredGroups = () => {
     const filteredGroups = this.currentDistribution!.groups
-    .filter(
-      group => group.name.toLowerCase().search(this.searchValue) !== -1
-    );
+      .filter(
+        group => group.name.toLowerCase().search(this.searchValue) !== -1
+      );
 
     return filteredGroups;
   }
@@ -288,6 +295,13 @@ export class NewAssignmentStore {
   public setImageCurrentOption(image: QuestionAttachment) {
     const currentImageChoiceQuestion = this.currentQuestion as EditableImageChoiceQuestion;
     const currentOption = currentImageChoiceQuestion!._options.find(option => option.order === this.currentOrderOption);
+    currentOption!.setImage(image);
+  }
+
+  @action
+  public setCustomImageCurrentOption(image: QuestionAttachment) {
+    const currentCustomImageChoiceQuestion = this.currentQuestion as EditableImageChoiceQuestion;
+    const currentOption = currentCustomImageChoiceQuestion!._options.find(option => option.order === this.currentOrderOption);
     currentOption!.setImage(image);
   }
 
@@ -335,8 +349,7 @@ export class NewAssignmentStore {
   public async removeAttachment(attachmentId: number) {
     try {
       const statusCode = await this.draftAssignmentService.removeAttachment(this.currentEntity!.id, attachmentId);
-
-      if (statusCode === statusCode204) {
+      if (statusCode! === statusCode204) {
         this.questionAttachments = this.questionAttachments.filter(
           attachment => attachment.id !== attachmentId
         );
@@ -397,7 +410,7 @@ export class NewAssignmentStore {
         return result;
       }
 
-    },       (isValid, reactionDisposer) => {
+    }, (isValid, reactionDisposer) => {
       if (isValid) {
         this.showValidationErrors = false;
         this.currentEntity!.setQuestionsWithError(null);
@@ -523,7 +536,7 @@ export class NewAssignmentStore {
   }
 
   public getGoalsByArticle() {
-    const arrayGoals :Array<String> = [];
+    const arrayGoals: Array<String> = [];
     if (this.currentEntity!.relatedArticles.length > 0) {
       this.currentEntity!.relatedArticles.forEach((element) => {
         if (element.grepGoals!.length > 0) {
@@ -560,13 +573,13 @@ export class NewAssignmentStore {
   }
 
   public async fetchQuestionAttachments(typeAttachments: AttachmentContentType): Promise<void> {
-    if (this.currentEntity!.relatedArticles.length <= 0) {
+    if (this.currentEntity!.relatedArticles.length <= 0 && typeAttachments === AttachmentContentType.image) {
       this.questionAttachments = [];
       return;
     }
 
     this.fetchingAttachments = true;
-
+    this.fetchingCustomImageAttachments = true;
     try {
       switch (typeAttachments) {
         case AttachmentContentType.image: {
@@ -574,6 +587,12 @@ export class NewAssignmentStore {
             (await this.articleService.fetchImages(
               this.currentEntity!.relatedArticles.map(getAllChildArticlesIds).flat()
             )) || [];
+          break;
+        }
+        case AttachmentContentType.customImage: {
+          const response = await this.articleService.fetchCustomImages('', this.currentPage);
+          this.questionCustomAttachments =
+            (response.myCustomImages).map(item => item).flat() || [];
           break;
         }
         case AttachmentContentType.video: {
@@ -589,11 +608,66 @@ export class NewAssignmentStore {
 
     } catch (e) {
       this.questionAttachments = [];
+      this.questionCustomAttachments = [];
       this.fetchingAttachments = false;
+      this.fetchingCustomImageAttachments = false;
       throw Error(`fetch question attachments: ${e}`);
     }
 
     this.fetchingAttachments = false;
+    this.fetchingCustomImageAttachments = false;
+  }
+
+  public async searchIdInExist(id: number, listids: string) {
+    const response = await this.articleService.fetchCustomImages(listids, this.currentPage);
+    const allAttachments = (response.myCustomImages).map(item => item).flat() || [];
+    let valueresponse = false;
+    if (allAttachments) {
+      allAttachments.forEach((element) => {
+        if (element.id === id) {
+          valueresponse = true;
+        }
+      });
+    }
+    return valueresponse;
+  }
+
+  public async searchIdInDeletes(id: number, listids: string) {
+    const response = await this.articleService.fetchCustomImages(listids, this.currentPage);
+    const allAttachments = (response.myCustomImages).map(item => item).flat() || [];
+    let valueresponse = false;
+    if (allAttachments) {
+      allAttachments.forEach((element) => {
+        if (element.id === id) {
+          if (element.deleteddate !== null || element.deleteddate !== undefined) {
+            valueresponse = true;
+          }
+        }
+      });
+    }
+    return valueresponse;
+  }
+
+  public async fetchQuestionCustomImagesAttachments(listids: string, typeAttachments: AttachmentContentType): Promise<void> {
+    this.fetchingCustomImageAttachments = true;
+    try {
+      switch (typeAttachments) {
+        case AttachmentContentType.customImage: {
+          const response = await this.articleService.fetchCustomImages(listids, this.currentPage);
+          this.questionCustomAttachments =
+            (response.myCustomImages).map(item => item).flat() || [];
+          this.numberOfPages = response.total_pages;
+          break;
+        }
+        default:
+          break;
+      }
+    } catch (e) {
+      this.questionCustomAttachments = [];
+      this.fetchingCustomImageAttachments = false;
+      throw Error(`fetch question custom images attachments: ${e}`);
+    }
+    this.fetchingCustomImageAttachments = false;
   }
 
   public getUpdatedAt() {
@@ -651,7 +725,7 @@ export class NewAssignmentStore {
     this.allArticlePanelFilters = await this.teachingPathService.getFiltersArticlePanel(lang);
   }
 
-  public async assignStudentToAssignment(assignmentId:string, referralToken: string) {
+  public async assignStudentToAssignment(assignmentId: string, referralToken: string) {
     return this.distributionService.assignStudentToAssignment(assignmentId, referralToken);
   }
 

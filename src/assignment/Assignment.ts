@@ -10,6 +10,9 @@ import moment, { Moment } from 'moment';
 
 import { AssignmentDistributeDTO } from './factory';
 import { isNil } from 'lodash';
+import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
+import { createContext } from 'vm';
+import { CustomImgAttachmentResponse, ResponseFetchCustomImages } from './api';
 
 export const ASSIGNMENT_REPO = 'ASSIGNMENT_REPO';
 
@@ -538,6 +541,7 @@ export class QuestionAttachment {
   public readonly title: string;
   public readonly fileName: string;
   public readonly duration?: number;
+  public readonly deleteddate?: string | undefined | null;
 
   constructor(params: {
     id: number;
@@ -546,6 +550,7 @@ export class QuestionAttachment {
     title: string;
     fileName: string;
     duration: number;
+    deleteddate?: string | undefined | null;
   }) {
     this.id = params.id;
     this.path = params.path;
@@ -553,6 +558,7 @@ export class QuestionAttachment {
     this.title = params.title;
     this.fileName = params.fileName;
     this.duration = params.duration;
+    this.deleteddate = params.deleteddate;
   }
 }
 
@@ -1047,6 +1053,12 @@ export interface ArticleRepo {
   getArticlesByIds(ids: Array<number>): Promise<Array<Article>>;
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
+  fetchCustomImages(ids:string, page: number): Promise<ResponseFetchCustomImages>;
+  createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse>;
+  deleteCustomImage(imageId: number): Promise<any>;
+  updateCustomImage(customImageId: number, formData: FormData): Promise<any>;
+  increaseUse(imageId: number): Promise<any>;
+  decreaseUse(imageId: number): Promise<any>;
   getLocaleData(locale: Locales): Promise<Array<WPLocale>>;
 }
 
@@ -1081,6 +1093,37 @@ export class Attachment {
     this.title = title;
     this.duration = duration;
     this.src = src;
+  }
+}
+
+export class CustomImgAttachment {
+  public readonly id: number;
+  public readonly path: string;
+  public readonly alt: string;
+  public readonly fileName: string;
+  public readonly title: string;
+  public readonly duration?: number;
+  public readonly src?: Array<string>;
+  public readonly deleteddate?: string | undefined | null;
+
+  constructor(
+    id: number,
+    path: string,
+    alt: string,
+    fileName: string,
+    title: string,
+    duration?: number,
+    src?: Array<string>,
+    deleteddate?: string | undefined | null
+  ) {
+    this.id = id;
+    this.path = path;
+    this.alt = alt;
+    this.fileName = fileName;
+    this.title = title;
+    this.duration = duration;
+    this.src = src;
+    this.deleteddate = deleteddate;
   }
 }
 
