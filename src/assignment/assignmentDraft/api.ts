@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 
-import { Grade, Subject } from '../Assignment';
+import { Grade, NowSchool, Subject } from '../Assignment';
 import { DraftAssignmentRepo, DraftAssignment, AlreadyEditingAssignmentError } from './AssignmentDraft';
 import { buildNewDraftAssignment, buildDraftAssignment, buildDraftAssignmentDTO } from './factory';
 import { API } from 'utils/api';
@@ -32,6 +32,7 @@ export interface NewDraftAssignmentResponseDTO {
   guidance?: string;
   hasGuidance?: boolean;
   open?: boolean;
+  schools?: Array<NowSchool>;
 }
 
 export interface DraftAssignmentRequestDTO {

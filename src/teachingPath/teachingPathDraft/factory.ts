@@ -65,7 +65,8 @@ export const buildDraftTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     grepReadingInSubjectsIds: dto.grepReadingInSubjectsIds,
     grepGoalsIds: dto.grepGoalsIds,
     sources: dto.sources,
-    open: dto.open
+    open: dto.open,
+    schools: dto.schools
   });
 
   draftTeachingPath.setContent(buildEditableNode(dto.content!, draftTeachingPath));

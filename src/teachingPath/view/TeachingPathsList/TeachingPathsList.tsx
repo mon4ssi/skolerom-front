@@ -181,9 +181,11 @@ class TeachingPathsListComponent extends Component<Props, State> {
     filter.source = QueryStringHelper.getString(this.props.history, QueryStringKeys.SOURCE);
     filter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeys.SEARCH);
     filter.order = QueryStringHelper.getString(this.props.history, QueryStringKeys.ORDER, SortingFilter.DESC);
+    filter.articles = QueryStringHelper.getString(this.props.history, QueryStringKeys.ARTICLES);
     if (this.state.showMySchool !== 0) {
       filter.showMySchoolTeachingpath = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.MYSCHOOL, this.state.showMySchool);
     }
+
     filter.orderField = SortingFilter.CREATION_DATE;
 
     if (filter.subject || filter.grade || filter.grepCoreElementsIds || filter.grepMainTopicsIds || filter.grepGoalsIds || filter.grepReadingInSubject || filter.source) {

@@ -50,6 +50,7 @@ class MyAssignments extends Component<Props> {
     filter.source = QueryStringHelper.getString(this.props.history, QueryStringKeys.SOURCE);
     filter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeys.SEARCH);
     filter.order = QueryStringHelper.getString(this.props.history, QueryStringKeys.ORDER, SortingFilter.DESC);
+    filter.articles = QueryStringHelper.getString(this.props.history, QueryStringKeys.ARTICLES);
     filter.orderField = SortingFilter.CREATION_DATE;
     if (this.props.typeOfAssignmentsList === 'myschool') {
       filter.showMySchoolTeachingpath = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.MYSCHOOL, 1);

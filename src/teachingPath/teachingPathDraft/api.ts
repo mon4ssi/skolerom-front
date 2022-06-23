@@ -12,7 +12,7 @@ import {
   buildArrayAllWpIds,
   buildFeatureImageForTeachingPathRequestDTO
 } from './factory';
-import { Grade, Article, ArticleRepo, ARTICLE_REPO_KEY } from 'assignment/Assignment';
+import { Grade, Article, ArticleRepo, ARTICLE_REPO_KEY, NowSchool } from 'assignment/Assignment';
 import { injector } from '../../Injector';
 
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
@@ -50,6 +50,7 @@ export interface DraftTeachingPathResponseDTO {
   grepGoalsIds?: Array<number>;
   sources?: Array<number>;
   open?: boolean;
+  schools?: Array<NowSchool>;
 }
 
 export interface TeachingPathItemRequestDTO {

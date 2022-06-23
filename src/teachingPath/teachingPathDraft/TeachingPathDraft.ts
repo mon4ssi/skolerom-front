@@ -482,6 +482,9 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
+  public getMySchool = () => this._schools
+
+  @action
   public setIsMySchool(isSchool: boolean) {
     this._isMySchool = isSchool;
     this.save();

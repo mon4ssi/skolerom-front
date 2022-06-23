@@ -366,9 +366,16 @@ export class PublishingActions extends Component<Props, State> {
     }
     const myschools = store!.getCurrentUser()!.schools;
     const arraySchoolIds = this.state.optionsMySchool;
-    myschools.forEach((school) => {
-      arraySchoolIds.push(school.id);
-    });
+    const editSchools = this.props.store!.currentEntity!.getMySchool();
+    if (editSchools && editSchools!.length > 0) {
+      editSchools!.forEach((school) => {
+        arraySchoolIds.push(school.id);
+      });
+    } else {
+      myschools.forEach((school) => {
+        arraySchoolIds.push(school.id);
+      });
+    }
     this.setState({ optionsMySchool : arraySchoolIds });
     this.props.store!.currentEntity!.setMySchool(String(arraySchoolIds));
   }

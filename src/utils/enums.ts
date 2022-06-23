@@ -67,6 +67,7 @@ export enum QueryStringKeys {
   GREPREADINGINSUBJECT = 'grepReadingInSubject',
   SOURCE = 'source',
   MYSCHOOL = 'onlyOwnSchools',
+  ARTICLES = 'articles',
 }
 
 export enum ReturnUrl {

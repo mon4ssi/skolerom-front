@@ -1,7 +1,7 @@
 import { computed, observable, toJS } from 'mobx';
 import intl from 'react-intl-universal';
 
-import { Grade, GreepElements, Subject, Article, Assignment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData, Source } from 'assignment/Assignment';
+import { Grade, GreepElements, Subject, Article, Assignment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData, NowSchool, Source } from 'assignment/Assignment';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from './service';
 import { injector } from '../Injector';
 
@@ -208,6 +208,7 @@ export interface TeachingPathArgs {
   grepGoalsIds?: Array<number>;
   grepGoals?: Array<GreepElements>;
   open?: boolean;
+  schools? : Array<NowSchool>;
 }
 
 export class TeachingPath {
@@ -255,6 +256,7 @@ export class TeachingPath {
   @observable protected _grepGoalsIds?: Array<number>;
   @observable protected _grepGoals?: Array<GreepElements> = [];
   @observable protected _open?: boolean = false;
+  @observable protected _schools?: Array<NowSchool> = [];
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;
@@ -302,6 +304,7 @@ export class TeachingPath {
     this._grepGoalsIds = args.grepGoalsIds;
     this._grepGoals = args.grepGoals || [];
     this._open = args.open || false;
+    this._schools = args.schools || [];
   }
 
   @computed
@@ -395,6 +398,11 @@ export class TeachingPath {
   @computed
   public get mySchools() {
     return this._mySchools;
+  }
+
+  @computed
+  public get schools() {
+    return this._schools;
   }
 
   @computed

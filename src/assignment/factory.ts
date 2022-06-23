@@ -184,6 +184,10 @@ export const buildFilterDTO = (filter: Filter): Object => {
     filterDTO.onlyOwnSchools = filter.showMySchoolTeachingpath;
   }
 
+  if (filter.articles) {
+    filterDTO.articles = filter.articles;
+  }
+
   return filterDTO;
 };
 

@@ -259,6 +259,7 @@ export interface AssignmentArgs {
   grepReadingInSubjectsIds?: Array<number>;
   grepGoals?: Array<GreepElements>;
   open?: boolean;
+  schools?: Array<NowSchool>;
 }
 
 export class Assignment {
@@ -308,6 +309,7 @@ export class Assignment {
   public grepGoalsIds?: Array<number>;
   public grepReadingInSubjectsIds?: Array<number>;
   public _open?: boolean;
+  public _schools? : Array<NowSchool>;
 
   constructor(args: AssignmentArgs) {
     this._id = args.id;
@@ -356,6 +358,7 @@ export class Assignment {
     this.grepGoalsIds = args.grepGoalsIds;
     this.grepReadingInSubjectsIds = args.grepReadingInSubjectsIds;
     this._open = args.open || false;
+    this._schools = args.schools || [];
   }
 
   public isOwnedByMe(): boolean {
@@ -475,6 +478,11 @@ export class Assignment {
   @computed
   public get mySchools() {
     return this._mySchools;
+  }
+
+  @computed
+  public get schools() {
+    return this._schools;
   }
 
   @computed
@@ -775,6 +783,7 @@ export class Filter {
   public showMySchoolTeachingpath?: number | null;
   public showMySchoolAssignments?: number | null;
   public onlyOwnSchools?: number | null;
+  public articles?: string | null;
 }
 
 export interface LanguageFilter {

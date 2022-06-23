@@ -348,6 +348,8 @@ export class DraftAssignment extends Assignment {
     this.save();
   }
 
+  public getMySchool = () => this._schools;
+
   public setIsMySchool(isSchool: boolean) {
     this._isMySchool = isSchool;
     this.save();
