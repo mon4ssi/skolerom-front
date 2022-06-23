@@ -32,26 +32,30 @@ import { TeachingPathApi } from 'teachingPath/api';
 import { UserType } from 'user/User';
 import { Notification, NotificationTypes } from '../Notification/Notification';
 
-import './SideOutPanelPreviewTeachingPath.scss';
+import './SideOutPanelPreviewAssignment.scss';
+import { AssignmentService, ASSIGNMENT_SERVICE } from 'assignment/service';
 
 interface Props extends RouteComponentProps {
-  store?: TeachingPathsListStore;
-  isPublishedCurrentTeachingPath?: boolean;
+  view?: string;
+  store?: AssignmentListStore;
+  isPublishedCurrentAssignment?: boolean;
   onClose?(e: SyntheticEvent): void;
 }
 
 interface SideOutPanelPreviewState {
-  currentTeachingPath: undefined | TeachingPath;
+  currentAssignment: undefined | Assignment;
+  isSuperCMCurrentUser: boolean;
 }
 
-export const USER_SERVICE = 'TEACHING_PATH_SERVICE';
+export const USER_SERVICE = 'ASSIGNMENT_SERVICE';
 
 @observer
-class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteComponentProps, SideOutPanelPreviewState> {
-  private teachingPathService: TeachingPathService = injector.get(TEACHING_PATH_SERVICE);
+class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComponentProps, SideOutPanelPreviewState> {
+  private assignmentService: AssignmentService = injector.get(ASSIGNMENT_SERVICE);
 
   public state = {
-    currentTeachingPath: undefined,
+    currentAssignment: undefined,
+    isSuperCMCurrentUser: false,
   };
 
   private onClose = (e: SyntheticEvent) => {
@@ -60,10 +64,16 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     }
   }
 
+  public componentDidMount = () => {
+    const { getCurrentUser } = this.props.store!;
+    const isSuperCM = getCurrentUser()!.isSuperCM;
+    this.setState({ isSuperCMCurrentUser: isSuperCM! });
+  }
+
   public renderViewButton = (isPublished: boolean, history: any, id: number, view: string) =>
   (
     <div className="actionButton">
-      <CreateButton disabled={!isPublished} onClick={() => { history.push(`/teaching-paths/view/${id}`); }} title={view} >
+      <CreateButton disabled={!isPublished} onClick={() => { history.push(`/assignments/view/${id}`); }} title={view} >
         {view}
       </CreateButton>
     </div>
@@ -81,7 +91,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   public renderEditButton = (editString: string, history: any, id: number) =>
   (
     <div className="actionButton">
-      <CreateButton disabled={false} onClick={() => { history.push(`/teaching-paths/edit/${id}`); }} title={editString} >
+      <CreateButton disabled={false} onClick={() => { history.push(`/assignments/edit/${id}`); }} title={editString} >
         {editString}
       </CreateButton>
     </div>
@@ -104,7 +114,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     /* console.log('e'); */
     const { history } = this.props;
     const { currentEntity: { id } } = this.props.store!;
-    history.push(`/teaching-paths/view/${id!}/tg=true`);
+    localStorage.setItem('isOpen', 'tg');
+    history.push(`/assignments/view/${id!}?open=tg`);
     /* currentEntity!.hasGuidance */
   }
 
@@ -112,7 +123,6 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const { history } = this.props;
     const { currentEntity: { id } } = this.props.store!;
     const { currentEntity } = this.props.store!;
-
     const isCopyApproved = await Notification.create({
       type: NotificationTypes.CONFIRM,
       title: intl.get('assignment list.Are you sure'),
@@ -121,8 +131,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
 
     if (isCopyApproved) {
       /* const currentEntityRoute = entityStore instanceof AssignmentListStore ? 'assignments' : 'teaching-paths'; */
-      const copyId = await this.teachingPathService.copyTeachingPath(id!);
-      history.push(`/teaching-paths/edit/${copyId}`);
+      const copyId = await this.assignmentService.copyAssignment(id!);
+      history.push(`/assignments/edit/${copyId}`);
     }
   }
 
@@ -154,7 +164,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   public renderSubjectArray = (subjectsArray: Array<any>) => (
     subjectsArray.map(item => (
       <li key={item.id} className="item">
-        {item.description}
+        {item.description || item.title}
       </li>
     ))
   )
@@ -303,13 +313,14 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   )
 
   public render() {
-    const { currentEntity } = this.props.store!;
+    const { currentAssignment } = this.props.store!;
+    const { isSuperCMCurrentUser } = this.state;
     const
       {
         title,
         isPublished,
         isOwnedByMe,
-        ownedByMe,
+        id,
         subjectItems,
         coreElementItems,
         sourceItems,
@@ -321,20 +332,20 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         numberOfQuestions,
         hasGuidance,
         isAnswered,
-        numberOfArticles,
-        view,
-      } = currentEntity;
-    const isPassedDeadline = moment(deadline).format('YYYY-MM-DD') < moment().format('YYYY-MM-DD');
+        createdAt,
+        ownedByMe,
+        /* view */
+      } = currentAssignment!;
+    const isPassedDeadline = moment(createdAt).format('YYYY-MM-DD') < moment().format('YYYY-MM-DD');
     const disableViewButton = (!isAnswered && isPassedDeadline) || !isPassedDeadline;
-    const { currentEntity: { id } } = this.props.store!;
-    const { history, isPublishedCurrentTeachingPath } = this.props;
+    /* const { currentAssignment: { id } } = this.props.store!; */
+    const { history, isPublishedCurrentAssignment, view } = this.props;
+    const viewText = currentAssignment instanceof Assignment ? 'View assignment' : 'View teaching path';
+    const guidanceText = currentAssignment instanceof Assignment ? 'Teacher guidance' : 'Teacher guidance';
+    const editText = currentAssignment instanceof Assignment ? 'Edit' : 'Edit';
+    const duplicateText = currentAssignment instanceof Assignment ? 'Duplicate' : 'Duplicate';
 
-    const viewText = currentEntity instanceof Assignment ? 'View assignment' : 'View teaching path';
-    const guidanceText = currentEntity instanceof Assignment ? 'Teacher guidance' : 'Teacher guidance';
-    const editText = currentEntity instanceof Assignment ? 'Edit' : 'Edit';
-    const duplicateText = currentEntity instanceof Assignment ? 'Duplicate' : 'Duplicate';
-
-    const selectedTeachingPath: TeachingPath = this.state.currentTeachingPath!;
+    const selectedAssignment: Assignment = this.state.currentAssignment!;
 
     return (
       <div className={'previewModalInfo'} onClick={this.stopPropagation} tabIndex={0}>
@@ -364,10 +375,6 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
               {numberOfQuestions ? numberOfQuestions : 'No'} questions
             </div>
             <div className="partsInfo">
-              <img src={article} alt="question" />
-              {numberOfArticles ? numberOfArticles : 'No'} articles
-            </div>
-            <div className="partsInfo">
               <img src={person} alt="question" />
               By {author ? author : ''}
             </div>
@@ -390,15 +397,14 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
             {this.renderGrepMultiSubjects(multiSubjectItems)}
             {this.renderGrepSources(sourceItems)}
             {this.renderGrepEducationalGoals(goalsItems)}
-
           </div>
         </div >
 
         <div className="footerButtons">
-          {isPublishedCurrentTeachingPath! && (view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentTeachingPath!, history, id, viewText)}
+          {isPublishedCurrentAssignment! && (view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentAssignment!, history, id, viewText)}
           {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
-          {view === 'edit' && (ownedByMe) && this.renderEditButton(editText, history, id)}
-          {isPublishedCurrentTeachingPath! && this.renderDuplicateButton(duplicateText)}
+          {(view === 'edit') && this.renderEditButton(editText, history, id)}
+          {isPublishedCurrentAssignment! && this.renderDuplicateButton(duplicateText)}
 
         </div>
       </div >
@@ -407,4 +413,4 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
 
 }
 
-export const SideOutPanelPreviewTeachingPath = withRouter(SideOutPanelPreviewTeachingPathComponent);
+export const SideOutPanelPreviewAssignment = withRouter(SideOutPanelPreviewAssignmentComponent);

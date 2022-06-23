@@ -33,8 +33,11 @@ interface AssignmentListItemProps {
   currentUserRole: UserType;
   removeAssignment: (assignmentId: number) => void;
   copyAssignment: (id: number) => void;
+  onClick: (id: number, view?: string) => void;
   itemsToLastAssignment: number;
   isContentManager: boolean;
+  id?: number;
+  view?: string;
 }
 
 interface AssignmentListItemState {
@@ -361,6 +364,14 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
     );
   }
 
+  public onAssignmentClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const { id, onClick, view } = this.props;
+    event.preventDefault();
+    if (onClick) {
+      onClick(id!, view!);
+    }
+  }
+
   public render() {
     const { assignment } = this.props;
     const { isActionMenuVisible } = this.state;
@@ -373,7 +384,6 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
       }
     };
     // const hasLikes = !((!assignment.view && !assignment.publishedAt) || (!assignment.view && assignment.publishedAt && assignment.isChanged));
-
     const moreButtonClasses = classNames('AssignmentListItem__more', {
       AssignmentListItem__more_clicked: isActionMenuVisible,
     });
@@ -383,7 +393,8 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
 
     return (
       <div className="AssignmentListItem__super">
-        <Link to={linkOptions}>
+        {/* <Link to={linkOptions}> */}
+        <div onClick={this.onAssignmentClick}>
           <li className="AssignmentListItem">
             <div className="AssignmentListItem__block AssignmentListItem__blockMain">
               <img
@@ -408,7 +419,8 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
               {/*{hasLikes && this.renderLikes(true)}*/}
             </div>
           </li>
-        </Link>
+        </div>
+        {/* </Link> */}
         <div className="AssignmentListItem__moreWrapper">
           <button className={moreButtonClasses} onClick={this.toggleActionMenu} title={intl.get('activity_page.options')} />
           <div className={actionMenuWrapperClasses}>

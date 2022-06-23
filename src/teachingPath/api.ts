@@ -172,9 +172,21 @@ export class TeachingPathApi implements TeachingPathRepo {
         levels: data.levels,
         answerId: data.answerId,
         isCopy: data.isCopy,
+        subjects: data.subjects,
+
+        // TEM-2319 Preview fot Teaching Paths
+        subjectItems: data.subjects,
+        coreElementItems: data.coreElements,
+        multiSubjectItems: data.mainTopics,
+        sourceItems: data.sources,
+        goalsItems: data.goals,
+
+        grepGoals: data.goals,
         numberOfArticles: data.numberOfArticles,
-        numberOfQuestions: data.numberOfQuestions,
+        numberOfQuestions: data.numberOfQuestion,
         hasGuidance: data.hasGuidance,
+        isPublished: data.isPublished,
+        ownedByMe: data.ownedByMe,
       });
     } catch (error) {
       if (error.response.data.message === 'Teaching path not assigned to you') {

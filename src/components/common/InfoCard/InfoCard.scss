@@ -95,6 +95,14 @@
         color: #939FA7;
       }
 
+      .isDraft {
+        white-space: nowrap;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        color: #596A75;
+        margin-left: 6px;
+      }
+
       p {
         @include text-shrink-multiline(2);
         margin: 0;

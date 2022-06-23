@@ -15,7 +15,8 @@ import {
   WPLocale,
   Source,
   FilterGrep,
-  GoalsData
+  GoalsData,
+  GenericGrepItem
 } from './Assignment';
 import {
   AssignmentDistributeDTO,
@@ -163,6 +164,7 @@ export interface ImageChoiceQuestionOptionDTO {
 
 interface AssignmentByIdResponseDTO {
   id: number;
+  author: string;
   title: string;
   description: string;
   featuredImage: string;
@@ -172,6 +174,15 @@ interface AssignmentByIdResponseDTO {
   questions: Array<QuestionDTO>;
   relatedArticles: Array<ArticleRequestDTO>;
   subjects: Array<SubjectDTO>;
+  isPublished: boolean;
+  view: string;
+  hasGuidance: boolean;
+  ownedByMe: boolean;
+  /* subjects: Array<any>; */
+  mainTopics: Array<any>;
+  sources: Array<any>;
+  coreElements: Array<any>;
+  goals: Array<any>;
 }
 
 export class AssignmentApi implements AssignmentRepo {
@@ -184,13 +195,24 @@ export class AssignmentApi implements AssignmentRepo {
     // questions and relatedArticles ignored here because it not essential for stores that use this method
     return new Assignment({
       id: assignmentDTO.id,
+      author: assignmentDTO.author,
       title: assignmentDTO.title,
       description: assignmentDTO.description,
       featuredImage: assignmentDTO.featuredImage,
       grades: assignmentDTO.grades,
       isPrivate: assignmentDTO.isPrivate,
       levels: assignmentDTO.levels,
+      numberOfQuestions: assignmentDTO.questions.length,
       subjects: assignmentDTO.subjects,
+      isPublished: assignmentDTO.isPublished,
+      ownedByMe: assignmentDTO.ownedByMe,
+      subjectItems: assignmentDTO.subjects.map(item => new GenericGrepItem(item.id, item.title)),
+      coreElementItems: assignmentDTO.coreElements,
+      multiSubjectItems: assignmentDTO.mainTopics,
+      sourceItems: assignmentDTO.sources,
+      goalsItems: assignmentDTO.goals,
+      view: assignmentDTO.view,
+      hasGuidance: assignmentDTO.hasGuidance,
     });
   }
 
@@ -212,7 +234,7 @@ export class AssignmentApi implements AssignmentRepo {
     return (await API.get('api/sources', {
       params:
       {
-        locale: this.currentLocale === Locales.EN ? null :  LOCALES_MAPPING_FOR_BACKEND[locale]
+        locale: this.currentLocale === Locales.EN ? null : LOCALES_MAPPING_FOR_BACKEND[locale]
       }
     })).data.data.map(
       (item: SourceDTO) => new Source(item.id, item.title, item.default)
@@ -266,7 +288,7 @@ export class AssignmentApi implements AssignmentRepo {
     }
   }
 
-  public async getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep>  {
+  public async getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep> {
     const response = await API.get('api/teacher/assignments/grep/filters', {
       params: {
         grades,
@@ -377,7 +399,7 @@ export class WPApi implements ArticleRepo {
   }: { page: number, perPage: number, order: string, grades?: number, subjects?: number, searchTitle?: string, core?: number | string, goal?: number | string, multi?: number, source?: number, lang: string }): Promise<Array<Article>> {
 
     let langParmeter = lang;
-    if (lang === '' || (typeof(lang) === 'undefined')) langParmeter = this.storageInteractor.getArticlesLocaleId()!;
+    if (lang === '' || (typeof (lang) === 'undefined')) langParmeter = this.storageInteractor.getArticlesLocaleId()!;
 
     try {
       return (
@@ -411,7 +433,7 @@ export class WPApi implements ArticleRepo {
       `${process.env.REACT_APP_WP_URL}/wp-json/getarticles/v1/post/`, {
         params: {
           ids: includes,
-          // lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
+        // lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
         }
       }
     );
@@ -423,7 +445,7 @@ export class WPApi implements ArticleRepo {
     return (
       await API.get(
         `${process.env.REACT_APP_WP_URL}/wp-json/media/v1/post/`, {
-          params:  {
+          params: {
             id: postIds.join(),
             content: AttachmentType.video
           }

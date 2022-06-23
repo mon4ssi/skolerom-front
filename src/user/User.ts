@@ -14,7 +14,8 @@ export interface UserRepo {
 export enum UserType {
   Teacher = 'TEACHER',
   Student = 'STUDENT',
-  ContentManager = 'CONTENT-MANAGER'
+  ContentManager = 'CONTENT-MANAGER',
+  SuperContentManager = 'SUPER-CM'
 }
 
 export type UserParams = {
@@ -22,6 +23,7 @@ export type UserParams = {
   name: string;
   photo: string;
   schools: Array<School>;
+  is_super_cm?: boolean;
 };
 
 export abstract class User {
@@ -30,6 +32,7 @@ export abstract class User {
   public readonly id: number;
   public readonly photo: string;
   public readonly schools: Array<School>;
+  public readonly isSuperCM?: boolean;
 
   protected constructor(params: UserParams & { type: UserType }) {
     this.type = params.type;
@@ -37,5 +40,6 @@ export abstract class User {
     this.name = params.name;
     this.photo = params.photo;
     this.schools = params.schools;
+    this.isSuperCM = params.is_super_cm;
   }
 }

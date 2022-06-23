@@ -1,7 +1,7 @@
 import { computed, observable, toJS } from 'mobx';
 import intl from 'react-intl-universal';
 
-import { Grade, GreepElements, Subject, Article, Assignment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData, Source } from 'assignment/Assignment';
+import { Grade, GreepElements, Subject, Article, Assignment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData, Source, SourceItem, CoreElementItem, EducationalGoalItem, GenericGrepItem } from 'assignment/Assignment';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from './service';
 import { injector } from '../Injector';
 
@@ -182,6 +182,13 @@ export interface TeachingPathArgs {
   minNumberOfSteps?: number;
   grades?: Array<Grade>;
   subjects?: Array<Subject>;
+
+  subjectItems?: Array<GenericGrepItem>;
+  sourceItems?: Array<GenericGrepItem>;
+  coreElementItems?: Array<GenericGrepItem>;
+  multiSubjectItems?: Array<GenericGrepItem>;
+  goalsItems?: Array<GenericGrepItem>;
+
   sources?: Array<number>;
   view?: string;
   levels?: Array<number>;
@@ -229,6 +236,13 @@ export class TeachingPath {
   protected readonly _minNumberOfSteps: number | undefined;
   protected readonly _ownedByMe: boolean;
   @observable protected _grades: Array<Grade> = [];
+
+  @observable protected _sourceItems: Array<GenericGrepItem> = [];
+  @observable protected _coreElementItems: Array<GenericGrepItem> = [];
+  @observable protected _multiSubjectItems: Array<GenericGrepItem> = [];
+  @observable protected _goalsItems: Array<GenericGrepItem> = [];
+  @observable protected _subjectItems: Array<Subject> = [];
+
   @observable protected _subjects: Array<Subject> = [];
   @observable protected _sources: Array<number> = [];
   @observable protected _levels: Array<number>;
@@ -273,6 +287,13 @@ export class TeachingPath {
     this._minNumberOfSteps = args.minNumberOfSteps;
     this._maxNumberOfSteps = args.maxNumberOfSteps;
     this._grades = args.grades || [];
+
+    this._sourceItems = args.sourceItems || [];
+    this._coreElementItems = args.coreElementItems || [];
+    this._multiSubjectItems = args.multiSubjectItems || [];
+    this._goalsItems = args.goalsItems || [];
+    this._subjectItems = args.subjects || [];
+
     this._subjects = args.subjects || [];
     this._sources = args.sources || [];
     this._view = args.view || 'edit';
@@ -425,8 +446,38 @@ export class TeachingPath {
   }
 
   @computed
+  public get ownedByMe() {
+    return this._ownedByMe;
+  }
+
+  @computed
   public get grades() {
     return this._grades;
+  }
+
+  @computed
+  public get sourceItems() {
+    return this._sourceItems;
+  }
+
+  @computed
+  public get coreElementItems() {
+    return this._coreElementItems;
+  }
+
+  @computed
+  public get multiSubjectItems() {
+    return this._multiSubjectItems;
+  }
+
+  @computed
+  public get goalsItems() {
+    return this._goalsItems;
+  }
+
+  @computed
+  public get subjectItems() {
+    return this._subjectItems;
   }
 
   @computed

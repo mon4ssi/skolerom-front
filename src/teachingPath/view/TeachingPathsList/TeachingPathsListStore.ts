@@ -120,6 +120,11 @@ export class TeachingPathsListStore {
     this.currentTeachingPath = this.teachingPathList.find(item => item.id === id)!;
   }
 
+  @action
+  public setCurrentTeachingPathEntity(teachingPath: TeachingPath) {
+    this.currentTeachingPath = teachingPath!;
+  }
+
   public hasAssignment(id: number) {
     return !!this.teachingPathList.find(item => item.id === id);
   }

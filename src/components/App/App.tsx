@@ -58,7 +58,22 @@ const CurrentAssignmentPageView = (props: any) => <CurrentAssignmentPage {...pro
 const CurrentAssignmentPagePreviewView = (props: any) => <CurrentAssignmentPagePreview {...props} isTeacher />;
 
 // tslint:disable-next-line: no-any
-const ViewTeachingPath = (props: any) => <EditTeachingPath {...props} readOnly />;
+const ViewAssignment = (props: any) => {
+  const tg = props!.location.pathname;
+  if (tg.includes(('tg=true'))) {
+    return (<CurrentAssignmentPage {...props} readOnly tgOpen={true} />);
+  }
+  return (<CurrentAssignmentPage {...props} readOnly />);
+};
+
+// tslint:disable-next-line: no-any
+const ViewTeachingPath = (props: any) => {
+  const tg = props!.location.pathname;
+  if (tg.includes(('tg=true'))) {
+    return (<EditTeachingPath {...props} readOnly tgOpen={true} />);
+  }
+  return (<EditTeachingPath {...props} readOnly />);
+};
 const loadDataMaintenance = 30000;
 const SECOND = 2;
 
@@ -89,14 +104,14 @@ const emptyRouteStyle = {
 class LocalizedApp extends Component<Props> {
   public state = {
     isLocalesLoaded: false,
-    isMaintenance : false,
-    isMaintenanceClose : true,
-    isDataText : ''
+    isMaintenance: false,
+    isMaintenanceClose: true,
+    isDataText: ''
   };
 
   private renderEmptyRoute = (path: string) => (
     <Route key={path} path={path}>
-      <div style={emptyRouteStyle}/>
+      <div style={emptyRouteStyle} />
     </Route>
   )
 
@@ -116,7 +131,7 @@ class LocalizedApp extends Component<Props> {
       const MyEndTimeValue = this.changeNewdate(MyEndTime);
       const date = new Date();
       const exactlyHour = date.getTime();
-      if (MyStartTimeValue <= exactlyHour &&  exactlyHour <= MyEndTimeValue) {
+      if (MyStartTimeValue <= exactlyHour && exactlyHour <= MyEndTimeValue) {
         this.setState({ isMaintenance: true });
       } else {
         this.setState({ isMaintenance: false });
@@ -341,7 +356,7 @@ class LocalizedApp extends Component<Props> {
           <AppHeader />
 
           <div className="App__view" id="view">
-            {!!loginStore!.currentUser || <Redirect to="/login"/>}
+            {!!loginStore!.currentUser || <Redirect to="/login" />}
             <div className="App__sidebar">
               <Switch>
                 {routesWithSidebar.map(this.renderSidebar)}

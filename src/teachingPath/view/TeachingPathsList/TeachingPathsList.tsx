@@ -26,6 +26,9 @@ import listPlaceholderImg from 'assets/images/list-placeholder.svg';
 import './TeachingPathsList.scss';
 import { SideOutPanelPreview } from 'components/common/SideOutPanelPreview/SideOutPanelPreview';
 import { SideOutPanelPreviewTeachingPath } from 'components/common/SideOutPanelPreviewTeachingPath/SideOutPanelPreviewTeachingPath';
+import { TeachingPathService, TEACHING_PATH_SERVICE } from 'teachingPath/service';
+import { injector } from 'Injector';
+import { TeachingPath } from 'teachingPath/TeachingPath';
 
 const MAGICNUMBER100 = -1;
 const MAGICNUMBER1 = 1;
@@ -47,6 +50,7 @@ interface State {
   idActiveCard: number | null;
   isTeachingPathPreviewVisible: boolean;
   isTeachingPathPreviewTeacherCMVisible: boolean;
+  isPublishedCurrentTeachingPath: boolean;
   selectedCoresAll: Array<GrepElementFilters>;
   selectedCoresFilter: Array<GrepElementFilters>;
   grepFiltersData: FilterGrep;
@@ -83,6 +87,8 @@ interface State {
 @inject('teachingPathsListStore', 'editTeachingPathStore')
 @observer
 class TeachingPathsListComponent extends Component<Props, State> {
+  private teachingPathService: TeachingPathService = injector.get(TEACHING_PATH_SERVICE);
+
   private tabNavigationLinks = [
     {
       name: 'All teaching paths',
@@ -120,6 +126,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
       idActiveCard: null,
       isTeachingPathPreviewVisible: false,
       isTeachingPathPreviewTeacherCMVisible: false,
+      isPublishedCurrentTeachingPath: false,
       selectedCoresAll: [],
       selectedCoresFilter: [],
       grepFiltersData: {},
@@ -485,13 +492,23 @@ class TeachingPathsListComponent extends Component<Props, State> {
     teachingPathsListStore!.setTypeOfTeachingPathsList(type);
   }
 
-  public openAssignmentPreview = (id: number, userType?: UserType) => {
+  public manageTeachingPathAction = async (id: number, userType?: UserType) => {
+    const { teachingPathsListStore, history } = this.props;
+
+    this.unregisterListener();
+    this.props.teachingPathsListStore!.setCurrentTeachingPath(id);
+    const { currentEntity } = teachingPathsListStore!;
     switch (userType) {
       case UserType.ContentManager:
       case UserType.Teacher:
-        this.unregisterListener();
-        this.props.teachingPathsListStore!.setCurrentTeachingPath(id);
-        this.setState({ isTeachingPathPreviewTeacherCMVisible: true });
+        if (!currentEntity!.isPublished) {
+          history.push(`/teaching-paths/edit/${id}`);
+        } else {
+          this.setState({ isPublishedCurrentTeachingPath: true });
+          const response: TeachingPath = await this.teachingPathService.getTeachingPathDataById(currentEntity!.id);
+          this.props.teachingPathsListStore!.setCurrentTeachingPathEntity(response);
+          this.setState({ isTeachingPathPreviewTeacherCMVisible: true });
+        }
         break;
       case UserType.Student:
         this.unregisterListener();
@@ -521,10 +538,10 @@ class TeachingPathsListComponent extends Component<Props, State> {
           }
           history.push(`/teaching-paths/edit/${id}`);
         */
-        this.openAssignmentPreview(id, currentUserType);
+        this.manageTeachingPathAction(id, currentUserType);
         break;
       case UserType.Student:
-        this.openAssignmentPreview(id, currentUserType);
+        this.manageTeachingPathAction(id, currentUserType);
         break;
       default:
         break;
@@ -1121,9 +1138,13 @@ class TeachingPathsListComponent extends Component<Props, State> {
 
   public renderSlideOutPanelTeacherCM = () => {
     const { teachingPathsListStore } = this.props;
+    const { currentEntity } = teachingPathsListStore!;
+    const { isPublishedCurrentTeachingPath } = this.state;
+    const tempIsPublishedCurrentTeachingPath = isPublishedCurrentTeachingPath!;
     return (
       <div className="dark" onClick={this.closeSlideOutPanel}>
         <SideOutPanelPreviewTeachingPath
+          isPublishedCurrentTeachingPath={tempIsPublishedCurrentTeachingPath}
           store={teachingPathsListStore}
           onClose={this.closeSlideOutPanel}
         />

@@ -93,6 +93,54 @@ export class Grade {
   }
 }
 
+export class GenericGrepItem {
+  @observable public id: number;
+  @observable public description: string;
+  @observable public gradeDesc?: string | undefined | null;
+  constructor(id: number, description: string, gradeDesc?: string) {
+    this.id = id;
+    this.description = description;
+    if (gradeDesc) {
+      this.gradeDesc = gradeDesc;
+    }
+  }
+
+}
+
+export class EducationalGoalItem {
+  @observable public id: number;
+  @observable public description: string;
+  @observable public gradeDesc: string | undefined | null;
+
+  constructor(id: number, description: string, gradeDesc: string) {
+    this.id = id;
+    this.description = description;
+    this.gradeDesc = gradeDesc;
+  }
+}
+
+export class SourceItem {
+  @observable public id: number;
+  @observable public description: string;
+
+  constructor(id: number, description: string) {
+    this.id = id;
+    this.description = description;
+  }
+}
+
+export class CoreElementItem {
+  @observable public id: number;
+  @observable public code: string;
+  @observable public description: string;
+
+  constructor(id: number, code: string, description: string) {
+    this.id = id;
+    this.code = code;
+    this.description = description;
+  }
+}
+
 export class Subject {
   @observable public id: number;
   @observable public title: string;
@@ -208,6 +256,13 @@ export interface AssignmentArgs {
   grades?: Array<Grade>;
   subjects?: Array<Subject>;
   sources?: Array<number>;
+
+  subjectItems?: Array<any>;
+  sourceItems?: Array<any>;
+  coreElementItems?: Array<any>;
+  multiSubjectItems?: Array<any>;
+  goalsItems?: Array<any>;
+
   isPrivate?: boolean;
   relatedArticles?: Array<Article>;
   createdAt?: string;
@@ -257,6 +312,13 @@ export class Assignment {
   @observable protected _subjects: Array<Subject> = [];
   @observable protected _sources: Array<number> = [];
   @observable protected _isPrivate: boolean = false;
+
+  @observable protected _sourceItems: Array<GenericGrepItem> = [];
+  @observable protected _coreElementItems: Array<GenericGrepItem> = [];
+  @observable protected _multiSubjectItems: Array<GenericGrepItem> = [];
+  @observable protected _goalsItems: Array<GenericGrepItem> = [];
+  @observable protected _subjectItems: Array<Subject> = [];
+
   @observable protected _relatedArticles: Array<Article> = [];
   @observable protected _createdAt: string = '';
   @observable protected _updatedAt: string = '';
@@ -300,6 +362,13 @@ export class Assignment {
     this._grades = args.grades || [];
     this._subjects = args.subjects || [];
     this._sources = args.sources || [];
+
+    this._sourceItems = args.sourceItems || [];
+    this._coreElementItems = args.coreElementItems || [];
+    this._multiSubjectItems = args.multiSubjectItems || [];
+    this._goalsItems = args.goalsItems || [];
+    this._subjectItems = args.subjects || [];
+
     this._isPrivate = !isNil(args.isPrivate) ? args.isPrivate : true;
     this._relatedArticles = args.relatedArticles || [];
     this._createdAt = args.createdAt || '';
@@ -441,8 +510,38 @@ export class Assignment {
   }
 
   @computed
+  public get sourceItems() {
+    return this._sourceItems;
+  }
+
+  @computed
+  public get coreElementItems() {
+    return this._coreElementItems;
+  }
+
+  @computed
+  public get multiSubjectItems() {
+    return this._multiSubjectItems;
+  }
+
+  @computed
+  public get goalsItems() {
+    return this._goalsItems;
+  }
+
+  @computed
+  public get subjectItems() {
+    return this._subjectItems;
+  }
+
+  @computed
   public get isPrivate() {
     return this._isPrivate;
+  }
+
+  @computed
+  public get ownedByMe() {
+    return this._ownedByMe;
   }
 
   @computed
