@@ -155,7 +155,7 @@
     .entityDescription {
       height: 67px;
       border-bottom: 1px solid #D3D9DE;
-      padding: 20px;
+      padding: 20px 45px 20px 45px;
       display: flex;
       align-items: left;
       justify-content: left;
@@ -196,7 +196,7 @@
 
     .summary {
       display: block;
-      padding: 20px;
+      padding: 20px 45px 20px 45px;
       background: white;
       overflow: auto;
       height: calc(100% - 290px);
@@ -220,7 +220,7 @@
         }
 
 
-        .image {
+        .imageGrep {
           margin-right: 10px;
 
           .imgInfo {
@@ -320,7 +320,7 @@
         }
 
 
-        .image {
+        .imageGrep {
           margin-right: 10px;
 
           .imgInfo {

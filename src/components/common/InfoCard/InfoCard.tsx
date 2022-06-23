@@ -386,7 +386,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
             {!isTeachingPath && this.renderDefaultIcons()}
             <div className={`${!withTooltip && 'flexBox'}`}>
               <div className="cardTitle">
-                <p className={`${!title && 'noTitle'}`}>{title ? title : intl.get('edit_teaching_path.no_title')}<span className="isDraft">{isPublished ? '' : '- Draft'}</span></p>
+                <p className={`${!title && 'noTitle'}`}>{title ? title : intl.get('edit_teaching_path.no_title')}<span className="isDraft">{isPublished ? '' : `- ${intl.get('teaching_paths_list.Draft')}`}</span></p>
               </div>
               {isTeachingPath && this.renderTeachingPathIcons()}
             </div>

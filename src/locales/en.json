@@ -647,6 +647,7 @@
     "validation": {
       "not_teaching_path_creator": "The teaching path cannot be opened"
     },
+    "Draft": "Draft",
     "delete": "Delete teaching path",
     "view": "View teaching path",
     "edit": "Edit teaching path",

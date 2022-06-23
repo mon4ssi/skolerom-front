@@ -647,6 +647,7 @@
     "validation": {
       "not_teaching_path_creator": "Læringsstien kan ikkje opnast."
     },
+    "Draft": "Kladd",
     "delete": "Slett læringsstien",
     "view": "Vis læringsstien",
     "edit": "Rediger læringsstien",

@@ -138,7 +138,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   public renderGrepSubjectsArray = (subjectsArray: Array<any>) =>
   (
     <div className="entityInfoBlock">
-      <div className="image">
+      <div className="imageGrep">
         <img className="imgInfo" src={subject} />
       </div>
       <div>
@@ -169,7 +169,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   public renderGrepCoreElements = (coreElementsArray: Array<GenericGrepItem>) =>
   (
     <div className="entityInfoBlock">
-      <div className="image">
+      <div className="imageGrep">
         <img className="imgInfo" src={coreElement} />
       </div>
       <div>
@@ -200,7 +200,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   public renderGrepMultiSubjects = (multiSubjectsArray: Array<GenericGrepItem>) =>
   (
     <div className="entityInfoBlock">
-      <div className="image">
+      <div className="imageGrep">
         <img className="imgInfo" src={multiSubject} />
       </div>
       <div>
@@ -232,7 +232,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   public renderGrepSources = (sourcesArray: Array<GenericGrepItem>) =>
   (
     <div className="entityInfoBlock">
-      <div className="image">
+      <div className="imageGrep">
         <img className="imgInfo" src={source} />
       </div>
       <div>
@@ -263,7 +263,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   (
     <>
       <div className="entityInfoBlockExpanded">
-        <div className="image">
+        <div className="imageGrep">
           <img className="imgInfo" src={goals} />
         </div>
         <div className="title">{intl.get('preview.teaching_path.grep.educational_goals')}</div>
@@ -364,7 +364,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         <div className="footerButtons">
           {isPublishedCurrentTeachingPath! && (view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentTeachingPath!, history, id, viewText)}
           {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
-          {view === 'edit' && (ownedByMe) && this.renderEditButton(editText, history, id)}
+          {view === 'edit' && this.renderEditButton(editText, history, id)}
           {isPublishedCurrentTeachingPath! && this.renderDuplicateButton(duplicateText)}
 
         </div>
