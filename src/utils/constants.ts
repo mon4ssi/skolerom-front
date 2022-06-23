@@ -20,7 +20,7 @@ export const TABLET_WIDTH = 1366;
 export const GENERAL_MOBILE_WIDTH = 640;
 export const MOBILE_WIDTH = 425;
 
-export const deadlineDateFormat = 'DD/MM YYYY';
+export const deadlineDateFormat = 'DD/MM, YYYY';
 
 export const firstLevel = 1;
 export const secondLevel = 2;

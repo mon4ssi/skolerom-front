@@ -173,6 +173,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         answerId: data.answerId,
         isCopy: data.isCopy,
         subjects: data.subjects,
+        createdAt: data.created_at,
 
         // TEM-2319 Preview fot Teaching Paths
         subjectItems: data.subjects,

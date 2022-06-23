@@ -126,31 +126,6 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     }
   }
 
-  /* public renderGrepSubjects = () =>
-  (
-    <div className="entityInfoBlock">
-      <div className="image">
-        <img className="imgInfo" src={subject} />
-      </div>
-      <div>
-        <div className="title">{'Subject'}</div>
-        <div>
-          <ul className="listItem">
-            <li className="item">
-              {'Science'}
-            </li>
-            <li className="item">
-              {'Health'}
-            </li>
-            <li className="item">
-              {'Mathematics'}
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  ) */
-
   public renderSubjectArray = (subjectsArray: Array<any>) => (
     subjectsArray.map(item => (
       <li key={item.id} className="item">
@@ -167,7 +142,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         <img className="imgInfo" src={subject} />
       </div>
       <div>
-        <div className="title">{'Subject'}</div>
+        <div className="title">{intl.get('preview.teaching_path.grep.subjects')}</div>
         <div>
           <ul className="listItem">
             {this.renderSubjectArray(subjectsArray)}
@@ -198,7 +173,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         <img className="imgInfo" src={coreElement} />
       </div>
       <div>
-        <div className="title">{'Core Element'}</div>
+        <div className="title">{intl.get('preview.teaching_path.grep.core_elements')}</div>
         <div>
           <ul className="listItem">
             {this.renderCoreElementsArray(coreElementsArray)}
@@ -229,7 +204,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         <img className="imgInfo" src={multiSubject} />
       </div>
       <div>
-        <div className="title">{'Multidisciplinary subjects'}</div>
+        <div className="title">{intl.get('preview.teaching_path.grep.multidisciplinary_subjects')}</div>
         <div>
           <ul className="listItem">
             {this.renderMultidisciplinarySubjectsArray(multiSubjectsArray)}
@@ -261,7 +236,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         <img className="imgInfo" src={source} />
       </div>
       <div>
-        <div className="title">{'Source'}</div>
+        <div className="title">{intl.get('preview.teaching_path.grep.sources')}</div>
         <div>
           <ul className="listItem">
             {this.renderSourcesArray(sourcesArray)}
@@ -291,7 +266,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         <div className="image">
           <img className="imgInfo" src={goals} />
         </div>
-        <div className="title">{'Educational goals'}</div>
+        <div className="title">{intl.get('preview.teaching_path.grep.educational_goals')}</div>
       </div>
       <div className="flexContainer">
         <ul className="listItem">
@@ -307,34 +282,27 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const
       {
         title,
-        isPublished,
-        isOwnedByMe,
         ownedByMe,
+        createdAt,
         subjectItems,
         coreElementItems,
         sourceItems,
         multiSubjectItems,
         goalsItems,
         description,
-        deadline,
         author,
         numberOfQuestions,
         hasGuidance,
-        isAnswered,
         numberOfArticles,
         view,
       } = currentEntity;
-    const isPassedDeadline = moment(deadline).format('YYYY-MM-DD') < moment().format('YYYY-MM-DD');
-    const disableViewButton = (!isAnswered && isPassedDeadline) || !isPassedDeadline;
     const { currentEntity: { id } } = this.props.store!;
     const { history, isPublishedCurrentTeachingPath } = this.props;
 
-    const viewText = currentEntity instanceof Assignment ? 'View assignment' : 'View teaching path';
-    const guidanceText = currentEntity instanceof Assignment ? 'Teacher guidance' : 'Teacher guidance';
-    const editText = currentEntity instanceof Assignment ? 'Edit' : 'Edit';
-    const duplicateText = currentEntity instanceof Assignment ? 'Duplicate' : 'Duplicate';
-
-    const selectedTeachingPath: TeachingPath = this.state.currentTeachingPath!;
+    const viewText = intl.get('preview.teaching_path.buttons.view');
+    const guidanceText = intl.get('preview.teaching_path.buttons.teacher_guidance');
+    const editText = intl.get('preview.teaching_path.buttons.edit');
+    const duplicateText = intl.get('preview.teaching_path.buttons.duplicate');
 
     return (
       <div className={'previewModalInfo'} onClick={this.stopPropagation} tabIndex={0}>
@@ -361,26 +329,25 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
           <div className="entityInfo">
             <div className="partsInfo">
               <img src={question} alt="question" />
-              {numberOfQuestions ? numberOfQuestions : 'No'} questions
+              {numberOfQuestions ? numberOfQuestions : intl.get('preview.teaching_path.headers.no')} {`${intl.get('preview.teaching_path.headers.questions')}`}
             </div>
             <div className="partsInfo">
               <img src={article} alt="question" />
-              {numberOfArticles ? numberOfArticles : 'No'} articles
+              {numberOfArticles ? numberOfArticles : intl.get('preview.teaching_path.headers.no')} {`${intl.get('preview.teaching_path.headers.articles')}`}
             </div>
             <div className="partsInfo">
               <img src={person} alt="question" />
-              By {author ? author : ''}
+              {`${intl.get('preview.teaching_path.headers.by')}`} {author ? author : ''}
             </div>
             <div className="partsInfo">
               <img src={date} alt="date" />
-              {isPassedDeadline ? intl.get('answers.past') : `${moment(deadline).format(deadlineDateFormat)}`}
+              {`${moment(createdAt).format(deadlineDateFormat)}`}
             </div>
           </div>
           <div className="entityDescription">
 
             <div className="partsInfo">
               {description ? description : ''}
-              {/* Bli med på innsiden av kroppens immunsystem – ditt eget fantastiske forsvarsverk som holder deg frisk og rask. */}
             </div>
           </div>
 

@@ -178,6 +178,7 @@ interface AssignmentByIdResponseDTO {
   view: string;
   hasGuidance: boolean;
   ownedByMe: boolean;
+  created_at: string;
   /* subjects: Array<any>; */
   mainTopics: Array<any>;
   sources: Array<any>;
@@ -197,6 +198,7 @@ export class AssignmentApi implements AssignmentRepo {
       id: assignmentDTO.id,
       author: assignmentDTO.author,
       title: assignmentDTO.title,
+      createdAt: assignmentDTO.created_at,
       description: assignmentDTO.description,
       featuredImage: assignmentDTO.featuredImage,
       grades: assignmentDTO.grades,

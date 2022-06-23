@@ -136,31 +136,6 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     }
   }
 
-  /* public renderGrepSubjects = () =>
-  (
-    <div className="entityInfoBlock">
-      <div className="image">
-        <img className="imgInfo" src={subject} />
-      </div>
-      <div>
-        <div className="title">{'Subject'}</div>
-        <div>
-          <ul className="listItem">
-            <li className="item">
-              {'Science'}
-            </li>
-            <li className="item">
-              {'Health'}
-            </li>
-            <li className="item">
-              {'Mathematics'}
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  ) */
-
   public renderSubjectArray = (subjectsArray: Array<any>) => (
     subjectsArray.map(item => (
       <li key={item.id} className="item">
@@ -177,7 +152,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
         <img className="imgInfo" src={subject} />
       </div>
       <div>
-        <div className="title">{'Subject'}</div>
+        <div className="title">{intl.get('preview.assignment.grep.subjects')}</div>
         <div>
           <ul className="listItem">
             {this.renderSubjectArray(subjectsArray)}
@@ -208,7 +183,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
         <img className="imgInfo" src={coreElement} />
       </div>
       <div>
-        <div className="title">{'Core Element'}</div>
+        <div className="title">{intl.get('preview.assignment.grep.core_elements')}</div>
         <div>
           <ul className="listItem">
             {this.renderCoreElementsArray(coreElementsArray)}
@@ -239,7 +214,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
         <img className="imgInfo" src={multiSubject} />
       </div>
       <div>
-        <div className="title">{'Multidisciplinary subjects'}</div>
+        <div className="title">{intl.get('preview.assignment.grep.multidisciplinary_subjects')}</div>
         <div>
           <ul className="listItem">
             {this.renderMultidisciplinarySubjectsArray(multiSubjectsArray)}
@@ -271,7 +246,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
         <img className="imgInfo" src={source} />
       </div>
       <div>
-        <div className="title">{'Source'}</div>
+        <div className="title">{intl.get('preview.assignment.grep.sources')}</div>
         <div>
           <ul className="listItem">
             {this.renderSourcesArray(sourcesArray)}
@@ -301,7 +276,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
         <div className="image">
           <img className="imgInfo" src={goals} />
         </div>
-        <div className="title">{'Educational goals'}</div>
+        <div className="title">{intl.get('preview.assignment.grep.educational_goals')}</div>
       </div>
       <div className="flexContainer">
         <ul className="listItem">
@@ -318,8 +293,6 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     const
       {
         title,
-        isPublished,
-        isOwnedByMe,
         id,
         subjectItems,
         coreElementItems,
@@ -333,17 +306,12 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
         hasGuidance,
         isAnswered,
         createdAt,
-        ownedByMe,
-        /* view */
       } = currentAssignment!;
-    const isPassedDeadline = moment(createdAt).format('YYYY-MM-DD') < moment().format('YYYY-MM-DD');
-    const disableViewButton = (!isAnswered && isPassedDeadline) || !isPassedDeadline;
-    /* const { currentAssignment: { id } } = this.props.store!; */
     const { history, isPublishedCurrentAssignment, view } = this.props;
-    const viewText = currentAssignment instanceof Assignment ? 'View assignment' : 'View teaching path';
-    const guidanceText = currentAssignment instanceof Assignment ? 'Teacher guidance' : 'Teacher guidance';
-    const editText = currentAssignment instanceof Assignment ? 'Edit' : 'Edit';
-    const duplicateText = currentAssignment instanceof Assignment ? 'Duplicate' : 'Duplicate';
+    const viewText = intl.get('preview.assignment.buttons.view');
+    const guidanceText = intl.get('preview.assignment.buttons.teacher_guidance');
+    const editText = intl.get('preview.assignment.buttons.edit');
+    const duplicateText = intl.get('preview.assignment.buttons.duplicate');
 
     const selectedAssignment: Assignment = this.state.currentAssignment!;
 
@@ -372,15 +340,15 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
           <div className="entityInfo">
             <div className="partsInfo">
               <img src={question} alt="question" />
-              {numberOfQuestions ? numberOfQuestions : 'No'} questions
+              {numberOfQuestions ? numberOfQuestions : intl.get('preview.assignment.headers.no')} {`${intl.get('preview.assignment.headers.questions')}`}
             </div>
             <div className="partsInfo">
               <img src={person} alt="question" />
-              By {author ? author : ''}
+              {`${intl.get('preview.assignment.headers.by')}`} {author ? author : ''}
             </div>
             <div className="partsInfo">
               <img src={date} alt="date" />
-              {isPassedDeadline ? intl.get('answers.past') : `${moment(deadline).format(deadlineDateFormat)}`}
+              {`${moment(createdAt).format(deadlineDateFormat)}`}
             </div>
           </div>
           <div className="entityDescription">
