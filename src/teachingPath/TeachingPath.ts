@@ -17,6 +17,7 @@ export interface TeachingPathRepo {
   getTeachingPathDistributes(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
   getTeachingPathListOfStudentInList(studentId: number, filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
   getMyTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
+  getMySchoolTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
   getStudentTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
   getTeachingPathDataById(id: number): Promise<TeachingPath>;
   getTeachingPathById(id: number): Promise<TeachingPath>;
@@ -178,6 +179,8 @@ export interface TeachingPathArgs {
   guidance?: string;
   hasGuidance?: boolean;
   isPrivate?: boolean;
+  isMySchool?: boolean;
+  mySchools?: string | undefined;
   isFinished?: boolean;
   maxNumberOfSteps?: number;
   minNumberOfSteps?: number;
@@ -232,6 +235,8 @@ export class TeachingPath {
   @observable protected _lastSelectedNodeId: number | undefined;
   @observable protected _isPrivate: boolean = false;
   @observable protected _createdAt: string = '';
+  @observable protected _isMySchool?: boolean = false;
+  @observable protected _mySchools?: string | undefined = '';
   @observable protected _isFinished: boolean = false;
   @observable protected _content: TeachingPathNode | null = null;
   protected readonly _maxNumberOfSteps: number | undefined;
@@ -285,6 +290,8 @@ export class TeachingPath {
     this._guidance = args.guidance || '';
     this._hasGuidance = args.hasGuidance || false;
     this._isPrivate = !isNil(args.isPrivate) ? args.isPrivate : true;
+    this._isMySchool = args.isMySchool || false;
+    this._mySchools = args.mySchools;
     this._isFinished = args.isFinished || false;
     this._content = args.content ? new TeachingPathNode(args.content) : null;
     this._minNumberOfSteps = args.minNumberOfSteps;
@@ -431,6 +438,16 @@ export class TeachingPath {
   @computed
   public get isPrivate() {
     return this._isPrivate;
+  }
+
+  @computed
+  public get mySchools() {
+    return this._mySchools;
+  }
+
+  @computed
+  public get isMySchool() {
+    return this._isMySchool;
   }
 
   @computed
@@ -594,12 +611,20 @@ export class TeachingPathsList {
     this.filter.per_page = perPage;
   }
 
+  public setFilterSchoolTeachingPath = (school: number) => {
+    this.filter.showMySchoolTeachingpath = school;
+  }
+
   public async getAllTeachingPathsList() {
     return this.teachingPathService.getAllTeachingPathsList(this.filter);
   }
 
   public async getMyTeachingPathsList() {
     return this.teachingPathService.getMyTeachingPathsList(this.filter);
+  }
+
+  public async getMySchoolTeachingPathsList() {
+    return this.teachingPathService.getMySchoolTeachingPathsList(this.filter);
   }
 
   public async getStudentTeachingPathsList() {

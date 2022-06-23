@@ -6,7 +6,7 @@ import classnames from 'classnames';
 
 import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
-import { Subject, Grade, FilterGrep, GreepSelectValue, GrepFilters, GoalsData, Source } from 'assignment/Assignment';
+import { Subject, Grade, FilterGrep, GreepSelectValue, GrepFilters, GoalsData, Source, NowSchool } from 'assignment/Assignment';
 import tagsImg from 'assets/images/tags.svg';
 import gradeImg from 'assets/images/grade.svg';
 import checkRounded from 'assets/images/check-rounded-white-bg.svg';
@@ -54,6 +54,7 @@ interface State {
   optionsGoals: Array<GoalsData>;
   optionsMyGrades: Array<Grade>;
   optionsMySubjects: Array<Subject>;
+  optionsMySchool: Array<number>;
   valueStringGoalsOptions: Array<string>;
   valueGoalsOptions: Array<number>;
   editValueCoreOptions: Array<number> | undefined;
@@ -64,6 +65,7 @@ interface State {
   pageCurrent: number;
   isValid: boolean;
   isValidPrivate: boolean;
+  isMyStateSchool: boolean;
   loadingGoals: boolean;
   isOpen: boolean | undefined;
 }
@@ -100,8 +102,10 @@ export class PublishingActions extends Component<Props, State> {
       editvalueMultiOptions: [],
       editvaluereadingOptions: [],
       editvalueGoalsOptions: [],
+      optionsMySchool: [],
       isValid: false,
       isValidPrivate: true,
+      isMyStateSchool: false,
       page: MAGICNUMBER1,
       pageCurrent: MAGICNUMBER1,
       loadingGoals: true,
@@ -224,19 +228,33 @@ export class PublishingActions extends Component<Props, State> {
       this.setState(
         {
           isValid: true,
-          isValidPrivate: true
+          isValidPrivate: true,
+          isMyStateSchool: false
         },
         () => {
           this.sendValidbutton();
         }
       );
+      this.props.store!.currentEntity!.setIsMySchool(false);
     } else {
+      if (store!.currentEntity!.isMySchool) {
+        this.setState(
+          {
+            isValidPrivate: false,
+            isMyStateSchool: true
+          }
+        );
+        this.props.store!.currentEntity!.setIsMySchool(true);
+      } else {
+        this.setState(
+          {
+            isValidPrivate: false,
+            isMyStateSchool: false
+          }
+        );
+        this.props.store!.currentEntity!.setIsMySchool(false);
+      }
       this.sendValidbutton();
-      this.setState(
-        {
-          isValidPrivate: false
-        }
-      );
     }
     if (typeof(store!.currentEntity!.getListOfSources()) !== 'undefined') {
       this.setState(
@@ -346,6 +364,13 @@ export class PublishingActions extends Component<Props, State> {
     if (document.getElementById('publishingInfo')) {
       document.getElementById('publishingInfo')!.addEventListener('scroll', this.handerScroll);
     }
+    const myschools = store!.getCurrentUser()!.schools;
+    const arraySchoolIds = this.state.optionsMySchool;
+    myschools.forEach((school) => {
+      arraySchoolIds.push(school.id);
+    });
+    this.setState({ optionsMySchool : arraySchoolIds });
+    this.props.store!.currentEntity!.setMySchool(String(arraySchoolIds));
   }
 
   public handerScroll = async () => {
@@ -647,15 +672,55 @@ export class PublishingActions extends Component<Props, State> {
     this.setState(
       {
         isValid: true,
-        isValidPrivate: true
+        isValidPrivate: true,
+        isMyStateSchool: false
       },
       () => {
         this.validateAddTeacherContentDefault(true);
         this.sendValidbutton();
+        // check only contentCM
+        if (this.props.store!.getCurrentUser()!.type === UserType.ContentManager) {
+          this.props.store!.currentEntity!.setGrepSourcesIds([]);
+          this.props.store!.currentEntity!.setOpen(false);
+          this.setState({ isOpen : false });
+        }
       }
     );
 
     this.props.store!.currentEntity!.setIsPrivate(true);
+    this.props.store!.currentEntity!.setIsMySchool(false);
+  }
+
+  public handleMySchoolOn = () => {
+    const isCopy = this.props.store!.currentEntity!.isCopy;
+    const assignmentTitle = this.props.store!.currentEntity!.title;
+    if (
+      isCopy && (
+      /Copy$/.test(assignmentTitle) ||
+      /Kopi$/.test(assignmentTitle) ||
+      /copy$/.test(assignmentTitle) ||
+      /kopi$/.test(assignmentTitle))
+    ) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('new assignment.copy_title_not_allow')
+      });
+
+      return;
+    }
+    this.setState(
+      {
+        isValid: false,
+        isValidPrivate: false,
+        isMyStateSchool: true
+      },
+      () => {
+        this.validateAddTeacherContentDefault(false);
+        this.sendValidbutton();
+      }
+    );
+    this.props.store!.currentEntity!.setIsPrivate(false);
+    this.props.store!.currentEntity!.setIsMySchool(true);
   }
 
   public handlePrivateOff = async () => {
@@ -678,7 +743,8 @@ export class PublishingActions extends Component<Props, State> {
     this.setState(
       {
         isValid: false,
-        isValidPrivate: false
+        isValidPrivate: false,
+        isMyStateSchool: false
       },
       () => {
         this.validateAddTeacherContentDefault(false);
@@ -686,6 +752,7 @@ export class PublishingActions extends Component<Props, State> {
       }
     );
     this.props.store!.currentEntity!.setIsPrivate(false);
+    this.props.store!.currentEntity!.setIsMySchool(false);
   }
 
   public compareTwoArraysReturnValueSubject = (allGrades: Array<Subject>, selectedGrades: Array<Subject>) => {
@@ -924,18 +991,27 @@ export class PublishingActions extends Component<Props, State> {
 
   public renderVisibility = () => {
     const { store } = this.props;
+    const isTeacher = (store!.getCurrentUser()!.type !== UserType.Teacher) ? true : false;
 
     const privateButtonClassnames = classnames(
       'flexBox justifyCenter alignCenter w50',
       {
-        active: store!.currentEntity!.isPrivate,
+        active: store!.currentEntity!.isPrivate && !store!.currentEntity!.isMySchool,
       }
     );
 
     const publicButtonClassnames = classnames(
       'flexBox justifyCenter alignCenter w50',
       {
-        active: !store!.currentEntity!.isPrivate,
+        active: !store!.currentEntity!.isPrivate && !store!.currentEntity!.isMySchool,
+      }
+    );
+
+    const mySchoolButtonClassnames = classnames(
+      'flexBox justifyCenter alignCenter w50',
+      {
+        active: !store!.currentEntity!.isPrivate && store!.currentEntity!.isMySchool,
+        hidden: isTeacher
       }
     );
 
@@ -947,6 +1023,18 @@ export class PublishingActions extends Component<Props, State> {
         </div>
         <p>{intl.get('publishing_page.visibility_description')}</p>
         <div className="visibilityButtons flexBox">
+          <button
+            className={mySchoolButtonClassnames}
+            onClick={this.handleMySchoolOn}
+            title={intl.get('teaching_path_tabs.My school')}
+          >
+            <img
+              src={publicIconImg}
+              alt="Public"
+              title={intl.get('teaching_path_tabs.My school')}
+            />
+            {intl.get('teaching_path_tabs.My school')}
+          </button>
           <button
             className={publicButtonClassnames}
             onClick={this.handlePrivateOff}
@@ -1606,6 +1694,119 @@ export class PublishingActions extends Component<Props, State> {
     </div>
   )
 
+  public addSkole = async (id: number) => {
+    const { store } = this.props;
+    const arraySchool : Array<TagProp> = [];
+    const myschools = store!.getCurrentUser()!.schools;
+    myschools.forEach((school) => {
+      arraySchool.push({
+        id: school.id,
+        title: school.name
+      });
+    });
+    const skole = myschools.find(skole => skole.id === id);
+    if (skole) {
+      this.setState(
+        {
+          optionsMySchool : [...this.state.optionsMySchool, skole.id]
+        },
+        () => {
+          store!.currentEntity!.setMySchool(String(this.state.optionsMySchool));
+        }
+      );
+    }
+  }
+
+  public removeSkole = async (id: number) => {
+    const { store } = this.props;
+    const arraySchool : Array<TagProp> = [];
+    const myschools = store!.getCurrentUser()!.schools;
+    myschools.forEach((school) => {
+      arraySchool.push({
+        id: school.id,
+        title: school.name
+      });
+    });
+    const skole = myschools.find(skole => skole.id === id);
+    const arrayRemove: Array<number> = [];
+    if (skole) {
+      if (this.state.optionsMySchool.length > 1) {
+        this.state.optionsMySchool.forEach((e) => {
+          if (e !== skole.id) { arrayRemove.push(e); }
+        });
+        this.setState(
+          {
+            optionsMySchool : arrayRemove
+          },
+          () => {
+            store!.currentEntity!.setMySchool(String(this.state.optionsMySchool));
+          }
+        );
+      } else {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('publishing_page.dont_empty')
+        });
+      }
+    }
+  }
+
+  public renderSkoleInput = (allSkole: Array<TagProp>) => {
+    const { store } = this.props;
+    const { optionsGrades, valueGradesOptions } = this.state;
+    const { currentEntity } = store!;
+    const selectedMySkole = this.state.optionsMySchool;
+    const selectedMySkoleTagProp : Array<TagProp> = [];
+    allSkole.forEach((skole) => {
+      if (selectedMySkole.includes(skole.id)) {
+        selectedMySkoleTagProp.push(skole);
+      }
+    });
+    const myplaceholder = (selectedMySkoleTagProp.length > 0) ? '' : intl.get('publishing_page.selected_myschools');
+
+    return (
+      <div className="itemsFlex grade">
+        <TagInputComponent
+          dataid="renderGradeInput"
+          className="filterBy darkTheme"
+          tags={allSkole}
+          addTag={this.addSkole}
+          currentTags={selectedMySkoleTagProp}
+          orderbyid={true}
+          removeTag={this.removeSkole}
+          placeholder={myplaceholder}
+          listView
+          temporaryTagsArray
+        />
+      </div>
+    );
+  }
+
+  public renderMySchool = () => {
+    const { store } = this.props;
+    const isTeacher = (store!.getCurrentUser()!.type === UserType.Teacher) ? true : false;
+    const arraySchool : Array<TagProp> = [];
+    const myschools = store!.getCurrentUser()!.schools;
+    const arraySchoolIds = this.state.optionsMySchool;
+    myschools.forEach((school) => {
+      arraySchool.push({
+        id: school.id,
+        title: school.name
+      });
+    });
+
+    if (isTeacher && myschools.length > 1) {
+      return (
+        <div className="infoContainer__top__skole">
+          <p>{intl.get('publishing_page.selected_myschools')}</p>
+          <div className="skoleInput">
+            {this.renderSkoleInput(arraySchool)}
+          </div>
+        </div>
+      );
+    }
+  }
+
   public render() {
     const { store, from } = this.props;
     const titleSimple = (this.state.isValidPrivate) ? intl.get('publishing_page.grep.title_private') : intl.get('publishing_page.grep.title') ;
@@ -1615,6 +1816,7 @@ export class PublishingActions extends Component<Props, State> {
         <div className="infoContainer">
           <div className="infoContainer__top">
             {this.renderVisibility()}
+            {this.state.isMyStateSchool && this.renderMySchool()}
           </div>
           <div className="infoContainer__hidden">
             {this.renderLevelChoice()}

@@ -92,6 +92,7 @@ const routesWithoutSidebar = [
 const routesWithSidebar = [
   '/teaching-paths/my',
   '/teaching-paths/all',
+  '/teaching-paths/myschool',
   '/teaching-paths/answers/:entityId'
 ];
 
@@ -131,13 +132,13 @@ class LocalizedApp extends Component<Props> {
       const MyEndTimeValue = this.changeNewdate(MyEndTime);
       const date = new Date();
       const exactlyHour = date.getTime();
-      if (MyStartTimeValue <= exactlyHour && exactlyHour <= MyEndTimeValue) {
-        this.setState({ isMaintenance: true });
+      if (MyStartTimeValue <= exactlyHour &&  exactlyHour <= MyEndTimeValue) {
+        if (!this.state.isMaintenance) { this.setState({ isMaintenance: true }); }
       } else {
-        this.setState({ isMaintenance: false });
+        if (this.state.isMaintenance) { this.setState({ isMaintenance: false }); }
       }
     } else {
-      this.setState({ isMaintenance: false });
+      if (this.state.isMaintenance) { this.setState({ isMaintenance: false }); }
     }
   }
 

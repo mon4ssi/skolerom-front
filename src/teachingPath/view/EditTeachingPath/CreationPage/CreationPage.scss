@@ -7,7 +7,35 @@
     min-width: 100%;
     min-height: fit-content;
     // overflow-x: auto;
-
+    &.draggableclass {
+      .InfoCard {
+        border: dashed 3px #4baf50;
+        cursor: move;
+        button {
+          pointer-events: none;
+          &.activeDragButton {
+            display: none;
+          }
+          &.desactiveDragButton {
+            display: block;
+            pointer-events: all;
+          }
+        }
+      }
+      .boxNodeOptionsChildren {
+        pointer-events: none;
+        .boxInformationDrop {
+          display: none;
+        }
+      }
+    }
+    &.dragged {
+      .topVerticalLine, .bottomVerticalLine, .bottomHorizontalLine, .teachingPathButtons {
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+  
     &.rootContainer {
       padding-bottom: 50px;
       padding-top: 17px;
@@ -21,7 +49,24 @@
         margin-bottom: 27px;
         padding: 23px 0px 0px 0px;
         z-index: 3;
-
+        position: relative !important;
+        &.imposibleDrop {
+          border: dashed 3px #ff4545;
+          background: #ffebeb;
+          .teachingPathItemsTitle {
+            background: transparent !important;
+          }
+          .numberAndActions button {
+            background: transparent !important;
+          }
+        }
+        &.posibleDrop {
+          border: dashed 3px #4baf50;
+        }
+        .nestedOrderNumber {
+          position: absolute;
+          top: -15px !important;
+        }
         &.bnoReadOnly {
           background:none;
         }
@@ -33,6 +78,19 @@
         padding: 25px 0px 20px 0px;
         position: relative;
         z-index: 3;
+        &.imposibleDrop {
+          border: dashed 3px #ff4545;
+          background: #ffebeb;
+          .teachingPathItemsTitle {
+            background: transparent !important;
+          }
+          .numberAndActions button {
+            background: transparent !important;
+          }
+        }
+        &.posibleDrop {
+          border: dashed 3px #4baf50;
+        }
 
         .nestedOrderNumber {
           position: absolute;
@@ -106,7 +164,7 @@
       width: 50%;
       border-top: 2px dashed #D3D9DE;
       position: absolute;
-      top: 377px;
+      top: 414px;
       transform: translateX(50%);
     }
 
@@ -115,7 +173,7 @@
       width: 100%;
       border-top: 2px dashed #D3D9DE;
       position: absolute;
-      top: 377px;
+      top: 414px;
       transform: translateX(0);
     }
 
@@ -124,7 +182,7 @@
       width: 50%;
       border-top: 2px dashed #D3D9DE;
       position: absolute;
-      top: 377px;
+      top: 414px;
       transform: translateX(-50%);
     }
     .teachingPathItemsTitleDiv {
@@ -226,6 +284,7 @@
 
     .teachingPathButtons {
       position: relative;
+      margin-bottom: 20px;      
 
       &.withUnmergeButton {
         margin-top: 15px;
@@ -237,7 +296,7 @@
 
       &.withoutPadding {
         margin-top: 15px !important;
-      }
+      }      
     }
 
     .InfoCard {
@@ -247,7 +306,7 @@
     .childrenContainer {
       position: relative;
       flex-direction: row;
-      // z-index: 1;
+      //z-index: 1;
     }
 
     .mergePanel {
@@ -301,7 +360,7 @@
         width: 40px;
         height: 40px;
         position: absolute;
-        top: 358px;
+        top: 395px;
         left: -20px;
         cursor: pointer;
         z-index: 3;
@@ -353,14 +412,18 @@
 
 
   }
-
+  .dragButtonsItem {
+    .desactiveDragButton {
+      display: none;
+    }
+  }
   .topVerticalLine {
     border-left: 2px solid #D3D9DE;
     height: 65px;
     min-height: 65px;
     position: absolute;
     top: -65px;
-    z-index: 1;
+    z-index: -1;
   }
 
   .bottomVerticalLine {
@@ -398,5 +461,109 @@
       }
     }
   }
+}
+.dropInfoAddtional {
+  position: absolute;
+  width: calc(100% - 74px);
+  bottom: 0;
+  max-width: 248px;
+  &.deletedrop {
+    display: none;
+  }
+  &.insited {
+    &:before {display: none}
+  }
+  &.posibleactive {
+    .isPosibleDragInside {
+      border: dashed 3px #4baf50;
+    }
+  }
+  &.dropLeftArticle {
+    &:before {
+      content: '';
+      position: absolute;
+      width: calc(100% + 40px);
+      height: 2px;
+      background: #d3d9de;
+      z-index: -1;
+      top: 175px;
+      left: calc(100% - 20px);
+    }
+  }
+  &.dropLeftAssignments {
+    &:before {
+      content: '';
+      position: absolute;
+      width: calc(100% + 40px);
+      height: 2px;
+      background: #d3d9de;
+      z-index: -1;
+      top: 175px;
+      left: calc(100% - 20px);
+    }
+  }
+  &.dropRightArticle {
+    &:before {
+      content: '';
+      position: absolute;
+      width: calc(100% + 40px);
+      height: 2px;
+      background: #d3d9de;
+      z-index: -1;
+      top: 175px;
+      right: calc(100% - 20px);
+    }
+  }
+  &.dropRightAssignments {
+    &:before {
+      content: '';
+      position: absolute;
+      width: calc(100% + 40px);
+      height: 2px;
+      background: #d3d9de;
+      z-index: -1;
+      top: 175px;
+      right: calc(100% - 20px);
+    }
+  }
+  .isPosibleDragInside {
+    width: 100%;
+    text-align: center;
+    border: dashed 2px black;
+    height: 269px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 5px;
+  }
+}
+.draggableclass .isPosibleDragInside {
+  display: none;
+}
+.lastChildren {
+  .dropInfoAddtional {
+    margin-top: 20px;
+    &:before { display: none; }
+  }
+}
+
+.boxInformationDrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: -3px;
+  margin-top: -3px;
+  width: calc(100% + 6px);
+  height: calc(100% + 6px);
+  background-color: white;
+  z-index: 4;
+  border: dashed 2px black;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  border-radius: 5px;
 }
 

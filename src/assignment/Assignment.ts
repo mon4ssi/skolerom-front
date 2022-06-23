@@ -10,6 +10,9 @@ import moment, { Moment } from 'moment';
 
 import { AssignmentDistributeDTO } from './factory';
 import { isNil } from 'lodash';
+import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
+import { createContext } from 'vm';
+import { CustomImgAttachmentResponse, ResponseFetchCustomImages } from './api';
 
 export const ASSIGNMENT_REPO = 'ASSIGNMENT_REPO';
 
@@ -26,6 +29,10 @@ export interface AssignmentRepo {
     total_pages: number;
   }>;
   getAllAssignmentsList(filter: Filter): Promise<{
+    myAssignments: Array<Assignment>;
+    total_pages: number;
+  }>;
+  getAllSchoolAssignmentsList(filter: Filter): Promise<{
     myAssignments: Array<Assignment>;
     total_pages: number;
   }>;
@@ -81,7 +88,7 @@ export class Grade {
   @observable public name_sub?: string | null;
   @observable public managementId?: number | null;
 
-  constructor(id: number, title: string, managementId?:number | undefined | null) {
+  constructor(id: number, title: string, managementId?: number | undefined | null) {
     this.id = id;
     this.title = title;
     this.filterStatus = null;
@@ -97,6 +104,7 @@ export class GenericGrepItem {
   @observable public id: number;
   @observable public description: string;
   @observable public gradeDesc?: string | undefined | null;
+
   constructor(id: number, description: string, gradeDesc?: string) {
     this.id = id;
     this.description = description;
@@ -104,7 +112,6 @@ export class GenericGrepItem {
       this.gradeDesc = gradeDesc;
     }
   }
-
 }
 
 export class EducationalGoalItem {
@@ -141,13 +148,23 @@ export class CoreElementItem {
   }
 }
 
+export class NowSchool {
+  @observable public id: number;
+  @observable public name: string;
+
+  constructor(id: number, name: string) {
+    this.id = id;
+    this.name = name;
+  }
+}
+
 export class Subject {
   @observable public id: number;
   @observable public title: string;
   @observable public filterStatus?: string | undefined | null;
   @observable public managementId?: number | undefined | null;
 
-  constructor(id: number, title: string, managementId?:number | undefined | null) {
+  constructor(id: number, title: string, managementId?: number | undefined | null) {
     this.id = id;
     this.title = title;
     this.filterStatus = null;
@@ -264,6 +281,8 @@ export interface AssignmentArgs {
   goalsItems?: Array<any>;
 
   isPrivate?: boolean;
+  isMySchool?: boolean;
+  mySchools?: string | undefined;
   relatedArticles?: Array<Article>;
   createdAt?: string;
   updatedAt?: string;
@@ -319,6 +338,8 @@ export class Assignment {
   @observable protected _goalsItems: Array<GenericGrepItem> = [];
   @observable protected _subjectItems: Array<Subject> = [];
 
+  @observable protected _isMySchool: boolean = false;
+  @observable protected _mySchools: string | undefined = '';
   @observable protected _relatedArticles: Array<Article> = [];
   @observable protected _createdAt: string = '';
   @observable protected _updatedAt: string = '';
@@ -370,6 +391,8 @@ export class Assignment {
     this._subjectItems = args.subjects || [];
 
     this._isPrivate = !isNil(args.isPrivate) ? args.isPrivate : true;
+    this._mySchools = args.mySchools;
+    this._isMySchool = args.isMySchool || false;
     this._relatedArticles = args.relatedArticles || [];
     this._createdAt = args.createdAt || '';
     this._updatedAt = args.updatedAt || '';
@@ -544,6 +567,15 @@ export class Assignment {
     return this._ownedByMe;
   }
 
+  public get isMySchool() {
+    return this._isMySchool;
+  }
+
+  @computed
+  public get mySchools() {
+    return this._mySchools;
+  }
+
   @computed
   public get relatedArticles() {
     return this._relatedArticles;
@@ -637,6 +669,7 @@ export class QuestionAttachment {
   public readonly title: string;
   public readonly fileName: string;
   public readonly duration?: number;
+  public readonly deleteddate?: string | undefined | null;
 
   constructor(params: {
     id: number;
@@ -645,6 +678,7 @@ export class QuestionAttachment {
     title: string;
     fileName: string;
     duration: number;
+    deleteddate?: string | undefined | null;
   }) {
     this.id = params.id;
     this.path = params.path;
@@ -652,6 +686,7 @@ export class QuestionAttachment {
     this.title = params.title;
     this.fileName = params.fileName;
     this.duration = params.duration;
+    this.deleteddate = params.deleteddate;
   }
 }
 
@@ -836,6 +871,9 @@ export class Filter {
   @observable public grepReadingInSubject?: string | number | null;
   @observable public source?: string | number | null;
   public showMyAssignments?: number | null;
+  public showMySchoolTeachingpath?: number | null;
+  public showMySchoolAssignments?: number | null;
+  public onlyOwnSchools?: number | null;
 }
 
 export interface LanguageFilter {
@@ -992,6 +1030,10 @@ export class AssignmentList {
     this.filter.page = number;
   }
 
+  public setFilterSchoolAssignments(number: number) {
+    this.filter.showMySchoolAssignments = number;
+  }
+
   @action
   public setFiltersPerPage(number: number) {
     this.filter.per_page = number;
@@ -1048,6 +1090,10 @@ export class AssignmentList {
 
   public async getAllAssignmentsList() {
     return this.assignmentService.getAllAssignmentsList(this.filter);
+  }
+
+  public async getAllSchoolAssignmentsList() {
+    return this.assignmentService.getAllSchoolAssignmentsList(this.filter);
   }
 
   public async getMyAssignmentsList() {
@@ -1146,6 +1192,12 @@ export interface ArticleRepo {
   getArticlesByIds(ids: Array<number>): Promise<Array<Article>>;
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
+  fetchCustomImages(ids: string, page: number): Promise<ResponseFetchCustomImages>;
+  createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse>;
+  deleteCustomImage(imageId: number): Promise<any>;
+  updateCustomImage(customImageId: number, formData: FormData): Promise<any>;
+  increaseUse(imageId: number): Promise<any>;
+  decreaseUse(imageId: number): Promise<any>;
   getLocaleData(locale: Locales): Promise<Array<WPLocale>>;
 }
 
@@ -1180,6 +1232,37 @@ export class Attachment {
     this.title = title;
     this.duration = duration;
     this.src = src;
+  }
+}
+
+export class CustomImgAttachment {
+  public readonly id: number;
+  public readonly path: string;
+  public readonly alt: string;
+  public readonly fileName: string;
+  public readonly title: string;
+  public readonly duration?: number;
+  public readonly src?: Array<string>;
+  public readonly deleteddate?: string | undefined | null;
+
+  constructor(
+    id: number,
+    path: string,
+    alt: string,
+    fileName: string,
+    title: string,
+    duration?: number,
+    src?: Array<string>,
+    deleteddate?: string | undefined | null
+  ) {
+    this.id = id;
+    this.path = path;
+    this.alt = alt;
+    this.fileName = fileName;
+    this.title = title;
+    this.duration = duration;
+    this.src = src;
+    this.deleteddate = deleteddate;
   }
 }
 

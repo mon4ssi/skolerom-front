@@ -128,12 +128,43 @@
   font-weight: 300;
   transition: background-color .315s ease-in-out, color .315s ease-in-out;
   padding: 10px 15px;
+  position: relative;
 }
 
 .AppHeader__dropdownItem:hover {
   background: #E7ECEF;
 }
 
+.AppHeader__dropdownItem__subMenu {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 0;
+  background: white;
+  z-index: 2;
+  transform: translateX(100%);
+  border: 1px solid #D3D9DE;
+  border-top: 0;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0 2px 4px 0 ffffff1c;
+  opacity: 0;
+  pointer-events: none;
+}
+li.AppHeader__dropdownItem__subItem {
+  text-decoration: none;
+  font-weight: 300;
+  transition: background-color .315s ease-in-out, color .315s ease-in-out;
+  padding: 10px 15px;
+  position: relative;
+}
+li.AppHeader__dropdownItem__subItem:hover {
+  background: #E7ECEF;
+}
+.AppHeader__dropdownItem:hover ul.AppHeader__dropdownItem__subMenu {
+  opacity: 1;
+  pointer-events: all;
+}
 .AppHeader__userLogo {
   @include circle(37px);
   margin-left: 10px;
@@ -236,7 +267,7 @@
     display: none;
   }
   .copyButton {
-    display: none;
+    display: none !important;
   }
 }
 
@@ -260,7 +291,7 @@
     padding: 20px 30px;
     left: 50%;
     top: 50%;
-    transform: translateX(-50%)translateY(-50%);
+    transform: translate(-50%,-50%);
     border-radius: 10px;
     min-width: 330px;
     padding-top: 15px;
@@ -337,6 +368,10 @@
         color: white;
         padding: 10px 20px;
         font-weight: 300;
+        &.btnDisabled {
+          pointer-events: none;
+          opacity: 0.4;
+        }
         img {
           width: 19px;
           margin-right: 8px;
@@ -357,6 +392,40 @@
   padding: 20px;
   box-shadow: 0 3px 5px 0 #00000024;
 }
+
+.singleListElementsSimple {
+    margin: 5px 0px;
+    margin-left: 20px;
+    a {
+      color: #000;
+      display: block;
+      text-decoration: none;
+      padding: 5px 0;
+      font-size: 1.125rem;
+      font-weight: 400;
+      &.BtnFinal {
+        display: flex;
+        background: #e2017b;
+        border-radius: 20px;
+        color: white;
+        padding: 10px 20px;
+        font-weight: 300;
+        &.btnDisabled {
+          pointer-events: none;
+          opacity: 0.4;
+        }
+        img {
+          width: 19px;
+          margin-right: 8px;
+        }
+        p {
+          color: white;
+          margin: 0px;
+        }
+      }
+    }  
+}
+
 .singleFlexElements {
   ul {
     display: flex;

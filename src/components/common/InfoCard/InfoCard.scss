@@ -2,8 +2,8 @@
 
 .InfoCard {
   width: 282px;
-  height: 344px;
-  min-height: 344px;
+  height: 374px;
+  min-height: 374px;
   box-sizing: content-box;
   background: #FFFFFF;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.100661);
@@ -12,8 +12,6 @@
   button {
     padding: 0;
     width: 100%;
-    min-height: 60%;
-    background: #939fa7;
     border-radius: 5px 5px 0 0;
     object-fit: cover;    
     position: relative;
@@ -27,8 +25,8 @@
   .actionButtons {
     position: absolute;
     top: -13px;
-    left: 143px; // TODO: 110px after adding DnD
-    z-index: 3;
+    left: 107px; // TODO: 110px after adding DnD
+    z-index: 2;
     button {
       padding: 0px;
       background: transparent;
@@ -74,19 +72,15 @@
 
   .cardImage {
     width: 100%;
-    min-height: 100%;
-    background: #939fa7;
+    height: 185px;
     border-radius: 5px 5px 0 0;
     object-fit: cover;
-    position: absolute;
-    bottom: 0;
   }
 
   .cardInfo {
-    min-height: 40%;
     height: auto;
     position: relative;
-    padding: 15px;
+    padding: 20px;
 
     .cardTitle {
       flex: 1 1;
@@ -106,8 +100,9 @@
       p {
         @include text-shrink-multiline(2);
         margin: 0;
-        font-size: 1.0625rem;
+        font-size: 1.05rem;
         font-weight: 500;
+        margin-bottom: 10px;
       }
 
       .levelIcon{
@@ -135,7 +130,7 @@
           outline: black;
           outline-style: auto;
         }
-        &:before {
+        /*&:before {
           position: absolute;
           box-shadow: 0 2px 2px #00000021;
           margin-top: 20px;
@@ -172,7 +167,7 @@
           z-index: 1;
           opacity: 0;
           pointer-events: none;
-        }
+        }*/
         &:hover {
           &:before, &:after {
             opacity: 1;
@@ -262,7 +257,7 @@
       height: 23px;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 5px;
+      margin-bottom: 15px;
       img {
         width: 20px;
         height: 20px;
@@ -355,6 +350,7 @@
 .tpIcon-DOMAIN {
   cursor: pointer;
 }
+
 @media screen and (max-width: $screen-dimension-desktop) {
   .InfoCard {
     .cardInfo {

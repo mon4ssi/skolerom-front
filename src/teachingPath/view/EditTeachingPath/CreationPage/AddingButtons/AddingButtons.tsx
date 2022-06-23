@@ -25,6 +25,7 @@ interface Props extends RouteComponentProps {
   editTeachingPathStore?: EditTeachingPathStore;
   newAssignmentStore?: NewAssignmentStore;
   nester: number;
+  onCancelDrag?(): void;
 }
 
 @inject('editTeachingPathStore', 'newAssignmentStore')
@@ -44,6 +45,7 @@ class AddingButtonsContainer extends Component<Props> {
     const { editTeachingPathStore, node } = this.props;
     event.preventDefault();
     editTeachingPathStore!.setCurrentNode(node!);
+    this.props.onCancelDrag!();
     this.context.changeContentType(0);
   }
 
@@ -51,6 +53,7 @@ class AddingButtonsContainer extends Component<Props> {
     const { editTeachingPathStore, node } = this.props;
     event.preventDefault();
     editTeachingPathStore!.setCurrentNode(node!);
+    this.props.onCancelDrag!();
     this.context.changeContentType(1);
   }
 
@@ -58,6 +61,7 @@ class AddingButtonsContainer extends Component<Props> {
     const { newAssignmentStore, editTeachingPathStore, history, node } = this.props;
 
     event.preventDefault();
+    this.props.onCancelDrag!();
     editTeachingPathStore!.setCurrentNode(node!);
     editTeachingPathStore!.setIsAssignmentCreating(true);
 
@@ -74,6 +78,7 @@ class AddingButtonsContainer extends Component<Props> {
     this.setState({
       modalDomain: true
     });
+    this.props.onCancelDrag!();
     document.addEventListener('keyup', this.handleKeyboardControl);
   }
 
@@ -180,7 +185,7 @@ class AddingButtonsContainer extends Component<Props> {
   private renderButtonDomain = () => {
     const { disabledbutton } = this.state;
     return (
-    <div className="addingButton" onClick={this.openDomainModal}>
+    <div className="addingButton addExternalArtikle" onClick={this.openDomainModal}>
       <button title={intl.get('edit_teaching_path.modals.add_domain')}>
         <img src={addDomainImg} alt="add-article" />
         {intl.get('edit_teaching_path.modals.add_domain')}

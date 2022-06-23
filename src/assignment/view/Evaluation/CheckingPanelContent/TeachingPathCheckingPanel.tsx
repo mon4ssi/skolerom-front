@@ -85,7 +85,7 @@ export class TeachingPathCheckingPanel extends Component<Props> {
           id={articleItem.id}
           image={articleItem.featuredImage}
           isChosen={articleItem.isSelected}
-          handleClick={this.handleDomainClick}
+          handleClick={this.handleArticleClick}
         />
       );
     })

@@ -17,6 +17,7 @@ export interface DistributionRepo {
 }
 
 interface SchoolArgs {
+  id: number;
   groupApiId : string;
   name: string;
   parent: string;
@@ -25,12 +26,14 @@ interface SchoolArgs {
 
 export class School {
 
+  protected readonly _id : number;
   protected readonly _groupApiId : string;
   protected readonly _name: string;
   protected readonly _parent: string;
   protected readonly _address: string;
 
   constructor(args: SchoolArgs) {
+    this._id = args.id;
     this._groupApiId = args.groupApiId;
     this._name = args.name;
     this._parent = args.parent;
@@ -45,6 +48,11 @@ export class School {
   @computed
   public get name() {
     return this._name;
+  }
+
+  @computed
+  public get id() {
+    return this._id;
   }
 
   @computed

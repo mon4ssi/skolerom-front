@@ -82,6 +82,7 @@ interface State {
   filtersisUsed: boolean;
   filtersAjaxLoading: boolean;
   filtersAjaxLoadingGoals: boolean;
+  showMySchool: number;
 }
 
 @inject('teachingPathsListStore', 'editTeachingPathStore')
@@ -98,10 +99,24 @@ class TeachingPathsListComponent extends Component<Props, State> {
       name: 'My teaching paths',
       url: '/teaching-paths/my'
     },
+    {
+      name: 'My school',
+      url: '/teaching-paths/myschool'
+    }
     // {
-    //   name: 'My school',
-    //   url: '/teacher/teaching-paths/school'
-    // },
+    //   name: 'My favorites',
+    //   url: '/teacher/teaching-paths/favorites'
+    // }
+  ];
+  private tabNavigationLinksCM = [
+    {
+      name: 'All teaching paths',
+      url: '/teaching-paths/all'
+    },
+    {
+      name: 'My teaching paths',
+      url: '/teaching-paths/my'
+    }
     // {
     //   name: 'My favorites',
     //   url: '/teacher/teaching-paths/favorites'
@@ -157,7 +172,8 @@ class TeachingPathsListComponent extends Component<Props, State> {
       goalValueFilter: [],
       filtersisUsed: false,
       filtersAjaxLoading: false,
-      filtersAjaxLoadingGoals: false
+      filtersAjaxLoadingGoals: false,
+      showMySchool: 0
     };
   }
 
@@ -176,6 +192,9 @@ class TeachingPathsListComponent extends Component<Props, State> {
     filter.source = QueryStringHelper.getString(this.props.history, QueryStringKeys.SOURCE);
     filter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeys.SEARCH);
     filter.order = QueryStringHelper.getString(this.props.history, QueryStringKeys.ORDER, SortingFilter.DESC);
+    if (this.state.showMySchool !== 0) {
+      filter.showMySchoolTeachingpath = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.MYSCHOOL, this.state.showMySchool);
+    }
     filter.orderField = SortingFilter.CREATION_DATE;
 
     if (filter.subject || filter.grade || filter.grepCoreElementsIds || filter.grepMainTopicsIds || filter.grepGoalsIds || filter.grepReadingInSubject || filter.source) {
@@ -326,11 +345,18 @@ class TeachingPathsListComponent extends Component<Props, State> {
   }
 
   public async componentDidMount() {
-    const { editTeachingPathStore } = this.props;
+    localStorage.removeItem('url');
+    /* console.log(localStorage.getItem('url')); */
+    const { editTeachingPathStore, typeOfTeachingPathsList } = this.props;
     const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions } = this.state;
     this.setCurrentTab();
     this.fetchTeachingPaths();
     this.unregisterListener = this.props.history.listen(this.locationUpdateListener);
+    if (typeOfTeachingPathsList === 'myschool') {
+      this.setState({
+        showMySchool : 1
+      });
+    }
     document.addEventListener('keyup', this.handleKeyboardControl);
     if (this.props.isNotStudent) {
       this.assigValueData('', '', '', '', '', '', true, true);
@@ -338,12 +364,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
       this.setState({
         valueStringGoalsOptions: listGoals
       });
-      /*this.setState({ filtersAjaxLoadingGoals: true });
-      const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, listGoals, MAGICNUMBER100, MAGICNUMBER1);
-      this.setState({
-        optionsGoals: this.renderValueOptionsGoals(grepFiltergoalssDataAwait.data).sort((a, b) => (a.label > b.label) ? 1 : -1)
-      });
-      this.setState({ filtersAjaxLoadingGoals: false });*/
     }
   }
 
@@ -1000,14 +1020,15 @@ class TeachingPathsListComponent extends Component<Props, State> {
   }
 
   public renderTabNavigate = () => {
-    const { readOnly } = this.props;
+    const { readOnly, teachingPathsListStore } = this.props;
+    const currentUserType = teachingPathsListStore!.getCurrentUser()!.type;
 
     if (!readOnly) {
       return (
         <TabNavigation
           textMainButton={intl.get('teaching_path_tabs.new teaching path')}
           onClickMainButton={this.createTeachingPath}
-          tabNavigationLinks={this.tabNavigationLinks}
+          tabNavigationLinks={(currentUserType === UserType.ContentManager) ? this.tabNavigationLinksCM : this.tabNavigationLinks}
           sourceTranslation={'teaching_path_tabs'}
         />
       );

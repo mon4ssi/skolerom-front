@@ -12,6 +12,10 @@ export class TeachingPathService {
     return this.teachingPathRepo.getAllTeachingPathsList(filter);
   }
 
+  public async getMySchoolTeachingPathsList(filter: Filter) {
+    return this.teachingPathRepo.getMySchoolTeachingPathsList(filter);
+  }
+
   public async getMyTeachingPathsList(filter: Filter) {
     return this.teachingPathRepo.getMyTeachingPathsList(filter);
   }

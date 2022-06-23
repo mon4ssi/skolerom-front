@@ -112,17 +112,17 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
       if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles && currentQuestionaryStore!.assignment!.relatedArticles.length > 0 && currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden) {
         currentQuestionaryStore!.setCurrentQuestion(0);
         this.updateQueryString();
-      } else {
-        if (currentQuestionaryStore!.assignment!.relatedArticles.length === 0) {
-          currentQuestionaryStore!.setCurrentQuestion(0);
-          this.updateQueryString();
-        } else {
-          await currentQuestionaryStore.getRelatedArticles();
-          currentQuestionaryStore!.setCurrentQuestion(-1);
-          this.updateQueryString();
-        }
-
+        return;
       }
+      if (currentQuestionaryStore!.assignment!.relatedArticles! && currentQuestionaryStore!.assignment!.relatedArticles!.length === 0) {
+        currentQuestionaryStore!.setCurrentQuestion(0);
+        this.updateQueryString();
+        return;
+      }
+      await currentQuestionaryStore.getRelatedArticles();
+      currentQuestionaryStore!.setCurrentQuestion(-1);
+      this.updateQueryString();
+
       if (currentQuestionaryStore.assignment && currentQuestionaryStore.assignment.isOwnedByMe() && !search) {
         /* this.props.history.replace(`/assignments/edit/${Number(match.params.id)}`); */
         return;
@@ -138,8 +138,9 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
       return this.updateQueryString();
     }
     if (currentQuestionaryStore.assignment!.relatedArticles.length > 0 && !search) {
+      /* console.log('jaaaaaaaaaaaaaaaaaaaa');
       this.props.currentQuestionaryStore.setCurrentQuestion(-1);
-      return this.updateQueryString();
+      return this.updateQueryString(); */
     }
     /* this.props.currentQuestionaryStore.setCurrentQuestion(0); */
     return this.updateQueryString();
@@ -251,28 +252,29 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
   }
 
   public updateQueryString() {
-    const { currentQuestionaryStore, history } = this.props;
+    const { currentQuestionaryStore, history, isTeacher } = this.props;
     const redirectData = (currentQuestionaryStore!.currentQuestionary && currentQuestionaryStore!.currentQuestionary.redirectData)
       ? currentQuestionaryStore!.currentQuestionary.redirectData
       : undefined;
-
     let currentPage;
     let questionId;
     if (this.state.showCover) {
       currentPage = ContentType.COVER;
       questionId = null;
-    } else if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles.length > 0
-      && !currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden && currentQuestionaryStore!.currentQuestionIndex < 0 && redirectData === undefined) {
+    } else if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles.length >= 0
+      && currentQuestionaryStore!.currentQuestionIndex < 0 && redirectData === undefined && !currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden) {
       currentPage = ContentType.ARTICLE_LIST;
       questionId = null;
-    } else if (currentQuestionaryStore.currentAnswer) {
-      currentPage = ContentType.QUESTION;
-      questionId = currentQuestionaryStore.currentQuestionIndex;
     } else {
-      currentPage = ContentType.SUBMIT;
-      questionId = null;
+      const isValidateCurrent = (isTeacher!) ? true : currentQuestionaryStore!.currentAnswer!;
+      if (isValidateCurrent!) {
+        currentPage = ContentType.QUESTION;
+        questionId = currentQuestionaryStore!.currentQuestionIndex!;
+      } else {
+        currentPage = ContentType.SUBMIT;
+        questionId = null;
+      }
     }
-
     QueryStringHelper.set(history, QueryStringKeys.PAGE, currentPage);
     if (!isNil(questionId)) {
       QueryStringHelper.set(history, QueryStringKeys.QUESTION_ID, questionId);
