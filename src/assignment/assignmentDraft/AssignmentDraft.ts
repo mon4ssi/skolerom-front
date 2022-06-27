@@ -268,6 +268,10 @@ export class DraftAssignment extends Assignment {
     return this.grepGoalsIds;
   }
 
+  public setListgrepGoalsIds(data: Array<number>): void {
+    this.grepGoalsIds = data;
+  }
+
   public getListOfgrepMainTopicsIds() {
     return this.grepMainTopicsIds;
   }
