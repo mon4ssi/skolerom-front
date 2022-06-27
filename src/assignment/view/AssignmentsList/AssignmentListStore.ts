@@ -156,6 +156,11 @@ export class AssignmentListStore {
     this.currentAssignment = this.myAssignments.find(item => item.id === id)!;
   }
 
+  @action
+  public setCurrentAssignmentEntity(assignment: Assignment) {
+    this.currentAssignment = assignment!;
+  }
+
   public hasAssignment(id: number) {
     return !!this.myAssignments.find(item => item.id === id);
   }

@@ -11,14 +11,16 @@ export const buildUser = (dto: UserDTO & StudentDTO): User => {
         id: dto.id,
         name: dto.name,
         photo: dto.photo,
-        schools: dto.schools
+        schools: dto.schools,
+        is_super_cm: dto.is_super_cm,
       });
     case UserType.Student:
       return new Student({
         id: dto.id,
         name: dto.name,
         photo: dto.photo,
-        schools: dto.schools
+        schools: dto.schools,
+        is_super_cm: dto.is_super_cm,
       });
     case UserType.ContentManager:
       return new ContentManager({
@@ -26,7 +28,8 @@ export const buildUser = (dto: UserDTO & StudentDTO): User => {
         name: dto.name,
         photo: dto.photo,
         email: dto.email || '',
-        schools: dto.schools
+        schools: dto.schools,
+        is_super_cm: dto.is_super_cm,
       });
     default:
       throw new TypeError(`Unknown user: ${dto.role}`);

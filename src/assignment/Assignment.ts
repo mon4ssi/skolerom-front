@@ -88,7 +88,7 @@ export class Grade {
   @observable public name_sub?: string | null;
   @observable public managementId?: number | null;
 
-  constructor(id: number, title: string, managementId?:number | undefined | null) {
+  constructor(id: number, title: string, managementId?: number | undefined | null) {
     this.id = id;
     this.title = title;
     this.filterStatus = null;
@@ -100,9 +100,58 @@ export class Grade {
   }
 }
 
+export class GenericGrepItem {
+  @observable public id: number;
+  @observable public description: string;
+  @observable public gradeDesc?: string | undefined | null;
+
+  constructor(id: number, description: string, gradeDesc?: string) {
+    this.id = id;
+    this.description = description;
+    if (gradeDesc) {
+      this.gradeDesc = gradeDesc;
+    }
+  }
+}
+
+export class EducationalGoalItem {
+  @observable public id: number;
+  @observable public description: string;
+  @observable public gradeDesc: string | undefined | null;
+
+  constructor(id: number, description: string, gradeDesc: string) {
+    this.id = id;
+    this.description = description;
+    this.gradeDesc = gradeDesc;
+  }
+}
+
+export class SourceItem {
+  @observable public id: number;
+  @observable public description: string;
+
+  constructor(id: number, description: string) {
+    this.id = id;
+    this.description = description;
+  }
+}
+
+export class CoreElementItem {
+  @observable public id: number;
+  @observable public code: string;
+  @observable public description: string;
+
+  constructor(id: number, code: string, description: string) {
+    this.id = id;
+    this.code = code;
+    this.description = description;
+  }
+}
+
 export class NowSchool {
   @observable public id: number;
   @observable public name: string;
+
   constructor(id: number, name: string) {
     this.id = id;
     this.name = name;
@@ -115,7 +164,7 @@ export class Subject {
   @observable public filterStatus?: string | undefined | null;
   @observable public managementId?: number | undefined | null;
 
-  constructor(id: number, title: string, managementId?:number | undefined | null) {
+  constructor(id: number, title: string, managementId?: number | undefined | null) {
     this.id = id;
     this.title = title;
     this.filterStatus = null;
@@ -224,6 +273,13 @@ export interface AssignmentArgs {
   grades?: Array<Grade>;
   subjects?: Array<Subject>;
   sources?: Array<number>;
+
+  subjectItems?: Array<any>;
+  sourceItems?: Array<any>;
+  coreElementItems?: Array<any>;
+  multiSubjectItems?: Array<any>;
+  goalsItems?: Array<any>;
+
   isPrivate?: boolean;
   isMySchool?: boolean;
   mySchools?: string | undefined;
@@ -276,6 +332,13 @@ export class Assignment {
   @observable protected _subjects: Array<Subject> = [];
   @observable protected _sources: Array<number> = [];
   @observable protected _isPrivate: boolean = false;
+
+  @observable protected _sourceItems: Array<GenericGrepItem> = [];
+  @observable protected _coreElementItems: Array<GenericGrepItem> = [];
+  @observable protected _multiSubjectItems: Array<GenericGrepItem> = [];
+  @observable protected _goalsItems: Array<GenericGrepItem> = [];
+  @observable protected _subjectItems: Array<Subject> = [];
+
   @observable protected _isMySchool: boolean = false;
   @observable protected _mySchools: string | undefined = '';
   @observable protected _relatedArticles: Array<Article> = [];
@@ -322,6 +385,13 @@ export class Assignment {
     this._grades = args.grades || [];
     this._subjects = args.subjects || [];
     this._sources = args.sources || [];
+
+    this._sourceItems = args.sourceItems || [];
+    this._coreElementItems = args.coreElementItems || [];
+    this._multiSubjectItems = args.multiSubjectItems || [];
+    this._goalsItems = args.goalsItems || [];
+    this._subjectItems = args.subjects || [];
+
     this._isPrivate = !isNil(args.isPrivate) ? args.isPrivate : true;
     this._mySchools = args.mySchools;
     this._isMySchool = args.isMySchool || false;
@@ -331,7 +401,7 @@ export class Assignment {
     this._publishedAt = args.publishedAt || '';
     this._numberOfQuestions = args.numberOfQuestions || this._questions.length;
     this._isAnswered = args.isAnswered || false;
-    this._view = args.view;
+    this._view = args.view || 'edit';
     this._deadline = args.deadline;
     this._featuredImage = args.featuredImage;
     this._answerId = args.answerId;
@@ -466,11 +536,40 @@ export class Assignment {
   }
 
   @computed
+  public get sourceItems() {
+    return this._sourceItems;
+  }
+
+  @computed
+  public get coreElementItems() {
+    return this._coreElementItems;
+  }
+
+  @computed
+  public get multiSubjectItems() {
+    return this._multiSubjectItems;
+  }
+
+  @computed
+  public get goalsItems() {
+    return this._goalsItems;
+  }
+
+  @computed
+  public get subjectItems() {
+    return this._subjectItems;
+  }
+
+  @computed
   public get isPrivate() {
     return this._isPrivate;
   }
 
   @computed
+  public get ownedByMe() {
+    return this._ownedByMe;
+  }
+
   public get isMySchool() {
     return this._isMySchool;
   }
@@ -1102,7 +1201,7 @@ export interface ArticleRepo {
   getArticlesByIds(ids: Array<number>): Promise<Array<Article>>;
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
-  fetchCustomImages(ids:string, page: number): Promise<ResponseFetchCustomImages>;
+  fetchCustomImages(ids: string, page: number): Promise<ResponseFetchCustomImages>;
   createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse>;
   deleteCustomImage(imageId: number): Promise<any>;
   updateCustomImage(customImageId: number, formData: FormData): Promise<any>;

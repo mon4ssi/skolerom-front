@@ -24,6 +24,11 @@ import teachingPath from 'assets/images/teaching-path.svg';
 import listPlaceholderImg from 'assets/images/list-placeholder.svg';
 
 import './TeachingPathsList.scss';
+import { SideOutPanelPreview } from 'components/common/SideOutPanelPreview/SideOutPanelPreview';
+import { SideOutPanelPreviewTeachingPath } from 'components/common/SideOutPanelPreviewTeachingPath/SideOutPanelPreviewTeachingPath';
+import { TeachingPathService, TEACHING_PATH_SERVICE } from 'teachingPath/service';
+import { injector } from 'Injector';
+import { TeachingPath } from 'teachingPath/TeachingPath';
 
 const MAGICNUMBER100 = -1;
 const MAGICNUMBER1 = 1;
@@ -44,6 +49,8 @@ interface Props extends RouteComponentProps {
 interface State {
   idActiveCard: number | null;
   isTeachingPathPreviewVisible: boolean;
+  isTeachingPathPreviewTeacherCMVisible: boolean;
+  isPublishedCurrentTeachingPath: boolean;
   selectedCoresAll: Array<GrepElementFilters>;
   selectedCoresFilter: Array<GrepElementFilters>;
   grepFiltersData: FilterGrep;
@@ -76,11 +83,14 @@ interface State {
   filtersAjaxLoading: boolean;
   filtersAjaxLoadingGoals: boolean;
   showMySchool: number;
+  currentTeachingPathView: string;
 }
 
 @inject('teachingPathsListStore', 'editTeachingPathStore')
 @observer
 class TeachingPathsListComponent extends Component<Props, State> {
+  private teachingPathService: TeachingPathService = injector.get(TEACHING_PATH_SERVICE);
+
   private tabNavigationLinks = [
     {
       name: 'All teaching paths',
@@ -131,6 +141,8 @@ class TeachingPathsListComponent extends Component<Props, State> {
     this.state = {
       idActiveCard: null,
       isTeachingPathPreviewVisible: false,
+      isTeachingPathPreviewTeacherCMVisible: false,
+      isPublishedCurrentTeachingPath: false,
       selectedCoresAll: [],
       selectedCoresFilter: [],
       grepFiltersData: {},
@@ -162,7 +174,8 @@ class TeachingPathsListComponent extends Component<Props, State> {
       filtersisUsed: false,
       filtersAjaxLoading: false,
       filtersAjaxLoadingGoals: false,
-      showMySchool: 0
+      showMySchool: 0,
+      currentTeachingPathView: '',
     };
   }
 
@@ -503,10 +516,32 @@ class TeachingPathsListComponent extends Component<Props, State> {
     teachingPathsListStore!.setTypeOfTeachingPathsList(type);
   }
 
-  public openAssignmentPreview = (id: number) => {
+  public manageTeachingPathAction = async (id: number, userType?: UserType) => {
+    const { teachingPathsListStore, history } = this.props;
+
     this.unregisterListener();
     this.props.teachingPathsListStore!.setCurrentTeachingPath(id);
-    this.setState({ isTeachingPathPreviewVisible: true });
+    const { currentEntity } = teachingPathsListStore!;
+    switch (userType) {
+      case UserType.ContentManager:
+      case UserType.Teacher:
+        if (!currentEntity!.isPublished) {
+          history.push(`/teaching-paths/edit/${id}`);
+        } else {
+          this.setState({ isPublishedCurrentTeachingPath: true });
+          const response: TeachingPath = await this.teachingPathService.getTeachingPathDataById(currentEntity!.id);
+          this.props.teachingPathsListStore!.setCurrentTeachingPathEntity(response);
+          this.setState({ isTeachingPathPreviewTeacherCMVisible: true });
+        }
+        break;
+      case UserType.Student:
+        this.unregisterListener();
+        this.props.teachingPathsListStore!.setCurrentTeachingPath(id);
+        this.setState({ isTeachingPathPreviewVisible: true });
+      default:
+        break;
+    }
+
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
@@ -518,18 +553,20 @@ class TeachingPathsListComponent extends Component<Props, State> {
   public onClickTeachingPath = (id: number, view?: string) => {
     const { teachingPathsListStore, history } = this.props;
     const currentUserType = teachingPathsListStore!.getCurrentUser()!.type;
-
     switch (currentUserType) {
       case UserType.Teacher:
       case UserType.ContentManager:
-        if (view === 'show') {
-          history.push(`/teaching-paths/view/${id}`);
-          break;
-        }
-        history.push(`/teaching-paths/edit/${id}`);
+        /*   if (view === 'show') {
+            history.push(`/teaching-paths/view/${id}`);
+            break;
+          }
+          history.push(`/teaching-paths/edit/${id}`);
+        */
+        this.setState({ currentTeachingPathView: view! });
+        this.manageTeachingPathAction(id, currentUserType);
         break;
       case UserType.Student:
-        this.openAssignmentPreview(id);
+        this.manageTeachingPathAction(id, currentUserType);
         break;
       default:
         break;
@@ -1109,6 +1146,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
     e.nativeEvent.stopImmediatePropagation();
     this.unregisterListener = this.props.history.listen(this.locationUpdateListener);
     this.setState({ isTeachingPathPreviewVisible: false });
+    this.setState({ isTeachingPathPreviewTeacherCMVisible: false });
   }
 
   public renderSlideOutPanel = () => {
@@ -1117,6 +1155,23 @@ class TeachingPathsListComponent extends Component<Props, State> {
     return (
       <div className="dark" onClick={this.closeSlideOutPanel}>
         <SideOutPanel
+          store={teachingPathsListStore}
+          onClose={this.closeSlideOutPanel}
+        />
+      </div>
+    );
+  }
+
+  public renderSlideOutPanelTeacherCM = () => {
+    const { teachingPathsListStore } = this.props;
+    const { currentEntity } = teachingPathsListStore!;
+    const { isPublishedCurrentTeachingPath, currentTeachingPathView } = this.state;
+    const tempIsPublishedCurrentTeachingPath = isPublishedCurrentTeachingPath!;
+    return (
+      <div className="dark" onClick={this.closeSlideOutPanel}>
+        <SideOutPanelPreviewTeachingPath
+          view={currentTeachingPathView}
+          isPublishedCurrentTeachingPath={tempIsPublishedCurrentTeachingPath}
           store={teachingPathsListStore}
           onClose={this.closeSlideOutPanel}
         />
@@ -1174,7 +1229,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
   }
 
   public render() {
-    const { isTeachingPathPreviewVisible } = this.state;
+    const { isTeachingPathPreviewVisible, isTeachingPathPreviewTeacherCMVisible } = this.state;
     return (
       <div className="teachingPathsList moveListBySearchFilter TpList">
         <h1 className="generalTitle">
@@ -1237,6 +1292,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
 
         {this.renderPagination()}
         {isTeachingPathPreviewVisible && this.renderSlideOutPanel()}
+        {isTeachingPathPreviewTeacherCMVisible && this.renderSlideOutPanelTeacherCM()}
       </div>
     );
   }

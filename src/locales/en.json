@@ -16,6 +16,50 @@
     "Copy url": "Copy url",
     "not permission": "Sorry, you don't have access to this platform. Please contact your organization to gain access"
   },
+  "preview": {
+    "teaching_path": {
+      "headers": {
+        "no": "No",
+        "questions": "questions",
+        "articles": "articles",
+        "by": "By"
+      },
+      "grep": {
+        "subjects": "Subject",
+        "core_elements": "Core elements",
+        "multidisciplinary_subjects": "Multidisciplinary subjects",
+        "sources": "Source",
+        "educational_goals": "Educational goals"
+      },
+      "buttons": {
+        "view": "View teaching path",
+        "teacher_guidance": "Teacher guidance",
+        "edit": "Edit",
+        "duplicate": "Duplicate"
+      }
+    },
+    "assignment": {
+      "headers": {
+        "no": "No",
+        "questions": "questions",
+        "articles": "articles",
+        "by": "By"
+      },
+      "grep": {
+        "subjects": "Subject",
+        "core_elements": "Core elements",
+        "multidisciplinary_subjects": "Multidisciplinary subjects",
+        "sources": "Source",
+        "educational_goals": "Educational goals"
+      },
+      "buttons": {
+        "view": "View assignment",
+        "teacher_guidance": "Teacher guidance",
+        "edit": "Edit",
+        "duplicate": "Duplicate"
+      }
+    }
+  },
   "assignments_page": {
     "no_results": "No results found",
     "title": "Title",
@@ -603,6 +647,7 @@
     "validation": {
       "not_teaching_path_creator": "The teaching path cannot be opened"
     },
+    "Draft": "Draft",
     "delete": "Delete teaching path",
     "view": "View teaching path",
     "edit": "Edit teaching path",

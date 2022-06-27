@@ -16,6 +16,7 @@ import {
   Source,
   FilterGrep,
   GoalsData,
+  GenericGrepItem,
   CustomImgAttachment
 } from './Assignment';
 import {
@@ -182,6 +183,7 @@ export interface ImageChoiceQuestionOptionDTO {
 
 interface AssignmentByIdResponseDTO {
   id: number;
+  author: string;
   title: string;
   description: string;
   featuredImage: string;
@@ -191,6 +193,16 @@ interface AssignmentByIdResponseDTO {
   questions: Array<QuestionDTO>;
   relatedArticles: Array<ArticleRequestDTO>;
   subjects: Array<SubjectDTO>;
+  isPublished: boolean;
+  view: string;
+  hasGuidance: boolean;
+  ownedByMe: boolean;
+  created_at: string;
+  /* subjects: Array<any>; */
+  mainTopics: Array<any>;
+  sources: Array<any>;
+  coreElements: Array<any>;
+  goals: Array<any>;
   open?: boolean;
 }
 
@@ -204,14 +216,26 @@ export class AssignmentApi implements AssignmentRepo {
     // questions and relatedArticles ignored here because it not essential for stores that use this method
     return new Assignment({
       id: assignmentDTO.id,
+      author: assignmentDTO.author,
       title: assignmentDTO.title,
+      createdAt: assignmentDTO.created_at,
       description: assignmentDTO.description,
       featuredImage: assignmentDTO.featuredImage,
       grades: assignmentDTO.grades,
       isPrivate: assignmentDTO.isPrivate,
       levels: assignmentDTO.levels,
+      numberOfQuestions: assignmentDTO.questions.length,
       subjects: assignmentDTO.subjects,
-      open: assignmentDTO.open
+      isPublished: assignmentDTO.isPublished,
+      ownedByMe: assignmentDTO.ownedByMe,
+      subjectItems: assignmentDTO.subjects.map(item => new GenericGrepItem(item.id, item.title)),
+      coreElementItems: assignmentDTO.coreElements,
+      multiSubjectItems: assignmentDTO.mainTopics,
+      sourceItems: assignmentDTO.sources,
+      goalsItems: assignmentDTO.goals,
+      view: assignmentDTO.view,
+      hasGuidance: assignmentDTO.hasGuidance,
+      open: assignmentDTO.open,
     });
   }
 
@@ -451,7 +475,7 @@ export class WPApi implements ArticleRepo {
       `${process.env.REACT_APP_WP_URL}/wp-json/getarticles/v1/post/`, {
         params: {
           ids: includes,
-          // lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
+        // lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
         }
       }
     );

@@ -16,6 +16,7 @@ export interface UserDTO {
   photo: string;
   email?: string;
   schools: Array<School>;
+  is_super_cm: boolean;
 }
 
 export interface StudentDTO {
@@ -37,7 +38,6 @@ export class UserApi implements UserRepo {
   public async getUserWithToken(code: string): Promise<string | null> {
     try {
       const response = await API.post('/api/login/dataporten/authorize', { code }, { withCredentials: true });
-
       this.storageInteractor.setUserWithToken(response.data.access_token, response.data.user);
       return response.data.access_token;
     } catch (error) {
@@ -65,7 +65,6 @@ export class UserApi implements UserRepo {
             }
       */
       this.storageInteractor.setUserWithToken(response.data.access_token, response.data.user);
-
       return response.data.access_token;
     } catch (error) {
       Notification.create({

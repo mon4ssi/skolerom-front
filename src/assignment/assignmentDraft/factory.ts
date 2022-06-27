@@ -206,6 +206,7 @@ export const buildDraftAssignmentDTO = (
   isPrivate: draftAssignment.isPrivate,
   isMySchool: draftAssignment.isMySchool,
   mySchools: draftAssignment.mySchools,
+  isPublished: draftAssignment.isPublished,
   subjects: draftAssignment.subjects,
   grades: draftAssignment.grades,
   levels: draftAssignment.levels,
