@@ -6,7 +6,7 @@ import classnames from 'classnames';
 
 import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
-import { Subject, Grade, FilterGrep, GreepSelectValue, GrepFilters, GoalsData, Source, NowSchool } from 'assignment/Assignment';
+import { Subject, Grade, FilterGrep, GreepSelectValue, GrepFilters, GoalsData, Source, NowSchool, Keyword } from 'assignment/Assignment';
 import tagsImg from 'assets/images/tags.svg';
 import gradeImg from 'assets/images/grade.svg';
 import checkRounded from 'assets/images/check-rounded-white-bg.svg';
@@ -48,6 +48,7 @@ interface State {
   valueCoreOptions: Array<number>;
   valueMultiOptions: Array<number>;
   valueSourceOptions: Array<number>;
+  valueKeywordsOptions: Array<number>;
   valuereadingOptions: Array<number>;
   valueGradesOptions: Array<number>;
   valueSubjectsOptions: Array<number>;
@@ -76,6 +77,12 @@ export interface TagPropSource {
   default: boolean;
 }
 
+export interface TagPropKeyword {
+  id: number;
+  title: string;
+  default: boolean;
+}
+
 @observer
 export class PublishingActions extends Component<Props, State> {
   constructor(props: Props) {
@@ -90,6 +97,7 @@ export class PublishingActions extends Component<Props, State> {
       valueCoreOptions: [],
       valueMultiOptions: [],
       valueSourceOptions: [],
+      valueKeywordsOptions: [],
       valuereadingOptions: [],
       valueGradesOptions: [],
       valueSubjectsOptions: [],
@@ -135,7 +143,10 @@ export class PublishingActions extends Component<Props, State> {
       if (!store!.getAllSources().length) {
         store!.getSources();
       }
-      if (typeof(store!.currentEntity!.getListOfGoals()) !== 'undefined') {
+      if (!store!.getAllKeywords().length) {
+        store!.getKeywords();
+      }
+      if (typeof (store!.currentEntity!.getListOfGoals()) !== 'undefined') {
         listGoals = this.transformDataToString(store!.currentEntity!.getListOfGoals()!);
       }
     }
@@ -149,11 +160,14 @@ export class PublishingActions extends Component<Props, State> {
       if (!store!.getAllSources().length) {
         store!.getSources();
       }
-      if (typeof(store!.getGoalsByArticle()) !== 'undefined') {
+      if (!store!.getAllKeywords().length) {
+        store!.getKeywords();
+      }
+      if (typeof (store!.getGoalsByArticle()) !== 'undefined') {
         listGoals = store!.getGoalsByArticle().split(',');
       }
     }
-    this.setState({ isOpen : store!.currentEntity!.open });
+    this.setState({ isOpen: store!.currentEntity!.open });
     await new Promise(resolve => setTimeout(resolve, SETTIMEOUT));
     const selectedGradesNature = store!.currentEntity!.getListOfGrades();
     const selectedSubjectsNature = store!.currentEntity!.getListOfSubjects();
@@ -163,61 +177,61 @@ export class PublishingActions extends Component<Props, State> {
     selectedGrades.forEach((ee) => {
       arraySelectedIdsNewsGrades.push(Number(ee.id));
     });
-    const newSelectGrades:Array<Grade> = await store!.getGradeWpIds(arraySelectedIdsNewsGrades);
+    const newSelectGrades: Array<Grade> = await store!.getGradeWpIds(arraySelectedIdsNewsGrades);
     newSelectGrades.forEach((ee) => {
       arraySelectedIdsGrades.push(Number(ee.id));
       arraySelectedIdsNewsManagemdGrades.push(Number(ee.managementId));
     });
     this.setState({
-      optionsMyGrades : newSelectGrades
+      optionsMyGrades: newSelectGrades
     });
 
     selectedSubjects.forEach((ee) => {
       arraySelectedIdsNewsSubjects.push(Number(ee.id));
     });
-    const newselectedSubjects:Array<Subject> = await store!.getSubjectWpIds(arraySelectedIdsNewsSubjects);
+    const newselectedSubjects: Array<Subject> = await store!.getSubjectWpIds(arraySelectedIdsNewsSubjects);
     newselectedSubjects.forEach((ee) => {
       arraySelectedIdsSubjects.push(Number(ee.id));
       arraySelectedIdsNewsManagemdSubjects.push(Number(ee.managementId));
     });
     this.setState({
       valueSubjectsOptions: arraySelectedIdsSubjects,
-      optionsMySubjects : newselectedSubjects
+      optionsMySubjects: newselectedSubjects
     });
     await new Promise(resolve => setTimeout(resolve, SETTIMEOUT));
     const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
 
     this.setState({
-      grepFiltersData : grepFiltersDataAwait
+      grepFiltersData: grepFiltersDataAwait
     });
     this.setState({
-      optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
+      optionsCore: this.renderValueOptions(grepFiltersDataAwait, 'core')
     });
     this.setState({
-      optionsMulti : this.renderValueOptions(grepFiltersDataAwait, 'multi')
+      optionsMulti: this.renderValueOptions(grepFiltersDataAwait, 'multi')
     });
     this.setState({
-      optionsReading : this.renderValueOptions(grepFiltersDataAwait, 'reading')
+      optionsReading: this.renderValueOptions(grepFiltersDataAwait, 'reading')
     });
     this.setState({
-      optionsSubjects : this.renderValueOptionsBasics(grepFiltersDataAwait, 'subject')
+      optionsSubjects: this.renderValueOptionsBasics(grepFiltersDataAwait, 'subject')
     });
     this.setState({
-      optionsGrades : this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
+      optionsGrades: this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
     });
     this.setState({
-      editValueCoreOptions : store!.currentEntity!.getListOfgrepCoreElementsIds()!
+      editValueCoreOptions: store!.currentEntity!.getListOfgrepCoreElementsIds()!
     });
     this.setState({
-      editvalueGoalsOptions : store!.currentEntity!.getListOfgrepGoalsIds()!
+      editvalueGoalsOptions: store!.currentEntity!.getListOfgrepGoalsIds()!
     });
     this.setState({
-      editvalueMultiOptions : store!.currentEntity!.getListOfgrepMainTopicsIds()!
+      editvalueMultiOptions: store!.currentEntity!.getListOfgrepMainTopicsIds()!
     });
     this.setState({
-      editvaluereadingOptions : store!.currentEntity!.getListOfgrepReadingInSubjectId()!
+      editvaluereadingOptions: store!.currentEntity!.getListOfgrepReadingInSubjectId()!
     });
-    if (typeof(store!.currentEntity!.getListOfgrepGoalsIds()) !== 'undefined') {
+    if (typeof (store!.currentEntity!.getListOfgrepGoalsIds()) !== 'undefined') {
       this.setState(
         {
           valueGoalsOptions: store!.currentEntity!.getListOfgrepGoalsIds()!
@@ -256,24 +270,31 @@ export class PublishingActions extends Component<Props, State> {
       }
       this.sendValidbutton();
     }
-    if (typeof(store!.currentEntity!.getListOfSources()) !== 'undefined') {
+    if (typeof (store!.currentEntity!.getListOfSources()) !== 'undefined') {
       this.setState(
         {
           valueSourceOptions: store!.currentEntity!.getListOfSources()!
         }
       );
     }
-    if (typeof(store!.currentEntity!.getListOfgrepCoreElementsIds()) !== 'undefined') {
+    if (typeof (store!.currentEntity!.getListOfKeywords()) !== 'undefined') {
+      this.setState(
+        {
+          valueKeywordsOptions: store!.currentEntity!.getListOfKeywords()!
+        }
+      );
+    }
+    if (typeof (store!.currentEntity!.getListOfgrepCoreElementsIds()) !== 'undefined') {
       this.setState({
         valueCoreOptions: store!.currentEntity!.getListOfgrepCoreElementsIds()!
       });
     }
-    if (typeof(store!.currentEntity!.getListOfgrepMainTopicsIds()) !== 'undefined') {
+    if (typeof (store!.currentEntity!.getListOfgrepMainTopicsIds()) !== 'undefined') {
       this.setState({
         valueMultiOptions: store!.currentEntity!.getListOfgrepMainTopicsIds()!
       });
     }
-    if (typeof(store!.currentEntity!.getListOfgrepReadingInSubjectId()) !== 'undefined') {
+    if (typeof (store!.currentEntity!.getListOfgrepReadingInSubjectId()) !== 'undefined') {
       this.setState(
         {
           valuereadingOptions: store!.currentEntity!.getListOfgrepReadingInSubjectId()!
@@ -328,10 +349,10 @@ export class PublishingActions extends Component<Props, State> {
     const grepFiltergoalssDataAwait = await store!.getGrepGoalsFilters(this.state.valueCoreOptions, this.state.valueMultiOptions, arraySelectedIdsNewsManagemdGrades, arraySelectedIdsNewsManagemdSubjects, listGoals, MAGICNUMBER100, MAGICNUMBER1);
     this.setState(
       {
-        optionsGoals : grepFiltergoalssDataAwait.data,
+        optionsGoals: grepFiltergoalssDataAwait.data,
       },
       () => {
-        if (this.state.editvalueGoalsOptions !== null && typeof(this.state.editvalueGoalsOptions) !== 'undefined') {
+        if (this.state.editvalueGoalsOptions !== null && typeof (this.state.editvalueGoalsOptions) !== 'undefined') {
           if (this.state.editvalueGoalsOptions!.length === 0) {
             this.setState(
               {
@@ -357,10 +378,10 @@ export class PublishingActions extends Component<Props, State> {
     this.setState(
       {
         // tslint:disable-next-line: variable-name
-        page : grepFiltergoalssDataAwait.total_pages,
+        page: grepFiltergoalssDataAwait.total_pages,
       }
     );
-    if (grepFiltergoalssDataAwait.data.length > 0) { this.setState({ loadingGoals : false }); }
+    if (grepFiltergoalssDataAwait.data.length > 0) { this.setState({ loadingGoals: false }); }
     if (document.getElementById('publishingInfo')) {
       document.getElementById('publishingInfo')!.addEventListener('scroll', this.handerScroll);
     }
@@ -376,7 +397,7 @@ export class PublishingActions extends Component<Props, State> {
         arraySchoolIds.push(school.id);
       });
     }
-    this.setState({ optionsMySchool : arraySchoolIds });
+    this.setState({ optionsMySchool: arraySchoolIds });
     this.props.store!.currentEntity!.setMySchool(String(arraySchoolIds));
   }
 
@@ -394,7 +415,7 @@ export class PublishingActions extends Component<Props, State> {
         allOptions = allOptions.concat(grepFiltergoalssDataAwait.data);
         this.setState(
           {
-            optionsGoals : allOptions
+            optionsGoals: allOptions
           },
           () => {
             this.sendValidbutton();
@@ -405,7 +426,7 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public transformDataToStringDat = (data: Array<String>, options: Array<GoalsData>) => {
-    const returnArray : Array<number> = [];
+    const returnArray: Array<number> = [];
     data!.forEach((element) => {
       for (let i = 0; i < options.length; i = i + 1) {
         if (element === options[i].code) {
@@ -419,9 +440,9 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public transformDataToString = (data: Array<GreepElements>) => {
-    const returnArray : Array<string> = [];
+    const returnArray: Array<string> = [];
     data!.forEach((element) => {
-      if (typeof(element) !== 'undefined') {
+      if (typeof (element) !== 'undefined') {
         returnArray.push(element.kode);
       }
     });
@@ -429,10 +450,10 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public transformDataToStringOrString = (data: Array<GreepElements>) => {
-    const returnArray : Array<string> = [];
+    const returnArray: Array<string> = [];
     if (data.length > 0) {
       data!.forEach((element) => {
-        if (typeof(element) !== 'undefined') {
+        if (typeof (element) !== 'undefined') {
           returnArray.push(element.kode);
         }
       });
@@ -441,7 +462,7 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public renderValueOptions = (data: FilterGrep, type: string) => {
-    const returnArray : Array<GreepSelectValue> = [];
+    const returnArray: Array<GreepSelectValue> = [];
     if (type === 'core') {
       data!.coreElementsFilters!.forEach((element) => {
         returnArray.push({
@@ -473,7 +494,7 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public renderValueOptionsBasics = (data: FilterGrep, type: string) => {
-    const returnArray : Array<GrepFilters> = [];
+    const returnArray: Array<GrepFilters> = [];
     if (type === 'subject') {
       data!.subjectFilters!.forEach((element) => {
         returnArray.push({
@@ -508,6 +529,12 @@ export class PublishingActions extends Component<Props, State> {
     default: source.default,
   })
 
+  public keywordToTagProp = (keyword: Keyword): TagPropKeyword => ({
+    id: keyword.id,
+    title: keyword.title,
+    default: keyword.default,
+  })
+
   public filterGrepGoals = async (coreoptions: Array<number>, multioptions: Array<number>, gradeoptions: Array<number>, subjectsoptions: Array<number>, goalsoptions: Array<string>) => {
     await new Promise(resolve => setTimeout(resolve, SETTIMEOUT));
     const grepFiltergoalssDataAwait = await this.props.store!.getGrepGoalsFilters(coreoptions, multioptions, gradeoptions, subjectsoptions, goalsoptions, MAGICNUMBER100, MAGICNUMBER1);
@@ -521,10 +548,10 @@ export class PublishingActions extends Component<Props, State> {
     const subject = store!.getAllSubjects().find(subject => subject.id === id);
     if (subject) {
       store!.currentEntity!.addSubject(subject);
-      this.setState({ loadingGoals : true });
+      this.setState({ loadingGoals: true });
       this.setState(
         {
-          optionsMySubjects : [...this.state.optionsMySubjects, subject]
+          optionsMySubjects: [...this.state.optionsMySubjects, subject]
         },
         () => {
           this.forceUpdate();
@@ -550,19 +577,19 @@ export class PublishingActions extends Component<Props, State> {
     });
     const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
     this.setState({
-      grepFiltersData : grepFiltersDataAwait
+      grepFiltersData: grepFiltersDataAwait
     });
     this.setState({
-      optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
+      optionsCore: this.renderValueOptions(grepFiltersDataAwait, 'core')
     });
     this.setState({
-      optionsMulti : this.renderValueOptions(grepFiltersDataAwait, 'multi')
+      optionsMulti: this.renderValueOptions(grepFiltersDataAwait, 'multi')
     });
     /* tslint:disable-next-line:max-line-length */
     const grepFiltergoalssDataAwait = await this.filterGrepGoals(this.state.valueCoreOptions, this.state.valueMultiOptions, arraySelectedIdsGradesManagmend, arraySelectedIdsSubjectsManagmend, this.state.valueStringGoalsOptions);
     this.setState(
       {
-        optionsGoals : grepFiltergoalssDataAwait.data
+        optionsGoals: grepFiltergoalssDataAwait.data
       },
       () => {
         this.sendValidbutton();
@@ -571,7 +598,7 @@ export class PublishingActions extends Component<Props, State> {
     this.setState(
       {
         // tslint:disable-next-line: variable-name
-        page : grepFiltergoalssDataAwait.total_pages,
+        page: grepFiltergoalssDataAwait.total_pages,
         // valueGoalsOptions : [],
         loadingGoals: false
       }
@@ -587,13 +614,13 @@ export class PublishingActions extends Component<Props, State> {
     const arrayRemove: Array<Subject> = [];
     if (subject) {
       store!.currentEntity!.removeSubject(subject);
-      this.setState({ loadingGoals : true });
+      this.setState({ loadingGoals: true });
       this.state.optionsMySubjects.forEach((e) => {
         if (e.id !== subject.id) { arrayRemove.push(e); }
       });
       this.setState(
         {
-          optionsMySubjects : arrayRemove
+          optionsMySubjects: arrayRemove
         },
         () => {
           this.forceUpdate();
@@ -614,10 +641,10 @@ export class PublishingActions extends Component<Props, State> {
     const grade = store!.getAllGrades().find(grade => grade.id === id);
     if (grade) {
       store!.currentEntity!.addGrade(grade);
-      this.setState({ loadingGoals : true });
+      this.setState({ loadingGoals: true });
       this.setState(
         {
-          optionsMyGrades : [...this.state.optionsMyGrades, grade]
+          optionsMyGrades: [...this.state.optionsMyGrades, grade]
         },
         () => {
           this.forceUpdate();
@@ -646,13 +673,13 @@ export class PublishingActions extends Component<Props, State> {
     const arrayRemove: Array<Grade> = [];
     if (grade) {
       store!.currentEntity!.removeGrade(grade);
-      this.setState({ loadingGoals : true });
+      this.setState({ loadingGoals: true });
       this.state.optionsMyGrades.forEach((e) => {
         if (e.id !== grade.id) { arrayRemove.push(e); }
       });
       this.setState(
         {
-          optionsMyGrades : arrayRemove
+          optionsMyGrades: arrayRemove
         },
         () => {
           this.forceUpdate();
@@ -689,7 +716,7 @@ export class PublishingActions extends Component<Props, State> {
         if (this.props.store!.getCurrentUser()!.type === UserType.ContentManager) {
           this.props.store!.currentEntity!.setGrepSourcesIds([]);
           this.props.store!.currentEntity!.setOpen(false);
-          this.setState({ isOpen : false });
+          this.setState({ isOpen: false });
         }
       }
     );
@@ -703,10 +730,10 @@ export class PublishingActions extends Component<Props, State> {
     const assignmentTitle = this.props.store!.currentEntity!.title;
     if (
       isCopy && (
-      /Copy$/.test(assignmentTitle) ||
-      /Kopi$/.test(assignmentTitle) ||
-      /copy$/.test(assignmentTitle) ||
-      /kopi$/.test(assignmentTitle))
+        /Copy$/.test(assignmentTitle) ||
+        /Kopi$/.test(assignmentTitle) ||
+        /copy$/.test(assignmentTitle) ||
+        /kopi$/.test(assignmentTitle))
     ) {
       Notification.create({
         type: NotificationTypes.ERROR,
@@ -735,10 +762,10 @@ export class PublishingActions extends Component<Props, State> {
     const assignmentTitle = this.props.store!.currentEntity!.title;
     if (
       isCopy && (
-      /Copy$/.test(assignmentTitle) ||
-      /Kopi$/.test(assignmentTitle) ||
-      /copy$/.test(assignmentTitle) ||
-      /kopi$/.test(assignmentTitle))
+        /Copy$/.test(assignmentTitle) ||
+        /Kopi$/.test(assignmentTitle) ||
+        /copy$/.test(assignmentTitle) ||
+        /kopi$/.test(assignmentTitle))
     ) {
       Notification.create({
         type: NotificationTypes.ERROR,
@@ -817,10 +844,10 @@ export class PublishingActions extends Component<Props, State> {
     const myisOpen = this.state.isOpen;
     if (myisOpen) {
       store!.currentEntity!.setOpen(false);
-      this.setState({ isOpen : false });
+      this.setState({ isOpen: false });
     } else {
       store!.currentEntity!.setOpen(true);
-      this.setState({ isOpen : true });
+      this.setState({ isOpen: true });
     }
   }
 
@@ -830,7 +857,7 @@ export class PublishingActions extends Component<Props, State> {
     const selectedSources = this.grepNumbersToTagprop(store!.currentEntity!.getListOfSources(), sources);
     const myplaceholder = (selectedSources.length > 0) ? '' : intl.get('publishing_page.source');
     const isOpen = this.state.isOpen;
-    const isChecked = (isOpen) ? checkActive : checkRounded ;
+    const isChecked = (isOpen) ? checkActive : checkRounded;
     const textIsOpen = (from === 'TEACHINGPATH') ? intl.get('publishing_page.source_is_open') : intl.get('publishing_page.source_is_open_assig');
     let classHidden = 'InformationSource hidden';
     if (store!.getCurrentUser()!.type === UserType.ContentManager) { classHidden = 'InformationSource'; }
@@ -852,11 +879,76 @@ export class PublishingActions extends Component<Props, State> {
               temporaryTagsArray
             />
             <div className="filterCheck isOpen" onClick={this.toggleisOpen}>
-                <img src={isChecked} />
-                <p>{textIsOpen}</p>
+              <img src={isChecked} />
+              <p>{textIsOpen}</p>
             </div>
+
           </div>
+          {this.renderKeywordsInput()}
         </div>
+      </div>
+    );
+  }
+
+  public addKeyword = async (id: number) => {
+    const { currentEntity } = this.props.store!;
+    const { valueKeywordsOptions } = this.state;
+    const ArrayValueKeywords = this.state.valueKeywordsOptions;
+    ArrayValueKeywords.push(id);
+    const uniqueArray = ArrayValueKeywords.filter((item, pos) => (ArrayValueKeywords.indexOf(item) === pos));
+    this.setState(
+      {
+        valueKeywordsOptions: uniqueArray
+      },
+      () => {
+        currentEntity!.setGrepKeywordsIds(this.state.valueKeywordsOptions);
+      }
+    );
+
+  }
+
+  public removeKeyword = async (id: number) => {
+    const { currentEntity } = this.props.store!;
+    const { valueKeywordsOptions } = this.state;
+    const ArrayValueKeywords = this.state.valueKeywordsOptions;
+    const index = ArrayValueKeywords.indexOf(id);
+
+    if (index > -1) {
+      ArrayValueKeywords.splice(index, 1);
+    }
+
+    if (!valueKeywordsOptions.includes(id)) {
+      this.setState(
+        {
+          valueKeywordsOptions: ArrayValueKeywords
+        },
+        () => {
+          currentEntity!.setGrepKeywordsIds(this.state.valueKeywordsOptions);
+        }
+      );
+    }
+
+  }
+
+  public renderKeywordsInput = () => {
+    const { store, from } = this.props;
+    const keywords = store!.getAllKeywords().map(this.keywordToTagProp);
+    const selectedKeywords = this.grepNumbersToTagprop(store!.currentEntity!.getListOfKeywords(), keywords);
+    /* console.log(selectedKeywords!); */
+    const myplaceholder = (selectedKeywords.length > 0) ? '' : intl.get('publishing_page.keywords');
+    return (
+      <div>
+        <TagInputComponent
+          className="filterBy darkTheme"
+          tags={keywords}
+          addTag={this.addKeyword}
+          currentTags={selectedKeywords}
+          orderbyid={false}
+          removeTag={this.removeKeyword}
+          placeholder={myplaceholder}
+          listView
+          temporaryTagsArray
+        />
       </div>
     );
   }
@@ -966,7 +1058,7 @@ export class PublishingActions extends Component<Props, State> {
     const buttonClassName = levels.includes(level) ? 'active' : undefined;
     const levelIcon = level === firstLevel ? firstLevelImg :
       level === secondLevel ? secondLevelImg :
-      thirdLevelImg;
+        thirdLevelImg;
 
     return (
       <button
@@ -991,7 +1083,7 @@ export class PublishingActions extends Component<Props, State> {
 
       <div className="studentLevelButtons flexBox">
 
-      {studentLevels.map(this.renderLevelButton)}
+        {studentLevels.map(this.renderLevelButton)}
       </div>
     </div>
   )
@@ -1073,7 +1165,7 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public searchValueInArrays = (emisor: Array<GreepSelectValue>, receptor: Array<number> | undefined) => {
-    let valueCoreElement:any = emisor[0];
+    let valueCoreElement: any = emisor[0];
     emisor.forEach((a) => {
       receptor!.forEach((b) => {
         if (a.value === b) {
@@ -1100,16 +1192,16 @@ export class PublishingActions extends Component<Props, State> {
     const { currentEntity } = this.props.store!;
     const { valueCoreOptions } = this.state;
     if (newValue.value !== 0) {
-      this.setState({ loadingGoals : true });
+      this.setState({ loadingGoals: true });
       /* tslint:disable-next-line:max-line-length */
       const grepFiltergoalssDataAwait = await this.filterGrepGoals(newValue.value, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
       this.setState({
-        optionsGoals : grepFiltergoalssDataAwait.data
+        optionsGoals: grepFiltergoalssDataAwait.data
       });
       this.setState(
         {
           // tslint:disable-next-line: variable-name
-          page : grepFiltergoalssDataAwait.total_pages,
+          page: grepFiltergoalssDataAwait.total_pages,
           // valueGoalsOptions : [],
           loadingGoals: false
         }
@@ -1128,16 +1220,16 @@ export class PublishingActions extends Component<Props, State> {
         currentEntity!.setGrepCoreElementsIds([newValue.value]);
       }
     } else {
-      this.setState({ loadingGoals : true });
+      this.setState({ loadingGoals: true });
       /* tslint:disable-next-line:max-line-length */
       const grepFiltergoalssDataAwait = await this.filterGrepGoals([], this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
       this.setState({
-        optionsGoals : grepFiltergoalssDataAwait.data
+        optionsGoals: grepFiltergoalssDataAwait.data
       });
       this.setState(
         {
           // tslint:disable-next-line: variable-name
-          page : grepFiltergoalssDataAwait.total_pages,
+          page: grepFiltergoalssDataAwait.total_pages,
           // valueGoalsOptions : [],
           loadingGoals: false
         }
@@ -1163,15 +1255,15 @@ export class PublishingActions extends Component<Props, State> {
 
   public grepNumbersToTagprop = (data: Array<Number> | undefined, validArray: Array<TagProp>) => {
     const returnArray: Array<TagProp> = [];
-    if (typeof(validArray) !== 'undefined') {
+    if (typeof (validArray) !== 'undefined') {
       validArray.forEach((e) => {
         if (data !== null) {
-          if (typeof(data) !== 'undefined') {
+          if (typeof (data) !== 'undefined') {
             if (data!.includes(Number(e.id))) {
               returnArray.push(
                 {
-                  id : e.id,
-                  title : e.title
+                  id: e.id,
+                  title: e.title
                 }
               );
             }
@@ -1220,7 +1312,7 @@ export class PublishingActions extends Component<Props, State> {
     const ArrayValueCores = this.state.valueCoreOptions;
     ArrayValueCores.push(id);
     const uniqueArray = ArrayValueCores.filter((item, pos) => (ArrayValueCores.indexOf(item) === pos));
-    this.setState({ loadingGoals : true });
+    this.setState({ loadingGoals: true });
     this.setState(
       {
         valueCoreOptions: uniqueArray
@@ -1240,7 +1332,7 @@ export class PublishingActions extends Component<Props, State> {
     if (index > -1) {
       ArrayValueCores.splice(index, 1);
     }
-    this.setState({ loadingGoals : true });
+    this.setState({ loadingGoals: true });
     if (!valueCoreOptions.includes(id)) {
       this.setState(
         {
@@ -1282,18 +1374,18 @@ export class PublishingActions extends Component<Props, State> {
     const { currentEntity } = this.props.store!;
     const { valueMultiOptions } = this.state;
     if (newValue.value !== 0) {
-      this.setState({ loadingGoals : true });
+      this.setState({ loadingGoals: true });
       /* tslint:disable-next-line:max-line-length */
       const grepFiltergoalssDataAwait = await this.filterGrepGoals(this.state.valueCoreOptions, newValue.value, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
       this.setState({
-        optionsGoals : grepFiltergoalssDataAwait.data
+        optionsGoals: grepFiltergoalssDataAwait.data
       });
       this.setState(
         {
           // tslint:disable-next-line: variable-name
-          page : grepFiltergoalssDataAwait.total_pages,
+          page: grepFiltergoalssDataAwait.total_pages,
           // valueGoalsOptions : [],
-          loadingGoals : false
+          loadingGoals: false
         }
       );
       this.comparativeGoalsValueToFilter();
@@ -1308,17 +1400,17 @@ export class PublishingActions extends Component<Props, State> {
       );
       currentEntity!.setGrepMainTopicsIds([newValue.value]);
     } else {
-      this.setState({ loadingGoals : true });
+      this.setState({ loadingGoals: true });
       const grepFiltergoalssDataAwait = await this.filterGrepGoals(this.state.valueCoreOptions, [], this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
       this.setState({
-        optionsGoals : grepFiltergoalssDataAwait.data
+        optionsGoals: grepFiltergoalssDataAwait.data
       });
       this.setState(
         {
           // tslint:disable-next-line: variable-name
-          page : grepFiltergoalssDataAwait.total_pages,
+          page: grepFiltergoalssDataAwait.total_pages,
           // valueGoalsOptions : [],
-          loadingGoals : false
+          loadingGoals: false
         }
       );
       this.setState({ pageCurrent: MAGICNUMBER1 });
@@ -1341,7 +1433,7 @@ export class PublishingActions extends Component<Props, State> {
     const ArrayValueMulti = this.state.valueMultiOptions;
     ArrayValueMulti.push(id);
     const uniqueArray = ArrayValueMulti.filter((item, pos) => (ArrayValueMulti.indexOf(item) === pos));
-    this.setState({ loadingGoals : true });
+    this.setState({ loadingGoals: true });
     this.setState(
       {
         valueMultiOptions: uniqueArray
@@ -1361,7 +1453,7 @@ export class PublishingActions extends Component<Props, State> {
     if (index > -1) {
       ArrayValueMulti.splice(index, 1);
     }
-    this.setState({ loadingGoals : true });
+    this.setState({ loadingGoals: true });
     if (!valueMultiOptions.includes(id)) {
       this.setState(
         {
@@ -1425,7 +1517,7 @@ export class PublishingActions extends Component<Props, State> {
   }*/
 
   public searchValueInNumbers = (emisor: Array<GreepSelectValue>, receptor: number | undefined) => {
-    let valueCoreElement:any = emisor[0];
+    let valueCoreElement: any = emisor[0];
     emisor.forEach((a) => {
       if (a.value === receptor) {
         valueCoreElement = a;
@@ -1511,7 +1603,7 @@ export class PublishingActions extends Component<Props, State> {
       if (this.state.optionsMyGrades.length > 0 && this.state.optionsMySubjects.length > 0 && this.state.valueGoalsOptions.length > 0) {
         this.props.store!.setIsActiveButtons();
       } else {
-        if (typeof(this.state.editvalueGoalsOptions) !== 'undefined') {
+        if (typeof (this.state.editvalueGoalsOptions) !== 'undefined') {
           if (this.state.editvalueGoalsOptions!.length > 0) {
             if (this.state.optionsMyGrades.length > 0 && this.state.optionsMySubjects.length > 0 && this.state.valueGoalsOptions.length > 0) {
               this.props.store!.setIsActiveButtons();
@@ -1558,7 +1650,7 @@ export class PublishingActions extends Component<Props, State> {
   public comparativeGoalsValueToFilter = () => {
     const { optionsGoals } = this.state;
     const { currentEntity } = this.props.store!;
-    const returnArray : Array<number> = [];
+    const returnArray: Array<number> = [];
     optionsGoals!.forEach((element) => {
       for (let i = 0; i < this.state.valueGoalsOptions.length; i = i + 1) {
         if (element.id === this.state.valueGoalsOptions[i]) {
@@ -1568,7 +1660,7 @@ export class PublishingActions extends Component<Props, State> {
     });
     this.setState(
       {
-        valueGoalsOptions : returnArray
+        valueGoalsOptions: returnArray
       },
       () => {
         currentEntity!.setGrepGoalsIds(this.state.valueGoalsOptions);
@@ -1596,7 +1688,7 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public transformData = (data: Array<GreepElements>, options: Array<GoalsData>) => {
-    const returnArray : Array<number> = [];
+    const returnArray: Array<number> = [];
     data!.forEach((element) => {
       for (let i = 0; i < options.length; i = i + 1) {
         if (element.kode === options[i].code) {
@@ -1617,10 +1709,10 @@ export class PublishingActions extends Component<Props, State> {
     let realOptionsGoals: Array<GoalsData> = [];
     let visibleGoals;
     let activeVisibleGoals = false;
-    if (typeof(optionsGoals) !== 'undefined') {
+    if (typeof (optionsGoals) !== 'undefined') {
       activeVisibleGoals = true;
     }
-    if (listGoals !== null && typeof(listGoals) !== 'undefined') {
+    if (listGoals !== null && typeof (listGoals) !== 'undefined') {
       // step 1: frag in two arrays
       myOptionGoals!.forEach((goal) => {
         if (listGoals!.includes(Number(goal!.id))) {
@@ -1641,7 +1733,7 @@ export class PublishingActions extends Component<Props, State> {
       visibleGoals = realOptionsGoals!.map((goal) => {
         const visibleGoalsGrade = goal!.grades!.map((grade) => {
           const title = grade.name.split('.', 1);
-          const mytitle = (grade.name.split('.').length === 1) ? title : `${title} ${intl.get('new assignment.grade')}` ;
+          const mytitle = (grade.name.split('.').length === 1) ? title : `${title} ${intl.get('new assignment.grade')}`;
           return <span key={grade.id}>{mytitle}</span>;
         });
         const visibleGoalsCore = goal!.coreElements!.map((core) => {
@@ -1706,7 +1798,7 @@ export class PublishingActions extends Component<Props, State> {
 
   public addSkole = async (id: number) => {
     const { store } = this.props;
-    const arraySchool : Array<TagProp> = [];
+    const arraySchool: Array<TagProp> = [];
     const myschools = store!.getCurrentUser()!.schools;
     myschools.forEach((school) => {
       arraySchool.push({
@@ -1718,7 +1810,7 @@ export class PublishingActions extends Component<Props, State> {
     if (skole) {
       this.setState(
         {
-          optionsMySchool : [...this.state.optionsMySchool, skole.id]
+          optionsMySchool: [...this.state.optionsMySchool, skole.id]
         },
         () => {
           store!.currentEntity!.setMySchool(String(this.state.optionsMySchool));
@@ -1729,7 +1821,7 @@ export class PublishingActions extends Component<Props, State> {
 
   public removeSkole = async (id: number) => {
     const { store } = this.props;
-    const arraySchool : Array<TagProp> = [];
+    const arraySchool: Array<TagProp> = [];
     const myschools = store!.getCurrentUser()!.schools;
     myschools.forEach((school) => {
       arraySchool.push({
@@ -1746,7 +1838,7 @@ export class PublishingActions extends Component<Props, State> {
         });
         this.setState(
           {
-            optionsMySchool : arrayRemove
+            optionsMySchool: arrayRemove
           },
           () => {
             store!.currentEntity!.setMySchool(String(this.state.optionsMySchool));
@@ -1766,7 +1858,7 @@ export class PublishingActions extends Component<Props, State> {
     const { optionsGrades, valueGradesOptions } = this.state;
     const { currentEntity } = store!;
     const selectedMySkole = this.state.optionsMySchool;
-    const selectedMySkoleTagProp : Array<TagProp> = [];
+    const selectedMySkoleTagProp: Array<TagProp> = [];
     allSkole.forEach((skole) => {
       if (selectedMySkole.includes(skole.id)) {
         selectedMySkoleTagProp.push(skole);
@@ -1795,7 +1887,7 @@ export class PublishingActions extends Component<Props, State> {
   public renderMySchool = () => {
     const { store } = this.props;
     const isTeacher = (store!.getCurrentUser()!.type === UserType.Teacher) ? true : false;
-    const arraySchool : Array<TagProp> = [];
+    const arraySchool: Array<TagProp> = [];
     const myschools = store!.getCurrentUser()!.schools;
     const arraySchoolIds = this.state.optionsMySchool;
     myschools.forEach((school) => {
@@ -1819,7 +1911,7 @@ export class PublishingActions extends Component<Props, State> {
 
   public render() {
     const { store, from } = this.props;
-    const titleSimple = (this.state.isValidPrivate) ? intl.get('publishing_page.grep.title_private') : intl.get('publishing_page.grep.title') ;
+    const titleSimple = (this.state.isValidPrivate) ? intl.get('publishing_page.grep.title_private') : intl.get('publishing_page.grep.title');
     const descriptionText = (this.state.isValid) ? intl.get('publishing_page.grep.description_privado') : (from === 'TEACHINGPATH') ? intl.get('publishing_page.grep.description') : intl.get('publishing_page.grep.descrption_assignment');
     return (
       <div className="PublishingActions flexBox dirColumn">

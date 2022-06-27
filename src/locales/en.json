@@ -506,6 +506,7 @@
     "source_is_open_title": "Visiblity Settings",
     "source_is_open_assig": "Display in Open Site",
     "source": "Source",
+    "keywords": "Keywords",
     "selected_myschools": "Select school",
     "dont_empty": "The School field cannot be left empty"
   },

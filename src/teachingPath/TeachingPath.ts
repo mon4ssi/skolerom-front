@@ -182,7 +182,15 @@ export interface TeachingPathArgs {
   minNumberOfSteps?: number;
   grades?: Array<Grade>;
   subjects?: Array<Subject>;
+
+  subjectItems?: Array<GenericGrepItem>;
+  sourceItems?: Array<GenericGrepItem>;
+  coreElementItems?: Array<GenericGrepItem>;
+  multiSubjectItems?: Array<GenericGrepItem>;
+  goalsItems?: Array<GenericGrepItem>;
+
   sources?: Array<number>;
+  keywords?: Array<number>;
   view?: string;
   levels?: Array<number>;
   featuredImage?: string;
@@ -208,7 +216,7 @@ export interface TeachingPathArgs {
   grepGoalsIds?: Array<number>;
   grepGoals?: Array<GreepElements>;
   open?: boolean;
-  schools? : Array<NowSchool>;
+  schools?: Array<NowSchool>;
 }
 
 export class TeachingPath {
@@ -230,6 +238,14 @@ export class TeachingPath {
   protected readonly _minNumberOfSteps: number | undefined;
   protected readonly _ownedByMe: boolean;
   @observable protected _grades: Array<Grade> = [];
+  @observable protected _keywords: Array<number> = [];
+
+  @observable protected _sourceItems: Array<GenericGrepItem> = [];
+  @observable protected _coreElementItems: Array<GenericGrepItem> = [];
+  @observable protected _multiSubjectItems: Array<GenericGrepItem> = [];
+  @observable protected _goalsItems: Array<GenericGrepItem> = [];
+  @observable protected _subjectItems: Array<Subject> = [];
+
   @observable protected _subjects: Array<Subject> = [];
   @observable protected _sources: Array<number> = [];
   @observable protected _levels: Array<number>;
@@ -275,6 +291,14 @@ export class TeachingPath {
     this._minNumberOfSteps = args.minNumberOfSteps;
     this._maxNumberOfSteps = args.maxNumberOfSteps;
     this._grades = args.grades || [];
+    this._keywords = args.keywords || [];
+
+    this._sourceItems = args.sourceItems || [];
+    this._coreElementItems = args.coreElementItems || [];
+    this._multiSubjectItems = args.multiSubjectItems || [];
+    this._goalsItems = args.goalsItems || [];
+    this._subjectItems = args.subjects || [];
+
     this._subjects = args.subjects || [];
     this._sources = args.sources || [];
     this._view = args.view || 'edit';
@@ -446,6 +470,11 @@ export class TeachingPath {
   }
 
   @computed
+  public get keywords() {
+    return this._keywords;
+  }
+
+  @computed
   public get view() {
     return this._view;
   }
@@ -456,6 +485,11 @@ export class TeachingPath {
 
   public getListOfSources() {
     return toJS(this._sources);
+  }
+
+  public getListOfKeywords() {
+    /* return toJS(this._keywords[1]); */
+    return toJS([1]);
   }
 
   public getListOfGrades() {

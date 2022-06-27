@@ -431,6 +431,12 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
+  public setGrepKeywordsIds = (data: Array<number>) => {
+    this._keywords = data;
+    this.save();
+  }
+
+  @action
   public setGrepCoreElementsIds = (data: Array<number>) => {
     this._grepCoreElementsIds = data;
     this.save();

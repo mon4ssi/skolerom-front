@@ -135,6 +135,18 @@ export class Source {
   }
 }
 
+export class Keyword {
+  @observable public id: number;
+  @observable public title: string;
+  @observable public default: boolean;
+
+  constructor(id: number, title: string, defaults: boolean) {
+    this.id = id;
+    this.title = title;
+    this.default = defaults;
+  }
+}
+
 export class GreepSelectValue {
   @observable public value: number | string | null;
   @observable public label: string;
@@ -224,6 +236,14 @@ export interface AssignmentArgs {
   grades?: Array<Grade>;
   subjects?: Array<Subject>;
   sources?: Array<number>;
+  keywords?: Array<number>;
+
+  subjectItems?: Array<any>;
+  sourceItems?: Array<any>;
+  coreElementItems?: Array<any>;
+  multiSubjectItems?: Array<any>;
+  goalsItems?: Array<any>;
+
   isPrivate?: boolean;
   isMySchool?: boolean;
   mySchools?: string | undefined;
@@ -275,6 +295,7 @@ export class Assignment {
   @observable protected _grades: Array<Grade> = [];
   @observable protected _subjects: Array<Subject> = [];
   @observable protected _sources: Array<number> = [];
+  @observable protected _keywords: Array<number> = [];
   @observable protected _isPrivate: boolean = false;
   @observable protected _isMySchool: boolean = false;
   @observable protected _mySchools: string | undefined = '';
@@ -322,6 +343,14 @@ export class Assignment {
     this._grades = args.grades || [];
     this._subjects = args.subjects || [];
     this._sources = args.sources || [];
+    this._keywords = args.keywords || [];
+
+    this._sourceItems = args.sourceItems || [];
+    this._coreElementItems = args.coreElementItems || [];
+    this._multiSubjectItems = args.multiSubjectItems || [];
+    this._goalsItems = args.goalsItems || [];
+    this._subjectItems = args.subjects || [];
+
     this._isPrivate = !isNil(args.isPrivate) ? args.isPrivate : true;
     this._mySchools = args.mySchools;
     this._isMySchool = args.isMySchool || false;
@@ -466,6 +495,36 @@ export class Assignment {
   }
 
   @computed
+  public get keywords() {
+    return this._keywords;
+  }
+
+  @computed
+  public get sourceItems() {
+    return this._sourceItems;
+  }
+
+  @computed
+  public get coreElementItems() {
+    return this._coreElementItems;
+  }
+
+  @computed
+  public get multiSubjectItems() {
+    return this._multiSubjectItems;
+  }
+
+  @computed
+  public get goalsItems() {
+    return this._goalsItems;
+  }
+
+  @computed
+  public get subjectItems() {
+    return this._subjectItems;
+  }
+
+  @computed
   public get isPrivate() {
     return this._isPrivate;
   }
@@ -560,6 +619,10 @@ export class Assignment {
 
   public getListOfSources() {
     return toJS(this._sources);
+  }
+
+  public getListOfKeywords() {
+    return toJS(this._keywords);
   }
 
   public getListOfGrades() {
