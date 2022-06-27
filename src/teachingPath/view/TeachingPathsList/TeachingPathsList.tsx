@@ -83,6 +83,7 @@ interface State {
   filtersAjaxLoading: boolean;
   filtersAjaxLoadingGoals: boolean;
   showMySchool: number;
+  currentTeachingPathView: string;
 }
 
 @inject('teachingPathsListStore', 'editTeachingPathStore')
@@ -173,7 +174,8 @@ class TeachingPathsListComponent extends Component<Props, State> {
       filtersisUsed: false,
       filtersAjaxLoading: false,
       filtersAjaxLoadingGoals: false,
-      showMySchool: 0
+      showMySchool: 0,
+      currentTeachingPathView: '',
     };
   }
 
@@ -558,6 +560,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
           }
           history.push(`/teaching-paths/edit/${id}`);
         */
+        this.setState({ currentTeachingPathView: view! });
         this.manageTeachingPathAction(id, currentUserType);
         break;
       case UserType.Student:
@@ -1160,11 +1163,12 @@ class TeachingPathsListComponent extends Component<Props, State> {
   public renderSlideOutPanelTeacherCM = () => {
     const { teachingPathsListStore } = this.props;
     const { currentEntity } = teachingPathsListStore!;
-    const { isPublishedCurrentTeachingPath } = this.state;
+    const { isPublishedCurrentTeachingPath, currentTeachingPathView } = this.state;
     const tempIsPublishedCurrentTeachingPath = isPublishedCurrentTeachingPath!;
     return (
       <div className="dark" onClick={this.closeSlideOutPanel}>
         <SideOutPanelPreviewTeachingPath
+          view={currentTeachingPathView}
           isPublishedCurrentTeachingPath={tempIsPublishedCurrentTeachingPath}
           store={teachingPathsListStore}
           onClose={this.closeSlideOutPanel}

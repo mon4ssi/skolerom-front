@@ -399,7 +399,7 @@ export class Assignment {
     this._publishedAt = args.publishedAt || '';
     this._numberOfQuestions = args.numberOfQuestions || this._questions.length;
     this._isAnswered = args.isAnswered || false;
-    this._view = args.view;
+    this._view = args.view || 'edit';
     this._deadline = args.deadline;
     this._featuredImage = args.featuredImage;
     this._answerId = args.answerId;

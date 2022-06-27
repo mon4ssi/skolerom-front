@@ -35,6 +35,7 @@ import { Notification, NotificationTypes } from '../Notification/Notification';
 import './SideOutPanelPreviewTeachingPath.scss';
 
 interface Props extends RouteComponentProps {
+  view: string;
   store?: TeachingPathsListStore;
   isPublishedCurrentTeachingPath?: boolean;
   onClose?(e: SyntheticEvent): void;
@@ -294,11 +295,9 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         numberOfQuestions,
         hasGuidance,
         numberOfArticles,
-        view,
       } = currentEntity;
     const { currentEntity: { id } } = this.props.store!;
-    const { history, isPublishedCurrentTeachingPath } = this.props;
-
+    const { history, isPublishedCurrentTeachingPath, view } = this.props;
     const viewText = intl.get('preview.teaching_path.buttons.view');
     const guidanceText = intl.get('preview.teaching_path.buttons.teacher_guidance');
     const editText = intl.get('preview.teaching_path.buttons.edit');
@@ -364,7 +363,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         <div className="footerButtons">
           {isPublishedCurrentTeachingPath! && (view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentTeachingPath!, history, id, viewText)}
           {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
-          {view === 'edit' && this.renderEditButton(editText, history, id)}
+          {(view === 'edit' || !isPublishedCurrentTeachingPath) && this.renderEditButton(editText, history, id)}
           {isPublishedCurrentTeachingPath! && this.renderDuplicateButton(duplicateText)}
 
         </div>

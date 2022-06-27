@@ -300,11 +300,13 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
         multiSubjectItems,
         goalsItems,
         description,
+        publishedAt,
         deadline,
         author,
         numberOfQuestions,
         hasGuidance,
         isAnswered,
+        isPublished,
         createdAt,
       } = currentAssignment!;
     const { history, isPublishedCurrentAssignment, view } = this.props;
@@ -314,7 +316,6 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     const duplicateText = intl.get('preview.assignment.buttons.duplicate');
 
     const selectedAssignment: Assignment = this.state.currentAssignment!;
-
     return (
       <div className={'previewModalInfo'} onClick={this.stopPropagation} tabIndex={0}>
         <div className="contentContainer">
@@ -369,10 +370,10 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
         </div >
 
         <div className="footerButtons">
-          {isPublishedCurrentAssignment! && (view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentAssignment!, history, id, viewText)}
+          {isPublishedCurrentAssignment && (true || view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentAssignment!, history, id, viewText)}
           {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
-          {view === 'edit' && this.renderEditButton(editText, history, id)}
-          {isPublishedCurrentAssignment! && this.renderDuplicateButton(duplicateText)}
+          {(view === 'edit' || publishedAt)  && this.renderEditButton(editText, history, id)}
+          {(isPublishedCurrentAssignment!) && this.renderDuplicateButton(duplicateText)}
 
         </div>
       </div >

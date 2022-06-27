@@ -48,6 +48,7 @@ export interface DraftAssignmentRequestDTO {
   subjects: Array<Subject>;
   grades: Array<Grade>;
   levels: Array<number>;
+  isPublished?: boolean;
   isCopy?: boolean;
   grepCoreElementsIds?: Array<number>;
   grepMainTopicsIds?: Array<number>;

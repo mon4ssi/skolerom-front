@@ -86,7 +86,7 @@ class AssignmentsList extends Component<Props, State> {
     return (
       <div className="dark" onClick={this.closeSlideOutPanel}>
         <SideOutPanelPreviewAssignment
-          view={view}
+          view={view!}
           isPublishedCurrentAssignment={tempIsPublishedCurrentAssignment}
           store={assignmentListStore}
           onClose={this.closeSlideOutPanel}
@@ -99,9 +99,9 @@ class AssignmentsList extends Component<Props, State> {
 
   public manageAssignmentAction = async (id: number, userType?: UserType, viewAssignment?: string) => {
     const { assignmentListStore, history } = this.props;
-    this.setState({ view: viewAssignment });
     this.unregisterListener();
     this.props.assignmentListStore!.setCurrentAssignment(id);
+    this.setState({ view: viewAssignment });
     const { currentAssignment } = assignmentListStore!;
     /* console.log(currentAssignment!); */
     switch (userType) {
@@ -153,9 +153,6 @@ class AssignmentsList extends Component<Props, State> {
   public renderListItem = (assignment: Assignment, idx: number, list: Array<Assignment>) => {
     const { assignmentListStore } = this.props;
     const { isAssignmentPreviewTeacherCMVisible } = this.state;
-    /* console.log(assignment);
-    console.log(assignment.id);
-    console.log(assignment.isPublished); */
     return assignmentListStore!.assignmentsState === StoreState.LOADING ? (
       <SkeletonLoader key={idx} className="AssignmentListItem" />
     ) : (

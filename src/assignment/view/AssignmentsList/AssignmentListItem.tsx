@@ -52,8 +52,9 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
 
   private checkAssignmentStatus = () => {
     const { assignment } = this.props;
-
-    if (!assignment.view && !assignment.publishedAt) {
+    const isPublished = assignment!.isPublished;
+    const displayDraftNotation = isPublished === undefined || (isPublished !== null && isPublished !== undefined && isPublished);
+    if (!displayDraftNotation) {
       return ` - ${intl.get('assignment list.Draft')}`;
     }
 
@@ -365,7 +366,7 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
   }
 
   public onAssignmentClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    const { id, onClick, view } = this.props;
+    const { id, onClick, assignment, view } = this.props;
     event.preventDefault();
     if (onClick) {
       onClick(id!, view!);
