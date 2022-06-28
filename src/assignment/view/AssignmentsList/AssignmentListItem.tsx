@@ -211,6 +211,10 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
         const originList = assignment!.view === 'edit' ? myAssignmentsActions : foreignAllAssignmentsActions;
         return isContentManager ? allAssignmentsActionsContentManager : originList;
 
+      case '/assignments/myschool':
+        const originListSchool = assignment!.view === 'edit' ? myAssignmentsActions : foreignAllAssignmentsActions;
+        return isContentManager ? allAssignmentsActionsContentManager : originListSchool;
+
       case '/assignments/my':
         return isContentManager ? myAssignmentsActionsContentManager : myAssignmentsActions;
 
