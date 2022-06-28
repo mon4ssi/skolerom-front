@@ -88,7 +88,7 @@ export class Grade {
   @observable public name_sub?: string | null;
   @observable public managementId?: number | null;
 
-  constructor(id: number, title: string, managementId?:number | undefined | null) {
+  constructor(id: number, title: string, managementId?: number | undefined | null) {
     this.id = id;
     this.title = title;
     this.filterStatus = null;
@@ -100,9 +100,58 @@ export class Grade {
   }
 }
 
+export class GenericGrepItem {
+  @observable public id: number;
+  @observable public description: string;
+  @observable public gradeDesc?: string | undefined | null;
+
+  constructor(id: number, description: string, gradeDesc?: string) {
+    this.id = id;
+    this.description = description;
+    if (gradeDesc) {
+      this.gradeDesc = gradeDesc;
+    }
+  }
+}
+
+export class EducationalGoalItem {
+  @observable public id: number;
+  @observable public description: string;
+  @observable public gradeDesc: string | undefined | null;
+
+  constructor(id: number, description: string, gradeDesc: string) {
+    this.id = id;
+    this.description = description;
+    this.gradeDesc = gradeDesc;
+  }
+}
+
+export class SourceItem {
+  @observable public id: number;
+  @observable public description: string;
+
+  constructor(id: number, description: string) {
+    this.id = id;
+    this.description = description;
+  }
+}
+
+export class CoreElementItem {
+  @observable public id: number;
+  @observable public code: string;
+  @observable public description: string;
+
+  constructor(id: number, code: string, description: string) {
+    this.id = id;
+    this.code = code;
+    this.description = description;
+  }
+}
+
 export class NowSchool {
   @observable public id: number;
   @observable public name: string;
+
   constructor(id: number, name: string) {
     this.id = id;
     this.name = name;
@@ -115,7 +164,7 @@ export class Subject {
   @observable public filterStatus?: string | undefined | null;
   @observable public managementId?: number | undefined | null;
 
-  constructor(id: number, title: string, managementId?:number | undefined | null) {
+  constructor(id: number, title: string, managementId?: number | undefined | null) {
     this.id = id;
     this.title = title;
     this.filterStatus = null;
@@ -297,6 +346,13 @@ export class Assignment {
   @observable protected _sources: Array<number> = [];
   @observable protected _keywords: Array<number> = [];
   @observable protected _isPrivate: boolean = false;
+
+  @observable protected _sourceItems: Array<GenericGrepItem> = [];
+  @observable protected _coreElementItems: Array<GenericGrepItem> = [];
+  @observable protected _multiSubjectItems: Array<GenericGrepItem> = [];
+  @observable protected _goalsItems: Array<GenericGrepItem> = [];
+  @observable protected _subjectItems: Array<Subject> = [];
+
   @observable protected _isMySchool: boolean = false;
   @observable protected _mySchools: string | undefined = '';
   @observable protected _relatedArticles: Array<Article> = [];
@@ -360,7 +416,7 @@ export class Assignment {
     this._publishedAt = args.publishedAt || '';
     this._numberOfQuestions = args.numberOfQuestions || this._questions.length;
     this._isAnswered = args.isAnswered || false;
-    this._view = args.view;
+    this._view = args.view || 'edit';
     this._deadline = args.deadline;
     this._featuredImage = args.featuredImage;
     this._answerId = args.answerId;
@@ -530,6 +586,10 @@ export class Assignment {
   }
 
   @computed
+  public get ownedByMe() {
+    return this._ownedByMe;
+  }
+
   public get isMySchool() {
     return this._isMySchool;
   }
@@ -1165,7 +1225,7 @@ export interface ArticleRepo {
   getArticlesByIds(ids: Array<number>): Promise<Array<Article>>;
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
-  fetchCustomImages(ids:string, page: number): Promise<ResponseFetchCustomImages>;
+  fetchCustomImages(ids: string, page: number): Promise<ResponseFetchCustomImages>;
   createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse>;
   deleteCustomImage(imageId: number): Promise<any>;
   updateCustomImage(customImageId: number, formData: FormData): Promise<any>;

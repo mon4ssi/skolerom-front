@@ -1,4 +1,4 @@
-import { TEACHING_PATH_REPO, TeachingPathRepo } from './TeachingPath';
+import { TEACHING_PATH_REPO, TeachingPathRepo, TeachingPath } from './TeachingPath';
 import { injector } from '../Injector';
 import { Filter } from '../assignment/Assignment';
 
@@ -22,6 +22,10 @@ export class TeachingPathService {
 
   public async getStudentTeachingPathsList(filter: Filter) {
     return this.teachingPathRepo.getStudentTeachingPathsList(filter);
+  }
+
+  public async getTeachingPathDataById(id: number): Promise<TeachingPath> {
+    return this.teachingPathRepo.getTeachingPathDataById(id);
   }
 
   public async getTeachingPathById(id: number) {

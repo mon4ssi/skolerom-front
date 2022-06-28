@@ -16,6 +16,50 @@
     "Copy url": "Kopier URL",
     "not permission": "Du har dessverre ikkje tilgang til denne plattforma. Kontakt organisasjonen din for å få tilgang."
   },
+  "preview": {
+    "teaching_path": {
+      "headers": {
+        "no": "Ingen",
+        "questions": "spørsmål",
+        "articles": "artikler",
+        "by": "Av"
+      },
+      "grep": {
+        "subjects": "Fag",
+        "core_elements": "Kjerneelementer",
+        "multidisciplinary_subjects": "Tverrfaglig tema",
+        "sources": "Kilde",
+        "educational_goals": "Kompetansemål"
+      },
+      "buttons": {
+        "view": "Se læringsvei",
+        "teacher_guidance": "Lærerveiledning",
+        "edit": "Redigere",
+        "duplicate": "Kopi"
+      }
+    },
+    "assignment": {
+      "headers": {
+        "no": "Ingen",
+        "questions": "spørsmål",
+        "articles": "artikler",
+        "by": "Av"
+      },
+      "grep": {
+        "subjects": "Fag",
+        "core_elements": "Kjerneelementer",
+        "multidisciplinary_subjects": "Tverrfaglig tema",
+        "sources": "Kilde",
+        "educational_goals": "Kompetansemål"
+      },
+      "buttons": {
+        "view": "Se oppgave",
+        "teacher_guidance": "Lærerveiledning",
+        "edit": "Redigere",
+        "duplicate": "Kopi"
+      }
+    }
+  },
   "assignments_page": {
     "no_results": "No results found",
     "title": "Tittel",
@@ -604,6 +648,7 @@
     "validation": {
       "not_teaching_path_creator": "Læringsstien kan ikkje opnast."
     },
+    "Draft": "Kladd",
     "delete": "Slett læringsstien",
     "view": "Vis læringsstien",
     "edit": "Rediger læringsstien",
