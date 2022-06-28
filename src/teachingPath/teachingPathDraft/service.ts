@@ -1,8 +1,11 @@
+import { Keyword } from 'assignment/Assignment';
 import { injector } from 'Injector';
 
 import { DraftTeachingPath, DraftTeachingPathRepo, DRAFT_TEACHING_PATH_REPO } from './TeachingPathDraft';
 
 export const DRAFT_TEACHING_PATH_SERVICE = 'DRAFT_TEACHING_PATH_SERVICE';
+
+const TEMPORAL = 67933;
 
 export class DraftTeachingPathService {
 
@@ -13,6 +16,15 @@ export class DraftTeachingPathService {
   public async createTeachingPath() {
     this.draftTeachingPath = await this.draftTeachingPathRepo.createTeachingPath();
     return this.draftTeachingPath;
+  }
+
+  public async getKeywordsFromArticles(arrayWpIds: Array<number>): Promise<Array<Keyword>> {
+    const keywords = await this.draftTeachingPathRepo.getKeywordsFromArticles(arrayWpIds);
+    const entityKeywordsArray: Array<Keyword> = [];
+    keywords.forEach((item) => {
+      entityKeywordsArray.push(new Keyword(item));
+    });
+    return entityKeywordsArray;
   }
 
   public getDraftForeignTeachingPathById = (id: number) =>

@@ -28,6 +28,7 @@ import { firstLevel, secondLevel, studentLevels } from 'utils/constants';
 import './PublishingActions.scss';
 import { GreepElements } from 'assignment/factory';
 import { UserType } from 'user/User';
+import { TagKeywordInputComponent, TagKeywordProp } from 'components/common/TagInput/TagInputKeyword/TagInputKeyword';
 
 const MAGICNUMBER100 = 100;
 const MAGICNUMBER1 = 1;
@@ -48,7 +49,7 @@ interface State {
   valueCoreOptions: Array<number>;
   valueMultiOptions: Array<number>;
   valueSourceOptions: Array<number>;
-  valueKeywordsOptions: Array<number>;
+  valueKeywordsOptions: Array<string>;
   valuereadingOptions: Array<number>;
   valueGradesOptions: Array<number>;
   valueSubjectsOptions: Array<number>;
@@ -529,10 +530,8 @@ export class PublishingActions extends Component<Props, State> {
     default: source.default,
   })
 
-  public keywordToTagProp = (keyword: Keyword): TagPropKeyword => ({
-    id: keyword.id,
-    title: keyword.title,
-    default: keyword.default,
+  public keywordToTagProp = (keyword: Keyword): TagKeywordProp => ({
+    description: keyword.description,
   })
 
   public filterGrepGoals = async (coreoptions: Array<number>, multioptions: Array<number>, gradeoptions: Array<number>, subjectsoptions: Array<number>, goalsoptions: Array<string>) => {
@@ -890,11 +889,11 @@ export class PublishingActions extends Component<Props, State> {
     );
   }
 
-  public addKeyword = async (id: number) => {
+  public addKeyword = async (description: string) => {
     const { currentEntity } = this.props.store!;
     const { valueKeywordsOptions } = this.state;
     const ArrayValueKeywords = this.state.valueKeywordsOptions;
-    ArrayValueKeywords.push(id);
+    ArrayValueKeywords.push(description);
     const uniqueArray = ArrayValueKeywords.filter((item, pos) => (ArrayValueKeywords.indexOf(item) === pos));
     this.setState(
       {
@@ -907,17 +906,17 @@ export class PublishingActions extends Component<Props, State> {
 
   }
 
-  public removeKeyword = async (id: number) => {
+  public removeKeyword = async (description: string) => {
     const { currentEntity } = this.props.store!;
     const { valueKeywordsOptions } = this.state;
     const ArrayValueKeywords = this.state.valueKeywordsOptions;
-    const index = ArrayValueKeywords.indexOf(id);
+    const index = ArrayValueKeywords.indexOf(description);
 
     if (index > -1) {
       ArrayValueKeywords.splice(index, 1);
     }
 
-    if (!valueKeywordsOptions.includes(id)) {
+    if (!valueKeywordsOptions.includes(description)) {
       this.setState(
         {
           valueKeywordsOptions: ArrayValueKeywords
@@ -933,17 +932,17 @@ export class PublishingActions extends Component<Props, State> {
   public renderKeywordsInput = () => {
     const { store, from } = this.props;
     const keywords = store!.getAllKeywords().map(this.keywordToTagProp);
-    const selectedKeywords = this.grepNumbersToTagprop(store!.currentEntity!.getListOfKeywords(), keywords);
+    const selectedKeywords = this.grepNumbersToTagKeywordProp(store!.currentEntity!.getListOfKeywords(), keywords);
     /* console.log(selectedKeywords!); */
     const myplaceholder = (selectedKeywords.length > 0) ? '' : intl.get('publishing_page.keywords');
     return (
       <div>
-        <TagInputComponent
+        <TagKeywordInputComponent
           className="filterBy darkTheme"
           tags={keywords}
           addTag={this.addKeyword}
           currentTags={selectedKeywords}
-          orderbyid={false}
+          orderbydescription={false}
           removeTag={this.removeKeyword}
           placeholder={myplaceholder}
           listView
@@ -1264,6 +1263,26 @@ export class PublishingActions extends Component<Props, State> {
                 {
                   id: e.id,
                   title: e.title
+                }
+              );
+            }
+          }
+        }
+      });
+    }
+    return returnArray;
+  }
+
+  public grepNumbersToTagKeywordProp = (data: Array<string> | undefined, validArray: Array<TagKeywordProp>) => {
+    const returnArray: Array<TagKeywordProp> = [];
+    if (typeof (validArray) !== 'undefined') {
+      validArray.forEach((e) => {
+        if (data !== null) {
+          if (typeof (data) !== 'undefined') {
+            if (data!.includes(String(e.description))) {
+              returnArray.push(
+                {
+                  description: e.description
                 }
               );
             }

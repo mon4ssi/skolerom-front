@@ -20,10 +20,13 @@ import { GreepElements } from 'assignment/factory';
 
 export const DRAFT_TEACHING_PATH_REPO = 'DRAFT_TEACHING_PATH_REPO';
 
+const TEMPORAL = 67933;
+
 export interface DraftTeachingPathRepo {
   saveTeachingPath: (teachingPath: DraftTeachingPath) => Promise<string>;
   publishTeachingPath: (teachingPath: DraftTeachingPath) => Promise<void>;
   createTeachingPath: () => Promise<DraftTeachingPath>;
+  getKeywordsFromArticles: (arrayWpIds: Array<number>) => Promise<Array<string>>;
   getDraftTeachingPathById: (id: number) => Promise<DraftTeachingPath>;
   getDraftForeignTeachingPathById: (id: number) => Promise<{teachingPath: DraftTeachingPath, articles?: Array<Article>}>;
   deleteTeachingPath: (id: number) => Promise<void>;
@@ -364,6 +367,12 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
+  public getAllSelectedArticlesIds() {
+    /* console.log(this._numberOfArticles); */
+    return [TEMPORAL];
+  }
+
+  @action
   public setGuidance = (value: string) => {
     this._guidance = value;
     this.save();
@@ -431,7 +440,7 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
-  public setGrepKeywordsIds = (data: Array<number>) => {
+  public setGrepKeywordsIds = (data: Array<string>) => {
     this._keywords = data;
     this.save();
   }

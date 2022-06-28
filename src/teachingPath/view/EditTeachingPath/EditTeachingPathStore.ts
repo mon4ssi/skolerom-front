@@ -18,6 +18,8 @@ import { GreepElements } from 'assignment/factory';
 
 const error400 = 400;
 
+const TEMPORAL = 67933;
+
 export class EditTeachingPathStore {
 
   private draftTeachingPathService = injector.get<DraftTeachingPathService>(DRAFT_TEACHING_PATH_SERVICE);
@@ -438,8 +440,12 @@ export class EditTeachingPathStore {
     this.allSources = await this.assignmentService.getSources();
   }
 
-  public getKeywords() {
-    this.allKeywords = /* await this.assignmentService.getSources() */[{ id: 1, title: 'asdfadsfsd', default: true }, { id: 2, title: 'AAAAAAAAAA', default: false }];
+  public async getKeywords() {
+    /*
+    this.allKeywords =  await this.assignmentService.getSources() [{ description: 'asdfadsfsd' }, { description: 'GAAAAAAAAA' }, { description: 'Skolerom' }, { description: 'My keyword' }];
+    */
+    this.allKeywords = await this.draftTeachingPathService.getKeywordsFromArticles([TEMPORAL]);
+    return this.allKeywords;
   }
 
   public async getAssignmentById(id: number): Promise<Assignment> {

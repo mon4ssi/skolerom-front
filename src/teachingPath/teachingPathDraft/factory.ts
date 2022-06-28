@@ -65,6 +65,7 @@ export const buildDraftTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     grepReadingInSubjectsIds: dto.grepReadingInSubjectsIds,
     grepGoalsIds: dto.grepGoalsIds,
     sources: dto.sources,
+    keywords: dto.keywords,
     open: dto.open,
     schools: dto.schools
   });
@@ -239,5 +240,6 @@ export const buildTeachingPathRequestDTO = (teachingPath: DraftTeachingPath) => 
   grepReadingInSubjectsIds: teachingPath.grepReadingInSubjectsIds,
   grepGoalsIds: teachingPath.grepGoalsIds,
   sources: teachingPath.sources,
+  keywords: teachingPath.keywords,
   open: teachingPath.open
 });

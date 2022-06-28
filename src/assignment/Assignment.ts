@@ -185,14 +185,10 @@ export class Source {
 }
 
 export class Keyword {
-  @observable public id: number;
-  @observable public title: string;
-  @observable public default: boolean;
+  @observable public description: string;
 
-  constructor(id: number, title: string, defaults: boolean) {
-    this.id = id;
-    this.title = title;
-    this.default = defaults;
+  constructor(description: string) {
+    this.description = description;
   }
 }
 
@@ -285,7 +281,7 @@ export interface AssignmentArgs {
   grades?: Array<Grade>;
   subjects?: Array<Subject>;
   sources?: Array<number>;
-  keywords?: Array<number>;
+  keywords?: Array<string>;
 
   subjectItems?: Array<any>;
   sourceItems?: Array<any>;
@@ -344,7 +340,7 @@ export class Assignment {
   @observable protected _grades: Array<Grade> = [];
   @observable protected _subjects: Array<Subject> = [];
   @observable protected _sources: Array<number> = [];
-  @observable protected _keywords: Array<number> = [];
+  @observable protected _keywords: Array<string> = [];
   @observable protected _isPrivate: boolean = false;
 
   @observable protected _sourceItems: Array<GenericGrepItem> = [];

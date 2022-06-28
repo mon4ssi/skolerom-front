@@ -43,6 +43,7 @@ export interface DraftAssignmentRepo {
   saveAttachment(assignmentId: number, attachmentId: number): Promise<void>;
   removeAttachment(assignmentId: number, attachmentId: number): Promise<number>;
   getNewAssignment(): Promise<DraftAssignment>;
+  getKeywordsFromArticles(arrayWpIds: Array<number>): Promise<Array<string>>;
   getDraftAssignmentById(id: number): Promise<DraftAssignment>;
   saveDraftAssignment(draft: DraftAssignment): Promise<string>;
   publishAssignment(draft: DraftAssignment): Promise<void>;
@@ -104,6 +105,10 @@ export class DraftAssignment extends Assignment {
 
   public set grades(grades: Array<Grade>) {
     this._grades = grades;
+  }
+
+  public set keywords(keywords: Array<string>) {
+    this._keywords = keywords;
   }
 
   private validate(target: string) {
@@ -238,7 +243,7 @@ export class DraftAssignment extends Assignment {
   }
 
   @action
-  public setGrepKeywordsIds = (data: Array<number>) => {
+  public setGrepKeywordsIds = (data: Array<string>) => {
     this._keywords = data;
     this.save();
   }
@@ -293,6 +298,12 @@ export class DraftAssignment extends Assignment {
   @action
   public setFeaturedImage() {
     this._featuredImage = this.relatedArticles[0] && this.relatedArticles[0].images && this.relatedArticles[0].images.url;
+  }
+
+  @action
+  public getAllSelectedArticlesIds() {
+    /* console.log(this.relatedArticles); */
+    return this.relatedArticles;
   }
 
   @action
@@ -375,6 +386,25 @@ export class DraftAssignment extends Assignment {
   }
 
   @action
+  public async getKeywordsFromArticles(wpIds: Array<number>) {
+    // this.validateTitle();
+    const allWpIdsFromArticles = this.getAllSelectedArticlesIds().map(item => item.id);
+
+    try {
+      await this.repo.getKeywordsFromArticles(allWpIdsFromArticles);
+    } catch (error) {
+      if (error instanceof AlreadyEditingAssignmentError) {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('new assignment.already_editing')
+        });
+      } else {
+        /* console.error('Error while getting keywords:', error.message); */
+      }
+    }
+  }
+
+  @action
   public async saveAssignment() {
     // this.validateTitle();
     this.validateNumberOfQuestions();
@@ -450,6 +480,7 @@ export class DraftAssignment extends Assignment {
 
   @action
   public setArticle = async (article: Article) => {
+    /* console.log(`Setting ${article!.id}`); */
     const idItems: Array<number> = [];
     const idItemsSubejs: Array<number> = [];
     this._relatedArticles = this.relatedArticles.concat(article);

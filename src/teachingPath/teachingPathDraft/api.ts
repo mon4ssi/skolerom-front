@@ -49,6 +49,7 @@ export interface DraftTeachingPathResponseDTO {
   grepReadingInSubjectsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
   sources?: Array<number>;
+  keywords?: Array<string>;
   open?: boolean;
   schools?: Array<NowSchool>;
 }
@@ -159,6 +160,22 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
         throw new AlreadyEditingTeachingPathError();
       }
       throw error;
+    }
+  }
+
+  public async getKeywordsFromArticles(arrayWpIds: Array<number>): Promise<any> {
+    try {
+      return (await API.get(
+        'api/teacher/teaching-paths/getTags', {
+          params: {
+            articleIds: 67933,
+          }
+        })).data;
+    } catch (error) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: error.response.message
+      });
     }
   }
 

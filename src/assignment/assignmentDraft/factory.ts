@@ -44,6 +44,7 @@ export const buildDraftAssignment = (dto: DraftAssignmentResponseDTO): DraftAssi
     grepReadingInSubjectsIds:dto.grepReadingInSubjectsIds,
     grepGoalsIds:dto.grepGoalsIds,
     sources:dto.sources,
+    keywords: dto.keywords,
     guidance:dto.guidance,
     hasGuidance:dto.hasGuidance,
     open: dto.open,
@@ -217,5 +218,6 @@ export const buildDraftAssignmentDTO = (
   grepMainTopicsIds: draftAssignment.grepMainTopicsIds,
   grepReadingInSubjectsIds: draftAssignment.grepReadingInSubjectsIds,
   sources: draftAssignment.sources,
+  keywords: draftAssignment.keywords,
   open: draftAssignment._open
 });

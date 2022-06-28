@@ -541,7 +541,9 @@ export class NewAssignmentStore {
   }
 
   public async getKeywords() {
-    this.allKeywords = /* await this.assignmentService.getSources() */[{ id: 1, title: 'asdfadsfsd', default: false }, { id: 2, title: 'AAAAAAAAAA', default: false }];
+    this.allKeywords = /* await this.assignmentService.getSources() */ [{ description: 'asdfadsfsd' }, { description: 'GAAAAAAAAA' }, { description: 'Skolerom' }, { description: 'My keyword' }];
+    /* await this.draftAssignmentService.getKeywordsFromArticles([67933]); */
+    return this.allKeywords;
   }
 
   public getGoalsByArticle() {
