@@ -292,6 +292,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         goalsItems,
         description,
         author,
+        isPrivate,
         numberOfQuestions,
         hasGuidance,
         numberOfArticles,
@@ -355,7 +356,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
             {this.renderGrepCoreElements(coreElementItems)}
             {this.renderGrepMultiSubjects(multiSubjectItems)}
             {this.renderGrepSources(sourceItems)}
-            {this.renderGrepEducationalGoals(goalsItems)}
+            {!isPrivate && this.renderGrepEducationalGoals(goalsItems)}
 
           </div>
         </div >

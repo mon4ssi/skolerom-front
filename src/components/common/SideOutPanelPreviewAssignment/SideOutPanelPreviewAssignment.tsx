@@ -307,6 +307,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
         hasGuidance,
         isAnswered,
         isPublished,
+        isPrivate,
         createdAt,
       } = currentAssignment!;
     const { history, isPublishedCurrentAssignment, view } = this.props;
@@ -365,7 +366,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
             {this.renderGrepCoreElements(coreElementItems)}
             {this.renderGrepMultiSubjects(multiSubjectItems)}
             {this.renderGrepSources(sourceItems)}
-            {this.renderGrepEducationalGoals(goalsItems)}
+            {!isPrivate && this.renderGrepEducationalGoals(goalsItems)}
           </div>
         </div >
 
