@@ -32,10 +32,10 @@
         "educational_goals": "Kompetansemål"
       },
       "buttons": {
-        "view": "Se læringsvei",
-        "teacher_guidance": "Lærerveiledning",
-        "edit": "Redigere",
-        "duplicate": "Kopi"
+        "view": "Se læringssti",
+        "teacher_guidance": "Se lærerveiledning",
+        "edit": "Rediger",
+        "duplicate": "Kopier"
       }
     },
     "assignment": {
@@ -54,9 +54,9 @@
       },
       "buttons": {
         "view": "Se oppgave",
-        "teacher_guidance": "Lærerveiledning",
-        "edit": "Redigere",
-        "duplicate": "Kopi"
+        "teacher_guidance": "Se lærerveiledning",
+        "edit": "Rediger",
+        "duplicate": "Kopier"
       }
     }
   },
