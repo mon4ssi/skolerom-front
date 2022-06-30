@@ -16,6 +16,8 @@ export const buildNewTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     createdAt: dto.createdAt,
     updatedAt: dto.updatedAt,
     publishedAt: dto.publishedAt,
+    selectedArticlesIds: dto.selectedArticlesIds,
+    selectedAssignmentsIds: dto.selectedAssignmentsIds,
   });
 
   draftTeachingPath.setContent(
@@ -67,7 +69,9 @@ export const buildDraftTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     sources: dto.sources,
     keywords: dto.keywords,
     open: dto.open,
-    schools: dto.schools
+    schools: dto.schools,
+    selectedArticlesIds: dto.selectedArticlesIds,
+    selectedAssignmentsIds: dto.selectedAssignmentsIds,
   });
 
   draftTeachingPath.setContent(buildEditableNode(dto.content!, draftTeachingPath));

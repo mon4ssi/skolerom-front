@@ -18,13 +18,16 @@ export class DraftTeachingPathService {
     return this.draftTeachingPath;
   }
 
-  public async getKeywordsFromArticles(arrayWpIds: Array<number>): Promise<Array<Keyword>> {
-    const keywords = await this.draftTeachingPathRepo.getKeywordsFromArticles(arrayWpIds);
+  public async getKeywordsFromArticles(arrayArticlesIds: Array<number>, arrayAsignmentsIds: Array<number>): Promise<Array<Keyword>> {
+    const keywords = await this.draftTeachingPathRepo.getKeywordsFromArticles(arrayArticlesIds, arrayAsignmentsIds);
     const entityKeywordsArray: Array<Keyword> = [];
-    keywords.forEach((item) => {
+    /* if (keywords!) { */
+    keywords!.forEach((item) => {
       entityKeywordsArray.push(new Keyword(item));
     });
     return entityKeywordsArray;
+    /* }
+    return []; */
   }
 
   public getDraftForeignTeachingPathById = (id: number) =>

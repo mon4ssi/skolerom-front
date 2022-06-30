@@ -10,7 +10,8 @@ import {
   TeachingPathItemValue,
   TeachingPathRepo,
   TEACHING_PATH_REPO,
-  TeachingPathNodeArgs
+  TeachingPathNodeArgs,
+  TeachingPathNodeType
 } from 'teachingPath/TeachingPath';
 import { SAVE_DELAY } from 'utils/constants';
 import { Article, Grade, Subject } from 'assignment/Assignment';
@@ -26,9 +27,9 @@ export interface DraftTeachingPathRepo {
   saveTeachingPath: (teachingPath: DraftTeachingPath) => Promise<string>;
   publishTeachingPath: (teachingPath: DraftTeachingPath) => Promise<void>;
   createTeachingPath: () => Promise<DraftTeachingPath>;
-  getKeywordsFromArticles: (arrayWpIds: Array<number>) => Promise<Array<string>>;
+  getKeywordsFromArticles: (arrayArticlesIds: Array<number>, arrayAsignmentsIds: Array<number>) => Promise<Array<string>>;
   getDraftTeachingPathById: (id: number) => Promise<DraftTeachingPath>;
-  getDraftForeignTeachingPathById: (id: number) => Promise<{teachingPath: DraftTeachingPath, articles?: Array<Article>}>;
+  getDraftForeignTeachingPathById: (id: number) => Promise<{ teachingPath: DraftTeachingPath, articles?: Array<Article> }>;
   deleteTeachingPath: (id: number) => Promise<void>;
 }
 
@@ -38,6 +39,8 @@ interface DraftTeachingPathArgs extends TeachingPathArgs {
   updatedAt: string | null;
   publishedAt: string | null;
   parentNode?: EditableTeachingPathNode;
+  selectedAssignmentsIds: Array<number>;
+  selectedArticlesIds: Array<number>;
 }
 
 export class DraftTeachingPath extends TeachingPath {
@@ -49,10 +52,22 @@ export class DraftTeachingPath extends TeachingPath {
   @observable protected _createdAt: string;
   @observable protected _updatedAt: string;
   @observable protected _publishedAt: string;
+  @observable protected _selectedAssignmentsIds: Array<number>;
+  @observable protected _selectedArticlesIds: Array<number>;
 
   @computed
   public get uuid() {
     return this._uuid;
+  }
+
+  @computed
+  public get selectedAssignmentsIds() {
+    return this._selectedAssignmentsIds;
+  }
+
+  @computed
+  public get selectedArticlesIds() {
+    return this._selectedArticlesIds;
   }
 
   @computed
@@ -86,6 +101,8 @@ export class DraftTeachingPath extends TeachingPath {
     this._createdAt = args.createdAt || '';
     this._updatedAt = args.updatedAt || '';
     this._publishedAt = args.publishedAt || '';
+    this._selectedAssignmentsIds = args.selectedAssignmentsIds || [];
+    this._selectedArticlesIds = args.selectedArticlesIds || [];
   }
 
   private validate(target: string) {
@@ -156,10 +173,10 @@ export class DraftTeachingPath extends TeachingPath {
   private validateCopy() {
     if (
       this.isCopy && (
-      /Copy$/.test(this.title) ||
-      /Kopi$/.test(this.title) ||
-      /copy$/.test(this.title) ||
-      /kopi$/.test(this.title))
+        /Copy$/.test(this.title) ||
+        /Kopi$/.test(this.title) ||
+        /copy$/.test(this.title) ||
+        /kopi$/.test(this.title))
     ) {
       throw new TeachingPathValidationError('new assignment.copy_title_not_allow');
     }
@@ -176,9 +193,9 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   public anySubjects(butSubjects: Array<Subject>, node: EditableTeachingPathNode) {
-    let returnArray : Array<Subject> = butSubjects;
+    let returnArray: Array<Subject> = butSubjects;
     node!.items!.forEach((e) => {
-      if (typeof(e.value.subjects) !== 'undefined') {
+      if (typeof (e.value.subjects) !== 'undefined') {
         returnArray = returnArray!.concat(e.value.subjects!);
       }
     });
@@ -202,7 +219,7 @@ export class DraftTeachingPath extends TeachingPath {
         firstItemForList.forEach((element) => {
           myFirstSubjects = this.anySubjects(myFirstSubjects, element);
         });
-        if (typeof(myFirstSubjects) !== 'undefined') {
+        if (typeof (myFirstSubjects) !== 'undefined') {
           myFirstSubjects.forEach((e) => {
             idItems.push(e.id);
           });
@@ -228,9 +245,9 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   public anyGoals(butGoals: Array<GreepElements>, node: EditableTeachingPathNode) {
-    let returnArray : Array<GreepElements> = butGoals;
+    let returnArray: Array<GreepElements> = butGoals;
     node!.items!.forEach((e) => {
-      if (typeof(e.value.grepGoals) !== 'undefined') {
+      if (typeof (e.value.grepGoals) !== 'undefined') {
         returnArray = returnArray!.concat(e.value.grepGoals!);
       }
     });
@@ -252,7 +269,7 @@ export class DraftTeachingPath extends TeachingPath {
       firstItemForList.forEach((element) => {
         myFirstGoals = this.anyGoals(myFirstGoals, element);
       });
-      if (typeof(myFirstGoals) !== 'undefined') {
+      if (typeof (myFirstGoals) !== 'undefined') {
         this._grepGoals!.splice(0, this._grepGoals!.length);
         myFirstGoals!.forEach((e) => {
           this._grepGoals!.push(e);
@@ -262,9 +279,11 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   public anyGrades(butGrades: Array<Grade>, node: EditableTeachingPathNode) {
-    let returnArray : Array<Grade> = butGrades;
+    /* console.log("any grades");
+    console.log(node!) */
+    let returnArray: Array<Grade> = butGrades;
     node!.items!.forEach((e) => {
-      if (typeof(e.value.grades) !== 'undefined') {
+      if (typeof (e.value.grades) !== 'undefined') {
         returnArray = returnArray!.concat(e.value.grades!);
       }
     });
@@ -288,7 +307,7 @@ export class DraftTeachingPath extends TeachingPath {
         firstItemForList.forEach((element) => {
           myFirstGrades = this.anyGrades(myFirstGrades, element);
         });
-        if (typeof(myFirstGrades) !== 'undefined') {
+        if (typeof (myFirstGrades) !== 'undefined') {
           myFirstGrades.forEach((e) => {
             idItems.push(e.id);
           });
@@ -302,6 +321,84 @@ export class DraftTeachingPath extends TeachingPath {
     }
   }
 
+  public anyArticlesIds(butIds: Array<number>, node: EditableTeachingPathNode) {
+    const items: TeachingPathItem = node!.getItems(node!)![0];
+    let returnArray: Array<number> = butIds;
+    node!.items!.forEach((e) => {
+      if (items.type === TeachingPathNodeType.Article) {
+        returnArray = returnArray!.concat(e.value.id!);
+      }
+    });
+    if (node!.children!.length > 0) {
+      node!.children!.forEach((element) => {
+        returnArray = this.anyArticlesIds(returnArray, element);
+      });
+    }
+    returnArray = returnArray!.filter((v, i, a) => a.findIndex(t => (t === v)) === i);
+    return returnArray;
+  }
+
+  public anyAssignmentIds(butIds: Array<number>, node: EditableTeachingPathNode) {
+    const items: TeachingPathItem = node!.getItems(node!)![0];
+    let returnArrayAssignments: Array<number> = butIds;
+    node!.items!.forEach((e) => {
+      if (items.type === TeachingPathNodeType.Assignment) {
+        returnArrayAssignments = returnArrayAssignments!.concat(e.value.id!);
+      }
+    });
+    if (node!.children!.length > 0) {
+      node!.children!.forEach((element) => {
+        returnArrayAssignments = this.anyAssignmentIds(returnArrayAssignments, element);
+      });
+    }
+    returnArrayAssignments = returnArrayAssignments!.filter((v, i, a) => a.findIndex(t => (t === v)) === i);
+    return returnArrayAssignments;
+  }
+
+  @action
+  public addArticlesIdsBySave = async () => {
+    /* console.log("add ids"); */
+    let myFirstIds: Array<number> = [];
+    const myFirstAssignmentsIds: Array<number> = [];
+    const idItems: Array<number> = [];
+    const idAssignmentItems: Array<number> = [];
+    const firstItems = this.content;
+    if (firstItems.children.length > 0) {
+      const firstItemForList = firstItems.children;
+      firstItemForList.forEach((element) => {
+        myFirstIds = this.anyArticlesIds(myFirstIds, element);
+      });
+      if (typeof (myFirstIds) !== 'undefined') {
+        myFirstIds.forEach((e) => {
+          idItems.push(e);
+        });
+      }
+    }
+    return idItems;
+  }
+
+  @action
+  public addAssignmentsIdsBySave = async () => {
+    /* console.log("add ids"); */
+    let myFirstAssignmentsIds: Array<number> = [];
+    const idAssignmentItems: Array<number> = [];
+    const firstItems = this.content;
+    if (firstItems.children.length > 0) {
+      const firstItemForList = firstItems.children;
+      firstItemForList.forEach((element) => {
+        myFirstAssignmentsIds = this.anyAssignmentIds(myFirstAssignmentsIds, element);
+      });
+      if (typeof (myFirstAssignmentsIds) !== 'undefined') {
+        myFirstAssignmentsIds.forEach((e) => {
+          idAssignmentItems.push(e);
+        });
+      }
+      /* this._selectedAssignmentsIds = idAssignmentItems; */
+
+    }
+    return idAssignmentItems;
+  }
+
   @action
   public async save() {
     if (!this.isSavingRunning) {
@@ -310,7 +407,9 @@ export class DraftTeachingPath extends TeachingPath {
         async () => {
           this.isDraftSaving = true;
           try {
-            if (this.isPublishing) return;
+            if (this.isPublishing) {
+              return;
+            }
             if (!this.isRunningPublishing) {
               this.addGradesBySave();
               this.addSubjectBySave();
@@ -367,9 +466,17 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
-  public getAllSelectedArticlesIds() {
+  public async getAllSelectedArticlesIds() {
     /* console.log(this._numberOfArticles); */
-    return [TEMPORAL];
+    const articlesIds = await this.addArticlesIdsBySave();
+    return articlesIds;
+  }
+
+  @action
+  public async getAllSelectedAssignmentsIds() {
+    /* console.log(this._numberOfArticles); */
+    const assignmentIds = await this.addAssignmentsIdsBySave();
+    return assignmentIds;
   }
 
   @action
@@ -632,6 +739,9 @@ export class EditableTeachingPathNode extends TeachingPathNode {
   }
 
   @action
+  public getItems = (node: EditableTeachingPathNode) => node!._items
+
+  @action
   public setChildren = (children: Array<EditableTeachingPathNode>) => {
     this._children = children;
     this.draftTeachingPath.save();
@@ -712,7 +822,7 @@ export class TeachingPathValidationError extends Error {
   }
 }
 
-export class AlreadyEditingTeachingPathError extends Error {}
+export class AlreadyEditingTeachingPathError extends Error { }
 
 export interface BreadcrumbsArgs {
   id: number;

@@ -144,9 +144,9 @@ export class PublishingActions extends Component<Props, State> {
       if (!store!.getAllSources().length) {
         store!.getSources();
       }
-      if (!store!.getAllKeywords().length) {
-        store!.getKeywords();
-      }
+      /* if (!store!.getAllKeywords().length) { */
+      store!.getKeywords();
+      /* } */
       if (typeof (store!.currentEntity!.getListOfGoals()) !== 'undefined') {
         listGoals = this.transformDataToString(store!.currentEntity!.getListOfGoals()!);
       }
@@ -161,9 +161,9 @@ export class PublishingActions extends Component<Props, State> {
       if (!store!.getAllSources().length) {
         store!.getSources();
       }
-      if (!store!.getAllKeywords().length) {
-        store!.getKeywords();
-      }
+      /* if (!store!.getAllKeywords().length) { */
+      store!.getKeywords();
+      /* } */
       if (typeof (store!.getGoalsByArticle()) !== 'undefined') {
         listGoals = store!.getGoalsByArticle().split(',');
       }
@@ -931,15 +931,18 @@ export class PublishingActions extends Component<Props, State> {
 
   public renderKeywordsInput = () => {
     const { store, from } = this.props;
+    const { valueKeywordsOptions } = this.state;
     const keywords = store!.getAllKeywords().map(this.keywordToTagProp);
-    const selectedKeywords = this.grepNumbersToTagKeywordProp(store!.currentEntity!.getListOfKeywords(), keywords);
-    /* console.log(selectedKeywords!); */
+    const selected = valueKeywordsOptions!.map(item => new Keyword(item)).map(this.keywordToTagProp);
+    const selectedKeywords = this.grepNumbersToTagKeywordProp(store!.currentEntity!.getListOfKeywords(), keywords).length > 0 ?
+      this.grepNumbersToTagKeywordProp(store!.currentEntity!.getListOfKeywords(), keywords) : selected!;
+    const listAndSelectedKeywords = [...keywords!, ...selected!].filter((v, i, a) => a.findIndex(v2 => (v2.description === v.description)) === i);
     const myplaceholder = (selectedKeywords.length > 0) ? '' : intl.get('publishing_page.keywords');
     return (
       <div>
         <TagKeywordInputComponent
           className="filterBy darkTheme"
-          tags={keywords}
+          tags={listAndSelectedKeywords}
           addTag={this.addKeyword}
           currentTags={selectedKeywords}
           orderbydescription={false}

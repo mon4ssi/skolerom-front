@@ -99,11 +99,12 @@ export class DraftAssignmentApi implements DraftAssignmentRepo {
   }
 
   public async getKeywordsFromArticles(arrayWpIds: Array<number>): Promise<any> {
+    const idsString = arrayWpIds.toString();
     try {
       return (await API.get(
         'api/teacher/assignments/getTags', {
           params: {
-            articleIds: arrayWpIds,
+            articleIds: idsString,
           }
         })).data;
     } catch (error) {

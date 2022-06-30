@@ -52,6 +52,8 @@ export interface DraftTeachingPathResponseDTO {
   keywords?: Array<string>;
   open?: boolean;
   schools?: Array<NowSchool>;
+  selectedArticlesIds: Array<number>;
+  selectedAssignmentsIds: Array<number>;
 }
 
 export interface TeachingPathItemRequestDTO {
@@ -163,12 +165,15 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
     }
   }
 
-  public async getKeywordsFromArticles(arrayWpIds: Array<number>): Promise<any> {
+  public async getKeywordsFromArticles(arrayArticlesIds: Array<number>, arrayAssignmentsIds: Array<number>): Promise<any> {
+    const idsArticlesString = arrayArticlesIds.toString();
+    const idsAssignmentsString = arrayAssignmentsIds.toString();
     try {
       return (await API.get(
         'api/teacher/teaching-paths/getTags', {
           params: {
-            articleIds: 67933,
+            articleIds: idsArticlesString,
+            assigIds: idsAssignmentsString,
           }
         })).data;
     } catch (error) {

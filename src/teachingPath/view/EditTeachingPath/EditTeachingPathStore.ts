@@ -444,7 +444,9 @@ export class EditTeachingPathStore {
     /*
     this.allKeywords =  await this.assignmentService.getSources() [{ description: 'asdfadsfsd' }, { description: 'GAAAAAAAAA' }, { description: 'Skolerom' }, { description: 'My keyword' }];
     */
-    this.allKeywords = await this.draftTeachingPathService.getKeywordsFromArticles([TEMPORAL]);
+    const selectedArticlesIds = await this.currentEntity!.getAllSelectedArticlesIds();
+    const selectedAssignmentIds = await this.currentEntity!.getAllSelectedAssignmentsIds();
+    this.allKeywords = await this.draftTeachingPathService.getKeywordsFromArticles(selectedArticlesIds, selectedAssignmentIds);
     return this.allKeywords;
   }
 

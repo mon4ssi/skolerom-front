@@ -408,7 +408,6 @@ export class DraftAssignment extends Assignment {
   public async saveAssignment() {
     // this.validateTitle();
     this.validateNumberOfQuestions();
-
     this.questions.forEach(question => question.validate());
 
     try {
