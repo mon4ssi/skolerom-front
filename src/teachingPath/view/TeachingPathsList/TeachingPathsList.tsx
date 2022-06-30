@@ -1035,6 +1035,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
           onClickMainButton={this.createTeachingPath}
           tabNavigationLinks={(currentUserType === UserType.ContentManager) ? this.tabNavigationLinksCM : this.tabNavigationLinks}
           sourceTranslation={'teaching_path_tabs'}
+          statusButtons={this.props.teachingPathsListStore!.teachingPathsState}
         />
       );
     }

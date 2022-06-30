@@ -20,7 +20,7 @@ import { AssignmentListStore } from './AssignmentsList/AssignmentListStore';
 import { UserType } from 'user/User';
 import { Page404 } from 'components/pages/Page404/Page404';
 
-import { BooleanFilter, SortingFilter, QueryStringKeys } from 'utils/enums';
+import { BooleanFilter, SortingFilter, QueryStringKeys, StoreState } from 'utils/enums';
 import * as QueryStringHelper from 'utils/QueryStringHelper';
 import { lettersNoEn } from 'utils/lettersNoEn';
 import { Pagination } from '../../components/common/Pagination/Pagination';
@@ -926,7 +926,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
   }
 
   public async componentDidMount() {
-    const { newAssignmentStore } = this.props;
+    const { newAssignmentStore, assignmentListStore } = this.props;
     const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions } = this.state;
     this.fetchTeachingPaths();
     if (!this.props.isStudent) {
@@ -1015,6 +1015,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
           onClickMainButton={this.createAssignment}
           tabNavigationLinks={(currentUserRole === UserType.ContentManager) ? this.tabNavigationLinksCm : this.tabNavigationLinks}
           sourceTranslation={'assignments_tabs'}
+          statusButtons={this.props.assignmentListStore!.assignmentsState}
         />
       );
     }
