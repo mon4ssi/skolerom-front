@@ -34,6 +34,7 @@ import { Notification, NotificationTypes } from '../Notification/Notification';
 
 import './SideOutPanelPreviewAssignment.scss';
 import { AssignmentService, ASSIGNMENT_SERVICE } from 'assignment/service';
+import { UserService } from 'user/UserService';
 
 interface Props extends RouteComponentProps {
   view?: string;
@@ -47,11 +48,12 @@ interface SideOutPanelPreviewState {
   isSuperCMCurrentUser: boolean;
 }
 
-export const USER_SERVICE = 'ASSIGNMENT_SERVICE';
+export const USER_SERVICE = 'USER_SERVICE';
 
 @observer
 class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComponentProps, SideOutPanelPreviewState> {
   private assignmentService: AssignmentService = injector.get(ASSIGNMENT_SERVICE);
+  private userService: UserService = injector.get<UserService>(USER_SERVICE);
 
   public state = {
     currentAssignment: undefined,
@@ -287,6 +289,14 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     </>
   )
 
+  public renderPublishDate = (createdAt: string) =>
+  (
+    <div className="partsInfo">
+      <img src={date} alt="date" />
+      {`${moment(createdAt).format(deadlineDateFormat)}`}
+    </div>
+  )
+
   public render() {
     const { currentAssignment } = this.props.store!;
     const { isSuperCMCurrentUser } = this.state;
@@ -310,7 +320,8 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
         isPrivate,
         createdAt,
       } = currentAssignment!;
-    const { history, isPublishedCurrentAssignment, view } = this.props;
+    const { history, isPublishedCurrentAssignment, view, store } = this.props;
+    const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager;
     const viewText = intl.get('preview.assignment.buttons.view');
     const guidanceText = intl.get('preview.assignment.buttons.teacher_guidance');
     const editText = intl.get('preview.assignment.buttons.edit');
@@ -348,10 +359,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
               <img src={person} alt="question" />
               {`${intl.get('preview.assignment.headers.by')}`} {author ? author : ''}
             </div>
-            <div className="partsInfo">
-              <img src={date} alt="date" />
-              {`${moment(createdAt).format(deadlineDateFormat)}`}
-            </div>
+            {showPublishDate && this.renderPublishDate(createdAt)}
           </div>
           <div className="entityDescription">
 
@@ -373,7 +381,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
         <div className="footerButtons">
           {isPublishedCurrentAssignment && (true || view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentAssignment!, history, id, viewText)}
           {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
-          {(view === 'edit' || publishedAt)  && this.renderEditButton(editText, history, id)}
+          {(view === 'edit' || publishedAt) && this.renderEditButton(editText, history, id)}
           {(isPublishedCurrentAssignment!) && this.renderDuplicateButton(duplicateText)}
 
         </div>
