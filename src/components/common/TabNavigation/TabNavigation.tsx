@@ -6,6 +6,7 @@ import { inject, observer } from 'mobx-react';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 import { UserType } from 'user/User';
 import { LoginStore } from 'user/view/LoginStore';
+import { StoreState } from 'utils/enums';
 
 import './TabNavigation.scss';
 import classNames from 'classnames';
@@ -21,6 +22,7 @@ interface Props extends RouteComponentProps {
   tabNavigationLinks: Array<TabNavigationLink>;
   textMainButton?: string;
   sourceTranslation: string;
+  statusButtons?: StoreState;
   onClickMainButton?(): void;
 }
 
@@ -62,10 +64,10 @@ class TabNavigationComponent extends Component<Props> {
   public hasButton = () => this.props.loginStore!.currentUser!.type !== UserType.Student && this.props.textMainButton;
 
   public render() {
-    const { tabNavigationLinks } = this.props;
-
+    const { tabNavigationLinks, statusButtons } = this.props;
     const classes = classNames('TabNavigation flexBox spaceBetween alignCenter', {
       TabNavigation_noMargin: !this.hasButton(),
+      detectInto: (statusButtons) ? 1 : 0
     });
 
     return (
