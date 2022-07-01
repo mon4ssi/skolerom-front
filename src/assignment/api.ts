@@ -37,6 +37,7 @@ import { ContentBlockType } from './ContentBlock';
 import { Locales } from 'utils/enums';
 import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
 import { CustomImageAttachments } from './view/NewAssignment/AttachmentsList/Attachments/CustomImageAttachments';
+import isNil from 'lodash/isNil';
 
 export interface AttachmentDTO {
   id: number;
@@ -283,6 +284,7 @@ export class AssignmentApi implements AssignmentRepo {
   }
 
   public async getMyAssignmentsList(filter: Filter) {
+    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
     const response = await API.get('api/teacher/assignments/draft', {
       params: buildFilterDTO(filter)
     });
@@ -295,6 +297,7 @@ export class AssignmentApi implements AssignmentRepo {
 
   public async getAllAssignmentsList(filter: Filter) {
     try {
+      if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
       const response = await API.get('api/teacher/assignments', {
         params: buildFilterDTO(filter)
       });
@@ -313,6 +316,7 @@ export class AssignmentApi implements AssignmentRepo {
 
   public async getAllSchoolAssignmentsList(filter: Filter) {
     try {
+      if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
       const response = await API.get('api/teacher/assignments', {
         params: buildFilterDTO(filter)
       });
@@ -343,6 +347,7 @@ export class AssignmentApi implements AssignmentRepo {
 
   public async getStudentAssignmentList(filter: Filter) {
     try {
+      if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
       const response = await API.get('api/student/assignments', {
         params: buildFilterDTO(filter)
       });
@@ -360,6 +365,7 @@ export class AssignmentApi implements AssignmentRepo {
 
   public async getAssignmentListOfStudentInList(studentId: number, filter: Filter) {
     try {
+      if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
       const response = await API.get('api/teacher/students/assignments', {
         params: {
           studentId,
@@ -383,6 +389,7 @@ export class AssignmentApi implements AssignmentRepo {
     distributes: Array<AssignmentDistribute>,
     total_pages: number;
   }> {
+    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
     const response = (await API.get('api/teacher/assignments/distributes', { params: filter })).data;
 
     return {

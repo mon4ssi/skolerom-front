@@ -42,7 +42,7 @@ const headerLinks: Array<HeaderNavigationLink> = [
       {
         name: 'School Articles',
         url: `${process.env.REACT_APP_WP_URL}/undervisning/`,
-      },
+      }/* ,
       {
         name: 'Publications',
         url: `${process.env.REACT_APP_WP_URL}/temaboker/`
@@ -54,7 +54,7 @@ const headerLinks: Array<HeaderNavigationLink> = [
       {
         name: 'Sound articles',
         url: `${process.env.REACT_APP_WP_URL}/lydartikler/`
-      }
+      }*/
     ]
   },
   {
@@ -65,6 +65,21 @@ const headerLinks: Array<HeaderNavigationLink> = [
       {
         name: 'For foresatte',
         url: `${process.env.REACT_APP_WP_URL}/for-foresatte/`
+      },
+      {
+        name: 'For Larere',
+        url: '#',
+        dropdown: true,
+        submenuItems: [
+          {
+            name: 'Lesereisen',
+            url: `${process.env.REACT_APP_WP_URL}/lesereisen-2022/`
+          },
+          {
+            name: 'Arshjul',
+            url: `${process.env.REACT_APP_WP_URL}/arshjul/`
+          }
+        ]
       }
     ]
   }
@@ -575,10 +590,12 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       <>
         <ul className="AppHeader__navigation">
           {linksList.map(renderHeaderLink)}
+          {this.renderQuestionTab()}
           {this.renderItemsNotLogin()}
         </ul>
         <ul className="AppHeader__navigation AppHeader__navigation_tablet">
           {tabletLinksList.map(renderHeaderLink)}
+          {this.renderQuestionTab()}
           {this.renderItemsNotLogin()}
         </ul>
       </>
