@@ -321,7 +321,8 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
         createdAt,
       } = currentAssignment!;
     const { history, isPublishedCurrentAssignment, view, store } = this.props;
-    const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager;
+    /* const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager; */
+    const showPublishDate = false;
     const viewText = intl.get('preview.assignment.buttons.view');
     const guidanceText = intl.get('preview.assignment.buttons.teacher_guidance');
     const editText = intl.get('preview.assignment.buttons.edit');
