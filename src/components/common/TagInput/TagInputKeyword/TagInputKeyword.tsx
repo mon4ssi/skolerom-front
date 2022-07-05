@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import intl from 'react-intl-universal';
 import onClickOutside from 'react-onclickoutside';
 
-import { Grade, ImageArticle, ArticleLevel } from 'assignment/Assignment';
+import { Grade, ImageArticle, ArticleLevel, Keyword } from 'assignment/Assignment';
 import { sortByAlphabet } from 'utils/sortByAlphabet';
 import { lettersNoEn } from 'utils/lettersNoEn';
 
@@ -11,10 +11,14 @@ import closeCross from 'assets/images/close-rounded-black.svg';
 import closeCrossLight from 'assets/images/close-cross.svg';
 
 import './TagInputKeyword.scss';
+import { TagKeyword } from './TagKeyword';
+import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
+import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
 
 const sixArticles = 6;
 const scrollDelay = 200;
 const timeoutlint = 4500;
+const ENTER_KEYCODE = 13;
 
 export interface TagKeywordProp {
   description: string;
@@ -33,6 +37,7 @@ interface Props {
   orderbydescription: boolean;
   noOpenOnFocus?: boolean;
   temporaryTagsArray?: boolean;
+  store?: NewAssignmentStore | EditTeachingPathStore;
 }
 
 interface State {
@@ -42,6 +47,8 @@ interface State {
   temporaryFoundedTagsArray: Array<TagKeywordProp>;
   temporaryLoadedFoundedTagsArray: Array<TagKeywordProp>;
   isTagInputChanged: boolean;
+  newInputValue: string;
+  isAddingNewTag: boolean;
 }
 
 const TagsKeywordsFound = lazy(() => import('./TagsKeywordsFound'));
@@ -55,7 +62,9 @@ class TagKeywordInputWrapper extends Component<Props, State> {
     temporaryTagsArray: [],
     temporaryFoundedTagsArray: [],
     temporaryLoadedFoundedTagsArray: [],
-    isTagInputChanged: false
+    isTagInputChanged: false,
+    newInputValue: '',
+    isAddingNewTag: false,
   };
 
   private onSelectTag = (description: string): void => {
@@ -127,9 +136,33 @@ class TagKeywordInputWrapper extends Component<Props, State> {
     }, scrollDelay);
   }
 
+  public handleKeyPressed = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.keyCode === ENTER_KEYCODE) {
+      this.setState({ isAddingNewTag: true });
+      this.props.currentTags.push(new Keyword(e.currentTarget.value.trim()));
+      this.props.store!.allKeywords.push(new Keyword(e.currentTarget.value.trim()));
+      /* this.props.store!.ke */
+      this.props.tags.push(new Keyword(e.currentTarget.value.trim()));
+      if (this.props.addTag) {
+        this.props.addTag(e.currentTarget.value.trim());
+      }
+      this.setState({ isAddingNewTag: false });
+      e.currentTarget.value = '';
+    }
+  }
+
   public handleChangeTagInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (lettersNoEn(e.target.value)) {
       const result = this.props.tags.filter(tag => tag.description.toLowerCase().startsWith(e.target.value));
+      /* if (result!.length === 0 && this.state.isAddingNewTag!) {
+        this.props.currentTags.push(new Keyword(e.target.value.trim()));
+        this.props.tags.push(new Keyword(e.target.value.trim()));
+        if (this.props.addTag) {
+          this.props.addTag(e.target.value.trim());
+        }
+        this.setState({ isAddingNewTag: false });
+        e.target.value = '';
+      } */
       this.setState(
         {
           tagInput: e.target.value,
@@ -220,6 +253,7 @@ class TagKeywordInputWrapper extends Component<Props, State> {
           autoFocus={autoFocus}
           value={tagInput}
           style={{ width: 110, flex: 1 }}
+          onKeyUp={this.handleKeyPressed}
           onChange={this.handleChangeTagInput}
           ref={node => (this.tagInput = node)}
           aria-labelledby={dataid}

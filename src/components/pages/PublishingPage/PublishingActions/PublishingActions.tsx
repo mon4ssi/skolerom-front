@@ -932,16 +932,17 @@ export class PublishingActions extends Component<Props, State> {
   public renderKeywordsInput = () => {
     const { store, from } = this.props;
     const { valueKeywordsOptions } = this.state;
-    const keywords = store!.getAllKeywords().map(this.keywordToTagProp);
     const selected = valueKeywordsOptions!.map(item => new Keyword(item)).map(this.keywordToTagProp);
+    const keywords = [...store!.getAllKeywords().map(this.keywordToTagProp), ...selected];
     const selectedKeywords = this.grepNumbersToTagKeywordProp(store!.currentEntity!.getListOfKeywords(), keywords).length > 0 ?
-      this.grepNumbersToTagKeywordProp(store!.currentEntity!.getListOfKeywords(), keywords) : selected!;
+      this.grepNumbersToTagKeywordProp(store!.currentEntity!.getListOfKeywords(), keywords).filter((v, i, a) => a.findIndex(v2 => (v2.description === v.description)) === i) : selected!;
     const listAndSelectedKeywords = [...keywords!, ...selected!].filter((v, i, a) => a.findIndex(v2 => (v2.description === v.description)) === i);
     const myplaceholder = (selectedKeywords.length > 0) ? '' : intl.get('publishing_page.keywords');
     return (
       <div>
         <TagKeywordInputComponent
           className="filterBy darkTheme"
+          store={store}
           tags={listAndSelectedKeywords}
           addTag={this.addKeyword}
           currentTags={selectedKeywords}
@@ -1954,8 +1955,8 @@ export class PublishingActions extends Component<Props, State> {
             <div className="infoContainer__filters">
               {this.renderGradeInput()}
               {this.renderSubjectInput()}
-              {!this.state.isValidPrivate && this.renderCoreElements()}
-              {!this.state.isValidPrivate && this.renderMultiDisciplinary()}
+              {false && !this.state.isValidPrivate && this.renderCoreElements()}
+              {false && !this.state.isValidPrivate && this.renderMultiDisciplinary()}
               {!this.state.isValidPrivate && this.renderReadingInSubject()}
             </div>
             {!this.state.isValidPrivate && this.renderGoals()}

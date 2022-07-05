@@ -21,13 +21,13 @@ export class DraftTeachingPathService {
   public async getKeywordsFromArticles(arrayArticlesIds: Array<number>, arrayAsignmentsIds: Array<number>): Promise<Array<Keyword>> {
     const keywords = await this.draftTeachingPathRepo.getKeywordsFromArticles(arrayArticlesIds, arrayAsignmentsIds);
     const entityKeywordsArray: Array<Keyword> = [];
-    /* if (keywords!) { */
-    keywords!.forEach((item) => {
-      entityKeywordsArray.push(new Keyword(item));
-    });
-    return entityKeywordsArray;
-    /* }
-    return []; */
+    if (keywords!) {
+      keywords!.forEach((item) => {
+        entityKeywordsArray.push(new Keyword(item));
+      });
+      return entityKeywordsArray;
+    }
+    return [];
   }
 
   public getDraftForeignTeachingPathById = (id: number) =>
