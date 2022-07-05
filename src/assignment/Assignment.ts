@@ -184,6 +184,14 @@ export class Source {
   }
 }
 
+export class Keyword {
+  @observable public description: string;
+
+  constructor(description: string) {
+    this.description = description;
+  }
+}
+
 export class GreepSelectValue {
   @observable public value: number | string | null;
   @observable public label: string;
@@ -273,6 +281,7 @@ export interface AssignmentArgs {
   grades?: Array<Grade>;
   subjects?: Array<Subject>;
   sources?: Array<number>;
+  keywords?: Array<string>;
 
   subjectItems?: Array<any>;
   sourceItems?: Array<any>;
@@ -331,6 +340,7 @@ export class Assignment {
   @observable protected _grades: Array<Grade> = [];
   @observable protected _subjects: Array<Subject> = [];
   @observable protected _sources: Array<number> = [];
+  @observable protected _keywords: Array<string> = [];
   @observable protected _isPrivate: boolean = false;
 
   @observable protected _sourceItems: Array<GenericGrepItem> = [];
@@ -385,6 +395,7 @@ export class Assignment {
     this._grades = args.grades || [];
     this._subjects = args.subjects || [];
     this._sources = args.sources || [];
+    this._keywords = args.keywords || [];
 
     this._sourceItems = args.sourceItems || [];
     this._coreElementItems = args.coreElementItems || [];
@@ -536,6 +547,11 @@ export class Assignment {
   }
 
   @computed
+  public get keywords() {
+    return this._keywords;
+  }
+
+  @computed
   public get sourceItems() {
     return this._sourceItems;
   }
@@ -659,6 +675,10 @@ export class Assignment {
 
   public getListOfSources() {
     return toJS(this._sources);
+  }
+
+  public getListOfKeywords() {
+    return toJS(this._keywords);
   }
 
   public getListOfGrades() {

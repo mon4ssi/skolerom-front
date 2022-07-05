@@ -24,6 +24,7 @@ export interface NewDraftAssignmentResponseDTO {
   uuid: string;
   assignmentContent: string;
   isCopy: boolean;
+  keywords?: Array<string>;
   grepCoreElementsIds?: Array<number>;
   grepMainTopicsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
@@ -51,6 +52,7 @@ export interface DraftAssignmentRequestDTO {
   levels: Array<number>;
   isPublished?: boolean;
   isCopy?: boolean;
+  keywords?: Array<string>;
   grepCoreElementsIds?: Array<number>;
   grepMainTopicsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
@@ -93,6 +95,23 @@ export class DraftAssignmentApi implements DraftAssignmentRepo {
       }
 
       throw error;
+    }
+  }
+
+  public async getKeywordsFromArticles(arrayWpIds: Array<number>): Promise<any> {
+    const idsString = arrayWpIds.toString();
+    try {
+      return (await API.get(
+        'api/teacher/assignments/getTags', {
+          params: {
+            articleIds: idsString,
+          }
+        })).data;
+    } catch (error) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: error.response.message
+      });
     }
   }
 

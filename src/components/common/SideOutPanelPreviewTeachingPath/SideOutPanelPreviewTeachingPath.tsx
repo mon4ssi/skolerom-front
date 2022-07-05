@@ -33,6 +33,7 @@ import { UserType } from 'user/User';
 import { Notification, NotificationTypes } from '../Notification/Notification';
 
 import './SideOutPanelPreviewTeachingPath.scss';
+import { UserService } from 'user/UserService';
 
 interface Props extends RouteComponentProps {
   view: string;
@@ -45,11 +46,12 @@ interface SideOutPanelPreviewState {
   currentTeachingPath: undefined | TeachingPath;
 }
 
-export const USER_SERVICE = 'TEACHING_PATH_SERVICE';
+export const USER_SERVICE = 'USER_SERVICE';
 
 @observer
 class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteComponentProps, SideOutPanelPreviewState> {
   private teachingPathService: TeachingPathService = injector.get(TEACHING_PATH_SERVICE);
+  private userService: UserService = injector.get<UserService>(USER_SERVICE);
 
   public state = {
     currentTeachingPath: undefined,
@@ -278,6 +280,14 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     </>
   )
 
+  public renderPublishDate = (createdAt: string) =>
+  (
+    <div className="partsInfo">
+      <img src={date} alt="date" />
+      {`${moment(createdAt).format(deadlineDateFormat)}`}
+    </div>
+  )
+
   public render() {
     const { currentEntity } = this.props.store!;
     const
@@ -299,6 +309,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
       } = currentEntity;
     const { currentEntity: { id } } = this.props.store!;
     const { history, isPublishedCurrentTeachingPath, view } = this.props;
+    /* const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager; */
+    const showPublishDate = false;
     const viewText = intl.get('preview.teaching_path.buttons.view');
     const guidanceText = intl.get('preview.teaching_path.buttons.teacher_guidance');
     const editText = intl.get('preview.teaching_path.buttons.edit');
@@ -339,14 +351,10 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
               <img src={person} alt="question" />
               {`${intl.get('preview.teaching_path.headers.by')}`} {author ? author : ''}
             </div>
-            <div className="partsInfo">
-              <img src={date} alt="date" />
-              {`${moment(createdAt).format(deadlineDateFormat)}`}
-            </div>
+            {showPublishDate && this.renderPublishDate(createdAt)}
           </div>
           <div className="entityDescription">
-
-            <div className="partsInfo">
+            <div className="partsInfoDescription">
               {description ? description : ''}
             </div>
           </div>

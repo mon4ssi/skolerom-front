@@ -194,6 +194,7 @@ export interface TeachingPathArgs {
   goalsItems?: Array<GenericGrepItem>;
 
   sources?: Array<number>;
+  keywords?: Array<string>;
   view?: string;
   levels?: Array<number>;
   featuredImage?: string;
@@ -244,6 +245,7 @@ export class TeachingPath {
   protected readonly _minNumberOfSteps: number | undefined;
   protected readonly _ownedByMe: boolean;
   @observable protected _grades: Array<Grade> = [];
+  @observable protected _keywords: Array<string> = [];
 
   @observable protected _sourceItems: Array<GenericGrepItem> = [];
   @observable protected _coreElementItems: Array<GenericGrepItem> = [];
@@ -299,6 +301,7 @@ export class TeachingPath {
     this._minNumberOfSteps = args.minNumberOfSteps;
     this._maxNumberOfSteps = args.maxNumberOfSteps;
     this._grades = args.grades || [];
+    this._keywords = args.keywords || [];
 
     this._sourceItems = args.sourceItems || [];
     this._coreElementItems = args.coreElementItems || [];
@@ -524,6 +527,11 @@ export class TeachingPath {
   }
 
   @computed
+  public get keywords() {
+    return this._keywords;
+  }
+
+  @computed
   public get view() {
     return this._view;
   }
@@ -534,6 +542,10 @@ export class TeachingPath {
 
   public getListOfSources() {
     return toJS(this._sources);
+  }
+
+  public getListOfKeywords() {
+    return toJS(this._keywords);
   }
 
   public getListOfGrades() {
