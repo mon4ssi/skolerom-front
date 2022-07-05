@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 
-import closeImg from 'assets/images/modal-close.svg';
+import closeImg from 'assets/images/close-rounded-black.svg';
 import downloadImg from 'assets/images/download.svg';
 
 import { DescriptionEditor } from '../NewAssignment/Questions/DescriptionEditor';

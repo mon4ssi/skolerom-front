@@ -25,6 +25,26 @@
       cursor: pointer;
       button {
         background: transparent;
+        position: relative;
+        &:before {
+          content: '';
+          background: #e2017b;
+          position: absolute;
+          width: 35px;
+          height: 35px;
+          top: 7px;
+          left: 5px;
+          border-radius: 50%;
+          opacity: 0;
+        }
+        &:hover {
+          img {
+            filter: grayscale(1)invert(1);
+          }
+          &:before {
+            opacity: 1;
+          }
+        }
       }
     }
     &__left {
@@ -118,5 +138,25 @@
   padding: 0px;
   img {
     margin-right: 10px;
+  }
+  &:before {
+    content: '';
+    position: absolute;
+    width: 31px;
+    height: 31px;
+    background: #e2017b;
+    z-index: -1;
+    border-radius: 50%;
+    left: -2px;
+    top: -2px;
+    opacity: 0;
+  }
+  &:hover {
+    img {
+      filter: brightness(0)invert(1);
+    }
+    &:before {
+      opacity: 1;
+    }
   }
 }

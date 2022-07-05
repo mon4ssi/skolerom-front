@@ -5,7 +5,7 @@ import { DescriptionEditor } from 'assignment/view/NewAssignment/Questions/Descr
 import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
 import { ItemContentTypeContext } from 'teachingPath/view/EditTeachingPath/ItemContentTypeContext';
 import 'teachingPath/view/TeacherGuidance/TeacherGuidanceModal.scss';
-import closeImg from 'assets/images/modal-close.svg';
+import closeImg from 'assets/images/close-rounded-black.svg';
 import downloadImg from 'assets/images/download.svg';
 import teaGuiBGImg from 'assets/images/guidance-bg.svg';
 import openTGImg from 'assets/images/open.svg';
