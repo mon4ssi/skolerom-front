@@ -51,7 +51,7 @@
         top: 0;
         width: 100%;
         z-index: 1;
-        line-height: calc(100vh / 6);
+        line-height: /* calc(100vh / 6) */36px;
         height: calc(100vh / 6);
         /* padding: 19px; */
         overflow: hidden;
@@ -76,10 +76,10 @@
           font-weight: 500px;
           text-align: center;
           vertical-align: middle;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          padding: 0px 30px;
+          /* white-space: nowrap; */
+          /* text-overflow: ellipsis; */
+          /* overflow: hidden; */
+          padding: 22px 85px;
         }
 
         .infoTeacher {
