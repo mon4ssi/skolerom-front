@@ -309,7 +309,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
       } = currentEntity;
     const { currentEntity: { id } } = this.props.store!;
     const { history, isPublishedCurrentTeachingPath, view } = this.props;
-    const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager;
+    /* const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager; */
+    const showPublishDate = false;
     const viewText = intl.get('preview.teaching_path.buttons.view');
     const guidanceText = intl.get('preview.teaching_path.buttons.teacher_guidance');
     const editText = intl.get('preview.teaching_path.buttons.edit');
@@ -353,8 +354,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
             {showPublishDate && this.renderPublishDate(createdAt)}
           </div>
           <div className="entityDescription">
-
-            <div className="partsInfo">
+            <div className="partsInfoDescription">
               {description ? description : ''}
             </div>
           </div>
