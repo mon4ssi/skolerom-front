@@ -33,6 +33,7 @@ import { TeachingPath } from 'teachingPath/TeachingPath';
 const MAGICNUMBER100 = -1;
 const MAGICNUMBER1 = 1;
 const limitSplicePathname = 4;
+const limitSplicePathname5 = 5;
 const limitIndex = 2;
 const heightMin = 250;
 const SOURCE = 'TEACHING_PATH';
@@ -1231,6 +1232,11 @@ class TeachingPathsListComponent extends Component<Props, State> {
 
   public render() {
     const { isTeachingPathPreviewVisible, isTeachingPathPreviewTeacherCMVisible } = this.state;
+    const { teachingPathsListStore } = this.props;
+    const teachingPaths = teachingPathsListStore!.teachingPathsState === StoreState.LOADING ?
+      teachingPathsListStore!.teachingPathsForSkeleton :
+      teachingPathsListStore!.teachingPathsList;
+    const classCard = (teachingPaths.length > limitSplicePathname5) ? 'cardList' : 'cardList onlyOneLine' ;
     return (
       <div className="teachingPathsList moveListBySearchFilter TpList">
         <h1 className="generalTitle">
@@ -1287,7 +1293,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
           goalValueFilter={this.state.goalValueFilter}
         />
 
-        <div className="cardList" aria-live="polite" id="List" aria-atomic="true">
+        <div className={classCard} aria-live="polite" id="List" aria-atomic="true">
           {this.renderTeachingPathCards()}
         </div>
 
