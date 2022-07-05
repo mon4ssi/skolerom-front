@@ -302,6 +302,20 @@ export class PublishingActions extends Component<Props, State> {
         }
       );
     }
+    const myschools = store!.getCurrentUser()!.schools;
+    const arraySchoolIds = this.state.optionsMySchool;
+    const editSchools = this.props.store!.currentEntity!.getMySchool();
+    if (editSchools && editSchools!.length > 0) {
+      editSchools!.forEach((school) => {
+        arraySchoolIds.push(school.id);
+      });
+    } else {
+      myschools.forEach((school) => {
+        arraySchoolIds.push(school.id);
+      });
+    }
+    this.setState({ optionsMySchool: arraySchoolIds });
+    this.props.store!.currentEntity!.setMySchool(String(arraySchoolIds));
     /*const arrayForGrades : Array<number> = [];
     if (selectedGrades.length > 0) {
       selectedGrades.forEach((element) => {
@@ -386,20 +400,6 @@ export class PublishingActions extends Component<Props, State> {
     if (document.getElementById('publishingInfo')) {
       document.getElementById('publishingInfo')!.addEventListener('scroll', this.handerScroll);
     }
-    const myschools = store!.getCurrentUser()!.schools;
-    const arraySchoolIds = this.state.optionsMySchool;
-    const editSchools = this.props.store!.currentEntity!.getMySchool();
-    if (editSchools && editSchools!.length > 0) {
-      editSchools!.forEach((school) => {
-        arraySchoolIds.push(school.id);
-      });
-    } else {
-      myschools.forEach((school) => {
-        arraySchoolIds.push(school.id);
-      });
-    }
-    this.setState({ optionsMySchool: arraySchoolIds });
-    this.props.store!.currentEntity!.setMySchool(String(arraySchoolIds));
   }
 
   public handerScroll = async () => {
