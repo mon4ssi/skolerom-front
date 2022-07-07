@@ -62,7 +62,8 @@ export interface FilterableAttachment {
   fileName?: string;
   alt?: string;
   duration?: number;
-  src?: Array<string>;
+  src?: Array<string> | undefined | null;
+  source?: string | undefined | null;
   deleteddate?: string | undefined | null;
 }
 
@@ -73,7 +74,8 @@ export interface FilterableCustomImageAttachment {
   fileName: string;
   alt?: string;
   duration?: number;
-  src?: Array<string>;
+  source?: string | undefined | null;
+  src?: Array<string> | undefined | null;
 }
 
 @inject('newAssignmentStore')
@@ -212,6 +214,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
   }
 
   private onSelectAttachment = async (id: number) => {
+    /* console.log('selecting'); */
     const { newAssignmentStore } = this.props;
     let attachment = null;
     if (this.context.contentType === AttachmentContentType.image) {
@@ -869,12 +872,12 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     const isMultipleChoice = newAssignmentStore!.isMultipleChoice();
     const onThirdTab = this.state.selectedTabId === this.THREE;
 
-    if (!onThirdTab) {
+    if (true) {
       if (this.state.selectedTabId === this.TWO) {
         return (
           <div className="attachment-info">
             <div className="images-count">
-              {isMultipleChoice ? this.renderSelectedCustomImageChoiceAttachment() : this.renderCustomSelectedAttachmentsCount()}
+              {isMultipleChoice ? this.renderSelectedImageChoiceAttachment() : this.renderSelectedAttachmentsCount()}
             </div>
             <CreateButton onClick={this.closeAttachmentsList} disabled={this.calcDisabledAttachmentButton()} title={isMultipleChoice ? intl.get('new assignment.use_this_image') : intl.get('new assignment.add_to_assignment')}>
               {isMultipleChoice ? intl.get('new assignment.use_this_image') : intl.get('new assignment.add_to_assignment')}

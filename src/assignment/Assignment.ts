@@ -382,7 +382,7 @@ export class Assignment {
   public grepGoalsIds?: Array<number>;
   public grepReadingInSubjectsIds?: Array<number>;
   public _open?: boolean;
-  public _schools? : Array<NowSchool>;
+  public _schools?: Array<NowSchool>;
 
   constructor(args: AssignmentArgs) {
     this._id = args.id;
@@ -696,6 +696,8 @@ export class QuestionAttachment {
   public readonly alt: string;
   public readonly title: string;
   public readonly fileName: string;
+  public readonly source?: string | undefined | null;
+  public readonly src?: Array<string> | undefined | null;
   public readonly duration?: number;
   public readonly deleteddate?: string | undefined | null;
 
@@ -706,12 +708,16 @@ export class QuestionAttachment {
     title: string;
     fileName: string;
     duration: number;
+    source: string | undefined | null;
+    src: Array<string> | undefined | null;
     deleteddate?: string | undefined | null;
   }) {
     this.id = params.id;
     this.path = params.path;
     this.alt = params.alt;
     this.title = params.title;
+    this.source = params.source || params.src![0];
+    this.src = params.src;
     this.fileName = params.fileName;
     this.duration = params.duration;
     this.deleteddate = params.deleteddate;
@@ -730,6 +736,7 @@ export abstract class Question {
   private readonly _id?: number;
   private readonly _type: QuestionType;
   @observable protected _title: string;
+  @observable protected _source?: string;
   @observable protected _guidance: string;
   @observable protected _order: number;
   @observable protected _content: Array<ContentBlock> = [];
@@ -761,6 +768,11 @@ export abstract class Question {
   @computed
   public get title() {
     return this._title;
+  }
+
+  @computed
+  public get source() {
+    return this._source;
   }
 
   @computed
@@ -1243,7 +1255,8 @@ export class Attachment {
   public readonly fileName: string;
   public readonly title: string;
   public readonly duration?: number;
-  public readonly src?: Array<string>;
+  public readonly src?: Array<string> | undefined | null;
+  public readonly source?: string | undefined | null;
 
   constructor(
     id: number,
@@ -1252,7 +1265,8 @@ export class Attachment {
     fileName: string,
     title: string,
     duration?: number,
-    src?: Array<string>
+    src?: Array<string> | undefined | null,
+    source?: string,
   ) {
     this.id = id;
     this.path = path;
@@ -1261,6 +1275,7 @@ export class Attachment {
     this.title = title;
     this.duration = duration;
     this.src = src;
+    this.source = source;
   }
 }
 
@@ -1271,7 +1286,8 @@ export class CustomImgAttachment {
   public readonly fileName: string;
   public readonly title: string;
   public readonly duration?: number;
-  public readonly src?: Array<string>;
+  public readonly src?: Array<string> | undefined | null;
+  public readonly source?: string | undefined | null;
   public readonly deleteddate?: string | undefined | null;
 
   constructor(
@@ -1281,7 +1297,8 @@ export class CustomImgAttachment {
     fileName: string,
     title: string,
     duration?: number,
-    src?: Array<string>,
+    src?: Array<string> | undefined | null,
+    source?: string | undefined | null,
     deleteddate?: string | undefined | null
   ) {
     this.id = id;
@@ -1291,6 +1308,7 @@ export class CustomImgAttachment {
     this.title = title;
     this.duration = duration;
     this.src = src;
+    this.source = source;
     this.deleteddate = deleteddate;
   }
 }

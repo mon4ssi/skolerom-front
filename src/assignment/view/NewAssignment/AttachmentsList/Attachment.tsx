@@ -152,7 +152,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
           <img
             src={attachment.path}
             alt={attachment.alt}
-            srcSet={arraySrc}
+            srcSet={arraySrc!}
             sizes={'(min-width: 320px) 300px'}
           />
         </button>
