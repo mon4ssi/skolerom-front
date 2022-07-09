@@ -9,6 +9,7 @@ pipelines:
           name: Build and Test
           caches:
             - node
+          size: 2x  
           script:
             - npm install             
             - npm run build:beta
