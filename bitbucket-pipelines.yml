@@ -5,16 +5,15 @@ image: node:14.15.1
 pipelines:
   branches:
     master:
-      - parallel:
-        - step:
-            name: Build and Test
-            caches:
-              - node
-            script:
-              - npm install             
-              - npm run build:beta
-            artifacts:
-              - build/**
+      - step:
+          name: Build and Test
+          caches:
+            - node
+          script:
+            - npm install             
+            - npm run build:beta
+          artifacts:
+            - build/**
 #        - step:
 #            name: Security Scan
 #            script:
