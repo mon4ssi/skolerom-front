@@ -9,10 +9,9 @@ pipelines:
           name: Build and Test
           caches:
             - node
-          size: 2x  
           script:
-            - npm install             
-            - npm run build:beta
+            - npm install   
+            - CI=false npm run build:beta
           artifacts:
             - build/**
 #        - step:
