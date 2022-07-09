@@ -30,7 +30,7 @@ pipelines:
                 AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
                 AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
                 AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
-                S3_BUCKET: ''
+                S3_BUCKET: 'skolerom-app-test'
                 LOCAL_PATH: 'build'
             - pipe: atlassian/aws-cloudfront-invalidate:0.6.0
               variables:
