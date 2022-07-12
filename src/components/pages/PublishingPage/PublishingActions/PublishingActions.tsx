@@ -243,32 +243,27 @@ export class PublishingActions extends Component<Props, State> {
       this.setState(
         {
           isValid: true,
-          isValidPrivate: true,
-          isMyStateSchool: false
+          isValidPrivate: true
         },
         () => {
+          if (store!.currentEntity!.isMySchool) {
+            this.setState({ isMyStateSchool: true });
+            this.props.store!.currentEntity!.setIsMySchool(true);
+          } else {
+            this.setState({ isMyStateSchool: false });
+            this.props.store!.currentEntity!.setIsMySchool(false);
+          }
           this.sendValidbutton();
         }
       );
-      this.props.store!.currentEntity!.setIsMySchool(false);
     } else {
-      if (store!.currentEntity!.isMySchool) {
-        this.setState(
-          {
-            isValidPrivate: false,
-            isMyStateSchool: true
-          }
-        );
-        this.props.store!.currentEntity!.setIsMySchool(true);
-      } else {
-        this.setState(
-          {
-            isValidPrivate: false,
-            isMyStateSchool: false
-          }
-        );
-        this.props.store!.currentEntity!.setIsMySchool(false);
-      }
+      this.setState(
+        {
+          isValidPrivate: false,
+          isMyStateSchool: false
+        }
+      );
+      this.props.store!.currentEntity!.setIsMySchool(false);
       this.sendValidbutton();
     }
     if (typeof (store!.currentEntity!.getListOfSources()) !== 'undefined') {
@@ -721,7 +716,7 @@ export class PublishingActions extends Component<Props, State> {
     );
 
     this.props.store!.currentEntity!.setIsPrivate(true);
-    this.props.store!.currentEntity!.setIsMySchool(false);
+    this.props.store!.currentEntity!.setIsMySchool(true);
   }
 
   public handleMySchoolOn = () => {
@@ -743,16 +738,16 @@ export class PublishingActions extends Component<Props, State> {
     }
     this.setState(
       {
-        isValid: false,
+        isValid: true,
         isValidPrivate: false,
         isMyStateSchool: true
       },
       () => {
-        this.validateAddTeacherContentDefault(false);
+        this.validateAddTeacherContentDefault(true);
         this.sendValidbutton();
       }
     );
-    this.props.store!.currentEntity!.setIsPrivate(false);
+    this.props.store!.currentEntity!.setIsPrivate(true);
     this.props.store!.currentEntity!.setIsMySchool(true);
   }
 
@@ -1098,21 +1093,21 @@ export class PublishingActions extends Component<Props, State> {
     const privateButtonClassnames = classnames(
       'flexBox justifyCenter alignCenter w50',
       {
-        active: store!.currentEntity!.isPrivate && !store!.currentEntity!.isMySchool,
+        active: store!.currentEntity!.isPrivate && !this.state.isMyStateSchool,
       }
     );
 
     const publicButtonClassnames = classnames(
       'flexBox justifyCenter alignCenter w50',
       {
-        active: !store!.currentEntity!.isPrivate && !store!.currentEntity!.isMySchool,
+        active: !store!.currentEntity!.isPrivate && !this.state.isMyStateSchool,
       }
     );
 
     const mySchoolButtonClassnames = classnames(
       'flexBox justifyCenter alignCenter w50',
       {
-        active: !store!.currentEntity!.isPrivate && store!.currentEntity!.isMySchool,
+        active: store!.currentEntity!.isPrivate && this.state.isMyStateSchool,
         hidden: isTeacher
       }
     );
