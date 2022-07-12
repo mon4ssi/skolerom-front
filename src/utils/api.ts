@@ -32,8 +32,8 @@ API.interceptors.request.use(
 
         if (pathName !== '/logout') {
           if (setCookie.split('sso-authcookie-skolerom').length <= 1) {
-            storageInteractor.logOut();
-            window.location.reload();
+            /* storageInteractor.logOut();
+            window.location.reload(); */
           }
         }
 

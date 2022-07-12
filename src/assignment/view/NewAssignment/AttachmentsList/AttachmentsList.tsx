@@ -563,6 +563,14 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
         return `${currentBlock.images.length} ${placeholder}`;
       }
     }
+    if (this.context.contentType === AttachmentContentType.customImage) {
+      const currentBlock = newAssignmentStore!.getAttachmentsFromCurrentBlock() as EditableImagesContentBlock;
+      placeholder = intl.get('new assignment.images_selected');
+
+      if (currentBlock && currentBlock.images && currentBlock.images.length) {
+        return `${currentBlock.images.length} ${placeholder}`;
+      }
+    }
     if (this.context.contentType === AttachmentContentType.video) {
       const currentBlock = newAssignmentStore!.getAttachmentsFromCurrentBlock() as EditableVideosContentBlock;
       placeholder = intl.get('new assignment.videos_selected');
@@ -574,7 +582,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     return `0 ${placeholder}`;
   }
 
-  public renderCustomSelectedAttachmentsCount = () => {
+  /* public renderCustomSelectedAttachmentsCount = () => {
     const { newAssignmentStore } = this.props;
     const currentQuestion = newAssignmentStore!.currentQuestion;
     let placeholder = '';
@@ -610,7 +618,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
       }
     }
     return `0 ${placeholder}`;
-  }
+  } */
 
   public renderPlaceholder = () => {
     if (this.context.contentType === AttachmentContentType.image) {
@@ -777,13 +785,13 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     return intl.get('new assignment.image_not_selected');
   }
 
-  public renderSelectedCustomImageChoiceAttachment = () => {
+  /* public renderSelectedCustomImageChoiceAttachment = () => {
     const counterAttachment = this.calcCounterAttachments();
     if (counterAttachment > 0) {
       return intl.get('new assignment.image_selected');
     }
     return intl.get('new assignment.image_not_selected');
-  }
+  } */
 
   public renderAttachments = () => {
     if (this.context.contentType === AttachmentContentType.image) {
@@ -872,26 +880,14 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     const isMultipleChoice = newAssignmentStore!.isMultipleChoice();
     const onThirdTab = this.state.selectedTabId === this.THREE;
 
-    if (true) {
-      if (this.state.selectedTabId === this.TWO) {
-        return (
-          <div className="attachment-info">
-            <div className="images-count">
-              {isMultipleChoice ? this.renderSelectedImageChoiceAttachment() : this.renderSelectedAttachmentsCount()}
-            </div>
-            <CreateButton onClick={this.closeAttachmentsList} disabled={this.calcDisabledAttachmentButton()} title={isMultipleChoice ? intl.get('new assignment.use_this_image') : intl.get('new assignment.add_to_assignment')}>
-              {isMultipleChoice ? intl.get('new assignment.use_this_image') : intl.get('new assignment.add_to_assignment')}
-            </CreateButton>
-          </div>
-        );
-      }
+    if (!onThirdTab) {
       return (
         <div className="attachment-info">
           <div className="images-count">
             {isMultipleChoice ? this.renderSelectedImageChoiceAttachment() : this.renderSelectedAttachmentsCount()}
           </div>
           <CreateButton onClick={this.closeAttachmentsList} disabled={this.calcDisabledAttachmentButton()} title={isMultipleChoice ? intl.get('new assignment.use_this_image') : intl.get('new assignment.add_to_assignment')}>
-            {isMultipleChoice ? intl.get('new assignment.use_this_image') : intl.get('new assignment.add_to_assignment')}
+            {isMultipleChoice ? intl.get('new assignment.add_to_assignment') : intl.get('new assignment.use_this_image')}
           </CreateButton>
         </div>
       );
