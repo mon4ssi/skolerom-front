@@ -23,7 +23,7 @@ import privateIconImg from 'assets/images/private.svg';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 
 import { TagInputComponent, TagProp } from 'components/common/TagInput/TagInput';
-import { firstLevel, secondLevel, studentLevels } from 'utils/constants';
+import { firstLevel, LANGUAGES, secondLevel, studentLevels } from 'utils/constants';
 
 import './PublishingActions.scss';
 import { GreepElements } from 'assignment/factory';
@@ -70,6 +70,7 @@ interface State {
   isMyStateSchool: boolean;
   loadingGoals: boolean;
   isOpen: boolean | undefined;
+  valueLanguageOptions: Array<number>;
 }
 
 export interface TagPropSource {
@@ -118,7 +119,8 @@ export class PublishingActions extends Component<Props, State> {
       page: MAGICNUMBER1,
       pageCurrent: MAGICNUMBER1,
       loadingGoals: true,
-      isOpen: false
+      isOpen: false,
+      valueLanguageOptions: []
     };
   }
 
@@ -876,9 +878,9 @@ export class PublishingActions extends Component<Props, State> {
               <img src={isChecked} />
               <p>{textIsOpen}</p>
             </div>
-
           </div>
           {this.renderKeywordsInput()}
+          {this.renderLanguagesInput()}
         </div>
       </div>
     );
@@ -948,6 +950,61 @@ export class PublishingActions extends Component<Props, State> {
           temporaryTagsArray
         />
       </div>
+    );
+  }
+
+  public renderLanguagesInput = () => {
+    const { valueLanguageOptions } = this.state;
+
+    const languages: Array<TagProp> = [];
+    LANGUAGES.forEach((item) => { languages.push({ id: Number(item.langId), title: item.description }); });
+
+    const selectedLanguage: Array<TagProp>  = [];
+    valueLanguageOptions.forEach((item) => { selectedLanguage.push(languages.find(i => i.id === item)!); });
+
+    const myplaceholder = (selectedLanguage.length > 0) ? '' : intl.get('publishing_page.languages');
+
+    return (
+      <div>
+        <TagInputComponent
+              className="filterBy darkTheme"
+              tags={languages}
+              addTag={this.addLanguage}
+              currentTags={selectedLanguage}
+              orderbyid={false}
+              removeTag={this.removeLanguage}
+              placeholder={myplaceholder}
+              listView
+              temporaryTagsArray
+        />
+      </div>
+    );
+  }
+
+  public addLanguage = async (id: number) => {
+    // const { currentEntity } = this.props.store!;
+    const newSelected: Array<number> = [];
+    newSelected.push(id);
+
+    this.setState(
+      {
+        valueLanguageOptions: newSelected
+      },
+      () => {
+        // currentEntity!.setGrepSourcesIds(this.state.valueSourceOptions);
+      }
+    );
+  }
+
+  public removeLanguage = async (id: number) => {
+    const newSelected: Array<number> = [];
+    this.setState(
+      {
+        valueLanguageOptions: newSelected
+      },
+      () => {
+        // currentEntity!.setGrepSourcesIds(this.state.valueSourceOptions);
+      }
     );
   }
 

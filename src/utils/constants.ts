@@ -51,7 +51,23 @@ export const LOCALES_MAPPING_FOR_BACKEND = {
   [Locales.NB]: 'nob',
   [Locales.NN]: 'nno'
 };
-
+export const LANGUAGES = [
+  {
+    description: 'English',
+    shortName: Locales.EN,
+    langId: 1
+  },
+  {
+    description: 'Norwegian Bokmål',
+    shortName: Locales.NB,
+    langId: 3
+  },
+  {
+    description: 'Norwegian Nynorsk',
+    shortName: Locales.NN,
+    langId: 2
+  }
+];
 // STATUSES
 
 export const STATUS_CONFLICT = 409;

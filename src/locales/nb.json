@@ -554,7 +554,8 @@
     "source": "Kilde",
     "keywords": "Nøkkelord",
     "selected_myschools": "Velg skole",
-    "dont_empty": "Skolefeltet kan ikke stå tomt"
+    "dont_empty": "Skolefeltet kan ikke stå tomt",
+    "languages": "Språk"
   },
   "distribution_page": {
     "distribute_assignment": "Distribuer oppgave",

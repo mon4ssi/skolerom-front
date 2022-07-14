@@ -14,6 +14,7 @@ import { UIStore } from 'locales/UIStore';
 import './MyAccountWindow.scss';
 import { LoginStore } from 'user/view/LoginStore';
 import { Locales } from 'utils/enums';
+import { LANGUAGES } from 'utils/constants';
 
 const ANIMATION_TIMEOUT = 200;
 
@@ -181,32 +182,6 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
 
   private renderLanguageChangeScreen = () => {
     const { uiStore, closeMyAccountWindow, loginStore } = this.props;
-    const languages = [
-      {
-        language: 'English',
-        shortName: Locales.EN
-      },
-      {
-        language: 'Norwegian Bokmål',
-        shortName: Locales.NB
-      },
-      {
-        language: 'Norwegian Nynorsk',
-        shortName: Locales.NN
-      }
-      // {
-      //   language: 'Sámi',
-      //   shortName: ''
-      // },
-      // {
-      //   language: 'Danish',
-      //   shortName: ''
-      // },
-      // {
-      //   language: 'Swedish',
-      //   shortName: ''
-      // }
-    ];
     const setCurrentLocale = async (language: string) => {
       if (uiStore!.currentLocale === language) {
         return null;
@@ -216,18 +191,18 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
       window.location.reload();
     };
 
-    const renderLanguage = (language: { language: string, shortName: string }) => (
+    const renderLanguage = (language: { description: string, shortName: string }) => (
       <li
         className="MyAccountWindow__item"
         // tslint:disable-next-line: jsx-no-lambda
         onClick={() => setCurrentLocale(language.shortName)}
-        key={language.language}
+        key={language.description}
       >
         <a
           href="javascript:void(0)"
           className={classnames('MyAccountWindow__itemText', { MyAccountWindow__itemText_selected: uiStore!.currentLocale === language.shortName })}
         >
-          {language.language} {uiStore!.currentLocale === language.shortName && `(${intl.get('header.selected')})`}
+          {language.description} {uiStore!.currentLocale === language.shortName && `(${intl.get('header.selected')})`}
         </a>
       </li>
     );
@@ -248,7 +223,7 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
         <div id="aux4" className="hidden">Not name</div>
         <input type="text" aria-labelledby="aux4" autoFocus className="hidden"/>
         <ul className="MyAccountWindow__list">
-          {languages.map(renderLanguage)}
+          {LANGUAGES.map(renderLanguage)}
         </ul>
       </>
     );
