@@ -325,6 +325,7 @@ export interface AssignmentArgs {
   grepGoals?: Array<GreepElements>;
   open?: boolean;
   schools?: Array<NowSchool>;
+  localeId?: number | null;
 }
 
 export class Assignment {
@@ -383,6 +384,7 @@ export class Assignment {
   public grepReadingInSubjectsIds?: Array<number>;
   public _open?: boolean;
   public _schools?: Array<NowSchool>;
+  @observable protected _localeId?: number | null = 3;
 
   constructor(args: AssignmentArgs) {
     this._id = args.id;
@@ -440,6 +442,7 @@ export class Assignment {
     this.grepReadingInSubjectsIds = args.grepReadingInSubjectsIds;
     this._open = args.open || false;
     this._schools = args.schools || [];
+    this._localeId = args.localeId;
   }
 
   public isOwnedByMe(): boolean {
@@ -663,6 +666,11 @@ export class Assignment {
   @computed
   public get isCopy() {
     return this._isCopy;
+  }
+
+  @computed
+  public get localeId() {
+    return this._localeId;
   }
 
   public getListOfArticles() {

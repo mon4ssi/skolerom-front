@@ -590,6 +590,11 @@ export class DraftAssignment extends Assignment {
     this.save();
   }
 
+  @action
+  public setLocaleId(localeId: number | null) {
+    this._localeId = localeId;
+    this.save();
+  }
 }
 
 export interface EditableQuestionArgs extends QuestionParams {

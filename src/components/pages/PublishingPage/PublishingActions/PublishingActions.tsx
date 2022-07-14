@@ -982,7 +982,7 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public addLanguage = async (id: number) => {
-    // const { currentEntity } = this.props.store!;
+    const { currentEntity } = this.props.store!;
     const newSelected: Array<number> = [];
     newSelected.push(id);
 
@@ -991,19 +991,20 @@ export class PublishingActions extends Component<Props, State> {
         valueLanguageOptions: newSelected
       },
       () => {
-        // currentEntity!.setGrepSourcesIds(this.state.valueSourceOptions);
+        currentEntity!.setLocaleId(this.state.valueSourceOptions[0]);
       }
     );
   }
 
   public removeLanguage = async (id: number) => {
+    const { currentEntity } = this.props.store!;
     const newSelected: Array<number> = [];
     this.setState(
       {
         valueLanguageOptions: newSelected
       },
       () => {
-        // currentEntity!.setGrepSourcesIds(this.state.valueSourceOptions);
+        currentEntity!.setLocaleId(null);
       }
     );
   }
