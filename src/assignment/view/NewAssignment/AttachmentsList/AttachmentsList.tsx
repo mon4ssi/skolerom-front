@@ -499,12 +499,14 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     this.props.context.changeContentType(AttachmentContentType.text);
     this.props.newAssignmentStore!.clearCurrentOption();
     this.props.newAssignmentStore!.visibilityAttachments = false;
+    this.setState({ currentPage: 1 });
   }
 
   public async componentDidMount() {
     if (this.refButton.current) {
       this.refButton.current!.focus();
     }
+    this.initializePaginationMountAction();
     document.addEventListener('keyup', this.handleKeyboardControl);
     await this.fetchAttachments();
     this.reaction = reaction(() => {
@@ -534,6 +536,11 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     if (prevProps.context.contentType !== context.contentType) {
       await this.fetchAttachments();
     }
+  }
+
+  public initializePaginationMountAction = () => {
+    this.setState({ currentPage: 1 });
+    this.onChangePage({ selected: 0 });
   }
 
   public renderSelectedAttachmentsCount = () => {
