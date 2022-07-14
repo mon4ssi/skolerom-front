@@ -1429,7 +1429,7 @@ export class Domain {
   public readonly url?: string;
   public grades?: Array<Grade>;
   public subjects?: Array<Subject>;
-  public readonly featuredImage?: string;
+  public featuredImage?: string;
   public image?: string;
   public isRead?: boolean;
   public grepGoals?: Array<GreepElements>;

@@ -62,7 +62,7 @@ export class Header extends Component<Props> {
       <div className="Header ">
 
         <div className="withPicture flexBox justifyCenter alignCenter dirColumn">
-          {/* <img src={backgroundImg} alt="background" className="headerBackground" /> */}
+          {<img src={this.props.store!.currentEntity!.featuredImage} alt="background" className="headerBackground" />}
           <div className="teachingPathTitle">
             {currentEntity!.title}
           </div>

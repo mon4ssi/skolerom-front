@@ -8,6 +8,7 @@ import { Header } from './Header/Header';
 import { QuestionsOverview } from './QuestionsOverview/QuestionsOverview';
 
 import './PublishingContent.scss';
+import { SelectCoverImage } from './SelectCoverImage/SelectCoverImage';
 
 interface Props {
   store?: NewAssignmentStore | EditTeachingPathStore;
@@ -30,6 +31,7 @@ export class PublishingContent extends Component<Props> {
           />
           {/* <Versions /> */}
         </div>
+        <SelectCoverImage currentEntity={store!.currentEntity!} localeKey={store!.localeKey} />
       </div>
     );
   }
