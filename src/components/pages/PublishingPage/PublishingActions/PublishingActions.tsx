@@ -731,7 +731,7 @@ export class PublishingActions extends Component<Props, State> {
     );
     this.setState({ IsVisibilityButtons: false });
     this.props.store!.currentEntity!.setIsPrivate(true);
-    this.props.store!.currentEntity!.setIsMySchool(true);
+    this.props.store!.currentEntity!.setIsMySchool(false);
   }
 
   public handleMySchoolOn = () => {
