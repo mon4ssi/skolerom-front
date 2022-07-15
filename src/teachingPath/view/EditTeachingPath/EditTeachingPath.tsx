@@ -18,6 +18,7 @@ interface Props extends RouteChildrenProps<{ id: string }> {
   editTeachingPathStore?: EditTeachingPathStore;
   newAssignmentStore?: NewAssignmentStore;
   readOnly?: boolean;
+  tgOpen?: boolean;
 }
 interface State {
   contentType: ItemContentType | null;
@@ -42,12 +43,11 @@ class EditTeachingPathComponent extends Component<Props & RouteComponentProps, S
     this.props.editTeachingPathStore!.getArticles({});
     const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
     headerArray[0].style.display = 'none';
-
     if (!isAssignmentCreating) {
       if (readOnly) {
         const result = await getDraftForeignTeachingPath(this.getParams());
         if (result.isOwnedByMe()) {
-          this.props.history.replace(`/teaching-paths/edit/${this.getParams()}`);
+          /* this.props.history.replace(`/teaching-paths/edit/${this.getParams()}`); */
         }
       } else {
         try {
@@ -76,10 +76,10 @@ class EditTeachingPathComponent extends Component<Props & RouteComponentProps, S
   )
 
   public renderCreationPage = () => {
-    const { location, readOnly } = this.props;
+    const { location, readOnly, tgOpen } = this.props;
     return !location!.pathname.includes('distribute') &&
       !location!.pathname.includes('publish') && (
-        <CreationPage readOnly={readOnly} />
+        <CreationPage readOnly={readOnly} tgOpen={tgOpen}/>
       );
   }
 

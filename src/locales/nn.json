@@ -32,10 +32,17 @@
         "educational_goals": "Kompetansemål"
       },
       "buttons": {
+<<<<<<< HEAD
         "view": "Se læringsvei",
         "teacher_guidance": "Lærerveiledning",
         "edit": "Redigere",
         "duplicate": "Kopi"
+=======
+        "view": "Se læringssti",
+        "teacher_guidance": "Se lærerveiledning",
+        "edit": "Rediger",
+        "duplicate": "Kopier"
+>>>>>>> sprint-31
       }
     },
     "assignment": {
@@ -54,9 +61,15 @@
       },
       "buttons": {
         "view": "Se oppgave",
+<<<<<<< HEAD
         "teacher_guidance": "Lærerveiledning",
         "edit": "Redigere",
         "duplicate": "Kopi"
+=======
+        "teacher_guidance": "Se lærerveiledning",
+        "edit": "Rediger",
+        "duplicate": "Kopier"
+>>>>>>> sprint-31
       }
     }
   },
@@ -553,6 +566,7 @@
     "source_is_open_assig": "Vis i Open Site",
     "source_is_open_title": "Synlegheitsinnstillingar",
     "source": "Kjelde",
+    "keywords": "Nøkkelord",
     "selected_myschools": "Velg skole",    
     "dont_empty": "Skolefeltet kan ikke stå tomt"
   },

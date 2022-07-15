@@ -75,6 +75,7 @@ class ContentBlockComponent extends Component<ContentBlockProps> {
   }
 
   private renderImage = (image: QuestionAttachment) => {
+    /* console.log(image) */
     const alt = image.path
       .split('/')
       .pop()!

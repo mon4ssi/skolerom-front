@@ -62,7 +62,8 @@ export interface FilterableAttachment {
   fileName?: string;
   alt?: string;
   duration?: number;
-  src?: Array<string>;
+  src?: Array<string> | undefined | null;
+  source?: string | undefined | null;
   deleteddate?: string | undefined | null;
 }
 
@@ -73,7 +74,8 @@ export interface FilterableCustomImageAttachment {
   fileName: string;
   alt?: string;
   duration?: number;
-  src?: Array<string>;
+  source?: string | undefined | null;
+  src?: Array<string> | undefined | null;
 }
 
 @inject('newAssignmentStore')
@@ -212,6 +214,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
   }
 
   private onSelectAttachment = async (id: number) => {
+    /* console.log('selecting'); */
     const { newAssignmentStore } = this.props;
     let attachment = null;
     if (this.context.contentType === AttachmentContentType.image) {
@@ -496,12 +499,14 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     this.props.context.changeContentType(AttachmentContentType.text);
     this.props.newAssignmentStore!.clearCurrentOption();
     this.props.newAssignmentStore!.visibilityAttachments = false;
+    this.setState({ currentPage: 1 });
   }
 
   public async componentDidMount() {
     if (this.refButton.current) {
       this.refButton.current!.focus();
     }
+    this.initializePaginationMountAction();
     document.addEventListener('keyup', this.handleKeyboardControl);
     await this.fetchAttachments();
     this.reaction = reaction(() => {
@@ -533,6 +538,11 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
   }
 
+  public initializePaginationMountAction = () => {
+    this.setState({ currentPage: 1 });
+    this.onChangePage({ selected: 0 });
+  }
+
   public renderSelectedAttachmentsCount = () => {
     const { newAssignmentStore } = this.props;
     const currentQuestion = newAssignmentStore!.currentQuestion;
@@ -560,6 +570,14 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
         return `${currentBlock.images.length} ${placeholder}`;
       }
     }
+    if (this.context.contentType === AttachmentContentType.customImage) {
+      const currentBlock = newAssignmentStore!.getAttachmentsFromCurrentBlock() as EditableImagesContentBlock;
+      placeholder = intl.get('new assignment.images_selected');
+
+      if (currentBlock && currentBlock.images && currentBlock.images.length) {
+        return `${currentBlock.images.length} ${placeholder}`;
+      }
+    }
     if (this.context.contentType === AttachmentContentType.video) {
       const currentBlock = newAssignmentStore!.getAttachmentsFromCurrentBlock() as EditableVideosContentBlock;
       placeholder = intl.get('new assignment.videos_selected');
@@ -571,7 +589,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     return `0 ${placeholder}`;
   }
 
-  public renderCustomSelectedAttachmentsCount = () => {
+  /* public renderCustomSelectedAttachmentsCount = () => {
     const { newAssignmentStore } = this.props;
     const currentQuestion = newAssignmentStore!.currentQuestion;
     let placeholder = '';
@@ -607,7 +625,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
       }
     }
     return `0 ${placeholder}`;
-  }
+  } */
 
   public renderPlaceholder = () => {
     if (this.context.contentType === AttachmentContentType.image) {
@@ -774,13 +792,13 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     return intl.get('new assignment.image_not_selected');
   }
 
-  public renderSelectedCustomImageChoiceAttachment = () => {
+  /* public renderSelectedCustomImageChoiceAttachment = () => {
     const counterAttachment = this.calcCounterAttachments();
     if (counterAttachment > 0) {
       return intl.get('new assignment.image_selected');
     }
     return intl.get('new assignment.image_not_selected');
-  }
+  } */
 
   public renderAttachments = () => {
     if (this.context.contentType === AttachmentContentType.image) {
@@ -870,25 +888,13 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     const onThirdTab = this.state.selectedTabId === this.THREE;
 
     if (!onThirdTab) {
-      if (this.state.selectedTabId === this.TWO) {
-        return (
-          <div className="attachment-info">
-            <div className="images-count">
-              {isMultipleChoice ? this.renderSelectedCustomImageChoiceAttachment() : this.renderCustomSelectedAttachmentsCount()}
-            </div>
-            <CreateButton onClick={this.closeAttachmentsList} disabled={this.calcDisabledAttachmentButton()} title={isMultipleChoice ? intl.get('new assignment.use_this_image') : intl.get('new assignment.add_to_assignment')}>
-              {isMultipleChoice ? intl.get('new assignment.use_this_image') : intl.get('new assignment.add_to_assignment')}
-            </CreateButton>
-          </div>
-        );
-      }
       return (
         <div className="attachment-info">
           <div className="images-count">
             {isMultipleChoice ? this.renderSelectedImageChoiceAttachment() : this.renderSelectedAttachmentsCount()}
           </div>
           <CreateButton onClick={this.closeAttachmentsList} disabled={this.calcDisabledAttachmentButton()} title={isMultipleChoice ? intl.get('new assignment.use_this_image') : intl.get('new assignment.add_to_assignment')}>
-            {isMultipleChoice ? intl.get('new assignment.use_this_image') : intl.get('new assignment.add_to_assignment')}
+            {isMultipleChoice ? intl.get('new assignment.add_to_assignment') : intl.get('new assignment.use_this_image')}
           </CreateButton>
         </div>
       );

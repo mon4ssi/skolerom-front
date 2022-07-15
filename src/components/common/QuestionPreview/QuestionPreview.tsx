@@ -137,8 +137,9 @@ export class QuestionPreview extends Component<Props, State> {
         case ContentBlockType.Images: {
           const block = item as EditableImagesContentBlock;
           const imagesPaths = block.images.map(image => image.path);
+          const imagesResources = block.images;
           return imagesPaths.length > 0
-            ? <QuestionAttachments key={index} paths={imagesPaths} isEvaluationStyle={isEvaluationStyle} isTeacher={isTeacher}/>
+            ? <QuestionAttachments key={index} paths={imagesPaths} images={imagesResources} isEvaluationStyle={isEvaluationStyle} isTeacher={isTeacher}/>
             : null;
         }
         case ContentBlockType.Videos: {

@@ -56,9 +56,28 @@ export class AssignmentListStore {
       this.assignmentList.setFiltersPerPage(ASSIGNMENTS_PER_PAGE_IN_LIST);
     }
 
-    const response = this.typeOfAssignmentsList === 'all' ?
+    /* const response = this.typeOfAssignmentsList === 'all' ?
       await this.assignmentList.getAllAssignmentsList() :
-      await this.assignmentList.getMyAssignmentsList();
+      await this.assignmentList.getMyAssignmentsList(); */
+    let response;
+    switch (this.typeOfAssignmentsList) {
+      case 'all':
+        this.assignmentList.setFilterSchoolAssignments(0);
+        response =  await this.assignmentList.getAllAssignmentsList();
+        break;
+      case 'my':
+        this.assignmentList.setFilterSchoolAssignments(0);
+        response =  await this.assignmentList.getMyAssignmentsList();
+        break;
+      case 'myschool':
+        this.assignmentList.setFilterSchoolAssignments(1);
+        response =  await this.assignmentList.getAllSchoolAssignmentsList();
+        break;
+      default:
+        this.assignmentList.setFilterSchoolAssignments(0);
+        response =  await this.assignmentList.getAllAssignmentsList();
+        break;
+    }
 
     if (this.fromTeachingPath) {
       this.myAssignments = this.myAssignments.concat(response.myAssignments);
@@ -135,6 +154,11 @@ export class AssignmentListStore {
 
   public setCurrentAssignment(id: number) {
     this.currentAssignment = this.myAssignments.find(item => item.id === id)!;
+  }
+
+  @action
+  public setCurrentAssignmentEntity(assignment: Assignment) {
+    this.currentAssignment = assignment!;
   }
 
   public hasAssignment(id: number) {

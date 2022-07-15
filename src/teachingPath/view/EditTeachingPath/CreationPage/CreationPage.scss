@@ -9,8 +9,17 @@
     // overflow-x: auto;
     &.draggableclass {
       .InfoCard {
-        border: dashed 3px #4baf50;
         cursor: move;
+        &:before {
+          content: '';
+          position: absolute;
+          pointer-events: none;
+          width: calc(100% - 6px);
+          height: calc(100% - 6px);
+          border: dashed 3px #4baf50;
+          z-index: 1;
+          border-radius: 5px;
+        }
         button {
           pointer-events: none;
           &.activeDragButton {
@@ -30,7 +39,7 @@
       }
     }
     &.dragged {
-      .topVerticalLine, .bottomVerticalLine, .bottomHorizontalLine, .teachingPathButtons {
+      .topVerticalLine, .bottomVerticalLine, .bottomHorizontalLine, .teachingPathButtons, .childrenContainer {
         opacity: 0;
         pointer-events: none;
       }
@@ -209,7 +218,7 @@
     }
 
     .unmergeImg {
-      margin-top: 15px;
+      margin-top: 21px;
       width: 40px;
       height: 40px;
       z-index: 2;
@@ -287,7 +296,7 @@
       margin-bottom: 20px;      
 
       &.withUnmergeButton {
-        margin-top: 15px;
+        margin-top: 10px;
       }
 
       &.withPadding {
@@ -301,6 +310,10 @@
 
     .InfoCard {
       margin: 0 20px;
+      position: relative;
+      .actionButtons {
+        left: 87px;
+      }
     }
 
     .childrenContainer {
@@ -317,7 +330,7 @@
         background: #596A75;
         padding: 8px 20px;
         position: absolute;
-        top: 311px;
+        top: 345px;
         color: white;
         border-radius: 5px;
         align-items: center;
@@ -325,15 +338,15 @@
         z-index: 5;
 
         &.enLocale {
-          left: -63px;
+          left: -93px;
         }
 
         &.nbLocale {
-          left: -88px;
+          left: -93px;
         }
 
         &.nnLocale {
-          left: -81px;
+          left: -93px;
         }
       }
 
@@ -428,9 +441,9 @@
 
   .bottomVerticalLine {
     border-left: 2px solid #D3D9DE;
-    height: 35px;
+    height: 42px;
     position: absolute;
-    bottom: -35px;
+    bottom: -42px;
     z-index: 1;
   }
 
@@ -439,7 +452,7 @@
     left: 160px;
     position: absolute;
     z-index: 1;
-    bottom: -35px;
+    bottom: -42px;
   }
 
   .exitButton {
@@ -461,6 +474,11 @@
       }
     }
   }
+}
+.main .withUnmergeButton .topVerticalLine {
+  height: 40px;
+  min-height: 40px;
+  top: -40px;
 }
 .dropInfoAddtional {
   position: absolute;
@@ -536,6 +554,7 @@
     align-items: center;
     background: white;
     border-radius: 5px;
+    justify-content: center;
   }
 }
 .draggableclass .isPosibleDragInside {

@@ -9,7 +9,10 @@
   box-shadow: 0 2px 5px 0 #D3D9DE;
   border: 1px solid #D3D9DE;
   margin-bottom: 20px;
-
+  &.detectInto {
+    opacity: 0.4;
+    pointer-events: none;
+  }
   ul {
     height: 60px;
 

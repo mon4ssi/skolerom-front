@@ -32,6 +32,10 @@ export interface AssignmentRepo {
     myAssignments: Array<Assignment>;
     total_pages: number;
   }>;
+  getAllSchoolAssignmentsList(filter: Filter): Promise<{
+    myAssignments: Array<Assignment>;
+    total_pages: number;
+  }>;
   getStudentAssignmentList(filter: Filter): Promise<{
     myAssignments: Array<Assignment>;
     total_pages: number;
@@ -84,7 +88,7 @@ export class Grade {
   @observable public name_sub?: string | null;
   @observable public managementId?: number | null;
 
-  constructor(id: number, title: string, managementId?:number | undefined | null) {
+  constructor(id: number, title: string, managementId?: number | undefined | null) {
     this.id = id;
     this.title = title;
     this.filterStatus = null;
@@ -96,13 +100,71 @@ export class Grade {
   }
 }
 
+export class GenericGrepItem {
+  @observable public id: number;
+  @observable public description: string;
+  @observable public gradeDesc?: string | undefined | null;
+
+  constructor(id: number, description: string, gradeDesc?: string) {
+    this.id = id;
+    this.description = description;
+    if (gradeDesc) {
+      this.gradeDesc = gradeDesc;
+    }
+  }
+}
+
+export class EducationalGoalItem {
+  @observable public id: number;
+  @observable public description: string;
+  @observable public gradeDesc: string | undefined | null;
+
+  constructor(id: number, description: string, gradeDesc: string) {
+    this.id = id;
+    this.description = description;
+    this.gradeDesc = gradeDesc;
+  }
+}
+
+export class SourceItem {
+  @observable public id: number;
+  @observable public description: string;
+
+  constructor(id: number, description: string) {
+    this.id = id;
+    this.description = description;
+  }
+}
+
+export class CoreElementItem {
+  @observable public id: number;
+  @observable public code: string;
+  @observable public description: string;
+
+  constructor(id: number, code: string, description: string) {
+    this.id = id;
+    this.code = code;
+    this.description = description;
+  }
+}
+
+export class NowSchool {
+  @observable public id: number;
+  @observable public name: string;
+
+  constructor(id: number, name: string) {
+    this.id = id;
+    this.name = name;
+  }
+}
+
 export class Subject {
   @observable public id: number;
   @observable public title: string;
   @observable public filterStatus?: string | undefined | null;
   @observable public managementId?: number | undefined | null;
 
-  constructor(id: number, title: string, managementId?:number | undefined | null) {
+  constructor(id: number, title: string, managementId?: number | undefined | null) {
     this.id = id;
     this.title = title;
     this.filterStatus = null;
@@ -119,6 +181,14 @@ export class Source {
     this.id = id;
     this.title = title;
     this.default = defaults;
+  }
+}
+
+export class Keyword {
+  @observable public description: string;
+
+  constructor(description: string) {
+    this.description = description;
   }
 }
 
@@ -211,7 +281,17 @@ export interface AssignmentArgs {
   grades?: Array<Grade>;
   subjects?: Array<Subject>;
   sources?: Array<number>;
+  keywords?: Array<string>;
+
+  subjectItems?: Array<any>;
+  sourceItems?: Array<any>;
+  coreElementItems?: Array<any>;
+  multiSubjectItems?: Array<any>;
+  goalsItems?: Array<any>;
+
   isPrivate?: boolean;
+  isMySchool?: boolean;
+  mySchools?: string | undefined;
   relatedArticles?: Array<Article>;
   createdAt?: string;
   updatedAt?: string;
@@ -244,6 +324,7 @@ export interface AssignmentArgs {
   grepReadingInSubjectsIds?: Array<number>;
   grepGoals?: Array<GreepElements>;
   open?: boolean;
+  schools?: Array<NowSchool>;
 }
 
 export class Assignment {
@@ -259,7 +340,17 @@ export class Assignment {
   @observable protected _grades: Array<Grade> = [];
   @observable protected _subjects: Array<Subject> = [];
   @observable protected _sources: Array<number> = [];
+  @observable protected _keywords: Array<string> = [];
   @observable protected _isPrivate: boolean = false;
+
+  @observable protected _sourceItems: Array<GenericGrepItem> = [];
+  @observable protected _coreElementItems: Array<GenericGrepItem> = [];
+  @observable protected _multiSubjectItems: Array<GenericGrepItem> = [];
+  @observable protected _goalsItems: Array<GenericGrepItem> = [];
+  @observable protected _subjectItems: Array<Subject> = [];
+
+  @observable protected _isMySchool: boolean = false;
+  @observable protected _mySchools: string | undefined = '';
   @observable protected _relatedArticles: Array<Article> = [];
   @observable protected _createdAt: string = '';
   @observable protected _updatedAt: string = '';
@@ -291,6 +382,7 @@ export class Assignment {
   public grepGoalsIds?: Array<number>;
   public grepReadingInSubjectsIds?: Array<number>;
   public _open?: boolean;
+  public _schools?: Array<NowSchool>;
 
   constructor(args: AssignmentArgs) {
     this._id = args.id;
@@ -303,14 +395,24 @@ export class Assignment {
     this._grades = args.grades || [];
     this._subjects = args.subjects || [];
     this._sources = args.sources || [];
+    this._keywords = args.keywords || [];
+
+    this._sourceItems = args.sourceItems || [];
+    this._coreElementItems = args.coreElementItems || [];
+    this._multiSubjectItems = args.multiSubjectItems || [];
+    this._goalsItems = args.goalsItems || [];
+    this._subjectItems = args.subjects || [];
+
     this._isPrivate = !isNil(args.isPrivate) ? args.isPrivate : true;
+    this._mySchools = args.mySchools;
+    this._isMySchool = args.isMySchool || false;
     this._relatedArticles = args.relatedArticles || [];
     this._createdAt = args.createdAt || '';
     this._updatedAt = args.updatedAt || '';
     this._publishedAt = args.publishedAt || '';
     this._numberOfQuestions = args.numberOfQuestions || this._questions.length;
     this._isAnswered = args.isAnswered || false;
-    this._view = args.view;
+    this._view = args.view || 'edit';
     this._deadline = args.deadline;
     this._featuredImage = args.featuredImage;
     this._answerId = args.answerId;
@@ -337,6 +439,7 @@ export class Assignment {
     this.grepGoalsIds = args.grepGoalsIds;
     this.grepReadingInSubjectsIds = args.grepReadingInSubjectsIds;
     this._open = args.open || false;
+    this._schools = args.schools || [];
   }
 
   public isOwnedByMe(): boolean {
@@ -444,8 +547,57 @@ export class Assignment {
   }
 
   @computed
+  public get keywords() {
+    return this._keywords;
+  }
+
+  @computed
+  public get sourceItems() {
+    return this._sourceItems;
+  }
+
+  @computed
+  public get coreElementItems() {
+    return this._coreElementItems;
+  }
+
+  @computed
+  public get multiSubjectItems() {
+    return this._multiSubjectItems;
+  }
+
+  @computed
+  public get goalsItems() {
+    return this._goalsItems;
+  }
+
+  @computed
+  public get subjectItems() {
+    return this._subjectItems;
+  }
+
+  @computed
   public get isPrivate() {
     return this._isPrivate;
+  }
+
+  @computed
+  public get ownedByMe() {
+    return this._ownedByMe;
+  }
+
+  public get isMySchool() {
+    return this._isMySchool;
+  }
+
+  @computed
+  public get mySchools() {
+    return this._mySchools;
+  }
+
+  @computed
+  public get schools() {
+    return this._schools;
   }
 
   @computed
@@ -525,6 +677,10 @@ export class Assignment {
     return toJS(this._sources);
   }
 
+  public getListOfKeywords() {
+    return toJS(this._keywords);
+  }
+
   public getListOfGrades() {
     return toJS(this._grades);
   }
@@ -540,6 +696,8 @@ export class QuestionAttachment {
   public readonly alt: string;
   public readonly title: string;
   public readonly fileName: string;
+  public readonly source?: string | undefined | null;
+  public readonly src?: Array<string> | undefined | null;
   public readonly duration?: number;
   public readonly deleteddate?: string | undefined | null;
 
@@ -550,12 +708,16 @@ export class QuestionAttachment {
     title: string;
     fileName: string;
     duration: number;
+    source: string | undefined | null;
+    src: Array<string> | undefined | null;
     deleteddate?: string | undefined | null;
   }) {
     this.id = params.id;
     this.path = params.path;
     this.alt = params.alt;
     this.title = params.title;
+    this.source = params.source || params.src![0];
+    this.src = params.src;
     this.fileName = params.fileName;
     this.duration = params.duration;
     this.deleteddate = params.deleteddate;
@@ -574,6 +736,7 @@ export abstract class Question {
   private readonly _id?: number;
   private readonly _type: QuestionType;
   @observable protected _title: string;
+  @observable protected _source?: string;
   @observable protected _guidance: string;
   @observable protected _order: number;
   @observable protected _content: Array<ContentBlock> = [];
@@ -605,6 +768,11 @@ export abstract class Question {
   @computed
   public get title() {
     return this._title;
+  }
+
+  @computed
+  public get source() {
+    return this._source;
   }
 
   @computed
@@ -743,6 +911,10 @@ export class Filter {
   @observable public grepReadingInSubject?: string | number | null;
   @observable public source?: string | number | null;
   public showMyAssignments?: number | null;
+  public showMySchoolTeachingpath?: number | null;
+  public showMySchoolAssignments?: number | null;
+  public onlyOwnSchools?: number | null;
+  public articles?: string | null;
 }
 
 export interface LanguageFilter {
@@ -899,6 +1071,10 @@ export class AssignmentList {
     this.filter.page = number;
   }
 
+  public setFilterSchoolAssignments(number: number) {
+    this.filter.showMySchoolAssignments = number;
+  }
+
   @action
   public setFiltersPerPage(number: number) {
     this.filter.per_page = number;
@@ -955,6 +1131,10 @@ export class AssignmentList {
 
   public async getAllAssignmentsList() {
     return this.assignmentService.getAllAssignmentsList(this.filter);
+  }
+
+  public async getAllSchoolAssignmentsList() {
+    return this.assignmentService.getAllSchoolAssignmentsList(this.filter);
   }
 
   public async getMyAssignmentsList() {
@@ -1053,7 +1233,7 @@ export interface ArticleRepo {
   getArticlesByIds(ids: Array<number>): Promise<Array<Article>>;
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
-  fetchCustomImages(ids:string, page: number): Promise<ResponseFetchCustomImages>;
+  fetchCustomImages(ids: string, page: number): Promise<ResponseFetchCustomImages>;
   createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse>;
   deleteCustomImage(imageId: number): Promise<any>;
   updateCustomImage(customImageId: number, formData: FormData): Promise<any>;
@@ -1075,7 +1255,8 @@ export class Attachment {
   public readonly fileName: string;
   public readonly title: string;
   public readonly duration?: number;
-  public readonly src?: Array<string>;
+  public readonly src?: Array<string> | undefined | null;
+  public readonly source?: string | undefined | null;
 
   constructor(
     id: number,
@@ -1084,7 +1265,8 @@ export class Attachment {
     fileName: string,
     title: string,
     duration?: number,
-    src?: Array<string>
+    src?: Array<string> | undefined | null,
+    source?: string,
   ) {
     this.id = id;
     this.path = path;
@@ -1093,6 +1275,7 @@ export class Attachment {
     this.title = title;
     this.duration = duration;
     this.src = src;
+    this.source = source;
   }
 }
 
@@ -1103,7 +1286,8 @@ export class CustomImgAttachment {
   public readonly fileName: string;
   public readonly title: string;
   public readonly duration?: number;
-  public readonly src?: Array<string>;
+  public readonly src?: Array<string> | undefined | null;
+  public readonly source?: string | undefined | null;
   public readonly deleteddate?: string | undefined | null;
 
   constructor(
@@ -1113,7 +1297,8 @@ export class CustomImgAttachment {
     fileName: string,
     title: string,
     duration?: number,
-    src?: Array<string>,
+    src?: Array<string> | undefined | null,
+    source?: string | undefined | null,
     deleteddate?: string | undefined | null
   ) {
     this.id = id;
@@ -1123,6 +1308,7 @@ export class CustomImgAttachment {
     this.title = title;
     this.duration = duration;
     this.src = src;
+    this.source = source;
     this.deleteddate = deleteddate;
   }
 }

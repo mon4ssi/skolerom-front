@@ -367,9 +367,10 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
   }
 
   public render() {
-    const { title, img, withButtons, onClick, isTeachingPath, withTooltip, type } = this.props;
+    const { title, img, withButtons, onClick, isTeachingPath, isPublished, withTooltip, type } = this.props;
     const isDomain = type === 'DOMAIN' ? true : false;
     const placeholderImgDefault = type === 'DOMAIN' ? placeholderDomainImg : placeholderImg;
+    const displayDraftNotation = isPublished === undefined || (isPublished !== null && isPublished !== undefined && isPublished);
     const infoCardClassNames = classnames(
       'InfoCard flexBox dirColumn',
       onClick && 'cursorPointer'
@@ -386,7 +387,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
             {!isTeachingPath && this.renderDefaultIcons()}
             <div className={`${!withTooltip && 'flexBox'}`}>
               <div className="cardTitle">
-                <p className={`${!title && 'noTitle'}`}>{title ? title : intl.get('edit_teaching_path.no_title')}</p>
+                <p className={`${!title && 'noTitle'}`}>{title ? title : intl.get('edit_teaching_path.no_title')}<span className="isDraft">{displayDraftNotation ? '' : `- ${intl.get('teaching_paths_list.Draft')}`}</span></p>
               </div>
               {isTeachingPath && this.renderTeachingPathIcons()}
             </div>

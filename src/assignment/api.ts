@@ -16,6 +16,7 @@ import {
   Source,
   FilterGrep,
   GoalsData,
+  GenericGrepItem,
   CustomImgAttachment
 } from './Assignment';
 import {
@@ -36,6 +37,7 @@ import { ContentBlockType } from './ContentBlock';
 import { Locales } from 'utils/enums';
 import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
 import { CustomImageAttachments } from './view/NewAssignment/AttachmentsList/Attachments/CustomImageAttachments';
+import isNil from 'lodash/isNil';
 
 export interface AttachmentDTO {
   id: number;
@@ -182,6 +184,7 @@ export interface ImageChoiceQuestionOptionDTO {
 
 interface AssignmentByIdResponseDTO {
   id: number;
+  author: string;
   title: string;
   description: string;
   featuredImage: string;
@@ -191,6 +194,16 @@ interface AssignmentByIdResponseDTO {
   questions: Array<QuestionDTO>;
   relatedArticles: Array<ArticleRequestDTO>;
   subjects: Array<SubjectDTO>;
+  isPublished: boolean;
+  view: string;
+  hasGuidance: boolean;
+  ownedByMe: boolean;
+  created_at: string;
+  /* subjects: Array<any>; */
+  mainTopics: Array<any>;
+  sources: Array<any>;
+  coreElements: Array<any>;
+  goals: Array<any>;
   open?: boolean;
 }
 
@@ -204,14 +217,26 @@ export class AssignmentApi implements AssignmentRepo {
     // questions and relatedArticles ignored here because it not essential for stores that use this method
     return new Assignment({
       id: assignmentDTO.id,
+      author: assignmentDTO.author,
       title: assignmentDTO.title,
+      createdAt: assignmentDTO.created_at,
       description: assignmentDTO.description,
       featuredImage: assignmentDTO.featuredImage,
       grades: assignmentDTO.grades,
       isPrivate: assignmentDTO.isPrivate,
       levels: assignmentDTO.levels,
+      numberOfQuestions: assignmentDTO.questions.length,
       subjects: assignmentDTO.subjects,
-      open: assignmentDTO.open
+      isPublished: assignmentDTO.isPublished,
+      ownedByMe: assignmentDTO.ownedByMe,
+      subjectItems: assignmentDTO.subjects.map(item => new GenericGrepItem(item.id, item.title)),
+      coreElementItems: assignmentDTO.coreElements,
+      multiSubjectItems: assignmentDTO.mainTopics,
+      sourceItems: assignmentDTO.sources,
+      goalsItems: assignmentDTO.goals,
+      view: assignmentDTO.view,
+      hasGuidance: assignmentDTO.hasGuidance,
+      open: assignmentDTO.open,
     });
   }
 
@@ -259,6 +284,7 @@ export class AssignmentApi implements AssignmentRepo {
   }
 
   public async getMyAssignmentsList(filter: Filter) {
+    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
     const response = await API.get('api/teacher/assignments/draft', {
       params: buildFilterDTO(filter)
     });
@@ -271,6 +297,26 @@ export class AssignmentApi implements AssignmentRepo {
 
   public async getAllAssignmentsList(filter: Filter) {
     try {
+      if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
+      const response = await API.get('api/teacher/assignments', {
+        params: buildFilterDTO(filter)
+      });
+
+      return {
+        myAssignments: response.data.data.map(buildAllAssignmentsList),
+        total_pages: response.data.meta.pagination.total_pages
+      };
+    } catch {
+      return {
+        myAssignments: [],
+        total_pages: 0
+      };
+    }
+  }
+
+  public async getAllSchoolAssignmentsList(filter: Filter) {
+    try {
+      if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
       const response = await API.get('api/teacher/assignments', {
         params: buildFilterDTO(filter)
       });
@@ -301,6 +347,7 @@ export class AssignmentApi implements AssignmentRepo {
 
   public async getStudentAssignmentList(filter: Filter) {
     try {
+      if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
       const response = await API.get('api/student/assignments', {
         params: buildFilterDTO(filter)
       });
@@ -318,6 +365,7 @@ export class AssignmentApi implements AssignmentRepo {
 
   public async getAssignmentListOfStudentInList(studentId: number, filter: Filter) {
     try {
+      if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
       const response = await API.get('api/teacher/students/assignments', {
         params: {
           studentId,
@@ -341,6 +389,7 @@ export class AssignmentApi implements AssignmentRepo {
     distributes: Array<AssignmentDistribute>,
     total_pages: number;
   }> {
+    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
     const response = (await API.get('api/teacher/assignments/distributes', { params: filter })).data;
 
     return {
@@ -433,7 +482,7 @@ export class WPApi implements ArticleRepo {
       `${process.env.REACT_APP_WP_URL}/wp-json/getarticles/v1/post/`, {
         params: {
           ids: includes,
-          // lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
+        // lang: this.currentLocale !== Locales.EN ? this.storageInteractor.getArticlesLocaleId() : null
         }
       }
     );
