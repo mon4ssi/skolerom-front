@@ -70,6 +70,7 @@ interface State {
   isMyStateSchool: boolean;
   loadingGoals: boolean;
   isOpen: boolean | undefined;
+  IsVisibilityButtons: boolean;
 }
 
 export interface TagPropSource {
@@ -118,7 +119,8 @@ export class PublishingActions extends Component<Props, State> {
       page: MAGICNUMBER1,
       pageCurrent: MAGICNUMBER1,
       loadingGoals: true,
-      isOpen: false
+      isOpen: false,
+      IsVisibilityButtons: false
     };
   }
 
@@ -133,6 +135,7 @@ export class PublishingActions extends Component<Props, State> {
     const arraySelectedIdsNewsManagemdSubjects: Array<number> = [];
     let listGoals: Array<string> = [];
     this.props.store!.setIsDisabledButtonsFalse();
+    this.setState({ IsVisibilityButtons: true });
 
     if (from === 'TEACHINGPATH') {
       if (!store!.getAllGrades().length) {
@@ -247,10 +250,20 @@ export class PublishingActions extends Component<Props, State> {
         },
         () => {
           if (store!.currentEntity!.isMySchool) {
-            this.setState({ isMyStateSchool: true });
+            this.setState(
+              {
+                isMyStateSchool: true,
+                isValidPrivate: false
+              }
+            );
             this.props.store!.currentEntity!.setIsMySchool(true);
           } else {
-            this.setState({ isMyStateSchool: false });
+            this.setState(
+              {
+                isMyStateSchool: false,
+                isValidPrivate: true
+              }
+            );
             this.props.store!.currentEntity!.setIsMySchool(false);
           }
           this.sendValidbutton();
@@ -266,6 +279,21 @@ export class PublishingActions extends Component<Props, State> {
       this.props.store!.currentEntity!.setIsMySchool(false);
       this.sendValidbutton();
     }
+    this.setState({ IsVisibilityButtons: false });
+    const myschools = store!.getCurrentUser()!.schools;
+    const arraySchoolIds = this.state.optionsMySchool;
+    const editSchools = this.props.store!.currentEntity!.getMySchool();
+    if (editSchools && editSchools!.length > 0) {
+      editSchools!.forEach((school) => {
+        arraySchoolIds.push(school.id);
+      });
+    } else {
+      myschools.forEach((school) => {
+        arraySchoolIds.push(school.id);
+      });
+    }
+    this.setState({ optionsMySchool: arraySchoolIds });
+    this.props.store!.currentEntity!.setMySchool(String(arraySchoolIds));
     if (typeof (store!.currentEntity!.getListOfSources()) !== 'undefined') {
       this.setState(
         {
@@ -297,20 +325,6 @@ export class PublishingActions extends Component<Props, State> {
         }
       );
     }
-    const myschools = store!.getCurrentUser()!.schools;
-    const arraySchoolIds = this.state.optionsMySchool;
-    const editSchools = this.props.store!.currentEntity!.getMySchool();
-    if (editSchools && editSchools!.length > 0) {
-      editSchools!.forEach((school) => {
-        arraySchoolIds.push(school.id);
-      });
-    } else {
-      myschools.forEach((school) => {
-        arraySchoolIds.push(school.id);
-      });
-    }
-    this.setState({ optionsMySchool: arraySchoolIds });
-    this.props.store!.currentEntity!.setMySchool(String(arraySchoolIds));
     /*const arrayForGrades : Array<number> = [];
     if (selectedGrades.length > 0) {
       selectedGrades.forEach((element) => {
@@ -697,6 +711,7 @@ export class PublishingActions extends Component<Props, State> {
     }
   }
   public handlePrivateOn = () => {
+    this.setState({ IsVisibilityButtons: true });
     this.setState(
       {
         isValid: true,
@@ -714,7 +729,7 @@ export class PublishingActions extends Component<Props, State> {
         }
       }
     );
-
+    this.setState({ IsVisibilityButtons: false });
     this.props.store!.currentEntity!.setIsPrivate(true);
     this.props.store!.currentEntity!.setIsMySchool(true);
   }
@@ -722,6 +737,7 @@ export class PublishingActions extends Component<Props, State> {
   public handleMySchoolOn = () => {
     const isCopy = this.props.store!.currentEntity!.isCopy;
     const assignmentTitle = this.props.store!.currentEntity!.title;
+    this.setState({ IsVisibilityButtons: true });
     if (
       isCopy && (
         /Copy$/.test(assignmentTitle) ||
@@ -740,7 +756,8 @@ export class PublishingActions extends Component<Props, State> {
       {
         isValid: true,
         isValidPrivate: false,
-        isMyStateSchool: true
+        isMyStateSchool: true,
+        IsVisibilityButtons: false
       },
       () => {
         this.validateAddTeacherContentDefault(true);
@@ -754,6 +771,7 @@ export class PublishingActions extends Component<Props, State> {
   public handlePrivateOff = async () => {
     const isCopy = this.props.store!.currentEntity!.isCopy;
     const assignmentTitle = this.props.store!.currentEntity!.title;
+    this.setState({ IsVisibilityButtons: true });
     if (
       isCopy && (
         /Copy$/.test(assignmentTitle) ||
@@ -772,7 +790,8 @@ export class PublishingActions extends Component<Props, State> {
       {
         isValid: false,
         isValidPrivate: false,
-        isMyStateSchool: false
+        isMyStateSchool: false,
+        IsVisibilityButtons: false
       },
       () => {
         this.validateAddTeacherContentDefault(false);
@@ -1112,6 +1131,8 @@ export class PublishingActions extends Component<Props, State> {
       }
     );
 
+    const IsVisibilityButtons = (this.state.IsVisibilityButtons) ? 'visibilityButtons flexBox preloading' : 'visibilityButtons flexBox';
+
     return (
       <div className="visibility">
         <div className="flexBox flex-align">
@@ -1119,7 +1140,7 @@ export class PublishingActions extends Component<Props, State> {
           <div className={'title'}>{intl.get('publishing_page.visibility')}</div>
         </div>
         <p>{intl.get('publishing_page.visibility_description')}</p>
-        <div className="visibilityButtons flexBox">
+        <div className={IsVisibilityButtons}>
           <button
             className={mySchoolButtonClassnames}
             onClick={this.handleMySchoolOn}

@@ -206,7 +206,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         multiSubjectItems: data.mainTopics,
         sourceItems: data.sources,
         goalsItems: data.goals,
-
+        isMySchool: data.isMySchool,
         grepGoals: data.goals,
         numberOfArticles: data.numberOfArticles,
         numberOfQuestions: data.numberOfQuestion,
