@@ -306,7 +306,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         numberOfQuestions,
         hasGuidance,
         numberOfArticles,
-        isMySchool
+        isMySchool,
       } = currentEntity;
     const { currentEntity: { id } } = this.props.store!;
     const { history, isPublishedCurrentTeachingPath, view } = this.props;
@@ -316,7 +316,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const guidanceText = intl.get('preview.teaching_path.buttons.teacher_guidance');
     const editText = intl.get('preview.teaching_path.buttons.edit');
     const duplicateText = intl.get('preview.teaching_path.buttons.duplicate');
-    const activeGoals = (isPrivate) ? false : (isMySchool) ? true : false;
+    const activeGoals = !isPrivate || isMySchool;
     return (
       <div className={'previewModalInfo'} onClick={this.stopPropagation} tabIndex={0}>
         <div className="contentContainer">
@@ -365,7 +365,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
             {this.renderGrepCoreElements(coreElementItems)}
             {this.renderGrepMultiSubjects(multiSubjectItems)}
             {this.renderGrepSources(sourceItems)}
-            {!activeGoals && this.renderGrepEducationalGoals(goalsItems)}
+            {activeGoals && this.renderGrepEducationalGoals(goalsItems)}
 
           </div>
         </div >
