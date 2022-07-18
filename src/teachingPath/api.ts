@@ -6,13 +6,23 @@ import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteract
 import { Locales } from 'utils/enums';
 
 import { TeachingPath, TeachingPathItem, TeachingPathNode, TeachingPathNodeType, TeachingPathRepo } from './TeachingPath';
-import { Article, Filter, Grade, Domain, FilterGrep, GoalsData } from 'assignment/Assignment';
+import { Article, Filter, Grade, Domain, FilterGrep, GoalsData, Attachment } from 'assignment/Assignment';
 import { API } from '../utils/api';
 import { buildFilterDTO, GradeDTO } from 'assignment/factory';
 import { Breadcrumbs } from './teachingPathDraft/TeachingPathDraft';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { StudentTeachingPathEvaluationNodeItem } from 'evaluation/api';
 import { CONDITIONALERROR, STATUS_SERVER_ERROR, STATUS_BADREQUEST } from 'utils/constants';
+
+export interface AttachmentDTO {
+  id: number;
+  url: string;
+  alt: string;
+  file_name: string;
+  title: string;
+  duration?: number;
+  src?: Array<string>;
+}
 
 export interface TeachingPathNodeItemResponseDTO {
   id: number;
@@ -380,6 +390,20 @@ export class TeachingPathApi implements TeachingPathRepo {
       data: response.data.data,
       total_pages: response.data.meta.pagination.total_pages
     };
+  }
+
+  public async fetchImages(postIds: Array<number>): Promise<Array<Attachment>> {
+    return (
+      await API.get(
+        `${process.env.REACT_APP_WP_URL}/wp-json/media/v1/post/`, {
+          params: {
+            id: postIds.join(','),
+            content: 'img',
+            size: 'full'
+          },
+        }
+      )
+    ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
   }
 
   public async getTeachingPathListOfStudentInList(studentId: number, filter: Filter) {

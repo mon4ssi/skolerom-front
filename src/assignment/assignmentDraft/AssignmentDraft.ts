@@ -303,6 +303,12 @@ export class DraftAssignment extends Assignment {
   @action
   public setFeaturedImageFromCover(path: string) {
     this._featuredImage = path;
+    this.save();
+  }
+
+  @action
+  public getFeaturedImageFromCover() {
+    return this._featuredImage;
   }
 
   @action

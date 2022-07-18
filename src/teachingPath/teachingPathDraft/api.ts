@@ -147,13 +147,12 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
 
   public saveTeachingPath = async (teachingPath: DraftTeachingPath): Promise<string> => {
     const dto = buildTeachingPathRequestDTO(teachingPath);
-    const featuredImage = buildFeatureImageForTeachingPathRequestDTO(dto.content);
+    // const featuredImage = buildFeatureImageForTeachingPathRequestDTO(dto.content);
 
     try {
       const response = await API.put(
         `/api/teacher/teaching-paths/draft/${teachingPath.id}`, {
-          ...dto,
-          featuredImage
+          ...dto
         }
       );
       return response.data.updateAt;

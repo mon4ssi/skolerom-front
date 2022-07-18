@@ -11,8 +11,10 @@ import { ArticleLevels, EditEntityLocaleKeys } from 'utils/enums';
 import img from 'assets/images/icon-image.svg';
 import { ArticleService } from 'assignment/service';
 import { injector } from 'Injector';
+import placeholderImg from 'assets/images/list-placeholder.svg';
 import { buildArticle } from 'assignment/factory';
 import { AttachmentComponent } from 'assignment/view/NewAssignment/AttachmentsList/Attachment';
+import { id } from 'date-fns/locale';
 
 interface Props {
   currentEntity?: DraftAssignment | DraftTeachingPath;
@@ -20,7 +22,9 @@ interface Props {
 }
 
 interface SelectCoverImageState {
+  articlesIds: Array<number>;
   media: Array<any>;
+  imagenDefault: string;
 }
 
 @observer
@@ -30,14 +34,16 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      articlesIds: [],
       media: [],
+      imagenDefault: placeholderImg
     };
   }
 
   public renderMedia = (media: Array<Attachment>) => (
     media.map(img =>
     (
-      <button key={img.path} onClick={() => this.changeFeaturedImage(img.path)}>
+      <button key={img.path} onClick={() => this.changeFeaturedImage(img.path)} className={(img.path === this.state.imagenDefault) ? 'active selectedButton' : 'selectedButton'}>
         <img className="imageForCover" key={img.path} src={img.path} />
       </button>
     )))
@@ -52,69 +58,76 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
   public componentDidMount = async () => {
     const { currentEntity } = this.props;
     const articleIds: Array<number> = await currentEntity!.getAllSelectedArticlesIds();
-    const mediaImgs: Array<Attachment> = await this.articleService.fetchImages(articleIds!);
+    const onlyOneSelected: Array<number> = [];
+    onlyOneSelected.push(articleIds[0]);
+    const mediaImgs: Array<Attachment> = await this.articleService.fetchCoverImages(articleIds) || [];
+    this.setState({
+      media: mediaImgs!,
+      articlesIds: articleIds
+    });
+    this.firstFeaturedImage(articleIds, this.state.media[0].path);
+    if (document.getElementById('CoverImagesContent')) {
+      document.getElementById('CoverImagesContent')!.addEventListener('scroll', this.handerScroll);
+    }
+  }
 
-    this.setState({ media: mediaImgs! });
+  public handerScroll = async () => {
+    const isFull = this.state.articlesIds.length;
+    const IDHtml = document.getElementById('CoverImagesContent')! as HTMLElement;
+    /* if (IDHtml.scrollHeight - Math.abs(IDHtml.scrollTop) === IDHtml.clientHeight) { }*/
+  }
 
+  public firstFeaturedImage = (ids: Array<number>, imagen: string) => {
+    const { currentEntity } = this.props;
+    if (ids.length > 0) {
+      if (this.state.media.length > 0) {
+        // article image
+        this.changeFeaturedImage(imagen);
+      } else {
+        this.setState({ imagenDefault: placeholderImg });
+      }
+    } else {
+      this.setState({ imagenDefault: placeholderImg });
+    }
   }
 
   public changeFeaturedImage = (path: string) => {
     const { currentEntity } = this.props;
     currentEntity!.setFeaturedImageFromCover(path);
-
+    this.setState({ imagenDefault: path });
   }
 
   public renderQuestions = () => {
     const { currentEntity } = this.props;
 
-    const questionsTitles = [
-      ...(currentEntity as DraftAssignment)!.questions.map(question => question.title),
-      intl.get('publishing_page.review_and_submit')
-    ];
     const { media } = this.state;
     return (
-      <div className="">
+      <div className="CenterImagenes">
         <div className="buttonContent">
-
-          <button className="coverImageButton">
+          <div className="coverImageButton">
             <img className="buttonImg" src={img} alt={'def'} title={'def'} />
             <div className="buttonLabel">
               Select a cover image
             </div>
-          </button>
+          </div>
         </div>
-
         <div className="gapOptionsImages">
           {this.renderMedia(media)}
-        </div>
-        <p className="title">
-          {intl.get('publishing_page.questions_overview')}
-        </p>
-
-        <div className="questions">
-          {questionsTitles.map(this.renderQuestion)}
         </div>
       </div>
     );
   }
 
-  public renderGradeSubject = (item: Grade | Subject) => (
-    <div
-      className="gradeSubject flexBox justifyCenter alignCenter fw500"
-      key={`${item.id}-${item.title}`}
-    >
-      {item.title}
-    </div>
-  )
-
   public render() {
     const { currentEntity, localeKey } = this.props;
-
     return (
       <div className="SelectCoverImage flexBox dirColumn">
-
-        {localeKey === EditEntityLocaleKeys.NEW_ASSIGNMENT && this.renderQuestions()}
-
+        <div className="SelectCoverImage__header">
+          <img src={this.state.imagenDefault} />
+        </div>
+        <div className="SelectCoverImage__body" id="CoverImagesContent">
+          {this.renderQuestions()}
+        </div>
       </div>
     );
   }

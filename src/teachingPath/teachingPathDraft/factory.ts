@@ -245,5 +245,6 @@ export const buildTeachingPathRequestDTO = (teachingPath: DraftTeachingPath) => 
   grepGoalsIds: teachingPath.grepGoalsIds,
   sources: teachingPath.sources,
   keywords: teachingPath.keywords,
-  open: teachingPath.open
+  open: teachingPath.open,
+  featuredImage: teachingPath.featuredImage
 });

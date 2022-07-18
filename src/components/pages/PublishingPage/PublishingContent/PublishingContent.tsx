@@ -22,15 +22,6 @@ export class PublishingContent extends Component<Props> {
 
     return (
       <div className="PublishingContent flexBox dirColumn">
-        <Header store={store} />
-
-        <div className="teachingPathContent flexBox">
-          <QuestionsOverview
-            currentEntity={store!.currentEntity!}
-            localeKey={store!.localeKey}
-          />
-          {/* <Versions /> */}
-        </div>
         <SelectCoverImage currentEntity={store!.currentEntity!} localeKey={store!.localeKey} />
       </div>
     );

@@ -322,8 +322,14 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
+  public getFeaturedImageFromCover() {
+    return this._featuredImage;
+  }
+
+  @action
   public setFeaturedImageFromCover(path: string) {
     this._featuredImage = path;
+    this.save();
   }
 
   public anyArticlesIds(butIds: Array<number>, node: EditableTeachingPathNode) {

@@ -504,17 +504,35 @@ export class WPApi implements ArticleRepo {
   }
 
   public async fetchImages(postIds: Array<number>): Promise<Array<Attachment>> {
-    return (
-      await API.get(
-        `${process.env.REACT_APP_WP_URL}/wp-json/media/v1/post/`, {
-          params: {
-            id: postIds.join(','),
-            content: AttachmentType.image,
-            size: 'full'
-          },
-        }
-      )
-    ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
+    const response = await API.get(
+      `${process.env.REACT_APP_WP_URL}/wp-json/media/v1/post/`, {
+        params: {
+          id: postIds.join(','),
+          content: AttachmentType.image,
+          size: 'full'
+        },
+      }
+    );
+    if (response.data.media.length > 0) {
+      return (response).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
+    }
+    return [];
+  }
+
+  public async fetchCoverImages(postIds: Array<number>): Promise<Array<Attachment>> {
+    const response = await API.get(
+      `${process.env.REACT_APP_WP_URL}/wp-json/media/v1/post/`, {
+        params: {
+          id: postIds.join(','),
+          content: AttachmentType.image,
+          size: 'full'
+        },
+      }
+    );
+    if (response.data.media.length > 0) {
+      return (response).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
+    }
+    return [];
   }
 
   public async fetchCustomImages(ids:string, page: number): Promise<ResponseFetchCustomImages> {
