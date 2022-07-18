@@ -317,6 +317,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
         hasGuidance,
         isAnswered,
         isPublished,
+        isMySchool,
         isPrivate,
         createdAt,
       } = currentAssignment!;
@@ -327,7 +328,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     const guidanceText = intl.get('preview.assignment.buttons.teacher_guidance');
     const editText = intl.get('preview.assignment.buttons.edit');
     const duplicateText = intl.get('preview.assignment.buttons.duplicate');
-
+    const activeGoals = !isPrivate || isMySchool;
     const selectedAssignment: Assignment = this.state.currentAssignment!;
     return (
       <div className={'previewModalInfo'} onClick={this.stopPropagation} tabIndex={0}>
@@ -375,7 +376,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
             {this.renderGrepCoreElements(coreElementItems)}
             {this.renderGrepMultiSubjects(multiSubjectItems)}
             {this.renderGrepSources(sourceItems)}
-            {!isPrivate && this.renderGrepEducationalGoals(goalsItems)}
+            {activeGoals && this.renderGrepEducationalGoals(goalsItems)}
           </div>
         </div >
 
@@ -383,7 +384,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
           {isPublishedCurrentAssignment && (true || view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentAssignment!, history, id, viewText)}
           {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
           {(view === 'edit' || publishedAt) && this.renderEditButton(editText, history, id)}
-          {(isPublishedCurrentAssignment!) && this.renderDuplicateButton(duplicateText)}
+          {(isPublishedCurrentAssignment! || isMySchool) && this.renderDuplicateButton(duplicateText)}
 
         </div>
       </div >
