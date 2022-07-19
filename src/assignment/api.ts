@@ -205,6 +205,7 @@ interface AssignmentByIdResponseDTO {
   coreElements: Array<any>;
   goals: Array<any>;
   open?: boolean;
+  isMySchool?: boolean;
 }
 
 export class AssignmentApi implements AssignmentRepo {
@@ -237,6 +238,7 @@ export class AssignmentApi implements AssignmentRepo {
       view: assignmentDTO.view,
       hasGuidance: assignmentDTO.hasGuidance,
       open: assignmentDTO.open,
+      isMySchool: assignmentDTO.isMySchool,
     });
   }
 
