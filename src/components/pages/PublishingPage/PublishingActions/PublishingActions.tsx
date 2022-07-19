@@ -968,7 +968,7 @@ export class PublishingActions extends Component<Props, State> {
     const { valueLocaleId } = this.state;
 
     const languages: Array<TagProp> = [];
-    LANGUAGES.forEach((item) => { languages.push({ id: Number(item.langId), title: item.description }); });
+    LANGUAGES.forEach((item) => { languages.push({ id: Number(item.langId), title: item.shortDescription }); });
 
     const selectedLanguage: Array<TagProp>  = [];
     if (valueLocaleId !== null) { selectedLanguage.push(languages.find(i => i.id === valueLocaleId)!); }

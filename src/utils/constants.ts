@@ -54,16 +54,19 @@ export const LOCALES_MAPPING_FOR_BACKEND = {
 export const LANGUAGES = [
   {
     description: 'English',
+    shortDescription: 'English',
     shortName: Locales.EN,
     langId: 1
   },
   {
     description: 'Norwegian Bokmål',
+    shortDescription: 'Bokmål',
     shortName: Locales.NB,
     langId: 3
   },
   {
     description: 'Norwegian Nynorsk',
+    shortDescription: 'Nynorsk',
     shortName: Locales.NN,
     langId: 2
   }
