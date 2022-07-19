@@ -70,7 +70,7 @@ interface State {
   isMyStateSchool: boolean;
   loadingGoals: boolean;
   isOpen: boolean | undefined;
-  valueLanguageOptions: Array<number>;
+  valueLocaleId: number | null;
 }
 
 export interface TagPropSource {
@@ -120,7 +120,7 @@ export class PublishingActions extends Component<Props, State> {
       pageCurrent: MAGICNUMBER1,
       loadingGoals: true,
       isOpen: false,
-      valueLanguageOptions: []
+      valueLocaleId: null
     };
   }
 
@@ -282,6 +282,7 @@ export class PublishingActions extends Component<Props, State> {
         }
       );
     }
+    if (typeof (store!.currentEntity!.localeId!) !== 'undefined') this.setState({ valueLocaleId: store!.currentEntity!.localeId! });
     if (typeof (store!.currentEntity!.getListOfgrepCoreElementsIds()) !== 'undefined') {
       this.setState({
         valueCoreOptions: store!.currentEntity!.getListOfgrepCoreElementsIds()!
@@ -390,7 +391,7 @@ export class PublishingActions extends Component<Props, State> {
     this.setState(
       {
         // tslint:disable-next-line: variable-name
-        page: grepFiltergoalssDataAwait.total_pages,
+        page: grepFiltergoalssDataAwait.total_pages
       }
     );
     if (grepFiltergoalssDataAwait.data.length > 0) { this.setState({ loadingGoals: false }); }
@@ -954,13 +955,13 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public renderLanguagesInput = () => {
-    const { valueLanguageOptions } = this.state;
+    const { valueLocaleId } = this.state;
 
     const languages: Array<TagProp> = [];
     LANGUAGES.forEach((item) => { languages.push({ id: Number(item.langId), title: item.description }); });
 
     const selectedLanguage: Array<TagProp>  = [];
-    valueLanguageOptions.forEach((item) => { selectedLanguage.push(languages.find(i => i.id === item)!); });
+    if (valueLocaleId !== null) { selectedLanguage.push(languages.find(i => i.id === valueLocaleId)!); }
 
     const myplaceholder = (selectedLanguage.length > 0) ? '' : intl.get('publishing_page.languages');
 
@@ -983,25 +984,22 @@ export class PublishingActions extends Component<Props, State> {
 
   public addLanguage = async (id: number) => {
     const { currentEntity } = this.props.store!;
-    const newSelected: Array<number> = [];
-    newSelected.push(id);
 
     this.setState(
       {
-        valueLanguageOptions: newSelected
+        valueLocaleId: id
       },
       () => {
-        currentEntity!.setLocaleId(this.state.valueSourceOptions[0]);
+        currentEntity!.setLocaleId(id);
       }
     );
   }
 
   public removeLanguage = async (id: number) => {
     const { currentEntity } = this.props.store!;
-    const newSelected: Array<number> = [];
     this.setState(
       {
-        valueLanguageOptions: newSelected
+        valueLocaleId: null
       },
       () => {
         currentEntity!.setLocaleId(null);
