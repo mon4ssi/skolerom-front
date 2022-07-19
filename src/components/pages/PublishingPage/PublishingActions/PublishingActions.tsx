@@ -711,7 +711,6 @@ export class PublishingActions extends Component<Props, State> {
     }
   }
   public handlePrivateOn = () => {
-    this.setState({ IsVisibilityButtons: true });
     this.setState(
       {
         isValid: true,
@@ -729,15 +728,13 @@ export class PublishingActions extends Component<Props, State> {
         }
       }
     );
-    this.setState({ IsVisibilityButtons: false });
     this.props.store!.currentEntity!.setIsPrivate(true);
-    this.props.store!.currentEntity!.setIsMySchool(true);
+    this.props.store!.currentEntity!.setIsMySchool(false);
   }
 
   public handleMySchoolOn = () => {
     const isCopy = this.props.store!.currentEntity!.isCopy;
     const assignmentTitle = this.props.store!.currentEntity!.title;
-    this.setState({ IsVisibilityButtons: true });
     if (
       isCopy && (
         /Copy$/.test(assignmentTitle) ||
@@ -756,8 +753,7 @@ export class PublishingActions extends Component<Props, State> {
       {
         isValid: true,
         isValidPrivate: false,
-        isMyStateSchool: true,
-        IsVisibilityButtons: false
+        isMyStateSchool: true
       },
       () => {
         this.validateAddTeacherContentDefault(true);
@@ -771,7 +767,6 @@ export class PublishingActions extends Component<Props, State> {
   public handlePrivateOff = async () => {
     const isCopy = this.props.store!.currentEntity!.isCopy;
     const assignmentTitle = this.props.store!.currentEntity!.title;
-    this.setState({ IsVisibilityButtons: true });
     if (
       isCopy && (
         /Copy$/.test(assignmentTitle) ||
@@ -790,8 +785,7 @@ export class PublishingActions extends Component<Props, State> {
       {
         isValid: false,
         isValidPrivate: false,
-        isMyStateSchool: false,
-        IsVisibilityButtons: false
+        isMyStateSchool: false
       },
       () => {
         this.validateAddTeacherContentDefault(false);
