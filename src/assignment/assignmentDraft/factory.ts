@@ -48,7 +48,8 @@ export const buildDraftAssignment = (dto: DraftAssignmentResponseDTO): DraftAssi
     guidance:dto.guidance,
     hasGuidance:dto.hasGuidance,
     open: dto.open,
-    schools: dto.schools
+    schools: dto.schools,
+    localeId: dto.localeId
   });
 
   const draftAssignment = new DraftAssignment({ assignment, sessionId: dto.uuid, questionsWithError: null });
@@ -219,5 +220,6 @@ export const buildDraftAssignmentDTO = (
   grepReadingInSubjectsIds: draftAssignment.grepReadingInSubjectsIds,
   sources: draftAssignment.sources,
   keywords: draftAssignment.keywords,
-  open: draftAssignment._open
+  open: draftAssignment._open,
+  localeId: draftAssignment.localeId!
 });

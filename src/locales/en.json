@@ -677,7 +677,8 @@
       "cant_publish_goals": "You can't publish because no educational goals are available",
       "notdata_goals": "There are no established goals for these criteria",
       "source_required": "Please set the source for this content",
-      "assignmets_not_enabled_open_site": "The following assignments are not enabled to display in the Open site [|content|] Continue anyway?"
+      "assignmets_not_enabled_open_site": "The following assignments are not enabled to display in the Open site [|content|] Continue anyway?",
+      "language_required": "Please set the language for this content"
     },
     "title": {
       "new_entity": "Publish teaching path",

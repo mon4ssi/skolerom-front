@@ -282,7 +282,17 @@ export class PublishingActions extends Component<Props, State> {
         }
       );
     }
-    if (typeof (store!.currentEntity!.localeId!) !== 'undefined') this.setState({ valueLocaleId: store!.currentEntity!.localeId! });
+    if (typeof (store!.currentEntity!.localeId!) !== 'undefined' && store!.currentEntity!.localeId! !== null) {
+      this.setState({ valueLocaleId: store!.currentEntity!.localeId! });
+    } else {
+      const currentLang = LANGUAGES.find(i => i.shortName === localStorage.getItem('currentLocale'))!;
+      this.setState({
+        valueLocaleId: currentLang.langId
+      },
+      () => {
+        store!.currentEntity!.setLocaleId(currentLang.langId);
+      });
+    }
     if (typeof (store!.currentEntity!.getListOfgrepCoreElementsIds()) !== 'undefined') {
       this.setState({
         valueCoreOptions: store!.currentEntity!.getListOfgrepCoreElementsIds()!

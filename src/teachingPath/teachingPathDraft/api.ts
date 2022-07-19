@@ -54,7 +54,7 @@ export interface DraftTeachingPathResponseDTO {
   schools?: Array<NowSchool>;
   selectedArticlesIds: Array<number>;
   selectedAssignmentsIds: Array<number>;
-  localeId: number | number;
+  localeId: number | null;
 }
 
 export interface TeachingPathItemRequestDTO {

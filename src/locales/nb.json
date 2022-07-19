@@ -676,7 +676,8 @@
       "cant_publish_goals": "Du kan ikke publisere uten kobling av kompetansemål",
       "notdata_goals": "Det er ingen etablerte mål for disse kriteriene",
       "source_required": "Vennligst angi kilden for dette innholdet",
-      "assignmets_not_enabled_open_site": "Følgende oppgaver er ikke aktivert for visning i den åpne løsningen [|content|] Fortsett uansett?"
+      "assignmets_not_enabled_open_site": "Følgende oppgaver er ikke aktivert for visning i den åpne løsningen [|content|] Fortsett uansett?",
+      "language_required": "Vennligst angi språk for dette innholdet"
     },
     "title": {
       "new_entity": "Ny læringssti",

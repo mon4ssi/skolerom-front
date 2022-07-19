@@ -17,6 +17,8 @@ import backImg from 'assets/images/back-arrow.svg';
 import './Header.scss';
 import { TeachingPathItem, TeachingPathNodeType } from 'teachingPath/TeachingPath';
 import { Assignment } from 'assignment/Assignment';
+import { LANGUAGES } from 'utils/constants';
+
 const PATHLENGTH1 = 11;
 const PATHLENGTH2 = 12;
 interface MatchProps {
@@ -169,6 +171,22 @@ export class HeaderComponent extends Component<Props> {
       });
 
       return;
+    }
+
+    if (userType === UserType.ContentManager) {
+      const localeId = editTeachingPathStore!.teachingPathContainer!.teachingPath!.localeId;
+
+      if (typeof(localeId) === 'undefined' || localeId === null) {
+        if (!isPrivate) {
+          Notification.create({
+            type: NotificationTypes.ERROR,
+            title: intl.get('edit_teaching_path.header.language_required')
+          });
+          return;
+        }
+        const currentLang = LANGUAGES.find(i => i.shortName === localStorage.getItem('currentLocale'))!;
+        editTeachingPathStore!.teachingPathContainer!.teachingPath!.setLocaleId(currentLang.langId);
+      }
     }
 
     if (userType === UserType.ContentManager && !isPrivate && displayInOpenSite) {
