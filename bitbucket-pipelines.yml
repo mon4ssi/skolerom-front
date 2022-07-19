@@ -4,7 +4,7 @@ image: node:14.19.3
 
 pipelines:
   branches:
-    master:
+    QA:
       - step:
           name: Build and Test
           caches:
