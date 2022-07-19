@@ -523,6 +523,8 @@
   },
   "publishing_page": {
     "publish_assignment": "Publiser oppgåva",
+    "notimages": "Denne artikkelen har ingen bilder",
+    "select button": "Velg et forsidebilde",
     "publish_and_distribute_assignment": "Publiser oppgåve",
     "subject": "fag",
     "grade": "trinn",

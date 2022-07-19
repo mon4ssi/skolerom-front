@@ -65,7 +65,7 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
       media: mediaImgs!,
       articlesIds: articleIds
     });
-    this.firstFeaturedImage(articleIds, this.state.media[0].path);
+    this.firstFeaturedImage(articleIds);
     if (document.getElementById('CoverImagesContent')) {
       document.getElementById('CoverImagesContent')!.addEventListener('scroll', this.handerScroll);
     }
@@ -77,12 +77,12 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
     /* if (IDHtml.scrollHeight - Math.abs(IDHtml.scrollTop) === IDHtml.clientHeight) { }*/
   }
 
-  public firstFeaturedImage = (ids: Array<number>, imagen: string) => {
+  public firstFeaturedImage = (ids: Array<number>) => {
     const { currentEntity } = this.props;
     if (ids.length > 0) {
       if (this.state.media.length > 0) {
         // article image
-        this.changeFeaturedImage(imagen);
+        this.changeFeaturedImage(this.state.media[0].path);
       } else {
         this.setState({ imagenDefault: placeholderImg });
       }
@@ -101,13 +101,20 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
     const { currentEntity } = this.props;
 
     const { media } = this.state;
+    if (media.length === 0) {
+      return (
+        <div className="CenterImagenes centerMsj">
+          {/*<p>{intl.get('publishing_page.notimages')}</p>*/}
+        </div>
+      );
+    }
     return (
       <div className="CenterImagenes">
         <div className="buttonContent">
           <div className="coverImageButton">
             <img className="buttonImg" src={img} alt={'def'} title={'def'} />
             <div className="buttonLabel">
-              Select a cover image
+              {intl.get('publishing_page.select button')}
             </div>
           </div>
         </div>

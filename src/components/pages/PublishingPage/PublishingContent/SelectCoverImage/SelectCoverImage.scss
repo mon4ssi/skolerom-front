@@ -18,6 +18,14 @@
     &__body {      
       height: 70%;
       overflow: scroll;
+      .CenterImagenes {
+        &.centerMsj {
+          text-align: center;
+          p {
+            font-size: 25px;
+          }
+        }
+      }
     }
 
     .questions {

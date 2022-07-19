@@ -190,8 +190,7 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
     try {
       return await API.post(
         `/api/teacher/teaching-paths/${teachingPath.id}`, {
-          ...dto,
-          featuredImage
+          ...dto
         }
       );
     } catch (error) {

@@ -522,6 +522,8 @@
     "saved_successfuly": "Saved successfully"
   },
   "publishing_page": {
+    "select button": "Select a cover image",
+    "notimages": "This articles no have images",
     "publish_and_distribute_assignment": "Publish assignment",
     "publish_assignment": "Publish assignment",
     "subject": "Subjects",
