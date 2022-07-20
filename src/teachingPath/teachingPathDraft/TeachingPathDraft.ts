@@ -699,6 +699,12 @@ export class DraftTeachingPath extends TeachingPath {
     const editInputText = (editDescript.getElementsByClassName('ql-editor')[0] as HTMLInputElement);
     editInputText.focus();
   }
+
+  @action
+  public setLocaleId(localeId: number | null) {
+    this._localeId = localeId;
+    this.save();
+  }
 }
 
 interface EditableTeachingPathNodeArgs extends TeachingPathNodeArgs {

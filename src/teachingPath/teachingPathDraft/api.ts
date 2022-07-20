@@ -55,6 +55,7 @@ export interface DraftTeachingPathResponseDTO {
   selectedArticlesIds: Array<number>;
   selectedAssignmentsIds: Array<number>;
   featuredImage: string;
+  localeId: number | null;
 }
 
 export interface TeachingPathItemRequestDTO {

@@ -72,7 +72,8 @@ export const buildDraftTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     schools: dto.schools,
     selectedArticlesIds: dto.selectedArticlesIds,
     selectedAssignmentsIds: dto.selectedAssignmentsIds,
-    featuredImage: dto.featuredImage
+    featuredImage: dto.featuredImage,
+    localeId: dto.localeId
   });
 
   draftTeachingPath.setContent(buildEditableNode(dto.content!, draftTeachingPath));
@@ -247,5 +248,6 @@ export const buildTeachingPathRequestDTO = (teachingPath: DraftTeachingPath) => 
   sources: teachingPath.sources,
   keywords: teachingPath.keywords,
   open: teachingPath.open,
-  featuredImage: teachingPath.featuredImage
+  featuredImage: teachingPath.featuredImage,
+  localeId: teachingPath.localeId
 });

@@ -224,6 +224,7 @@ export interface TeachingPathArgs {
   schools? : Array<NowSchool>;
   numberOfQuestions?: number;
   numberOfArticles?: number;
+  localeId?: number | null;
 }
 
 export class TeachingPath {
@@ -283,6 +284,7 @@ export class TeachingPath {
   @observable protected _schools?: Array<NowSchool> = [];
   protected readonly _numberOfQuestions?: number = 0;
   protected readonly _numberOfArticles?: number = 0;
+  @observable protected _localeId?: number | null = 3;
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;
@@ -342,6 +344,7 @@ export class TeachingPath {
     this._schools = args.schools || [];
     this._numberOfQuestions = args.numberOfQuestions || 0;
     this._numberOfArticles = args.numberOfArticles || 0;
+    this._localeId = args.localeId;
   }
 
   @computed
@@ -535,6 +538,11 @@ export class TeachingPath {
   @computed
   public get view() {
     return this._view;
+  }
+
+  @computed
+  public get localeId() {
+    return this._localeId;
   }
 
   public getListOfSubjects() {

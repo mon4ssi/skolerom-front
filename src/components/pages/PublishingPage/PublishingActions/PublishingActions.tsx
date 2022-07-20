@@ -23,7 +23,7 @@ import privateIconImg from 'assets/images/private.svg';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 
 import { TagInputComponent, TagProp } from 'components/common/TagInput/TagInput';
-import { firstLevel, secondLevel, studentLevels } from 'utils/constants';
+import { firstLevel, LANGUAGES, secondLevel, studentLevels } from 'utils/constants';
 
 import './PublishingActions.scss';
 import { GreepElements } from 'assignment/factory';
@@ -71,6 +71,7 @@ interface State {
   loadingGoals: boolean;
   isOpen: boolean | undefined;
   IsVisibilityButtons: boolean;
+  valueLocaleId: number | null;
 }
 
 export interface TagPropSource {
@@ -120,7 +121,8 @@ export class PublishingActions extends Component<Props, State> {
       pageCurrent: MAGICNUMBER1,
       loadingGoals: true,
       isOpen: false,
-      IsVisibilityButtons: false
+      IsVisibilityButtons: false,
+      valueLocaleId: null
     };
   }
 
@@ -308,6 +310,17 @@ export class PublishingActions extends Component<Props, State> {
         }
       );
     }
+    if (typeof (store!.currentEntity!.localeId!) !== 'undefined' && store!.currentEntity!.localeId! !== null) {
+      this.setState({ valueLocaleId: store!.currentEntity!.localeId! });
+    } else {
+      const currentLang = LANGUAGES.find(i => i.shortName === localStorage.getItem('currentLocale'))!;
+      this.setState({
+        valueLocaleId: currentLang.langId
+      },
+      () => {
+        store!.currentEntity!.setLocaleId(currentLang.langId);
+      });
+    }
     if (typeof (store!.currentEntity!.getListOfgrepCoreElementsIds()) !== 'undefined') {
       this.setState({
         valueCoreOptions: store!.currentEntity!.getListOfgrepCoreElementsIds()!
@@ -402,7 +415,7 @@ export class PublishingActions extends Component<Props, State> {
     this.setState(
       {
         // tslint:disable-next-line: variable-name
-        page: grepFiltergoalssDataAwait.total_pages,
+        page: grepFiltergoalssDataAwait.total_pages
       }
     );
     if (grepFiltergoalssDataAwait.data.length > 0) { this.setState({ loadingGoals: false }); }
@@ -889,9 +902,9 @@ export class PublishingActions extends Component<Props, State> {
               <img src={isChecked} />
               <p>{textIsOpen}</p>
             </div>
-
           </div>
           {this.renderKeywordsInput()}
+          {this.renderLanguagesInput()}
         </div>
       </div>
     );
@@ -961,6 +974,59 @@ export class PublishingActions extends Component<Props, State> {
           temporaryTagsArray
         />
       </div>
+    );
+  }
+
+  public renderLanguagesInput = () => {
+    const { valueLocaleId } = this.state;
+
+    const languages: Array<TagProp> = [];
+    LANGUAGES.forEach((item) => { languages.push({ id: Number(item.langId), title: item.shortDescription }); });
+
+    const selectedLanguage: Array<TagProp>  = [];
+    if (valueLocaleId !== null) { selectedLanguage.push(languages.find(i => i.id === valueLocaleId)!); }
+
+    const myplaceholder = (selectedLanguage.length > 0) ? '' : intl.get('publishing_page.languages');
+
+    return (
+      <div>
+        <TagInputComponent
+              className="filterBy darkTheme"
+              tags={languages}
+              addTag={this.addLanguage}
+              currentTags={selectedLanguage}
+              orderbyid={false}
+              removeTag={this.removeLanguage}
+              placeholder={myplaceholder}
+              listView
+              temporaryTagsArray
+        />
+      </div>
+    );
+  }
+
+  public addLanguage = async (id: number) => {
+    const { currentEntity } = this.props.store!;
+
+    this.setState(
+      {
+        valueLocaleId: id
+      },
+      () => {
+        currentEntity!.setLocaleId(id);
+      }
+    );
+  }
+
+  public removeLanguage = async (id: number) => {
+    const { currentEntity } = this.props.store!;
+    this.setState(
+      {
+        valueLocaleId: null
+      },
+      () => {
+        currentEntity!.setLocaleId(null);
+      }
     );
   }
 
