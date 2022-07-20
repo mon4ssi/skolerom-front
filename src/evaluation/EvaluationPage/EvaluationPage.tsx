@@ -8,6 +8,7 @@ import { SearchFilter } from 'components/common/SearchFilter/SearchFilter';
 import { Pagination } from 'components/common/Pagination/Pagination';
 import * as QueryStringHelper from 'utils/QueryStringHelper';
 import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
+import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
 import { SortingFilter, StoreState, QueryStringKeys } from 'utils/enums';
 
 import './EvaluationPage.scss';
@@ -28,9 +29,11 @@ const tabNavigationData = {
 
 interface IEvaluationPageProps {
   assignmentListStore?: AssignmentListStore;
+  teachingPathsListStore?: TeachingPathsListStore;
 }
 
 @inject('assignmentListStore')
+@inject('teachingPathsListStore')
 @observer
 class EvaluationPage extends Component<IEvaluationPageProps & RouteComponentProps> {
 
@@ -77,8 +80,11 @@ class EvaluationPage extends Component<IEvaluationPageProps & RouteComponentProp
   }
 
   private renderPaginationIfNeeded() {
-    const totalPages = this.props.assignmentListStore!.assignmentDistributeList.pages;
-    if (totalPages > 1 && this.props.assignmentListStore!.assignmentDistributeList.state === StoreState.PENDING) {
+    const { history, assignmentListStore, teachingPathsListStore } = this.props;
+    const ifAssigments = history.location.pathname.includes('/assignments');
+    const totalPages = (ifAssigments) ? assignmentListStore!.assignmentDistributeList.pages : teachingPathsListStore!.paginationTotalPages;
+    const mystate = (ifAssigments) ? assignmentListStore!.assignmentDistributeList.state :  teachingPathsListStore!.teachingPathsState;
+    if (totalPages > 1 && mystate === StoreState.PENDING) {
       return (
         <Pagination
           pageCount={totalPages}

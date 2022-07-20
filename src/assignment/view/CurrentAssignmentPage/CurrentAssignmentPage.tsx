@@ -124,7 +124,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
       this.updateQueryString();
 
       if (currentQuestionaryStore.assignment && currentQuestionaryStore.assignment.isOwnedByMe() && !search) {
-        this.props.history.replace(`/assignments/edit/${Number(match.params.id)}`);
+        /* this.props.history.replace(`/assignments/edit/${Number(match.params.id)}`); */
         return;
       }
     } else {
@@ -440,8 +440,8 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
       isVisibleButtonRender = true;
     }
     const url: URL = new URL(window.location.href);
-    const openTeacherGuidance: boolean = (url.searchParams.get('open') === 'tg' ? true : false);
-
+    /* const localParamIsOpenTG = localStorage!.getItem('isOpen'); */
+    const openTeacherGuidance: boolean = (url.searchParams.get('open') === 'tg' /* || localParamIsOpenTG!  */? true : false);
     return !isLoading && (
       <div tabIndex={0} className="CurrentAssignmentPage">
         <AppHeader
