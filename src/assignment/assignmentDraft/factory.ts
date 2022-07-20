@@ -32,6 +32,8 @@ export const buildDraftAssignment = (dto: DraftAssignmentResponseDTO): DraftAssi
     id: dto.id,
     updatedAt: dto.updatedAt,
     isPrivate: dto.isPrivate,
+    isMySchool: dto.isMySchool,
+    mySchools: dto.mySchools,
     grades: dto.grades.map(grade => new Grade(grade.id, grade.title)),
     subjects: dto.subjects.map(subject => new Subject(subject.id, subject.title)),
     levels: dto.levels.map(level => level),
@@ -42,9 +44,11 @@ export const buildDraftAssignment = (dto: DraftAssignmentResponseDTO): DraftAssi
     grepReadingInSubjectsIds:dto.grepReadingInSubjectsIds,
     grepGoalsIds:dto.grepGoalsIds,
     sources:dto.sources,
+    keywords: dto.keywords,
     guidance:dto.guidance,
     hasGuidance:dto.hasGuidance,
-    open: dto.open
+    open: dto.open,
+    schools: dto.schools
   });
 
   const draftAssignment = new DraftAssignment({ assignment, sessionId: dto.uuid, questionsWithError: null });
@@ -201,6 +205,9 @@ export const buildDraftAssignmentDTO = (
   guidance: draftAssignment.guidance,
   numberOfQuestions: draftAssignment.numberOfQuestions || draftAssignment.questions.length,
   isPrivate: draftAssignment.isPrivate,
+  isMySchool: draftAssignment.isMySchool,
+  mySchools: draftAssignment.mySchools,
+  isPublished: draftAssignment.isPublished,
   subjects: draftAssignment.subjects,
   grades: draftAssignment.grades,
   levels: draftAssignment.levels,
@@ -211,5 +218,6 @@ export const buildDraftAssignmentDTO = (
   grepMainTopicsIds: draftAssignment.grepMainTopicsIds,
   grepReadingInSubjectsIds: draftAssignment.grepReadingInSubjectsIds,
   sources: draftAssignment.sources,
+  keywords: draftAssignment.keywords,
   open: draftAssignment._open
 });

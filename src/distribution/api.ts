@@ -16,6 +16,7 @@ interface GrepDataDTO {
 }
 
 interface SchoolDTO {
+  id: number;
   groupApiId : string;
   name: string;
   parent: string;

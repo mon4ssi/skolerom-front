@@ -16,6 +16,50 @@
     "Copy url": "Copy url",
     "not permission": "Sorry, you don't have access to this platform. Please contact your organization to gain access"
   },
+  "preview": {
+    "teaching_path": {
+      "headers": {
+        "no": "No",
+        "questions": "questions",
+        "articles": "articles",
+        "by": "By"
+      },
+      "grep": {
+        "subjects": "Subject",
+        "core_elements": "Core elements",
+        "multidisciplinary_subjects": "Multidisciplinary subjects",
+        "sources": "Source",
+        "educational_goals": "Educational goals"
+      },
+      "buttons": {
+        "view": "View teaching path",
+        "teacher_guidance": "Teacher guidance",
+        "edit": "Edit",
+        "duplicate": "Duplicate"
+      }
+    },
+    "assignment": {
+      "headers": {
+        "no": "No",
+        "questions": "questions",
+        "articles": "articles",
+        "by": "By"
+      },
+      "grep": {
+        "subjects": "Subject",
+        "core_elements": "Core elements",
+        "multidisciplinary_subjects": "Multidisciplinary subjects",
+        "sources": "Source",
+        "educational_goals": "Educational goals"
+      },
+      "buttons": {
+        "view": "View assignment",
+        "teacher_guidance": "Teacher guidance",
+        "edit": "Edit",
+        "duplicate": "Duplicate"
+      }
+    }
+  },
   "assignments_page": {
     "no_results": "No results found",
     "title": "Title",
@@ -83,9 +127,15 @@
     "selected": "selected",
     "Log in": "Log in",
     "About skolerom": "About skolerom",
+    "About": "About us",
+    "contact": "Contact",
     "School": "School",
     "Library": "Library",
+    "support": "Support",
     "For foresatte": "For foresatte",
+    "For Larere": "For lærere",
+    "Lesereisen": "Lesereisen 2022",
+    "Arshjul": "Årshjul",
     "teacher": "Teacher",
     "student": "Student",
     "content_manager": "Content manager",
@@ -502,7 +552,10 @@
     "source_is_open": "Display in Open Site",    
     "source_is_open_title": "Visiblity Settings",
     "source_is_open_assig": "Display in Open Site",
-    "source": "Source"
+    "source": "Source",
+    "keywords": "Keywords",
+    "selected_myschools": "Select school",
+    "dont_empty": "The School field cannot be left empty"
   },
   "distribution_page": {
     "distribute_assignment": "Distribute assignment",
@@ -598,6 +651,7 @@
     "validation": {
       "not_teaching_path_creator": "The teaching path cannot be opened"
     },
+    "Draft": "Draft",
     "delete": "Delete teaching path",
     "view": "View teaching path",
     "edit": "Edit teaching path",

@@ -45,6 +45,10 @@ export class AssignmentService {
     return this.assignmentRepo.getAllAssignmentsList(filter);
   }
 
+  public async getAllSchoolAssignmentsList(filter: Filter) {
+    return this.assignmentRepo.getAllSchoolAssignmentsList(filter);
+  }
+
   public async getMyAssignmentsList(filter: Filter) {
     return this.assignmentRepo.getMyAssignmentsList(filter);
   }

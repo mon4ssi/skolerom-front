@@ -1,13 +1,14 @@
 import { computed, observable, toJS } from 'mobx';
 import intl from 'react-intl-universal';
 
-import { Grade, GreepElements, Subject, Article, Assignment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData, Source } from 'assignment/Assignment';
+import { Grade, GreepElements, Subject, Article, Assignment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData, Source, NowSchool, SourceItem, CoreElementItem, EducationalGoalItem, GenericGrepItem } from 'assignment/Assignment';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from './service';
 import { injector } from '../Injector';
 
 import { secondLevel } from 'utils/constants';
 import { Breadcrumbs } from './teachingPathDraft/TeachingPathDraft';
 import { isNil } from 'lodash';
+import { timeStamp } from 'console';
 
 export const TEACHING_PATH_REPO = 'TEACHING_PATH_REPO';
 
@@ -16,7 +17,9 @@ export interface TeachingPathRepo {
   getTeachingPathDistributes(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
   getTeachingPathListOfStudentInList(studentId: number, filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
   getMyTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
+  getMySchoolTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
   getStudentTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
+  getTeachingPathDataById(id: number): Promise<TeachingPath>;
   getTeachingPathById(id: number): Promise<TeachingPath>;
   getCurrentNode(teachingPathId: number, nodeId: number): Promise<TeachingPathNode>;
   markAsPickedArticle(teachingPathId: number, nodeId: number, idArticle: number, levelWpId: number): Promise<void>;
@@ -51,11 +54,12 @@ export type TeachingPathItemValueArgs = {
   imageUrl?: string;
   wpId?: number;
   isAnswered?: boolean;
-  numberOfQuestions?: number;
   featuredImage?: string;
   grepGoals?: Array<GreepElements>;
   hasGuidance?: boolean;
   open?: boolean;
+  numberOfArticles?: number;
+  numberOfQuestions?: number;
 };
 
 export type TeachingPathItemValue = Article | Assignment | Domain;
@@ -167,6 +171,7 @@ export interface TeachingPathArgs {
   id: number;
   title: string;
   author?: string;
+  createdAt?: string | null;
   rootNodeId?: number;
   lastSelectedNodeId?: number;
   content?: TeachingPathNodeArgs | null;
@@ -174,12 +179,22 @@ export interface TeachingPathArgs {
   guidance?: string;
   hasGuidance?: boolean;
   isPrivate?: boolean;
+  isMySchool?: boolean;
+  mySchools?: string | undefined;
   isFinished?: boolean;
   maxNumberOfSteps?: number;
   minNumberOfSteps?: number;
   grades?: Array<Grade>;
   subjects?: Array<Subject>;
+
+  subjectItems?: Array<GenericGrepItem>;
+  sourceItems?: Array<GenericGrepItem>;
+  coreElementItems?: Array<GenericGrepItem>;
+  multiSubjectItems?: Array<GenericGrepItem>;
+  goalsItems?: Array<GenericGrepItem>;
+
   sources?: Array<number>;
+  keywords?: Array<string>;
   view?: string;
   levels?: Array<number>;
   featuredImage?: string;
@@ -205,6 +220,9 @@ export interface TeachingPathArgs {
   grepGoalsIds?: Array<number>;
   grepGoals?: Array<GreepElements>;
   open?: boolean;
+  schools? : Array<NowSchool>;
+  numberOfQuestions?: number;
+  numberOfArticles?: number;
 }
 
 export class TeachingPath {
@@ -218,12 +236,23 @@ export class TeachingPath {
   @observable protected _rootNodeId: number | undefined;
   @observable protected _lastSelectedNodeId: number | undefined;
   @observable protected _isPrivate: boolean = false;
+  @observable protected _createdAt: string = '';
+  @observable protected _isMySchool?: boolean = false;
+  @observable protected _mySchools?: string | undefined = '';
   @observable protected _isFinished: boolean = false;
   @observable protected _content: TeachingPathNode | null = null;
   protected readonly _maxNumberOfSteps: number | undefined;
   protected readonly _minNumberOfSteps: number | undefined;
   protected readonly _ownedByMe: boolean;
   @observable protected _grades: Array<Grade> = [];
+  @observable protected _keywords: Array<string> = [];
+
+  @observable protected _sourceItems: Array<GenericGrepItem> = [];
+  @observable protected _coreElementItems: Array<GenericGrepItem> = [];
+  @observable protected _multiSubjectItems: Array<GenericGrepItem> = [];
+  @observable protected _goalsItems: Array<GenericGrepItem> = [];
+  @observable protected _subjectItems: Array<Subject> = [];
+
   @observable protected _subjects: Array<Subject> = [];
   @observable protected _sources: Array<number> = [];
   @observable protected _levels: Array<number>;
@@ -250,22 +279,36 @@ export class TeachingPath {
   @observable protected _grepGoalsIds?: Array<number>;
   @observable protected _grepGoals?: Array<GreepElements> = [];
   @observable protected _open?: boolean = false;
+  @observable protected _schools?: Array<NowSchool> = [];
+  protected readonly _numberOfQuestions?: number = 0;
+  protected readonly _numberOfArticles?: number = 0;
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;
     this._title = args.title;
     this._author = args.author || undefined;
+    this._createdAt = args.createdAt || '';
     this._rootNodeId = args.rootNodeId || undefined;
     this._lastSelectedNodeId = args.lastSelectedNodeId || undefined;
     this._description = args.description || '';
     this._guidance = args.guidance || '';
     this._hasGuidance = args.hasGuidance || false;
     this._isPrivate = !isNil(args.isPrivate) ? args.isPrivate : true;
+    this._isMySchool = args.isMySchool || false;
+    this._mySchools = args.mySchools;
     this._isFinished = args.isFinished || false;
     this._content = args.content ? new TeachingPathNode(args.content) : null;
     this._minNumberOfSteps = args.minNumberOfSteps;
     this._maxNumberOfSteps = args.maxNumberOfSteps;
     this._grades = args.grades || [];
+    this._keywords = args.keywords || [];
+
+    this._sourceItems = args.sourceItems || [];
+    this._coreElementItems = args.coreElementItems || [];
+    this._multiSubjectItems = args.multiSubjectItems || [];
+    this._goalsItems = args.goalsItems || [];
+    this._subjectItems = args.subjects || [];
+
     this._subjects = args.subjects || [];
     this._sources = args.sources || [];
     this._view = args.view || 'edit';
@@ -295,6 +338,9 @@ export class TeachingPath {
     this._grepGoalsIds = args.grepGoalsIds;
     this._grepGoals = args.grepGoals || [];
     this._open = args.open || false;
+    this._schools = args.schools || [];
+    this._numberOfQuestions = args.numberOfQuestions || 0;
+    this._numberOfArticles = args.numberOfArticles || 0;
   }
 
   @computed
@@ -328,8 +374,23 @@ export class TeachingPath {
   }
 
   @computed
+  public get numberOfArticles() {
+    return this._numberOfArticles;
+  }
+
+  @computed
+  public get numberOfQuestions() {
+    return this._numberOfQuestions;
+  }
+
+  @computed
   public get author() {
     return this._author;
+  }
+
+  @computed
+  public get createdAt() {
+    return this._createdAt;
   }
 
   @computed
@@ -386,6 +447,21 @@ export class TeachingPath {
   }
 
   @computed
+  public get mySchools() {
+    return this._mySchools;
+  }
+
+  @computed
+  public get schools() {
+    return this._schools;
+  }
+
+  @computed
+  public get isMySchool() {
+    return this._isMySchool;
+  }
+
+  @computed
   public get isFinished() {
     return this._isFinished;
   }
@@ -406,8 +482,38 @@ export class TeachingPath {
   }
 
   @computed
+  public get ownedByMe() {
+    return this._ownedByMe;
+  }
+
+  @computed
   public get grades() {
     return this._grades;
+  }
+
+  @computed
+  public get sourceItems() {
+    return this._sourceItems;
+  }
+
+  @computed
+  public get coreElementItems() {
+    return this._coreElementItems;
+  }
+
+  @computed
+  public get multiSubjectItems() {
+    return this._multiSubjectItems;
+  }
+
+  @computed
+  public get goalsItems() {
+    return this._goalsItems;
+  }
+
+  @computed
+  public get subjectItems() {
+    return this._subjectItems;
   }
 
   @computed
@@ -421,6 +527,11 @@ export class TeachingPath {
   }
 
   @computed
+  public get keywords() {
+    return this._keywords;
+  }
+
+  @computed
   public get view() {
     return this._view;
   }
@@ -431,6 +542,10 @@ export class TeachingPath {
 
   public getListOfSources() {
     return toJS(this._sources);
+  }
+
+  public getListOfKeywords() {
+    return toJS(this._keywords);
   }
 
   public getListOfGrades() {
@@ -520,12 +635,20 @@ export class TeachingPathsList {
     this.filter.per_page = perPage;
   }
 
+  public setFilterSchoolTeachingPath = (school: number) => {
+    this.filter.showMySchoolTeachingpath = school;
+  }
+
   public async getAllTeachingPathsList() {
     return this.teachingPathService.getAllTeachingPathsList(this.filter);
   }
 
   public async getMyTeachingPathsList() {
     return this.teachingPathService.getMyTeachingPathsList(this.filter);
+  }
+
+  public async getMySchoolTeachingPathsList() {
+    return this.teachingPathService.getMySchoolTeachingPathsList(this.filter);
   }
 
   public async getStudentTeachingPathsList() {
@@ -538,6 +661,10 @@ export class TeachingPathsList {
 
   public async getTeachingPathListOfStudentInList(studentId: number) {
     return this.teachingPathService.getTeachingPathListOfStudentInList(studentId, this.filter);
+  }
+
+  public async getTeachingPathDataById(id: number): Promise<TeachingPath> {
+    return this.teachingPathService.getTeachingPathDataById(id);
   }
 
   public async getTeachingPathById(id: number) {

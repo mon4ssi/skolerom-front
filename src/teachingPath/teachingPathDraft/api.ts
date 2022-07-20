@@ -12,7 +12,7 @@ import {
   buildArrayAllWpIds,
   buildFeatureImageForTeachingPathRequestDTO
 } from './factory';
-import { Grade, Article, ArticleRepo, ARTICLE_REPO_KEY } from 'assignment/Assignment';
+import { Grade, Article, ArticleRepo, ARTICLE_REPO_KEY, NowSchool } from 'assignment/Assignment';
 import { injector } from '../../Injector';
 
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
@@ -33,6 +33,8 @@ export interface DraftTeachingPathResponseDTO {
   guidance?: string;
   hasGuidance?: boolean;
   isPrivate?: boolean;
+  isMySchool?: boolean;
+  mySchools?: string | undefined;
   content: TeachingPathNodeResponseDTO | null;
   createdAt: string;
   updatedAt: string | null;
@@ -47,7 +49,11 @@ export interface DraftTeachingPathResponseDTO {
   grepReadingInSubjectsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
   sources?: Array<number>;
+  keywords?: Array<string>;
   open?: boolean;
+  schools?: Array<NowSchool>;
+  selectedArticlesIds: Array<number>;
+  selectedAssignmentsIds: Array<number>;
 }
 
 export interface TeachingPathItemRequestDTO {
@@ -156,6 +162,25 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
         throw new AlreadyEditingTeachingPathError();
       }
       throw error;
+    }
+  }
+
+  public async getKeywordsFromArticles(arrayArticlesIds: Array<number>, arrayAssignmentsIds: Array<number>): Promise<any> {
+    const idsArticlesString = arrayArticlesIds.toString();
+    const idsAssignmentsString = arrayAssignmentsIds.toString();
+    try {
+      return (await API.get(
+        'api/teacher/teaching-paths/getTags', {
+          params: {
+            articleIds: idsArticlesString,
+            assigIds: idsAssignmentsString,
+          }
+        })).data;
+    } catch (error) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: error.response.message
+      });
     }
   }
 

@@ -16,6 +16,50 @@
     "Copy url": "Kopier url",
     "not permission": "Beklager, du har ikke tilgang til denne plattformen. Kontakt organisasjonen din for å få tilgang."
   },
+  "preview": {
+    "teaching_path": {
+      "headers": {
+        "no": "Ingen",
+        "questions": "spørsmål",
+        "articles": "artikler",
+        "by": "Av"
+      },
+      "grep": {
+        "subjects": "Fag",
+        "core_elements": "Kjerneelementer",
+        "multidisciplinary_subjects": "Tverrfaglig tema",
+        "sources": "Kilde",
+        "educational_goals": "Kompetansemål"
+      },
+      "buttons": {
+        "view": "Se læringssti",
+        "teacher_guidance": "Se lærerveiledning",
+        "edit": "Rediger",
+        "duplicate": "Kopier"
+      }
+    },
+    "assignment": {
+      "headers": {
+        "no": "Ingen",
+        "questions": "spørsmål",
+        "articles": "artikler",
+        "by": "Av"
+      },
+      "grep": {
+        "subjects": "Fag",
+        "core_elements": "Kjerneelementer",
+        "multidisciplinary_subjects": "Tverrfaglig tema",
+        "sources": "Kilde",
+        "educational_goals": "Kompetansemål"
+      },
+      "buttons": {
+        "view": "Se oppgave",
+        "teacher_guidance": "Se lærerveiledning",
+        "edit": "Rediger",
+        "duplicate": "Kopier"
+      }
+    }
+  },
   "assignments_page": {
     "no_results": "No results found",
     "title": "Tittel",
@@ -83,9 +127,15 @@
     "selected": "valgt",
     "Log in": "Logg inn",
     "About skolerom": "Hva er Skolerom?",
+    "contact": "Kontakt oss",
+    "About": "Om oss",
     "School": "Støttemateriell",
     "Library": "Skolebibliotek",
+    "support": "Support",
     "For foresatte": "For foresatte",
+    "For Larere": "For lærere",
+    "Lesereisen": "Lesereisen 2022",
+    "Arshjul": "Årshjul",
     "teacher": "Lærer",
     "student": "Elev",
     "content_manager": "Redaktør",
@@ -501,7 +551,10 @@
     "source_is_open": "Vis i Open Site",    
     "source_is_open_title": "Synlighetsinnstillinger",
     "source_is_open_assig": "Vis i Open Site",
-    "source": "Kilde"
+    "source": "Kilde",
+    "keywords": "Nøkkelord",
+    "selected_myschools": "Velg skole",
+    "dont_empty": "Skolefeltet kan ikke stå tomt"
   },
   "distribution_page": {
     "distribute_assignment": "Distribuer oppgave",
@@ -597,6 +650,7 @@
     "validation": {
       "not_teaching_path_creator": "Læringsstien kan ikke åpnes."
     },
+    "Draft": "Kladd",
     "delete": "Slett læringsstien",
     "view": "Vis læringsstien",
     "edit": "Rediger læringsstien",

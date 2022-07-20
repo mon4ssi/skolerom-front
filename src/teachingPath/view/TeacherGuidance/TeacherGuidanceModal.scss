@@ -41,6 +41,14 @@
             left: 98%;
             top: -15px;
             cursor: pointer;
+            .roundedCircle {
+                fill: white;
+            }
+            &:hover {
+                .roundedCircle {
+                    fill: rgb(211, 217, 222);
+                }  
+            }
         }
     }
 

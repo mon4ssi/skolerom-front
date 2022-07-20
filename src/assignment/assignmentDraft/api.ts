@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 
-import { Grade, Subject } from '../Assignment';
+import { Grade, NowSchool, Subject } from '../Assignment';
 import { DraftAssignmentRepo, DraftAssignment, AlreadyEditingAssignmentError } from './AssignmentDraft';
 import { buildNewDraftAssignment, buildDraftAssignment, buildDraftAssignmentDTO } from './factory';
 import { API } from 'utils/api';
@@ -11,6 +11,8 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 
 export interface DraftAssignmentResponseDTO extends NewDraftAssignmentResponseDTO {
   isPrivate: boolean;
+  isMySchool: boolean;
+  mySchools: string | undefined;
   grades: Array<Grade>;
   subjects: Array<Subject>;
   levels: Array<number>;
@@ -22,6 +24,7 @@ export interface NewDraftAssignmentResponseDTO {
   uuid: string;
   assignmentContent: string;
   isCopy: boolean;
+  keywords?: Array<string>;
   grepCoreElementsIds?: Array<number>;
   grepMainTopicsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
@@ -30,6 +33,7 @@ export interface NewDraftAssignmentResponseDTO {
   guidance?: string;
   hasGuidance?: boolean;
   open?: boolean;
+  schools?: Array<NowSchool>;
 }
 
 export interface DraftAssignmentRequestDTO {
@@ -39,12 +43,16 @@ export interface DraftAssignmentRequestDTO {
   guidance: string;
   numberOfQuestions: number;
   isPrivate: boolean;
+  isMySchool: boolean;
+  mySchools: string | undefined;
   assignmentContent: AssignmentRequestDTO;
   featuredImage?: string;
   subjects: Array<Subject>;
   grades: Array<Grade>;
   levels: Array<number>;
+  isPublished?: boolean;
   isCopy?: boolean;
+  keywords?: Array<string>;
   grepCoreElementsIds?: Array<number>;
   grepMainTopicsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
@@ -87,6 +95,23 @@ export class DraftAssignmentApi implements DraftAssignmentRepo {
       }
 
       throw error;
+    }
+  }
+
+  public async getKeywordsFromArticles(arrayWpIds: Array<number>): Promise<any> {
+    const idsString = arrayWpIds.toString();
+    try {
+      return (await API.get(
+        'api/teacher/assignments/getTags', {
+          params: {
+            articleIds: idsString,
+          }
+        })).data;
+    } catch (error) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: error.response.message
+      });
     }
   }
 

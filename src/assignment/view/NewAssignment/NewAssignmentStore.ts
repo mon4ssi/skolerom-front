@@ -3,7 +3,7 @@ import isUndefined from 'lodash/isUndefined';
 import isNull from 'lodash/isNull';
 import intl from 'react-intl-universal';
 import { injector } from 'Injector';
-import { Assignment, Article, ARTICLE_SERVICE_KEY, Attachment, Grade, QuestionAttachment, QuestionType, Subject, GreepElements, FilterArticlePanel, Source, CustomImgAttachment } from 'assignment/Assignment';
+import { Assignment, Article, ARTICLE_SERVICE_KEY, Attachment, Grade, QuestionAttachment, QuestionType, Subject, GreepElements, FilterArticlePanel, Source, CustomImgAttachment, Keyword } from 'assignment/Assignment';
 import { DraftAssignment, EditableImageChoiceQuestion, EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
 import { ArticleService, ASSIGNMENT_SERVICE, AssignmentService } from 'assignment/service';
 import { DRAFT_ASSIGNMENT_SERVICE, DraftAssignmentService } from 'assignment/assignmentDraft/service';
@@ -83,6 +83,7 @@ export class NewAssignmentStore {
   @observable public allGrades: Array<Grade> = [];
   @observable public allSubjects: Array<Subject> = [];
   @observable public allSources: Array<Source> = [];
+  @observable public allKeywords: Array<Keyword> = [];
   @observable public questionAttachments: Array<Attachment> = [];
   @observable public questionCustomAttachments: Array<CustomImgAttachment> = [];
   @observable public currentOrderOption: number = -1;
@@ -476,6 +477,10 @@ export class NewAssignmentStore {
     return toJS(this.allSources);
   }
 
+  public getAllKeywords(): Array<Keyword> {
+    return toJS(this.allKeywords);
+  }
+
   /*public getIsOpen(): boolean {
     return this.open;
   }*/
@@ -533,6 +538,12 @@ export class NewAssignmentStore {
 
   public async getSources() {
     this.allSources = await this.assignmentService.getSources();
+  }
+
+  public async getKeywords() {
+    const relatedArticles = this.currentEntity!.relatedArticles.map(item => item.id);
+    this.allKeywords = await this.draftAssignmentService.getKeywordsFromArticles(relatedArticles!);
+    return this.allKeywords;
   }
 
   public getGoalsByArticle() {

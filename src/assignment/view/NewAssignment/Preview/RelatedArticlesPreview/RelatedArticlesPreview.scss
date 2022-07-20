@@ -151,6 +151,26 @@
       cursor: pointer;
       button {
         background: transparent;
+        position: relative;
+        &:before {
+          content: '';
+          background: #e2017b;
+          position: absolute;
+          width: 35px;
+          height: 35px;
+          top: 7px;
+          left: 5px;
+          border-radius: 50%;
+          opacity: 0;
+        }
+        &:hover {
+          img {
+            filter: grayscale(1)invert(1);
+          }
+          &:before {
+            opacity: 1;
+          }
+        }
       }
     }
     &__left {
@@ -184,6 +204,7 @@
   box-shadow: 0 0 13px -4px rgba(87, 87, 87, 1);
   margin: 5px 10px;
   margin-bottom: 20px;
+  max-height: 325px;
   cursor: pointer;
   transition: 0.5s;
   &:hover {

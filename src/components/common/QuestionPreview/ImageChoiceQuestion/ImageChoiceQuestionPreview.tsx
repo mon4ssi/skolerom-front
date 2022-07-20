@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import classnames from 'classnames';
 import Lightbox from 'react-image-lightbox';
 
-import { ImageChoiceQuestion, ImageChoiceQuestionOption, TypedQuestion } from 'assignment/Assignment';
+import { ImageChoiceQuestion, ImageChoiceQuestionOption, QuestionAttachment, TypedQuestion } from 'assignment/Assignment';
 import {
   EditableImageChoiceQuestion,
   EditableImageChoiceQuestionOption,
@@ -94,6 +94,17 @@ class ImageOption extends Component<ImageOptionProps, ImageOptionState> {
     }
   }
 
+  public renderCustomImageInfo = (option: QuestionAttachment) => {
+    if (option) {
+      return (
+        <div style={{ padding: '9px', fontSize: '13px', fontStyle: 'italic', color: '#993266 !important' }}>
+          <div style={{ fontStyle: 'Italic', color: '#767168', fontWeight: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{option!.title}</div>
+          <div style={{ fontStyle: 'Italic', color: '#767168', fontWeight: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Source: {option.source || option.src}</div>
+        </div>
+      );
+    }
+  }
+
   public render() {
     const { option, answer, light, isEvaluationStyle, readOnly } = this.props;
     const isValueSelected = answer && answer.value.includes(option.title);
@@ -109,6 +120,8 @@ class ImageOption extends Component<ImageOptionProps, ImageOptionState> {
       ImageOption__button_selected: isValueSelected
     });
 
+    const isCustomImageAttachment = true && (option.image && !option!.image!.path!.includes('wp-content'));
+
     const optionTitleStyle = `fs15 fw500 tc1 ImageOption__title ${(isValueSelected && light) ? 'light' : isValueSelected && 'isSelected'}`;
 
     return (
@@ -119,10 +132,11 @@ class ImageOption extends Component<ImageOptionProps, ImageOptionState> {
           alt="bilde"
         />
         <div className={imageOptionImageClassNames} onClick={this.openLightbox}>
-          <img src={zoom} alt="Zoom"/>
+          <img src={zoom} alt="Zoom" />
         </div>
+        {isCustomImageAttachment && this.renderCustomImageInfo(option.image!)}
         <div className={optionTitleStyle}>
-          {option.title}
+          {option!.title}
         </div>
         <button className={`ImagenfocusCurrentOption ${imageOptionTickClassNames}`} onClick={this.setIsRight} title="Check" ref={this.refInput}>
           <img
@@ -173,7 +187,7 @@ export class ImageChoiceQuestionPreview extends Component<Props> {
             isEvaluationStyle={isEvaluationStyle}
           />
         </div>
-    )));
+      )));
   }
 
   public render() {

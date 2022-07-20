@@ -20,7 +20,7 @@ import { AssignmentListStore } from './AssignmentsList/AssignmentListStore';
 import { UserType } from 'user/User';
 import { Page404 } from 'components/pages/Page404/Page404';
 
-import { BooleanFilter, SortingFilter, QueryStringKeys } from 'utils/enums';
+import { BooleanFilter, SortingFilter, QueryStringKeys, StoreState } from 'utils/enums';
 import * as QueryStringHelper from 'utils/QueryStringHelper';
 import { lettersNoEn } from 'utils/lettersNoEn';
 import { Pagination } from '../../components/common/Pagination/Pagination';
@@ -31,6 +31,7 @@ const SOURCE = 'ASSIGNMENT';
 const renderTeacherRedirect = () => <Redirect to="/assignments/all" />;
 const renderAllAssignments = () => <MyAssignments typeOfAssignmentsList="all" />;
 const renderMyAssignments = () => <MyAssignments typeOfAssignmentsList="my" />;
+const renderMySchoolAssignments = () => <MyAssignments typeOfAssignmentsList="myschool" />;
 
 const renderStudentsAssignments = () => <StudentAssignments />;
 const renderStudentEvaluation = () => <StudentEvaluation />;
@@ -57,6 +58,10 @@ const teacherRoutes = (
     <Route
       path="/assignments/all"
       render={renderAllAssignments}
+    />
+    <Route
+      path="/assignments/myschool"
+      render={renderMySchoolAssignments}
     />
     <Route
       path="/assignments/my"
@@ -163,6 +168,25 @@ interface State {
 @observer
 class AssignmentsPageWrapper extends Component<Props, State> {
   public tabNavigationLinks = [
+    {
+      name: 'All assignments',
+      url: '/assignments/all'
+    },
+    {
+      name: 'My assignments',
+      url: '/assignments/my'
+    },
+    {
+      name: 'My school',
+      url: '/assignments/myschool'
+    }
+    /*
+      {
+        name: 'My favorites',
+        url: '/teacher/assignments/favorites'
+    }*/
+  ];
+  public tabNavigationLinksCm = [
     {
       name: 'All assignments',
       url: '/assignments/all'
@@ -902,7 +926,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
   }
 
   public async componentDidMount() {
-    const { newAssignmentStore } = this.props;
+    const { newAssignmentStore, assignmentListStore } = this.props;
     const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions } = this.state;
     this.fetchTeachingPaths();
     if (!this.props.isStudent) {
@@ -989,8 +1013,9 @@ class AssignmentsPageWrapper extends Component<Props, State> {
         <TabNavigation
           textMainButton={intl.get('assignments_tabs.new_assignment')}
           onClickMainButton={this.createAssignment}
-          tabNavigationLinks={this.tabNavigationLinks}
+          tabNavigationLinks={(currentUserRole === UserType.ContentManager) ? this.tabNavigationLinksCm : this.tabNavigationLinks}
           sourceTranslation={'assignments_tabs'}
+          statusButtons={this.props.assignmentListStore!.assignmentsState}
         />
       );
     }
