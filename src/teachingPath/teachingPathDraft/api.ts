@@ -54,6 +54,7 @@ export interface DraftTeachingPathResponseDTO {
   schools?: Array<NowSchool>;
   selectedArticlesIds: Array<number>;
   selectedAssignmentsIds: Array<number>;
+  featuredImage: string;
 }
 
 export interface TeachingPathItemRequestDTO {
@@ -116,7 +117,6 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
       const response: AxiosResponse<DraftTeachingPathResponseDTO> = await API.get(
         `/api/teacher/teaching-paths/draft/${id}/edit`
       );
-
       return response.data.content ?
         buildDraftTeachingPath(response.data) :
         buildNewTeachingPath(response.data);

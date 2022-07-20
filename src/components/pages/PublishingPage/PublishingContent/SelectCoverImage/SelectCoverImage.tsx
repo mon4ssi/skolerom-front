@@ -78,11 +78,23 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
   }
 
   public firstFeaturedImage = (ids: Array<number>) => {
-    const { currentEntity } = this.props;
+    const { localeKey, currentEntity } = this.props;
     if (ids.length > 0) {
       if (this.state.media.length > 0) {
         // article image
-        this.changeFeaturedImage(this.state.media[0].path);
+        if (localeKey === EditEntityLocaleKeys.NEW_ASSIGNMENT) {
+          if (currentEntity!.featuredImage === undefined || currentEntity!.featuredImage === null) {
+            this.changeFeaturedImage(this.state.media[0].path);
+          } else {
+            this.setState({ imagenDefault: currentEntity!.featuredImage });
+          }
+        } else {
+          if (currentEntity!.featuredImage === undefined || currentEntity!.featuredImage === null) {
+            this.changeFeaturedImage(this.state.media[0].path);
+          } else {
+            this.setState({ imagenDefault: currentEntity!.featuredImage });
+          }
+        }
       } else {
         this.setState({ imagenDefault: placeholderImg });
       }
