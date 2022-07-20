@@ -1233,6 +1233,7 @@ export interface ArticleRepo {
   getArticlesByIds(ids: Array<number>): Promise<Array<Article>>;
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
+  fetchCoverImages(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchCustomImages(ids: string, page: number): Promise<ResponseFetchCustomImages>;
   createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse>;
   deleteCustomImage(imageId: number): Promise<any>;
@@ -1429,7 +1430,7 @@ export class Domain {
   public readonly url?: string;
   public grades?: Array<Grade>;
   public subjects?: Array<Subject>;
-  public readonly featuredImage?: string;
+  public featuredImage?: string;
   public image?: string;
   public isRead?: boolean;
   public grepGoals?: Array<GreepElements>;

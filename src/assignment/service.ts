@@ -110,6 +110,10 @@ export class ArticleService {
     return this.articleRepo.fetchImages(postIds);
   }
 
+  public async fetchCoverImages(postIds: Array<number>): Promise<Array<Attachment>> {
+    return this.articleRepo.fetchCoverImages(postIds);
+  }
+
   public async fetchCustomImages(ids:string, page: number): Promise<ResponseFetchCustomImages> {
     return this.articleRepo.fetchCustomImages(ids, page);
   }

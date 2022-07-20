@@ -301,9 +301,20 @@ export class DraftAssignment extends Assignment {
   }
 
   @action
+  public setFeaturedImageFromCover(path: string) {
+    this._featuredImage = path;
+    this.save();
+  }
+
+  @action
+  public getFeaturedImageFromCover() {
+    return this._featuredImage;
+  }
+
+  @action
   public getAllSelectedArticlesIds() {
     /* console.log(this.relatedArticles); */
-    return this.relatedArticles;
+    return this.relatedArticles.map(item => item.id);
   }
 
   @action
@@ -388,7 +399,7 @@ export class DraftAssignment extends Assignment {
   @action
   public async getKeywordsFromArticles(wpIds: Array<number>) {
     // this.validateTitle();
-    const allWpIdsFromArticles = this.getAllSelectedArticlesIds().map(item => item.id);
+    const allWpIdsFromArticles = this.getAllSelectedArticlesIds();
 
     try {
       await this.repo.getKeywordsFromArticles(allWpIdsFromArticles);

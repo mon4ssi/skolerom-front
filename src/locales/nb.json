@@ -522,6 +522,8 @@
     "saved_successfuly": "Lagring vellykket"
   },
   "publishing_page": {
+    "select button": "Velg et forsidebilde",
+    "notimages": "Denne artikkelen har ingen bilder",
     "publish_assignment": "Publiser oppgave",
     "subject": "fag",
     "grade": "trinn",
