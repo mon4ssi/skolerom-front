@@ -13,6 +13,7 @@ import {
   TeachingPathNodeArgs,
   TeachingPathNodeType
 } from 'teachingPath/TeachingPath';
+import { buildTeachingPathRequestDTO, buildFeatureImageForTeachingPathRequestDTO } from './factory';
 import { SAVE_DELAY } from 'utils/constants';
 import { Article, Grade, Subject } from 'assignment/Assignment';
 
@@ -231,6 +232,13 @@ export class DraftTeachingPath extends TeachingPath {
         }
       }
     }
+  }
+
+  @action
+  public setFeaturedImage() {
+    const teachingPath = buildTeachingPathRequestDTO(this);
+    const image = buildFeatureImageForTeachingPathRequestDTO(teachingPath.content);
+    this._featuredImage = image;
   }
 
   @action

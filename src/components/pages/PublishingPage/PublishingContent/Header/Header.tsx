@@ -81,15 +81,11 @@ export class Header extends Component<Props, SelectCoverImageState> {
 
   public firstFeaturedImage = (ids: Array<number>) => {
     const { store } = this.props;
-    const { currentEntity } = store!;
+    const { currentEntity, localeKey } = store!;
     if (ids.length > 0) {
       if (this.state.media.length > 0) {
         // article image
-        if (currentEntity!.featuredImage === undefined || currentEntity!.featuredImage === null) {
-          this.changeFeaturedImage(this.state.media[0].path);
-        } else {
-          this.setState({ imagenDefault: currentEntity!.featuredImage });
-        }
+        currentEntity!.setFeaturedImage();
       } else {
         this.setState({ imagenDefault: placeholderImg });
       }
