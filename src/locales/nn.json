@@ -61,7 +61,7 @@
     }
   },
   "assignments_page": {
-    "no_results": "No results found",
+    "no_results": "Søket ditt gav ingen resultat",
     "title": "Tittel",
     "source": "Kilde",    
     "img_not": "Bildet er ikke valgt ennå"
@@ -192,7 +192,7 @@
   "assignments_tabs": {
     "All assignments": "Alle oppgåver",
     "My assignments": "Mine oppgåver",
-    "My school": "Min skole",
+    "My school": "Skulen min",
     "My favorites": "Mine favorittar",
     "new_assignment": "Ny oppgåve"
   },
@@ -549,7 +549,7 @@
       "title_private":"Vel trinn og fag",
       "description":"Når du deler offentleg, må du kople læringssti til læreplan. Vel relevante fag, klassetrinn, kompetansemål, kjerneelement og lesing i fag før publisering og distribusjon.",
       "descrption_assignment":"Når du deler offentleg, må du kople oppgåva til læreplan. Vel relevante fag, klassetrinn, kompetansemål, kjerneelement og lesing i fag før publisering og distribusjon.",
-      "description_privado":"Kopling til læreplanen er berre nødvendig når du deler offentleg. Du kan gjerne kople innhaldet til relevante kompetansemål her om du ønskjer det."
+      "description_privado":"Vel Skulen min for berre å dela med skulen din. Vel Offentlig for å dela med alle som bruker Skolerom eller Privat for å halda det for deg sjølv og dei du delar det med."
     },
     "source_is_open": "Vis i Open Site",
     "source_is_open_assig": "Vis i Open Site",
@@ -610,7 +610,7 @@
   "teaching_path_tabs": {
     "All teaching paths": "Alle læringsstiar",
     "My teaching paths": "Mine læringsstiar",
-    "My school": "Min skole",
+    "My school": "Skulen min",
     "My favorites": "Mine favorittar",
     "new teaching path": "Lag læringssti"
   },

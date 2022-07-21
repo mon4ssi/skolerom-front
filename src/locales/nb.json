@@ -61,7 +61,7 @@
     }
   },
   "assignments_page": {
-    "no_results": "No results found",
+    "no_results": "Søket ditt ga ingen resultater",
     "title": "Tittel",
     "source": "Kilde",
     "img_not": "Bildet er ikke valgt ennå"
@@ -548,7 +548,7 @@
       "title_private":"Velg trinn og fag",
       "description":"Når du deler offentlig, må du koble læringssti til læreplan. Velg relevante fag, klassetrinn, kompetansemål, kjerneelementer og lesing i fag for å kunne lagre og distribuere læringsstien.",
       "descrption_assignment":"Når du deler offentlig, må du koble oppgaven til læreplan. Velg relevante fag, klassetrinn, kompetansemål, kjerneelementer og lesing i fag for å kunne lagre og distribuere oppgaven.",
-      "description_privado":"Kobling til læreplan er bare obligatorisk når du deler offentlig. For å lettere kunne søke i ditt eget innhold kan du velge å legge til kompetansemål her."
+      "description_privado":"Velg Min skole for kun å dele med skolen din. Velg Offentlig for å dele med alle som bruker Skolerom eller Privat for å holde det for deg selv og de du deler det med."
     },
     "source_is_open": "Vis i Open Site",    
     "source_is_open_title": "Synlighetsinnstillinger",
