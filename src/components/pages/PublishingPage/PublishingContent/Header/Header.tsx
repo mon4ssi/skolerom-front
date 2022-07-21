@@ -70,27 +70,14 @@ export class Header extends Component<Props, SelectCoverImageState> {
   public componentDidMount = async () => {
     const { store } = this.props;
     const { currentEntity } = store!;
-    const articleIds: Array<number> = await currentEntity!.getAllSelectedArticlesIds();
-    const mediaImgs: Array<Attachment> = await this.articleService.fetchCoverImages(articleIds) || [];
-    this.setState({
-      media: mediaImgs!,
-      articlesIds: articleIds
-    });
-    this.firstFeaturedImage(articleIds);
+    this.firstFeaturedImage();
   }
 
-  public firstFeaturedImage = (ids: Array<number>) => {
+  public firstFeaturedImage = () => {
     const { store } = this.props;
     const { currentEntity, localeKey } = store!;
-    if (ids.length > 0) {
-      if (this.state.media.length > 0) {
-        // article image
-        currentEntity!.setFeaturedImage();
-      } else {
-        this.setState({ imagenDefault: placeholderImg });
-      }
-    } else {
-      this.setState({ imagenDefault: placeholderImg });
+    if (currentEntity!.featuredImage === undefined || currentEntity!.featuredImage === null) {
+      currentEntity!.setFeaturedImage();
     }
   }
 
