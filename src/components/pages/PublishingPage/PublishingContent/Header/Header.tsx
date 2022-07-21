@@ -5,7 +5,10 @@ import intl from 'react-intl-universal';
 import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
 import { DraftAssignment } from 'assignment/assignmentDraft/AssignmentDraft';
+import { Attachment, ARTICLE_SERVICE_KEY } from 'assignment/Assignment';
 import { EditEntityLocaleKeys } from 'utils/enums';
+import { ArticleService } from 'assignment/service';
+import { injector } from 'Injector';
 import { UserType } from 'user/User';
 
 import defaultUserPhoto from 'assets/images/profile-avatar.png';
@@ -16,6 +19,7 @@ import thirdLevelImg from 'assets/images/level-3-blue.svg';
 
 import { secondLevel, thirdLevel } from 'utils/constants';
 import { getStudentLevelsRange } from 'utils/studentLevelsRange';
+import placeholderImg from 'assets/images/list-placeholder.svg';
 
 import './Header.scss';
 
@@ -23,8 +27,24 @@ interface Props {
   store?: NewAssignmentStore | EditTeachingPathStore;
 }
 
+interface SelectCoverImageState {
+  articlesIds: Array<number>;
+  media: Array<any>;
+  imagenDefault: string;
+}
+
 @observer
-export class Header extends Component<Props> {
+export class Header extends Component<Props, SelectCoverImageState> {
+  private articleService: ArticleService = injector.get<ArticleService>(ARTICLE_SERVICE_KEY);
+
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      articlesIds: [],
+      media: [],
+      imagenDefault: placeholderImg
+    };
+  }
 
   public renderQuestionsInfo = () => {
     const { store } = this.props;
@@ -45,6 +65,44 @@ export class Header extends Component<Props> {
     return (
       <img src={currentUser.photo || defaultUserPhoto} alt="teacher-img" />
     );
+  }
+
+  public componentDidMount = async () => {
+    const { store } = this.props;
+    const { currentEntity } = store!;
+    const articleIds: Array<number> = await currentEntity!.getAllSelectedArticlesIds();
+    const mediaImgs: Array<Attachment> = await this.articleService.fetchCoverImages(articleIds) || [];
+    this.setState({
+      media: mediaImgs!,
+      articlesIds: articleIds
+    });
+    this.firstFeaturedImage(articleIds);
+  }
+
+  public firstFeaturedImage = (ids: Array<number>) => {
+    const { store } = this.props;
+    const { currentEntity } = store!;
+    if (ids.length > 0) {
+      if (this.state.media.length > 0) {
+        // article image
+        if (currentEntity!.featuredImage === undefined || currentEntity!.featuredImage === null) {
+          this.changeFeaturedImage(this.state.media[0].path);
+        } else {
+          this.setState({ imagenDefault: currentEntity!.featuredImage });
+        }
+      } else {
+        this.setState({ imagenDefault: placeholderImg });
+      }
+    } else {
+      this.setState({ imagenDefault: placeholderImg });
+    }
+  }
+
+  public changeFeaturedImage = (path: string) => {
+    const { store } = this.props;
+    const { currentEntity } = store!;
+    currentEntity!.setFeaturedImageFromCover(path);
+    this.setState({ imagenDefault: path });
   }
 
   public render() {

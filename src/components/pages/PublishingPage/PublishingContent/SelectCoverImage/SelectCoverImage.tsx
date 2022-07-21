@@ -12,6 +12,7 @@ import img from 'assets/images/icon-image.svg';
 import { ArticleService } from 'assignment/service';
 import { injector } from 'Injector';
 import placeholderImg from 'assets/images/list-placeholder.svg';
+import greenCheck from 'assets/images/green_check.svg';
 import { buildArticle } from 'assignment/factory';
 import { AttachmentComponent } from 'assignment/view/NewAssignment/AttachmentsList/Attachment';
 import { id } from 'date-fns/locale';
@@ -45,6 +46,7 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
     (
       <button key={img.path} onClick={() => this.changeFeaturedImage(img.path)} className={(img.path === this.state.imagenDefault) ? 'active selectedButton' : 'selectedButton'}>
         <img className="imageForCover" key={img.path} src={img.path} />
+        <img className="icon" src={greenCheck}/>
       </button>
     )))
 
