@@ -81,7 +81,7 @@ export class QuestionAttachments extends Component<ImagesProps> {
   )
 
   public renderImage = (image: QuestionAttachment, index: number) => {
-    const isCustomImage = !image.path.includes('wp-content');
+    const isCustomImage = !image.path.includes('wp-content') && !image.path.includes('sites');
     const onSelectAttachment = () => this.setCurrentAttachmentByIndex(index);
     return (
       <div style={{ width: '275px', minWidth: '220px', padding: '5px' }}>
