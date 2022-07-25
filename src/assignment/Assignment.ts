@@ -252,6 +252,7 @@ export interface GrepSource {
 }
 
 export class FilterGrep {
+  public localeFilters?: Array<GrepFilters>;
   public subjectFilters?: Array<GrepFilters>;
   public gradeFilters?: Array<GrepFilters>;
   public coreElementsFilters?: Array<GrepElementFilters>;
@@ -906,6 +907,7 @@ export class Filter {
   @observable public isPublished?: number | null;
   @observable public order?: string | null;
   @observable public orderField?: string | null;
+  @observable public locale?: string | number | null;
   @observable public grade?: string | number | null;
   @observable public subject?: string | number | null;
   @observable public isAnswered?: string | null;

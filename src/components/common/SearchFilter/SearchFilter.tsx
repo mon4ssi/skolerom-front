@@ -43,6 +43,7 @@ interface Props {
   isAssignmentsListFilter?: boolean;
 
   customLanguagesList?: Array<Language>;
+  customLocalesList?: Array<Greep>;
   customGradesList?: Array<Grade>;
   customGradeChildrenList?: Array<Grade>;
   customSubjectsList?: Array<Subject>;
@@ -60,6 +61,7 @@ interface Props {
   goalsFilterValueTP?: string | number | null;
   readingFilterValueTP?: string | number | null;
 
+  defaultValueLocaleFilter?: string | null;
   defaultValueLanguageFilter?: string | null;
   defaultValueGradeFilter?: string | null;
   defaultValueSubjectFilter?: string | null;
@@ -97,6 +99,7 @@ interface Props {
   handleChangeSelectCore?(e: any): void;
   handleChangeSelectGoals?(e: any): void;
 
+  handleClickLocale?(e: SyntheticEvent): void;
   handleClickLanguage?(e: SyntheticEvent): void;
   handleClickGrade?(e: SyntheticEvent): void;
   handleClickChildrenGrade?(e: SyntheticEvent): void;
@@ -563,6 +566,41 @@ class SearchFilter extends Component<Props, State> {
         </a>
       </div>
     );
+  }
+
+  public renderFiltersLocale = () => {
+    const { handleClickLocale, customLocalesList, defaultValueLocaleFilter } = this.props;
+    const locales = (customLocalesList!).sort((a, b) => (a.title > b.title) ? 1 : -1);
+    const arrayDefaults = (defaultValueLocaleFilter) ? defaultValueLocaleFilter.split(',') : [];
+
+    const visibleLang = locales!.map((item) => {
+      const title: string = item.title;
+      const classD = (arrayDefaults.includes(String(item.id))) ? 'active' : '';
+
+      return (
+        <button
+          value={item.id}
+          className={`itemFlexFilter localeFilterClass ${classD}`}
+          onClick={handleClickLocale}
+          key={item.id}
+        >
+          {title}
+        </button>
+      );
+    });
+    if (locales!.length === 0) {
+      return (
+        <div className="minimalLoading">
+          <span /><span /><span />
+        </div>
+      );
+    }
+    return (
+      <div className="gradesItems flexFilter">
+        {visibleLang}
+      </div>
+    );
+
   }
 
   public renderFiltersLanguage = () => {
@@ -1385,6 +1423,19 @@ class SearchFilter extends Component<Props, State> {
             </button>
           </div>
           <div className="FiltersModal__body">
+            <div className="FiltersModal__body__item">
+              <div className="itemFilter">
+                <div className="itemFilter__left">
+                  <img src={langImg} />
+                </div>
+                <div className="itemFilter__right">
+                  <h3>{intl.get('generals.language')}</h3>
+                  <div className="itemFilter__core">
+                    {this.renderFiltersLocale()}
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className="FiltersModal__body__item">
               <div className="itemFilter">
                 <div className="itemFilter__left">
