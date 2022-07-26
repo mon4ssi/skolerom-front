@@ -1539,6 +1539,19 @@ class SearchFilter extends Component<Props, State> {
             <div className="FiltersModal__body__item">
               <div className="itemFilter">
                 <div className="itemFilter__left">
+                  <img src={langImg} />
+                </div>
+                <div className="itemFilter__right">
+                  <h3>{intl.get('generals.language')}</h3>
+                  <div className="itemFilter__core">
+                    {this.renderFiltersLocale()}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="FiltersModal__body__item">
+              <div className="itemFilter">
+                <div className="itemFilter__left">
                   <img src={gradeImg} />
                 </div>
                 <div className="itemFilter__right">

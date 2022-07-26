@@ -53,7 +53,7 @@ export interface AssignmentRepo {
     total_pages: number;
   }>;
   copyAssignment(id: number): Promise<number>;
-  getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
+  getGrepFiltersAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
   downloadTeacherGuidancePDF(id: number): Promise<void>;
 }
 
@@ -1097,6 +1097,10 @@ export class AssignmentList {
   public setFiltersSorting(orderField: string, order: string) {
     this.filter.order = order;
     this.filter.orderField = orderField;
+  }
+
+  public setFiltersLocale(locale: string | number | null) {
+    this.filter.locale = locale;
   }
 
   public setFiltersGradeID(gradeID: string | number | null) {
