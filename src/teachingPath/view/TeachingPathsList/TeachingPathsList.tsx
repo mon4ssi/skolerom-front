@@ -620,7 +620,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
         QueryStringHelper.set(this.props.history, QueryStringKeys.LOCALE, String(filterLocale));
         QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, 1);
 
-        this.assigValueData(String(this.state.myValueLocale), String(this.state.myValueGrade), String(this.state.myValueSubject), '', '', '', '', false, false);
+        this.assigValueData(String(this.state.myValueLocale), '', '', '', '', '', '', true, true);
       }
     );
   }
