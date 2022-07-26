@@ -113,13 +113,10 @@
     height: calc(100% - #{$header-height});
 
     .wrapperTeachingPath{
-      width: calc(100% - 230px);
+      width: 100%;
 
       .contentTeachingPath {
-        display: flex;
-        height: calc(100% - 70px);
-        align-items: center;
-        justify-content: center;
+        height: 100%;
         width: 100%;
       }
     }

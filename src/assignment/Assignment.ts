@@ -274,6 +274,7 @@ export interface AssignmentArgs {
   id: number;
   title?: string;
   author?: string;
+  authoravatar?: string;
   description?: string;
   guidance?: string;
   hasGuidance?: boolean;
@@ -334,6 +335,7 @@ export class Assignment {
   protected readonly _ownedByMe: boolean;
   @observable protected _title: string = '';
   @observable private _author: string = '';
+  @observable protected _authoravatar: string = '';
   @observable protected _questions: Array<Question> = [];
   @observable protected _description: string = '';
   @observable protected _guidance: string;
@@ -390,6 +392,7 @@ export class Assignment {
     this._id = args.id;
     this._title = args.title || '';
     this._author = args.author || '';
+    this._authoravatar = args.authoravatar || '';
     this._description = args.description || '';
     this._guidance = args.guidance || '';
     this._hasGuidance = args.hasGuidance || false;
@@ -671,6 +674,11 @@ export class Assignment {
   @computed
   public get localeId() {
     return this._localeId;
+  }
+
+  @computed
+  public get authoravatar() {
+    return this._authoravatar;
   }
 
   public getListOfArticles() {

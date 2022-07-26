@@ -321,7 +321,6 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
         disabled={!this.canGoToNextQuestion}
         title="Next"
       >
-        Next
         <img
           className="CurrentAssignmentPage__buttonImage"
           src={this.canGoToNextQuestion ? arrowRightRounded : arrowRightRoundedGray}
@@ -350,7 +349,6 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
           alt="arrow left"
           title="arrow left"
         />
-        Back
       </button>
     );
   }
@@ -364,7 +362,9 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
 
   public renderBreadcrumbsIfNeeded = () => this.props.location.state && this.props.location.state.node && (
     <div className="CurrentAssignmentPage__breadcrumbs">
+      {this.renderBackButton()}
       <BreadcrumbsTeachingPath getCurrentNodeFromAssignment={this.redirectToCurrentNode} />
+      {this.renderNextButton()}
     </div>
   )
 

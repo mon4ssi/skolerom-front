@@ -8,6 +8,37 @@
   width: 100vw;
   flex-direction: column;
   z-index: 20;
+  .teachingPathNewBreadCrumbs {
+    position: absolute;
+    top: 25px;
+    z-index: 99;
+    align-items: center;
+    display: flex;
+    background: white;
+    left: 50%;
+    transform: translateX(-50%);
+    .breadcrumb {
+      padding: 10px;
+      height: auto;
+      margin: 0px;
+      border-top: none;
+      .breadcrumbs {
+        align-items: center;
+        li {
+          font-size: 15px;
+        }
+      }
+    }
+    button {
+      background: transparent;
+      &.navigationNextButton img {
+        transform: rotate(180deg);
+      }
+      img {
+        width: 20px;
+      }
+    }
+  }
 
   .teachingPathNavigate {
     display: flex;
@@ -113,13 +144,10 @@
     height: calc(100% - #{$header-height});
 
     .wrapperTeachingPath{
-      width: calc(100% - 230px);
+      width: 100%;
 
       .contentTeachingPath {
-        display: flex;
-        height: calc(100% - 70px);
-        align-items: center;
-        justify-content: center;
+        height: 100%;
         width: 100%;
       }
     }

@@ -15,6 +15,7 @@ import logoImage from 'assets/images/logo.svg';
 import burger from 'assets/images/burger-icon.svg';
 import verticalDots from 'assets/images/vertical-dots.svg';
 import userPlaceholder from 'assets/images/user-placeholder.png';
+import closeicon from 'assets/images/close-rounded-black.svg';
 import question from 'assets/images/questions.svg';
 
 import './AppHeader.scss';
@@ -170,6 +171,7 @@ interface HeaderProps extends RouteComponentProps {
   loginStore?: LoginStore;
   fromAssignmentPassing?: boolean;
   fromTeachingPathPassing?: boolean;
+  studentFormTeachinPath?: boolean;
   isPreview?: boolean;
   uiStore?: UIStore;
   width?:number;
@@ -225,6 +227,13 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     uiStore!.setCurrentActiveTab('activity');
   }
 
+  private closeWindow = () => (
+    <div className="closeHeaderTp" onClick={this.handleLogoClick}>
+      <p>{intl.get('teaching path passing.exit')}</p>
+      <img src={closeicon} />
+    </div>
+  )
+
   private getFeideUrl = async () => {
     const { history } = this.props;
 
@@ -256,6 +265,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   }
 
   private renderRole = () => {
+    const { studentFormTeachinPath } = this.props;
     const currentUser = this.props.loginStore!.currentUser;
 
     /*if (currentUser && currentUser.type === UserType.Teacher) {
@@ -264,6 +274,9 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     if (currentUser && currentUser.type === UserType.Student) {
       return intl.get('header.student');
     }*/
+    if (currentUser && currentUser.type === UserType.Student && studentFormTeachinPath) {
+      return intl.get('header.student');
+    }
     if (currentUser && currentUser.type === UserType.ContentManager) {
       return intl.get('header.content_manager');
     }
@@ -759,7 +772,8 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         {!this.props.isPreview && this.props.loginStore!.currentUser && !isStudent && fromTeachingPathPassing && this.renderCopyButton('teaching_paths_list.copy')}
         {ifLogin && this.renderNavigationNotLogin()}
 
-        {this.props.loginStore!.currentUser &&  this.renderBurgerButton()}
+        {this.props.loginStore!.currentUser && this.renderBurgerButton()}
+        {this.props.studentFormTeachinPath && this.closeWindow()}
         <div className="AppHeader__block AppHeader__block_mobile">
           <NavLink to={redirectLink} onClick={this.handleLogoClick}>
             <img src={logoImage} alt="logo mobile"/>

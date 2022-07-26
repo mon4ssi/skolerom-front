@@ -60,6 +60,16 @@
       color: #E2017B;   
     }
   }
+  .closeHeaderTp {
+    display: flex;
+    align-items: center;
+    p {
+      margin: 0px;
+    }
+    img {
+      margin-left: 10px;
+    }
+  }
 }
 
 .AppHeader__block_mobile {

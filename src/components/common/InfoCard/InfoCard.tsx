@@ -21,6 +21,7 @@ import placeholderDomainImg from 'assets/images/addLink_placeholder.png';
 import refresh from 'assets/images/refresh.svg';
 import drag from 'assets/images/drag.svg';
 import dragActive from 'assets/images/drag-active.svg';
+import arrowLeftRounded from 'assets/images/arrow-left-rounded.svg';
 
 import './InfoCard.scss';
 
@@ -47,6 +48,8 @@ interface Props {
   isContentManager?: boolean;
   isPublished?: boolean;
   isDistributed?: boolean;
+  isReadArticle?: boolean;
+  hiddeIcons?: boolean;
   onClick?(id: number, view?: string): void;
   onCLickImg?(url?: string): void;
   onDelete?(itemId: number): void;
@@ -58,7 +61,16 @@ interface Props {
   copyTeachingPath?(id: number): void;
 }
 
-class InfoCardComponent extends Component<Props & RouteComponentProps> {
+interface State {
+  showdescription: boolean;
+}
+
+class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
+
+  public state = {
+    showdescription: false
+  };
+
   private handleClickDelete = (event: React.SyntheticEvent<HTMLButtonElement>) => {
     event.preventDefault();
     this.props.onDelete!(this.props.id!);
@@ -179,7 +191,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
     return null;
   }
 
-  public onCardImgClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  public onCardImgClick = (event: React.MouseEvent<HTMLImageElement>) => {
     const { onCLickImg, url } = this.props;
     event.preventDefault();
     if (onCLickImg) {
@@ -188,6 +200,14 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
   }
 
   public onCardClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const { id, onClick, view } = this.props;
+    event.preventDefault();
+    if (onClick) {
+      onClick(id!, view);
+    }
+  }
+
+  public onButtonCardClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { id, onClick, view } = this.props;
     event.preventDefault();
     if (onClick) {
@@ -312,9 +332,34 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
     e.stopPropagation();
   }
 
-  public renderDescription = () => {
-    const { description } = this.props;
+  public toggleRead = () => {
+    if (this.state.showdescription) {
+      this.setState({ showdescription: false });
+    } else {
+      this.setState({ showdescription: true });
+    }
+  }
 
+  public renderDescription = () => {
+    const { description, hiddeIcons } = this.props;
+    const classDescription = (this.state.showdescription) ? 'cardDescription active' : 'cardDescription';
+    const ClassButton = (this.state.showdescription) ? 'toggleRead active' : 'toggleRead';
+    const textButton = (this.state.showdescription) ? intl.get('preview.teaching_path.read close') : intl.get('preview.teaching_path.read open');
+    if (hiddeIcons) {
+      return description ? (
+        <div className="ContentcardDescription">
+          <div className={classDescription}>
+            {description}
+          </div>
+          <div className="toggleReadDescription">
+            <a href="javascript:void(0)" className={ClassButton} onClick={this.toggleRead}>
+              <img src={arrowLeftRounded} />
+              <p>{textButton}</p>
+            </a>
+          </div>
+        </div>
+      ) : null;
+    }
     return description ? (
       <div className="cardDescription">
         {description}
@@ -375,6 +420,39 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
       'InfoCard flexBox dirColumn',
       onClick && 'cursorPointer'
     );
+    const classIsRead = (this.props.isReadArticle) ? 'btn btnRead' : 'btn';
+    const textsRead = (this.props.isReadArticle) ? intl.get('preview.teaching_path.read again') : intl.get('preview.teaching_path.read article');
+    const textsAssig = (this.props.isReadArticle) ? intl.get('preview.assignment.read again') : intl.get('preview.assignment.read article');
+    const textFinal = (this.props.type === 'ASSIGNMENT') ? textsAssig : textsRead;
+    if (this.props.hiddeIcons) {
+      return (
+        <div className={infoCardClassNames} data-id={this.props.id}>
+          {!isDomain && withButtons && this.renderActionButtons()}
+        {isDomain && withButtons && this.renderDomainButtons()}
+        <button title={title} onClick={this.onButtonCardClick}>
+          <img src={img || placeholderImgDefault} alt={title} title={title} className="cardImage" onError={this.isErrorImg}/>
+        </button>
+        <div className="cardInfo flexBox dirColumn spaceBetween">
+          <div>
+            {!isTeachingPath && !this.props.hiddeIcons && this.renderDefaultIcons()}
+            <div className={`${!withTooltip && 'flexBox'}`}>
+              <div className="cardTitle">
+                <p className={`${!title && 'noTitle'}`}>{title ? title : intl.get('edit_teaching_path.no_title')}<span className="isDraft">{displayDraftNotation ? '' : `- ${intl.get('teaching_paths_list.Draft')}`}</span></p>
+              </div>
+              {isTeachingPath && this.renderTeachingPathIcons()}
+            </div>
+
+            {this.renderDescription()}
+            <div className="buttonRead">
+              <button className={classIsRead} onClick={this.onButtonCardClick}>
+                {textFinal}
+              </button>
+            </div>
+          </div>
+        </div>
+        </div>
+      );
+    }
     return (
       <div className={infoCardClassNames} onClick={this.onCardClick} data-id={this.props.id}>
         {!isDomain && withButtons && this.renderActionButtons()}
@@ -384,7 +462,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps> {
         </button>
         <div className="cardInfo flexBox dirColumn spaceBetween">
           <div>
-            {!isTeachingPath && this.renderDefaultIcons()}
+            {!isTeachingPath && !this.props.hiddeIcons && this.renderDefaultIcons()}
             <div className={`${!withTooltip && 'flexBox'}`}>
               <div className="cardTitle">
                 <p className={`${!title && 'noTitle'}`}>{title ? title : intl.get('edit_teaching_path.no_title')}<span className="isDraft">{displayDraftNotation ? '' : `- ${intl.get('teaching_paths_list.Draft')}`}</span></p>

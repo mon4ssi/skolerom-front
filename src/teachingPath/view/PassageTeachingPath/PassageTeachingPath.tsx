@@ -19,6 +19,7 @@ import { BreadcrumbsTeachingPath } from 'components/common/Breadcrumbs/Breadcrum
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 
 import actualArrowLeftRounded from 'assets/images/actual-arrow-left-rounded.svg';
+import arrowLeftRounded from 'assets/images/arrow-left-rounded.svg';
 
 import './PassageTeachingPath.scss';
 import { Loader } from '../../../components/common/Loader/Loader';
@@ -197,8 +198,7 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
       : '';
     return (
       <div key={item.id} className={'questionWrapper'}>
-        <span className={`questionNumber ${selectedItem}-circle`}>{index + 1}</span>
-        <span className={`questionName ${selectedItem}`}>{item.title}</span>
+        <span className={`questionNumber ${selectedItem}-circle`} />
       </div>
     )
       ;
@@ -223,26 +223,8 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
       }
     }
 
-    if (questionaryTeachingPathStore!.displayedElement === TeachingPathNodeType.Root) {
-      return (
-        <>
-          <span className={'overview'}>{intl.get('teaching path preview.Start teaching path')}</span>
-          <h1 className={'titleTeachingPath'}>{currentTeachingPath && currentTeachingPath.title}</h1>
-        </>
-      );
-    }
-    if (currentNode && currentNode.children.length === 0) {
-      return (
-        <>
-          <span className={'overview'}>{intl.get('edit_teaching_path.Submit')}</span>
-          <span>{currentNode.selectQuestion}</span>
-        </>
-      );
-    }
     return (
       <>
-        <span className={'overview'}>{intl.get('edit_teaching_path.Step overview')}</span>
-        <span>{currentNode && currentNode.selectQuestion}</span>
         {currentList.map(this.renderQuestion)}
       </>
     );
@@ -270,29 +252,23 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
   public render() {
     return (
       <div className={'passageTeachingPath'}>
-        <AppHeader fromTeachingPathPassing onLogoClick={this.handleExit}/>
+        <AppHeader fromTeachingPathPassing studentFormTeachinPath onLogoClick={this.handleExit}/>
 
         <div className="teachingPathWrapper">
-
-          <div className="teachingPathNavigate">
-            <div className="stepOverview">
-              {this.renderOverview()}
-            </div>
-
-            <div className="arrowControlsTeachingPath">
-              <button className={'navigationExitButton'} onClick={this.handleExit} title={intl.get('teaching path passing.exit')} >
-                <img src={actualArrowLeftRounded} alt="actualArrowLeftRounded"/>
-                <span>{intl.get('teaching path passing.exit')}</span>
-              </button>
-            </div>
+          <div className="teachingPathNewBreadCrumbs">
+            <button className={'navigationExitButton'} title={intl.get('teaching path passing.exit')} >
+              <img src={arrowLeftRounded} alt="arrowLeftRounded"/>
+            </button>
+            <BreadcrumbsTeachingPath onClickStart={this.onClickStartBreadcrumbs}/>
+            <button className={'navigationNextButton'} title={intl.get('teaching path passing.exit')} >
+              <img src={arrowLeftRounded} alt="arrowRightRounded"/>
+            </button>
           </div>
 
           <div className="flexBox dirColumn wrapperTeachingPath">
             <div className="contentTeachingPath" ref={this.ref}>
               {this.renderContent()}
             </div>
-
-            <BreadcrumbsTeachingPath onClickStart={this.onClickStartBreadcrumbs}/>
           </div>
         </div>
       </div>

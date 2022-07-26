@@ -99,6 +99,16 @@ export class CurrentQuestionaryStore {
     return this.assignment!.featuredImage;
   }
 
+  @computed
+  public get authoravatar() {
+    return this.assignment!.authoravatar;
+  }
+
+  @computed
+  public get author() {
+    return this.assignment!.author;
+  }
+
   public get numberOfQuestions(): number {
     return this.questions.length;
   }

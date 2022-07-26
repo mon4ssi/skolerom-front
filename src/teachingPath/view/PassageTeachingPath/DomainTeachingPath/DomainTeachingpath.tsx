@@ -44,7 +44,7 @@ export class DomainTeachingPath extends Component<Props, State> {
     const length = questionaryTeachingPathStore!.currentDomainList.length;
     return questionaryTeachingPathStore!.currentDomainList.map((item, index) => {
       if (item) {
-        const passedStyle = item.isRead ? 'passedStyle' : '';
+        const passedStyle = item.isRead ? '' : '';
         return (
           <div className={passedStyle} key={item.id} role="region" aria-live="polite" aria-atomic="true">
             <InfoCard
@@ -56,6 +56,8 @@ export class DomainTeachingPath extends Component<Props, State> {
               img={(item.featuredImage) ? item.featuredImage : listPlaceholderImg}
               urldomain={item.url}
               onClick={this.chooseCard(item)}
+              isReadArticle={item.isRead}
+              hiddeIcons
             />
           </div>
         );

@@ -36,7 +36,11 @@
         "teacher_guidance": "Teacher guidance",
         "edit": "Edit",
         "duplicate": "Duplicate"
-      }
+      },
+      "read open": "Read description",
+      "read close": "Close description",
+      "read again": "Read again",
+      "read article": "Read article"
     },
     "assignment": {
       "headers": {
@@ -57,7 +61,9 @@
         "teacher_guidance": "Teacher guidance",
         "edit": "Edit",
         "duplicate": "Duplicate"
-      }
+      },
+      "read again": "Read again",
+      "read article": "Read assignment"
     }
   },
   "assignments_page": {
@@ -616,7 +622,8 @@
   },
   "teaching path preview": {
     "Start teaching path": "Start teaching path",
-    "steps": "steps"
+    "steps": "steps",
+    "deadline": "Deadline"
   },
   "teaching path search": {
     "Search for teaching paths": "Search for teaching paths...",
