@@ -53,7 +53,7 @@ export interface AssignmentRepo {
     total_pages: number;
   }>;
   copyAssignment(id: number): Promise<number>;
-  getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
+  getGrepFiltersAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
   downloadTeacherGuidancePDF(id: number): Promise<void>;
 }
 
@@ -252,6 +252,7 @@ export interface GrepSource {
 }
 
 export class FilterGrep {
+  public localeFilters?: Array<GrepFilters>;
   public subjectFilters?: Array<GrepFilters>;
   public gradeFilters?: Array<GrepFilters>;
   public coreElementsFilters?: Array<GrepElementFilters>;
@@ -384,7 +385,7 @@ export class Assignment {
   public grepReadingInSubjectsIds?: Array<number>;
   public _open?: boolean;
   public _schools?: Array<NowSchool>;
-  @observable protected _localeId?: number | null = 3;
+  @observable protected _localeId?: number | null;
 
   constructor(args: AssignmentArgs) {
     this._id = args.id;
@@ -906,6 +907,7 @@ export class Filter {
   @observable public isPublished?: number | null;
   @observable public order?: string | null;
   @observable public orderField?: string | null;
+  @observable public locale?: string | number | null;
   @observable public grade?: string | number | null;
   @observable public subject?: string | number | null;
   @observable public isAnswered?: string | null;
@@ -1095,6 +1097,10 @@ export class AssignmentList {
   public setFiltersSorting(orderField: string, order: string) {
     this.filter.order = order;
     this.filter.orderField = orderField;
+  }
+
+  public setFiltersLocale(locale: string | number | null) {
+    this.filter.locale = locale;
   }
 
   public setFiltersGradeID(gradeID: string | number | null) {

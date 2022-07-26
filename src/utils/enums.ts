@@ -52,6 +52,7 @@ export enum SliderButtonBehavior {
 }
 
 export enum QueryStringKeys {
+  LOCALE = 'locale',
   GRADE = 'grade',
   SUBJECT = 'subject',
   ORDER = 'order',
