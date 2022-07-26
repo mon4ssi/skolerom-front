@@ -284,7 +284,7 @@ export class TeachingPath {
   @observable protected _schools?: Array<NowSchool> = [];
   protected readonly _numberOfQuestions?: number = 0;
   protected readonly _numberOfArticles?: number = 0;
-  @observable protected _localeId?: number | null = 3;
+  @observable protected _localeId?: number | null;
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;

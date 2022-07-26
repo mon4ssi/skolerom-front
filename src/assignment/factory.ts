@@ -188,6 +188,10 @@ export const buildFilterDTO = (filter: Filter): Object => {
     filterDTO.articles = filter.articles;
   }
 
+  if (filter.locale) {
+    filterDTO.locale = filter.locale;
+  }
+
   return filterDTO;
 };
 

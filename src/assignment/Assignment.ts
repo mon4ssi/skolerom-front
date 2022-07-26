@@ -385,7 +385,7 @@ export class Assignment {
   public grepReadingInSubjectsIds?: Array<number>;
   public _open?: boolean;
   public _schools?: Array<NowSchool>;
-  @observable protected _localeId?: number | null = 3;
+  @observable protected _localeId?: number | null;
 
   constructor(args: AssignmentArgs) {
     this._id = args.id;
