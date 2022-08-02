@@ -56,32 +56,6 @@ const headerLinks: Array<HeaderNavigationLink> = [
         url: `${process.env.REACT_APP_WP_URL}/lydartikler/`
       }*/
     ]
-  },
-  {
-    name: 'School',
-    url: '#',
-    dropdown: true,
-    submenuItems: [
-      {
-        name: 'For foresatte',
-        url: `${process.env.REACT_APP_WP_URL}/for-foresatte/`
-      },
-      {
-        name: 'For Larere',
-        url: '#',
-        dropdown: true,
-        submenuItems: [
-          {
-            name: 'Lesereisen',
-            url: `${process.env.REACT_APP_WP_URL}/lesereisen-2022/`
-          },
-          {
-            name: 'Arshjul',
-            url: `${process.env.REACT_APP_WP_URL}/arshjul/`
-          }
-        ]
-      }
-    ]
   }
 ];
 const tabletHeaderLinks: Array<HeaderNavigationLink> = [
