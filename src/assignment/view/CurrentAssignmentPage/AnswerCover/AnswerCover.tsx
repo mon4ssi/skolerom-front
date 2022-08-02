@@ -20,6 +20,7 @@ import './AnswerCover.scss';
 const DELAY = 800;
 interface Props {
   currentQuestionaryStore?: CurrentQuestionaryStore;
+  isdontTeaching?: boolean;
   switchCover(): void;
 }
 
@@ -31,9 +32,11 @@ export class AnswerCover extends Component<Props> {
 
   public async componentDidMount() {
     const Navrray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__navBar') as HTMLCollectionOf<HTMLElement>);
-    const breadcrumbeArray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__breadcrumbs') as HTMLCollectionOf<HTMLElement>);
     Navrray[0].style.display = 'none';
-    breadcrumbeArray[0].style.display = 'none';
+    if (this.props.isdontTeaching) {
+      const breadcrumbeArray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__mybreadcrumbs') as HTMLCollectionOf<HTMLElement>);
+      breadcrumbeArray[0].style.display = 'none';
+    }
     await this.props.currentQuestionaryStore!.getRelatedArticles();
     if (this.ref.current) {
       this.ref.current!.focus();
@@ -44,9 +47,11 @@ export class AnswerCover extends Component<Props> {
 
   public componentWillUnmount() {
     const Navrray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__navBar') as HTMLCollectionOf<HTMLElement>);
-    const breadcrumbeArray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__breadcrumbs') as HTMLCollectionOf<HTMLElement>);
     Navrray[0].style.display = 'block';
-    breadcrumbeArray[0].style.display = 'block';
+    if (this.props.isdontTeaching) {
+      const breadcrumbeArray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__mybreadcrumbs') as HTMLCollectionOf<HTMLElement>);
+      breadcrumbeArray[0].style.display = 'flex';
+    }
   }
 
   public getStartButtonTitle = () => {
@@ -163,7 +168,6 @@ export class AnswerCover extends Component<Props> {
           </div>
           <span className="AnswerCover__title">{assignment!.title}</span>
           {assignment!.description && <span className="AnswerCover__description">{assignment!.description}</span>}
-          {this.getAnsweredQuestionsCount()}
           <div ref={this.refEl} className="AnswerCover__div_button">
             <button className="AnswerCover__button" onClick={switchCover} ref={this.ref} title={this.getStartButtonTitle()}>
               {this.getStartButtonTitle()}

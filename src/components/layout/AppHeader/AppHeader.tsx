@@ -172,6 +172,7 @@ interface HeaderProps extends RouteComponentProps {
   fromAssignmentPassing?: boolean;
   fromTeachingPathPassing?: boolean;
   studentFormTeachinPath?: boolean;
+  studentFormAssignment?: boolean;
   isPreview?: boolean;
   uiStore?: UIStore;
   width?:number;
@@ -227,12 +228,15 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     uiStore!.setCurrentActiveTab('activity');
   }
 
-  private closeWindow = () => (
-    <div className="closeHeaderTp" onClick={this.handleLogoClick}>
-      <p>{intl.get('teaching path passing.exit')}</p>
-      <img src={closeicon} />
-    </div>
-  )
+  private closeWindow = () => {
+    const textClose = (this.props.studentFormAssignment) ? intl.get('teaching path passing.exit') : intl.get('current_assignment_page.Exit assignment');
+    return (
+      <div className="closeHeaderTp" onClick={this.handleLogoClick}>
+        <p>{textClose}</p>
+        <img src={closeicon} />
+      </div>
+    );
+  }
 
   private getFeideUrl = async () => {
     const { history } = this.props;

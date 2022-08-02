@@ -84,7 +84,6 @@ export class AssignmentOverview extends Component<Props> {
           <div className={questionNumberClassname}>
             {renderQuestionNumber()}
           </div>
-          {questionTitle}
         </a>
       </li>
     );
@@ -125,7 +124,6 @@ export class AssignmentOverview extends Component<Props> {
           <div className={questionNumberClassname}>
             1
           </div>
-          {intl.get('assignment preview.Assignment articles')}
         </a>
       </li>
     );
@@ -139,9 +137,6 @@ export class AssignmentOverview extends Component<Props> {
     const { redirectData } = this.props;
     return (
       <div className="AssignmentOverview">
-        <div className="AssignmentOverview__header AssignmentOverview__text">
-          {intl.get('current_assignment_page.Assignment overview')}
-        </div>
         <ul className="AssignmentOverview__questions">
           {!redirectData && this.renderAssignmentArticles()}
           {this.renderQuestions()}

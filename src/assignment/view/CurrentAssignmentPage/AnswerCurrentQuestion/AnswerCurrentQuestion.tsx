@@ -90,12 +90,16 @@ class AnswerCurrentQuestion extends Component<Props> {
       finishPreviewSubmit,
       currentQuestionaryStore,
       isPreview,
-      isIdTeachingPath
+      isIdTeachingPath,
+      isTeachingPath,
+      questionaryTeachingPathStore,
+      location: { state }
     } = this.props;
 
     if (!readOnly && this.props.showCover) {
+      const coverInside = (isTeachingPath && state && state.node && state.teachingPath && questionaryTeachingPathStore!.currentNode) ? true : false;
       return (
-        <AnswerCover switchCover={this.props.switchCover}/>
+        <AnswerCover switchCover={this.props.switchCover} isdontTeaching={coverInside}/>
       );
     }
     const redirectData = (currentQuestionaryStore!.currentQuestionary && currentQuestionaryStore!.currentQuestionary.redirectData)
