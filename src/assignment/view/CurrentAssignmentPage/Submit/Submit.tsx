@@ -10,6 +10,7 @@ import { QuestionaryTeachingPathStore } from 'teachingPath/questionaryTeachingPa
 import { LocationState } from '../CurrentAssignmentPage';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 import { CurrentQuestionaryStore } from '../CurrentQuestionaryStore';
+import list from 'assets/images/list-placeholder.svg';
 
 import check from 'assets/images/check-white.svg';
 

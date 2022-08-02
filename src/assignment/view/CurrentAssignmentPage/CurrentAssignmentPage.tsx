@@ -443,9 +443,6 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     }
     const url: URL = new URL(window.location.href);
     const isOnlyAssig = (state && state.node && state.teachingPath && questionaryTeachingPathStore!.currentNode) ? true : false;
-    /*console.log(this.props.currentQuestionaryStore);
-    const background = (this.props.currentQuestionaryStore && this.props.currentQuestionaryStore!.featuredImage) ? this.props.currentQuestionaryStore!.featuredImage : list;*/
-    /* const localParamIsOpenTG = localStorage!.getItem('isOpen'); */
     const openTeacherGuidance: boolean = (url.searchParams.get('open') === 'tg' /* || localParamIsOpenTG!  */? true : false);
     return !isLoading && (
       <div tabIndex={0} className="CurrentAssignmentPage">
@@ -468,7 +465,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
 
         <div className="CurrentAssignmentPage__content">
           <div className="CurrentAssignmentPage__container">
-            <div className="CurrentAssignmentPage__main" /*style={{ backgroundImage: `url(${background})` }} */>
+            <div className="CurrentAssignmentPage__main">
               <div className="CurrentAssignmentPage__main__center">
                 <div className={navBarClasses}>
                   <AssignmentOverview

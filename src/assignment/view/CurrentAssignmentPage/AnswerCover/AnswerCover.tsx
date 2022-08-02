@@ -32,7 +32,9 @@ export class AnswerCover extends Component<Props> {
 
   public async componentDidMount() {
     const Navrray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__navBar') as HTMLCollectionOf<HTMLElement>);
+    const newContent = Array.from(document.getElementsByClassName('CurrentAssignmentPage__main') as HTMLCollectionOf<HTMLElement>);
     Navrray[0].style.display = 'none';
+    newContent[0].classList.remove('questionBody');
     if (this.props.isdontTeaching) {
       const breadcrumbeArray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__mybreadcrumbs') as HTMLCollectionOf<HTMLElement>);
       breadcrumbeArray[0].style.display = 'none';
@@ -47,7 +49,9 @@ export class AnswerCover extends Component<Props> {
 
   public componentWillUnmount() {
     const Navrray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__navBar') as HTMLCollectionOf<HTMLElement>);
+    const newContent = Array.from(document.getElementsByClassName('CurrentAssignmentPage__main') as HTMLCollectionOf<HTMLElement>);
     Navrray[0].style.display = 'block';
+    newContent[0].classList.add('questionBody');
     if (this.props.isdontTeaching) {
       const breadcrumbeArray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__mybreadcrumbs') as HTMLCollectionOf<HTMLElement>);
       breadcrumbeArray[0].style.display = 'flex';
