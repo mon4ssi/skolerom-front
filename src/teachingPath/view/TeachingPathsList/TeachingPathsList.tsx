@@ -685,9 +685,9 @@ class TeachingPathsListComponent extends Component<Props, State> {
         let isInclude = this.state.myValueGrade!.includes(Number(value));
         if (arrayMyValue.length > 1) {
           arrayMyValue.forEach((ar) => {
-            isInclude = this.state.myValueGrade!.includes(Number(ar));
             NumberArrayMyValue.push(Number(ar));
           });
+          isInclude = String(this.state.myValueGrade) === value;
         } else {
           NumberArrayMyValue.push(Number(value));
         }

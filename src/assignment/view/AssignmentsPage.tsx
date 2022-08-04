@@ -291,22 +291,24 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     );
   }
   private handleClickGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const { newAssignmentStore } = this.props;
-    const { optionsGrades, valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
+    const { optionsGrades, myValueGrade } = this.state;
+
     const currentTarget = e.currentTarget;
-    // const valueSelectedGrades = this.state.myValueGrade;
-    let valueSelectedGrades: Array<number> = [];
-    const value = e.currentTarget.value;
+    const value = currentTarget.value;
     const arrayMyValue = value.split(',');
+
+    let valueSelectedGrades: Array<number> = [];
     const NumberArrayMyValue = [];
     const valueToArray: Array<number> = [];
     const newArrayGradeChildren: Array<Grade> = [];
-    let isInclude = this.state.myValueGrade!.includes(Number(value));
+
+    let isInclude = myValueGrade!.includes(Number(value));
+
     if (arrayMyValue.length > 1) {
       arrayMyValue.forEach((ar) => {
-        isInclude = this.state.myValueGrade!.includes(Number(ar));
         NumberArrayMyValue.push(Number(ar));
       });
+      isInclude = String(myValueGrade) === value;
     } else {
       NumberArrayMyValue.push(Number(value));
     }
@@ -323,11 +325,6 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       } else {
         this.setState({ filtersisUsed: false });
       }
-
-      /*const indexSelected = valueSelectedGrades!.indexOf(Number(value));
-      if (indexSelected > -1) {
-        valueSelectedGrades!.splice(indexSelected, 1);
-      }*/
     }
     this.setState({
       myValueGrade: valueSelectedGrades
