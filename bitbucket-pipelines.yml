@@ -19,8 +19,8 @@ pipelines:
 #            script:
 #              - pipe: atlassian/git-secrets-scan:0.5.1
       - step:
-          name: Deploy to Production
-          deployment: Production
+          name: Deploy to Testing
+          deployment: Testing
           #trigger: manual
           clone:
             enabled: false
