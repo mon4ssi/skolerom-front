@@ -6,6 +6,7 @@ import './AssignmentOverview.scss';
 import { Answer } from 'assignment/questionary/Questionary';
 
 const coverWithArticleCardsIndex = 2;
+const const100 = 100;
 
 interface Props {
   answers: Array<Answer>;
@@ -44,7 +45,7 @@ export class AssignmentOverview extends Component<Props> {
       (!!answers[index].value.length) :
       numberOfAnsweredQuestions === questionsList.length - 1;
 
-    const indexInsideClass = (Number(currentQuestion) === Number(index)) ? 'question_in' : '' ;
+    const indexInsideClass = (Number(currentQuestion) === Number(index) || Number(currentQuestion) > Number(index)) ? 'question_in' : '' ;
 
     const questionClassname = classnames('AssignmentOverview__question', indexInsideClass, {
       AssignmentOverview__question_answered: currentQuestionAnswerStatus,
@@ -105,7 +106,7 @@ export class AssignmentOverview extends Component<Props> {
       }
     };
 
-    const questionClassname = classnames('AssignmentOverview__question AssignmentOverview__text', {
+    const questionClassname = classnames('AssignmentOverview__question AssignmentOverview__text question_in', {
       AssignmentOverview__question_answered: isReadArticles,
       AssignmentOverview__question_disabled: !this.isStarted,
     });
@@ -134,9 +135,17 @@ export class AssignmentOverview extends Component<Props> {
   )
 
   public render() {
-    const { redirectData } = this.props;
+    const { redirectData, currentQuestion } = this.props;
+    const auxcontValue = (redirectData === undefined) ? 1 : 0;
+    const widthAll = const100 / Number(this.props.questionsList.length + auxcontValue);
+    const currentData = (Number(currentQuestion) + 1);
+    const width = widthAll * currentData;
+    const myWidth = (currentData === 1) ? '45px' : `calc(${width}% + 45px)`;
     return (
       <div className="AssignmentOverview">
+        <div className="Assignment__progressbar">
+          <div className="Assignment__progressbar__content" style={{ width: myWidth }} />
+        </div>
         <ul className="AssignmentOverview__questions">
           {!redirectData && this.renderAssignmentArticles()}
           {this.renderQuestions()}

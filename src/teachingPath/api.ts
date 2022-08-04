@@ -262,7 +262,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         answerId: data.answerId,
         isCopy: data.isCopy,
         deadline: data.deadline,
-        authorAvatar: data.authorAvatar
+        authorAvatar: data.authorPhoto
       });
     } catch (error) {
       if (error.response.data.message === 'Teaching path not assigned to you') {

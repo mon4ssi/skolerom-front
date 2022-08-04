@@ -187,7 +187,7 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
       case TeachingPathNodeType.Domain:
         return <DomainTeachingPath finishReading={this.finishReadingDomain} />;
       default:
-        return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers}/>;
+        return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers} onimage={this.props.questionaryTeachingPathStore!.currentTeachingPath!.featuredImage} />;
     }
   }
 
@@ -249,11 +249,56 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
     this.props.questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Root);
   }
 
+  public renderThisBlock = () => {
+    const { questionaryTeachingPathStore } = this.props;
+    const node = questionaryTeachingPathStore!.currentNode;
+    let cont = 0;
+    if (node && node.breadcrumbs) {
+      node.breadcrumbs.map((bread) => {
+        // tslint:disable-next-line:no-bitwise
+        cont = cont + 1;
+        const classUsed = (cont === node!.breadcrumbs!.length) ? 'used rounded' : 'used';
+        return (
+          <li className={classUsed} key={bread.id} />
+        );
+      });
+    }
+  }
+
+  public itemsbyBreadcrumbs = () => {
+    const { questionaryTeachingPathStore } = this.props;
+    const node = questionaryTeachingPathStore!.currentNode;
+    if (node && node.breadcrumbs) {
+      if (node.breadcrumbs.length === 1) {
+        return (
+          <ul>
+            <li className="used rounded" />
+            <li />
+          </ul>
+        );
+      }
+      return (
+        <ul>
+          <li className="used" />
+          {this.renderThisBlock()}
+          <li />
+        </ul>
+      );
+    }
+    return (
+      <ul>
+        <li className="used " />
+      </ul>
+    );
+  }
+
   public render() {
     return (
       <div className={'passageTeachingPath'}>
         <AppHeader fromTeachingPathPassing studentFormTeachinPath onLogoClick={this.handleExit}/>
-
+        <div className="passageTeachingPathBreadCrumbs">
+          {this.itemsbyBreadcrumbs()}
+        </div>
         <div className="teachingPathWrapper">
           <div className="teachingPathNewBreadCrumbs">
             <button className={'navigationExitButton'} title={intl.get('teaching path passing.exit')} >
