@@ -95,6 +95,8 @@ export class TeachingPathApi implements TeachingPathRepo {
 
   public storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
   public currentLocale = this.storageInteractor.getCurrentLocale()!;
+  public numberContentAll = 0;
+  public arrayNumberContentAll: Array<number> = [];
 
   public async getAllTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
     if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
@@ -281,13 +283,30 @@ export class TeachingPathApi implements TeachingPathRepo {
 
   }
 
+  public searchShortesPath(data: any): number | undefined {
+    const numberContent = 0;
+    if (data.shortestPath !== undefined || data.shortestPath !== null || data.shortestPath.length !== 0) {
+      this.numberContentAll = this.numberContentAll + 1;
+      this.arrayNumberContentAll.push(data.shortestPath.id);
+      this.searchShortesPath(data.shortestPath);
+    } else {
+      return numberContent;
+    }
+  }
+
   public async getCurrentNode(teachingPathId: number, nodeId: number): Promise<TeachingPathNode> {
     const { data } = await API.get(`api/student/teaching-paths/${teachingPathId}/node/${nodeId}`);
-
+    this.arrayNumberContentAll = [];
+    if (!isNull(data.shortestPath)) {
+      this.arrayNumberContentAll.push(data.shortestPath.id);
+      this.searchShortesPath(data.shortestPath);
+    }
     const breadcrumbs = data.breadcrumbs.reverse().map((crumb: BreadcrumbsResponseDTO) => new Breadcrumbs({
       selectQuestion: crumb.selectQuestion,
       id: crumb.id,
       parentNodeId: crumb.parentNodeId,
+      shortest: this.numberContentAll,
+      shortpathid: this.arrayNumberContentAll,
       items: !isNull(crumb.items) ? crumb.items.map(item => new TeachingPathItem({
         type: crumb.type,
         value: item

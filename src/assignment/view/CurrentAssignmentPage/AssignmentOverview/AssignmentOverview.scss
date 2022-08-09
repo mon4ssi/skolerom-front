@@ -26,6 +26,7 @@
   height: 10px;
   z-index: 2;
   pointer-events: none;
+  overflow: hidden;
   &__content {
     height: 100%;
     position: absolute;

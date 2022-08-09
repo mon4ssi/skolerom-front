@@ -96,7 +96,7 @@ export class CurrentQuestionaryStore {
 
   @computed
   public get featuredImage() {
-    return this.assignment!.featuredImage;
+    return (this.assignment) ? this.assignment!.featuredImage : '';
   }
 
   @computed

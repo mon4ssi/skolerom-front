@@ -52,7 +52,7 @@
         }
         &:last-child {
           &:before { display: none; }
-          &:after { border-radius: 0px; }
+          &:after { border-radius: 0px !important; }
         }
       }
     }

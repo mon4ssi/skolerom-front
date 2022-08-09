@@ -249,27 +249,23 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
     this.props.questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Root);
   }
 
-  public renderThisBlock = () => {
-    const { questionaryTeachingPathStore } = this.props;
-    const node = questionaryTeachingPathStore!.currentNode;
-    let cont = 0;
-    if (node && node.breadcrumbs) {
-      node.breadcrumbs.map((bread) => {
-        // tslint:disable-next-line:no-bitwise
-        cont = cont + 1;
-        const classUsed = (cont === node!.breadcrumbs!.length) ? 'used rounded' : 'used';
-        return (
-          <li className={classUsed} key={bread.id} />
-        );
-      });
-    }
-  }
-
   public itemsbyBreadcrumbs = () => {
     const { questionaryTeachingPathStore } = this.props;
     const node = questionaryTeachingPathStore!.currentNode;
     if (node && node.breadcrumbs) {
-      if (node.breadcrumbs.length === 1) {
+      const lengthShort = node && node.breadcrumbs[0]!.shortest!;
+      const shortpad = node.breadcrumbs[0]!.shortpathid;
+      const arrayActualyBreadCrumbs : Array<number> = [];
+      node.breadcrumbs.forEach((bread) => {
+        arrayActualyBreadCrumbs.push(bread.id);
+      });
+      const lastDrow = (arrayActualyBreadCrumbs[arrayActualyBreadCrumbs.length - 1]);
+      const newArrayCore = arrayActualyBreadCrumbs.concat(shortpad!);
+      const listcrude = newArrayCore!.map((shortitem) => {
+        const usedClass = (arrayActualyBreadCrumbs.includes(shortitem)) ? (shortitem === lastDrow) ? 'used rounded' : 'used' : '';
+        return (shortitem !== undefined) ? (<li key={shortitem} className={usedClass}/>) : '';
+      });
+      if (lengthShort === 1 || lengthShort === 0) {
         return (
           <ul>
             <li className="used rounded" />
@@ -279,9 +275,7 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
       }
       return (
         <ul>
-          <li className="used" />
-          {this.renderThisBlock()}
-          <li />
+          {listcrude}
         </ul>
       );
     }

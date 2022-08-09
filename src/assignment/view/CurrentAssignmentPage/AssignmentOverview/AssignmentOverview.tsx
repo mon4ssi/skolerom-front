@@ -137,10 +137,10 @@ export class AssignmentOverview extends Component<Props> {
   public render() {
     const { redirectData, currentQuestion } = this.props;
     const auxcontValue = (redirectData === undefined) ? 1 : 0;
-    const widthAll = const100 / Number(this.props.questionsList.length + auxcontValue);
+    const widthAll = const100 / Number(this.props.questionsList.length);
     const currentData = (Number(currentQuestion) + 1);
-    const width = widthAll * currentData;
-    const myWidth = (currentData === 1) ? '45px' : `calc(${width}% + 45px)`;
+    const width = (widthAll * currentData);
+    const myWidth = (currentData < 0) ? '45px' : `calc(${width}% + 45px)`;
     return (
       <div className="AssignmentOverview">
         <div className="Assignment__progressbar">
