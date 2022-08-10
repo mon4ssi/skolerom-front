@@ -1,7 +1,7 @@
 import { computed, observable, toJS } from 'mobx';
 import intl from 'react-intl-universal';
 
-import { Grade, GreepElements, Subject, Article, Assignment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData, Source, NowSchool, SourceItem, CoreElementItem, EducationalGoalItem, GenericGrepItem } from 'assignment/Assignment';
+import { Grade, GreepElements, Subject, Article, Assignment, Attachment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData, Source, NowSchool, SourceItem, CoreElementItem, EducationalGoalItem, GenericGrepItem } from 'assignment/Assignment';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from './service';
 import { injector } from '../Injector';
 
@@ -26,10 +26,11 @@ export interface TeachingPathRepo {
   sendDataDomain(domain: string): Promise<Domain>;
   getFiltersArticlePanel(lang: string): Promise<FilterArticlePanel>;
   getGrepFilters(grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
-  getGrepFiltersTeachingPath(grades: string, subjects: string, coreElements?: string, mainTopics?: string, $goals?: string, source?: string): Promise<FilterGrep>;
+  getGrepFiltersTeachingPath(locale: string, grades: string, subjects: string, coreElements?: string, mainTopics?: string, $goals?: string, source?: string): Promise<FilterGrep>;
   /* tslint:disable-next-line:max-line-length */
   getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number): Promise<{ data: Array<GoalsData>, total_pages: number; }>;
   finishTeachingPath(id: number): Promise<void>;
+  fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
   deleteTeachingPathAnswers(teachingPathId: number, answerId: number): Promise<void>;
   copyTeachingPath(id: number): Promise<number>;
   getGradeWpIds(gradeWpIds: Array<number>): Promise<Array<Grade>>;
@@ -223,6 +224,7 @@ export interface TeachingPathArgs {
   schools? : Array<NowSchool>;
   numberOfQuestions?: number;
   numberOfArticles?: number;
+  localeId?: number | null;
 }
 
 export class TeachingPath {
@@ -282,6 +284,7 @@ export class TeachingPath {
   @observable protected _schools?: Array<NowSchool> = [];
   protected readonly _numberOfQuestions?: number = 0;
   protected readonly _numberOfArticles?: number = 0;
+  @observable protected _localeId?: number | null;
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;
@@ -341,6 +344,7 @@ export class TeachingPath {
     this._schools = args.schools || [];
     this._numberOfQuestions = args.numberOfQuestions || 0;
     this._numberOfArticles = args.numberOfArticles || 0;
+    this._localeId = args.localeId;
   }
 
   @computed
@@ -534,6 +538,11 @@ export class TeachingPath {
   @computed
   public get view() {
     return this._view;
+  }
+
+  @computed
+  public get localeId() {
+    return this._localeId;
   }
 
   public getListOfSubjects() {

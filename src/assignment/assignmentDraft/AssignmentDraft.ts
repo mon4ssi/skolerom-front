@@ -182,10 +182,10 @@ export class DraftAssignment extends Assignment {
   private validateCopy() {
     if (
       this.isCopy && (
-      /Copy$/.test(this.title) ||
-      /Kopi$/.test(this.title) ||
-      /copy$/.test(this.title) ||
-      /kopi$/.test(this.title))
+        /Copy$/.test(this.title) ||
+        /Kopi$/.test(this.title) ||
+        /copy$/.test(this.title) ||
+        /kopi$/.test(this.title))
     ) {
       throw new AssignmentValidationError('new assignment.copy_title_not_allow');
     }
@@ -301,9 +301,20 @@ export class DraftAssignment extends Assignment {
   }
 
   @action
+  public setFeaturedImageFromCover(path: string) {
+    this._featuredImage = path;
+    this.save();
+  }
+
+  @action
+  public getFeaturedImageFromCover() {
+    return this._featuredImage;
+  }
+
+  @action
   public getAllSelectedArticlesIds() {
     /* console.log(this.relatedArticles); */
-    return this.relatedArticles;
+    return this.relatedArticles.map(item => item.id);
   }
 
   @action
@@ -388,7 +399,7 @@ export class DraftAssignment extends Assignment {
   @action
   public async getKeywordsFromArticles(wpIds: Array<number>) {
     // this.validateTitle();
-    const allWpIdsFromArticles = this.getAllSelectedArticlesIds().map(item => item.id);
+    const allWpIdsFromArticles = this.getAllSelectedArticlesIds();
 
     try {
       await this.repo.getKeywordsFromArticles(allWpIdsFromArticles);
@@ -480,12 +491,13 @@ export class DraftAssignment extends Assignment {
   @action
   public setArticle = async (article: Article) => {
     /* console.log(`Setting ${article!.id}`); */
+    // Managing articles from AssignmentDraft: adding
     const idItems: Array<number> = [];
     const idItemsSubejs: Array<number> = [];
     this._relatedArticles = this.relatedArticles.concat(article);
 
-    const allGrades: Array<Grade> = [...this.grades, ...article.grades!];
-    const allSubjects: Array<Subject> = [...this.subjects, ...article.subjects!];
+    const allGrades: Array<Grade> = this.grades.length > 0 ? [...this.grades/* , ...article.grades! */] : [...this.grades, ...article.grades!];
+    const allSubjects: Array<Subject> = this.subjects.length > 0 ? [...this.subjects/* , ...article.subjects! */] : [...this.subjects, ...article.subjects!];
 
     allGrades.forEach((e) => {
       idItems.push(e.id);
@@ -538,7 +550,7 @@ export class DraftAssignment extends Assignment {
     this._relatedArticles = this.relatedArticles.filter(
       article => article.id !== removableArticle.id
     );
-
+    // Managing articles from AssignmentDraft: removing
     const newGrades: Array<Grade> = [];
     const newSubjects: Array<Subject> = [];
 
@@ -546,9 +558,15 @@ export class DraftAssignment extends Assignment {
       (article.grades || []).forEach(grade => newGrades.push(grade));
       (article.subjects || []).forEach(subject => newSubjects.push(subject));
     });
-
-    this.setGrades(uniqBy(newGrades, 'id'));
-    this.setSubjects(uniqBy(newSubjects, 'id'));
+    /* console.log(newGrades);
+    console.log(newSubjects); */
+    // // Managing articles from AssignmentDraft: extra validation
+    if (this._grades.length <= 0) {
+      this.setGrades(uniqBy(newGrades, 'id'));
+    }
+    if (this._subjects.length <= 0) {
+      this.setSubjects(uniqBy(newSubjects, 'id'));
+    }
 
     this.save();
   }
@@ -590,6 +608,11 @@ export class DraftAssignment extends Assignment {
     this.save();
   }
 
+  @action
+  public setLocaleId(localeId: number | null) {
+    this._localeId = localeId;
+    this.save();
+  }
 }
 
 export interface EditableQuestionArgs extends QuestionParams {
@@ -690,7 +713,7 @@ export class EditableTextQuestion extends TextQuestion implements QuestionAction
     if (filteredContentBlocks.length <= 0) {
       return true;
     }
-    const previousBlock = filteredContentBlocks[filteredContentBlocks.length - 1] ;
+    const previousBlock = filteredContentBlocks[filteredContentBlocks.length - 1];
     switch (type) {
       case ContentBlockType.Text: {
         const previousFilteredBlock = previousBlock as EditableTextContentBlock;
@@ -994,7 +1017,7 @@ export class EditableMultipleChoiceQuestion extends MultipleChoiceQuestion imple
     if (filteredContentBlocks.length <= 0) {
       return true;
     }
-    const previousBlock = filteredContentBlocks[filteredContentBlocks.length - 1] ;
+    const previousBlock = filteredContentBlocks[filteredContentBlocks.length - 1];
     switch (type) {
       case ContentBlockType.Text: {
         const previousFilteredBlock = previousBlock as EditableTextContentBlock;
@@ -1474,7 +1497,7 @@ export class EditableImageChoiceQuestion extends ImageChoiceQuestion implements 
     if (filteredContentBlocks.length <= 0) {
       return true;
     }
-    const previousBlock = filteredContentBlocks[filteredContentBlocks.length - 1] ;
+    const previousBlock = filteredContentBlocks[filteredContentBlocks.length - 1];
     switch (type) {
       case ContentBlockType.Text: {
         const previousFilteredBlock = previousBlock as EditableTextContentBlock;
@@ -1696,4 +1719,4 @@ export class QuestionImagesOverflowError extends Error {
   }
 }
 
-export class AlreadyEditingAssignmentError extends Error {}
+export class AlreadyEditingAssignmentError extends Error { }

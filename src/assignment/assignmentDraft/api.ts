@@ -34,6 +34,7 @@ export interface NewDraftAssignmentResponseDTO {
   hasGuidance?: boolean;
   open?: boolean;
   schools?: Array<NowSchool>;
+  localeId: number | null;
 }
 
 export interface DraftAssignmentRequestDTO {
@@ -59,6 +60,7 @@ export interface DraftAssignmentRequestDTO {
   grepReadingInSubjectsIds?: Array<number>;
   sources?: Array<number>;
   open?: boolean;
+  localeId: number | null;
 }
 
 export class DraftAssignmentApi implements DraftAssignmentRepo {

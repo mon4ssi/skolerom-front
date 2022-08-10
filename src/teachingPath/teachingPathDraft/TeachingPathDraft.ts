@@ -13,6 +13,7 @@ import {
   TeachingPathNodeArgs,
   TeachingPathNodeType
 } from 'teachingPath/TeachingPath';
+import { buildTeachingPathRequestDTO, buildFeatureImageForTeachingPathRequestDTO } from './factory';
 import { SAVE_DELAY } from 'utils/constants';
 import { Article, Grade, Subject } from 'assignment/Assignment';
 
@@ -234,6 +235,13 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
+  public setFeaturedImage() {
+    const teachingPath = buildTeachingPathRequestDTO(this);
+    const image = buildFeatureImageForTeachingPathRequestDTO(teachingPath.content);
+    this._featuredImage = image;
+  }
+
+  @action
   public improbeSubjects(subjects: Array<Subject>) {
     if (this.isCopy) {
       subjects!.forEach((e) => {
@@ -319,6 +327,17 @@ export class DraftTeachingPath extends TeachingPath {
         }
       }
     }
+  }
+
+  @action
+  public getFeaturedImageFromCover() {
+    return this._featuredImage;
+  }
+
+  @action
+  public setFeaturedImageFromCover(path: string) {
+    this._featuredImage = path;
+    this.save();
   }
 
   public anyArticlesIds(butIds: Array<number>, node: EditableTeachingPathNode) {
@@ -687,6 +706,12 @@ export class DraftTeachingPath extends TeachingPath {
     const editDescript = (document.getElementsByClassName(`jr-desEdit${nroLevel}`)[0] as HTMLDivElement);
     const editInputText = (editDescript.getElementsByClassName('ql-editor')[0] as HTMLInputElement);
     editInputText.focus();
+  }
+
+  @action
+  public setLocaleId(localeId: number | null) {
+    this._localeId = localeId;
+    this.save();
   }
 }
 

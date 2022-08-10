@@ -57,8 +57,8 @@ export class AssignmentService {
     return this.assignmentRepo.getStudentAssignmentList(filter);
   }
 
-  public async getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, goals?: string) {
-    return this.assignmentRepo.getGrepFiltersAssignment(grades, subjects, coreElements, goals);
+  public async getGrepFiltersAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string) {
+    return this.assignmentRepo.getGrepFiltersAssignment(locale, grades, subjects, coreElements, goals);
   }
 
   public async getAssignmentListOfStudentInList(studentId: number, filter: Filter) {
@@ -108,6 +108,10 @@ export class ArticleService {
 
   public async fetchImages(postIds: Array<number>): Promise<Array<Attachment>> {
     return this.articleRepo.fetchImages(postIds);
+  }
+
+  public async fetchCoverImages(postIds: Array<number>): Promise<Array<Attachment>> {
+    return this.articleRepo.fetchCoverImages(postIds);
   }
 
   public async fetchCustomImages(ids:string, page: number): Promise<ResponseFetchCustomImages> {

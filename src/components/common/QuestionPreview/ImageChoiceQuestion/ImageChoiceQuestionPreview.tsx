@@ -120,7 +120,7 @@ class ImageOption extends Component<ImageOptionProps, ImageOptionState> {
       ImageOption__button_selected: isValueSelected
     });
 
-    const isCustomImageAttachment = true && (option.image && !option!.image!.path!.includes('wp-content'));
+    const isCustomImageAttachment = true && (option.image && (!option!.image!.path!.includes('wp-content') && !option!.image!.path!.includes('sites')));
 
     const optionTitleStyle = `fs15 fw500 tc1 ImageOption__title ${(isValueSelected && light) ? 'light' : isValueSelected && 'isSelected'}`;
 

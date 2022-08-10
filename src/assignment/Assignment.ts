@@ -53,7 +53,7 @@ export interface AssignmentRepo {
     total_pages: number;
   }>;
   copyAssignment(id: number): Promise<number>;
-  getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
+  getGrepFiltersAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
   downloadTeacherGuidancePDF(id: number): Promise<void>;
 }
 
@@ -252,6 +252,7 @@ export interface GrepSource {
 }
 
 export class FilterGrep {
+  public localeFilters?: Array<GrepFilters>;
   public subjectFilters?: Array<GrepFilters>;
   public gradeFilters?: Array<GrepFilters>;
   public coreElementsFilters?: Array<GrepElementFilters>;
@@ -325,6 +326,7 @@ export interface AssignmentArgs {
   grepGoals?: Array<GreepElements>;
   open?: boolean;
   schools?: Array<NowSchool>;
+  localeId?: number | null;
 }
 
 export class Assignment {
@@ -383,6 +385,7 @@ export class Assignment {
   public grepReadingInSubjectsIds?: Array<number>;
   public _open?: boolean;
   public _schools?: Array<NowSchool>;
+  @observable protected _localeId?: number | null;
 
   constructor(args: AssignmentArgs) {
     this._id = args.id;
@@ -440,6 +443,7 @@ export class Assignment {
     this.grepReadingInSubjectsIds = args.grepReadingInSubjectsIds;
     this._open = args.open || false;
     this._schools = args.schools || [];
+    this._localeId = args.localeId;
   }
 
   public isOwnedByMe(): boolean {
@@ -663,6 +667,11 @@ export class Assignment {
   @computed
   public get isCopy() {
     return this._isCopy;
+  }
+
+  @computed
+  public get localeId() {
+    return this._localeId;
   }
 
   public getListOfArticles() {
@@ -898,6 +907,7 @@ export class Filter {
   @observable public isPublished?: number | null;
   @observable public order?: string | null;
   @observable public orderField?: string | null;
+  @observable public locale?: string | number | null;
   @observable public grade?: string | number | null;
   @observable public subject?: string | number | null;
   @observable public isAnswered?: string | null;
@@ -1089,6 +1099,10 @@ export class AssignmentList {
     this.filter.orderField = orderField;
   }
 
+  public setFiltersLocale(locale: string | number | null) {
+    this.filter.locale = locale;
+  }
+
   public setFiltersGradeID(gradeID: string | number | null) {
     this.filter.grade = gradeID;
   }
@@ -1233,6 +1247,7 @@ export interface ArticleRepo {
   getArticlesByIds(ids: Array<number>): Promise<Array<Article>>;
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
+  fetchCoverImages(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchCustomImages(ids: string, page: number): Promise<ResponseFetchCustomImages>;
   createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse>;
   deleteCustomImage(imageId: number): Promise<any>;
@@ -1429,7 +1444,7 @@ export class Domain {
   public readonly url?: string;
   public grades?: Array<Grade>;
   public subjects?: Array<Subject>;
-  public readonly featuredImage?: string;
+  public featuredImage?: string;
   public image?: string;
   public isRead?: boolean;
   public grepGoals?: Array<GreepElements>;

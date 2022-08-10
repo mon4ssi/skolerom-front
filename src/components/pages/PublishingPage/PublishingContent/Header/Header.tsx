@@ -5,7 +5,10 @@ import intl from 'react-intl-universal';
 import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
 import { DraftAssignment } from 'assignment/assignmentDraft/AssignmentDraft';
+import { Attachment, ARTICLE_SERVICE_KEY } from 'assignment/Assignment';
 import { EditEntityLocaleKeys } from 'utils/enums';
+import { ArticleService } from 'assignment/service';
+import { injector } from 'Injector';
 import { UserType } from 'user/User';
 
 import defaultUserPhoto from 'assets/images/profile-avatar.png';
@@ -16,6 +19,7 @@ import thirdLevelImg from 'assets/images/level-3-blue.svg';
 
 import { secondLevel, thirdLevel } from 'utils/constants';
 import { getStudentLevelsRange } from 'utils/studentLevelsRange';
+import placeholderImg from 'assets/images/list-placeholder.svg';
 
 import './Header.scss';
 
@@ -23,8 +27,24 @@ interface Props {
   store?: NewAssignmentStore | EditTeachingPathStore;
 }
 
+interface SelectCoverImageState {
+  articlesIds: Array<number>;
+  media: Array<any>;
+  imagenDefault: string;
+}
+
 @observer
-export class Header extends Component<Props> {
+export class Header extends Component<Props, SelectCoverImageState> {
+  private articleService: ArticleService = injector.get<ArticleService>(ARTICLE_SERVICE_KEY);
+
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      articlesIds: [],
+      media: [],
+      imagenDefault: placeholderImg
+    };
+  }
 
   public renderQuestionsInfo = () => {
     const { store } = this.props;
@@ -47,6 +67,27 @@ export class Header extends Component<Props> {
     );
   }
 
+  public componentDidMount = async () => {
+    const { store } = this.props;
+    const { currentEntity } = store!;
+    this.firstFeaturedImage();
+  }
+
+  public firstFeaturedImage = () => {
+    const { store } = this.props;
+    const { currentEntity, localeKey } = store!;
+    if (currentEntity!.featuredImage === undefined || currentEntity!.featuredImage === null) {
+      currentEntity!.setFeaturedImage();
+    }
+  }
+
+  public changeFeaturedImage = (path: string) => {
+    const { store } = this.props;
+    const { currentEntity } = store!;
+    currentEntity!.setFeaturedImageFromCover(path);
+    this.setState({ imagenDefault: path });
+  }
+
   public render() {
     const { store } = this.props;
     const { currentEntity } = store!;
@@ -62,7 +103,6 @@ export class Header extends Component<Props> {
       <div className="Header ">
 
         <div className="withPicture flexBox justifyCenter alignCenter dirColumn">
-          {/* <img src={backgroundImg} alt="background" className="headerBackground" /> */}
           <div className="teachingPathTitle">
             {currentEntity!.title}
           </div>
