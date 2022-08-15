@@ -26,7 +26,7 @@ export interface TeachingPathRepo {
   sendDataDomain(domain: string): Promise<Domain>;
   getFiltersArticlePanel(lang: string): Promise<FilterArticlePanel>;
   getGrepFilters(grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
-  getGrepFiltersTeachingPath(grades: string, subjects: string, coreElements?: string, mainTopics?: string, $goals?: string, source?: string): Promise<FilterGrep>;
+  getGrepFiltersTeachingPath(locale: string, grades: string, subjects: string, coreElements?: string, mainTopics?: string, $goals?: string, source?: string): Promise<FilterGrep>;
   /* tslint:disable-next-line:max-line-length */
   getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number): Promise<{ data: Array<GoalsData>, total_pages: number; }>;
   finishTeachingPath(id: number): Promise<void>;
@@ -286,7 +286,7 @@ export class TeachingPath {
   @observable protected _schools?: Array<NowSchool> = [];
   protected readonly _numberOfQuestions?: number = 0;
   protected readonly _numberOfArticles?: number = 0;
-  @observable protected _localeId?: number | null = 3;
+  @observable protected _localeId?: number | null;
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;

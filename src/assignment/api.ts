@@ -335,9 +335,10 @@ export class AssignmentApi implements AssignmentRepo {
     }
   }
 
-  public async getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep> {
+  public async getGrepFiltersAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep> {
     const response = await API.get('api/teacher/assignments/grep/filters', {
       params: {
+        locale,
         grades,
         subjects,
         coreElements,

@@ -213,6 +213,13 @@ export class AssignmentListStore {
       this.getAssignmentsList();
   }
 
+  public setFiltersLocale(locale: string | number | null) {
+    this.clearMyAssignmentsList();
+    this.assignmentList.setFiltersLocale(locale);
+    this.assignmentList.setFiltersPage(1);
+    this.getAssignmentsList();
+  }
+
   public setFiltersGradeID(gradeID: string | number | null) {
     this.clearMyAssignmentsList();
     this.assignmentList.setFiltersGradeID(gradeID);
@@ -329,8 +336,8 @@ export class AssignmentListStore {
     }
   }
 
-  public async getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, goals?: string) {
-    return this.assignmentService.getGrepFiltersAssignment(grades, subjects, coreElements, goals);
+  public async getGrepFiltersAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string) {
+    return this.assignmentService.getGrepFiltersAssignment(locale, grades, subjects, coreElements, goals);
   }
 
   public get gradeFilterValue() {

@@ -43,7 +43,7 @@ const headerLinks: Array<HeaderNavigationLink> = [
       {
         name: 'School Articles',
         url: `${process.env.REACT_APP_WP_URL}/undervisning/`,
-      }/* ,
+      },
       {
         name: 'Publications',
         url: `${process.env.REACT_APP_WP_URL}/temaboker/`
@@ -55,7 +55,7 @@ const headerLinks: Array<HeaderNavigationLink> = [
       {
         name: 'Sound articles',
         url: `${process.env.REACT_APP_WP_URL}/lydartikler/`
-      }*/
+      }
     ]
   },
   {
@@ -483,10 +483,10 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
               <a href={`${process.env.REACT_APP_WP_URL}/hva-er-skolerom`} title={intl.get('header.About skolerom')} target="_blank">{intl.get('header.About skolerom')}</a>
             </li>
             <li className="AppHeader__dropdownItem">
-              <a href={`${process.env.REACT_APP_WP_URL}/support-skolerom`} title={intl.get('generals.support')} target="_blank">{intl.get('generals.support')}</a>
+              <a href={`${process.env.REACT_APP_WP_URL}/kontakt-oss`} title={intl.get('header.contact')} target="_blank">{intl.get('header.contact')}</a>
             </li>
             <li className="AppHeader__dropdownItem">
-              <a href={`${process.env.REACT_APP_WP_URL}/kontakt-oss`} title={intl.get('header.contact')} target="_blank">{intl.get('header.contact')}</a>
+              <a href={`${process.env.REACT_APP_WP_URL}/support-skolerom`} title={intl.get('generals.support')} target="_blank">{intl.get('generals.support')}</a>
             </li>
             {this.props.loginStore!.currentUser && this.dropDownKeyboard()}
           </ul>
