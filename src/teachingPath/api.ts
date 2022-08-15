@@ -285,10 +285,12 @@ export class TeachingPathApi implements TeachingPathRepo {
 
   public searchShortesPath(data: any): number | undefined {
     const numberContent = 0;
-    if (data.shortestPath !== undefined || data.shortestPath !== null || data.shortestPath.length !== 0) {
+    if (data.shortestPath !== undefined || data.shortestPath !== null || data.shortestPath.length !== 0 || typeof(data.shortestPath) !== 'undefined') {
       this.numberContentAll = this.numberContentAll + 1;
-      this.arrayNumberContentAll.push(data.shortestPath.id);
-      this.searchShortesPath(data.shortestPath);
+      if (typeof(data.shortestPath) !== 'undefined') {
+        this.arrayNumberContentAll.push(data.shortestPath.id);
+        this.searchShortesPath(data.shortestPath);
+      }
     } else {
       return numberContent;
     }
