@@ -7,7 +7,9 @@ import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTe
 import { Header } from './Header/Header';
 import { QuestionsOverview } from './QuestionsOverview/QuestionsOverview';
 
+import { UserType } from 'user/User';
 import './PublishingContent.scss';
+import { SelectCoverImage } from './SelectCoverImage/SelectCoverImage';
 
 interface Props {
   store?: NewAssignmentStore | EditTeachingPathStore;
@@ -15,21 +17,24 @@ interface Props {
 
 @observer
 export class PublishingContent extends Component<Props> {
-
   public render() {
     const { store } = this.props;
-
+    if (store!.getCurrentUser()!.type === UserType.Teacher) {
+      return (
+        <div className="PublishingContent flexBox dirColumn">
+          <Header store={store}/>
+          <div className="teachingPathContent flexBox">
+            <QuestionsOverview
+              currentEntity={store!.currentEntity!}
+              localeKey={store!.localeKey}
+            />
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="PublishingContent flexBox dirColumn">
-        <Header store={store} />
-
-        <div className="teachingPathContent flexBox">
-          <QuestionsOverview
-            currentEntity={store!.currentEntity!}
-            localeKey={store!.localeKey}
-          />
-          {/* <Versions /> */}
-        </div>
+        <SelectCoverImage currentEntity={store!.currentEntity!} localeKey={store!.localeKey} />
       </div>
     );
   }

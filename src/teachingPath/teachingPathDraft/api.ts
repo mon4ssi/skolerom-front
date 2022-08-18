@@ -12,7 +12,7 @@ import {
   buildArrayAllWpIds,
   buildFeatureImageForTeachingPathRequestDTO
 } from './factory';
-import { Grade, Article, ArticleRepo, ARTICLE_REPO_KEY } from 'assignment/Assignment';
+import { Grade, Article, ArticleRepo, ARTICLE_REPO_KEY, NowSchool } from 'assignment/Assignment';
 import { injector } from '../../Injector';
 
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
@@ -33,6 +33,8 @@ export interface DraftTeachingPathResponseDTO {
   guidance?: string;
   hasGuidance?: boolean;
   isPrivate?: boolean;
+  isMySchool?: boolean;
+  mySchools?: string | undefined;
   content: TeachingPathNodeResponseDTO | null;
   createdAt: string;
   updatedAt: string | null;
@@ -47,7 +49,13 @@ export interface DraftTeachingPathResponseDTO {
   grepReadingInSubjectsIds?: Array<number>;
   grepGoalsIds?: Array<number>;
   sources?: Array<number>;
+  keywords?: Array<string>;
   open?: boolean;
+  schools?: Array<NowSchool>;
+  selectedArticlesIds: Array<number>;
+  selectedAssignmentsIds: Array<number>;
+  featuredImage: string;
+  localeId: number | null;
 }
 
 export interface TeachingPathItemRequestDTO {
@@ -110,7 +118,6 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
       const response: AxiosResponse<DraftTeachingPathResponseDTO> = await API.get(
         `/api/teacher/teaching-paths/draft/${id}/edit`
       );
-
       return response.data.content ?
         buildDraftTeachingPath(response.data) :
         buildNewTeachingPath(response.data);
@@ -141,13 +148,12 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
 
   public saveTeachingPath = async (teachingPath: DraftTeachingPath): Promise<string> => {
     const dto = buildTeachingPathRequestDTO(teachingPath);
-    const featuredImage = buildFeatureImageForTeachingPathRequestDTO(dto.content);
+    // const featuredImage = buildFeatureImageForTeachingPathRequestDTO(dto.content);
 
     try {
       const response = await API.put(
         `/api/teacher/teaching-paths/draft/${teachingPath.id}`, {
-          ...dto,
-          featuredImage
+          ...dto
         }
       );
       return response.data.updateAt;
@@ -159,6 +165,25 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
     }
   }
 
+  public async getKeywordsFromArticles(arrayArticlesIds: Array<number>, arrayAssignmentsIds: Array<number>): Promise<any> {
+    const idsArticlesString = arrayArticlesIds.toString();
+    const idsAssignmentsString = arrayAssignmentsIds.toString();
+    try {
+      return (await API.get(
+        'api/teacher/teaching-paths/getTags', {
+          params: {
+            articleIds: idsArticlesString,
+            assigIds: idsAssignmentsString,
+          }
+        })).data;
+    } catch (error) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: error.response.message
+      });
+    }
+  }
+
   public publishTeachingPath = async (teachingPath: DraftTeachingPath): Promise<void> => {
     const dto = buildTeachingPathRequestDTO(teachingPath);
     const featuredImage = buildFeatureImageForTeachingPathRequestDTO(dto.content);
@@ -166,8 +191,7 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
     try {
       return await API.post(
         `/api/teacher/teaching-paths/${teachingPath.id}`, {
-          ...dto,
-          featuredImage
+          ...dto
         }
       );
     } catch (error) {

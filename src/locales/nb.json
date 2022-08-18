@@ -16,8 +16,52 @@
     "Copy url": "Kopier url",
     "not permission": "Beklager, du har ikke tilgang til denne plattformen. Kontakt organisasjonen din for å få tilgang."
   },
+  "preview": {
+    "teaching_path": {
+      "headers": {
+        "no": "Ingen",
+        "questions": "spørsmål",
+        "articles": "artikler",
+        "by": "Av"
+      },
+      "grep": {
+        "subjects": "Fag",
+        "core_elements": "Kjerneelementer",
+        "multidisciplinary_subjects": "Tverrfaglig tema",
+        "sources": "Kilde",
+        "educational_goals": "Kompetansemål"
+      },
+      "buttons": {
+        "view": "Se læringssti",
+        "teacher_guidance": "Se lærerveiledning",
+        "edit": "Rediger",
+        "duplicate": "Kopier"
+      }
+    },
+    "assignment": {
+      "headers": {
+        "no": "Ingen",
+        "questions": "spørsmål",
+        "articles": "artikler",
+        "by": "Av"
+      },
+      "grep": {
+        "subjects": "Fag",
+        "core_elements": "Kjerneelementer",
+        "multidisciplinary_subjects": "Tverrfaglig tema",
+        "sources": "Kilde",
+        "educational_goals": "Kompetansemål"
+      },
+      "buttons": {
+        "view": "Se oppgave",
+        "teacher_guidance": "Se lærerveiledning",
+        "edit": "Rediger",
+        "duplicate": "Kopier"
+      }
+    }
+  },
   "assignments_page": {
-    "no_results": "No results found",
+    "no_results": "Søket ditt ga ingen resultater",
     "title": "Tittel",
     "source": "Kilde",
     "img_not": "Bildet er ikke valgt ennå"
@@ -83,9 +127,15 @@
     "selected": "valgt",
     "Log in": "Logg inn",
     "About skolerom": "Hva er Skolerom?",
+    "contact": "Kontakt oss",
+    "About": "Om oss",
     "School": "Støttemateriell",
     "Library": "Skolebibliotek",
+    "support": "Support",
     "For foresatte": "For foresatte",
+    "For Larere": "For lærere",
+    "Lesereisen": "Lesereisen 2022",
+    "Arshjul": "Årshjul",
     "teacher": "Lærer",
     "student": "Elev",
     "content_manager": "Redaktør",
@@ -472,6 +522,8 @@
     "saved_successfuly": "Lagring vellykket"
   },
   "publishing_page": {
+    "select button": "Velg et forsidebilde",
+    "notimages": "Denne artikkelen har ingen bilder",
     "publish_assignment": "Publiser oppgave",
     "subject": "fag",
     "grade": "trinn",
@@ -496,12 +548,16 @@
       "title_private":"Velg trinn og fag",
       "description":"Når du deler offentlig, må du koble læringssti til læreplan. Velg relevante fag, klassetrinn, kompetansemål, kjerneelementer og lesing i fag for å kunne lagre og distribuere læringsstien.",
       "descrption_assignment":"Når du deler offentlig, må du koble oppgaven til læreplan. Velg relevante fag, klassetrinn, kompetansemål, kjerneelementer og lesing i fag for å kunne lagre og distribuere oppgaven.",
-      "description_privado":"Kobling til læreplan er bare obligatorisk når du deler offentlig. For å lettere kunne søke i ditt eget innhold kan du velge å legge til kompetansemål her."
+      "description_privado":"Velg Min skole for kun å dele med skolen din. Velg Offentlig for å dele med alle som bruker Skolerom eller Privat for å holde det for deg selv og de du deler det med."
     },
     "source_is_open": "Vis i Open Site",    
     "source_is_open_title": "Synlighetsinnstillinger",
     "source_is_open_assig": "Vis i Open Site",
-    "source": "Kilde"
+    "source": "Kilde",
+    "keywords": "Nøkkelord",
+    "selected_myschools": "Velg skole",
+    "dont_empty": "Skolefeltet kan ikke stå tomt",
+    "languages": "Språk"
   },
   "distribution_page": {
     "distribute_assignment": "Distribuer oppgave",
@@ -597,6 +653,7 @@
     "validation": {
       "not_teaching_path_creator": "Læringsstien kan ikke åpnes."
     },
+    "Draft": "Kladd",
     "delete": "Slett læringsstien",
     "view": "Vis læringsstien",
     "edit": "Rediger læringsstien",
@@ -621,7 +678,8 @@
       "cant_publish_goals": "Du kan ikke publisere uten kobling av kompetansemål",
       "notdata_goals": "Det er ingen etablerte mål for disse kriteriene",
       "source_required": "Vennligst angi kilden for dette innholdet",
-      "assignmets_not_enabled_open_site": "Følgende oppgaver er ikke aktivert for visning i den åpne løsningen [|content|] Fortsett uansett?"
+      "assignmets_not_enabled_open_site": "Følgende oppgaver er ikke aktivert for visning i den åpne løsningen [|content|] Fortsett uansett?",
+      "language_required": "Vennligst angi språk for dette innholdet"
     },
     "title": {
       "new_entity": "Ny læringssti",
@@ -748,7 +806,7 @@
     "part2": "Følgende nettlesere er støttet: Firefox, Opera, Edge og Google Chrome."
   },
   "generals": {
-    "support":"Support",
+    "support":"Trenger du hjelp?",
     "keyboard":"Tastatursnarveier",
     "dragdrop":"Dra og slipp her",
     "accesibility_text": {

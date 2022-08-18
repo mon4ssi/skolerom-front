@@ -43,6 +43,7 @@ export interface DraftAssignmentRepo {
   saveAttachment(assignmentId: number, attachmentId: number): Promise<void>;
   removeAttachment(assignmentId: number, attachmentId: number): Promise<number>;
   getNewAssignment(): Promise<DraftAssignment>;
+  getKeywordsFromArticles(arrayWpIds: Array<number>): Promise<Array<string>>;
   getDraftAssignmentById(id: number): Promise<DraftAssignment>;
   saveDraftAssignment(draft: DraftAssignment): Promise<string>;
   publishAssignment(draft: DraftAssignment): Promise<void>;
@@ -104,6 +105,10 @@ export class DraftAssignment extends Assignment {
 
   public set grades(grades: Array<Grade>) {
     this._grades = grades;
+  }
+
+  public set keywords(keywords: Array<string>) {
+    this._keywords = keywords;
   }
 
   private validate(target: string) {
@@ -177,10 +182,10 @@ export class DraftAssignment extends Assignment {
   private validateCopy() {
     if (
       this.isCopy && (
-      /Copy$/.test(this.title) ||
-      /Kopi$/.test(this.title) ||
-      /copy$/.test(this.title) ||
-      /kopi$/.test(this.title))
+        /Copy$/.test(this.title) ||
+        /Kopi$/.test(this.title) ||
+        /copy$/.test(this.title) ||
+        /kopi$/.test(this.title))
     ) {
       throw new AssignmentValidationError('new assignment.copy_title_not_allow');
     }
@@ -238,6 +243,12 @@ export class DraftAssignment extends Assignment {
   }
 
   @action
+  public setGrepKeywordsIds = (data: Array<string>) => {
+    this._keywords = data;
+    this.save();
+  }
+
+  @action
   public setGrepMainTopicsIds = (data: Array<number>) => {
     this.grepMainTopicsIds = data;
     this.save();
@@ -287,6 +298,23 @@ export class DraftAssignment extends Assignment {
   @action
   public setFeaturedImage() {
     this._featuredImage = this.relatedArticles[0] && this.relatedArticles[0].images && this.relatedArticles[0].images.url;
+  }
+
+  @action
+  public setFeaturedImageFromCover(path: string) {
+    this._featuredImage = path;
+    this.save();
+  }
+
+  @action
+  public getFeaturedImageFromCover() {
+    return this._featuredImage;
+  }
+
+  @action
+  public getAllSelectedArticlesIds() {
+    /* console.log(this.relatedArticles); */
+    return this.relatedArticles.map(item => item.id);
   }
 
   @action
@@ -347,6 +375,18 @@ export class DraftAssignment extends Assignment {
     this.save();
   }
 
+  public setMySchool = (schools: string) => {
+    this._mySchools = schools;
+    this.save();
+  }
+
+  public getMySchool = () => this._schools;
+
+  public setIsMySchool(isSchool: boolean) {
+    this._isMySchool = isSchool;
+    this.save();
+  }
+
   public setUpdatedAt(updatedAt: string) {
     this._updatedAt = updatedAt;
   }
@@ -357,10 +397,28 @@ export class DraftAssignment extends Assignment {
   }
 
   @action
+  public async getKeywordsFromArticles(wpIds: Array<number>) {
+    // this.validateTitle();
+    const allWpIdsFromArticles = this.getAllSelectedArticlesIds();
+
+    try {
+      await this.repo.getKeywordsFromArticles(allWpIdsFromArticles);
+    } catch (error) {
+      if (error instanceof AlreadyEditingAssignmentError) {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('new assignment.already_editing')
+        });
+      } else {
+        /* console.error('Error while getting keywords:', error.message); */
+      }
+    }
+  }
+
+  @action
   public async saveAssignment() {
     // this.validateTitle();
     this.validateNumberOfQuestions();
-
     this.questions.forEach(question => question.validate());
 
     try {
@@ -432,12 +490,14 @@ export class DraftAssignment extends Assignment {
 
   @action
   public setArticle = async (article: Article) => {
+    /* console.log(`Setting ${article!.id}`); */
+    // Managing articles from AssignmentDraft: adding
     const idItems: Array<number> = [];
     const idItemsSubejs: Array<number> = [];
     this._relatedArticles = this.relatedArticles.concat(article);
 
-    const allGrades: Array<Grade> = [...this.grades, ...article.grades!];
-    const allSubjects: Array<Subject> = [...this.subjects, ...article.subjects!];
+    const allGrades: Array<Grade> = this.grades.length > 0 ? [...this.grades/* , ...article.grades! */] : [...this.grades, ...article.grades!];
+    const allSubjects: Array<Subject> = this.subjects.length > 0 ? [...this.subjects/* , ...article.subjects! */] : [...this.subjects, ...article.subjects!];
 
     allGrades.forEach((e) => {
       idItems.push(e.id);
@@ -490,7 +550,7 @@ export class DraftAssignment extends Assignment {
     this._relatedArticles = this.relatedArticles.filter(
       article => article.id !== removableArticle.id
     );
-
+    // Managing articles from AssignmentDraft: removing
     const newGrades: Array<Grade> = [];
     const newSubjects: Array<Subject> = [];
 
@@ -498,9 +558,15 @@ export class DraftAssignment extends Assignment {
       (article.grades || []).forEach(grade => newGrades.push(grade));
       (article.subjects || []).forEach(subject => newSubjects.push(subject));
     });
-
-    this.setGrades(uniqBy(newGrades, 'id'));
-    this.setSubjects(uniqBy(newSubjects, 'id'));
+    /* console.log(newGrades);
+    console.log(newSubjects); */
+    // // Managing articles from AssignmentDraft: extra validation
+    if (this._grades.length <= 0) {
+      this.setGrades(uniqBy(newGrades, 'id'));
+    }
+    if (this._subjects.length <= 0) {
+      this.setSubjects(uniqBy(newSubjects, 'id'));
+    }
 
     this.save();
   }
@@ -542,6 +608,11 @@ export class DraftAssignment extends Assignment {
     this.save();
   }
 
+  @action
+  public setLocaleId(localeId: number | null) {
+    this._localeId = localeId;
+    this.save();
+  }
 }
 
 export interface EditableQuestionArgs extends QuestionParams {
@@ -642,7 +713,7 @@ export class EditableTextQuestion extends TextQuestion implements QuestionAction
     if (filteredContentBlocks.length <= 0) {
       return true;
     }
-    const previousBlock = filteredContentBlocks[filteredContentBlocks.length - 1] ;
+    const previousBlock = filteredContentBlocks[filteredContentBlocks.length - 1];
     switch (type) {
       case ContentBlockType.Text: {
         const previousFilteredBlock = previousBlock as EditableTextContentBlock;
@@ -946,7 +1017,7 @@ export class EditableMultipleChoiceQuestion extends MultipleChoiceQuestion imple
     if (filteredContentBlocks.length <= 0) {
       return true;
     }
-    const previousBlock = filteredContentBlocks[filteredContentBlocks.length - 1] ;
+    const previousBlock = filteredContentBlocks[filteredContentBlocks.length - 1];
     switch (type) {
       case ContentBlockType.Text: {
         const previousFilteredBlock = previousBlock as EditableTextContentBlock;
@@ -1426,7 +1497,7 @@ export class EditableImageChoiceQuestion extends ImageChoiceQuestion implements 
     if (filteredContentBlocks.length <= 0) {
       return true;
     }
-    const previousBlock = filteredContentBlocks[filteredContentBlocks.length - 1] ;
+    const previousBlock = filteredContentBlocks[filteredContentBlocks.length - 1];
     switch (type) {
       case ContentBlockType.Text: {
         const previousFilteredBlock = previousBlock as EditableTextContentBlock;
@@ -1648,4 +1719,4 @@ export class QuestionImagesOverflowError extends Error {
   }
 }
 
-export class AlreadyEditingAssignmentError extends Error {}
+export class AlreadyEditingAssignmentError extends Error { }

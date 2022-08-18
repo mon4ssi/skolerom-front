@@ -6,13 +6,23 @@ import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteract
 import { Locales } from 'utils/enums';
 
 import { TeachingPath, TeachingPathItem, TeachingPathNode, TeachingPathNodeType, TeachingPathRepo } from './TeachingPath';
-import { Article, Filter, Grade, Domain, FilterGrep, GoalsData } from 'assignment/Assignment';
+import { Article, Filter, Grade, Domain, FilterGrep, GoalsData, Attachment } from 'assignment/Assignment';
 import { API } from '../utils/api';
 import { buildFilterDTO, GradeDTO } from 'assignment/factory';
 import { Breadcrumbs } from './teachingPathDraft/TeachingPathDraft';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { StudentTeachingPathEvaluationNodeItem } from 'evaluation/api';
 import { CONDITIONALERROR, STATUS_SERVER_ERROR, STATUS_BADREQUEST } from 'utils/constants';
+
+export interface AttachmentDTO {
+  id: number;
+  url: string;
+  alt: string;
+  file_name: string;
+  title: string;
+  duration?: number;
+  src?: Array<string>;
+}
 
 export interface TeachingPathNodeItemResponseDTO {
   id: number;
@@ -22,12 +32,13 @@ export interface TeachingPathNodeItemResponseDTO {
   excerpt?: string;
   grades: Array<Grade>;
   url?: string;
-  numberOfQuestions?: number;
   images?: { id: number, url: string };
   relatedArticles?: Array<Article>;
   isSelected?: boolean;
   hasGuidance?: boolean;
   open?: boolean;
+  numberOfQuestions?: number;
+  numberOfArticles?: number;
 }
 
 export interface TeachingPathNodeResponseDTO {
@@ -46,6 +57,7 @@ export interface StudentTeachingPathNodeResponseDTO extends TeachingPathNodeResp
 
 export interface TeacherTeachingPathResponseDTO {
   id: number;
+  author: string;
   title: string;
   description: string;
   view: string;
@@ -55,6 +67,8 @@ export interface TeacherTeachingPathResponseDTO {
   url?: string;
   isPublished?: boolean;
   isDistributed?: boolean;
+  hasGuidance?: boolean;
+  isMySchool?: boolean;
 }
 
 export interface StudentTeachingPathResponseDTO extends TeacherTeachingPathResponseDTO {
@@ -83,6 +97,31 @@ export class TeachingPathApi implements TeachingPathRepo {
   public currentLocale = this.storageInteractor.getCurrentLocale()!;
 
   public async getAllTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
+    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
+    const response = await API.get('api/teacher/teaching-paths', {
+      params: buildFilterDTO(filter)
+    });
+    return {
+      teachingPathsList: response.data.data.map((item: TeacherTeachingPathResponseDTO) => new TeachingPath({
+        id: item.id,
+        author: item.author,
+        title: item.title,
+        description: item.description,
+        grades: isNil(item.grades) ? undefined : item.grades.map(grade => new Grade(grade.id, grade.title)),
+        view: item.view,
+        levels: item.levels,
+        featuredImage: item.featuredImage,
+        url: item.url,
+        isPublished: item.isPublished,
+        isDistributed: item.isDistributed,
+        hasGuidance: item.hasGuidance,
+      })),
+      total_pages: response.data.meta.pagination.total_pages
+    };
+  }
+
+  public async getMySchoolTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
+    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
     const response = await API.get('api/teacher/teaching-paths', {
       params: buildFilterDTO(filter)
     });
@@ -97,13 +136,15 @@ export class TeachingPathApi implements TeachingPathRepo {
         featuredImage: item.featuredImage,
         url: item.url,
         isPublished: item.isPublished,
-        isDistributed: item.isDistributed
+        isDistributed: item.isDistributed,
+        isMySchool: item.isMySchool,
       })),
       total_pages: response.data.meta.pagination.total_pages
     };
   }
 
   public async getMyTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
+    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
     const response = await API.get('api/teacher/teaching-paths/draft', {
       params: buildFilterDTO(filter)
     });
@@ -117,13 +158,15 @@ export class TeachingPathApi implements TeachingPathRepo {
         featuredImage: item.featuredImage,
         url: item.url,
         isPublished: item.isPublished,
-        isDistributed: item.isDistributed
+        isDistributed: item.isDistributed,
+        hasGuidance: item.hasGuidance,
       })),
       total_pages: response.data.meta.pagination.total_pages
     };
   }
 
   public async getStudentTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
+    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
     const response = await API.get('api/student/teaching-paths', {
       params: buildFilterDTO(filter)
     });
@@ -147,6 +190,57 @@ export class TeachingPathApi implements TeachingPathRepo {
       })),
       total_pages: response.data.meta.pagination.total_pages
     };
+  }
+
+  public async getTeachingPathDataById(id: number): Promise<TeachingPath> {
+    try {
+      const { data } = await API.get(`api/teacher/teaching-paths/${id}`);
+      return new TeachingPath({
+        id: data.id,
+        title: data.title,
+        description: data.description,
+        isPrivate: data.isPrivate,
+        isFinished: data.isFinished,
+        rootNodeId: data.rootNodeId,
+        lastSelectedNodeId: data.lastSelectedNodeId,
+        minNumberOfSteps: data.minNumberOfSteps,
+        maxNumberOfSteps: data.maxNumberOfSteps,
+        author: data.author,
+        levels: data.levels,
+        answerId: data.answerId,
+        isCopy: data.isCopy,
+        subjects: data.subjects,
+        createdAt: data.created_at,
+
+        // TEM-2319 Preview fot Teaching Paths
+        subjectItems: data.subjects,
+        coreElementItems: data.coreElements,
+        multiSubjectItems: data.mainTopics,
+        sourceItems: data.sources,
+        goalsItems: data.goals,
+        isMySchool: data.isMySchool,
+        grepGoals: data.goals,
+        numberOfArticles: data.numberOfArticles,
+        numberOfQuestions: data.numberOfQuestion,
+        hasGuidance: data.hasGuidance,
+        isPublished: data.isPublished,
+        ownedByMe: data.ownedByMe,
+      });
+    } catch (error) {
+      if (error.response.data.message === 'Teaching path not assigned to you') {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('teaching path passing.not for you')
+        });
+      } else if (error.response.data.message === 'Teaching path deadline passed') {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('teaching path passing.validation.deadline')
+        });
+      }
+      throw error;
+    }
+
   }
 
   public async getTeachingPathById(id: number): Promise<TeachingPath> {
@@ -256,9 +350,10 @@ export class TeachingPathApi implements TeachingPathRepo {
     };
   }
 
-  public async getGrepFiltersTeachingPath(grades: string, subjects: string, coreElements?: string, mainTopics?:string, goals?: string, source?:string): Promise<FilterGrep>  {
+  public async getGrepFiltersTeachingPath(locale: string, grades: string, subjects: string, coreElements?: string, mainTopics?:string, goals?: string, source?:string): Promise<FilterGrep>  {
     const response = await API.get('api/teacher/teaching-paths/grep/filters', {
       params: {
+        locale,
         grades,
         subjects,
         coreElements,
@@ -298,6 +393,20 @@ export class TeachingPathApi implements TeachingPathRepo {
       data: response.data.data,
       total_pages: response.data.meta.pagination.total_pages
     };
+  }
+
+  public async fetchImages(postIds: Array<number>): Promise<Array<Attachment>> {
+    return (
+      await API.get(
+        `${process.env.REACT_APP_WP_URL}/wp-json/media/v1/post/`, {
+          params: {
+            id: postIds.join(','),
+            content: 'img',
+            size: 'full'
+          },
+        }
+      )
+    ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
   }
 
   public async getTeachingPathListOfStudentInList(studentId: number, filter: Filter) {

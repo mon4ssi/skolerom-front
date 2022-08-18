@@ -21,7 +21,11 @@ export const AnswerMappingContentBlock = (props: Props) => {
       case ContentBlockType.Images:
         const imageBlock = block as ImageContentBlock;
         const imagePathes = imageBlock.images.map(image => image.path);
-        return <QuestionAttachments paths={imagePathes} />;
+        return <QuestionAttachments paths={imagePathes} images={imageBlock.images} />;
+      case ContentBlockType.CustomImages:
+        const customImageBlock = block as ImageContentBlock;
+        const customImagePathes = customImageBlock.images.map(image => image.path);
+        return <QuestionAttachments paths={customImagePathes} images={customImageBlock.images} />;
       case ContentBlockType.Videos:
         const videoBlock = block as VideoContentBlock;
         const videosPaths = videoBlock.videos.map(video => video.path);

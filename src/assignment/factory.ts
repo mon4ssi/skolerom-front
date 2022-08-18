@@ -180,6 +180,18 @@ export const buildFilterDTO = (filter: Filter): Object => {
     filterDTO.showMyAssignments = filter.showMyAssignments;
   }
 
+  if (filter.showMySchoolTeachingpath) {
+    filterDTO.onlyOwnSchools = filter.showMySchoolTeachingpath;
+  }
+
+  if (filter.articles) {
+    filterDTO.articles = filter.articles;
+  }
+
+  if (filter.locale) {
+    filterDTO.locale = filter.locale;
+  }
+
   return filterDTO;
 };
 
@@ -224,7 +236,7 @@ const buildContentBlockDTO = (block: ContentBlock): ContentBlockDTO => {
     buffer.text = block.text;
   }
   if (block instanceof EditableImagesContentBlock) {
-    buffer.images = block.images.map(i => ({ id: i.id, path: i.path })) as Array<QuestionAttachment>;
+    buffer.images = block.images.map(i => ({ id: i.id, path: i.path, title: i.title, source: i.src || i.source })) as Array<QuestionAttachment>;
   }
   if (block instanceof EditableVideosContentBlock) {
     buffer.videos = block.videos;

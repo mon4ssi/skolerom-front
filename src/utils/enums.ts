@@ -52,6 +52,7 @@ export enum SliderButtonBehavior {
 }
 
 export enum QueryStringKeys {
+  LOCALE = 'locale',
   GRADE = 'grade',
   SUBJECT = 'subject',
   ORDER = 'order',
@@ -66,6 +67,8 @@ export enum QueryStringKeys {
   GREEPGOALSIDS = 'grepGoalsIds',
   GREPREADINGINSUBJECT = 'grepReadingInSubject',
   SOURCE = 'source',
+  MYSCHOOL = 'onlyOwnSchools',
+  ARTICLES = 'articles',
 }
 
 export enum ReturnUrl {

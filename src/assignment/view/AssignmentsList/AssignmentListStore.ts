@@ -56,9 +56,28 @@ export class AssignmentListStore {
       this.assignmentList.setFiltersPerPage(ASSIGNMENTS_PER_PAGE_IN_LIST);
     }
 
-    const response = this.typeOfAssignmentsList === 'all' ?
+    /* const response = this.typeOfAssignmentsList === 'all' ?
       await this.assignmentList.getAllAssignmentsList() :
-      await this.assignmentList.getMyAssignmentsList();
+      await this.assignmentList.getMyAssignmentsList(); */
+    let response;
+    switch (this.typeOfAssignmentsList) {
+      case 'all':
+        this.assignmentList.setFilterSchoolAssignments(0);
+        response =  await this.assignmentList.getAllAssignmentsList();
+        break;
+      case 'my':
+        this.assignmentList.setFilterSchoolAssignments(0);
+        response =  await this.assignmentList.getMyAssignmentsList();
+        break;
+      case 'myschool':
+        this.assignmentList.setFilterSchoolAssignments(1);
+        response =  await this.assignmentList.getAllSchoolAssignmentsList();
+        break;
+      default:
+        this.assignmentList.setFilterSchoolAssignments(0);
+        response =  await this.assignmentList.getAllAssignmentsList();
+        break;
+    }
 
     if (this.fromTeachingPath) {
       this.myAssignments = this.myAssignments.concat(response.myAssignments);
@@ -137,6 +156,11 @@ export class AssignmentListStore {
     this.currentAssignment = this.myAssignments.find(item => item.id === id)!;
   }
 
+  @action
+  public setCurrentAssignmentEntity(assignment: Assignment) {
+    this.currentAssignment = assignment!;
+  }
+
   public hasAssignment(id: number) {
     return !!this.myAssignments.find(item => item.id === id);
   }
@@ -187,6 +211,13 @@ export class AssignmentListStore {
     return this.userService.getCurrentUser()!.type === UserType.Student ?
       this.getStudentAssignmentList() :
       this.getAssignmentsList();
+  }
+
+  public setFiltersLocale(locale: string | number | null) {
+    this.clearMyAssignmentsList();
+    this.assignmentList.setFiltersLocale(locale);
+    this.assignmentList.setFiltersPage(1);
+    this.getAssignmentsList();
   }
 
   public setFiltersGradeID(gradeID: string | number | null) {
@@ -305,8 +336,8 @@ export class AssignmentListStore {
     }
   }
 
-  public async getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, goals?: string) {
-    return this.assignmentService.getGrepFiltersAssignment(grades, subjects, coreElements, goals);
+  public async getGrepFiltersAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string) {
+    return this.assignmentService.getGrepFiltersAssignment(locale, grades, subjects, coreElements, goals);
   }
 
   public get gradeFilterValue() {

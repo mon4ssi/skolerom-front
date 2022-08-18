@@ -19,9 +19,30 @@
 
   .back-button {
     cursor: pointer;
-
+    position: relative;
+    white-space: nowrap;
+    &:before {
+      content: '';
+      position: absolute;
+      width: 31px;
+      height: 31px;
+      background: #e2017b;
+      z-index: -1;
+      border-radius: 50%;
+      left: -2px;
+      top: -2px;
+      opacity: 0;
+    }
     img {
       margin-right: 10px;
+    }
+    &:hover {
+      img {
+        filter: brightness(0)invert(1);
+      }
+      &:before {
+        opacity: 1;
+      }
     }
   }
 

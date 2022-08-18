@@ -4,7 +4,7 @@ import { debounce } from 'utils/debounce';
 import { injector } from 'Injector';
 import { ArticleService, ASSIGNMENT_SERVICE, AssignmentService } from 'assignment/service';
 import { DRAFT_TEACHING_PATH_SERVICE, DraftTeachingPathService } from 'teachingPath/teachingPathDraft/service';
-import { Article, ARTICLE_SERVICE_KEY, Grade, Subject, FilterArticlePanel, Source, Assignment } from 'assignment/Assignment';
+import { Article, ARTICLE_SERVICE_KEY, Grade, Subject, FilterArticlePanel, Source, Assignment, Keyword } from 'assignment/Assignment';
 import { TeachingPathContainer } from 'teachingPath/teachingPathContainer/teachingPathContainer';
 import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
 import { TeachingPathItemValue, TeachingPathNodeType } from 'teachingPath/TeachingPath';
@@ -17,6 +17,8 @@ import { TEACHING_PATH_SERVICE, TeachingPathService } from 'teachingPath/service
 import { GreepElements } from 'assignment/factory';
 
 const error400 = 400;
+
+const TEMPORAL = 67933;
 
 export class EditTeachingPathStore {
 
@@ -58,6 +60,7 @@ export class EditTeachingPathStore {
   @observable public allGrades: Array<Grade> = [];
   @observable public allSubjects: Array<Subject> = [];
   @observable public allSources: Array<Source> = [];
+  @observable public allKeywords: Array<Keyword> = [];
   @observable public allGoals: Array<GreepElements> = [];
   @observable public allArticlePanelFilters: FilterArticlePanel | null = null;
   @observable public isAssignmentCreating: boolean = false;
@@ -144,7 +147,7 @@ export class EditTeachingPathStore {
     this.isEditArticles = true;
   }
 
-  public setArticleInEdit(idArticle:number) {
+  public setArticleInEdit(idArticle: number) {
     this.articleInEdit = idArticle;
   }
 
@@ -152,7 +155,7 @@ export class EditTeachingPathStore {
     return this.articleInEdit;
   }
 
-  public setAssignmentInEdit(idAssingment:number) {
+  public setAssignmentInEdit(idAssingment: number) {
     this.assingmentInEdit = idAssingment;
   }
 
@@ -203,9 +206,9 @@ export class EditTeachingPathStore {
   @action
   public getFilteredGroups = () => {
     const filteredGroups = this.currentDistribution!.groups
-    .filter(
-      group => group.name.toLowerCase().search(this.searchValue) !== -1
-    );
+      .filter(
+        group => group.name.toLowerCase().search(this.searchValue) !== -1
+      );
 
     return filteredGroups;
   }
@@ -437,6 +440,16 @@ export class EditTeachingPathStore {
     this.allSources = await this.assignmentService.getSources();
   }
 
+  public async getKeywords() {
+    /*
+    this.allKeywords =  await this.assignmentService.getSources() [{ description: 'asdfadsfsd' }, { description: 'GAAAAAAAAA' }, { description: 'Skolerom' }, { description: 'My keyword' }];
+    */
+    const selectedArticlesIds = await this.currentEntity!.getAllSelectedArticlesIds();
+    const selectedAssignmentIds = await this.currentEntity!.getAllSelectedAssignmentsIds();
+    this.allKeywords = await this.draftTeachingPathService.getKeywordsFromArticles(selectedArticlesIds, selectedAssignmentIds);
+    return this.allKeywords;
+  }
+
   public async getAssignmentById(id: number): Promise<Assignment> {
     return this.assignmentService.getAssignmentById(id);
   }
@@ -451,6 +464,10 @@ export class EditTeachingPathStore {
 
   public getAllSources(): Array<Source> {
     return toJS(this.allSources);
+  }
+
+  public getAllKeywords(): Array<Keyword> {
+    return toJS(this.allKeywords);
   }
 
   public getAllArticlePanelFilters() {
@@ -486,7 +503,7 @@ export class EditTeachingPathStore {
     this.userService.setTeachingPathReferralToken(referralToken);
   }
 
-  public async assignStudentToTeachingPath(teachingPathId:string, referralToken: string) {
+  public async assignStudentToTeachingPath(teachingPathId: string, referralToken: string) {
     return this.distributionService.assignStudentToTeachingPath(teachingPathId, referralToken);
   }
 
@@ -496,7 +513,7 @@ export class EditTeachingPathStore {
   }
 
   @action
-  public async sendDataDomain(domain:string) {
+  public async sendDataDomain(domain: string) {
     return this.teachingPathService.sendDataDomain(domain);
   }
 
@@ -516,8 +533,8 @@ export class EditTeachingPathStore {
   }
 
   @action
-  public async getGrepFiltersTeachingPath(grades: string, subjects: string, coreElements?: string, mainTopics?:string, goals?: string, source?: string) {
-    return this.teachingPathService.getGrepFiltersTeachingPath(grades, subjects, coreElements, mainTopics, goals, source);
+  public async getGrepFiltersTeachingPath(locale: string, grades: string, subjects: string, coreElements?: string, mainTopics?: string, goals?: string, source?: string) {
+    return this.teachingPathService.getGrepFiltersTeachingPath(locale, grades, subjects, coreElements, mainTopics, goals, source);
   }
 
   @action

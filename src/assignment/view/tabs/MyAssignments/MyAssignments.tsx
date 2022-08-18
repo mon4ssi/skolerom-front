@@ -39,8 +39,9 @@ class MyAssignments extends Component<Props> {
 
   private async fetchAssignments() {
     const { filter } = this.props.assignmentListStore!;
-
+    const myFilterSchool = (this.props.typeOfAssignmentsList === 'myschool') ? 1 : 0;
     filter.page = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.PAGE, 1);
+    filter.locale = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.LOCALE);
     filter.grade = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GRADE);
     filter.subject = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.SUBJECT);
     filter.grepCoreElementsIds = QueryStringHelper.getString(this.props.history, QueryStringKeys.GREPCOREELEMENTSIDS);
@@ -50,9 +51,10 @@ class MyAssignments extends Component<Props> {
     filter.source = QueryStringHelper.getString(this.props.history, QueryStringKeys.SOURCE);
     filter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeys.SEARCH);
     filter.order = QueryStringHelper.getString(this.props.history, QueryStringKeys.ORDER, SortingFilter.DESC);
+    filter.articles = QueryStringHelper.getString(this.props.history, QueryStringKeys.ARTICLES);
     filter.orderField = SortingFilter.CREATION_DATE;
-
-    if (filter.subject || filter.grade || filter.grepCoreElementsIds || filter.grepMainTopicsIds || filter.grepGoalsIds || filter.grepReadingInSubject || filter.source) {
+    filter.showMySchoolTeachingpath = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.MYSCHOOL, myFilterSchool);
+    if (filter.locale || filter.subject || filter.grade || filter.grepCoreElementsIds || filter.grepMainTopicsIds || filter.grepGoalsIds || filter.grepReadingInSubject || filter.source) {
       this.setState({ filtersisUsed: true });
     } else {
       this.setState({ filtersisUsed: false });

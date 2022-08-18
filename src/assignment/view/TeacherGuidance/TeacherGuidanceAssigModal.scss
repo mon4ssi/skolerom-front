@@ -10,9 +10,9 @@
   border: 1px solid rgba(0,0,0,.2);
   border-radius: 0.3rem;
   outline: 0;
-  z-index: 9;
+  z-index: 15;
   display: none;
-  word-break: break-all;
+  /* word-break: break-all; */
 
   &__header {
       padding: 1rem;
@@ -38,11 +38,20 @@
       }
 
       &__close {
-          position:absolute;
-          left: 98%;
-          top: -15px;
-          cursor: pointer;
-      }
+        position:absolute;
+        left: 98%;
+        top: -15px;
+        cursor: pointer;
+        border-radius: 50%;
+        .roundedCircle {
+            fill: white;
+        }
+        &:hover {
+            .roundedCircle {
+                fill: rgb(211, 217, 222);
+            }  
+        }
+    }
   }
 
   &__body {

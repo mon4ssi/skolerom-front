@@ -115,6 +115,10 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
         const originList = view === 'edit' ? myTeachingPathsActions : foreignAllTeachingPathsActions;
         return isContentManager ? contentManagerTeachingPathsActions : originList;
 
+      case '/teaching-paths/myschool':
+        const originListmyschool = view === 'edit' ? myTeachingPathsActions : foreignAllTeachingPathsActions;
+        return isContentManager ? contentManagerTeachingPathsActions : originListmyschool;
+
       case '/teaching-paths/my':
         return isContentManager ? contentManagerTeachingPathsActions : myTeachingPathsActions;
 

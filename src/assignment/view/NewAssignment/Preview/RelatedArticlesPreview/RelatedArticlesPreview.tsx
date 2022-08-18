@@ -492,7 +492,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       } else {
         newAssignmentStore!.currentEntity!.addArticle(article);
       }
-      newAssignmentStore!.currentEntity!.setFeaturedImage();
+      // newAssignmentStore!.currentEntity!.setFeaturedImage();
     }
   }
 

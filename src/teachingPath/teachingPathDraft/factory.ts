@@ -16,6 +16,8 @@ export const buildNewTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     createdAt: dto.createdAt,
     updatedAt: dto.updatedAt,
     publishedAt: dto.publishedAt,
+    selectedArticlesIds: dto.selectedArticlesIds,
+    selectedAssignmentsIds: dto.selectedAssignmentsIds,
   });
 
   draftTeachingPath.setContent(
@@ -49,6 +51,7 @@ export const buildDraftTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     guidance: dto.guidance,
     hasGuidance: dto.hasGuidance,
     isPrivate: dto.isPrivate,
+    isMySchool: dto.isMySchool,
     content: null,
     sessionId: dto.uuid,
     createdAt: dto.createdAt,
@@ -64,7 +67,13 @@ export const buildDraftTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     grepReadingInSubjectsIds: dto.grepReadingInSubjectsIds,
     grepGoalsIds: dto.grepGoalsIds,
     sources: dto.sources,
-    open: dto.open
+    keywords: dto.keywords,
+    open: dto.open,
+    schools: dto.schools,
+    selectedArticlesIds: dto.selectedArticlesIds,
+    selectedAssignmentsIds: dto.selectedAssignmentsIds,
+    featuredImage: dto.featuredImage,
+    localeId: dto.localeId
   });
 
   draftTeachingPath.setContent(buildEditableNode(dto.content!, draftTeachingPath));
@@ -225,6 +234,8 @@ export const buildTeachingPathRequestDTO = (teachingPath: DraftTeachingPath) => 
   guidance: teachingPath.guidance,
   hasGuidance: teachingPath.hasGuidance,
   isPrivate: teachingPath.isPrivate,
+  mySchools: teachingPath.mySchools,
+  isMySchool: teachingPath.isMySchool,
   content: buildTeachingPathNodeRequestDTO(teachingPath.content),
   grades: buildGrade(teachingPath.grades),
   subjects: buildSubject(teachingPath.subjects),
@@ -235,5 +246,8 @@ export const buildTeachingPathRequestDTO = (teachingPath: DraftTeachingPath) => 
   grepReadingInSubjectsIds: teachingPath.grepReadingInSubjectsIds,
   grepGoalsIds: teachingPath.grepGoalsIds,
   sources: teachingPath.sources,
-  open: teachingPath.open
+  keywords: teachingPath.keywords,
+  open: teachingPath.open,
+  featuredImage: teachingPath.featuredImage,
+  localeId: teachingPath.localeId
 });

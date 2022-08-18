@@ -4,8 +4,11 @@ import {
   DraftAssignmentRepo,
   DRAFT_ASSIGNMENT_REPO
 } from 'assignment/assignmentDraft/AssignmentDraft';
+import { Keyword } from 'assignment/Assignment';
 
 export const DRAFT_ASSIGNMENT_SERVICE = 'DRAFT_ASSIGNMENT_SERVICE';
+
+const TEMPORAL = 67933;
 
 export class DraftAssignmentService {
 
@@ -25,6 +28,15 @@ export class DraftAssignmentService {
   public async getNewAssignment(): Promise<DraftAssignment> {
     this.draftAssignment = await this.draftAssignmentRepo.getNewAssignment();
     return this.getAssignment();
+  }
+
+  public async getKeywordsFromArticles(arrayWpIds: Array<number>): Promise<Array<Keyword>> {
+    const keywords = await this.draftAssignmentRepo.getKeywordsFromArticles(arrayWpIds);
+    const entityKeywordsArray: Array<Keyword> = [];
+    keywords.forEach((item) => {
+      entityKeywordsArray.push(new Keyword(item));
+    });
+    return entityKeywordsArray;
   }
 
   public async saveAttachment(assignmentId: number, attachmentId: number) {
