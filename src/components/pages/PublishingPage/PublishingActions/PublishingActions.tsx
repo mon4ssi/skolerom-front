@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import intl from 'react-intl-universal';
 import classnames from 'classnames';
 
 import { Subject, Grade, FilterGrep, GreepSelectValue, GrepFilters, GoalsData, Source, Keyword } from 'assignment/Assignment';
@@ -15,11 +14,13 @@ import { TagKeywordInputComponent, TagKeywordProp } from 'components/common/TagI
 import {
   PublishingActionsProps, PublishingActionsState, TagPropSource,
   MAGICNUMBER1, MAGICNUMBER100, SETTIMEOUT,
-  PublishingActionsIcons, initializePublishingActionsState
+  PublishingActionsIcons, initializePublishingActionsState,
+  LabelsUIList, LabelsList
 } from './PublishingActionsAux';
 
 @observer
 export class PublishingActions extends Component<PublishingActionsProps, PublishingActionsState> {
+  private labels: LabelsList = LabelsUIList;
   constructor(props: PublishingActionsProps) {
     super(props);
     this.state = initializePublishingActionsState();
@@ -106,33 +107,15 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
 
     this.setState({
-      grepFiltersData: grepFiltersDataAwait
-    });
-    this.setState({
-      optionsCore: this.renderValueOptions(grepFiltersDataAwait, 'core')
-    });
-    this.setState({
-      optionsMulti: this.renderValueOptions(grepFiltersDataAwait, 'multi')
-    });
-    this.setState({
-      optionsReading: this.renderValueOptions(grepFiltersDataAwait, 'reading')
-    });
-    this.setState({
-      optionsSubjects: this.renderValueOptionsBasics(grepFiltersDataAwait, 'subject')
-    });
-    this.setState({
-      optionsGrades: this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
-    });
-    this.setState({
-      editValueCoreOptions: store!.currentEntity!.getListOfgrepCoreElementsIds()!
-    });
-    this.setState({
-      editvalueGoalsOptions: store!.currentEntity!.getListOfgrepGoalsIds()!
-    });
-    this.setState({
-      editvalueMultiOptions: store!.currentEntity!.getListOfgrepMainTopicsIds()!
-    });
-    this.setState({
+      grepFiltersData: grepFiltersDataAwait,
+      optionsCore: this.renderValueOptions(grepFiltersDataAwait, 'core'),
+      optionsMulti: this.renderValueOptions(grepFiltersDataAwait, 'multi'),
+      optionsReading: this.renderValueOptions(grepFiltersDataAwait, 'reading'),
+      optionsSubjects: this.renderValueOptionsBasics(grepFiltersDataAwait, 'subject'),
+      optionsGrades: this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade'),
+      editValueCoreOptions: store!.currentEntity!.getListOfgrepCoreElementsIds()!,
+      editvalueGoalsOptions: store!.currentEntity!.getListOfgrepGoalsIds()!,
+      editvalueMultiOptions: store!.currentEntity!.getListOfgrepMainTopicsIds()!,
       editvaluereadingOptions: store!.currentEntity!.getListOfgrepReadingInSubjectId()!
     });
     if (typeof (store!.currentEntity!.getListOfgrepGoalsIds()) !== 'undefined') {
@@ -616,7 +599,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     ) {
       Notification.create({
         type: NotificationTypes.ERROR,
-        title: intl.get('new assignment.copy_title_not_allow')
+        title: this.labels.copyWordInTitleNotAllowed
       });
 
       return;
@@ -648,7 +631,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     ) {
       Notification.create({
         type: NotificationTypes.ERROR,
-        title: intl.get('new assignment.copy_title_not_allow')
+        title: this.labels.copyWordInTitleNotAllowed,
       });
 
       return;
@@ -734,17 +717,17 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     const { store, from } = this.props;
     const sources = store!.getAllSources().map(this.sourceToTagProp);
     const selectedSources = this.grepNumbersToTagprop(store!.currentEntity!.getListOfSources(), sources);
-    const myplaceholder = (selectedSources.length > 0) ? '' : intl.get('publishing_page.source');
+    const myplaceholder = (selectedSources.length > 0) ? '' : this.labels.labelSource;
     const isOpen = this.state.isOpen;
     const isChecked = (isOpen) ? PublishingActionsIcons.checkActive : PublishingActionsIcons.checkRounded;
-    const textIsOpen = (from === 'TEACHINGPATH') ? intl.get('publishing_page.source_is_open') : intl.get('publishing_page.source_is_open_assig');
+    const textIsOpen = (from === 'TEACHINGPATH') ? this.labels.isOpenTeachingPath : this.labels.isOpenAssignment;
     let classHidden = 'InformationSource hidden';
     if (store!.getCurrentUser()!.type === UserType.ContentManager) { classHidden = 'InformationSource'; }
 
     return (
       <div className={classHidden}>
         <div className="infoContainer__secondTitle">
-          <h2>{intl.get('publishing_page.source_is_open_title')}</h2>
+          <h2>{this.labels.labelTitleIsOpen}</h2>
           <div className="itemsFlex subject">
             <TagInputComponent
               className="filterBy darkTheme"
@@ -816,7 +799,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     const selectedKeywords = this.grepNumbersToTagKeywordProp(store!.currentEntity!.getListOfKeywords(), keywords).length > 0 ?
       this.grepNumbersToTagKeywordProp(store!.currentEntity!.getListOfKeywords(), keywords).filter((v, i, a) => a.findIndex(v2 => (v2.description === v.description)) === i) : selected!;
     const listAndSelectedKeywords = [...keywords!, ...selected!].filter((v, i, a) => a.findIndex(v2 => (v2.description === v.description)) === i);
-    const myplaceholder = (selectedKeywords.length > 0) ? '' : intl.get('publishing_page.keywords');
+    const myplaceholder = (selectedKeywords.length > 0) ? '' : this.labels.placeholderKeywords;
     return (
       <div>
         <TagKeywordInputComponent
@@ -844,7 +827,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     const selectedLanguage: Array<TagProp> = [];
     if (valueLocaleId !== null) { selectedLanguage.push(languages.find(i => i.id === valueLocaleId)!); }
 
-    const myplaceholder = (selectedLanguage.length > 0) ? '' : intl.get('publishing_page.languages');
+    const myplaceholder = (selectedLanguage.length > 0) ? '' : this.labels.placeholderLanguages;
 
     return (
       <div>
@@ -891,7 +874,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
   public renderSubjectInput = () => {
     const { store } = this.props;
     const selectedSubjects = this.state.optionsMySubjects.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.gradeToTagProp);
-    const myplaceholder = (selectedSubjects.length > 0) ? '' : intl.get('publishing_page.subject');
+    const myplaceholder = (selectedSubjects.length > 0) ? '' : this.labels.placeholderSubjects;
     const subjects = store!.getAllSubjects().filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.subjectToTagProp);
     return (
       <div className="itemsFlex subject">
@@ -926,7 +909,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
   public renderGradeInput = () => {
     const { store } = this.props;
     const selectedGrades = this.state.optionsMyGrades.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.gradeToTagProp);
-    const myplaceholder = (selectedGrades.length > 0) ? '' : intl.get('publishing_page.grade');
+    const myplaceholder = (selectedGrades.length > 0) ? '' : this.labels.placeholderGrades;
     const grades = store!.getAllGrades().filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.gradeToTagProp).sort((a, b) => a.id - b.id);
     return (
       <div className="itemsFlex grade">
@@ -977,47 +960,47 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     return (
       <div className="visibility">
         <div className="flexBox flex-align">
-          <img src={PublishingActionsIcons.visibilityImg} alt={intl.get('generals.visibility')} title={intl.get('generals.visibility')} />
-          <div className={'title'}>{intl.get('publishing_page.visibility')}</div>
+          <img src={PublishingActionsIcons.visibilityImg} alt={this.labels.textVisibilityForImage} title={this.labels.textVisibilityForImage} />
+          <div className={'title'}>{this.labels.labelVisibility}</div>
         </div>
-        <p>{intl.get('publishing_page.visibility_description')}</p>
+        <p>{this.labels.textvisibilityDescription}</p>
         <div className={IsVisibilityButtons}>
           <button
             className={mySchoolButtonClassnames}
             onClick={this.handleMySchoolOn}
-            title={intl.get('teaching_path_tabs.My school')}
+            title={this.labels.labelMySchoolButton}
           >
             <img
               src={PublishingActionsIcons.publicIconImg}
               alt="Public"
-              title={intl.get('teaching_path_tabs.My school')}
+              title={this.labels.labelMySchoolButton}
             />
-            {intl.get('teaching_path_tabs.My school')}
+            {this.labels.labelMySchoolButton}
           </button>
           <button
             className={publicButtonClassnames}
             onClick={this.handlePrivateOff}
-            title={intl.get('publishing_page.public')}
+            title={this.labels.labelPublicButton}
           >
             <img
               src={PublishingActionsIcons.publicIconImg}
               alt="Public"
-              title={intl.get('publishing_page.public')}
+              title={this.labels.labelPublicButton}
             />
-            {intl.get('publishing_page.public')}
+            {this.labels.labelPublicButton}
           </button>
 
           <button
             className={privateButtonClassnames}
             onClick={this.handlePrivateOn}
-            title={intl.get('publishing_page.private')}
+            title={this.labels.labelPrivateButton}
           >
             <img
               src={PublishingActionsIcons.privateIconImg}
               alt="Private"
-              title={intl.get('publishing_page.private')}
+              title={this.labels.labelPrivateButton}
             />
-            {intl.get('publishing_page.private')}
+            {this.labels.labelPrivateButton}
           </button>
         </div>
       </div>
@@ -1197,7 +1180,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     const { optionsCore } = this.state;
     const newOptionsCore = optionsCore.map(this.grepToTagProp);
     const selectedCore = this.grepNumbersToTagprop(store!.currentEntity!.getListOfgrepCoreElementsIds(), newOptionsCore);
-    const myplaceholder = (selectedCore.length > 0) ? '' : intl.get('assignments search.Choose Core');
+    const myplaceholder = (selectedCore.length > 0) ? '' : this.labels.placeholderCoreElements;
     return (
       <div className="itemsFlex grade">
         <TagInputComponent
@@ -1317,7 +1300,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     const { optionsMulti } = this.state;
     const newOptionsMulti = optionsMulti.map(this.grepToTagProp);
     const selectedMulti = this.grepNumbersToTagprop(store!.currentEntity!.getListOfgrepMainTopicsIds(), newOptionsMulti);
-    const myplaceholder = (selectedMulti.length > 0) ? '' : intl.get('assignments search.Choose Multi');
+    const myplaceholder = (selectedMulti.length > 0) ? '' : this.labels.placeholderMultiDisciplinarySubjects;
     return (
       <div className="itemsFlex grade">
         <TagInputComponent
@@ -1394,7 +1377,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     const newOptionsReading = optionsReading.map(this.grepToTagProp);
     const valueReading = (store!.currentEntity!.getListOfgrepReadingInSubjectId() !== undefined) ? store!.currentEntity!.getListOfgrepReadingInSubjectId() : [];
     const selectedReading = this.grepNumbersToTagprop(valueReading, newOptionsReading);
-    const myplaceholder = (selectedReading.length > 0) ? '' : intl.get('assignments search.Choose reading');
+    const myplaceholder = (selectedReading.length > 0) ? '' : this.labels.placeholderReadingInSubject;
     return (
       <div className="itemsFlex grade">
         <TagInputComponent
@@ -1496,10 +1479,10 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     <div className="itemTablesHeader">
       <div className="itemTablesTh">
         <div className="itemTablesTd icons" />
-        <div className="itemTablesTd grade">{intl.get('new assignment.Grade')}</div>
-        <div className="itemTablesTd subjects">{intl.get('new assignment.Subjects')}</div>
-        <div className="itemTablesTd core">{intl.get('new assignment.greep.core')}</div>
-        <div className="itemTablesTd goals">{intl.get('new assignment.greep.goals')}</div>
+        <div className="itemTablesTd grade">{this.labels.goalsTableHeaderGrade}</div>
+        <div className="itemTablesTd subjects">{this.labels.goalsTableHeaderSubject}</div>
+        <div className="itemTablesTd core">{this.labels.goalsTableHeaderCoreElements}</div>
+        <div className="itemTablesTd goals">{this.labels.goalsTableHeaderGoalInfo}</div>
       </div>
     </div>
   )
@@ -1549,7 +1532,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
       visibleGoals = realOptionsGoals!.map((goal) => {
         const visibleGoalsGrade = goal!.grades!.map((grade) => {
           const title = grade.name.split('.', 1);
-          const mytitle = (grade.name.split('.').length === 1) ? title : `${title} ${intl.get('new assignment.grade')}`;
+          const mytitle = (grade.name.split('.').length === 1) ? title : `${title} ${this.labels.labelGrades}`;
           return <span key={grade.id}>{mytitle}</span>;
         });
         const visibleGoalsCore = goal!.coreElements!.map((core) => {
@@ -1588,7 +1571,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     if (optionsGoals.length === 0) {
       return (
         <div className="itemTablesBody">
-          {intl.get('edit_teaching_path.header.notdata_goals')}
+          {this.labels.notDdataGoals}
         </div>
       );
     }
@@ -1603,7 +1586,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     <div className="infoContainer__body">
       <div className="infoContainer__body__title">
         <img src={PublishingActionsIcons.goalsImg} />
-        <h3>{intl.get('new assignment.greep.goals')}</h3>
+        <h3>{this.labels.labelGoals}</h3>
       </div>
       <div className="infoContainer__body__table">
         {this.renderTableHeader()}
@@ -1663,7 +1646,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
       } else {
         Notification.create({
           type: NotificationTypes.ERROR,
-          title: intl.get('publishing_page.dont_empty')
+          title: this.labels.dontEmpty
         });
       }
     }
@@ -1677,7 +1660,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
         selectedMySkoleTagProp.push(skole);
       }
     });
-    const myplaceholder = (selectedMySkoleTagProp.length > 0) ? '' : intl.get('publishing_page.selected_myschools');
+    const myplaceholder = (selectedMySkoleTagProp.length > 0) ? '' : this.labels.selectedMySchools;
 
     return (
       <div className="itemsFlex grade">
@@ -1712,7 +1695,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     if (isTeacher && myschools.length > 1) {
       return (
         <div className="infoContainer__top__skole">
-          <p>{intl.get('publishing_page.selected_myschools')}</p>
+          <p>{this.labels.selectedMySchools}</p>
           <div className="skoleInput">
             {this.renderSkoleInput(arraySchool)}
           </div>
@@ -1723,8 +1706,8 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
 
   public render() {
     const { from } = this.props;
-    const titleSimple = (this.state.isValidPrivate) ? intl.get('publishing_page.grep.title_private') : intl.get('publishing_page.grep.title');
-    const descriptionText = (this.state.isValid) ? intl.get('publishing_page.grep.description_privado') : (from === 'TEACHINGPATH') ? intl.get('publishing_page.grep.description') : intl.get('publishing_page.grep.descrption_assignment');
+    const titleSimple = (this.state.isValidPrivate) ? this.labels.titleForPrivateSelected : this.labels.titleVariantPrivateNotSelected;
+    const descriptionText = (this.state.isValid) ? this.labels.descriptionForPrivateSelected : (from === 'TEACHINGPATH') ? this.labels.descriptionForPublicSelectedTeachingPath : this.labels.descriptionForPublicSelectedAssignment;
     return (
       <div className="PublishingActions flexBox dirColumn">
         <div className="infoContainer">
