@@ -192,6 +192,7 @@
   "pagination": {
     "Previous page": "Previous page",
     "Next page": "Next page",
+    "Next question": "Next question",
     "Question": "Question",
     "Exit": "Exit assignment"
   },

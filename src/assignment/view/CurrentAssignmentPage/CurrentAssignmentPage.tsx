@@ -395,9 +395,9 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
           className="ButtonNextNew--btn"
           onClick={this.goToNextQuestion}
           disabled={!this.canGoToNextQuestion}
-          title={intl.get('pagination.Next page')}
+          title={intl.get('pagination.Next question')}
         >
-          {intl.get('pagination.Next page')}
+          {intl.get('pagination.Next question')}
         </button>
       </div>
     );

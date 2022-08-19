@@ -104,7 +104,6 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
           hiddeIcons
           // levels={levels || []}
         />
-        <img src={article.isRead ? checkActive : checkInactive} alt="checkbox" className="AssignmentArticlesToReading__checkbox"/>
       </div>
     );
   }
