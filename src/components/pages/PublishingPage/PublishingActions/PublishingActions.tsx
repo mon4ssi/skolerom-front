@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import classnames from 'classnames';
-
 import { Subject, Grade, FilterGrep, GreepSelectValue, GrepFilters, GoalsData, Source, Keyword } from 'assignment/Assignment';
-
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { TagInputComponent, TagProp } from 'components/common/TagInput/TagInput';
 import { LANGUAGES } from 'utils/constants';
@@ -48,9 +46,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
       if (!store!.getAllSources().length) {
         store!.getSources();
       }
-      /* if (!store!.getAllKeywords().length) { */
       store!.getKeywords();
-      /* } */
       if (typeof (store!.currentEntity!.getListOfGoals()) !== 'undefined') {
         listGoals = this.transformDataToString(store!.currentEntity!.getListOfGoals()!);
       }
@@ -65,9 +61,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
       if (!store!.getAllSources().length) {
         store!.getSources();
       }
-      /* if (!store!.getAllKeywords().length) { */
       store!.getKeywords();
-      /* } */
       if (typeof (store!.getGoalsByArticle()) !== 'undefined') {
         listGoals = store!.getGoalsByArticle().split(',');
       }
@@ -445,12 +439,8 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     });
     const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
     this.setState({
-      grepFiltersData: grepFiltersDataAwait
-    });
-    this.setState({
-      optionsCore: this.renderValueOptions(grepFiltersDataAwait, 'core')
-    });
-    this.setState({
+      grepFiltersData: grepFiltersDataAwait,
+      optionsCore: this.renderValueOptions(grepFiltersDataAwait, 'core'),
       optionsMulti: this.renderValueOptions(grepFiltersDataAwait, 'multi')
     });
     /* tslint:disable-next-line:max-line-length */
@@ -506,11 +496,10 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     const grade = store!.getAllGrades().find(grade => grade.id === id);
     if (grade) {
       store!.currentEntity!.addGrade(grade);
-      this.setState({ loadingGoals: true });
-      this.setState(
-        {
-          optionsMyGrades: [...this.state.optionsMyGrades, grade]
-        },
+      this.setState({
+        loadingGoals: true,
+        optionsMyGrades: [...this.state.optionsMyGrades, grade]
+      },
         () => {
           this.forceUpdate();
         }
@@ -1076,11 +1065,10 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
           loadingGoals: false
         }
       );
-      this.setState({ pageCurrent: MAGICNUMBER1 });
-      this.setState(
-        {
-          valueCoreOptions: []
-        },
+      this.setState({
+        pageCurrent: MAGICNUMBER1,
+        valueCoreOptions: []
+      },
         () => {
           this.sendValidbutton();
         }
@@ -1207,22 +1195,17 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
       /* tslint:disable-next-line:max-line-length */
       const grepFiltergoalssDataAwait = await this.filterGrepGoals(this.state.valueCoreOptions, newValue.value, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
       this.setState({
-        optionsGoals: grepFiltergoalssDataAwait.data
-      });
-      this.setState(
-        {
-          // tslint:disable-next-line: variable-name
-          page: grepFiltergoalssDataAwait.total_pages,
-          // valueGoalsOptions : [],
-          loadingGoals: false
-        }
+        optionsGoals: grepFiltergoalssDataAwait.data,
+        // tslint:disable-next-line: variable-name
+        page: grepFiltergoalssDataAwait.total_pages,
+        loadingGoals: false
+      }
       );
       this.comparativeGoalsValueToFilter();
-      this.setState({ pageCurrent: MAGICNUMBER1 });
-      this.setState(
-        {
-          valueMultiOptions: [...valueMultiOptions, newValue.value]
-        },
+      this.setState({
+        pageCurrent: MAGICNUMBER1,
+        valueMultiOptions: [...valueMultiOptions, newValue.value]
+      },
         () => {
           this.sendValidbutton();
         }
