@@ -18,6 +18,26 @@
   cursor: default;
 }
 
+.Assignment__progressbar {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 10px;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+  &__content {
+    height: 100%;
+    position: absolute;
+    left: 0px;
+    background: #0a7b24;
+    top: 0px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+}
+
 .AssignmentOverview__question {
   margin-bottom: 10px;
   @include animate-many(color);

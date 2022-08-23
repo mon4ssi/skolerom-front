@@ -17,6 +17,7 @@ export interface RevisionDTO {
   title: string;
   description: string;
   author: string;
+  authoravatar: string;
   questions: Array<QuestionDTO>;
   relatedArticles: Array<Article>;
   featuredImage?: string;

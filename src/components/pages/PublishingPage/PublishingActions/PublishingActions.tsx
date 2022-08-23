@@ -1,134 +1,31 @@
 import React, { Component } from 'react';
-import Select from 'react-select';
 import { observer } from 'mobx-react';
-import intl from 'react-intl-universal';
 import classnames from 'classnames';
-
-import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
-import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
-import { Subject, Grade, FilterGrep, GreepSelectValue, GrepFilters, GoalsData, Source, NowSchool, Keyword } from 'assignment/Assignment';
-import tagsImg from 'assets/images/tags.svg';
-import gradeImg from 'assets/images/grade.svg';
-import checkRounded from 'assets/images/check-rounded-white-bg.svg';
-import checkActive from 'assets/images/check-active.svg';
-import goalsImg from 'assets/images/goals.svg';
-import settingsImg from 'assets/images/settings-slider.svg';
-import visibilityImg from 'assets/images/visibility.svg';
-import firstLevelImg from 'assets/images/level-1-blue.svg';
-import secondLevelImg from 'assets/images/level-2-blue.svg';
-import thirdLevelImg from 'assets/images/level-3-blue.svg';
-import publicIconImg from 'assets/images/teacher-public.svg';
-import privateIconImg from 'assets/images/private.svg';
-
+import { Subject, Grade, FilterGrep, GreepSelectValue, GrepFilters, GoalsData, Source, Keyword } from 'assignment/Assignment';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
-
 import { TagInputComponent, TagProp } from 'components/common/TagInput/TagInput';
-import { firstLevel, LANGUAGES, secondLevel, studentLevels } from 'utils/constants';
-
+import { LANGUAGES } from 'utils/constants';
 import './PublishingActions.scss';
 import { GreepElements } from 'assignment/factory';
 import { UserType } from 'user/User';
 import { TagKeywordInputComponent, TagKeywordProp } from 'components/common/TagInput/TagInputKeyword/TagInputKeyword';
-
-const MAGICNUMBER100 = 100;
-const MAGICNUMBER1 = 1;
-const SETTIMEOUT = 1000;
-
-interface Props {
-  store?: NewAssignmentStore | EditTeachingPathStore;
-  from?: string;
-}
-
-interface State {
-  grepFiltersData: FilterGrep;
-  optionsCore: Array<GreepSelectValue>;
-  optionsMulti: Array<GreepSelectValue>;
-  optionsReading: Array<GreepSelectValue>;
-  optionsSubjects: Array<GrepFilters>;
-  optionsGrades: Array<GrepFilters>;
-  valueCoreOptions: Array<number>;
-  valueMultiOptions: Array<number>;
-  valueSourceOptions: Array<number>;
-  valueKeywordsOptions: Array<string>;
-  valuereadingOptions: Array<number>;
-  valueGradesOptions: Array<number>;
-  valueSubjectsOptions: Array<number>;
-  optionsGoals: Array<GoalsData>;
-  optionsMyGrades: Array<Grade>;
-  optionsMySubjects: Array<Subject>;
-  optionsMySchool: Array<number>;
-  valueStringGoalsOptions: Array<string>;
-  valueGoalsOptions: Array<number>;
-  editValueCoreOptions: Array<number> | undefined;
-  editvalueMultiOptions: Array<number> | undefined;
-  editvaluereadingOptions: Array<number> | undefined;
-  editvalueGoalsOptions: Array<number> | undefined;
-  page: number;
-  pageCurrent: number;
-  isValid: boolean;
-  isValidPrivate: boolean;
-  isMyStateSchool: boolean;
-  loadingGoals: boolean;
-  isOpen: boolean | undefined;
-  IsVisibilityButtons: boolean;
-  valueLocaleId: number | null;
-}
-
-export interface TagPropSource {
-  id: number;
-  title: string;
-  default: boolean;
-}
-
-export interface TagPropKeyword {
-  id: number;
-  title: string;
-  default: boolean;
-}
+import {
+  PublishingActionsProps, PublishingActionsState, TagPropSource,
+  MAGICNUMBER1, MAGICNUMBER100, SETTIMEOUT,
+  PublishingActionsIcons, initializePublishingActionsState,
+  LabelsList, initializeAllLabelsForUI,
+} from './PublishingActionsAux';
 
 @observer
-export class PublishingActions extends Component<Props, State> {
-  constructor(props: Props) {
+export class PublishingActions extends Component<PublishingActionsProps, PublishingActionsState> {
+  private labels: LabelsList = initializeAllLabelsForUI();
+  constructor(props: PublishingActionsProps) {
     super(props);
-    this.state = {
-      grepFiltersData: {},
-      optionsCore: [],
-      optionsMulti: [],
-      optionsReading: [],
-      optionsSubjects: [],
-      optionsGrades: [],
-      valueCoreOptions: [],
-      valueMultiOptions: [],
-      valueSourceOptions: [],
-      valueKeywordsOptions: [],
-      valuereadingOptions: [],
-      valueGradesOptions: [],
-      valueSubjectsOptions: [],
-      optionsGoals: [],
-      optionsMyGrades: [],
-      optionsMySubjects: [],
-      valueStringGoalsOptions: [],
-      valueGoalsOptions: [],
-      editValueCoreOptions: [],
-      editvalueMultiOptions: [],
-      editvaluereadingOptions: [],
-      editvalueGoalsOptions: [],
-      optionsMySchool: [],
-      isValid: false,
-      isValidPrivate: true,
-      isMyStateSchool: false,
-      page: MAGICNUMBER1,
-      pageCurrent: MAGICNUMBER1,
-      loadingGoals: true,
-      isOpen: false,
-      IsVisibilityButtons: false,
-      valueLocaleId: null
-    };
+    this.state = initializePublishingActionsState();
   }
 
   public async componentDidMount() {
     const { store, from } = this.props;
-    const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, valuereadingOptions } = this.state;
     const arraySelectedIdsGrades: Array<number> = [];
     const arraySelectedIdsSubjects: Array<number> = [];
     const arraySelectedIdsNewsGrades: Array<number> = [];
@@ -149,9 +46,7 @@ export class PublishingActions extends Component<Props, State> {
       if (!store!.getAllSources().length) {
         store!.getSources();
       }
-      /* if (!store!.getAllKeywords().length) { */
       store!.getKeywords();
-      /* } */
       if (typeof (store!.currentEntity!.getListOfGoals()) !== 'undefined') {
         listGoals = this.transformDataToString(store!.currentEntity!.getListOfGoals()!);
       }
@@ -166,9 +61,7 @@ export class PublishingActions extends Component<Props, State> {
       if (!store!.getAllSources().length) {
         store!.getSources();
       }
-      /* if (!store!.getAllKeywords().length) { */
       store!.getKeywords();
-      /* } */
       if (typeof (store!.getGoalsByArticle()) !== 'undefined') {
         listGoals = store!.getGoalsByArticle().split(',');
       }
@@ -208,33 +101,15 @@ export class PublishingActions extends Component<Props, State> {
     const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
 
     this.setState({
-      grepFiltersData: grepFiltersDataAwait
-    });
-    this.setState({
-      optionsCore: this.renderValueOptions(grepFiltersDataAwait, 'core')
-    });
-    this.setState({
-      optionsMulti: this.renderValueOptions(grepFiltersDataAwait, 'multi')
-    });
-    this.setState({
-      optionsReading: this.renderValueOptions(grepFiltersDataAwait, 'reading')
-    });
-    this.setState({
-      optionsSubjects: this.renderValueOptionsBasics(grepFiltersDataAwait, 'subject')
-    });
-    this.setState({
-      optionsGrades: this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
-    });
-    this.setState({
-      editValueCoreOptions: store!.currentEntity!.getListOfgrepCoreElementsIds()!
-    });
-    this.setState({
-      editvalueGoalsOptions: store!.currentEntity!.getListOfgrepGoalsIds()!
-    });
-    this.setState({
-      editvalueMultiOptions: store!.currentEntity!.getListOfgrepMainTopicsIds()!
-    });
-    this.setState({
+      grepFiltersData: grepFiltersDataAwait,
+      optionsCore: this.renderValueOptions(grepFiltersDataAwait, 'core'),
+      optionsMulti: this.renderValueOptions(grepFiltersDataAwait, 'multi'),
+      optionsReading: this.renderValueOptions(grepFiltersDataAwait, 'reading'),
+      optionsSubjects: this.renderValueOptionsBasics(grepFiltersDataAwait, 'subject'),
+      optionsGrades: this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade'),
+      editValueCoreOptions: store!.currentEntity!.getListOfgrepCoreElementsIds()!,
+      editvalueGoalsOptions: store!.currentEntity!.getListOfgrepGoalsIds()!,
+      editvalueMultiOptions: store!.currentEntity!.getListOfgrepMainTopicsIds()!,
       editvaluereadingOptions: store!.currentEntity!.getListOfgrepReadingInSubjectId()!
     });
     if (typeof (store!.currentEntity!.getListOfgrepGoalsIds()) !== 'undefined') {
@@ -317,9 +192,9 @@ export class PublishingActions extends Component<Props, State> {
       this.setState({
         valueLocaleId: currentLang.langId
       },
-      () => {
-        store!.currentEntity!.setLocaleId(currentLang.langId);
-      });
+        () => {
+          store!.currentEntity!.setLocaleId(currentLang.langId);
+        });
     }
     if (typeof (store!.currentEntity!.getListOfgrepCoreElementsIds()) !== 'undefined') {
       this.setState({
@@ -338,38 +213,6 @@ export class PublishingActions extends Component<Props, State> {
         }
       );
     }
-    /*const arrayForGrades : Array<number> = [];
-    if (selectedGrades.length > 0) {
-      selectedGrades.forEach((element) => {
-        for (let i = 0; i < this.state.optionsGrades.length; i = i + 1) {
-          // tslint:disable-next-line: variable-name
-          if (Number(element.id) === Number(this.state.optionsGrades[i].wp_id)) {
-            if (!this.state.valueGradesOptions.includes(this.state.optionsGrades[i].id)) {
-              arrayForGrades.push(this.state.optionsGrades[i].id);
-            }
-          }
-        }
-      });
-      this.setState({
-        valueGradesOptions: arrayForGrades!
-      });
-    }*/
-    /*const arrayForSubjects : Array<number> = [];
-    if (selectedSubjects.length > 0) {
-      selectedSubjects.forEach((element) => {
-        for (let i = 0; i < this.state.optionsSubjects.length; i = i + 1) {
-          // tslint:disable-next-line: variable-name
-          if (Number(element.id) === Number(this.state.optionsSubjects[i].wp_id)) {
-            if (!this.state.valueSubjectsOptions.includes(this.state.optionsSubjects[i].id)) {
-              arrayForSubjects.push(this.state.optionsSubjects[i].id);
-            }
-          }
-        }
-      });
-      this.setState({
-        valueSubjectsOptions: arrayForSubjects!
-      });
-    }*/
     if (listGoals.length > 0) {
       localStorage.setItem('goals', String(listGoals));
     } else {
@@ -563,9 +406,7 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public addSubject = async (id: number) => {
-    const { optionsSubjects, valueSubjectsOptions } = this.state;
     const { store } = this.props;
-    const arrayValueSubjects = this.state.valueSubjectsOptions;
     const subject = store!.getAllSubjects().find(subject => subject.id === id);
     if (subject) {
       store!.currentEntity!.addSubject(subject);
@@ -598,12 +439,8 @@ export class PublishingActions extends Component<Props, State> {
     });
     const grepFiltersDataAwait = await store!.getGrepFilters(String(arraySelectedIdsGrades), String(arraySelectedIdsSubjects));
     this.setState({
-      grepFiltersData: grepFiltersDataAwait
-    });
-    this.setState({
-      optionsCore: this.renderValueOptions(grepFiltersDataAwait, 'core')
-    });
-    this.setState({
+      grepFiltersData: grepFiltersDataAwait,
+      optionsCore: this.renderValueOptions(grepFiltersDataAwait, 'core'),
       optionsMulti: this.renderValueOptions(grepFiltersDataAwait, 'multi')
     });
     /* tslint:disable-next-line:max-line-length */
@@ -629,7 +466,6 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public removeSubject = async (id: number) => {
-    const { optionsSubjects, valueSubjectsOptions } = this.state;
     const { store } = this.props;
     const subject = store!.getAllSubjects().find(subject => subject.id === id);
     const arrayRemove: Array<Subject> = [];
@@ -656,17 +492,14 @@ export class PublishingActions extends Component<Props, State> {
   })
 
   public addGrade = async (id: number) => {
-    const { optionsSubjects, valueSubjectsOptions } = this.state;
     const { store } = this.props;
-    const arrayValueGrades = this.state.valueGradesOptions;
     const grade = store!.getAllGrades().find(grade => grade.id === id);
     if (grade) {
       store!.currentEntity!.addGrade(grade);
-      this.setState({ loadingGoals: true });
-      this.setState(
-        {
-          optionsMyGrades: [...this.state.optionsMyGrades, grade]
-        },
+      this.setState({
+        loadingGoals: true,
+        optionsMyGrades: [...this.state.optionsMyGrades, grade]
+      },
         () => {
           this.forceUpdate();
         }
@@ -688,7 +521,6 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public removeGrade = async (id: number) => {
-    const { optionsGrades, valueSubjectsOptions } = this.state;
     const { store } = this.props;
     const grade = store!.getAllGrades().find(grade => grade.id === id);
     const arrayRemove: Array<Grade> = [];
@@ -733,7 +565,6 @@ export class PublishingActions extends Component<Props, State> {
       () => {
         this.validateAddTeacherContentDefault(true);
         this.sendValidbutton();
-        // check only contentCM
         if (this.props.store!.getCurrentUser()!.type === UserType.ContentManager) {
           this.props.store!.currentEntity!.setGrepSourcesIds([]);
           this.props.store!.currentEntity!.setOpen(false);
@@ -757,7 +588,7 @@ export class PublishingActions extends Component<Props, State> {
     ) {
       Notification.create({
         type: NotificationTypes.ERROR,
-        title: intl.get('new assignment.copy_title_not_allow')
+        title: this.labels.copyWordInTitleNotAllowed
       });
 
       return;
@@ -789,7 +620,7 @@ export class PublishingActions extends Component<Props, State> {
     ) {
       Notification.create({
         type: NotificationTypes.ERROR,
-        title: intl.get('new assignment.copy_title_not_allow')
+        title: this.labels.copyWordInTitleNotAllowed,
       });
 
       return;
@@ -845,7 +676,7 @@ export class PublishingActions extends Component<Props, State> {
 
   public addSource = async (id: number) => {
     const { currentEntity } = this.props.store!;
-    const { valueSourceOptions } = this.state;
+    /* const { valueSourceOptions } = this.state; */
     const ArrayValueSource = this.state.valueSourceOptions;
     ArrayValueSource.push(id);
     const uniqueArray = ArrayValueSource.filter((item, pos) => (ArrayValueSource.indexOf(item) === pos));
@@ -875,17 +706,17 @@ export class PublishingActions extends Component<Props, State> {
     const { store, from } = this.props;
     const sources = store!.getAllSources().map(this.sourceToTagProp);
     const selectedSources = this.grepNumbersToTagprop(store!.currentEntity!.getListOfSources(), sources);
-    const myplaceholder = (selectedSources.length > 0) ? '' : intl.get('publishing_page.source');
+    const myplaceholder = (selectedSources.length > 0) ? '' : this.labels.labelSource;
     const isOpen = this.state.isOpen;
-    const isChecked = (isOpen) ? checkActive : checkRounded;
-    const textIsOpen = (from === 'TEACHINGPATH') ? intl.get('publishing_page.source_is_open') : intl.get('publishing_page.source_is_open_assig');
+    const isChecked = (isOpen) ? PublishingActionsIcons.checkActive : PublishingActionsIcons.checkRounded;
+    const textIsOpen = (from === 'TEACHINGPATH') ? this.labels.isOpenTeachingPath : this.labels.isOpenAssignment;
     let classHidden = 'InformationSource hidden';
     if (store!.getCurrentUser()!.type === UserType.ContentManager) { classHidden = 'InformationSource'; }
 
     return (
       <div className={classHidden}>
         <div className="infoContainer__secondTitle">
-          <h2>{intl.get('publishing_page.source_is_open_title')}</h2>
+          <h2>{this.labels.labelTitleIsOpen}</h2>
           <div className="itemsFlex subject">
             <TagInputComponent
               className="filterBy darkTheme"
@@ -912,7 +743,6 @@ export class PublishingActions extends Component<Props, State> {
 
   public addKeyword = async (description: string) => {
     const { currentEntity } = this.props.store!;
-    const { valueKeywordsOptions } = this.state;
     const ArrayValueKeywords = this.state.valueKeywordsOptions;
     ArrayValueKeywords.push(description);
     const uniqueArray = ArrayValueKeywords.filter((item, pos) => (ArrayValueKeywords.indexOf(item) === pos));
@@ -958,7 +788,7 @@ export class PublishingActions extends Component<Props, State> {
     const selectedKeywords = this.grepNumbersToTagKeywordProp(store!.currentEntity!.getListOfKeywords(), keywords).length > 0 ?
       this.grepNumbersToTagKeywordProp(store!.currentEntity!.getListOfKeywords(), keywords).filter((v, i, a) => a.findIndex(v2 => (v2.description === v.description)) === i) : selected!;
     const listAndSelectedKeywords = [...keywords!, ...selected!].filter((v, i, a) => a.findIndex(v2 => (v2.description === v.description)) === i);
-    const myplaceholder = (selectedKeywords.length > 0) ? '' : intl.get('publishing_page.keywords');
+    const myplaceholder = (selectedKeywords.length > 0) ? '' : this.labels.placeholderKeywords;
     return (
       <div>
         <TagKeywordInputComponent
@@ -983,23 +813,23 @@ export class PublishingActions extends Component<Props, State> {
     const languages: Array<TagProp> = [];
     LANGUAGES.forEach((item) => { languages.push({ id: Number(item.langId), title: item.shortDescription }); });
 
-    const selectedLanguage: Array<TagProp>  = [];
+    const selectedLanguage: Array<TagProp> = [];
     if (valueLocaleId !== null) { selectedLanguage.push(languages.find(i => i.id === valueLocaleId)!); }
 
-    const myplaceholder = (selectedLanguage.length > 0) ? '' : intl.get('publishing_page.languages');
+    const myplaceholder = (selectedLanguage.length > 0) ? '' : this.labels.placeholderLanguages;
 
     return (
       <div>
         <TagInputComponent
-              className="filterBy darkTheme"
-              tags={languages}
-              addTag={this.addLanguage}
-              currentTags={selectedLanguage}
-              orderbyid={false}
-              removeTag={this.removeLanguage}
-              placeholder={myplaceholder}
-              listView
-              temporaryTagsArray
+          className="filterBy darkTheme"
+          tags={languages}
+          addTag={this.addLanguage}
+          currentTags={selectedLanguage}
+          orderbyid={false}
+          removeTag={this.removeLanguage}
+          placeholder={myplaceholder}
+          listView
+          temporaryTagsArray
         />
       </div>
     );
@@ -1032,32 +862,9 @@ export class PublishingActions extends Component<Props, State> {
 
   public renderSubjectInput = () => {
     const { store } = this.props;
-    const { optionsSubjects, valueSubjectsOptions } = this.state;
     const selectedSubjects = this.state.optionsMySubjects.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.gradeToTagProp);
-    const myplaceholder = (selectedSubjects.length > 0) ? '' : intl.get('publishing_page.subject');
+    const myplaceholder = (selectedSubjects.length > 0) ? '' : this.labels.placeholderSubjects;
     const subjects = store!.getAllSubjects().filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.subjectToTagProp);
-    /*let filterSelectedSubjects = this.compareTwoArraysReturnValue(subjects, selectedSubjects);
-    if (selectedSubjects.length > 0) {
-      myplaceholder = '';
-    }
-    if (filterSelectedSubjects.length === 0) {
-      filterSelectedSubjects = selectedSubjects;
-    }
-    if (filterSelectedSubjects.length > 0) {
-      filterSelectedSubjects.forEach((element) => {
-        for (let i = 0; i < optionsSubjects.length; i = i + 1) {
-          // tslint:disable-next-line: variable-name
-          if (element.id === optionsSubjects[i].wp_id) {
-            if (!valueSubjectsOptions.includes(element.id)) {
-              if (!valueSubjectsOptions.includes(optionsSubjects[i].id)) {
-                valueSubjectsOptions.push(optionsSubjects[i].id);
-              }
-            }
-          }
-        }
-      });
-    }*/
-
     return (
       <div className="itemsFlex subject">
         <TagInputComponent
@@ -1090,27 +897,9 @@ export class PublishingActions extends Component<Props, State> {
 
   public renderGradeInput = () => {
     const { store } = this.props;
-    const { optionsGrades, valueGradesOptions } = this.state;
-    const { currentEntity } = store!;
     const selectedGrades = this.state.optionsMyGrades.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.gradeToTagProp);
-    const myplaceholder = (selectedGrades.length > 0) ? '' : intl.get('publishing_page.grade');
+    const myplaceholder = (selectedGrades.length > 0) ? '' : this.labels.placeholderGrades;
     const grades = store!.getAllGrades().filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.gradeToTagProp).sort((a, b) => a.id - b.id);
-    /*let filterSelectedGrades = this.compareTwoArraysReturnValue(grades, selectedGrades);
-    if (filterSelectedGrades.length === 0) {
-      filterSelectedGrades = selectedGrades;
-    }
-    if (filterSelectedGrades.length > 0) {
-      filterSelectedGrades.forEach((element) => {
-        for (let i = 0; i < optionsGrades.length; i = i + 1) {
-          // tslint:disable-next-line: variable-name
-          if (element.id === optionsGrades[i].wp_id) {
-            if (!this.state.valueGradesOptions.includes(optionsGrades[i].id)) {
-              this.state.valueGradesOptions.push(optionsGrades[i].id);
-            }
-          }
-        }
-      });
-    }*/
     return (
       <div className="itemsFlex grade">
         <TagInputComponent
@@ -1128,42 +917,6 @@ export class PublishingActions extends Component<Props, State> {
       </div>
     );
   }
-
-  public renderLevelButton = (level: number) => {
-    const { levels } = this.props.store!.currentEntity!;
-
-    const buttonClassName = levels.includes(level) ? 'active' : undefined;
-    const levelIcon = level === firstLevel ? firstLevelImg :
-      level === secondLevel ? secondLevelImg :
-        thirdLevelImg;
-
-    return (
-      <button
-        key={`key-${level}`}
-        value={level}
-        className={buttonClassName}
-        onClick={this.handleSelectLevel}
-        title={`${level}-level-icon`}
-      >
-        <img src={levelIcon} alt={`${level}-level-icon`} title={`${level}-level-icon`} />
-        {level}
-      </button>
-    );
-  }
-
-  public renderLevelChoice = () => (
-    <div className="itemsFlex levels">
-      <div className="flexBox">
-        <img src={settingsImg} alt={intl.get('generals.student_level')} title={intl.get('generals.student_level')} />
-        <div className={'title'}>{intl.get('publishing_page.student_level')}</div>
-      </div>
-
-      <div className="studentLevelButtons flexBox">
-
-        {studentLevels.map(this.renderLevelButton)}
-      </div>
-    </div>
-  )
 
   public renderVisibility = () => {
     const { store } = this.props;
@@ -1196,47 +949,47 @@ export class PublishingActions extends Component<Props, State> {
     return (
       <div className="visibility">
         <div className="flexBox flex-align">
-          <img src={visibilityImg} alt={intl.get('generals.visibility')} title={intl.get('generals.visibility')} />
-          <div className={'title'}>{intl.get('publishing_page.visibility')}</div>
+          <img src={PublishingActionsIcons.visibilityImg} alt={this.labels.textVisibilityForImage} title={this.labels.textVisibilityForImage} />
+          <div className={'title'}>{this.labels.labelVisibility}</div>
         </div>
-        <p>{intl.get('publishing_page.visibility_description')}</p>
+        <p>{this.labels.textvisibilityDescription}</p>
         <div className={IsVisibilityButtons}>
           <button
             className={mySchoolButtonClassnames}
             onClick={this.handleMySchoolOn}
-            title={intl.get('teaching_path_tabs.My school')}
+            title={this.labels.labelMySchoolButton}
           >
             <img
-              src={publicIconImg}
+              src={PublishingActionsIcons.publicIconImg}
               alt="Public"
-              title={intl.get('teaching_path_tabs.My school')}
+              title={this.labels.labelMySchoolButton}
             />
-            {intl.get('teaching_path_tabs.My school')}
+            {this.labels.labelMySchoolButton}
           </button>
           <button
             className={publicButtonClassnames}
             onClick={this.handlePrivateOff}
-            title={intl.get('publishing_page.public')}
+            title={this.labels.labelPublicButton}
           >
             <img
-              src={publicIconImg}
+              src={PublishingActionsIcons.publicIconImg}
               alt="Public"
-              title={intl.get('publishing_page.public')}
+              title={this.labels.labelPublicButton}
             />
-            {intl.get('publishing_page.public')}
+            {this.labels.labelPublicButton}
           </button>
 
           <button
             className={privateButtonClassnames}
             onClick={this.handlePrivateOn}
-            title={intl.get('publishing_page.private')}
+            title={this.labels.labelPrivateButton}
           >
             <img
-              src={privateIconImg}
+              src={PublishingActionsIcons.privateIconImg}
               alt="Private"
-              title={intl.get('publishing_page.private')}
+              title={this.labels.labelPrivateButton}
             />
-            {intl.get('publishing_page.private')}
+            {this.labels.labelPrivateButton}
           </button>
         </div>
       </div>
@@ -1281,7 +1034,6 @@ export class PublishingActions extends Component<Props, State> {
         {
           // tslint:disable-next-line: variable-name
           page: grepFiltergoalssDataAwait.total_pages,
-          // valueGoalsOptions : [],
           loadingGoals: false
         }
       );
@@ -1313,11 +1065,10 @@ export class PublishingActions extends Component<Props, State> {
           loadingGoals: false
         }
       );
-      this.setState({ pageCurrent: MAGICNUMBER1 });
-      this.setState(
-        {
-          valueCoreOptions: []
-        },
+      this.setState({
+        pageCurrent: MAGICNUMBER1,
+        valueCoreOptions: []
+      },
         () => {
           this.sendValidbutton();
         }
@@ -1373,40 +1124,7 @@ export class PublishingActions extends Component<Props, State> {
     return returnArray;
   }
 
-  /*public addCore = async (id: number) => {
-    const { currentEntity } = this.props.store!;
-    const { valueCoreOptions } = this.state;
-    const ArrayValueCores = this.state.valueCoreOptions;
-    ArrayValueCores.push(id);
-    const uniqueArray = ArrayValueCores.filter((item, pos) => (ArrayValueCores.indexOf(item) === pos));
-    this.setState({ loadingGoals : true });
-    this.setState(
-      {
-        valueCoreOptions: uniqueArray
-      },
-      () => {
-        this.sendValidbutton();
-        currentEntity!.setGrepCoreElementsIds(this.state.valueCoreOptions);
-      }
-    );
-    const grepFiltergoalssDataAwait = await this.filterGrepGoals(uniqueArray, this.state.valueMultiOptions, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
-    this.setState({
-      optionsGoals : grepFiltergoalssDataAwait.data
-    });
-    this.setState(
-      {
-        // tslint:disable-next-line: variable-name
-        page : grepFiltergoalssDataAwait.total_pages,
-        // valueGoalsOptions : [],
-        loadingGoals: false
-      }
-    );
-    this.comparativeGoalsValueToFilter();
-    this.setState({ pageCurrent: MAGICNUMBER1 });
-  }*/
-
   public addCore = async (id: number) => {
-    const { optionsSubjects, valueSubjectsOptions } = this.state;
     const { store } = this.props;
     const ArrayValueCores = this.state.valueCoreOptions;
     ArrayValueCores.push(id);
@@ -1447,10 +1165,10 @@ export class PublishingActions extends Component<Props, State> {
 
   public renderCoreElements = () => {
     const { store } = this.props;
-    const { optionsCore, editValueCoreOptions, valueCoreOptions } = this.state;
+    const { optionsCore } = this.state;
     const newOptionsCore = optionsCore.map(this.grepToTagProp);
     const selectedCore = this.grepNumbersToTagprop(store!.currentEntity!.getListOfgrepCoreElementsIds(), newOptionsCore);
-    const myplaceholder = (selectedCore.length > 0) ? '' : intl.get('assignments search.Choose Core');
+    const myplaceholder = (selectedCore.length > 0) ? '' : this.labels.placeholderCoreElements;
     return (
       <div className="itemsFlex grade">
         <TagInputComponent
@@ -1477,22 +1195,17 @@ export class PublishingActions extends Component<Props, State> {
       /* tslint:disable-next-line:max-line-length */
       const grepFiltergoalssDataAwait = await this.filterGrepGoals(this.state.valueCoreOptions, newValue.value, this.state.valueGradesOptions, this.state.valueSubjectsOptions, this.state.valueStringGoalsOptions);
       this.setState({
-        optionsGoals: grepFiltergoalssDataAwait.data
-      });
-      this.setState(
-        {
-          // tslint:disable-next-line: variable-name
-          page: grepFiltergoalssDataAwait.total_pages,
-          // valueGoalsOptions : [],
-          loadingGoals: false
-        }
+        optionsGoals: grepFiltergoalssDataAwait.data,
+        // tslint:disable-next-line: variable-name
+        page: grepFiltergoalssDataAwait.total_pages,
+        loadingGoals: false
+      }
       );
       this.comparativeGoalsValueToFilter();
-      this.setState({ pageCurrent: MAGICNUMBER1 });
-      this.setState(
-        {
-          valueMultiOptions: [...valueMultiOptions, newValue.value]
-        },
+      this.setState({
+        pageCurrent: MAGICNUMBER1,
+        valueMultiOptions: [...valueMultiOptions, newValue.value]
+      },
         () => {
           this.sendValidbutton();
         }
@@ -1528,7 +1241,6 @@ export class PublishingActions extends Component<Props, State> {
 
   public addMulti = async (id: number) => {
     const { currentEntity } = this.props.store!;
-    const { valueMultiOptions } = this.state;
     const ArrayValueMulti = this.state.valueMultiOptions;
     ArrayValueMulti.push(id);
     const uniqueArray = ArrayValueMulti.filter((item, pos) => (ArrayValueMulti.indexOf(item) === pos));
@@ -1568,10 +1280,10 @@ export class PublishingActions extends Component<Props, State> {
 
   public renderMultiDisciplinary = () => {
     const { store } = this.props;
-    const { optionsMulti, editvalueMultiOptions } = this.state;
+    const { optionsMulti } = this.state;
     const newOptionsMulti = optionsMulti.map(this.grepToTagProp);
     const selectedMulti = this.grepNumbersToTagprop(store!.currentEntity!.getListOfgrepMainTopicsIds(), newOptionsMulti);
-    const myplaceholder = (selectedMulti.length > 0) ? '' : intl.get('assignments search.Choose Multi');
+    const myplaceholder = (selectedMulti.length > 0) ? '' : this.labels.placeholderMultiDisciplinarySubjects;
     return (
       <div className="itemsFlex grade">
         <TagInputComponent
@@ -1589,31 +1301,6 @@ export class PublishingActions extends Component<Props, State> {
       </div>
     );
   }
-
-  /*public handleChangeSelectReading = async (newValue: any) => {
-    const { currentEntity } = this.props.store!;
-    const { valuereadingOptions } = this.state;
-    if (newValue !== 0) {
-      this.setState(
-        {
-          valuereadingOptions: newValue.value
-        },
-        () => {
-          this.sendValidbutton();
-        }
-      );
-    } else {
-      this.setState(
-        {
-          valuereadingOptions: 0
-        },
-        () => {
-          this.sendValidbutton();
-        }
-      );
-    }
-    currentEntity!.setGrepReadingInSubjectId(newValue.value);
-  }*/
 
   public searchValueInNumbers = (emisor: Array<GreepSelectValue>, receptor: number | undefined) => {
     let valueCoreElement: any = emisor[0];
@@ -1673,7 +1360,7 @@ export class PublishingActions extends Component<Props, State> {
     const newOptionsReading = optionsReading.map(this.grepToTagProp);
     const valueReading = (store!.currentEntity!.getListOfgrepReadingInSubjectId() !== undefined) ? store!.currentEntity!.getListOfgrepReadingInSubjectId() : [];
     const selectedReading = this.grepNumbersToTagprop(valueReading, newOptionsReading);
-    const myplaceholder = (selectedReading.length > 0) ? '' : intl.get('assignments search.Choose reading');
+    const myplaceholder = (selectedReading.length > 0) ? '' : this.labels.placeholderReadingInSubject;
     return (
       <div className="itemsFlex grade">
         <TagInputComponent
@@ -1727,7 +1414,7 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public sendTableBodyGoal = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const { editvalueGoalsOptions, valueGoalsOptions } = this.state;
+    const { valueGoalsOptions } = this.state;
     const target = e.currentTarget;
     const value = Number(target!.value);
     if (target.classList.contains('active')) {
@@ -1771,20 +1458,17 @@ export class PublishingActions extends Component<Props, State> {
     );
   }
 
-  public renderTableHeader = () => {
-    const { store } = this.props;
-    return (
-      <div className="itemTablesHeader">
-        <div className="itemTablesTh">
-          <div className="itemTablesTd icons" />
-          <div className="itemTablesTd grade">{intl.get('new assignment.Grade')}</div>
-          <div className="itemTablesTd subjects">{intl.get('new assignment.Subjects')}</div>
-          <div className="itemTablesTd core">{intl.get('new assignment.greep.core')}</div>
-          <div className="itemTablesTd goals">{intl.get('new assignment.greep.goals')}</div>
-        </div>
+  public renderTableHeader = () => (
+    <div className="itemTablesHeader">
+      <div className="itemTablesTh">
+        <div className="itemTablesTd icons" />
+        <div className="itemTablesTd grade">{this.labels.goalsTableHeaderGrade}</div>
+        <div className="itemTablesTd subjects">{this.labels.goalsTableHeaderSubject}</div>
+        <div className="itemTablesTd core">{this.labels.goalsTableHeaderCoreElements}</div>
+        <div className="itemTablesTd goals">{this.labels.goalsTableHeaderGoalInfo}</div>
       </div>
-    );
-  }
+    </div>
+  )
 
   public transformData = (data: Array<GreepElements>, options: Array<GoalsData>) => {
     const returnArray: Array<number> = [];
@@ -1799,8 +1483,7 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public renderTableBody = () => {
-    const { store, from } = this.props;
-    const { optionsGoals, editvalueGoalsOptions } = this.state;
+    const { optionsGoals } = this.state;
     const listGoals = this.state.valueGoalsOptions;
     const myOptionGoals = this.state.optionsGoals;
     const goalsNotSelected: Array<GoalsData> = [];
@@ -1832,7 +1515,7 @@ export class PublishingActions extends Component<Props, State> {
       visibleGoals = realOptionsGoals!.map((goal) => {
         const visibleGoalsGrade = goal!.grades!.map((grade) => {
           const title = grade.name.split('.', 1);
-          const mytitle = (grade.name.split('.').length === 1) ? title : `${title} ${intl.get('new assignment.grade')}`;
+          const mytitle = (grade.name.split('.').length === 1) ? title : `${title} ${this.labels.labelGrades}`;
           return <span key={grade.id}>{mytitle}</span>;
         });
         const visibleGoalsCore = goal!.coreElements!.map((core) => {
@@ -1849,8 +1532,8 @@ export class PublishingActions extends Component<Props, State> {
           <div className="itemTablesTr" key={goal!.id}>
             <div className="itemTablesTd icons">
               <button value={goal.id} onClick={this.sendTableBodyGoal} className={activeCrop}>
-                <img src={checkRounded} alt="Check" title="check" className={'checkImg'} />
-                <img src={checkActive} alt="Check" title="check" className={'checkImgFalse'} />
+                <img src={PublishingActionsIcons.checkRounded} alt="Check" title="check" className={'checkImg'} />
+                <img src={PublishingActionsIcons.checkActive} alt="Check" title="check" className={'checkImgFalse'} />
               </button>
             </div>
             <div className="itemTablesTd grade">{visibleGoalsGrade} </div>
@@ -1871,7 +1554,7 @@ export class PublishingActions extends Component<Props, State> {
     if (optionsGoals.length === 0) {
       return (
         <div className="itemTablesBody">
-          {intl.get('edit_teaching_path.header.notdata_goals')}
+          {this.labels.notDdataGoals}
         </div>
       );
     }
@@ -1885,8 +1568,8 @@ export class PublishingActions extends Component<Props, State> {
   public renderGoals = () => (
     <div className="infoContainer__body">
       <div className="infoContainer__body__title">
-        <img src={goalsImg} />
-        <h3>{intl.get('new assignment.greep.goals')}</h3>
+        <img src={PublishingActionsIcons.goalsImg} />
+        <h3>{this.labels.labelGoals}</h3>
       </div>
       <div className="infoContainer__body__table">
         {this.renderTableHeader()}
@@ -1946,16 +1629,13 @@ export class PublishingActions extends Component<Props, State> {
       } else {
         Notification.create({
           type: NotificationTypes.ERROR,
-          title: intl.get('publishing_page.dont_empty')
+          title: this.labels.dontEmpty
         });
       }
     }
   }
 
   public renderSkoleInput = (allSkole: Array<TagProp>) => {
-    const { store } = this.props;
-    const { optionsGrades, valueGradesOptions } = this.state;
-    const { currentEntity } = store!;
     const selectedMySkole = this.state.optionsMySchool;
     const selectedMySkoleTagProp: Array<TagProp> = [];
     allSkole.forEach((skole) => {
@@ -1963,7 +1643,7 @@ export class PublishingActions extends Component<Props, State> {
         selectedMySkoleTagProp.push(skole);
       }
     });
-    const myplaceholder = (selectedMySkoleTagProp.length > 0) ? '' : intl.get('publishing_page.selected_myschools');
+    const myplaceholder = (selectedMySkoleTagProp.length > 0) ? '' : this.labels.selectedMySchools;
 
     return (
       <div className="itemsFlex grade">
@@ -1988,7 +1668,6 @@ export class PublishingActions extends Component<Props, State> {
     const isTeacher = (store!.getCurrentUser()!.type === UserType.Teacher) ? true : false;
     const arraySchool: Array<TagProp> = [];
     const myschools = store!.getCurrentUser()!.schools;
-    const arraySchoolIds = this.state.optionsMySchool;
     myschools.forEach((school) => {
       arraySchool.push({
         id: school.id,
@@ -1999,7 +1678,7 @@ export class PublishingActions extends Component<Props, State> {
     if (isTeacher && myschools.length > 1) {
       return (
         <div className="infoContainer__top__skole">
-          <p>{intl.get('publishing_page.selected_myschools')}</p>
+          <p>{this.labels.selectedMySchools}</p>
           <div className="skoleInput">
             {this.renderSkoleInput(arraySchool)}
           </div>
@@ -2009,18 +1688,15 @@ export class PublishingActions extends Component<Props, State> {
   }
 
   public render() {
-    const { store, from } = this.props;
-    const titleSimple = (this.state.isValidPrivate) ? intl.get('publishing_page.grep.title_private') : intl.get('publishing_page.grep.title');
-    const descriptionText = (this.state.isValid) ? intl.get('publishing_page.grep.description_privado') : (from === 'TEACHINGPATH') ? intl.get('publishing_page.grep.description') : intl.get('publishing_page.grep.descrption_assignment');
+    const { from } = this.props;
+    const titleSimple = (this.state.isValidPrivate) ? this.labels.titleForPrivateSelected : this.labels.titleVariantPrivateNotSelected;
+    const descriptionText = (this.state.isValid) ? this.labels.descriptionForPrivateSelected : (from === 'TEACHINGPATH') ? this.labels.descriptionForPublicSelectedTeachingPath : this.labels.descriptionForPublicSelectedAssignment;
     return (
       <div className="PublishingActions flexBox dirColumn">
         <div className="infoContainer">
           <div className="infoContainer__top">
             {this.renderVisibility()}
             {this.state.isMyStateSchool && this.renderMySchool()}
-          </div>
-          <div className="infoContainer__hidden">
-            {this.renderLevelChoice()}
           </div>
           <div className="infoContainer__bottom">
             {!this.state.isValidPrivate && this.renderSourceInput()}

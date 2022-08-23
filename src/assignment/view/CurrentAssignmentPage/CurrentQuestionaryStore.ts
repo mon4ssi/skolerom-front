@@ -96,7 +96,17 @@ export class CurrentQuestionaryStore {
 
   @computed
   public get featuredImage() {
-    return this.assignment!.featuredImage;
+    return (this.assignment) ? this.assignment!.featuredImage : '';
+  }
+
+  @computed
+  public get authoravatar() {
+    return this.assignment!.authoravatar;
+  }
+
+  @computed
+  public get author() {
+    return this.assignment!.author;
   }
 
   public get numberOfQuestions(): number {

@@ -41,17 +41,20 @@ class AssignmentTeachingPathComponent extends Component<ComponentProps> {
   public renderCards = () => {
     const { questionaryTeachingPathStore } = this.props;
     return questionaryTeachingPathStore!.currentListAssignment.map((item) => {
-      const passedStyle = item.isSelected ? 'passedStyle' : '';
+      const passedStyle = item.isSelected ? '' : '';
       return (
          <div className={passedStyle} key={item.id}>
            <InfoCard
              icon={assignment}
+             type="ASSIGNMENT"
              title={item.title}
              grades={item.grades}
              description={item.description}
              img={item.featuredImage ? item.featuredImage : listPlaceholderImg}
              numberOfQuestions={item.numberOfQuestions}
+             isReadArticle={item.isSelected}
              onClick={this.goToAssignment(item.id)}
+             hiddeIcons
            />
          </div>
       );

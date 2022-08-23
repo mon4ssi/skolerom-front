@@ -8,16 +8,19 @@ import { firstLevel, secondLevel, thirdLevel } from 'utils/constants';
 import { CurrentQuestionaryStore } from '../CurrentQuestionaryStore';
 
 import list from 'assets/images/list-placeholder.svg';
+import teachingPathImage from 'assets/images/teaching-path.svg';
+import userPlaceholder from 'assets/images/user-placeholder.png';
+import clock from 'assets/images/rounded-clock.svg';
 import question from 'assets/images/questions.svg';
 import level1 from 'assets/images/level-1-blue.svg';
 import level2 from 'assets/images/level-2-blue.svg';
 import level3 from 'assets/images/level-3-blue.svg';
-import user from 'assets/images/user-placeholder.png';
 
 import './AnswerCover.scss';
 const DELAY = 800;
 interface Props {
   currentQuestionaryStore?: CurrentQuestionaryStore;
+  isdontTeaching?: boolean;
   switchCover(): void;
 }
 
@@ -28,6 +31,14 @@ export class AnswerCover extends Component<Props> {
   public refEl = createRef<HTMLDivElement>();
 
   public async componentDidMount() {
+    const Navrray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__navBar') as HTMLCollectionOf<HTMLElement>);
+    const newContent = Array.from(document.getElementsByClassName('CurrentAssignmentPage__main') as HTMLCollectionOf<HTMLElement>);
+    Navrray[0].style.display = 'none';
+    newContent[0].classList.remove('questionBody');
+    if (this.props.isdontTeaching) {
+      const breadcrumbeArray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__mybreadcrumbs') as HTMLCollectionOf<HTMLElement>);
+      breadcrumbeArray[0].style.display = 'none';
+    }
     await this.props.currentQuestionaryStore!.getRelatedArticles();
     if (this.ref.current) {
       this.ref.current!.focus();
@@ -35,6 +46,18 @@ export class AnswerCover extends Component<Props> {
       setTimeout(() => { this.refEl.current!.focus(); }, DELAY);
     }
   }
+
+  public componentWillUnmount() {
+    const Navrray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__navBar') as HTMLCollectionOf<HTMLElement>);
+    const newContent = Array.from(document.getElementsByClassName('CurrentAssignmentPage__main') as HTMLCollectionOf<HTMLElement>);
+    Navrray[0].style.display = 'block';
+    newContent[0].classList.add('questionBody');
+    if (this.props.isdontTeaching) {
+      const breadcrumbeArray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__mybreadcrumbs') as HTMLCollectionOf<HTMLElement>);
+      breadcrumbeArray[0].style.display = 'flex';
+    }
+  }
+
   public getStartButtonTitle = () => {
     const { currentQuestionaryStore } = this.props;
 
@@ -127,17 +150,33 @@ export class AnswerCover extends Component<Props> {
   public render() {
     const { switchCover, currentQuestionaryStore } = this.props;
     const assignment = currentQuestionaryStore!.assignment;
-
+    const background = (currentQuestionaryStore && currentQuestionaryStore!.featuredImage) ? currentQuestionaryStore!.featuredImage : list;
+    const avatarauthor = (currentQuestionaryStore && currentQuestionaryStore.authoravatar) ? currentQuestionaryStore.authoravatar : userPlaceholder;
+    const authorname = currentQuestionaryStore && currentQuestionaryStore.author;
     return (
-      <div className="AnswerCover">
-        {this.renderImage()}
-        <span className="AnswerCover__title">{assignment!.title}</span>
-        {assignment!.description && <span className="AnswerCover__description">{assignment!.description}</span>}
-        {this.getAnsweredQuestionsCount()}
-        <div ref={this.refEl} className="AnswerCover__div_button">
-          <button className="AnswerCover__button" onClick={switchCover} ref={this.ref} title={this.getStartButtonTitle()}>
-            {this.getStartButtonTitle()}
-          </button>
+      <div className="AnswerCover" style={{ backgroundImage: `url(${background})` }}>
+        <div className="AnswerCover__content">
+          <div className="authorInfo">
+            <img src={avatarauthor} />
+            <h4>{authorname}</h4>
+          </div>
+          <div className="metaInfo">
+            <div className="metaInfo__deadline">
+              <img src={clock} />
+              <p>{intl.get('teaching path preview.deadline')} {currentQuestionaryStore && currentQuestionaryStore.deadline}</p>
+            </div>
+            <div className="metaInfo__steps">
+              <img src={teachingPathImage} />
+              <p>{currentQuestionaryStore && currentQuestionaryStore!.numberOfQuestions} {intl.get('teaching path preview.steps')}</p>
+            </div>
+          </div>
+          <span className="AnswerCover__title">{assignment!.title}</span>
+          {assignment!.description && <span className="AnswerCover__description">{assignment!.description}</span>}
+          <div ref={this.refEl} className="AnswerCover__div_button">
+            <button className="AnswerCover__button" onClick={switchCover} ref={this.ref} title={this.getStartButtonTitle()}>
+              {this.getStartButtonTitle()}
+            </button>
+          </div>
         </div>
       </div>
     );

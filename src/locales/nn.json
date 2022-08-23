@@ -36,7 +36,11 @@
         "teacher_guidance": "Se lærerveiledning",
         "edit": "Rediger",
         "duplicate": "Kopier"
-      }
+      },
+      "read open": "Les beskrivelse",
+      "read close": "Nær description",
+      "read again": "Les igjen",
+      "read article": "les artikkelen"
     },
     "assignment": {
       "headers": {
@@ -57,7 +61,9 @@
         "teacher_guidance": "Se lærerveiledning",
         "edit": "Rediger",
         "duplicate": "Kopier"
-      }
+      },
+      "read again": "Les igjen",
+      "read article": "les oppdrag"
     }
   },
   "assignments_page": {
@@ -186,6 +192,7 @@
   "pagination": {
     "Previous page": "Føregåande side",
     "Next page": "Neste side",
+    "Next question": "Neste spørsmål",
     "Question": "Spørsmål",
     "Exit": "Avslutt oppgåva"
   },
@@ -616,7 +623,8 @@
   },
   "teaching path preview": {
     "Start teaching path": "Start læringssti",
-    "steps": "steg"
+    "steps": "steg",
+    "deadline": "Frist"
   },
   "teaching path search": {
     "Search for teaching paths": "Søk etter læringsstiar ...",

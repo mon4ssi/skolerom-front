@@ -15,6 +15,7 @@ import { Article } from 'assignment/Assignment';
 import { ReadingArticle } from 'components/pages/ReadingArticle/ReadingArticle';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { UserType } from 'user/User';
+import list from 'assets/images/list-placeholder.svg';
 
 import './AssignmentArticlesToReading.scss';
 
@@ -90,7 +91,6 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
       <div
         className={`AssignmentArticlesToReading__card ${article.isRead && 'cardBorder' } ${readOnly && 'AssignmentArticlesToReading__defaultCursor'}`}
         key={article.id}
-        onClick={this.openArticle(article)}
       >
         <InfoCard
           type={'ARTICLE'}
@@ -99,9 +99,11 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
           description={article.excerpt}
           grades={article.grades}
           img={article.images && article.images!.url}
+          isReadArticle={article.isRead}
+          onClick={this.openArticle(article)}
+          hiddeIcons
           // levels={levels || []}
         />
-        <img src={article.isRead ? checkActive : checkInactive} alt="checkbox" className="AssignmentArticlesToReading__checkbox"/>
       </div>
     );
   }
@@ -169,8 +171,11 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
   }
 
   public render() {
+    const { currentQuestionaryStore } = this.props;
+    const background = (currentQuestionaryStore && currentQuestionaryStore!.featuredImage) ? currentQuestionaryStore!.featuredImage : list;
     return (
       <div className="AssignmentArticlesToReading">
+        <div className="QuestionPreview__background AssignmentArticlesToReading__background" style={{ backgroundImage: `url(${background})` }} />
         {this.renderContent()}
       </div>
     );

@@ -29,6 +29,7 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 import './CurrentAssignmentPage.scss';
 import { AssignmentListStore } from '../AssignmentsList/AssignmentListStore';
 import { TeacherGuidanceAssigModal } from '../TeacherGuidance/TeacherGuidanceAssigModal';
+import list from 'assets/images/list-placeholder.svg';
 
 const COVER_INDEX = -2;
 const animationInDuration = 500;
@@ -321,7 +322,6 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
         disabled={!this.canGoToNextQuestion}
         title="Next"
       >
-        Next
         <img
           className="CurrentAssignmentPage__buttonImage"
           src={this.canGoToNextQuestion ? arrowRightRounded : arrowRightRoundedGray}
@@ -350,7 +350,6 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
           alt="arrow left"
           title="arrow left"
         />
-        Back
       </button>
     );
   }
@@ -363,8 +362,10 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
   )
 
   public renderBreadcrumbsIfNeeded = () => this.props.location.state && this.props.location.state.node && (
-    <div className="CurrentAssignmentPage__breadcrumbs">
+    <div className="CurrentAssignmentPage__mybreadcrumbs">
+      {this.renderBackButton()}
       <BreadcrumbsTeachingPath getCurrentNodeFromAssignment={this.redirectToCurrentNode} />
+      {this.renderNextButton()}
     </div>
   )
 
@@ -394,9 +395,9 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
           className="ButtonNextNew--btn"
           onClick={this.goToNextQuestion}
           disabled={!this.canGoToNextQuestion}
-          title={intl.get('pagination.Next page')}
+          title={intl.get('pagination.Next question')}
         >
-          {intl.get('pagination.Next page')}
+          {intl.get('pagination.Next question')}
         </button>
       </div>
     );
@@ -422,6 +423,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
       uiStore,
       isTeacher,
       assignmentListStore,
+      questionaryTeachingPathStore,
       match
     } = this.props;
 
@@ -440,12 +442,14 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
       isVisibleButtonRender = true;
     }
     const url: URL = new URL(window.location.href);
-    /* const localParamIsOpenTG = localStorage!.getItem('isOpen'); */
+    const isOnlyAssig = (state && state.node && state.teachingPath && questionaryTeachingPathStore!.currentNode) ? true : false;
     const openTeacherGuidance: boolean = (url.searchParams.get('open') === 'tg' /* || localParamIsOpenTG!  */? true : false);
     return !isLoading && (
       <div tabIndex={0} className="CurrentAssignmentPage">
         <AppHeader
           fromAssignmentPassing
+          studentFormTeachinPath
+          studentFormAssignment={isOnlyAssig}
           onLogoClick={this.handleExit(ExitEventTarget.HEADER_LOGO)}
           entityStore={assignmentListStore!}
           currentEntityId={Number(match.params.id)}
@@ -460,33 +464,25 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
         {this.props.uiStore!.sidebarShown && <div className="CurrentAssignmentPage__overlay" onClick={uiStore!.hideSidebar} />}
 
         <div className="CurrentAssignmentPage__content">
-          <div className={navBarClasses}>
-            <AssignmentOverview
-              answers={answers}
-              isTeacher={isTeacher}
-              questionsList={questionTitlesListWithSubmit}
-              setCurrentQuestion={this.setCurrentQuestion}
-              currentQuestion={currentQuestionIndex}
-              numberOfAnsweredQuestions={numberOfAnsweredQuestions}
-              handleShowArrowsTooltip={handleShowArrowsTooltip}
-              readOnly={this.isReadOnly}
-              isShowAssignmentArticles={isShowAssignmentArticles}
-              isStartedAssignment={isStartedAssignment}
-              isReadArticles={isReadArticles}
-              redirectData={state && state.node}
-            />
-
-            <ArrowControls
-              shouldRenderPrevButton={this.canGoToPrevQuestion}
-              shouldRenderNextButton={!!this.canGoToNextQuestion}
-              onExit={this.handleExit(ExitEventTarget.EXIT_BUTTON)}
-              onNext={this.goToNextQuestion}
-              onPrev={this.goToPrevQuestion}
-            />
-          </div>
           <div className="CurrentAssignmentPage__container">
             <div className="CurrentAssignmentPage__main">
               <div className="CurrentAssignmentPage__main__center">
+                <div className={navBarClasses}>
+                  <AssignmentOverview
+                    answers={answers}
+                    isTeacher={isTeacher}
+                    questionsList={questionTitlesListWithSubmit}
+                    setCurrentQuestion={this.setCurrentQuestion}
+                    currentQuestion={currentQuestionIndex}
+                    numberOfAnsweredQuestions={numberOfAnsweredQuestions}
+                    handleShowArrowsTooltip={handleShowArrowsTooltip}
+                    readOnly={this.isReadOnly}
+                    isShowAssignmentArticles={isShowAssignmentArticles}
+                    isStartedAssignment={isStartedAssignment}
+                    isReadArticles={isReadArticles}
+                    redirectData={state && state.node}
+                  />
+                </div>
                 {this.renderNavigationIfNeeded()}
                 <AnswerCurrentQuestion
                   answer={currentAnswer}
