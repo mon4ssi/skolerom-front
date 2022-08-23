@@ -13,12 +13,12 @@ import {
   PublishingActionsProps, PublishingActionsState, TagPropSource,
   MAGICNUMBER1, MAGICNUMBER100, SETTIMEOUT,
   PublishingActionsIcons, initializePublishingActionsState,
-  LabelsUIList, LabelsList
+  LabelsList, initializeAllLabelsForUI,
 } from './PublishingActionsAux';
 
 @observer
 export class PublishingActions extends Component<PublishingActionsProps, PublishingActionsState> {
-  private labels: LabelsList = LabelsUIList;
+  private labels: LabelsList = initializeAllLabelsForUI();
   constructor(props: PublishingActionsProps) {
     super(props);
     this.state = initializePublishingActionsState();
