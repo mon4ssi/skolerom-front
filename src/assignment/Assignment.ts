@@ -303,6 +303,7 @@ export interface AssignmentArgs {
   view?: string;
   deadline?: Date;
   featuredImage?: string;
+  backgroundImage?: string;
   answerId?: number;
   isPassed?: boolean | null;
   mark?: number | null;
@@ -365,6 +366,7 @@ export class Assignment {
   @observable protected _levels: Array<number>;
   @observable protected _view: string | undefined;
   @observable protected _featuredImage?: string;
+  @observable protected _backgroundImage?: string;
   @observable protected _answerId?: number;
   @observable protected _isPassed?: boolean | null;
   @observable protected _mark?: number | null;
@@ -421,6 +423,7 @@ export class Assignment {
     this._view = args.view || 'edit';
     this._deadline = args.deadline;
     this._featuredImage = args.featuredImage;
+    this._backgroundImage = args.backgroundImage;
     this._answerId = args.answerId;
     this._comment = args.comment;
     this._mark = args.mark;
@@ -531,6 +534,11 @@ export class Assignment {
   @computed
   public get featuredImage() {
     return this._featuredImage;
+  }
+
+  @computed
+  public get backgroundImage() {
+    return this._backgroundImage;
   }
 
   @computed

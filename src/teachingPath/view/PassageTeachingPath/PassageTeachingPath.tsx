@@ -286,6 +286,22 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
     );
   }
 
+  public renderLeftButton = () => {
+    const { questionaryTeachingPathStore } = this.props;
+    const node = questionaryTeachingPathStore!.currentNode;
+    if (node && node.breadcrumbs) {
+      const idNode = node && node.id;
+      const indexCore = node.breadcrumbs.find(element => element!.id === idNode)!._id;
+      const afterBreadcrumb = (indexCore === 0) ? 0 : indexCore - 1;
+      return (
+        <button className={'navigationExitButton'} title={intl.get('teaching path passing.exit')} >
+          <img src={arrowLeftRounded} alt="arrowLeftRounded"/>
+        </button>
+      );
+    }
+    return;
+  }
+
   public render() {
     return (
       <div className={'passageTeachingPath'}>
@@ -295,9 +311,7 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
         </div>
         <div className="teachingPathWrapper">
           <div className="teachingPathNewBreadCrumbs">
-            <button className={'navigationExitButton'} title={intl.get('teaching path passing.exit')} >
-              <img src={arrowLeftRounded} alt="arrowLeftRounded"/>
-            </button>
+            {this.renderLeftButton()}
             <BreadcrumbsTeachingPath onClickStart={this.onClickStartBreadcrumbs}/>
             <button className={'navigationNextButton'} title={intl.get('teaching path passing.exit')} >
               <img src={arrowLeftRounded} alt="arrowRightRounded"/>

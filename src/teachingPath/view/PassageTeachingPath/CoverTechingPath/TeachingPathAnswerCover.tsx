@@ -35,13 +35,19 @@ class TeachingPathAnswerCoverComponent extends Component<Props>{
     breadcrumbeArray[0].style.display = 'flex';
   }
 
+  public changeText = (text: Date) => {
+    const textNew = String(text).split(' ')[0];
+    return textNew;
+  }
+
   public render() {
     const { questionaryTeachingPathStore, onClickStart } = this.props;
     const currentTeachingPath = questionaryTeachingPathStore!.currentTeachingPath;
     const numberOfSteps = currentTeachingPath && currentTeachingPath.numberOfSteps;
-    const background = currentTeachingPath && currentTeachingPath!.featuredImage;
+    const background = currentTeachingPath && currentTeachingPath!.backgroundImage;
     const avatarauthor = (currentTeachingPath && currentTeachingPath.authorAvatar) ? currentTeachingPath.authorAvatar : userPlaceholder;
     const authorname = currentTeachingPath && currentTeachingPath.author;
+    const newDate = (currentTeachingPath && currentTeachingPath.deadline) ? this.changeText(currentTeachingPath.deadline) : '';
     return (
       <div className={'cover'} style={{ backgroundImage: `url(${background})` }}>
         <div className={'cover__content'}>
@@ -52,7 +58,7 @@ class TeachingPathAnswerCoverComponent extends Component<Props>{
           <div className="metaInfo">
             <div className="metaInfo__deadline">
               <img src={clock} />
-              <p>{intl.get('teaching path preview.deadline')} {currentTeachingPath && currentTeachingPath.deadline}</p>
+              <p>{intl.get('teaching path preview.deadline')} {newDate}</p>
             </div>
             <div className="metaInfo__steps">
               <img src={teachingPathImage} />

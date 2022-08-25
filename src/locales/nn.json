@@ -40,7 +40,7 @@
       "read open": "Les beskrivelse",
       "read close": "Nær description",
       "read again": "Les igjen",
-      "read article": "les artikkelen"
+      "read article": "Les artikkelen"
     },
     "assignment": {
       "headers": {
@@ -63,7 +63,7 @@
         "duplicate": "Kopier"
       },
       "read again": "Les igjen",
-      "read article": "les oppdrag"
+      "read article": "Velg oppdrag"
     }
   },
   "assignments_page": {

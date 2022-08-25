@@ -224,7 +224,7 @@ export class SubmitComponent extends Component<Props> {
     const { numberOfQuestions, numberOfAnsweredQuestions, readOnly, currentQuestionaryStore } = this.props;
     const { sumArticlesRead, sumArticlesTotal } = this.state;
     const submitDescriptionText = intl.get('current_assignment_page.submit_description', { numberOfAnsweredQuestions, numberOfQuestions });
-    const background = (currentQuestionaryStore && currentQuestionaryStore!.featuredImage) ? currentQuestionaryStore!.featuredImage : list;
+    const background = (currentQuestionaryStore && currentQuestionaryStore!.backgroundImage) ? currentQuestionaryStore!.backgroundImage : list;
     return (
       <div>
         <div className="QuestionPreview__background" style={{ backgroundImage: `url(${background})` }} />
