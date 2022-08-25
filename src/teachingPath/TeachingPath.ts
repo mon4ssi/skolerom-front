@@ -172,6 +172,7 @@ export interface TeachingPathArgs {
   id: number;
   title: string;
   author?: string;
+  authorRole?: string;
   createdAt?: string | null;
   rootNodeId?: number;
   lastSelectedNodeId?: number;
@@ -232,6 +233,7 @@ export class TeachingPath {
   protected readonly _id: number;
   @observable protected _title: string;
   @observable protected _author: string | undefined;
+  @observable protected _authorRole: string | undefined;
   @observable protected _description: string;
   @observable protected _guidance: string;
   @observable protected _hasGuidance: boolean = false;
@@ -290,6 +292,7 @@ export class TeachingPath {
     this._id = args.id;
     this._title = args.title;
     this._author = args.author || undefined;
+    this._authorRole = args.authorRole || undefined;
     this._createdAt = args.createdAt || '';
     this._rootNodeId = args.rootNodeId || undefined;
     this._lastSelectedNodeId = args.lastSelectedNodeId || undefined;
@@ -390,6 +393,11 @@ export class TeachingPath {
   @computed
   public get author() {
     return this._author;
+  }
+
+  @computed
+  public get authorRole() {
+    return this._authorRole;
   }
 
   @computed

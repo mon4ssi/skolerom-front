@@ -313,6 +313,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
         publishedAt,
         deadline,
         author,
+        authorRole,
         numberOfQuestions,
         hasGuidance,
         isAnswered,
@@ -323,7 +324,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
       } = currentAssignment!;
     const { history, isPublishedCurrentAssignment, view, store } = this.props;
     /* const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager; */
-    const showPublishDate = false;
+    const showPublishDate = authorRole === UserType.Teacher || !(authorRole === UserType.ContentManager && !(isPrivate!));
     const viewText = intl.get('preview.assignment.buttons.view');
     const guidanceText = intl.get('preview.assignment.buttons.teacher_guidance');
     const editText = intl.get('preview.assignment.buttons.edit');

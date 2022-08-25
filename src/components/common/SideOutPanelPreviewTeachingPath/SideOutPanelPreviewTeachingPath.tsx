@@ -302,6 +302,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         goalsItems,
         description,
         author,
+        authorRole,
         isPrivate,
         numberOfQuestions,
         hasGuidance,
@@ -311,7 +312,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const { currentEntity: { id } } = this.props.store!;
     const { history, isPublishedCurrentTeachingPath, view } = this.props;
     /* const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager; */
-    const showPublishDate = false;
+    const showPublishDate = authorRole === UserType.Teacher || !(authorRole === UserType.ContentManager && !(isPrivate!));
     const viewText = intl.get('preview.teaching_path.buttons.view');
     const guidanceText = intl.get('preview.teaching_path.buttons.teacher_guidance');
     const editText = intl.get('preview.teaching_path.buttons.edit');

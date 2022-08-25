@@ -275,6 +275,7 @@ export interface AssignmentArgs {
   id: number;
   title?: string;
   author?: string;
+  authorRole?: string;
   description?: string;
   guidance?: string;
   hasGuidance?: boolean;
@@ -335,6 +336,7 @@ export class Assignment {
   protected readonly _ownedByMe: boolean;
   @observable protected _title: string = '';
   @observable private _author: string = '';
+  @observable protected _authorRole: string | undefined;
   @observable protected _questions: Array<Question> = [];
   @observable protected _description: string = '';
   @observable protected _guidance: string;
@@ -391,6 +393,7 @@ export class Assignment {
     this._id = args.id;
     this._title = args.title || '';
     this._author = args.author || '';
+    this._authorRole = args.authorRole || undefined;
     this._description = args.description || '';
     this._guidance = args.guidance || '';
     this._hasGuidance = args.hasGuidance || false;
@@ -453,6 +456,11 @@ export class Assignment {
   @computed
   public get author(): string {
     return this._author;
+  }
+
+  @computed
+  public get authorRole() {
+    return this._authorRole;
   }
 
   @computed
