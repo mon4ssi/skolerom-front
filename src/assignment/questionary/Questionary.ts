@@ -215,6 +215,7 @@ export class Questionary {
 
   @action
   public async publish(redirectData?: RedirectData) {
+
     this.validate();
     this.isPublishing = true;
     return redirectData ? this.repo.publishFromTeachingPath(this, redirectData) : this.repo.publishQuestionary(this);
