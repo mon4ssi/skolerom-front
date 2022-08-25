@@ -256,7 +256,7 @@ export class QuestionPreview extends Component<Props, State> {
 
   public render() {
     const { withQuestionCounter, isEvaluationStyle, withLargeCounter, currentQuestionaryStore } = this.props;
-    const background = (currentQuestionaryStore && currentQuestionaryStore!.featuredImage) ? currentQuestionaryStore!.featuredImage : list;
+    const background = (currentQuestionaryStore && currentQuestionaryStore!.backgroundImage) ? currentQuestionaryStore!.backgroundImage : list;
     const contentClassnames = classnames(
       'mainContent w100 flexBox dirColumn',
       withQuestionCounter && 'withQuestionCounter',

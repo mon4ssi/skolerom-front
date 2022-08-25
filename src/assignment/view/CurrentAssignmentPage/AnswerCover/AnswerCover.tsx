@@ -147,12 +147,18 @@ export class AnswerCover extends Component<Props> {
     );
   }
 
+  public changeText = (text: Date) => {
+    const textNew = String(text).split(' ')[0];
+    return textNew;
+  }
+
   public render() {
     const { switchCover, currentQuestionaryStore } = this.props;
     const assignment = currentQuestionaryStore!.assignment;
-    const background = (currentQuestionaryStore && currentQuestionaryStore!.featuredImage) ? currentQuestionaryStore!.featuredImage : list;
+    const background = (currentQuestionaryStore && currentQuestionaryStore!.backgroundImage) ? currentQuestionaryStore!.backgroundImage : list;
     const avatarauthor = (currentQuestionaryStore && currentQuestionaryStore.authoravatar) ? currentQuestionaryStore.authoravatar : userPlaceholder;
     const authorname = currentQuestionaryStore && currentQuestionaryStore.author;
+    const newDate = (currentQuestionaryStore && currentQuestionaryStore.deadline) ? this.changeText(currentQuestionaryStore.deadline) : '';
     return (
       <div className="AnswerCover" style={{ backgroundImage: `url(${background})` }}>
         <div className="AnswerCover__content">
@@ -163,7 +169,7 @@ export class AnswerCover extends Component<Props> {
           <div className="metaInfo">
             <div className="metaInfo__deadline">
               <img src={clock} />
-              <p>{intl.get('teaching path preview.deadline')} {currentQuestionaryStore && currentQuestionaryStore.deadline}</p>
+              <p>{intl.get('teaching path preview.deadline')} {newDate}</p>
             </div>
             <div className="metaInfo__steps">
               <img src={teachingPathImage} />

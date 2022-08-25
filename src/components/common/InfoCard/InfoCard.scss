@@ -30,7 +30,7 @@
       img {
         width: 18px;
         margin-right: 5px;
-        transform: rotate(90deg);
+        transform: rotate(-90deg);
       }
       p {
         font-size: 13px;
@@ -341,10 +341,10 @@
           img {
             width: 18px;
             margin-right: 5px;
-            transform: rotate(90deg);
+            transform: rotate(-90deg);
           }
           &.active img {
-            transform: rotate(-90deg);
+            transform: rotate(90deg);
           }
           p {
             font-size: 13px;

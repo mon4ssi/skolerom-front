@@ -100,6 +100,11 @@ export class CurrentQuestionaryStore {
   }
 
   @computed
+  public get backgroundImage() {
+    return (this.assignment) ? this.assignment!.backgroundImage : '';
+  }
+
+  @computed
   public get authoravatar() {
     return this.assignment!.authoravatar;
   }

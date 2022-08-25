@@ -31,16 +31,15 @@
 
 .AssignmentArticlesToReading__articles {
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 282px);
-  grid-gap: 36px;
+  display: flex;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .AssignmentArticlesToReading__card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 282px;
+  margin: 0px 10px;
+  margin-bottom: 10px;
   cursor: pointer;
 }
 

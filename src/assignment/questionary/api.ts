@@ -21,6 +21,7 @@ export interface RevisionDTO {
   questions: Array<QuestionDTO>;
   relatedArticles: Array<Article>;
   featuredImage?: string;
+  backgroundImage?: string;
 }
 
 export interface RevisionByIdDTO {

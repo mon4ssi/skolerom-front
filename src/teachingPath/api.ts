@@ -257,6 +257,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         rootNodeId: data.rootNodeId,
         lastSelectedNodeId: data.lastSelectedNodeId,
         featuredImage: data.featuredImage,
+        backgroundImage: data.backgroundImage,
         minNumberOfSteps: data.minNumberOfSteps,
         maxNumberOfSteps: data.maxNumberOfSteps,
         author: data.author,

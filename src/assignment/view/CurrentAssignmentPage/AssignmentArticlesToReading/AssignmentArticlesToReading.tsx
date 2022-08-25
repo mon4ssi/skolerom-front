@@ -172,7 +172,7 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
 
   public render() {
     const { currentQuestionaryStore } = this.props;
-    const background = (currentQuestionaryStore && currentQuestionaryStore!.featuredImage) ? currentQuestionaryStore!.featuredImage : list;
+    const background = (currentQuestionaryStore && currentQuestionaryStore!.backgroundImage) ? currentQuestionaryStore!.backgroundImage : list;
     return (
       <div className="AssignmentArticlesToReading">
         <div className="QuestionPreview__background AssignmentArticlesToReading__background" style={{ backgroundImage: `url(${background})` }} />
