@@ -299,7 +299,9 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
       };
     }
     this.props.questionaryTeachingPathStore!.handleAssignment(false);
-    await this.props.currentQuestionaryStore!.publishQuestionary(data);
+    if (!this.props.isTeacher) {
+      await this.props.currentQuestionaryStore!.publishQuestionary(data);
+    }
   }
 
   public redirectToCurrentNode = (idTeachingPath: number, node: number) => {
@@ -441,7 +443,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     }
     const url: URL = new URL(window.location.href);
     /* const localParamIsOpenTG = localStorage!.getItem('isOpen'); */
-    const openTeacherGuidance: boolean = (url.searchParams.get('open') === 'tg' /* || localParamIsOpenTG!  */? true : false);
+    const openTeacherGuidance: boolean = (url.searchParams.get('open') === 'tg' /* || localParamIsOpenTG!  */ ? true : false);
     return !isLoading && (
       <div tabIndex={0} className="CurrentAssignmentPage">
         <AppHeader
