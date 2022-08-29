@@ -286,15 +286,41 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
     );
   }
 
+  public onClickItem = (idNode: number) => {
+    const { questionaryTeachingPathStore } = this.props;
+    if (idNode > 0) {
+      questionaryTeachingPathStore!.handleIframe(false);
+      return questionaryTeachingPathStore!.calculateCurrentNode(questionaryTeachingPathStore!.teachingPathId!, idNode);
+    }
+  }
+
+  public onClickBackButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { questionaryTeachingPathStore } = this.props;
+    const check = Number(e.currentTarget.getAttribute('data-check'));
+    const id = Number(e.currentTarget.getAttribute('data-id'));
+    if (check === 0) {
+      const exitTeachingPath = await Notification.create({
+        type: NotificationTypes.CONFIRM,
+        title: intl.get('teaching path passing.confirm_exit')
+      });
+      if (exitTeachingPath) {
+        this.props.questionaryTeachingPathStore!.resetAllInfoAboutTeachingPath();
+        this.props.history.push('/teaching-paths');
+      }
+    } else {
+      this.onClickItem(id);
+    }
+  }
+
   public renderLeftButton = () => {
     const { questionaryTeachingPathStore } = this.props;
     const node = questionaryTeachingPathStore!.currentNode;
     if (node && node.breadcrumbs) {
       const idNode = node && node.id;
-      const indexCore = node.breadcrumbs.find(element => element!.id === idNode)!._id;
-      const afterBreadcrumb = (indexCore === 0) ? 0 : indexCore - 1;
+      const indexCore = node.breadcrumbs.findIndex(element => element!.id === idNode);
+      const idSkill = (node.breadcrumbs[Number(indexCore - 1)] === undefined) ? 0 : node.breadcrumbs[Number(indexCore - 1)].id;
       return (
-        <button className={'navigationExitButton'} title={intl.get('teaching path passing.exit')} >
+        <button className={'navigationExitButton'} data-check={indexCore} data-id={idSkill} onClick={this.onClickBackButton} title={intl.get('teaching path passing.exit')} >
           <img src={arrowLeftRounded} alt="arrowLeftRounded"/>
         </button>
       );
@@ -313,9 +339,6 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
           <div className="teachingPathNewBreadCrumbs">
             {this.renderLeftButton()}
             <BreadcrumbsTeachingPath onClickStart={this.onClickStartBreadcrumbs}/>
-            <button className={'navigationNextButton'} title={intl.get('teaching path passing.exit')} >
-              <img src={arrowLeftRounded} alt="arrowRightRounded"/>
-            </button>
           </div>
 
           <div className="flexBox dirColumn wrapperTeachingPath">
