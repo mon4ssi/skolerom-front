@@ -53,9 +53,9 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
     const { title, id, levels, correspondingLevelArticleId } = article;
     const isStudent = this.props.currentQuestionaryStore!.getCurrentUser()!.type === UserType.Student;
 
-    if (!isStudent) {
+    /*if (!isStudent) {
       return null;
-    }
+    }*/
 
     const articleChildren = levels![0].childArticles!.length ? levels![0].childArticles! : [article];
     const currentArticleLevelObject = articleChildren.find(article => article.id === correspondingLevelArticleId);
@@ -111,8 +111,9 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
   public finishReading = (graduation: number) => { // TODO maybe it should be removed in future
     const { currentQuestionaryStore } = this.props;
     const { shownArticleLevelId, attachedArticleId } = this.state;
+    const isStudent = this.props.currentQuestionaryStore!.getCurrentUser()!.type === UserType.Student;
     if (!isNull(attachedArticleId)) {
-      this.props.currentQuestionaryStore!.setReadStatusToArticle(attachedArticleId!, shownArticleLevelId, graduation);
+      this.props.currentQuestionaryStore!.setReadStatusToArticle(attachedArticleId!, shownArticleLevelId, graduation, isStudent);
       this.closeArticle();
       Notification.create({
         type: NotificationTypes.SUCCESS,

@@ -6,8 +6,9 @@ import intl from 'react-intl-universal';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 import { QuestionaryTeachingPathStore } from '../../../questionaryTeachingPath/questionaryTeachingPathStore';
 import { EditTeachingPathStore } from '../../EditTeachingPath/EditTeachingPathStore';
-import teachingPath from 'assets/images/teaching-path.svg';
+import teachingPathImage from 'assets/images/teaching-path.svg';
 import userPlaceholder from 'assets/images/user-placeholder.png';
+import clock from 'assets/images/rounded-clock.svg';
 
 import './TeachingPathAnswerCover.scss';
 import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
@@ -24,29 +25,57 @@ class TeachingPathAnswerCoverComponent extends Component<Props>{
   public ref = createRef<HTMLButtonElement>();
   public async componentDidMount() {
     this.ref.current!.focus();
+    // const teachingPathNavigateArray = Array.from(document.getElementsByClassName('teachingPathNavigate') as HTMLCollectionOf<HTMLElement>);
+    const breadcrumbeArray = Array.from(document.getElementsByClassName('teachingPathNewBreadCrumbs') as HTMLCollectionOf<HTMLElement>);
+    // teachingPathNavigateArray[0].style.display = 'none';
+    breadcrumbeArray[0].style.display = 'none';
+  }
+  public componentWillUnmount() {
+    // const teachingPathNavigateArray = Array.from(document.getElementsByClassName('teachingPathNavigate') as HTMLCollectionOf<HTMLElement>);
+    const breadcrumbeArray = Array.from(document.getElementsByClassName('teachingPathNewBreadCrumbs') as HTMLCollectionOf<HTMLElement>);
+    // teachingPathNavigateArray[0].style.display = 'block';
+    breadcrumbeArray[0].style.display = 'flex';
+  }
+
+  public changeText = (text: Date) => {
+    const textNew = String(text).split(' ')[0];
+    return textNew;
   }
 
   public render() {
     const { questionaryTeachingPathStore, onClickStart, content } = this.props;
     const currentTeachingPath = questionaryTeachingPathStore!.currentTeachingPath;
+    const background = content && content!.backgroundImage;
+    const avatarauthor = (content && content.authorAvatar) ? content.authorAvatar : userPlaceholder;
+    const authorname = content && content.author;
     const numberOfSteps = content && content.numberOfSteps;
+    const newDate = (content && content.deadline) ? this.changeText(content.deadline) : '';
     return (
-      <div className={'cover'}>
-         <div className="assignmentInfo">
-          {/*<div className={'extraInfo'}>*/}
-          {/*  <img src={clock} alt="question"/>*/}
-          {/*  <span>17 {intl.get('assignment preview.min completion time')}</span>*/}
-          {/*</div>*/}
-         </div>
+      <div className={'cover'} style={{ backgroundImage: `url(${background})` }}>
+        <div className={'cover__content'}>
+          <div className="authorInfo">
+            <img src={avatarauthor} />
+            <h4>{authorname}</h4>
+          </div>
+          <div className="metaInfo">
+            <div className="metaInfo__deadline">
+              <img src={clock} />
+              <p>{intl.get('teaching path preview.deadline')} {newDate}</p>
+            </div>
+            <div className="metaInfo__steps">
+              <img src={teachingPathImage} />
+              <p>{numberOfSteps && numberOfSteps.max} {intl.get('teaching path preview.steps')}</p>
+            </div>
+          </div>
+          <span className="assignmentTitle">{content && content.title}</span>
+          <span className="assignmentDescription">{content && content.description}</span>
 
-        <span className="assignmentTitle">{content && content.title}</span>
-        <span className="assignmentDescription">{content && content.description}</span>
-
-        <div className={'startButton'} >
-          <button className="CreateButton" onClick={onClickStart} ref={this.ref} title={intl.get('teaching path preview.Start teaching path')}>
-          {intl.get('teaching path preview.Start teaching path')}
-          </button>
-          {/*<CreateButton onClick={onClickStart} >{intl.get('teaching path preview.Start teaching path')}</CreateButton>*/}
+          <div className={'startButton'} >
+            <button className="CreateButton" onClick={onClickStart} ref={this.ref} title={intl.get('teaching path preview.Start teaching path')}>
+            {intl.get('teaching path preview.Start teaching path')}
+            </button>
+            {/*<CreateButton onClick={onClickStart} >{intl.get('teaching path preview.Start teaching path')}</CreateButton>*/}
+          </div>
         </div>
       </div>
     );

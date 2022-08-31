@@ -133,8 +133,8 @@ export class CurrentQuestionaryStore {
     this.relatedArticles.some(i => i.isRead === true)
 
   @action
-  public async setReadStatusToArticle(idArticle: number, levelId: number, graduation: number) {
-    await this.questionaryService.setReadStatusArticle(this.assignment!.id, this.currentQuestionary!.idRevision!, idArticle, levelId, graduation);
+  public async setReadStatusToArticle(idArticle: number, levelId: number, graduation: number, isStudent: boolean) {
+    if (isStudent) await this.questionaryService.setReadStatusArticle(this.assignment!.id, this.currentQuestionary!.idRevision!, idArticle, levelId, graduation);
     let indexArticle = -1;
     const article = this.relatedArticles.find((article, index) => {
       if (article.id === idArticle) {

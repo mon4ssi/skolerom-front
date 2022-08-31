@@ -465,7 +465,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
 
         <div className="CurrentAssignmentPage__content">
           <div className="CurrentAssignmentPage__container">
-            <div className="CurrentAssignmentPage__main">
+            <div className="CurrentAssignmentPage__main questionBody">
               <div className="CurrentAssignmentPage__main__center">
                 <div className={navBarClasses}>
                   <AssignmentOverview
