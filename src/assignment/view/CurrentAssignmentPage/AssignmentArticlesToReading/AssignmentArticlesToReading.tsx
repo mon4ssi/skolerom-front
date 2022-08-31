@@ -54,7 +54,17 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
     const isStudent = this.props.currentQuestionaryStore!.getCurrentUser()!.type === UserType.Student;
 
     if (!isStudent) {
-      return null;
+      const articleChildren = levels![0].childArticles!.length ? levels![0].childArticles! : [article];
+      const currentArticleLevelObject = articleChildren.find(article => article.id === correspondingLevelArticleId);
+
+      this.setState({
+        isShowArticle: true,
+        titleCurrentArticle: title,
+        currentArticleChildren: articleChildren,
+        attachedArticleId: id,
+        shownArticleId: correspondingLevelArticleId || id,
+        shownArticleLevelId: currentArticleLevelObject ? currentArticleLevelObject.levels![0].wpId : article.levels![0].wpId
+      });
     }
 
     const articleChildren = levels![0].childArticles!.length ? levels![0].childArticles! : [article];
@@ -89,7 +99,7 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
     }
     return (
       <div
-        className={`AssignmentArticlesToReading__card ${article.isRead && 'cardBorder' } ${readOnly && 'AssignmentArticlesToReading__defaultCursor'}`}
+        className={`AssignmentArticlesToReading__card ${article.isRead && 'cardBorder'} ${readOnly && 'AssignmentArticlesToReading__defaultCursor'}`}
         key={article.id}
       >
         <InfoCard
@@ -111,7 +121,12 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
   public finishReading = (graduation: number) => { // TODO maybe it should be removed in future
     const { currentQuestionaryStore } = this.props;
     const { shownArticleLevelId, attachedArticleId } = this.state;
+    const isStudent = this.props.currentQuestionaryStore!.getCurrentUser()!.type === UserType.Student;
+
     if (!isNull(attachedArticleId)) {
+      if (!isStudent) {
+        return this.closeArticle();
+      }
       this.props.currentQuestionaryStore!.setReadStatusToArticle(attachedArticleId!, shownArticleLevelId, graduation);
       this.closeArticle();
       Notification.create({

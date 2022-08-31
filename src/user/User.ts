@@ -23,7 +23,8 @@ export type UserParams = {
   name: string;
   photo: string;
   schools: Array<School>;
-  is_super_cm?: boolean;
+  isSuperCM?: boolean;
+  teacherTrial?: boolean;
 };
 
 export abstract class User {
@@ -33,6 +34,7 @@ export abstract class User {
   public readonly photo: string;
   public readonly schools: Array<School>;
   public readonly isSuperCM?: boolean;
+  public readonly teacherTrial?: boolean;
 
   protected constructor(params: UserParams & { type: UserType }) {
     this.type = params.type;
@@ -40,6 +42,7 @@ export abstract class User {
     this.name = params.name;
     this.photo = params.photo;
     this.schools = params.schools;
-    this.isSuperCM = params.is_super_cm;
+    this.isSuperCM = params.isSuperCM;
+    this.teacherTrial = params.teacherTrial;
   }
 }

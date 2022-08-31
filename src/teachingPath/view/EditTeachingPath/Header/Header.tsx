@@ -352,20 +352,24 @@ export class HeaderComponent extends Component<Props> {
 
   private renderDistributeButton = () => {
     const { editTeachingPathStore } = this.props;
-    const userType = editTeachingPathStore!.getCurrentUser()!.type;
+    const currentUser = editTeachingPathStore!.getCurrentUser()!;
+    const userType = currentUser!.type;
+    const isteacherTrial = currentUser!.teacherTrial;
 
     if (userType !== UserType.ContentManager) {
-      return (
-        <button
-          onClick={this.onPublish(false)}
-          disabled={this.isDisabledPublishButton()}
-          className="CreateButton"
-          ref={this.refGoDistribution}
-          title={intl.get('edit_teaching_path.header.publish_and_distribute_teaching_path')}
-        >
-          {intl.get('edit_teaching_path.header.publish_and_distribute_teaching_path')}
-        </button>
-      );
+      if (!isteacherTrial) {
+        return (
+          <button
+            onClick={this.onPublish(false)}
+            disabled={this.isDisabledPublishButton()}
+            className="CreateButton"
+            ref={this.refGoDistribution}
+            title={intl.get('edit_teaching_path.header.publish_and_distribute_teaching_path')}
+          >
+            {intl.get('edit_teaching_path.header.publish_and_distribute_teaching_path')}
+          </button>
+        );
+      }
     }
   }
 

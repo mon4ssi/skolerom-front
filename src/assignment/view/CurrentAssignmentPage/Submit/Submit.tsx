@@ -15,6 +15,7 @@ import list from 'assets/images/list-placeholder.svg';
 import check from 'assets/images/check-white.svg';
 
 import './Submit.scss';
+import { UserType } from 'user/User';
 const showDelay = 500;
 type LocataionProps = Location<{ readOnly: boolean } & LocationState>;
 
@@ -40,9 +41,9 @@ export class SubmitComponent extends Component<Props> {
 
   public refbutton = createRef<HTMLButtonElement>();
   public state = {
-    sumArticlesRead : 0,
-    sumArticlesTotal : 0,
-    disablebutton : true
+    sumArticlesRead: 0,
+    sumArticlesTotal: 0,
+    disablebutton: true
   };
 
   public clickRevert = () => {
@@ -71,15 +72,15 @@ export class SubmitComponent extends Component<Props> {
     const { redirectData, questionaryTeachingPathStore, history } = this.props;
     const childNode = questionaryTeachingPathStore!.currentNode;
     await this.props.publishQuestionary();
-
+    const isStudent = this.props.currentQuestionaryStore!.getCurrentUser()!.type === UserType.Student;
     return (childNode && childNode.children.length > 0 && redirectData)
       ? this.props.history.push(`/teaching-path/${questionaryTeachingPathStore!.currentTeachingPath!.id}`, {
         node: history.location.state && history.location.state.node
       })
-      : this.props.history.push('/submitted', {
+      : isStudent ? this.props.history.push('/submitted', {
         originPath: '/assignments',
         title: 'current_assignment_page.submited_title'
-      });
+      }) : this.props.history.push('/assignments/all');
   }
 
   public reloadToPreview = async () => {
@@ -124,7 +125,7 @@ export class SubmitComponent extends Component<Props> {
     }
     this.sendValidArticlesRead();
     if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles.length > 0 && currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden) {
-      this.setState({ disablebutton : false });
+      this.setState({ disablebutton: false });
       setTimeout(
         () => {
           if (this.refbutton.current) {
@@ -137,7 +138,7 @@ export class SubmitComponent extends Component<Props> {
       if (redirectData === undefined) {
         if (currentQuestionaryStore!.relatedAllArticles.length) {
           if (numberOfAnsweredQuestions === numberOfQuestions && currentQuestionaryStore!.allArticlesread) {
-            this.setState({ disablebutton : false });
+            this.setState({ disablebutton: false });
             setTimeout(
               () => {
                 if (this.refbutton.current) {
@@ -148,12 +149,12 @@ export class SubmitComponent extends Component<Props> {
             );
           } else {
             if (!readOnly) {
-              this.setState({ disablebutton : true });
+              this.setState({ disablebutton: true });
             }
           }
         } else {
           if (numberOfAnsweredQuestions === numberOfQuestions) {
-            this.setState({ disablebutton : false });
+            this.setState({ disablebutton: false });
             setTimeout(
               () => {
                 if (this.refbutton.current) {
@@ -166,7 +167,7 @@ export class SubmitComponent extends Component<Props> {
         }
       } else {
         if (numberOfAnsweredQuestions === numberOfQuestions) {
-          this.setState({ disablebutton : false });
+          this.setState({ disablebutton: false });
           setTimeout(
             () => {
               if (this.refbutton.current) {
@@ -199,7 +200,7 @@ export class SubmitComponent extends Component<Props> {
         >
           <>
             <img className="Submit__image" src={check} alt={intl.get('current_assignment_page.submit')} />
-          {intl.get('current_assignment_page.complete_and_submit_button')}
+            {intl.get('current_assignment_page.complete_and_submit_button')}
           </>
         </button>
       );
@@ -214,7 +215,7 @@ export class SubmitComponent extends Component<Props> {
       >
         <>
           <img className="Submit__image" src={check} alt={intl.get('current_assignment_page.submit')} />
-        {intl.get('current_assignment_page.complete_and_submit_button')}
+          {intl.get('current_assignment_page.complete_and_submit_button')}
         </>
       </button>
     );
