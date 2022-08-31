@@ -52,12 +52,6 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
   public openArticle = (article: Article) => () => {
     const { title, id, levels, correspondingLevelArticleId } = article;
     const isStudent = this.props.currentQuestionaryStore!.getCurrentUser()!.type === UserType.Student;
-
-<<<<<<< HEAD
-    /*if (!isStudent) {
-      return null;
-    }*/
-=======
     if (!isStudent) {
       const articleChildren = levels![0].childArticles!.length ? levels![0].childArticles! : [article];
       const currentArticleLevelObject = articleChildren.find(article => article.id === correspondingLevelArticleId);
@@ -71,7 +65,6 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
         shownArticleLevelId: currentArticleLevelObject ? currentArticleLevelObject.levels![0].wpId : article.levels![0].wpId
       });
     }
->>>>>>> fb94536f88c444d7e2a1c8b04f61ee359d82ca40
 
     const articleChildren = levels![0].childArticles!.length ? levels![0].childArticles! : [article];
     const currentArticleLevelObject = articleChildren.find(article => article.id === correspondingLevelArticleId);
@@ -128,17 +121,11 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
     const { currentQuestionaryStore } = this.props;
     const { shownArticleLevelId, attachedArticleId } = this.state;
     const isStudent = this.props.currentQuestionaryStore!.getCurrentUser()!.type === UserType.Student;
-<<<<<<< HEAD
     if (!isNull(attachedArticleId)) {
       this.props.currentQuestionaryStore!.setReadStatusToArticle(attachedArticleId!, shownArticleLevelId, graduation, isStudent);
-=======
-
-    if (!isNull(attachedArticleId)) {
       if (!isStudent) {
         return this.closeArticle();
       }
-      this.props.currentQuestionaryStore!.setReadStatusToArticle(attachedArticleId!, shownArticleLevelId, graduation);
->>>>>>> fb94536f88c444d7e2a1c8b04f61ee359d82ca40
       this.closeArticle();
       Notification.create({
         type: NotificationTypes.SUCCESS,
