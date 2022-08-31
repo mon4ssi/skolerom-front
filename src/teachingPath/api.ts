@@ -208,6 +208,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         minNumberOfSteps: data.minNumberOfSteps,
         maxNumberOfSteps: data.maxNumberOfSteps,
         author: data.author,
+        authorRole: data.authorRole,
         levels: data.levels,
         answerId: data.answerId,
         isCopy: data.isCopy,

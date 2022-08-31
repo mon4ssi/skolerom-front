@@ -300,7 +300,9 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
       };
     }
     this.props.questionaryTeachingPathStore!.handleAssignment(false);
-    await this.props.currentQuestionaryStore!.publishQuestionary(data);
+    if (!this.props.isTeacher) {
+      await this.props.currentQuestionaryStore!.publishQuestionary(data);
+    }
   }
 
   public redirectToCurrentNode = (idTeachingPath: number, node: number) => {

@@ -249,19 +249,23 @@ class HeaderWrapper extends Component<Props> {
 
   private renderDistributeButton = () => {
     const { newAssignmentStore, location } = this.props;
-    const userType = newAssignmentStore!.getCurrentUser()!.type;
+    const currentUser = newAssignmentStore!.getCurrentUser()!;
+    const userType = currentUser!.type;
+    const isteacherTrial = currentUser!.teacherTrial;
     if (userType !== UserType.ContentManager && !(location.state && location.state.fromTeachingPath)) {
-      return (
-        <button
-          onClick={this.onPublish(false)}
-          disabled={this.isDisabledPublishButton()}
-          className="CreateButton"
-          ref={this.refGoDistribution}
-          title={intl.get('new assignment.publish_and_distribute_assignment')}
-        >
-          {intl.get('new assignment.publish_and_distribute_assignment')}
-        </button>
-      );
+      if (!isteacherTrial) {
+        return (
+          <button
+            onClick={this.onPublish(false)}
+            disabled={this.isDisabledPublishButton()}
+            className="CreateButton"
+            ref={this.refGoDistribution}
+            title={intl.get('new assignment.publish_and_distribute_assignment')}
+          >
+            {intl.get('new assignment.publish_and_distribute_assignment')}
+          </button>
+        );
+      }
     }
   }
 

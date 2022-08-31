@@ -185,6 +185,7 @@ export interface ImageChoiceQuestionOptionDTO {
 interface AssignmentByIdResponseDTO {
   id: number;
   author: string;
+  authorRole: string;
   title: string;
   description: string;
   featuredImage: string;
@@ -219,6 +220,7 @@ export class AssignmentApi implements AssignmentRepo {
     return new Assignment({
       id: assignmentDTO.id,
       author: assignmentDTO.author,
+      authorRole: assignmentDTO.authorRole,
       title: assignmentDTO.title,
       createdAt: assignmentDTO.created_at,
       description: assignmentDTO.description,

@@ -7,7 +7,7 @@ import { TagInputComponent, TagProp } from 'components/common/TagInput/TagInput'
 import { LANGUAGES } from 'utils/constants';
 import './PublishingActions.scss';
 import { GreepElements } from 'assignment/factory';
-import { UserType } from 'user/User';
+import { User, UserType } from 'user/User';
 import { TagKeywordInputComponent, TagKeywordProp } from 'components/common/TagInput/TagInputKeyword/TagInputKeyword';
 import {
   PublishingActionsProps, PublishingActionsState, TagPropSource,
@@ -19,6 +19,8 @@ import {
 @observer
 export class PublishingActions extends Component<PublishingActionsProps, PublishingActionsState> {
   private labels: LabelsList = initializeAllLabelsForUI();
+  private currentUser: User = this.props.store!.getCurrentUser()!;
+  private currentUserType: string = this.currentUser!.type;
   constructor(props: PublishingActionsProps) {
     super(props);
     this.state = initializePublishingActionsState();
@@ -33,6 +35,8 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     const arraySelectedIdsNewsManagemdGrades: Array<number> = [];
     const arraySelectedIdsNewsManagemdSubjects: Array<number> = [];
     let listGoals: Array<string> = [];
+    /* const isTeacher = (store!.getCurrentUser()!.type === UserType.Teacher) ? true : false; */
+
     this.props.store!.setIsDisabledButtonsFalse();
     this.setState({ IsVisibilityButtons: true });
 
@@ -921,6 +925,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
   public renderVisibility = () => {
     const { store } = this.props;
     const isTeacher = (store!.getCurrentUser()!.type !== UserType.Teacher) ? true : false;
+    const isTeacherTrial = (store!.getCurrentUser()!.teacherTrial) ? true : false;
 
     const privateButtonClassnames = classnames(
       'flexBox justifyCenter alignCenter w50',
@@ -933,6 +938,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
       'flexBox justifyCenter alignCenter w50',
       {
         active: !store!.currentEntity!.isPrivate && !this.state.isMyStateSchool,
+        hidden: isTeacherTrial
       }
     );
 

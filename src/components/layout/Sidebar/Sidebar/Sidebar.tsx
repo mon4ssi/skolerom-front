@@ -63,6 +63,34 @@ const teacherSidebarLinks = [
     }*/
 ];
 
+const teacherTrialSidebarLinks = [
+  {
+    icon: activityIcon,
+    name: 'Activity',
+    url: '/activity'
+  },
+  {
+    icon: teachingPathImg,
+    name: 'Teaching Paths',
+    url: '/teaching-paths'
+  },
+  {
+    icon: assignmentsImg,
+    name: 'Assignments',
+    url: '/assignments'
+  },
+  /* {
+    icon: evaluationIcon,
+    name: 'Evaluation',
+    url: '/evaluation'
+  },
+  {
+    icon: studentsImg,
+    name: 'Students',
+    url: '/students'
+  }, */
+];
+
 const studentSidebarLinks = [
   {
     icon: activityIcon,
@@ -147,7 +175,10 @@ class Sidebar extends Component<Props> {
 
     switch (currentUser!.type) {
       case (UserType.Teacher):
-        return teacherSidebarLinks.map(this.renderSidebarLink);
+        if (!currentUser!.teacherTrial) {
+          return teacherSidebarLinks.map(this.renderSidebarLink);
+        }
+        return teacherTrialSidebarLinks.map(this.renderSidebarLink);
       case (UserType.Student):
         return studentSidebarLinks.map(this.renderSidebarLink);
       case (UserType.ContentManager):

@@ -16,7 +16,8 @@ export interface UserDTO {
   photo: string;
   email?: string;
   schools: Array<School>;
-  is_super_cm: boolean;
+  isSuperCM: boolean;
+  teacherTrial: boolean;
 }
 
 export interface StudentDTO {
