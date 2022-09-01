@@ -21,6 +21,7 @@
       "headers": {
         "no": "No",
         "questions": "questions",
+        "steps": "steps",
         "articles": "articles",
         "by": "By"
       },
