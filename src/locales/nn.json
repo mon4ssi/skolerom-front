@@ -21,6 +21,7 @@
       "headers": {
         "no": "Ingen",
         "questions": "spørsmål",
+        "steps": "steps",
         "articles": "artikler",
         "by": "Av"
       },
