@@ -15,7 +15,7 @@ import { deadlineDateFormat, thirdLevel } from 'utils/constants';
 import clock from 'assets/images/clock.svg';
 import close from 'assets/images/close.svg';
 
-import question from 'assets/images/questions.svg';
+import steps from 'assets/images/teaching-path.svg';
 import article from 'assets/images/article.svg';
 import person from 'assets/images/person.svg';
 import date from 'assets/images/date.svg';
@@ -299,6 +299,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         coreElementItems,
         sourceItems,
         multiSubjectItems,
+        numberOfSteps,
         goalsItems,
         description,
         author,
@@ -342,8 +343,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
           <input type="text" aria-labelledby="aux1" autoFocus className="hidden" />
           <div className="entityInfo">
             <div className="partsInfo">
-              <img src={question} alt="question" />
-              {numberOfQuestions ? numberOfQuestions : intl.get('preview.teaching_path.headers.no')} {`${intl.get('preview.teaching_path.headers.questions')}`}
+              <img src={steps} alt="question" />
+              {numberOfSteps.min === numberOfSteps.max ? `${numberOfSteps.min}` : `${numberOfSteps.min}-${numberOfSteps.max}`} {`${intl.get('preview.teaching_path.headers.steps')}`}
             </div>
             <div className="partsInfo">
               <img src={article} alt="question" />

@@ -1420,7 +1420,6 @@ export class AssignmentsList extends Component<Props, State> {
 
   public render() {
     const { assignmentListStore } = this.props;
-
     return (
       <div className="addItemModal__content">
         <div className="addItemModal__left">

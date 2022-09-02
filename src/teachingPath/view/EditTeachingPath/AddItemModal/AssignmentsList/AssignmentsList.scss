@@ -40,25 +40,6 @@
         &.selectedTab {
           color: #e2017b;
         }
-        &:before {
-          content: '';
-          background: #e2017b;
-          position: absolute;
-          width: 35px;
-          height: 35px;
-          top: 6px;
-          left: -1px;
-          border-radius: 50%;
-          opacity: 0;
-        }
-        &:hover {
-          img {
-            filter: grayscale(1)invert(1);
-          }
-          &:before {
-            opacity: 1;
-          }
-        }
       }
     }
     &__left {
@@ -80,7 +61,26 @@
     }
     &__right {
       button {
-        margin-right: 0px !important;
+        margin-right: 0px !important;        
+        &:before {
+          content: '';
+          background: #e2017b;
+          position: absolute;
+          width: 35px;
+          height: 35px;
+          top: 6px;
+          left: -1px;
+          border-radius: 50%;
+          opacity: 0;
+        }
+        &:hover {
+          img {
+            filter: grayscale(1)invert(1);
+          }
+          &:before {
+            opacity: 1;
+          }
+        }
       }
     }
 

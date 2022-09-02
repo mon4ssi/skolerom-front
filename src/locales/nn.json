@@ -21,6 +21,7 @@
       "headers": {
         "no": "Ingen",
         "questions": "spørsmål",
+        "steps": "steps",
         "articles": "artikler",
         "by": "Av"
       },
@@ -578,7 +579,7 @@
     "click_to_set_due_date": "(Lag frist for innlevering ved å klikke her)",
     "include_exclude": "Ta med / Utelat",
     "students": "elevar",
-    "of": "er",
+    "of": "av",
     "my_classes": "Mine klassar",
     "level": "Spor",
     "name": "Namn",
