@@ -7,6 +7,13 @@
   .gradesChildrenItems {
     margin-top: 15px;
   }
+  &.loadingAssignments {
+    .SearchFilter {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+  }
+  
 
   .assignmentsListHeader {
     width: calc(100% - 40px);

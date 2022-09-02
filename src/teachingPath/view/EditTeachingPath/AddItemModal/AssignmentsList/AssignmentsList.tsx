@@ -1420,6 +1420,13 @@ export class AssignmentsList extends Component<Props, State> {
 
   public render() {
     const { assignmentListStore } = this.props;
+    const classValueLoading = (assignmentListStore!.assignmentsState === StoreState.LOADING) ? 'AssignmentsList flexBox dirColumn loadingAssignments' : 'AssignmentsList flexBox dirColumn';
+    let forceFocus = false;
+    if (assignmentListStore!.searchQueryFilterValue) {
+      if (assignmentListStore!.assignmentsState !== StoreState.LOADING) {
+        forceFocus = true;
+      }
+    }
     return (
       <div className="addItemModal__content">
         <div className="addItemModal__left">
@@ -1430,7 +1437,7 @@ export class AssignmentsList extends Component<Props, State> {
           {this.conditionalGreedData()}
         </div>
         <div className="addItemModal__right">
-          <div className="AssignmentsList flexBox dirColumn">
+          <div className={classValueLoading}>
             {this.renderHeader()}
             <SearchFilter
               subject
@@ -1469,6 +1476,8 @@ export class AssignmentsList extends Component<Props, State> {
               defaultValueReadingFilter={String(this.state.myValueReading)}
               coreValueFilter={this.state.coreValueFilter}
               goalValueFilter={this.state.goalValueFilter}
+              disabledInputSearch={(assignmentListStore!.assignmentsState === StoreState.LOADING)}
+              forceFocusInputSearch={forceFocus}
             />
             {this.renderAssignmentsList()}
             {this.renderSubmitFooter()}
