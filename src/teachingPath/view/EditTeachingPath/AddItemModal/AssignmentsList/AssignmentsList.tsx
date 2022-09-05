@@ -1476,8 +1476,6 @@ export class AssignmentsList extends Component<Props, State> {
               defaultValueReadingFilter={String(this.state.myValueReading)}
               coreValueFilter={this.state.coreValueFilter}
               goalValueFilter={this.state.goalValueFilter}
-              disabledInputSearch={(assignmentListStore!.assignmentsState === StoreState.LOADING)}
-              forceFocusInputSearch={forceFocus}
             />
             {this.renderAssignmentsList()}
             {this.renderSubmitFooter()}
