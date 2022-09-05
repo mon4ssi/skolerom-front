@@ -121,7 +121,7 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
     const { currentQuestionaryStore, match, isTeacher, history } = this.props;
     const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
     headerArray[0].style.display = 'none';
-    await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
+    await currentQuestionaryStore.getQuestionaryByIdPreview(Number(match.params.id));
 
   }
   public async componentDidUpdate(prevProps: CurrentAssignmentPagePreviewProps) {

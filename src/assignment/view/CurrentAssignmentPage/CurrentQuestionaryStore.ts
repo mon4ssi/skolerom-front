@@ -61,6 +61,18 @@ export class CurrentQuestionaryStore {
     return this.currentQuestionary;
   }
 
+  public async getQuestionaryByIdPreview(assignmentId: number) {
+    this.isLoading = true;
+    const questionary = await this.questionaryService.getAssignmentQuestionaryByIdPreview(assignmentId);
+    this.currentQuestionary = questionary;
+    this.assignment = questionary.assignment;
+    this.questions = questionary.assignment.questions;
+    this.answers = questionary.answers;
+    this.isLoading = false;
+
+    return this.currentQuestionary;
+  }
+
   public getCurrentUser = () => this.userService.getCurrentUser();
 
   @computed
