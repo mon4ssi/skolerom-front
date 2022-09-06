@@ -53,7 +53,7 @@ export class SetRelatedArticles extends Component<Props, State> {
     const article = newAssignmentStore!.currentEntity!.relatedArticles.find(article => article.id === id);
     if (article) {
       newAssignmentStore!.currentEntity!.removeArticle(article);
-      newAssignmentStore!.currentEntity!.setFeaturedImage();
+      // newAssignmentStore!.currentEntity!.setFeaturedImage();
     }
   }
 

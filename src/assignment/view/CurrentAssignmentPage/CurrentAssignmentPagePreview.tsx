@@ -121,7 +121,7 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
     const { currentQuestionaryStore, match, isTeacher, history } = this.props;
     const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
     headerArray[0].style.display = 'none';
-    await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
+    await currentQuestionaryStore.getQuestionaryByIdPreview(Number(match.params.id));
 
   }
   public async componentDidUpdate(prevProps: CurrentAssignmentPagePreviewProps) {
@@ -319,8 +319,10 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
   )
 
   public renderBreadcrumbsIfNeeded = () => this.props.location.state && this.props.location.state.node && (
-    <div className="CurrentAssignmentPage__breadcrumbs">
+    <div className="CurrentAssignmentPage__mybreadcrumbs">
+      {this.renderBackButton()}
       <BreadcrumbsTeachingPath getCurrentNodeFromAssignment={this.redirectToCurrentNode} />
+      {this.renderNextButton()}
     </div>
   )
 
@@ -410,47 +412,35 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
         {this.props.uiStore!.sidebarShown && <div className="CurrentAssignmentPage__overlay" onClick={uiStore!.hideSidebar} />}
 
         <div className="CurrentAssignmentPage__content">
-          <div className={navBarClasses}>
-            <AssignmentOverview
-              answers={answers}
-              isTeacher={isTeacher}
-              questionsList={questionTitlesListWithSubmit}
-              setCurrentQuestion={this.setCurrentQuestion}
-              currentQuestion={currentQuestionIndex}
-              numberOfAnsweredQuestions={numberOfAnsweredQuestions}
-              handleShowArrowsTooltip={handleShowArrowsTooltip}
-              readOnly={this.isReadOnly}
-              isShowAssignmentArticles={isShowAssignmentArticles}
-              isStartedAssignment={isStartedAssignment}
-              isReadArticles={isReadArticles}
-              redirectData={state && state.node}
-              isPreview
-            />
-
-            <ArrowControls
-              shouldRenderPrevButton={this.canGoToPrevQuestion}
-              shouldRenderNextButton={!!this.canGoToNextQuestion}
-              onExit={this.handleExit(ExitEventTarget.EXIT_BUTTON)}
-              onNext={this.goToNextQuestion}
-              onPrev={this.goToPrevQuestion}
-            />
-          </div>
           <div className="CurrentAssignmentPage__container">
-            <div className="CurrentAssignmentPage__main">
+            <div className="CurrentAssignmentPage__main questionBody">
               <div className="CurrentAssignmentPage__main__center">
+                <div className={navBarClasses}>
+                  <AssignmentOverview
+                    answers={answers}
+                    isTeacher={isTeacher}
+                    questionsList={questionTitlesListWithSubmit}
+                    setCurrentQuestion={this.setCurrentQuestion}
+                    currentQuestion={currentQuestionIndex}
+                    numberOfAnsweredQuestions={numberOfAnsweredQuestions}
+                    handleShowArrowsTooltip={handleShowArrowsTooltip}
+                    readOnly={this.isReadOnly}
+                    isShowAssignmentArticles={isShowAssignmentArticles}
+                    isStartedAssignment={isStartedAssignment}
+                    isReadArticles={isReadArticles}
+                    redirectData={state && state.node}
+                  />
+                </div>
                 {this.renderNavigationIfNeeded()}
                 <AnswerCurrentQuestion
                   answer={currentAnswer}
                   numberOfQuestions={numberOfQuestions}
                   numberOfAnsweredQuestions={numberOfAnsweredQuestions}
                   publishQuestionary={this.handlePublish}
-                  finishPreviewSubmit={this.finishPreviewSubmit}
                   readOnly={this.isReadOnly}
                   switchCover={this.switchCover}
                   showCover={this.state.showCover}
                   isTeachingPath={state && !!state.teachingPath}
-                  isPreview
-                  isIdTeachingPath={teachingPath}
                 />
                 {isVisibleButtonRender && this.renderIfneedNextButton()}
               </div>

@@ -15,7 +15,7 @@ import { deadlineDateFormat, thirdLevel } from 'utils/constants';
 import clock from 'assets/images/clock.svg';
 import close from 'assets/images/close.svg';
 
-import question from 'assets/images/questions.svg';
+import steps from 'assets/images/teaching-path.svg';
 import article from 'assets/images/article.svg';
 import person from 'assets/images/person.svg';
 import date from 'assets/images/date.svg';
@@ -299,9 +299,11 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         coreElementItems,
         sourceItems,
         multiSubjectItems,
+        numberOfSteps,
         goalsItems,
         description,
         author,
+        authorRole,
         isPrivate,
         numberOfQuestions,
         hasGuidance,
@@ -311,7 +313,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const { currentEntity: { id } } = this.props.store!;
     const { history, isPublishedCurrentTeachingPath, view } = this.props;
     /* const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager; */
-    const showPublishDate = false;
+    const showPublishDate = authorRole === UserType.Teacher || !(authorRole === UserType.ContentManager && !(isPrivate!));
     const viewText = intl.get('preview.teaching_path.buttons.view');
     const guidanceText = intl.get('preview.teaching_path.buttons.teacher_guidance');
     const editText = intl.get('preview.teaching_path.buttons.edit');
@@ -341,8 +343,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
           <input type="text" aria-labelledby="aux1" autoFocus className="hidden" />
           <div className="entityInfo">
             <div className="partsInfo">
-              <img src={question} alt="question" />
-              {numberOfQuestions ? numberOfQuestions : intl.get('preview.teaching_path.headers.no')} {`${intl.get('preview.teaching_path.headers.questions')}`}
+              <img src={steps} alt="question" />
+              {numberOfSteps.min === numberOfSteps.max ? `${numberOfSteps.min}` : `${numberOfSteps.min}-${numberOfSteps.max}`} {`${intl.get('preview.teaching_path.headers.steps')}`}
             </div>
             <div className="partsInfo">
               <img src={article} alt="question" />

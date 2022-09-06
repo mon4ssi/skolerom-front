@@ -67,7 +67,7 @@ export class ArticleTeachingPath extends Component<Props, State> {
     const { questionaryTeachingPathStore } = this.props;
 
     return questionaryTeachingPathStore!.currentArticlesList.map((item) => {
-      const passedStyle = item.isSelected ? 'passedStyle' : '';
+      const passedStyle = item.isSelected ? '' : '';
       return (
         <div className={passedStyle} key={item.id} role="region" aria-live="polite" aria-atomic="true" ref={this.ref}>
           <InfoCard
@@ -77,6 +77,8 @@ export class ArticleTeachingPath extends Component<Props, State> {
             description={item.excerpt}
             img={(item.images && item.images.url) ? item.images.url : listPlaceholderImg}
             onClick={this.chooseCard(item)}
+            isReadArticle={item.isSelected}
+            hiddeIcons
           />
         </div>
       );

@@ -17,9 +17,11 @@ export interface RevisionDTO {
   title: string;
   description: string;
   author: string;
+  authoravatar: string;
   questions: Array<QuestionDTO>;
   relatedArticles: Array<Article>;
   featuredImage?: string;
+  backgroundImage?: string;
 }
 
 export interface RevisionByIdDTO {
@@ -109,7 +111,23 @@ export class QuestionaryApi implements QuestionaryRepo {
 
   public async getAssignmentQuestionaryById(assignmentId: number):Promise<Questionary> {
     const response: AxiosResponse<TeacherAssignmentByIdResponseDTO> = await API.get(
-      `api/teacher/assignments/${assignmentId}`
+      `api/teacher/assignments/${assignmentId}`, {
+        params: {
+          withBackground: true
+        }
+      }
+    );
+
+    return buildQuestionaryView(response.data);
+  }
+
+  public async getAssignmentQuestionaryByIdPreview(assignmentId: number):Promise<Questionary> {
+    const response: AxiosResponse<TeacherAssignmentByIdResponseDTO> = await API.get(
+      `api/teacher/assignments/${assignmentId}`, {
+        params: {
+          withBackground: true
+        }
+      }
     );
 
     return buildQuestionaryView(response.data);

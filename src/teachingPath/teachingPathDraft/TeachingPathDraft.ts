@@ -13,6 +13,7 @@ import {
   TeachingPathNodeArgs,
   TeachingPathNodeType
 } from 'teachingPath/TeachingPath';
+import { buildTeachingPathRequestDTO, buildFeatureImageForTeachingPathRequestDTO } from './factory';
 import { SAVE_DELAY } from 'utils/constants';
 import { Article, Grade, Subject } from 'assignment/Assignment';
 
@@ -234,6 +235,13 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
+  public setFeaturedImage() {
+    const teachingPath = buildTeachingPathRequestDTO(this);
+    const image = buildFeatureImageForTeachingPathRequestDTO(teachingPath.content);
+    this._featuredImage = image;
+  }
+
+  @action
   public improbeSubjects(subjects: Array<Subject>) {
     if (this.isCopy) {
       subjects!.forEach((e) => {
@@ -319,6 +327,17 @@ export class DraftTeachingPath extends TeachingPath {
         }
       }
     }
+  }
+
+  @action
+  public getFeaturedImageFromCover() {
+    return this._featuredImage;
+  }
+
+  @action
+  public setFeaturedImageFromCover(path: string) {
+    this._featuredImage = path;
+    this.save();
   }
 
   public anyArticlesIds(butIds: Array<number>, node: EditableTeachingPathNode) {
@@ -688,6 +707,12 @@ export class DraftTeachingPath extends TeachingPath {
     const editInputText = (editDescript.getElementsByClassName('ql-editor')[0] as HTMLInputElement);
     editInputText.focus();
   }
+
+  @action
+  public setLocaleId(localeId: number | null) {
+    this._localeId = localeId;
+    this.save();
+  }
 }
 
 interface EditableTeachingPathNodeArgs extends TeachingPathNodeArgs {
@@ -824,11 +849,53 @@ export class TeachingPathValidationError extends Error {
 
 export class AlreadyEditingTeachingPathError extends Error { }
 
+export interface ShortestPathArgs {
+  id: number;
+  selectQuestion: string;
+  type: string;
+  shortestPath: ShortestPathArgs | undefined;
+}
+
+export class ShortestPath {
+  public _id: number;
+  public _selectQuestion: string;
+  public _type: string;
+  public _shortestPath: ShortestPathArgs | undefined;
+  constructor(args: ShortestPathArgs) {
+    this._id = args.id;
+    this._selectQuestion = args.selectQuestion;
+    this._type = args.type;
+    this._shortestPath = args.shortestPath;
+  }
+
+  @computed
+  public get id() {
+    return this._id;
+  }
+
+  @computed
+  public get selectQuestion() {
+    return this._selectQuestion;
+  }
+
+  @computed
+  public get type() {
+    return this._type;
+  }
+
+  @computed
+  public get shortestPath() {
+    return this._shortestPath;
+  }
+}
+
 export interface BreadcrumbsArgs {
   id: number;
   parentNodeId: number | null;
   selectQuestion: string;
   items: Array<TeachingPathItem> | undefined;
+  shortest?: number | null | undefined;
+  shortpathid?: Array<number>;
 }
 
 export class Breadcrumbs {
@@ -836,12 +903,16 @@ export class Breadcrumbs {
   public _selectQuestion: string;
   public _parentNodeId: number | null;
   public _items: Array<TeachingPathItem> | undefined;
+  public _shortest?: number | null | undefined;
+  public _shortpathid?: Array<number>;
 
   constructor(args: BreadcrumbsArgs) {
     this._id = args.id;
     this._items = args.items ? args.items : undefined;
     this._selectQuestion = args.selectQuestion;
     this._parentNodeId = args.parentNodeId;
+    this._shortest = args.shortest;
+    this._shortpathid = args.shortpathid;
   }
 
   @computed
@@ -862,5 +933,15 @@ export class Breadcrumbs {
   @computed
   public get selectQuestion() {
     return this._selectQuestion;
+  }
+
+  @computed
+  public get shortest() {
+    return this._shortest;
+  }
+
+  @computed
+  public get shortpathid() {
+    return this._shortpathid;
   }
 }

@@ -21,6 +21,7 @@
       "headers": {
         "no": "Ingen",
         "questions": "spørsmål",
+        "steps": "steps",
         "articles": "artikler",
         "by": "Av"
       },
@@ -36,7 +37,11 @@
         "teacher_guidance": "Se lærerveiledning",
         "edit": "Rediger",
         "duplicate": "Kopier"
-      }
+      },
+      "read open": "Les beskrivelse",
+      "read close": "Nær description",
+      "read again": "Les igjen",
+      "read article": "Les artikkelen"
     },
     "assignment": {
       "headers": {
@@ -57,11 +62,13 @@
         "teacher_guidance": "Se lærerveiledning",
         "edit": "Rediger",
         "duplicate": "Kopier"
-      }
+      },
+      "read again": "Les igjen",
+      "read article": "Velg oppdrag"
     }
   },
   "assignments_page": {
-    "no_results": "No results found",
+    "no_results": "Søket ditt gav ingen resultat",
     "title": "Tittel",
     "source": "Kilde",    
     "img_not": "Bildet er ikke valgt ennå"
@@ -186,13 +193,14 @@
   "pagination": {
     "Previous page": "Føregåande side",
     "Next page": "Neste side",
+    "Next question": "Neste spørsmål",
     "Question": "Spørsmål",
     "Exit": "Avslutt oppgåva"
   },
   "assignments_tabs": {
     "All assignments": "Alle oppgåver",
     "My assignments": "Mine oppgåver",
-    "My school": "Min skole",
+    "My school": "Skulen min",
     "My favorites": "Mine favorittar",
     "new_assignment": "Ny oppgåve"
   },
@@ -523,6 +531,8 @@
   },
   "publishing_page": {
     "publish_assignment": "Publiser oppgåva",
+    "notimages": "Denne artikkelen har ingen bilder",
+    "select button": "Velg et forsidebilde",
     "publish_and_distribute_assignment": "Publiser oppgåve",
     "subject": "fag",
     "grade": "trinn",
@@ -547,7 +557,7 @@
       "title_private":"Vel trinn og fag",
       "description":"Når du deler offentleg, må du kople læringssti til læreplan. Vel relevante fag, klassetrinn, kompetansemål, kjerneelement og lesing i fag før publisering og distribusjon.",
       "descrption_assignment":"Når du deler offentleg, må du kople oppgåva til læreplan. Vel relevante fag, klassetrinn, kompetansemål, kjerneelement og lesing i fag før publisering og distribusjon.",
-      "description_privado":"Kopling til læreplanen er berre nødvendig når du deler offentleg. Du kan gjerne kople innhaldet til relevante kompetansemål her om du ønskjer det."
+      "description_privado":"Vel Skulen min for berre å dela med skulen din. Vel Offentlig for å dela med alle som bruker Skolerom eller Privat for å halda det for deg sjølv og dei du delar det med."
     },
     "source_is_open": "Vis i Open Site",
     "source_is_open_assig": "Vis i Open Site",
@@ -555,7 +565,8 @@
     "source": "Kjelde",
     "keywords": "Nøkkelord",
     "selected_myschools": "Velg skole",    
-    "dont_empty": "Skolefeltet kan ikke stå tomt"
+    "dont_empty": "Skolefeltet kan ikke stå tomt",
+    "languages": "Språk"
   },
   "distribution_page": {
     "distribute_assignment": "Distribuer oppgåva",
@@ -568,7 +579,7 @@
     "click_to_set_due_date": "(Lag frist for innlevering ved å klikke her)",
     "include_exclude": "Ta med / Utelat",
     "students": "elevar",
-    "of": "er",
+    "of": "av",
     "my_classes": "Mine klassar",
     "level": "Spor",
     "name": "Namn",
@@ -607,13 +618,14 @@
   "teaching_path_tabs": {
     "All teaching paths": "Alle læringsstiar",
     "My teaching paths": "Mine læringsstiar",
-    "My school": "Min skole",
+    "My school": "Skulen min",
     "My favorites": "Mine favorittar",
     "new teaching path": "Lag læringssti"
   },
   "teaching path preview": {
     "Start teaching path": "Start læringssti",
-    "steps": "steg"
+    "steps": "steg",
+    "deadline": "Frist"
   },
   "teaching path search": {
     "Search for teaching paths": "Søk etter læringsstiar ...",
@@ -676,7 +688,8 @@
       "cant_publish_goals": "Du kan ikkje publisere utan kopling av kompetansemål",
       "notdata_goals": "Det er ingen etablerte mål for desse kriteria",
       "source_required": "Vennligst gje opp kjelda for dette innhaldet",
-      "assignmets_not_enabled_open_site": "Følgende oppgaver er ikke aktivert for visning i den åpne løsningen [|content|] Fortsett uansett?"
+      "assignmets_not_enabled_open_site": "Følgende oppgaver er ikke aktivert for visning i den åpne løsningen [|content|] Fortsett uansett?"      ,
+      "language_required": "Vennligst gje opp språk for dette innhaldet"
     },
     "title": {
       "new_entity": "Ny læringssti",
@@ -804,7 +817,7 @@
     "part2": "Følgjande nettlesarar er støtta: Firefox, Opera, Edge og Google Chrome."
   },
   "generals": {
-    "support":"Support",
+    "support":"Trenger du hjelp?",
     "keyboard":"Tastatursnarvegar",
     "dragdrop":"Dra og slipp her",
     "accesibility_text": {

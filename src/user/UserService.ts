@@ -1,5 +1,5 @@
 import { injector } from 'Injector';
-import { UserRepo, USER_REPO, User } from 'user/User';
+import { UserRepo, USER_REPO, User, UserType } from 'user/User';
 import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteractor';
 
 export const USER_SERVICE = 'USER_SERVICE';
@@ -13,6 +13,7 @@ export class UserService {
   private userRepo = injector.get<UserRepo>(USER_REPO);
   private storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
   private currentUser: User | null = null;
+  private currentUserType: UserType | null = null;
 
   public async getUserWithToken(token: string): Promise<string | null> {
     return this.userRepo.getUserWithToken(token);

@@ -145,6 +145,7 @@ interface State {
   expandCore: boolean;
   expandGoals: boolean;
   expandSubjects: boolean;
+  myValueLocale: Array<number>;
   myValueGrade: Array<number>;
   myValueSubject: Array<number>;
   myValueMulti: Array<number>;
@@ -156,6 +157,7 @@ interface State {
   optionsReading: Array<Greep>;
   optionsSubjects: Array<GrepFilters>;
   optionsGrades: Array<GrepFilters>;
+  optionsLocales: Array<Greep>;
   optionsGoals: Array<GreepSelectValue>;
   customGradeChildrenList: Array<Grade>;
   valueCoreOptions: Array<number>;
@@ -204,6 +206,7 @@ export class AssignmentsList extends Component<Props, State> {
       expandGoals: true,
       expandSubjects: true,
       myValueSubject: [],
+      myValueLocale: [],
       myValueGrade: [],
       myValueMulti: [],
       myValueReading: [],
@@ -214,6 +217,7 @@ export class AssignmentsList extends Component<Props, State> {
       optionsReading: [],
       optionsSubjects: [],
       optionsGrades: [],
+      optionsLocales: [],
       optionsGoals: [],
       customGradeChildrenList: [],
       valueCoreOptions: [],
@@ -307,6 +311,14 @@ export class AssignmentsList extends Component<Props, State> {
         });
       });
     }
+    if (type === 'locale') {
+      data!.localeFilters!.forEach((element) => {
+        returnArray.push({
+          id: Number(element.id),
+          title: element.name,
+        });
+      });
+    }
     return returnArray;
   }
 
@@ -352,10 +364,10 @@ export class AssignmentsList extends Component<Props, State> {
     return returnArray;
   }
 
-  public async assigValueData(grades: string, subjects: string, core?: string, goals?: string) {
+  public async assigValueData(locale: string, grades: string, subjects: string, core?: string, goals?: string) {
     const { editTeachingPathStore, assignmentListStore } = this.props;
     this.setState({ filtersAjaxLoading: true });
-    const grepFiltersDataAwait = await assignmentListStore!.getGrepFiltersAssignment(grades, subjects, core, goals);
+    const grepFiltersDataAwait = await assignmentListStore!.getGrepFiltersAssignment(locale, grades, subjects, core, goals);
     this.setState({
       grepFiltersData : grepFiltersDataAwait
     });
@@ -429,6 +441,8 @@ export class AssignmentsList extends Component<Props, State> {
         );
       }
     );
+    this.setState({ optionsLocales: this.renderValueOptionsNumbers(grepFiltersDataAwait, 'locale') });
+
     this.setState({ filtersAjaxLoading: false });
   }
 
@@ -473,7 +487,7 @@ export class AssignmentsList extends Component<Props, State> {
     document.addEventListener('keyup', this.handleKeyboardControl);
     this.refButton.current!.focus();
     this.setState({ filtersAjaxLoading: true });
-    this.assigValueData('', '', '', '');
+    this.assigValueData('', '', '', '', '');
     this.setState({ filtersAjaxLoading: false });
     const listGoals = [''];
     this.setState({
@@ -873,7 +887,7 @@ export class AssignmentsList extends Component<Props, State> {
         }
       });
     });
-    this.assigValueData(String(this.state.myValueGrade), String(valueSelectedSubjects), '', '');
+    this.assigValueData(String(this.state.myValueLocale), String(this.state.myValueGrade), String(valueSelectedSubjects), '', '');
     assignmentListStore!.setFiltersSubjectID(String(valueSelectedSubjects));
   }
 
@@ -889,7 +903,26 @@ export class AssignmentsList extends Component<Props, State> {
       assignmentListStore!.setFiltersGradeID(currentGrade ? currentGrade.id : null);
     }
   }
+  public handleClickLocale = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { assignmentListStore } = this.props;
+    const localeId = Number(e.currentTarget.value);
+    const filterLocale: Array<number> = [];
 
+    if (e.currentTarget.classList.contains('active')) {
+      e.currentTarget.classList.remove('active');
+    } else {
+      filterLocale.push(localeId);
+    }
+
+    this.setState(
+      {
+        myValueLocale: filterLocale
+      },
+      () => {
+        this.assigValueData(String(this.state.myValueLocale), String(this.state.myValueGrade), String(this.state.myValueSubject), '', '');
+      }
+    );
+  }
   public handleClickGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const { assignmentListStore, editTeachingPathStore } = this.props;
     const { optionsGrades, valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
@@ -942,7 +975,7 @@ export class AssignmentsList extends Component<Props, State> {
     this.setState({
       myValueGrade: valueSelectedGrades
     });
-    this.assigValueData(String(valueSelectedGrades), String(valueSubjectsOptions), '', '');
+    this.assigValueData(String(this.state.myValueLocale), String(valueSelectedGrades), String(valueSubjectsOptions), '', '');
     assignmentListStore!.setFiltersGradeID(String(valueSelectedGrades));
   }
 
@@ -977,7 +1010,7 @@ export class AssignmentsList extends Component<Props, State> {
       myValueGrade: valueSelectedGrades
     });
     this.setState({ valueGradesOptions: valueToArray });
-    this.assigValueData(String(valueSelectedGrades), String(valueSubjectsOptions), '', '');
+    this.assigValueData(String(this.state.myValueLocale), String(valueSelectedGrades), String(valueSubjectsOptions), '', '');
     assignmentListStore!.setFiltersGradeID(String(valueSelectedGrades));
   }
 
@@ -1049,8 +1082,9 @@ export class AssignmentsList extends Component<Props, State> {
       coreValueFilter : [],
       goalValueFilter : [],
       filtersisUsed: false,
+      myValueLocale: []
     });
-    this.assigValueData('', '', '', '');
+    this.assigValueData('', '', '', '', '');
     /*this.setState({ filtersAjaxLoadingGoals: true });
     const grepFiltergoalssDataAwait = await this.props.editTeachingPathStore!.getGrepGoalsFilters([], [], [], [], [], MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
@@ -1079,7 +1113,7 @@ export class AssignmentsList extends Component<Props, State> {
       }
     );
     this.setState({ valueCoreOptions: ArrayValue });
-    this.assigValueData(String(this.state.myValueGrade), String(this.state.myValueSubject), String(ArrayValue), String(this.state.myValueGoal));
+    this.assigValueData(String(this.state.myValueLocale), String(this.state.myValueGrade), String(this.state.myValueSubject), String(ArrayValue), String(this.state.myValueGoal));
     /*this.setState({ filtersAjaxLoadingGoals: true });
     const grepFiltergoalssDataAwait = await editTeachingPathStore!.getGrepGoalsFilters(ArrayValue, valueMultiOptions, valueGradesOptions, valueSubjectsOptions, this.state.valueStringGoalsOptions, MAGICNUMBER100, MAGICNUMBER1);
     this.setState({
@@ -1120,7 +1154,7 @@ export class AssignmentsList extends Component<Props, State> {
     newValue.forEach((e) => {
       ArrayValue.push(e.value);
     });
-    this.assigValueData(String(this.state.myValueGrade), String(this.state.myValueSubject), String(this.state.myValueCore), String(ArrayValue));
+    this.assigValueData(String(this.state.myValueLocale), String(this.state.myValueGrade), String(this.state.myValueSubject), String(this.state.myValueCore), String(ArrayValue));
     assignmentListStore!.setFiltersGoalID(singleString);
     this.setState({ goalValueFilter : newValue });
   }
@@ -1386,7 +1420,13 @@ export class AssignmentsList extends Component<Props, State> {
 
   public render() {
     const { assignmentListStore } = this.props;
-
+    const classValueLoading = (assignmentListStore!.assignmentsState === StoreState.LOADING) ? 'AssignmentsList flexBox dirColumn loadingAssignments' : 'AssignmentsList flexBox dirColumn';
+    let forceFocus = false;
+    if (assignmentListStore!.searchQueryFilterValue) {
+      if (assignmentListStore!.assignmentsState !== StoreState.LOADING) {
+        forceFocus = true;
+      }
+    }
     return (
       <div className="addItemModal__content">
         <div className="addItemModal__left">
@@ -1397,12 +1437,13 @@ export class AssignmentsList extends Component<Props, State> {
           {this.conditionalGreedData()}
         </div>
         <div className="addItemModal__right">
-          <div className="AssignmentsList flexBox dirColumn">
+          <div className={classValueLoading}>
             {this.renderHeader()}
             <SearchFilter
               subject
               placeholder={intl.get('assignments search.Search')}
               isAssignmentsListFilter
+              customLocalesList={this.state.optionsLocales}
               customGradesList={this.state.gradesArrayFilter}
               customCoreTPList={this.state.optionsCore}
               customGoalsTPList={this.state.optionsGoals}
@@ -1418,6 +1459,7 @@ export class AssignmentsList extends Component<Props, State> {
               handleChangeGrade={this.handleChangeGrade}
               handleClickChildrenGrade={this.handleClickChildrenGrade}
               handleInputSearchQuery={this.handleInputSearchQuery}
+              handleClickLocale={this.handleClickLocale}
               handleClickGrade={this.handleClickGrade}
               handleClickSubject={this.handleClickSubject}
               handleClickMulti={this.handleClickMulti}
@@ -1426,6 +1468,7 @@ export class AssignmentsList extends Component<Props, State> {
               handleChangeSelectGoals={this.handleChangeSelectGoals}
               handleClickReset={this.handleClickReset}
               // VALUES
+              defaultValueLocaleFilter={String(this.state.myValueLocale)}
               defaultValueSubjectFilter={String(assignmentListStore!.subjectFilterValue)}
               defaultValueGradeFilter={String(assignmentListStore!.gradeFilterValue)}
               searchQueryFilterValue={assignmentListStore!.searchQueryFilterValue}

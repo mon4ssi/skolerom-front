@@ -24,6 +24,7 @@ import './SearchFilter.scss';
 
 const STYLE_ELEMENT_ID = 'STYLE_ELEMENT_ID';
 const MAX_HEADER_HEIGHT = 70;
+const DELAY = 500;
 
 interface Props {
   assignmentListStore?: AssignmentListStore;
@@ -41,8 +42,11 @@ interface Props {
   isArticlesListPage?: boolean;
   isAssignmentsListPage?: boolean;
   isAssignmentsListFilter?: boolean;
+  disabledInputSearch?: boolean;
+  forceFocusInputSearch?: boolean;
 
   customLanguagesList?: Array<Language>;
+  customLocalesList?: Array<Greep>;
   customGradesList?: Array<Grade>;
   customGradeChildrenList?: Array<Grade>;
   customSubjectsList?: Array<Subject>;
@@ -60,6 +64,7 @@ interface Props {
   goalsFilterValueTP?: string | number | null;
   readingFilterValueTP?: string | number | null;
 
+  defaultValueLocaleFilter?: string | null;
   defaultValueLanguageFilter?: string | null;
   defaultValueGradeFilter?: string | null;
   defaultValueSubjectFilter?: string | null;
@@ -97,6 +102,7 @@ interface Props {
   handleChangeSelectCore?(e: any): void;
   handleChangeSelectGoals?(e: any): void;
 
+  handleClickLocale?(e: SyntheticEvent): void;
   handleClickLanguage?(e: SyntheticEvent): void;
   handleClickGrade?(e: SyntheticEvent): void;
   handleClickChildrenGrade?(e: SyntheticEvent): void;
@@ -123,6 +129,7 @@ class SearchFilter extends Component<Props, State> {
   private space: RefObject<HTMLDivElement> = React.createRef();
   private subjectRef: RefObject<HTMLSelectElement> = React.createRef();
   private evaluationRef: RefObject<HTMLSelectElement> = React.createRef();
+  private searchRef: RefObject<HTMLInputElement> = React.createRef();
 
   public state = {
     displayWidthBreakpoint: 0,
@@ -563,6 +570,41 @@ class SearchFilter extends Component<Props, State> {
         </a>
       </div>
     );
+  }
+
+  public renderFiltersLocale = () => {
+    const { handleClickLocale, customLocalesList, defaultValueLocaleFilter } = this.props;
+    const locales = (customLocalesList!).sort((a, b) => (a.title > b.title) ? 1 : -1);
+    const arrayDefaults = (defaultValueLocaleFilter) ? defaultValueLocaleFilter.split(',') : [];
+
+    const visibleLang = locales!.map((item) => {
+      const title: string = item.title;
+      const classD = (arrayDefaults.includes(String(item.id))) ? 'active' : '';
+
+      return (
+        <button
+          value={item.id}
+          className={`itemFlexFilter localeFilterClass ${classD}`}
+          onClick={handleClickLocale}
+          key={item.id}
+        >
+          {title}
+        </button>
+      );
+    });
+    if (locales!.length === 0) {
+      return (
+        <div className="minimalLoading">
+          <span /><span /><span />
+        </div>
+      );
+    }
+    return (
+      <div className="gradesItems flexFilter">
+        {visibleLang}
+      </div>
+    );
+
   }
 
   public renderFiltersLanguage = () => {
@@ -1388,6 +1430,19 @@ class SearchFilter extends Component<Props, State> {
             <div className="FiltersModal__body__item">
               <div className="itemFilter">
                 <div className="itemFilter__left">
+                  <img src={langImg} />
+                </div>
+                <div className="itemFilter__right">
+                  <h3>{intl.get('generals.language')}</h3>
+                  <div className="itemFilter__core">
+                    {this.renderFiltersLocale()}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="FiltersModal__body__item">
+              <div className="itemFilter">
+                <div className="itemFilter__left">
                   <img src={gradeImg} />
                 </div>
                 <div className="itemFilter__right">
@@ -1485,6 +1540,19 @@ class SearchFilter extends Component<Props, State> {
             </button>
           </div>
           <div className="FiltersModal__body">
+            <div className="FiltersModal__body__item">
+              <div className="itemFilter">
+                <div className="itemFilter__left">
+                  <img src={langImg} />
+                </div>
+                <div className="itemFilter__right">
+                  <h3>{intl.get('generals.language')}</h3>
+                  <div className="itemFilter__core">
+                    {this.renderFiltersLocale()}
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className="FiltersModal__body__item">
               <div className="itemFilter">
                 <div className="itemFilter__left">
@@ -1684,7 +1752,9 @@ class SearchFilter extends Component<Props, State> {
       isArticlesListPage,
       isStudentTpPage,
       isAssignmentsListPage,
-      isAssignmentsListFilter
+      isAssignmentsListFilter,
+      disabledInputSearch,
+      forceFocusInputSearch
     } = this.props;
     let myValue: any;
     const searchQueryValue = searchQueryFilterValue || '';
@@ -1694,6 +1764,14 @@ class SearchFilter extends Component<Props, State> {
       const inputTag = document.getElementById('ChangeForce') as HTMLInputElement;
       inputTag.value = myValue;
     };
+    if (forceFocusInputSearch) {
+      setTimeout(() => {
+        if (this.searchRef.current) {
+          this.searchRef.current.focus();
+        }
+      }, DELAY);
+    }
+
     return (
       <div className="SearchFilter" aria-controls="List" ref={this.container}>
         {!isArticlesListPage && !isStudentTpPage && isStudent && this.renderEvaluationStatus()}
@@ -1724,6 +1802,8 @@ class SearchFilter extends Component<Props, State> {
             id="SendFilter"
             aria-required="true"
             aria-invalid="false"
+            disabled={disabledInputSearch}
+            ref={this.searchRef}
           />
           <label id="searchfilterInput" className="hidden">{placeholder}</label>
           <div id="ChangeForce" className="SearchFilter__search__submit" />

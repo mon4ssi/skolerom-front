@@ -22,10 +22,10 @@
     width: 100%;
     height: inherit;
     overflow: auto;
-    max-height: 420px;
+    max-height: calc(100% - 80px);
     overflow-y: scroll;
-    max-width: 1250px;
-
+    max-width: 950px;
+    margin-bottom: 20px;
     .passedStyle {
       .InfoCard {
         box-shadow: 0 0 7px 0 #0A7B24;

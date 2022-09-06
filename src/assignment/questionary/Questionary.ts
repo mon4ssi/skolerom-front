@@ -19,6 +19,7 @@ export interface QuestionaryRepo {
   deleteQuestionary(questionary: Questionary): Promise<void>;
   revertQuestionary(questionary: Questionary): Promise<Questionary>;
   getAssignmentQuestionaryById(assignmentId: number): Promise<Questionary>;
+  getAssignmentQuestionaryByIdPreview(assignmentId: number): Promise<Questionary>;
   setReadStatusArticle(
     idAssignment: number,
     idRevision: number,
@@ -215,6 +216,7 @@ export class Questionary {
 
   @action
   public async publish(redirectData?: RedirectData) {
+
     this.validate();
     this.isPublishing = true;
     return redirectData ? this.repo.publishFromTeachingPath(this, redirectData) : this.repo.publishQuestionary(this);

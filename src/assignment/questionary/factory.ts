@@ -81,8 +81,10 @@ export const buildQuestionary = (dto: QuestionaryResponseDTO, assignmentId: numb
         : [],
       id: assignmentId,
       author: dto.revision.author,
+      authoravatar: dto.revision.authoravatar,
       questions: dto.revision.questions.map(buildQuestion),
-      featuredImage: dto.revision.featuredImage ? dto.revision.featuredImage : undefined
+      featuredImage: dto.revision.featuredImage ? dto.revision.featuredImage : undefined,
+      backgroundImage: dto.revision.backgroundImage ? dto.revision.backgroundImage : undefined
     })
   });
 

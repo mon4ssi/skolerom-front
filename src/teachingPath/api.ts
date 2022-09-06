@@ -6,13 +6,23 @@ import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteract
 import { Locales } from 'utils/enums';
 
 import { TeachingPath, TeachingPathItem, TeachingPathNode, TeachingPathNodeType, TeachingPathRepo } from './TeachingPath';
-import { Article, Filter, Grade, Domain, FilterGrep, GoalsData } from 'assignment/Assignment';
+import { Article, Filter, Grade, Domain, FilterGrep, GoalsData, Attachment } from 'assignment/Assignment';
 import { API } from '../utils/api';
 import { buildFilterDTO, GradeDTO } from 'assignment/factory';
 import { Breadcrumbs } from './teachingPathDraft/TeachingPathDraft';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { StudentTeachingPathEvaluationNodeItem } from 'evaluation/api';
 import { CONDITIONALERROR, STATUS_SERVER_ERROR, STATUS_BADREQUEST } from 'utils/constants';
+
+export interface AttachmentDTO {
+  id: number;
+  url: string;
+  alt: string;
+  file_name: string;
+  title: string;
+  duration?: number;
+  src?: Array<string>;
+}
 
 export interface TeachingPathNodeItemResponseDTO {
   id: number;
@@ -85,6 +95,8 @@ export class TeachingPathApi implements TeachingPathRepo {
 
   public storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
   public currentLocale = this.storageInteractor.getCurrentLocale()!;
+  public numberContentAll = 0;
+  public arrayNumberContentAll: Array<number> = [];
 
   public async getAllTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
     if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
@@ -196,6 +208,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         minNumberOfSteps: data.minNumberOfSteps,
         maxNumberOfSteps: data.maxNumberOfSteps,
         author: data.author,
+        authorRole: data.authorRole,
         levels: data.levels,
         answerId: data.answerId,
         isCopy: data.isCopy,
@@ -244,12 +257,16 @@ export class TeachingPathApi implements TeachingPathRepo {
         isFinished: data.isFinished,
         rootNodeId: data.rootNodeId,
         lastSelectedNodeId: data.lastSelectedNodeId,
+        featuredImage: data.featuredImage,
+        backgroundImage: data.backgroundImage,
         minNumberOfSteps: data.minNumberOfSteps,
         maxNumberOfSteps: data.maxNumberOfSteps,
         author: data.author,
         levels: data.levels,
         answerId: data.answerId,
         isCopy: data.isCopy,
+        deadline: data.deadline,
+        authorAvatar: data.authorPhoto
       });
     } catch (error) {
       if (error.response.data.message === 'Teaching path not assigned to you') {
@@ -268,13 +285,32 @@ export class TeachingPathApi implements TeachingPathRepo {
 
   }
 
+  public searchShortesPath(data: any): number | undefined {
+    const numberContent = 0;
+    if (data.shortestPath !== undefined || data.shortestPath !== null || data.shortestPath.length !== 0 || typeof(data.shortestPath) !== 'undefined') {
+      this.numberContentAll = this.numberContentAll + 1;
+      if (typeof(data.shortestPath) !== 'undefined') {
+        this.arrayNumberContentAll.push(data.shortestPath.id);
+        this.searchShortesPath(data.shortestPath);
+      }
+    } else {
+      return numberContent;
+    }
+  }
+
   public async getCurrentNode(teachingPathId: number, nodeId: number): Promise<TeachingPathNode> {
     const { data } = await API.get(`api/student/teaching-paths/${teachingPathId}/node/${nodeId}`);
-
+    this.arrayNumberContentAll = [];
+    if (!isNull(data.shortestPath)) {
+      this.arrayNumberContentAll.push(data.shortestPath.id);
+      this.searchShortesPath(data.shortestPath);
+    }
     const breadcrumbs = data.breadcrumbs.reverse().map((crumb: BreadcrumbsResponseDTO) => new Breadcrumbs({
       selectQuestion: crumb.selectQuestion,
       id: crumb.id,
       parentNodeId: crumb.parentNodeId,
+      shortest: this.numberContentAll,
+      shortpathid: this.arrayNumberContentAll,
       items: !isNull(crumb.items) ? crumb.items.map(item => new TeachingPathItem({
         type: crumb.type,
         value: item
@@ -340,9 +376,10 @@ export class TeachingPathApi implements TeachingPathRepo {
     };
   }
 
-  public async getGrepFiltersTeachingPath(grades: string, subjects: string, coreElements?: string, mainTopics?:string, goals?: string, source?:string): Promise<FilterGrep>  {
+  public async getGrepFiltersTeachingPath(locale: string, grades: string, subjects: string, coreElements?: string, mainTopics?:string, goals?: string, source?:string): Promise<FilterGrep>  {
     const response = await API.get('api/teacher/teaching-paths/grep/filters', {
       params: {
+        locale,
         grades,
         subjects,
         coreElements,
@@ -382,6 +419,20 @@ export class TeachingPathApi implements TeachingPathRepo {
       data: response.data.data,
       total_pages: response.data.meta.pagination.total_pages
     };
+  }
+
+  public async fetchImages(postIds: Array<number>): Promise<Array<Attachment>> {
+    return (
+      await API.get(
+        `${process.env.REACT_APP_WP_URL}/wp-json/media/v1/post/`, {
+          params: {
+            id: postIds.join(','),
+            content: 'img',
+            size: 'full'
+          },
+        }
+      )
+    ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
   }
 
   public async getTeachingPathListOfStudentInList(studentId: number, filter: Filter) {

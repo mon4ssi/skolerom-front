@@ -15,6 +15,7 @@ import { Article } from 'assignment/Assignment';
 import { ReadingArticle } from 'components/pages/ReadingArticle/ReadingArticle';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { UserType } from 'user/User';
+import list from 'assets/images/list-placeholder.svg';
 
 import './AssignmentArticlesToReading.scss';
 
@@ -51,9 +52,18 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
   public openArticle = (article: Article) => () => {
     const { title, id, levels, correspondingLevelArticleId } = article;
     const isStudent = this.props.currentQuestionaryStore!.getCurrentUser()!.type === UserType.Student;
-
     if (!isStudent) {
-      return null;
+      const articleChildren = levels![0].childArticles!.length ? levels![0].childArticles! : [article];
+      const currentArticleLevelObject = articleChildren.find(article => article.id === correspondingLevelArticleId);
+
+      this.setState({
+        isShowArticle: true,
+        titleCurrentArticle: title,
+        currentArticleChildren: articleChildren,
+        attachedArticleId: id,
+        shownArticleId: correspondingLevelArticleId || id,
+        shownArticleLevelId: currentArticleLevelObject ? currentArticleLevelObject.levels![0].wpId : article.levels![0].wpId
+      });
     }
 
     const articleChildren = levels![0].childArticles!.length ? levels![0].childArticles! : [article];
@@ -88,9 +98,8 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
     }
     return (
       <div
-        className={`AssignmentArticlesToReading__card ${article.isRead && 'cardBorder' } ${readOnly && 'AssignmentArticlesToReading__defaultCursor'}`}
+        className={`AssignmentArticlesToReading__card ${article.isRead && 'cardBorder'} ${readOnly && 'AssignmentArticlesToReading__defaultCursor'}`}
         key={article.id}
-        onClick={this.openArticle(article)}
       >
         <InfoCard
           type={'ARTICLE'}
@@ -99,9 +108,11 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
           description={article.excerpt}
           grades={article.grades}
           img={article.images && article.images!.url}
+          isReadArticle={article.isRead}
+          onClick={this.openArticle(article)}
+          hiddeIcons
           // levels={levels || []}
         />
-        <img src={article.isRead ? checkActive : checkInactive} alt="checkbox" className="AssignmentArticlesToReading__checkbox"/>
       </div>
     );
   }
@@ -109,8 +120,12 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
   public finishReading = (graduation: number) => { // TODO maybe it should be removed in future
     const { currentQuestionaryStore } = this.props;
     const { shownArticleLevelId, attachedArticleId } = this.state;
+    const isStudent = this.props.currentQuestionaryStore!.getCurrentUser()!.type === UserType.Student;
     if (!isNull(attachedArticleId)) {
-      this.props.currentQuestionaryStore!.setReadStatusToArticle(attachedArticleId!, shownArticleLevelId, graduation);
+      this.props.currentQuestionaryStore!.setReadStatusToArticle(attachedArticleId!, shownArticleLevelId, graduation, isStudent);
+      if (!isStudent) {
+        return this.closeArticle();
+      }
       this.closeArticle();
       Notification.create({
         type: NotificationTypes.SUCCESS,
@@ -169,8 +184,11 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
   }
 
   public render() {
+    const { currentQuestionaryStore } = this.props;
+    const background = (currentQuestionaryStore && currentQuestionaryStore!.backgroundImage) ? currentQuestionaryStore!.backgroundImage : list;
     return (
       <div className="AssignmentArticlesToReading">
+        <div className="QuestionPreview__background AssignmentArticlesToReading__background" style={{ backgroundImage: `url(${background})` }} />
         {this.renderContent()}
       </div>
     );

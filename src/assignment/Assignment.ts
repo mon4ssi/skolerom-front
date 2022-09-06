@@ -53,7 +53,7 @@ export interface AssignmentRepo {
     total_pages: number;
   }>;
   copyAssignment(id: number): Promise<number>;
-  getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
+  getGrepFiltersAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
   downloadTeacherGuidancePDF(id: number): Promise<void>;
 }
 
@@ -252,6 +252,7 @@ export interface GrepSource {
 }
 
 export class FilterGrep {
+  public localeFilters?: Array<GrepFilters>;
   public subjectFilters?: Array<GrepFilters>;
   public gradeFilters?: Array<GrepFilters>;
   public coreElementsFilters?: Array<GrepElementFilters>;
@@ -274,6 +275,8 @@ export interface AssignmentArgs {
   id: number;
   title?: string;
   author?: string;
+  authoravatar?: string;
+  authorRole?: string;
   description?: string;
   guidance?: string;
   hasGuidance?: boolean;
@@ -301,6 +304,7 @@ export interface AssignmentArgs {
   view?: string;
   deadline?: Date;
   featuredImage?: string;
+  backgroundImage?: string;
   answerId?: number;
   isPassed?: boolean | null;
   mark?: number | null;
@@ -325,6 +329,7 @@ export interface AssignmentArgs {
   grepGoals?: Array<GreepElements>;
   open?: boolean;
   schools?: Array<NowSchool>;
+  localeId?: number | null;
 }
 
 export class Assignment {
@@ -333,6 +338,8 @@ export class Assignment {
   protected readonly _ownedByMe: boolean;
   @observable protected _title: string = '';
   @observable private _author: string = '';
+  @observable protected _authoravatar: string = '';
+  @observable protected _authorRole: string | undefined;
   @observable protected _questions: Array<Question> = [];
   @observable protected _description: string = '';
   @observable protected _guidance: string;
@@ -361,6 +368,7 @@ export class Assignment {
   @observable protected _levels: Array<number>;
   @observable protected _view: string | undefined;
   @observable protected _featuredImage?: string;
+  @observable protected _backgroundImage?: string;
   @observable protected _answerId?: number;
   @observable protected _isPassed?: boolean | null;
   @observable protected _mark?: number | null;
@@ -383,11 +391,14 @@ export class Assignment {
   public grepReadingInSubjectsIds?: Array<number>;
   public _open?: boolean;
   public _schools?: Array<NowSchool>;
+  @observable protected _localeId?: number | null;
 
   constructor(args: AssignmentArgs) {
     this._id = args.id;
     this._title = args.title || '';
     this._author = args.author || '';
+    this._authorRole = args.authorRole || undefined;
+    this._authoravatar = args.authoravatar || '';
     this._description = args.description || '';
     this._guidance = args.guidance || '';
     this._hasGuidance = args.hasGuidance || false;
@@ -415,6 +426,7 @@ export class Assignment {
     this._view = args.view || 'edit';
     this._deadline = args.deadline;
     this._featuredImage = args.featuredImage;
+    this._backgroundImage = args.backgroundImage;
     this._answerId = args.answerId;
     this._comment = args.comment;
     this._mark = args.mark;
@@ -440,6 +452,7 @@ export class Assignment {
     this.grepReadingInSubjectsIds = args.grepReadingInSubjectsIds;
     this._open = args.open || false;
     this._schools = args.schools || [];
+    this._localeId = args.localeId;
   }
 
   public isOwnedByMe(): boolean {
@@ -449,6 +462,11 @@ export class Assignment {
   @computed
   public get author(): string {
     return this._author;
+  }
+
+  @computed
+  public get authorRole() {
+    return this._authorRole;
   }
 
   @computed
@@ -524,6 +542,11 @@ export class Assignment {
   @computed
   public get featuredImage() {
     return this._featuredImage;
+  }
+
+  @computed
+  public get backgroundImage() {
+    return this._backgroundImage;
   }
 
   @computed
@@ -663,6 +686,16 @@ export class Assignment {
   @computed
   public get isCopy() {
     return this._isCopy;
+  }
+
+  @computed
+  public get localeId() {
+    return this._localeId;
+  }
+
+  @computed
+  public get authoravatar() {
+    return this._authoravatar;
   }
 
   public getListOfArticles() {
@@ -898,6 +931,7 @@ export class Filter {
   @observable public isPublished?: number | null;
   @observable public order?: string | null;
   @observable public orderField?: string | null;
+  @observable public locale?: string | number | null;
   @observable public grade?: string | number | null;
   @observable public subject?: string | number | null;
   @observable public isAnswered?: string | null;
@@ -1089,6 +1123,10 @@ export class AssignmentList {
     this.filter.orderField = orderField;
   }
 
+  public setFiltersLocale(locale: string | number | null) {
+    this.filter.locale = locale;
+  }
+
   public setFiltersGradeID(gradeID: string | number | null) {
     this.filter.grade = gradeID;
   }
@@ -1233,6 +1271,7 @@ export interface ArticleRepo {
   getArticlesByIds(ids: Array<number>): Promise<Array<Article>>;
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
+  fetchCoverImages(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchCustomImages(ids: string, page: number): Promise<ResponseFetchCustomImages>;
   createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse>;
   deleteCustomImage(imageId: number): Promise<any>;
@@ -1429,7 +1468,7 @@ export class Domain {
   public readonly url?: string;
   public grades?: Array<Grade>;
   public subjects?: Array<Subject>;
-  public readonly featuredImage?: string;
+  public featuredImage?: string;
   public image?: string;
   public isRead?: boolean;
   public grepGoals?: Array<GreepElements>;

@@ -36,7 +36,7 @@ export const TABLET_WIDTH = 1366;
 export const GENERAL_MOBILE_WIDTH = 640;
 export const MOBILE_WIDTH = 425;
 
-export const deadlineDateFormat = 'DD/MM, YYYY';
+export const deadlineDateFormat = 'MMM DD, YYYY';
 
 export const firstLevel = 1;
 export const secondLevel = 2;
@@ -51,7 +51,26 @@ export const LOCALES_MAPPING_FOR_BACKEND = {
   [Locales.NB]: 'nob',
   [Locales.NN]: 'nno'
 };
-
+export const LANGUAGES = [
+  {
+    description: 'English',
+    shortDescription: 'English',
+    shortName: Locales.EN,
+    langId: 1
+  },
+  {
+    description: 'Norwegian Bokmål',
+    shortDescription: 'Bokmål',
+    shortName: Locales.NB,
+    langId: 3
+  },
+  {
+    description: 'Norwegian Nynorsk',
+    shortDescription: 'Nynorsk',
+    shortName: Locales.NN,
+    langId: 2
+  }
+];
 // STATUSES
 
 export const STATUS_CONFLICT = 409;

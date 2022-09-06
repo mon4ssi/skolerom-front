@@ -21,6 +21,7 @@
       "headers": {
         "no": "No",
         "questions": "questions",
+        "steps": "steps",
         "articles": "articles",
         "by": "By"
       },
@@ -36,7 +37,11 @@
         "teacher_guidance": "Teacher guidance",
         "edit": "Edit",
         "duplicate": "Duplicate"
-      }
+      },
+      "read open": "Read description",
+      "read close": "Close description",
+      "read again": "Read again",
+      "read article": "Read article"
     },
     "assignment": {
       "headers": {
@@ -57,7 +62,9 @@
         "teacher_guidance": "Teacher guidance",
         "edit": "Edit",
         "duplicate": "Duplicate"
-      }
+      },
+      "read again": "Read again",
+      "read article": "Read assignment"
     }
   },
   "assignments_page": {
@@ -186,6 +193,7 @@
   "pagination": {
     "Previous page": "Previous page",
     "Next page": "Next page",
+    "Next question": "Next question",
     "Question": "Question",
     "Exit": "Exit assignment"
   },
@@ -522,6 +530,8 @@
     "saved_successfuly": "Saved successfully"
   },
   "publishing_page": {
+    "select button": "Select a cover image",
+    "notimages": "This articles no have images",
     "publish_and_distribute_assignment": "Publish assignment",
     "publish_assignment": "Publish assignment",
     "subject": "Subjects",
@@ -547,7 +557,7 @@
       "title_private":"Select Grade and Subject",
       "description":"Connecting your teaching path is required when sharing publicity. Please select the appropriate educational goals below before publishing and distribution",
       "descrption_assignment":"Connecting your teaching path is required when sharing publicity. Please select the appropriate educational goals below before publishing and distribution",
-      "description_privado":"Linking to the curriculum is only necessary when you publish publicly, but you are welcome to link the content to relevant competence goals below if desired."
+      "description_privado":"Select My school to share with your school only. Select Public to share with everyone using Skolerom or Private to keep it to yourself and the ones you share it with."
     },
     "source_is_open": "Display in Open Site",    
     "source_is_open_title": "Visiblity Settings",
@@ -555,7 +565,8 @@
     "source": "Source",
     "keywords": "Keywords",
     "selected_myschools": "Select school",
-    "dont_empty": "The School field cannot be left empty"
+    "dont_empty": "The School field cannot be left empty",
+    "languages": "Languages"
   },
   "distribution_page": {
     "distribute_assignment": "Distribute assignment",
@@ -613,7 +624,8 @@
   },
   "teaching path preview": {
     "Start teaching path": "Start teaching path",
-    "steps": "steps"
+    "steps": "steps",
+    "deadline": "Deadline"
   },
   "teaching path search": {
     "Search for teaching paths": "Search for teaching paths...",
@@ -676,7 +688,8 @@
       "cant_publish_goals": "You can't publish because no educational goals are available",
       "notdata_goals": "There are no established goals for these criteria",
       "source_required": "Please set the source for this content",
-      "assignmets_not_enabled_open_site": "The following assignments are not enabled to display in the Open site [|content|] Continue anyway?"
+      "assignmets_not_enabled_open_site": "The following assignments are not enabled to display in the Open site [|content|] Continue anyway?",
+      "language_required": "Please set the language for this content"
     },
     "title": {
       "new_entity": "Publish teaching path",

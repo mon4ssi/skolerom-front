@@ -54,6 +54,8 @@ export interface DraftTeachingPathResponseDTO {
   schools?: Array<NowSchool>;
   selectedArticlesIds: Array<number>;
   selectedAssignmentsIds: Array<number>;
+  featuredImage: string;
+  localeId: number | null;
 }
 
 export interface TeachingPathItemRequestDTO {
@@ -116,7 +118,6 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
       const response: AxiosResponse<DraftTeachingPathResponseDTO> = await API.get(
         `/api/teacher/teaching-paths/draft/${id}/edit`
       );
-
       return response.data.content ?
         buildDraftTeachingPath(response.data) :
         buildNewTeachingPath(response.data);
@@ -147,13 +148,12 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
 
   public saveTeachingPath = async (teachingPath: DraftTeachingPath): Promise<string> => {
     const dto = buildTeachingPathRequestDTO(teachingPath);
-    const featuredImage = buildFeatureImageForTeachingPathRequestDTO(dto.content);
+    // const featuredImage = buildFeatureImageForTeachingPathRequestDTO(dto.content);
 
     try {
       const response = await API.put(
         `/api/teacher/teaching-paths/draft/${teachingPath.id}`, {
-          ...dto,
-          featuredImage
+          ...dto
         }
       );
       return response.data.updateAt;
@@ -191,8 +191,7 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
     try {
       return await API.post(
         `/api/teacher/teaching-paths/${teachingPath.id}`, {
-          ...dto,
-          featuredImage
+          ...dto
         }
       );
     } catch (error) {

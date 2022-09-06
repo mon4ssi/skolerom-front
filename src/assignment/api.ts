@@ -185,6 +185,7 @@ export interface ImageChoiceQuestionOptionDTO {
 interface AssignmentByIdResponseDTO {
   id: number;
   author: string;
+  authorRole: string;
   title: string;
   description: string;
   featuredImage: string;
@@ -219,6 +220,7 @@ export class AssignmentApi implements AssignmentRepo {
     return new Assignment({
       id: assignmentDTO.id,
       author: assignmentDTO.author,
+      authorRole: assignmentDTO.authorRole,
       title: assignmentDTO.title,
       createdAt: assignmentDTO.created_at,
       description: assignmentDTO.description,
@@ -286,7 +288,7 @@ export class AssignmentApi implements AssignmentRepo {
   }
 
   public async getMyAssignmentsList(filter: Filter) {
-    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
+    if (!isNil(filter.searchQuery)) filter.searchQuery = String(filter.searchQuery!);
     const response = await API.get('api/teacher/assignments/draft', {
       params: buildFilterDTO(filter)
     });
@@ -299,7 +301,7 @@ export class AssignmentApi implements AssignmentRepo {
 
   public async getAllAssignmentsList(filter: Filter) {
     try {
-      if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
+      if (!isNil(filter.searchQuery)) filter.searchQuery = String(filter.searchQuery!);
       const response = await API.get('api/teacher/assignments', {
         params: buildFilterDTO(filter)
       });
@@ -335,9 +337,10 @@ export class AssignmentApi implements AssignmentRepo {
     }
   }
 
-  public async getGrepFiltersAssignment(grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep> {
+  public async getGrepFiltersAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep> {
     const response = await API.get('api/teacher/assignments/grep/filters', {
       params: {
+        locale,
         grades,
         subjects,
         coreElements,
@@ -506,17 +509,35 @@ export class WPApi implements ArticleRepo {
   }
 
   public async fetchImages(postIds: Array<number>): Promise<Array<Attachment>> {
-    return (
-      await API.get(
-        `${process.env.REACT_APP_WP_URL}/wp-json/media/v1/post/`, {
-          params: {
-            id: postIds.join(','),
-            content: AttachmentType.image,
-            size: 'full'
-          },
-        }
-      )
-    ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
+    const response = await API.get(
+      `${process.env.REACT_APP_WP_URL}/wp-json/media/v1/post/`, {
+        params: {
+          id: postIds.join(','),
+          content: AttachmentType.image,
+          size: 'full'
+        },
+      }
+    );
+    if (response.data.media.length > 0) {
+      return (response).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
+    }
+    return [];
+  }
+
+  public async fetchCoverImages(postIds: Array<number>): Promise<Array<Attachment>> {
+    const response = await API.get(
+      `${process.env.REACT_APP_WP_URL}/wp-json/media/v1/post/`, {
+        params: {
+          id: postIds.join(','),
+          content: AttachmentType.image,
+          size: 'full'
+        },
+      }
+    );
+    if (response.data.media.length > 0) {
+      return (response).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
+    }
+    return [];
   }
 
   public async fetchCustomImages(ids:string, page: number): Promise<ResponseFetchCustomImages> {

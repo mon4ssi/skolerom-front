@@ -15,6 +15,7 @@ import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentL
 import { UserType } from 'user/User';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { AttachmentContentType, AttachmentContentTypeContext } from '../AttachmentContentTypeContext';
+import { LANGUAGES } from 'utils/constants';
 
 import './Header.scss';
 
@@ -119,6 +120,22 @@ class HeaderWrapper extends Component<Props> {
       });
 
       return;
+    }
+
+    if (userType === UserType.ContentManager) {
+      const localeId = newAssignmentStore!.assignmentContainer!.assignment!.localeId;
+
+      if (typeof(localeId) === 'undefined' || localeId === null) {
+        if (!isPrivate) {
+          Notification.create({
+            type: NotificationTypes.ERROR,
+            title: intl.get('edit_teaching_path.header.language_required')
+          });
+          return;
+        }
+        const currentLang = LANGUAGES.find(i => i.shortName === localStorage.getItem('currentLocale'))!;
+        newAssignmentStore!.assignmentContainer!.assignment.setLocaleId(currentLang.langId);
+      }
     }
 
     try {
@@ -232,19 +249,23 @@ class HeaderWrapper extends Component<Props> {
 
   private renderDistributeButton = () => {
     const { newAssignmentStore, location } = this.props;
-    const userType = newAssignmentStore!.getCurrentUser()!.type;
+    const currentUser = newAssignmentStore!.getCurrentUser()!;
+    const userType = currentUser!.type;
+    const isteacherTrial = currentUser!.teacherTrial;
     if (userType !== UserType.ContentManager && !(location.state && location.state.fromTeachingPath)) {
-      return (
-        <button
-          onClick={this.onPublish(false)}
-          disabled={this.isDisabledPublishButton()}
-          className="CreateButton"
-          ref={this.refGoDistribution}
-          title={intl.get('new assignment.publish_and_distribute_assignment')}
-        >
-          {intl.get('new assignment.publish_and_distribute_assignment')}
-        </button>
-      );
+      if (!isteacherTrial) {
+        return (
+          <button
+            onClick={this.onPublish(false)}
+            disabled={this.isDisabledPublishButton()}
+            className="CreateButton"
+            ref={this.refGoDistribution}
+            title={intl.get('new assignment.publish_and_distribute_assignment')}
+          >
+            {intl.get('new assignment.publish_and_distribute_assignment')}
+          </button>
+        );
+      }
     }
   }
 

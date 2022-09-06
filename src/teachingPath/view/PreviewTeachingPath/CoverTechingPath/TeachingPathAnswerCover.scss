@@ -1,9 +1,18 @@
 .cover {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 800px;
-  
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;  
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  &__content {
+    background: rgb(255, 255, 255);
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0 ,0, 0.1);
+    width: 750px;
+    padding: 50px 70px;
+  }
     .mainImage {
       width: 600px;
       height: 45%;
@@ -50,12 +59,12 @@
     }
   
     .assignmentTitle {
-      font-size: 2.15rem;
-      display: flex;
-      align-self: center;
+      font-size: 2.5rem;
       font-weight: 500;
       padding: 10px 20px;
       text-align: center;
+      margin-top: 20px;
+      display: block;
     }
   
     .assignmentDescription {

@@ -1,7 +1,7 @@
 import { computed, observable, toJS } from 'mobx';
 import intl from 'react-intl-universal';
 
-import { Grade, GreepElements, Subject, Article, Assignment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData, Source, NowSchool, SourceItem, CoreElementItem, EducationalGoalItem, GenericGrepItem } from 'assignment/Assignment';
+import { Grade, GreepElements, Subject, Article, Assignment, Attachment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData, Source, NowSchool, SourceItem, CoreElementItem, EducationalGoalItem, GenericGrepItem } from 'assignment/Assignment';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from './service';
 import { injector } from '../Injector';
 
@@ -26,10 +26,11 @@ export interface TeachingPathRepo {
   sendDataDomain(domain: string): Promise<Domain>;
   getFiltersArticlePanel(lang: string): Promise<FilterArticlePanel>;
   getGrepFilters(grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
-  getGrepFiltersTeachingPath(grades: string, subjects: string, coreElements?: string, mainTopics?: string, $goals?: string, source?: string): Promise<FilterGrep>;
+  getGrepFiltersTeachingPath(locale: string, grades: string, subjects: string, coreElements?: string, mainTopics?: string, $goals?: string, source?: string): Promise<FilterGrep>;
   /* tslint:disable-next-line:max-line-length */
   getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number): Promise<{ data: Array<GoalsData>, total_pages: number; }>;
   finishTeachingPath(id: number): Promise<void>;
+  fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
   deleteTeachingPathAnswers(teachingPathId: number, answerId: number): Promise<void>;
   copyTeachingPath(id: number): Promise<number>;
   getGradeWpIds(gradeWpIds: Array<number>): Promise<Array<Grade>>;
@@ -171,6 +172,8 @@ export interface TeachingPathArgs {
   id: number;
   title: string;
   author?: string;
+  authorAvatar?: string;
+  authorRole?: string;
   createdAt?: string | null;
   rootNodeId?: number;
   lastSelectedNodeId?: number;
@@ -198,6 +201,7 @@ export interface TeachingPathArgs {
   view?: string;
   levels?: Array<number>;
   featuredImage?: string;
+  backgroundImage?: string;
   url?: string;
   answerId?: number;
   isPassed?: boolean | null;
@@ -223,6 +227,7 @@ export interface TeachingPathArgs {
   schools? : Array<NowSchool>;
   numberOfQuestions?: number;
   numberOfArticles?: number;
+  localeId?: number | null;
 }
 
 export class TeachingPath {
@@ -230,6 +235,8 @@ export class TeachingPath {
   protected readonly _id: number;
   @observable protected _title: string;
   @observable protected _author: string | undefined;
+  @observable protected _authorAvatar: string | undefined;
+  @observable protected _authorRole: string | undefined;
   @observable protected _description: string;
   @observable protected _guidance: string;
   @observable protected _hasGuidance: boolean = false;
@@ -258,6 +265,7 @@ export class TeachingPath {
   @observable protected _levels: Array<number>;
   @observable protected _view: string;
   @observable protected _featuredImage?: string;
+  @observable protected _backgroundImage?: string;
   @observable protected _url?: string;
   @observable protected _answerId?: number;
   @observable protected _isPassed?: boolean | null;
@@ -282,11 +290,14 @@ export class TeachingPath {
   @observable protected _schools?: Array<NowSchool> = [];
   protected readonly _numberOfQuestions?: number = 0;
   protected readonly _numberOfArticles?: number = 0;
+  @observable protected _localeId?: number | null;
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;
     this._title = args.title;
     this._author = args.author || undefined;
+    this._authorAvatar = args.authorAvatar || undefined;
+    this._authorRole = args.authorRole || undefined;
     this._createdAt = args.createdAt || '';
     this._rootNodeId = args.rootNodeId || undefined;
     this._lastSelectedNodeId = args.lastSelectedNodeId || undefined;
@@ -314,6 +325,7 @@ export class TeachingPath {
     this._view = args.view || 'edit';
     this._levels = args.levels || [secondLevel];
     this._featuredImage = args.featuredImage;
+    this._backgroundImage = args.backgroundImage;
     this._url = args.url;
     this._answerId = args.answerId;
     this._comment = args.comment;
@@ -341,6 +353,7 @@ export class TeachingPath {
     this._schools = args.schools || [];
     this._numberOfQuestions = args.numberOfQuestions || 0;
     this._numberOfArticles = args.numberOfArticles || 0;
+    this._localeId = args.localeId;
   }
 
   @computed
@@ -389,6 +402,16 @@ export class TeachingPath {
   }
 
   @computed
+  public get authorAvatar() {
+    return this._authorAvatar;
+  }
+
+  @computed
+  public get authorRole() {
+    return this._authorRole;
+  }
+
+  @computed
   public get createdAt() {
     return this._createdAt;
   }
@@ -396,6 +419,11 @@ export class TeachingPath {
   @computed
   public get featuredImage() {
     return this._featuredImage;
+  }
+
+  @computed
+  public get backgroundImage() {
+    return this._backgroundImage;
   }
 
   @computed
@@ -534,6 +562,11 @@ export class TeachingPath {
   @computed
   public get view() {
     return this._view;
+  }
+
+  @computed
+  public get localeId() {
+    return this._localeId;
   }
 
   public getListOfSubjects() {

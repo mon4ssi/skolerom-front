@@ -17,6 +17,8 @@ import backImg from 'assets/images/back-arrow.svg';
 import './Header.scss';
 import { TeachingPathItem, TeachingPathNodeType } from 'teachingPath/TeachingPath';
 import { Assignment } from 'assignment/Assignment';
+import { LANGUAGES } from 'utils/constants';
+
 const PATHLENGTH1 = 11;
 const PATHLENGTH2 = 12;
 interface MatchProps {
@@ -169,6 +171,22 @@ export class HeaderComponent extends Component<Props> {
       });
 
       return;
+    }
+
+    if (userType === UserType.ContentManager) {
+      const localeId = editTeachingPathStore!.teachingPathContainer!.teachingPath!.localeId;
+
+      if (typeof(localeId) === 'undefined' || localeId === null) {
+        if (!isPrivate) {
+          Notification.create({
+            type: NotificationTypes.ERROR,
+            title: intl.get('edit_teaching_path.header.language_required')
+          });
+          return;
+        }
+        const currentLang = LANGUAGES.find(i => i.shortName === localStorage.getItem('currentLocale'))!;
+        editTeachingPathStore!.teachingPathContainer!.teachingPath!.setLocaleId(currentLang.langId);
+      }
     }
 
     if (userType === UserType.ContentManager && !isPrivate && displayInOpenSite) {
@@ -334,20 +352,24 @@ export class HeaderComponent extends Component<Props> {
 
   private renderDistributeButton = () => {
     const { editTeachingPathStore } = this.props;
-    const userType = editTeachingPathStore!.getCurrentUser()!.type;
+    const currentUser = editTeachingPathStore!.getCurrentUser()!;
+    const userType = currentUser!.type;
+    const isteacherTrial = currentUser!.teacherTrial;
 
     if (userType !== UserType.ContentManager) {
-      return (
-        <button
-          onClick={this.onPublish(false)}
-          disabled={this.isDisabledPublishButton()}
-          className="CreateButton"
-          ref={this.refGoDistribution}
-          title={intl.get('edit_teaching_path.header.publish_and_distribute_teaching_path')}
-        >
-          {intl.get('edit_teaching_path.header.publish_and_distribute_teaching_path')}
-        </button>
-      );
+      if (!isteacherTrial) {
+        return (
+          <button
+            onClick={this.onPublish(false)}
+            disabled={this.isDisabledPublishButton()}
+            className="CreateButton"
+            ref={this.refGoDistribution}
+            title={intl.get('edit_teaching_path.header.publish_and_distribute_teaching_path')}
+          >
+            {intl.get('edit_teaching_path.header.publish_and_distribute_teaching_path')}
+          </button>
+        );
+      }
     }
   }
 
