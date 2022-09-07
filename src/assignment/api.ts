@@ -299,7 +299,7 @@ export class AssignmentApi implements AssignmentRepo {
 
   public async getAllAssignmentsList(filter: Filter) {
     try {
-      if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
+      if (!isNil(filter.searchQuery)) filter.searchQuery = String(filter.searchQuery!);
       const response = await API.get('api/teacher/assignments', {
         params: buildFilterDTO(filter)
       });

@@ -809,6 +809,9 @@ export class AssignmentsList extends Component<Props, State> {
       }
     });
 
+    const ids = sortedAssignments.map(o => o.id);
+    sortedAssignments = sortedAssignments.filter(({ id }, index) => !ids.includes(id, index + 1));
+
     sortedAssignments = this.state.itemsForNewChildren.concat(sortedAssignments);
     const assignments = assignmentListStore!.assignmentsState === StoreState.LOADING && !assignmentsList.length ?
       assignmentListStore!.assignmentsForSkeleton :

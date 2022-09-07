@@ -300,6 +300,7 @@ export class AssignmentListStore {
   public async setFiltersForTeachingPath() {
     this.assignmentList.setFiltersPage(1);
     this.assignmentList.setFiltersIsPublished(1);
+    this.assignmentList.setFiltersSearchQuery('');
     this.assignmentList.setFiltersPerPage(ASSIGNMENTS_PER_PAGE_IN_LIST);
 
     this.getAssignmentsList();
