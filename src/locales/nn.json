@@ -264,7 +264,8 @@
     "inactive": "Inaktiv",
     "due_first": "først",
     "due_last": "sist",    
-    "hidden_related": "Skjul artiklane for elevane"
+    "hidden_related": "Skjul artiklane for elevane", 
+    "hidden_question": "Skjul spørsmål i elevvisningen"
   },
   "assignment list": {
     "question": "spørsmål",

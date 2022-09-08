@@ -260,6 +260,21 @@
 
 }
 
+
+.hiddenQuestionCheck {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  img {
+    margin: 0px;
+  }
+  div {
+    font-size: 14px;
+    max-width: 120px;
+    margin-left: 10px;
+  }
+}
+
 .content-block-dragged.attached-files {
   &::after {
     top: 10px;

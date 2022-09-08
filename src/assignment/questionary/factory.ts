@@ -107,6 +107,7 @@ const buildQuestion = (dto: QuestionDTO, index: number) => {
   const title = dto.title;
   const guidance = dto.guidance;
   const order = dto.orderPosition || index;
+  const hide_answer = dto.hide_answer;
   const contentBlocks = dto.content!.map(buildContentBlock);
 
   switch (dto.type) {
@@ -115,6 +116,7 @@ const buildQuestion = (dto: QuestionDTO, index: number) => {
         id,
         title,
         guidance,
+        hide_answer,
         order,
         contentBlocks,
       });
