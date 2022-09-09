@@ -75,7 +75,9 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
       return <span className={'evaluationAnswer'} dangerouslySetInnerHTML={{ __html: answerSplit }} />;
     }
     if (question.hide_answer) {
-      answer!.setValue(intl.get('new assignment.hidden_anwser'), redirectData);
+      if (answer) {
+        answer!.setValue(intl.get('new assignment.hidden_anwser'), redirectData);
+      }
     }
     if (readOnly) {
       return (
