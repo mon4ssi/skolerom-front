@@ -467,7 +467,8 @@
     "indicadorgrade": ".",
     "go_back_to_teaching_path": "Oppgåva vart ikkje publisert og vil ikke bli lagd til i læringsstien. Er du sikker på at du vil tilbake til læringsstien?",
     "specify": "Spesifiser ein eller fleire relaterte artiklar for å få forslag til bilde, PDF-ar, videoar og lyd.",
-    "no_title": "Utan tittel"
+    "no_title": "Utan tittel",
+    "hidden_anwser":"Dette svaret ble merket som skjult"
   },
   "evaluation_page": {
     "title": "Vurdering",

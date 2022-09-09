@@ -467,7 +467,8 @@
     "indicadorgrade": "th",
     "go_back_to_teaching_path": "Assignment was not published and will not be added to the teaching path. Are you sure you want to go back to the teaching path?",
     "specify": "Specify 1 or more related articles to get suggestions for images, PDFs, videos and sound.",
-    "no_title": "No title"
+    "no_title": "No title",
+    "hidden_anwser":"This answer was marked as hidden"
   },
   "evaluation_page": {
     "title": "Evaluation",

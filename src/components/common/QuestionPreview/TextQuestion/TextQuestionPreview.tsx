@@ -33,7 +33,7 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
     }
   }
   public handleChangeAnswer = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { redirectData, answer, handleShowArrowsTooltip } = this.props;
+    const { redirectData, answer, handleShowArrowsTooltip, question } = this.props;
     event.preventDefault();
     const value = this.useValuedQuotes(event.currentTarget.value);
     answer!.setValue(value, redirectData);
@@ -68,11 +68,14 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
   }
 
   public renderContent = () => {
-    const { readOnly, answer, isEvaluationStyle } = this.props;
-
+    const { readOnly, answer, isEvaluationStyle, question, redirectData } = this.props;
+    const isHideValue = (question.hide_answer) ? intl.get('new assignment.Write your answer here') : answer && answer!.value;
     if (isEvaluationStyle) {
       const answerSplit = String(answer && answer.value).replace(/\n/g, '<br />');
       return <span className={'evaluationAnswer'} dangerouslySetInnerHTML={{ __html: answerSplit }} />;
+    }
+    if (question.hide_answer) {
+      answer!.setValue(intl.get('new assignment.hidden_anwser'), redirectData);
     }
     if (readOnly) {
       return (
@@ -80,7 +83,7 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
           <label id="titleTextAnswser" className="hidden">{intl.get('new assignment.Write your answer here')}</label>
           <textarea
             autoFocus={!readOnly}
-            value={answer && answer!.value}
+            value={isHideValue}
             className="studentsAnswer"
             placeholder={intl.get('new assignment.Write your answer here')}
             readOnly={readOnly}
