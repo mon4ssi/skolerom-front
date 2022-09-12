@@ -412,6 +412,23 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
     return;
   }
 
+  public renderRightButton = () => {
+    const { questionaryTeachingPathStore } = this.props;
+    const node = questionaryTeachingPathStore!.currentNode;
+    if (node && node.breadcrumbs) {
+      const idNode = node && node.id;
+      const indexCore = node.breadcrumbs.findIndex(element => element!.id === idNode);
+      const idSkill = (node.breadcrumbs[Number(indexCore - 1)] === undefined) ? 0 : node.breadcrumbs[Number(indexCore - 1)].id;
+      const isDisabled = true;
+      return (
+        <button className={'navigationNextButton '} onClick={this.onClickBackButton} title={intl.get('teaching path passing.exit')} disabled={isDisabled}>
+          <img src={arrowLeftRounded} alt="arrowLeftRounded"/>
+        </button>
+      );
+    }
+    return;
+  }
+
   public render() {
     return (
       <div className={'passageTeachingPath PreviewTeachingPath'}>
@@ -423,6 +440,7 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
         <div className="teachingPathNewBreadCrumbs">
             {this.renderLeftButton()}
             <BreadcrumbsTeachingPath onClickStart={this.onClickStartBreadcrumbs}/>
+            {this.renderRightButton()}
           </div>
           <div className="flexBox dirColumn wrapperTeachingPath">
             <div className="contentTeachingPath" ref={this.ref}>

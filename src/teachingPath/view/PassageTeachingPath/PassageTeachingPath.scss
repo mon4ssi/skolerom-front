@@ -83,6 +83,10 @@
       &.navigationNextButton img {
         transform: rotate(180deg);
       }
+      &:disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
       img {
         width: 20px;
       }

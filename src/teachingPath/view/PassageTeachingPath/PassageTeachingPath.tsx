@@ -312,6 +312,12 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
     }
   }
 
+  public NextButtonRight = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { questionaryTeachingPathStore } = this.props;
+    const id = Number(e.currentTarget.getAttribute('data-id'));
+    this.onClickItem(id);
+  }
+
   public renderLeftButton = () => {
     const { questionaryTeachingPathStore } = this.props;
     const node = questionaryTeachingPathStore!.currentNode;
@@ -321,6 +327,45 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
       const idSkill = (node.breadcrumbs[Number(indexCore - 1)] === undefined) ? 0 : node.breadcrumbs[Number(indexCore - 1)].id;
       return (
         <button className={'navigationExitButton'} data-check={indexCore} data-id={idSkill} onClick={this.onClickBackButton} title={intl.get('teaching path passing.exit')} >
+          <img src={arrowLeftRounded} alt="arrowLeftRounded"/>
+        </button>
+      );
+    }
+    return;
+  }
+
+  public renderRightButton = () => {
+    const { questionaryTeachingPathStore } = this.props;
+    const node = questionaryTeachingPathStore!.currentNode;
+    if (node && node.breadcrumbs) {
+      const onlyOnePath = (node.children.length === 1) ? true : false;
+      const checkThisType = (node.children && node.children[0].items![0].type);
+      const idSkill = node.children[0].id;
+      let isDisabled = true;
+      if (onlyOnePath) {
+        switch (checkThisType) {
+          case TeachingPathNodeType.Article:
+            if (questionaryTeachingPathStore!.currentArticlesList[0] && questionaryTeachingPathStore!.currentArticlesList[0].isSelected) {
+              isDisabled = false;
+            }
+            break;
+          case TeachingPathNodeType.Assignment:
+            if (questionaryTeachingPathStore!.currentAssignmentList[0] && questionaryTeachingPathStore!.currentAssignmentList[0].isSelected) {
+              isDisabled = false;
+            }
+            break;
+          case TeachingPathNodeType.Domain:
+            if (questionaryTeachingPathStore!.currentDomainList[0] && questionaryTeachingPathStore!.currentDomainList[0].isRead) {
+              isDisabled = false;
+            }
+            break;
+          default:
+            isDisabled = true;
+            break;
+        }
+      }
+      return (
+        <button className={'navigationNextButton '} data-id={idSkill} onClick={this.NextButtonRight} title={intl.get('teaching path passing.exit')} disabled={isDisabled}>
           <img src={arrowLeftRounded} alt="arrowLeftRounded"/>
         </button>
       );
@@ -339,6 +384,7 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
           <div className="teachingPathNewBreadCrumbs">
             {this.renderLeftButton()}
             <BreadcrumbsTeachingPath onClickStart={this.onClickStartBreadcrumbs}/>
+            {this.renderRightButton()}
           </div>
 
           <div className="flexBox dirColumn wrapperTeachingPath">
