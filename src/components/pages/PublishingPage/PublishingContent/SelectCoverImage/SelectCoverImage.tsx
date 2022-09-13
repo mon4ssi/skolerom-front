@@ -343,17 +343,17 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
           </div>
         </div>
         <div className="buttonContent">
-          <div className={`coverImageButtonTab ${this.selectClassOption(selectedTabId, const1)}`}>
+          <div onClick={this.manageTabContentTabWP} className={`coverImageButtonTab ${this.selectClassOption(selectedTabId, const1)}`}>
             <div className="buttonLabel" onClick={this.manageTabContentTabWP}>
               {'IMAGES FROM ARTICLES'}
             </div>
           </div>
-          <div className={`coverImageButtonTab ${this.selectClassOption(selectedTabId, const2)}`}>
+          <div onClick={this.manageTabContentTabCustom} className={`coverImageButtonTab ${this.selectClassOption(selectedTabId, const2)}`}>
             <div className="buttonLabel" onClick={this.manageTabContentTabCustom}>
               {'CUSTOM IMAGES'}
             </div>
           </div>
-          <div className={`coverImageButtonTab ${this.selectClassOption(selectedTabId, const3)}`}>
+          <div onClick={this.manageTabContentTabUpload} className={`coverImageButtonTab ${this.selectClassOption(selectedTabId, const3)}`}>
             <div className="buttonLabel" onClick={this.manageTabContentTabUpload}>
               {'UPLOAD IMAGES'}
             </div>
