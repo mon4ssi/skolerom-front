@@ -19,6 +19,8 @@ import { id } from 'date-fns/locale';
 import { CustomImageFormSimple } from './CustomImageFormSimple/CustomImageFormSimple';
 import { Pagination } from 'components/common/Pagination/Pagination';
 import { MoreOptionsCustomImage } from './MoreOptionsCustomImage/MoreOptionsCustomImage';
+import { CustomImageForm } from 'assignment/view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
+import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 
 const const1 = 1;
 const const2 = 2;
@@ -37,6 +39,8 @@ interface SelectCoverImageState {
   selectedTabId: number;
   currentPage: number;
   totalNumberOfPages: number;
+  currentAttachmentId: number;
+  currentAttachment: Attachment | null;
 }
 
 @observer
@@ -53,21 +57,39 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
       selectedTabId: 1,
       currentPage: 1,
       totalNumberOfPages: 0,
+      currentAttachmentId: 0,
+      currentAttachment: null,
     };
   }
 
   public renderTabById = (media: Array<Attachment>, selectedTabId: number) => {
     switch (selectedTabId) {
       case const1:
-        return this.renderMediaWP(media);
+        return this.state.mediaWP!.length! === 0 ? this.addMedia() : this.renderMediaWP(media);
       case const2:
         return this.renderMediaCustom(media);
       case const3:
-        return this.renderUploadForm();
+        return this.state.currentAttachmentId === 0 ? this.renderUploadForm() : this.renderEditForm();
       default:
         break;
     }
   }
+
+  public addMedia = () => (
+    <div style={{ width: '100%', height: '100%', textAlign: 'center' }}>
+
+      <div style={{ margin: '40px', paddingLeft: '20%', paddingRight: '20%' }}>
+        <div>
+          <img className="buttonImgAddMedia" src={img} alt={'def'} title={'def'} />
+        </div>
+        <div>
+          {'No images available, please upload a custom image.'}
+        </div>
+
+      </div>
+      <button className="CreateButton" onClick={this.manageTabContentTabUpload}>{'Upload image'}</button>
+    </div>
+  )
 
   public renderMediaWP = (mediaWP: Array<Attachment>) => (
     mediaWP.map(img =>
@@ -78,27 +100,62 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
       </button>
     )))
 
-  public editItem = async () => {
-    this.setState({ selectedTabId: 3 });
+  public editItem = async (attachmentid?: number, attachment?: Attachment) => {
+    this.setState({ selectedTabId: const3, currentAttachmentId: attachmentid!, currentAttachment: attachment! });
   }
 
   public onRenderThirdTab = (id: number) => {
     // console.log
   }
 
-  public removeItem = async () => {
-    // console.log
+  public removeItem = async (attachmentid?: number) => {
+    const deleteConfirmation = await this.confirmDeleteListItem();
+    if (true!) {
+      /* this.toggleAttachment(); */
+    }
+    if (deleteConfirmation!) {
+      await this.articleService.deleteCustomImage(attachmentid!);
+      Notification.create({
+        type: NotificationTypes.SUCCESS,
+        title: intl.get('new assignment.notification.success_removing_image'),
+      });
+      this.setState({ selectedTabId: 2 });
+      const mediaImgsCustom = (await this.articleService.fetchCustomImages('', this.state.currentPage!)).myCustomImages;
+      this.setState({ mediaCustomImgs: mediaImgsCustom! });
+    }
+  }
+
+  public confirmDeleteListItem = async () => {
+    /* this.closeActionMenu(); */
+
+    const isDeletionApproved = await Notification.create({
+      type: NotificationTypes.CONFIRM,
+      title: intl.get('assignment list.Are you sure'),
+      submitButtonTitle: intl.get('notifications.delete')
+    });
+
+    if (isDeletionApproved) {
+      return true;
+    }
+  }
+
+  public handleClick = async (attachmentid?: number) => {
+    this.setState({ currentAttachmentId: attachmentid! });
+  }
+
+  public onResetId = async (attachmentid?: number) => {
+    this.setState({ currentAttachmentId: attachmentid! });
   }
 
   public renderMediaCustom = (mediaCustom: Array<Attachment>) => (
     mediaCustom.map(img =>
     (
-      <button key={img.path} onClick={() => this.changeFeaturedImage(img.path)} className={(img.path === this.state.imagenDefault) ? 'active selectedButton' : 'selectedButton'}>
-        {true && <MoreOptionsCustomImage attachmentId={img.id} onEdit={this.editItem} onRemove={this.removeItem} />}
-        <img className="imageForCoverCustom" key={img.path} src={img.path} />
-        <div className="imageInfo">
+      <button key={img.path} className={(img.path === this.state.imagenDefault) ? 'active selectedButton' : 'selectedButton'}>
+        {<MoreOptionsCustomImage attachment={img} attachmentId={img.id} onEdit={this.editItem} onRemove={this.removeItem} onClick={this.handleClick} onResetId={this.onResetId} />}
+        <img onClick={() => this.state.currentAttachmentId! === 0 && this.changeFeaturedImage(img.path)} className="imageForCoverCustom" key={img.path} src={img.path} />
+        <div onClick={() => this.state.currentAttachmentId! === 0 && this.changeFeaturedImage(img.path)} className="imageInfo">
           <div className="rowImageInfo">Title:{img.title}</div>
-          <div className="rowImageInfo">Source:{img.source ? img.source : ''}</div>
+          <div className="rowImageInfo">Source:{img.source === null ? img.src : img.source}</div>
         </div>
         <img className="icon" src={greenCheck} />
 
@@ -141,6 +198,13 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
       </div>
     );
   }
+
+  public renderEditForm = () => (
+    <div style={{ width: '100%' }}>
+      <CustomImageForm attachment={this.state.currentAttachment!} onRedirectToList={this.goToCustomImgAttachmentList} />
+    </div>
+  )
+
   public renderQuestion = (title: string, index: number) => (
     <div className="question flexBox alignCenter" key={`question-${index}`}>
       <div className="questionNumber flexBox alignCenter justifyCenter">{index + 1}</div>
@@ -203,8 +267,11 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
 
   public changeFeaturedImage = (path: string) => {
     const { currentEntity } = this.props;
-    currentEntity!.setFeaturedImageFromCover(path);
-    this.setState({ imagenDefault: path });
+    const { currentAttachmentId } = this.state;
+    if (currentAttachmentId! === 0) {
+      currentEntity!.setFeaturedImageFromCover(path);
+      this.setState({ imagenDefault: path });
+    }
   }
 
   public manageTabContentTabWP = () => (

@@ -12,12 +12,16 @@ import { EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 
 import './MoreOptionsCustomImage.scss';
+import { Attachment } from 'assignment/Assignment';
 
 interface MoreOptionsCustomImageWrapperProps {
   question?: EditableQuestion;
+  attachment?: Attachment;
   attachmentId: number;
-  onEdit: () => Promise<void>;
-  onRemove: () => Promise<void>;
+  onClick?: (id?: number) => Promise<void>;
+  onResetId?: (id?: number) => Promise<void>;
+  onEdit: (id?: number, attachment?: Attachment) => Promise<void>;
+  onRemove: (id?: number) => Promise<void>;
 }
 
 class MoreOptionsCustomImageWrapper extends Component<MoreOptionsCustomImageWrapperProps> {
@@ -25,17 +29,24 @@ class MoreOptionsCustomImageWrapper extends Component<MoreOptionsCustomImageWrap
     isMoreOptionsCustomImageTooltipVisible: false
   };
 
-  public handleClickOutside = () =>
-    this.setState({ isMoreOptionsCustomImageTooltipVisible: false })
+  public handleClickOutside = () => {
+    this.setState({ isMoreOptionsCustomImageTooltipVisible: false });
+    this.props.onResetId!(this.state.isMoreOptionsCustomImageTooltipVisible! && this.props.attachmentId !== 0 ? this.props.attachmentId! : 0);
+  }
 
-  public handleClickIcon = () =>
+  public handleClickIcon = () => {
     this.setState({
       isMoreOptionsCustomImageTooltipVisible: !this.state.isMoreOptionsCustomImageTooltipVisible
-    })
+    });
+    this.props.onClick!(this.props.attachmentId!);
+  }
+  public edit = async (event: React.MouseEvent<HTMLAnchorElement>) => {
+    this.props.onEdit(this.props.attachmentId, this.props.attachment);
+  }
 
-  public edit = async (event: React.MouseEvent<HTMLAnchorElement>) => this.props.onEdit();
-
-  public remove = async (event: React.MouseEvent<HTMLAnchorElement>) => this.props.onRemove();
+  public remove = async (event: React.MouseEvent<HTMLAnchorElement>) => {
+    this.props.onRemove(this.props.attachmentId!);
+  }
 
   public renderMoreOptionsCustomImage = () => (
     <div className="tooltip" >
