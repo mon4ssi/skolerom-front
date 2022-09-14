@@ -1,0 +1,98 @@
+
+.MoreOptionsCustomImage {
+    cursor: pointer;
+    position: absolute;
+  
+    button {
+      padding: 0px;
+      background: transparent;
+      margin-left: 0px;
+  
+      &:focus {
+        /* outline: black;
+        outline-style: auto; */
+      }
+    }
+
+    .moreIcon{
+      top: 10px;
+      max-height: 25px;
+      max-width: 25px;
+      position: relative;
+      z-index: 1;
+    }
+  
+    .tooltip .bottom {
+      top: 45px;
+      right: -101px;
+      position: absolute;
+      background: #fff;
+      border-radius: 8px;
+      border: 1px solid #596A75;
+      padding: 11px;
+      cursor: default;
+      z-index: 34;
+      ul {
+        width: max-content;
+  
+        li {
+          margin-bottom: 10px;
+          justify-content: flex-end;
+          cursor: pointer;
+          align-items: center;
+  
+          a {
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+  
+            &:focus {
+              outline: black;
+              outline-style: auto;
+              outline-offset: 2px;
+            }
+          }
+  
+          span {
+            font-size: 0.7825rem;
+            font-weight: 400;
+          }
+  
+          img {
+            margin-left: 13px;
+            width: 18px;
+            height: 18px;
+          }
+  
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+  
+      i {
+        position: absolute;
+        top: -5px;
+        left: 14%;
+        margin-top: -12px;
+        width: 12px;
+        height: 24px;
+        overflow: hidden;
+        transform: rotate(-0.25turn);
+  
+        &::after {
+          content: '';
+          position: absolute;
+          width: 12px;
+          height: 12px;
+          left: 0;
+          top: 50%;
+          transform: translate(-50%, -50%) rotate(-45deg);
+          background-color: #fff;
+          border: 1px solid #596A75;
+        }
+      }
+    }
+  }
+
+  

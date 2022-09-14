@@ -338,7 +338,8 @@
     "notification": {
       "error_single_upload": "Feil ved opplasting av gjeldende bilde",
       "error_multiple_upload": "Feil ved opplasting av gjeldende bilder",
-      "success": "Bilder ble lastet opp"
+      "success": "Bildeopplastningen var vellykket",
+      "success_removing_image": "Bildet ble fjernet"
     },
     "updateCustomImagesForm": {
       "title": "Tittel",
@@ -352,8 +353,8 @@
       "counter_message_1": "Du har valgt",
       "counter_message_2": "bilder.",
       "upload_images": "Laste opp",
-      "message_success_single": "Bildet er lastet opp",
-      "message_success_multiple": "Bilder ble lastet opp"
+      "message_success_single": "Bildeopplastningen var vellykket",
+      "message_success_multiple": "Bildeopplastningen var vellykket"
     },
     "images_empty_list": "No images available, please upload a custom image",
     "videos_from_article": "Video frå artikkel",

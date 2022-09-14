@@ -338,7 +338,8 @@
     "notification": {
       "error_single_upload": "Error uploading the current image",
       "error_multiple_upload": "Error uploading the current images",
-      "success": "Images uploaded successfuly"
+      "success": "Images uploaded successfuly",
+      "success_removing_image": "Image removed succesfully"
     },
     "updateCustomImagesForm": {
       "title": "Title",
