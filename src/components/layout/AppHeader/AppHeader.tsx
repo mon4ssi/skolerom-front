@@ -122,14 +122,14 @@ const renderHeaderLink = (link: HeaderNavigationLink) => {
   if (link.dropdown) {
     const renderSubMenuSubMenu = (item: HeaderNavigationLink) => (
         <li key={item.name} className={'AppHeader__dropdownItem__subItem'}>
-          <a href={item.url} title={intl.get(`header.title.${item.name}`)}>{intl.get(`header.${item.name}`)}</a>
+          <a href={item.url} title={item.name}>{item.name}</a>
         </li>
     );
     const renderSubmenu = (item: HeaderNavigationLink) => {
       if (item.dropdown) {
         return (
           <li key={item.name} className={'AppHeader__dropdownItem'}>
-            <a href={item.url} title={intl.get(`header.title.${item.name}`)}>{intl.get(`header.${item.name}`)}</a>
+            <a href={item.url} title={item.name}>{item.name}</a>
             <ul className="AppHeader__dropdownItem__subMenu">
               {item.submenuItems!.map(renderSubMenuSubMenu)}
             </ul>
@@ -138,7 +138,7 @@ const renderHeaderLink = (link: HeaderNavigationLink) => {
       }
       return (
         <li key={item.name} className={'AppHeader__dropdownItem'}>
-          <a href={item.url} title={intl.get(`header.title.${item.name}`)}>{intl.get(`header.${item.name}`)}</a>
+          <a href={item.url} title={item.name}>{item.name}</a>
         </li>
       );
     };
@@ -146,7 +146,7 @@ const renderHeaderLink = (link: HeaderNavigationLink) => {
     return (
       <li key={link.name} className="AppHeader__navigationItem tc1 fs17 fw500">
         <div className="AppHeader__navigationItemText">
-          <a href={link.url} className="AppHeader__dropdown" title={intl.get(`header.title.${link.name}`)}>{intl.get(`header.${link.name}`)}</a>
+          <a href={link.url} className="AppHeader__dropdown" title={link.name}>{link.name}</a>
           <div className={'AppHeader__submenuWrapper'}>
             <ul className={'AppHeader__submenu'}>
               {link.submenuItems!.map(renderSubmenu)}
@@ -160,7 +160,7 @@ const renderHeaderLink = (link: HeaderNavigationLink) => {
   return (
     <li key={link.name} className="AppHeader__navigationItem tc1 fs17 fw500">
       <div className="AppHeader__navigationItemText">
-        <a href={link.url} title={intl.get(`header.title.${link.name}`)}>{intl.get(`header.${link.name}`)}</a>
+        <a href={link.url} title={link.name}>{link.name}</a>
       </div>
     </li>
   );
@@ -189,6 +189,7 @@ interface HeaderState {
   modalVisible: Modals;
   isModalKeyboard: boolean;
   isMobileModalOpen: boolean;
+  linksMenu: Array<HeaderNavigationLink>;
 }
 
 @inject('loginStore', 'uiStore')
@@ -197,7 +198,8 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   public readonly state: HeaderState = {
     modalVisible: Modals.NONE,
     isModalKeyboard: false,
-    isMobileModalOpen: false
+    isMobileModalOpen: false,
+    linksMenu: []
   };
 
   private renderUserModalIfNeeded() {
@@ -571,15 +573,25 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
 
   public async componentDidMount() {
     document.addEventListener('keyup', this.handleKeyboardControl);
+    this.getdataMenu();
   }
   public componentWillUnmount() {
     document.removeEventListener('keyup', this.handleKeyboardControl);
   }
 
+  public getdataMenu = async () => {
+    const { uiStore } = this.props;
+    const linksLis2t = await this.props.loginStore!.getMenuData(uiStore!.currentLocale);
+    this.setState({
+      linksMenu: linksLis2t
+    });
+  }
+
   public renderNavigation = () => {
     const { uiStore } = this.props;
-    const linksList = uiStore!.currentLocale === 'nn' ? nynorskHeaderLinks : headerLinks;
+    // const linksList = uiStore!.currentLocale === 'nn' ? nynorskHeaderLinks : headerLinks;
     const tabletLinksList = uiStore!.currentLocale === 'nn' ? nynorskHeaderLinks : headerLinks;
+    const linksList = this.state.linksMenu;
 
     return (
       <>
@@ -590,7 +602,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
           {this.renderAccountTab()}
         </ul>
         <ul className="AppHeader__navigation AppHeader__navigation_tablet">
-          {tabletLinksList.map(renderHeaderLink)}
+          {linksList.map(renderHeaderLink)}
           {this.renderQuestionTab()}
           {this.renderAccountTab()}
         </ul>
