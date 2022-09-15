@@ -187,7 +187,7 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
       case TeachingPathNodeType.Domain:
         return <DomainTeachingPath finishReading={this.finishReadingDomain} />;
       default:
-        return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers} onimage={this.props.questionaryTeachingPathStore!.currentTeachingPath!.featuredImage} />;
+        return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers} onimage={this.props.questionaryTeachingPathStore!.currentTeachingPath!.backgroundImage} />;
     }
   }
 
@@ -339,8 +339,8 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
     const node = questionaryTeachingPathStore!.currentNode;
     if (node && node.breadcrumbs) {
       const onlyOnePath = (node.children.length === 1) ? true : false;
-      const checkThisType = (node.children && node.children[0].items![0].type);
-      const idSkill = node.children[0].id;
+      const checkThisType = (node.children) ? (node.children[0]) ? node.children[0].items![0].type : '' : '';
+      const idSkill = (node.children[0]) ? node.children[0].id : 0;
       let isDisabled = true;
       if (onlyOnePath) {
         switch (checkThisType) {
