@@ -536,6 +536,14 @@ export class EditTeachingPathStore {
   public async getGrepFiltersTeachingPath(locale: string, grades: string, subjects: string, coreElements?: string, mainTopics?: string, goals?: string, source?: string) {
     return this.teachingPathService.getGrepFiltersTeachingPath(locale, grades, subjects, coreElements, mainTopics, goals, source);
   }
+  @action
+  public async getGrepFiltersMyTeachingPath(locale: string, grades: string, subjects: string, coreElements?: string, mainTopics?: string, goals?: string, source?: string) {
+    return this.teachingPathService.getGrepFiltersMyTeachingPath(locale, grades, subjects, coreElements, mainTopics, goals, source);
+  }
+  @action
+  public async getGrepFiltersMyschoolTeachingPath(locale: string, grades: string, subjects: string, coreElements?: string, mainTopics?: string, goals?: string, source?: string) {
+    return this.teachingPathService.getGrepFiltersMyschoolTeachingPath(locale, grades, subjects, coreElements, mainTopics, goals, source);
+  }
 
   @action
   public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number) {

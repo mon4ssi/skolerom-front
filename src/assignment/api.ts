@@ -351,6 +351,32 @@ export class AssignmentApi implements AssignmentRepo {
     return response.data;
   }
 
+  public async getGrepFiltersMyAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep> {
+    const response = await API.get('api/teacher/assignments/draft/grep/filters', {
+      params: {
+        locale,
+        grades,
+        subjects,
+        coreElements,
+        goals
+      }
+    });
+    return response.data;
+  }
+
+  public async getGrepFiltersMySchoolAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep> {
+    const response = await API.get('api/teacher/assignments/myschool/grep/filters', {
+      params: {
+        locale,
+        grades,
+        subjects,
+        coreElements,
+        goals
+      }
+    });
+    return response.data;
+  }
+
   public async getStudentAssignmentList(filter: Filter) {
     try {
       if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);

@@ -754,6 +754,12 @@ export class NewAssignmentStore {
   public async getGrepFiltersAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string) {
     return this.assignmentService.getGrepFiltersAssignment(locale, grades, subjects, coreElements, goals);
   }
+  public async getGrepFiltersMyAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string) {
+    return this.assignmentService.getGrepFiltersMyAssignment(locale, grades, subjects, coreElements, goals);
+  }
+  public async getGrepFiltersMySchoolAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string) {
+    return this.assignmentService.getGrepFiltersMySchoolAssignment(locale, grades, subjects, coreElements, goals);
+  }
   public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number) {
     return this.teachingPathService.getGrepGoalsFilters(grepCoreElementsIds, grepMainTopicsIds, gradesIds, subjectsIds, orderGoalsCodes, perPage, page);
   }
