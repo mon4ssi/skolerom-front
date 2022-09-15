@@ -390,6 +390,34 @@ export class TeachingPathApi implements TeachingPathRepo {
     });
     return response.data;
   }
+  public async getGrepFiltersMyTeachingPath(locale: string, grades: string, subjects: string, coreElements?: string, mainTopics?:string, goals?: string, source?:string): Promise<FilterGrep>  {
+    const response = await API.get('api/teacher/teaching-paths/draft/grep/filters', {
+      params: {
+        locale,
+        grades,
+        subjects,
+        coreElements,
+        mainTopics,
+        goals,
+        source
+      }
+    });
+    return response.data;
+  }
+  public async getGrepFiltersMyschoolTeachingPath(locale: string, grades: string, subjects: string, coreElements?: string, mainTopics?:string, goals?: string, source?:string): Promise<FilterGrep>  {
+    const response = await API.get('api/teacher/teaching-paths/myschool/grep/filters', {
+      params: {
+        locale,
+        grades,
+        subjects,
+        coreElements,
+        mainTopics,
+        goals,
+        source
+      }
+    });
+    return response.data;
+  }
 
   public async getGrepFilters(grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep>  {
     const response = await API.get('api/teacher/grep/filters', {

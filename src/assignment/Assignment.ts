@@ -54,6 +54,8 @@ export interface AssignmentRepo {
   }>;
   copyAssignment(id: number): Promise<number>;
   getGrepFiltersAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
+  getGrepFiltersMyAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
+  getGrepFiltersMySchoolAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
   downloadTeacherGuidancePDF(id: number): Promise<void>;
 }
 

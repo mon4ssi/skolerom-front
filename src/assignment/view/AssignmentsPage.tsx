@@ -29,9 +29,15 @@ const MAGICNUMBER100 = -1;
 const MAGICNUMBER1 = 1;
 const SOURCE = 'ASSIGNMENT';
 const renderTeacherRedirect = () => <Redirect to="/assignments/all" />;
-const renderAllAssignments = () => <MyAssignments typeOfAssignmentsList="all" />;
-const renderMyAssignments = () => <MyAssignments typeOfAssignmentsList="my" />;
-const renderMySchoolAssignments = () => <MyAssignments typeOfAssignmentsList="myschool" />;
+// const renderAllAssignments = (testFunction: any) => <MyAssignments typeOfAssignmentsList="all" />;
+function renderAllAssignments(testFunction: any) {
+  return <MyAssignments typeOfAssignmentsList="all" testFunction={testFunction} />;
+}
+// const renderMyAssignments = () => <MyAssignments typeOfAssignmentsList="my" />;
+const renderMyAssignments = (testFunction: any) => (
+  < MyAssignments typeOfAssignmentsList="my" testFunction={testFunction} />
+);
+const renderMySchoolAssignments = (testFunction: any) => (<MyAssignments typeOfAssignmentsList="myschool" testFunction={testFunction} />);
 
 const renderStudentsAssignments = () => <StudentAssignments />;
 const renderStudentEvaluation = () => <StudentEvaluation />;
@@ -48,7 +54,7 @@ interface Props extends RouteComponentProps {
 
 const currentUserRole = JSON.parse(localStorage.getItem('USER_DATA') || '{}').role;
 
-const teacherRoutes = (
+const teacherRoutes = (testFunction: any) => (
   <Switch>
     <Route
       path="/assignments"
@@ -57,15 +63,15 @@ const teacherRoutes = (
     />
     <Route
       path="/assignments/all"
-      render={renderAllAssignments}
+      render={() => (renderAllAssignments(testFunction))}
     />
     <Route
       path="/assignments/myschool"
-      render={renderMySchoolAssignments}
+      render={() => (renderMySchoolAssignments(testFunction))}
     />
     <Route
       path="/assignments/my"
-      render={renderMyAssignments}
+      render={() => (renderMyAssignments(testFunction))}
     />
     <Route
       path="/assignments/answers/:entityId"
@@ -78,7 +84,7 @@ const teacherRoutes = (
   </Switch>
 );
 
-const studentRoutes = (
+const studentRoutes = (testFunction: any) => (
   <Switch>
     <Route
       exact
@@ -96,7 +102,7 @@ const studentRoutes = (
   </Switch>
 );
 
-const contentManagerRoutes = (
+const contentManagerRoutes = (testFunction: any) => (
   <Switch>
     <Route
       path="/assignments"
@@ -118,17 +124,28 @@ const contentManagerRoutes = (
   </Switch>
 );
 
-const AssignmentsPageRouter = () => (
+const AssignmentsPageRouter = (testFunction: any) => (
   <Switch>
-
-    {currentUserRole === UserType.Teacher && teacherRoutes}
-    {currentUserRole === UserType.Student && studentRoutes}
-    {currentUserRole === UserType.ContentManager && contentManagerRoutes}
+    {currentUserRole === UserType.Teacher && teacherRoutes(testFunction)}
+    {currentUserRole === UserType.Student && studentRoutes(testFunction)}
+    {currentUserRole === UserType.ContentManager && contentManagerRoutes(testFunction)}
 
     <Route path="/assignments/school" />
     <Route path="/assignments/favorites" />
   </Switch>
 );
+
+// const AssignmentsPageRouter = () => (
+//   <Switch>
+
+//     {currentUserRole === UserType.Teacher && teacherRoutes}
+//     {currentUserRole === UserType.Student && studentRoutes}
+//     {currentUserRole === UserType.ContentManager && contentManagerRoutes}
+
+//     <Route path="/assignments/school" />
+//     <Route path="/assignments/favorites" />
+//   </Switch>
+// );
 
 interface State {
   myValueLocale: Array<number>;
@@ -505,7 +522,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       }
     }
     this.setState({
-      myValueReading : valueSelectedReading
+      myValueReading: valueSelectedReading
     });
     QueryStringHelper.set(
       this.props.history,
@@ -534,7 +551,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       }
     }
     this.setState({
-      myValueSource : valueSelectedSource
+      myValueSource: valueSelectedSource
     });
     QueryStringHelper.set(
       this.props.history,
@@ -550,7 +567,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     const { valueSubjectsOptions, valueCoreOptions, valueMultiOptions, valueGradesOptions } = this.state;
     this.setState(
       {
-        myValueCore : newValue
+        myValueCore: newValue
       },
       () => {
         if (this.state.myValueSubject.length > 0 || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti.length > 0 || this.state.myValueReading.length > 0 || this.state.myValueGrade.length > 0) {
@@ -565,7 +582,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     });
     this.setState({ valueCoreOptions: ArrayValue });
     this.assigValueData(String(this.state.myValueLocale), String(this.state.myValueGrade), String(this.state.myValueSubject), String(ArrayValue), String(this.state.myValueGoal));
-    let singleString : string = '';
+    let singleString: string = '';
     if (newValue.length > 0) {
       newValue.forEach((e, index) => {
         singleString = (index === 0) ? String(e.value) : `${singleString},${String(e.value)}`;
@@ -583,7 +600,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     const ArrayValue: Array<number> = [];
     this.setState(
       {
-        myValueGoal : newValue
+        myValueGoal: newValue
       },
       () => {
         if (this.state.myValueSubject.length > 0 || this.state.myValueCore.length > 0 || this.state.myValueGoal.length > 0 || this.state.myValueMulti.length > 0 || this.state.myValueReading.length > 0 || this.state.myValueGrade.length > 0) {
@@ -598,7 +615,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     });
     this.setState({ valueGoalsOptions: ArrayValue });
     this.assigValueData(String(this.state.myValueLocale), String(this.state.myValueGrade), String(this.state.myValueSubject), String(this.state.myValueCore), String(ArrayValue));
-    let singleString : string = '';
+    let singleString: string = '';
     if (newValue.length > 0) {
       newValue.forEach((e, index) => {
         singleString = (index === 0) ? String(e.value) : `${singleString},${String(e.value)}`;
@@ -647,7 +664,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
   }
 
   public renderValueOptions = (data: FilterGrep, type: string) => {
-    const returnArray : Array<GreepSelectValue> = [];
+    const returnArray: Array<GreepSelectValue> = [];
     if (type === 'core') {
       data!.coreElementsFilters!.forEach((element) => {
         returnArray.push({
@@ -688,7 +705,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
   }
 
   public renderValueOptionsNumbers = (data: FilterGrep, type: string) => {
-    const returnArray : Array<Greep> = [];
+    const returnArray: Array<Greep> = [];
     if (type === 'source') {
       data!.sourceFilters!.forEach((element) => {
         returnArray.push({
@@ -728,7 +745,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
   }
 
   public renderValueOptionsBasics = (data: FilterGrep, type: string) => {
-    const returnArray : Array<GrepFilters> = [];
+    const returnArray: Array<GrepFilters> = [];
     if (type === 'subject') {
       data!.subjectFilters!.forEach((element) => {
         returnArray.push({
@@ -758,7 +775,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
   }
 
   public renderValueOptionsGoals = (data: Array<GoalsData>) => {
-    const returnArray : Array<GreepSelectValue> = [];
+    const returnArray: Array<GreepSelectValue> = [];
     data!.forEach((element) => {
       returnArray.push({
         // tslint:disable-next-line: variable-name
@@ -792,24 +809,39 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     }
   }
 
-  public async assigValueData(locale: string, grades: string, subjects: string, core?: string, goals?: string) {
+  public async assigValueData(locale: string, grades: string, subjects: string, core?: string, goals?: string, typeList?: string) {
+
     const { newAssignmentStore } = this.props;
 
     this.setState({ filtersAjaxLoading: true });
     this.setState({ filtersAjaxLoadingGoals: true });
+    let grepFiltersDataAwait = null;
+    switch (typeList) {
+      case 'all':
+        grepFiltersDataAwait = await newAssignmentStore!.getGrepFiltersAssignment(locale, grades, subjects, core, goals);
+        break;
+      case 'my':
+        grepFiltersDataAwait = await newAssignmentStore!.getGrepFiltersMyAssignment(locale, grades, subjects, core, goals);
+        break;
+      case 'myschool':
+        grepFiltersDataAwait = await newAssignmentStore!.getGrepFiltersMySchoolAssignment(locale, grades, subjects, core, goals);
+        break;
+      default:
+        grepFiltersDataAwait = await newAssignmentStore!.getGrepFiltersAssignment(locale, grades, subjects, core, goals);
+        break;
+    }
 
-    const grepFiltersDataAwait = await newAssignmentStore!.getGrepFiltersAssignment(locale, grades, subjects, core, goals);
     this.setState({
-      grepFiltersData : grepFiltersDataAwait
+      grepFiltersData: grepFiltersDataAwait
     });
     this.setState({
-      optionsCore : this.renderValueOptions(grepFiltersDataAwait, 'core')
+      optionsCore: this.renderValueOptions(grepFiltersDataAwait, 'core')
     });
     this.setState({
-      optionsMulti : this.renderValueOptionsNumbers(grepFiltersDataAwait, 'multi')
+      optionsMulti: this.renderValueOptionsNumbers(grepFiltersDataAwait, 'multi')
     });
     this.setState({
-      optionsReading : this.renderValueOptionsNumbers(grepFiltersDataAwait, 'reading')
+      optionsReading: this.renderValueOptionsNumbers(grepFiltersDataAwait, 'reading')
     });
     this.setState({
       optionsSource: this.renderValueOptionsNumbers(grepFiltersDataAwait, 'source')
@@ -819,7 +851,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     });
     this.setState(
       {
-        optionsSubjects : this.renderValueOptionsBasics(grepFiltersDataAwait, 'subject')
+        optionsSubjects: this.renderValueOptionsBasics(grepFiltersDataAwait, 'subject')
       },
       () => {
         this.setState(
@@ -827,7 +859,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
             subjectsArrayFilter: this.renderDataSubjects(this.state.optionsSubjects)
           },
           () => {
-            const ArrayValue : Array<number> = [];
+            const ArrayValue: Array<number> = [];
             this.state.subjectsArrayFilter!.forEach((element) => {
               this.state.myValueSubject.forEach((el) => {
                 if (Number(element.id) === Number(el)) {
@@ -849,7 +881,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     );
     this.setState(
       {
-        optionsGrades : this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
+        optionsGrades: this.renderValueOptionsBasics(grepFiltersDataAwait, 'grade')
       },
       () => {
         this.setState(
@@ -918,7 +950,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
   }
 
   public renderDataSubjects = (data: Array<GrepFilters>) => {
-    const returnArray : Array<Subject> = [];
+    const returnArray: Array<Subject> = [];
     data!.forEach((element) => {
       returnArray.push({
         // tslint:disable-next-line: variable-name
@@ -1123,14 +1155,16 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       AssignmentsPage_noTabs: !this.hasTabNavigation()
     });
 
+    // const testFunction = (string: any) => (console.log(string));
+    const testFunction = (cadena: any) => (this.assigValueData('', '', '', '', '', cadena));
+
     return (
       <div className={classes}>
         {!isAnswerPage && this.renderTitle()}
         {this.renderTabNavigations()}
 
         {this.renderSearchFilter()}
-
-        <AssignmentsPageRouter />
+        {AssignmentsPageRouter(testFunction)}
 
         {this.renderPagination()}
       </div>

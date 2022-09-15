@@ -18,6 +18,7 @@ interface Props extends RouteComponentProps {
   newAssignmentStore?: NewAssignmentStore;
   assignmentListStore?: AssignmentListStore;
   typeOfAssignmentsList: string;
+  testFunction?: Function;
 }
 
 @inject('newAssignmentStore', 'assignmentListStore')
@@ -38,6 +39,10 @@ class MyAssignments extends Component<Props> {
   private unregisterListener: () => void = () => undefined;
 
   private async fetchAssignments() {
+    if (this.props.testFunction !== undefined) {
+      this.props.testFunction(this.props.typeOfAssignmentsList);
+    }
+
     const { filter } = this.props.assignmentListStore!;
     const myFilterSchool = (this.props.typeOfAssignmentsList === 'myschool') ? 1 : 0;
     filter.page = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.PAGE, 1);
@@ -64,6 +69,7 @@ class MyAssignments extends Component<Props> {
   }
 
   public componentDidMount = async () => {
+
     const { assignmentListStore, typeOfAssignmentsList } = this.props;
 
     assignmentListStore!.setTypeOfAssignmentsList(typeOfAssignmentsList);
@@ -73,7 +79,7 @@ class MyAssignments extends Component<Props> {
   }
 
   public componentDidUpdate = async (prevProps: Props) => {
-    const { assignmentListStore, typeOfAssignmentsList } = this.props;
+    const { assignmentListStore, typeOfAssignmentsList, testFunction } = this.props;
 
     if (prevProps.typeOfAssignmentsList !== typeOfAssignmentsList) {
       assignmentListStore!.setTypeOfAssignmentsList(typeOfAssignmentsList);
