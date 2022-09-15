@@ -39,7 +39,7 @@ class MyAssignments extends Component<Props> {
   private unregisterListener: () => void = () => undefined;
 
   private async fetchAssignments() {
-    if (this.props.testFunction !== undefined) {
+    if (this.props.testFunction !== undefined && typeof this.props.testFunction === 'function') {
       this.props.testFunction(this.props.typeOfAssignmentsList);
     }
 
