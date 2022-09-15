@@ -189,6 +189,10 @@ class TeachingPathsListComponent extends Component<Props, State> {
   public fetchTeachingPaths() {
     const { filter } = this.props.teachingPathsListStore!;
 
+    if (this.props.isNotStudent) {
+      this.assigValueData('', '', '', '', '', '', '', true, true);
+    }
+
     filter.page = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.PAGE, 1);
     filter.locale = QueryStringHelper.getString(this.props.history, QueryStringKeys.LOCALE);
     filter.grade = QueryStringHelper.getString(this.props.history, QueryStringKeys.GRADE);
@@ -222,7 +226,26 @@ class TeachingPathsListComponent extends Component<Props, State> {
     this.setState({ filtersAjaxLoading: true });
     this.setState({ filtersAjaxLoadingGoals: true });
 
-    const grepFiltersDataAwait = await editTeachingPathStore!.getGrepFiltersTeachingPath(locale, grades, subjects, core, multi, goals, source);
+    let grepFiltersDataAwait = null;
+
+    switch (this.props.typeOfTeachingPathsList) {
+      case 'all':
+        grepFiltersDataAwait = await editTeachingPathStore!.getGrepFiltersTeachingPath(locale, grades, subjects, core, multi, goals, source);
+        break;
+      case 'my':
+        grepFiltersDataAwait = await editTeachingPathStore!.getGrepFiltersMyTeachingPath(locale, grades, subjects, core, multi, goals, source);
+        break;
+
+      case 'myschool':
+      case 'school':
+
+        grepFiltersDataAwait = await editTeachingPathStore!.getGrepFiltersMyschoolTeachingPath(locale, grades, subjects, core, multi, goals, source);
+        break;
+
+      default:
+        grepFiltersDataAwait = await editTeachingPathStore!.getGrepFiltersTeachingPath(locale, grades, subjects, core, multi, goals, source);
+        break;
+    }
 
     this.setState({
       grepFiltersData: grepFiltersDataAwait
@@ -371,12 +394,13 @@ class TeachingPathsListComponent extends Component<Props, State> {
     this.unregisterListener = this.props.history.listen(this.locationUpdateListener);
     if (typeOfTeachingPathsList === 'myschool') {
       this.setState({
-        showMySchool : 1
+        showMySchool: 1
       });
     }
     document.addEventListener('keyup', this.handleKeyboardControl);
+
     if (this.props.isNotStudent) {
-      this.assigValueData('', '', '', '', '', '', '', true, true);
+      // this.assigValueData('', '', '', '', '', '', '', true, true);
       const listGoals = [''];
       this.setState({
         valueStringGoalsOptions: listGoals
@@ -1220,7 +1244,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
     const teachingPaths = teachingPathsListStore!.teachingPathsState === StoreState.LOADING ?
       teachingPathsListStore!.teachingPathsForSkeleton :
       teachingPathsListStore!.teachingPathsList;
-    const classCard = (teachingPaths.length > limitSplicePathname5) ? 'cardList' : 'cardList onlyOneLine' ;
+    const classCard = (teachingPaths.length > limitSplicePathname5) ? 'cardList' : 'cardList onlyOneLine';
     return (
       <div className="teachingPathsList moveListBySearchFilter TpList">
         <h1 className="generalTitle">

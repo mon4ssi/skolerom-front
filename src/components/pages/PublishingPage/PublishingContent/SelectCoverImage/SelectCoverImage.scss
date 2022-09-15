@@ -114,6 +114,7 @@
   font-size: 14px;
   font-weight: 600;
   min-height: 46px;
+  text-transform: uppercase;
   &:hover,
   &.selected,
   &.active {
@@ -216,4 +217,9 @@
     width: 100%;
     overflow: hidden;
     margin: 5px 0px;
+}
+
+.fixed {
+  min-height: 260px;
+  max-height: 260px;
 }
