@@ -333,7 +333,8 @@
       "custom_images": "Egendefinerte bilder",
       "edit": "Rediger bilde",
       "delete": "Slett bilde",
-      "upload_image": "Last opp bilde"
+      "upload_image": "Last opp bilde",
+      "no_images": "Ingen bilder tilgjengelige. Vennligst last opp eget bilde."
     },
     "notification": {
       "error_single_upload": "Feil ved opplasting av gjeldende bilde",

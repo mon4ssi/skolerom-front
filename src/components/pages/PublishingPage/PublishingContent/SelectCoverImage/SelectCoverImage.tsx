@@ -83,7 +83,7 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
           <img className="buttonImgAddMedia" src={img} alt={'def'} title={'def'} />
         </div>
         <div>
-          {'No images available, please upload a custom image.'}
+          {intl.get('new assignment.images_options.no_images')}
         </div>
 
       </div>

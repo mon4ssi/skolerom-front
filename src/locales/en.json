@@ -333,7 +333,8 @@
       "custom_images": "Custom images",
       "edit": "Edit image",
       "delete": "Delete image",
-      "upload_image": "Upload image"
+      "upload_image": "Upload image",
+      "no_images": "No images available. Please upload a custom image."
     },
     "notification": {
       "error_single_upload": "Error uploading the current image",
