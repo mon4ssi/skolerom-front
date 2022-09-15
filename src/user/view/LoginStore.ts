@@ -169,6 +169,16 @@ export class LoginStore {
     const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/maintenance/v1/status`);
     return response.data;
   }
+
+  public async getMenuData(locale: string) {
+    const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/menu_list/v1/get`, {
+      params:
+      {
+        lang: locale
+      }
+    });
+    return response.data;
+  }
   /*
   public async getMaintenance_mode() {
     const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/maintenance/v1/status`);

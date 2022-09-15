@@ -72,28 +72,49 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     this.setState({ isSuperCMCurrentUser: isSuperCM! });
   }
 
+  public openInNewTabView = () => {
+    const { currentEntity: { id } } = this.props.store!;
+    const url: URL = new URL(window.location.href);
+    const urlForEditing: string = `${url.origin}/assignments/view/${id!}`;
+    window.open(urlForEditing);
+  }
+
   public renderViewButton = (isPublished: boolean, history: any, id: number, view: string) =>
   (
     <div className="actionButton">
-      <CreateButton disabled={!isPublished} onClick={() => { history.push(`/assignments/view/${id}`); }} title={view} >
+      <CreateButton disabled={!isPublished} onClick={() => this.openInNewTabView()} title={view} >
         {view}
       </CreateButton>
     </div>
   )
 
+  public openInNewTabTeacherGuidance = () => {
+    const { currentEntity: { id } } = this.props.store!;
+    const url: URL = new URL(window.location.href);
+    const urlForEditing: string = `${url.origin}/assignments/view/${id!}/?open=tg`;
+    localStorage.setItem('isOpen', 'tg');
+    window.open(urlForEditing);
+  }
+
   public renderTeacherGuidanceButton = (guidanceString: string) =>
   (
     <div className="actionButton">
-      <CreateButton disabled={false} onClick={this.handleTeacherGuidance} title={guidanceString} >
+      <CreateButton disabled={false} onClick={() => this.openInNewTabTeacherGuidance()} title={guidanceString} >
         {guidanceString}
       </CreateButton>
     </div>
   )
 
+  public openInNewTabEdit = (id: number) => {
+    const url: URL = new URL(window.location.href);
+    const urlForEditing: string = `${url.origin}/assignments/edit/${id}`;
+    window.open(urlForEditing);
+  }
+
   public renderEditButton = (editString: string, history: any, id: number) =>
   (
     <div className="actionButton">
-      <CreateButton disabled={false} onClick={() => { history.push(`/assignments/edit/${id}`); }} title={editString} >
+      <CreateButton disabled={false} onClick={() => { this.openInNewTabEdit(id); }} title={editString} >
         {editString}
       </CreateButton>
     </div>
