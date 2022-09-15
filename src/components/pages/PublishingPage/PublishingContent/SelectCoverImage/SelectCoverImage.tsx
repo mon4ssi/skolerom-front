@@ -87,7 +87,7 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
         </div>
 
       </div>
-      <button className="CreateButton" onClick={this.manageTabContentTabUpload}>{'Upload image'}</button>
+      <button className="CreateButton" onClick={this.manageTabContentTabUpload}>{intl.get('new assignment.images_options.upload_image')}</button>
     </div>
   )
 
@@ -150,12 +150,12 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
   public renderMediaCustom = (mediaCustom: Array<Attachment>) => (
     mediaCustom.map(img =>
     (
-      <button key={img.path} className={(img.path === this.state.imagenDefault) ? 'active selectedButton' : 'selectedButton'}>
+      <button key={img.path} className={(img.path === this.state.imagenDefault) ? 'active selectedButton' : 'selectedButton fixed'}>
         {<MoreOptionsCustomImage attachment={img} attachmentId={img.id} onEdit={this.editItem} onRemove={this.removeItem} onClick={this.handleClick} onResetId={this.onResetId} />}
         <img onClick={() => this.state.currentAttachmentId! === 0 && this.changeFeaturedImage(img.path)} className="imageForCoverCustom" key={img.path} src={img.path} />
         <div onClick={() => this.state.currentAttachmentId! === 0 && this.changeFeaturedImage(img.path)} className="imageInfo">
-          <div className="rowImageInfo">Title:{img.title}</div>
-          <div className="rowImageInfo">Source:{img.source === null ? img.src : img.source}</div>
+          <div className="rowImageInfo">{`${intl.get('new assignment.updateCustomImagesForm.title')}: ${img.title}`}</div>
+          <div className="rowImageInfo">{`${intl.get('new assignment.updateCustomImagesForm.source')}: ${img.source === null ? img.src : img.source}`}</div>
         </div>
         <img className="icon" src={greenCheck} />
 
@@ -345,17 +345,17 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
         <div className="buttonContent">
           <div onClick={this.manageTabContentTabWP} className={`coverImageButtonTab ${this.selectClassOption(selectedTabId, const1)}`}>
             <div className="buttonLabel" onClick={this.manageTabContentTabWP}>
-              {'IMAGES FROM ARTICLES'}
+              {intl.get('new assignment.images_options.images_from_article')}
             </div>
           </div>
           <div onClick={this.manageTabContentTabCustom} className={`coverImageButtonTab ${this.selectClassOption(selectedTabId, const2)}`}>
             <div className="buttonLabel" onClick={this.manageTabContentTabCustom}>
-              {'CUSTOM IMAGES'}
+              {intl.get('new assignment.images_options.custom_images')}
             </div>
           </div>
           <div onClick={this.manageTabContentTabUpload} className={`coverImageButtonTab ${this.selectClassOption(selectedTabId, const3)}`}>
             <div className="buttonLabel" onClick={this.manageTabContentTabUpload}>
-              {'UPLOAD IMAGES'}
+              {intl.get('new assignment.images_options.upload_image')}
             </div>
           </div>
         </div>
