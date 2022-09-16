@@ -68,6 +68,7 @@ const buildEditableQuestion = (
 
   const title = dto.title;
   const guidance = dto.guidance;
+  const hide_answer = dto.hide_answer;
   const order = dto.orderPosition || index;
   const contentBlocks = dto.content;
 
@@ -76,6 +77,7 @@ const buildEditableQuestion = (
       const question: EditableTextQuestion = new EditableTextQuestion({
         title,
         guidance,
+        hide_answer,
         order,
         assignmentDraft,
         contentBlocks: []
@@ -97,6 +99,7 @@ const buildEditableQuestion = (
         {
           title,
           guidance,
+          hide_answer,
           order,
           assignmentDraft,
           contentBlocks: [],
@@ -124,6 +127,7 @@ const buildEditableQuestion = (
         {
           title,
           guidance,
+          hide_answer,
           order,
           assignmentDraft,
           contentBlocks: [],

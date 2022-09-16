@@ -213,6 +213,7 @@ export const buildQuestionDTO = (question: Question): QuestionDTO => {
     title: question.title,
     guidance: question.guidance,
     orderPosition: question.orderPosition,
+    hide_answer: question.hide_answer,
     content: question.content.map(buildContentBlockDTO),
   };
 

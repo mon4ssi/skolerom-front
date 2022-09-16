@@ -264,7 +264,8 @@
     "inactive": "Inaktiv",
     "due_first": "først",
     "due_last": "sist",
-    "hidden_related": "Skjul artikkel i elevvisningen"
+    "hidden_related": "Skjul artikkel i elevvisningen",
+    "hidden_question": "Skjul svarfelt i elevvisningen"
   },
   "assignment list": {
     "question": "spørsmål",
@@ -466,7 +467,8 @@
     "indicadorgrade": ".",
     "go_back_to_teaching_path": "Oppgaven ble ikke publisert og vil ikke bli lagt til i læringsstien. Er du sikker på at du vil tilbake til læringsstien?",
     "specify": "Spesifiser en eller flere relaterte artikler for å få forslag til bilder, PDF-er, videoer og lyd.",
-    "no_title": "Uten tittel"
+    "no_title": "Uten tittel",
+    "hidden_anwser":"Dette svaret ble merket som skjult"
   },
   "evaluation_page": {
     "title": "Vurdering",

@@ -113,6 +113,7 @@ export interface QuestionDTO {
   title: string;
   guidance: string;
   orderPosition: number;
+  hide_answer: boolean | undefined;
   options?: Array<OptionDTO>;
   content?: Array<ContentBlockDTO>;
 }

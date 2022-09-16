@@ -53,29 +53,29 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
     const { title, id, levels, correspondingLevelArticleId } = article;
     const isStudent = this.props.currentQuestionaryStore!.getCurrentUser()!.type === UserType.Student;
     if (!isStudent) {
-      const articleChildren = levels![0].childArticles!.length ? levels![0].childArticles! : [article];
-      const currentArticleLevelObject = articleChildren.find(article => article.id === correspondingLevelArticleId);
+      // const articleChildren = levels![0].childArticles!.length ? levels![0].childArticles! : [article];
+      // const currentArticleLevelObject = articleChildren.find(article => article.id === correspondingLevelArticleId);
 
       this.setState({
         isShowArticle: true,
         titleCurrentArticle: title,
-        currentArticleChildren: articleChildren,
+        // currentArticleChildren: articleChildren,
         attachedArticleId: id,
         shownArticleId: correspondingLevelArticleId || id,
-        shownArticleLevelId: currentArticleLevelObject ? currentArticleLevelObject.levels![0].wpId : article.levels![0].wpId
+        // shownArticleLevelId: currentArticleLevelObject ? currentArticleLevelObject.levels![0].wpId : article.levels![0].wpId
       });
     }
 
-    const articleChildren = levels![0].childArticles!.length ? levels![0].childArticles! : [article];
-    const currentArticleLevelObject = articleChildren.find(article => article.id === correspondingLevelArticleId);
+    /// const articleChildren = levels![0].childArticles!.length ? levels![0].childArticles! : [article];
+    // const currentArticleLevelObject = articleChildren.find(article => article.id === correspondingLevelArticleId);
 
     this.setState({
       isShowArticle: true,
       titleCurrentArticle: title,
-      currentArticleChildren: articleChildren,
+      // currentArticleChildren: articleChildren,
       attachedArticleId: id,
       shownArticleId: correspondingLevelArticleId || id,
-      shownArticleLevelId: currentArticleLevelObject ? currentArticleLevelObject.levels![0].wpId : article.levels![0].wpId
+      // shownArticleLevelId: currentArticleLevelObject ? currentArticleLevelObject.levels![0].wpId : article.levels![0].wpId
     });
   }
 
