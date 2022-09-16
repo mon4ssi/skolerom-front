@@ -69,7 +69,7 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
 
   public renderContent = () => {
     const { readOnly, answer, isEvaluationStyle, question, redirectData } = this.props;
-    const isHideValue = (question.hide_answer) ? intl.get('new assignment.Write your answer here') : answer && answer!.value;
+    const isHideValue = (question.hide_answer) ? '' : answer && answer!.value;
     if (isEvaluationStyle) {
       const answerSplit = String(answer && answer.value).replace(/\n/g, '<br />');
       return <span className={'evaluationAnswer'} dangerouslySetInnerHTML={{ __html: answerSplit }} />;
