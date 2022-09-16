@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { SortableElement, SortEnd, SortEvent } from 'react-sortable-hoc';
 import TextAreaAutosize from 'react-textarea-autosize';
 
-import { EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
+import { EditableQuestion, EditableTextQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
 import { MoreOptions } from '../../MoreOptions/MoreOptions';
 import { CreationElements, NewAssignmentStore } from '../../NewAssignmentStore';
 import { ContentBlockType } from '../../../../ContentBlock';
@@ -16,6 +16,8 @@ import { MAX_DESCRIPTION_LENGTH } from 'utils/constants';
 
 import textQuestionIcon from 'assets/images/new-text-question.svg';
 import textQuestionIconPink from 'assets/images/new-text-question-pink.svg';
+import checkInactive from 'assets/images/ckeck-inactive.svg';
+import checkActive from 'assets/images/check-active.svg';
 
 import '../Questions.scss';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
@@ -28,12 +30,23 @@ interface TextQuestionProps {
   question: EditableQuestion;
   newAssignmentStore?: NewAssignmentStore;
 }
+interface State {
+  hiddenQuestion: boolean | undefined;
+}
 
 @inject('newAssignmentStore')
 @observer
-class TextQuestionContent extends Component<TextQuestionProps> {
+class TextQuestionContent extends Component<TextQuestionProps, State> {
   public static contextType = AttachmentContentTypeContext;
-  private titleRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
+  public state = {
+    hiddenQuestion: false
+  };
+  public titleRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
+
+  public componentDidMount() {
+    const { question } = this.props;
+    this.setState({ hiddenQuestion: question.hide_answer });
+  }
 
   public addNewContentBlock = (type: ContentBlockType): void => {
     const { question, newAssignmentStore } = this.props;
@@ -93,6 +106,26 @@ class TextQuestionContent extends Component<TextQuestionProps> {
     this.props.newAssignmentStore!.openTeacherGuidanceAssig(nroLevel);
   }
 
+  public toggleHiddenQuestion = (event: React.MouseEvent<HTMLDivElement>) => {
+    const { question } = this.props;
+    event.preventDefault();
+    if (this.state.hiddenQuestion) {
+      this.setState({
+        hiddenQuestion: false
+      });
+      if (question instanceof EditableTextQuestion) {
+        question.setHiddenQuestion(false);
+      }
+    } else {
+      this.setState({
+        hiddenQuestion: true
+      });
+      if (question instanceof EditableTextQuestion) {
+        question.setHiddenQuestion(true);
+      }
+    }
+  }
+
   public render() {
     const { question, newAssignmentStore } = this.props;
     const order = question.orderPosition + 1;
@@ -138,7 +171,7 @@ class TextQuestionContent extends Component<TextQuestionProps> {
             addNewContentBlock={this.addNewContentBlock}
           />
         </div>
-        <div className="sectionGuidance">
+        <div className="sectionGuidance sectionNotSpace">
           <CreateButton
             title={newAssignmentStore!.getTitleButtonGuidance}
             onClick={this.openModalTGAssig.bind(this, String(order))}
@@ -146,6 +179,12 @@ class TextQuestionContent extends Component<TextQuestionProps> {
             <img src={teaGuiBGImg} alt={newAssignmentStore!.getTitleButtonGuidance} />
             {newAssignmentStore!.getTitleButtonGuidance}
           </CreateButton>
+          <div className="hiddenQuestionCheck" onClick={this.toggleHiddenQuestion}>
+            <img src={this.state.hiddenQuestion ? checkActive : checkInactive} alt="checkbox" className="AssignmentArticlesToReading__checkbox"/>
+            <div>
+              {intl.get('assignments search.hidden_question')}
+            </div>
+          </div>
         </div>
       </div>
     );

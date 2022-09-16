@@ -738,6 +738,7 @@ export interface QuestionParams {
   title: string;
   guidance?: string;
   order: number;
+  hide_answer?: boolean;
   contentBlocks: Array<ContentBlock>;
 }
 
@@ -747,6 +748,8 @@ export abstract class Question {
   @observable protected _title: string;
   @observable protected _source?: string;
   @observable protected _guidance: string;
+  // tslint:disable-next-line: variable-name
+  @observable protected _hide_answer?: boolean | undefined;
   @observable protected _order: number;
   @observable protected _content: Array<ContentBlock> = [];
 
@@ -757,6 +760,8 @@ export abstract class Question {
     this._guidance = params.guidance || '';
     this._order = params.order;
     this._content = params.contentBlocks;
+    // tslint:disable-next-line: variable-name
+    this._hide_answer = params.hide_answer || false;
   }
 
   @computed
@@ -787,6 +792,11 @@ export abstract class Question {
   @computed
   public get guidance() {
     return this._guidance;
+  }
+
+  @computed
+  public get hide_answer() {
+    return this._hide_answer;
   }
 
   @computed
