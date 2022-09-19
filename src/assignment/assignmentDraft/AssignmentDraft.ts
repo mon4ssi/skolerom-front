@@ -652,6 +652,7 @@ export class EditableTextQuestion extends TextQuestion implements QuestionAction
       title: '',
       guidance: '',
       order: index,
+      hide_answer: false,
       contentBlocks: []
     });
   }
@@ -746,6 +747,7 @@ export class EditableTextQuestion extends TextQuestion implements QuestionAction
       assignmentDraft: this.assignmentDraft!,
       title: this.title,
       guidance: this.guidance,
+      hide_answer: this.hide_answer,
       contentBlocks: this._content.map(item => cloneDeep(item))
     });
   }
@@ -775,6 +777,15 @@ export class EditableTextQuestion extends TextQuestion implements QuestionAction
 
   public set guidance(value: string) {
     this._guidance = value;
+  }
+
+  @computed
+  public get hide_answer() {
+    return this._hide_answer;
+  }
+
+  public set hide_answer(value: boolean | undefined) {
+    this._hide_answer = value;
   }
 
   @action
@@ -880,6 +891,12 @@ export class EditableTextQuestion extends TextQuestion implements QuestionAction
     this._order = order;
     this.save();
   }
+
+  @action
+  public setHiddenQuestion(value: boolean) {
+    this._hide_answer = value;
+    this.save();
+  }
 }
 
 export interface MultipleChoiceQuestionOptionArgs {
@@ -954,6 +971,7 @@ export class EditableMultipleChoiceQuestion extends MultipleChoiceQuestion imple
       title: '',
       guidance: '',
       order: index,
+      hide_answer: false,
       options: [],
       contentBlocks: []
     });
@@ -1259,6 +1277,7 @@ export class EditableMultipleChoiceQuestion extends MultipleChoiceQuestion imple
       title: this.title,
       guidance: this.guidance,
       options: this._options,
+      hide_answer: this.hide_answer,
       contentBlocks: this._content.map(item => cloneDeep(item))
     });
 
@@ -1370,6 +1389,7 @@ export class EditableImageChoiceQuestion extends ImageChoiceQuestion implements 
       title: '',
       guidance: '',
       order: index,
+      hide_answer: false,
       options: [],
       contentBlocks: []
     });
@@ -1629,6 +1649,12 @@ export class EditableImageChoiceQuestion extends ImageChoiceQuestion implements 
   }
 
   @action
+  public setHiddenQuestion(value: boolean) {
+    this._hide_answer = value;
+    this.save();
+  }
+
+  @action
   public setOrder(order: number): void {
     this._order = order;
     this.save();
@@ -1691,6 +1717,7 @@ export class EditableImageChoiceQuestion extends ImageChoiceQuestion implements 
       assignmentDraft: this.assignmentDraft!,
       title: this.title,
       guidance: this.guidance,
+      hide_answer: this.hide_answer,
       options: this._options,
       contentBlocks: this._content.map(item => cloneDeep(item))
     });

@@ -164,11 +164,12 @@ export class QuestionPreview extends Component<Props, State> {
 
     switch (question.type) {
       case QuestionType.Text:
+        const onlyReadOnly = (question.hide_answer) ? true : readOnly;
         return (
           <TextQuestionPreview
             question={question}
             answer={answer}
-            readOnly={readOnly}
+            readOnly={onlyReadOnly}
             redirectData={redirectData}
             isEvaluationStyle={isEvaluationStyle}
             handleShowArrowsTooltip={handleShowArrowsTooltip}
