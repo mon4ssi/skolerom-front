@@ -5,7 +5,7 @@
     /* overflow: auto; */
     height: 100%;
     &__header {
-      height: 30%;
+      height: 45%;
       width: 100%;
       img {
         width: 100%;
@@ -115,6 +115,7 @@
   font-weight: 600;
   min-height: 46px;
   text-transform: uppercase;
+  padding-top: 6px;
   &:hover,
   &.selected,
   &.active {
@@ -170,6 +171,7 @@
 
 .buttonContent {
     display: flex;
+    padding-top: 12px
 }
 
 .imageForCover {

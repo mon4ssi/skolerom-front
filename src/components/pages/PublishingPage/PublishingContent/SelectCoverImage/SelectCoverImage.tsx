@@ -335,14 +335,6 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
     return (
       <div className="CenterImagenes">
         <div className="buttonContent">
-          <div className="coverImageButton">
-            <img className="buttonImg" src={img} alt={'def'} title={'def'} />
-            <div className="buttonLabel">
-              {intl.get('publishing_page.select button')}
-            </div>
-          </div>
-        </div>
-        <div className="buttonContent">
           <div onClick={this.manageTabContentTabWP} className={`coverImageButtonTab ${this.selectClassOption(selectedTabId, const1)}`}>
             <div className="buttonLabel" onClick={this.manageTabContentTabWP}>
               {intl.get('new assignment.images_options.images_from_article')}

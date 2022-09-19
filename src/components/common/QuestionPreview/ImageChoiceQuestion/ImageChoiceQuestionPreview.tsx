@@ -2,6 +2,7 @@ import React, { Component, createRef } from 'react';
 import { observer } from 'mobx-react';
 import classnames from 'classnames';
 import Lightbox from 'react-image-lightbox';
+import intl from 'react-intl-universal';
 
 import { ImageChoiceQuestion, ImageChoiceQuestionOption, QuestionAttachment, TypedQuestion } from 'assignment/Assignment';
 import {
@@ -99,7 +100,7 @@ class ImageOption extends Component<ImageOptionProps, ImageOptionState> {
       return (
         <div style={{ padding: '9px', fontSize: '13px', fontStyle: 'italic', color: '#993266 !important' }}>
           <div style={{ fontStyle: 'Italic', color: '#767168', fontWeight: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{option!.title}</div>
-          <div style={{ fontStyle: 'Italic', color: '#767168', fontWeight: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Source: {option.source || option.src}</div>
+          <div style={{ fontStyle: 'Italic', color: '#767168', fontWeight: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>`${intl.get('new assignment.updateCustomImagesForm.source')}:{option.source || option.src}`</div>
         </div>
       );
     }

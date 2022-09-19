@@ -75,7 +75,7 @@ export class QuestionAttachments extends Component<ImagesProps> {
         {image.title}
       </div>
       <div style={{ fontStyle: 'Italic', color: '#767168', fontWeight: 300 }}>
-        Source: {image.src || image.source}
+      {intl.get('new assignment.updateCustomImagesForm.source')}: {image.source || image.src}
       </div>
     </div>
   )
