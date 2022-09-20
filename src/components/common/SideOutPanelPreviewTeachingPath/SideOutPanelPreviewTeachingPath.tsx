@@ -80,6 +80,18 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     </div>
   )
 
+  public checkForPåbygging = () => {
+    const goalsList = this.props.store!.currentEntity!.goalsItems;
+    let counter = 0;
+    goalsList.forEach((goal) => {
+      if (goal.gradeDesc!.includes('påbygging')) {
+        counter = counter + 1;
+      }
+    });
+    const foundString = counter > 0 ? true : false;
+    return foundString;
+  }
+
   public openInNewTabTeacherGuidance = () => {
     const { currentEntity: { id } } = this.props.store!;
     const url: URL = new URL(window.location.href);
@@ -283,23 +295,25 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     ))
   )
 
-  public renderGrepEducationalGoals = (goalsArray: Array<GenericGrepItem>) =>
-  (
-    <>
-      <div className="entityInfoBlockExpanded">
-        <div className="imageGrep">
-          <img className="imgInfo" src={goals} />
+  public renderGrepEducationalGoals = (goalsArray: Array<GenericGrepItem>) => {
+    const expandedStyle: boolean = this.checkForPåbygging();
+    return (
+      <>
+        <div className="entityInfoBlockExpanded">
+          <div className="imageGrep">
+            <img className="imgInfo" src={goals} />
+          </div>
+          <div className="title">{intl.get('preview.teaching_path.grep.educational_goals')}</div>
         </div>
-        <div className="title">{intl.get('preview.teaching_path.grep.educational_goals')}</div>
-      </div>
-      <div className="flexContainer">
-        <ul className="listItem">
-          {this.renderGoalsArray(goalsArray)}
-        </ul>
+        <div className={expandedStyle ? 'flexContainerExpanded' : 'flexContainer'}>
+          <ul className="listItem">
+            {this.renderGoalsArray(goalsArray)}
+          </ul>
 
-      </div>
-    </>
-  )
+        </div>
+      </>
+    );
+  }
 
   public renderPublishDate = (createdAt: string) =>
   (

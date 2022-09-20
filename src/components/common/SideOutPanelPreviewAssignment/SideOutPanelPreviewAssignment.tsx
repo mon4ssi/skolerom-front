@@ -88,6 +88,18 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     </div>
   )
 
+  public checkForPåbygging = () => {
+    const goalsList = this.props.store!.currentAssignment!.goalsItems;
+    let counter = 0;
+    goalsList.forEach((goal) => {
+      if (goal.gradeDesc!.includes('påbygging')) {
+        counter = counter + 1;
+      }
+    });
+    const foundString = counter > 0 ? true : false;
+    return foundString;
+  }
+
   public openInNewTabTeacherGuidance = () => {
     const { currentEntity: { id } } = this.props.store!;
     const url: URL = new URL(window.location.href);
@@ -292,23 +304,24 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     ))
   )
 
-  public renderGrepEducationalGoals = (goalsArray: Array<GenericGrepItem>) =>
-  (
-    <>
-      <div className="entityInfoBlockExpanded">
-        <div className="imageGrep">
-          <img className="imgInfo" src={goals} />
+  public renderGrepEducationalGoals = (goalsArray: Array<GenericGrepItem>) => {
+    const expandedStyle: boolean = this.checkForPåbygging();
+    return (
+      <>
+        <div className="entityInfoBlockExpanded">
+          <div className="imageGrep">
+            <img className="imgInfo" src={goals} />
+          </div>
+          <div className="title">{intl.get('preview.assignment.grep.educational_goals')}</div>
         </div>
-        <div className="title">{intl.get('preview.assignment.grep.educational_goals')}</div>
-      </div>
-      <div className="flexContainer">
-        <ul className="listItem">
-          {this.renderGoalsArray(goalsArray)}
-        </ul>
-
-      </div>
-    </>
-  )
+        <div className={expandedStyle ? 'flexContainerExpanded' : 'flexContainer'}>
+          <ul className="listItem">
+            {this.renderGoalsArray(goalsArray)}
+          </ul>
+        </div>
+      </>
+    );
+  }
 
   public renderPublishDate = (createdAt: string) =>
   (
@@ -352,6 +365,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     const duplicateText = intl.get('preview.assignment.buttons.duplicate');
     const activeGoals = !isPrivate || isMySchool;
     const selectedAssignment: Assignment = this.state.currentAssignment!;
+    const expandedStyle: boolean = this.checkForPåbygging();
     return (
       <div className={'previewModalInfo'} onClick={this.stopPropagation} tabIndex={0}>
         <div className="contentContainer">
