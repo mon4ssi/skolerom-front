@@ -77,7 +77,7 @@ class MoreOptionsCustomImageWrapper extends Component<MoreOptionsCustomImageWrap
     /* console.log(this.props.attachmentId); */
 
     return (
-      <div className="MoreOptionsCustomImage">
+      <div className="MoreOptionsCustomImageForPublishing">
         <button onClick={this.handleClickIcon}>
           <img
             src={image}
