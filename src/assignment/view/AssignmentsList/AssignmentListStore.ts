@@ -123,6 +123,7 @@ export class AssignmentListStore {
       this.assignmentList.setFiltersIsEvaluated(null);
       this.assignmentList.setFiltersSorting(SortingFilter.DEADLINE, SortingFilter.ASC);
     }
+    this.assignmentList.setFiltersLocale(null);
     this.assignmentList.setFiltersPage(1);
     this.assignmentList.setFiltersSearchQuery('');
   }
