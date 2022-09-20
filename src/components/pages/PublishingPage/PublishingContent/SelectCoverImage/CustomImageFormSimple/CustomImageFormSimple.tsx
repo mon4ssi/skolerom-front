@@ -105,7 +105,7 @@ export const CustomImageFormSimple = (props: any) => {
       }
       if (percentage >= HUNDRED) {
         setTimeout(async () => {
-          await articleService.fetchCustomImages('', 1);
+          await articleService.fetchCustomImages('', 1, '');
           setProgressBar(0);
           setInProgress(false);
           setImageFileArray([]);
@@ -140,7 +140,7 @@ export const CustomImageFormSimple = (props: any) => {
       }
       if (percentage >= HUNDRED) {
         setTimeout(async () => {
-          await articleService.fetchCustomImages('', 1);
+          await articleService.fetchCustomImages('', 1, '');
           setProgressBar(0);
           setInProgress(false);
           setImageFileArray([]);

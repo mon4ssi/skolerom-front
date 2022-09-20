@@ -9,7 +9,7 @@ import { NewAssignmentStore } from '../NewAssignmentStore';
 import { AttachmentComponent } from './Attachment';
 import { AttachmentContentType, AttachmentContentTypeContext } from '../AttachmentContentTypeContext';
 import { EditableImageChoiceQuestion, QuestionImagesOverflowError } from 'assignment/assignmentDraft/AssignmentDraft';
-import { ARTICLE_SERVICE_KEY, Attachment, QuestionAttachment, QuestionType } from '../../../Assignment';
+import { ARTICLE_SERVICE_KEY, Attachment, CustomImgAttachment, QuestionAttachment, QuestionType } from '../../../Assignment';
 import { EditableImagesContentBlock, EditableVideosContentBlock } from 'assignment/assignmentDraft/EditableContentBlock';
 import { ImageAttachments } from './Attachments/ImageAttachments';
 import { VideosAttachments } from './Attachments/VideosAttachments';
@@ -53,6 +53,7 @@ interface State {
   query: string;
   errMsg: string;
   listIdsSelected: Array<number>;
+  totalPages: number;
 }
 
 export interface FilterableAttachment {
@@ -92,7 +93,8 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     errMsg: '',
     currentAttachment: undefined,
     currentPage: 1,
-    listIdsSelected: []
+    listIdsSelected: [],
+    totalPages: 0,
   };
 
   public TWO = 2;
@@ -118,9 +120,18 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     }
   }
 
-  private handleSearch = (e: ChangeEvent<HTMLInputElement>): void => {
+  private handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
+    const { newAssignmentStore } = this.props;
     if (lettersNoEn(e.target.value)) {
       this.setState({ query: e.target.value.toLowerCase() });
+      if (this.state.selectedTabId === this.TWO) {
+        const response = await newAssignmentStore!.fetchQuestionCustomImagesAttachments(String(this.state.listIdsSelected), AttachmentContentType.customImage, e.target.value!);
+        /* const myCustomImagesSearch: CustomImgAttachment[] = response.myCustomImages;
+        const numberOfPages: number = response.total_pages; */
+        this.setState({
+          currentPage: 1,
+        });
+      }
     }
   }
 
@@ -903,10 +914,12 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
 
   public onChangePage = async ({ selected }: { selected: number }) => {
     const { newAssignmentStore } = this.props;
+    const { query } = this.state;
     this.setState({ currentPage: selected + 1 });
     newAssignmentStore!.currentPage = selected + 1;
     newAssignmentStore!.fetchingCustomImageAttachments = true;
-    newAssignmentStore!.fetchQuestionCustomImagesAttachments(String(this.state.listIdsSelected), AttachmentContentType.customImage);
+    query !== '' && query !== undefined ? newAssignmentStore!.fetchQuestionCustomImagesAttachments(String(this.state.listIdsSelected), AttachmentContentType.customImage, query) :
+      newAssignmentStore!.fetchQuestionCustomImagesAttachments(String(this.state.listIdsSelected), AttachmentContentType.customImage);
     /* this.render(); */
     newAssignmentStore!.fetchingCustomImageAttachments = false;
   }

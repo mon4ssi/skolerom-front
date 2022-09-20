@@ -1284,7 +1284,7 @@ export interface ArticleRepo {
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchCoverImages(postIds: Array<number>): Promise<Array<Attachment>>;
-  fetchCustomImages(ids: string, page: number): Promise<ResponseFetchCustomImages>;
+  fetchCustomImages(ids: string, page: number, title: string): Promise<ResponseFetchCustomImages>;
   createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse>;
   deleteCustomImage(imageId: number): Promise<any>;
   updateCustomImage(customImageId: number, formData: FormData): Promise<any>;

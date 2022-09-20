@@ -567,14 +567,16 @@ export class WPApi implements ArticleRepo {
     return [];
   }
 
-  public async fetchCustomImages(ids:string, page: number): Promise<ResponseFetchCustomImages> {
+  public async fetchCustomImages(ids:string, page: number, titleSearch: string): Promise<ResponseFetchCustomImages> {
     const parameters = (ids) ? {
       page: page!,
       per_page: DEFAULT_CUSTOM_IMAGES_PER_PAGE,
       selectedImages: ids,
+      title: titleSearch,
     } : {
       page: page!,
       per_page: DEFAULT_CUSTOM_IMAGES_PER_PAGE,
+      title: titleSearch,
     };
     const response = await API.get(
       `${process.env.REACT_APP_BASE_URL}/api/teacher/images`, {

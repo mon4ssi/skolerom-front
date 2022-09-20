@@ -122,8 +122,8 @@ export class ArticleService {
     return this.articleRepo.fetchCoverImages(postIds);
   }
 
-  public async fetchCustomImages(ids:string, page: number): Promise<ResponseFetchCustomImages> {
-    return this.articleRepo.fetchCustomImages(ids, page);
+  public async fetchCustomImages(ids:string, page: number, title: string): Promise<ResponseFetchCustomImages> {
+    return this.articleRepo.fetchCustomImages(ids, page, title);
   }
 
   public async createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse> {

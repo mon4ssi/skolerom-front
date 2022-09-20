@@ -120,7 +120,7 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
         title: intl.get('new assignment.notification.success_removing_image'),
       });
       this.setState({ selectedTabId: 2 });
-      const mediaImgsCustom = (await this.articleService.fetchCustomImages('', this.state.currentPage!)).myCustomImages;
+      const mediaImgsCustom = (await this.articleService.fetchCustomImages('', this.state.currentPage!, '')).myCustomImages;
       this.setState({ mediaCustomImgs: mediaImgsCustom! });
     }
   }
@@ -163,7 +163,7 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
     )))
 
   public updateMediaCustom = async (page?: number) => {
-    const mediaCustomUpdated = (await this.articleService.fetchCustomImages('', page ? page : 1));
+    const mediaCustomUpdated = (await this.articleService.fetchCustomImages('', page ? page : 1, ''));
     const data = mediaCustomUpdated.myCustomImages || [];
     const numberOfPages = mediaCustomUpdated.total_pages;
     this.setState({ mediaCustomImgs: data!, totalNumberOfPages: numberOfPages });
@@ -218,7 +218,7 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
     const onlyOneSelected: Array<number> = [];
     onlyOneSelected.push(articleIds[0]);
     const mediaImgsWP: Array<Attachment> = await this.articleService.fetchCoverImages(articleIds) || [];
-    const mediaImgsCustom = (await this.articleService.fetchCustomImages('', 1));
+    const mediaImgsCustom = (await this.articleService.fetchCustomImages('', 1, ''));
     const data: Array<Attachment> = mediaImgsCustom.myCustomImages || [];
     const numberOfPages = mediaImgsCustom.total_pages;
     this.setState({
@@ -381,7 +381,7 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
   public onChangePage = async ({ selected }: { selected: number }) => {
     /* const { newAssignmentStore } = this.props; */
     this.setState({ currentPage: selected + 1 });
-    const pageChangedCustomImgs = (await this.articleService.fetchCustomImages('', selected + 1)).myCustomImages || [];
+    const pageChangedCustomImgs = (await this.articleService.fetchCustomImages('', selected + 1, '')).myCustomImages || [];
     this.setState({ mediaCustomImgs: pageChangedCustomImgs! });
     /* newAssignmentStore!.currentPage = selected + 1;
     newAssignmentStore!.fetchingCustomImageAttachments = true;
