@@ -550,7 +550,7 @@ export class NewAssignmentStore {
     const arrayGoals: Array<String> = [];
     if (this.currentEntity!.relatedArticles.length > 0) {
       this.currentEntity!.relatedArticles.forEach((element) => {
-        if (element.grepGoals!.length > 0) {
+        if (element.grepGoals && element.grepGoals!.length > 0) {
           element.grepGoals!.forEach((e) => {
             if (!arrayGoals.includes(e.kode)) {
               arrayGoals.push(e.kode);
