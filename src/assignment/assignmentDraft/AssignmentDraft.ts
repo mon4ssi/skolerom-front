@@ -653,7 +653,6 @@ export class EditableTextQuestion extends TextQuestion implements QuestionAction
       guidance: '',
       hide_answer: false,
       order: index,
-      hide_answer: false,
       contentBlocks: []
     });
   }
@@ -973,7 +972,6 @@ export class EditableMultipleChoiceQuestion extends MultipleChoiceQuestion imple
       guidance: '',
       hide_answer: false,
       order: index,
-      hide_answer: false,
       options: [],
       contentBlocks: []
     });
@@ -1280,7 +1278,6 @@ export class EditableMultipleChoiceQuestion extends MultipleChoiceQuestion imple
       guidance: this.guidance,
       hide_answer: this.hide_answer,
       options: this._options,
-      hide_answer: this.hide_answer,
       contentBlocks: this._content.map(item => cloneDeep(item))
     });
 
@@ -1393,7 +1390,6 @@ export class EditableImageChoiceQuestion extends ImageChoiceQuestion implements 
       guidance: '',
       hide_answer: false,
       order: index,
-      hide_answer: false,
       options: [],
       contentBlocks: []
     });
@@ -1643,12 +1639,6 @@ export class EditableImageChoiceQuestion extends ImageChoiceQuestion implements 
   @action
   public setTitle(value: string): void {
     this._title = value;
-    this.save();
-  }
-
-  @action
-  public setHiddenQuestion(value: boolean) {
-    this._hide_answer = value;
     this.save();
   }
 
