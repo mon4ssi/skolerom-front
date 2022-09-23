@@ -97,7 +97,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
       await this.articleService.deleteCustomImage(attachment.id);
       Notification.create({
         type: NotificationTypes.SUCCESS,
-        title: 'Image removed succesfully',
+        title: intl.get('new assignment.notification.success_removing_image'),
       });
       this.props.onRedirectToList();
     }

@@ -351,6 +351,32 @@ export class AssignmentApi implements AssignmentRepo {
     return response.data;
   }
 
+  public async getGrepFiltersMyAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep> {
+    const response = await API.get('api/teacher/assignments/draft/grep/filters', {
+      params: {
+        locale,
+        grades,
+        subjects,
+        coreElements,
+        goals
+      }
+    });
+    return response.data;
+  }
+
+  public async getGrepFiltersMySchoolAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep> {
+    const response = await API.get('api/teacher/assignments/myschool/grep/filters', {
+      params: {
+        locale,
+        grades,
+        subjects,
+        coreElements,
+        goals
+      }
+    });
+    return response.data;
+  }
+
   public async getStudentAssignmentList(filter: Filter) {
     try {
       if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
@@ -541,14 +567,16 @@ export class WPApi implements ArticleRepo {
     return [];
   }
 
-  public async fetchCustomImages(ids:string, page: number): Promise<ResponseFetchCustomImages> {
+  public async fetchCustomImages(ids:string, page: number, titleSearch: string): Promise<ResponseFetchCustomImages> {
     const parameters = (ids) ? {
       page: page!,
       per_page: DEFAULT_CUSTOM_IMAGES_PER_PAGE,
       selectedImages: ids,
+      title: titleSearch,
     } : {
       page: page!,
       per_page: DEFAULT_CUSTOM_IMAGES_PER_PAGE,
+      title: titleSearch,
     };
     const response = await API.get(
       `${process.env.REACT_APP_BASE_URL}/api/teacher/images`, {

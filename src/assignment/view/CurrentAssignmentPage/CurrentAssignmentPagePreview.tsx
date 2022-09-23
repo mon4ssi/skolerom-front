@@ -431,7 +431,7 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
                     redirectData={state && state.node}
                   />
                 </div>
-                {this.renderNavigationIfNeeded()}
+                {this.renderBreadcrumbsIfNeeded()}
                 <AnswerCurrentQuestion
                   answer={currentAnswer}
                   numberOfQuestions={numberOfQuestions}

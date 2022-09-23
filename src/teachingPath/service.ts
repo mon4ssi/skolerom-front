@@ -67,6 +67,12 @@ export class TeachingPathService {
   public async getGrepFiltersTeachingPath(locale: string, grades: string, subjects: string, coreElements?: string, mainTopics?:string, goals? : string, source?:string) {
     return this.teachingPathRepo.getGrepFiltersTeachingPath(locale, grades, subjects, coreElements, mainTopics, goals, source);
   }
+  public async getGrepFiltersMyTeachingPath(locale: string, grades: string, subjects: string, coreElements?: string, mainTopics?:string, goals? : string, source?:string) {
+    return this.teachingPathRepo.getGrepFiltersMyTeachingPath(locale, grades, subjects, coreElements, mainTopics, goals, source);
+  }
+  public async getGrepFiltersMyschoolTeachingPath(locale: string, grades: string, subjects: string, coreElements?: string, mainTopics?:string, goals? : string, source?:string) {
+    return this.teachingPathRepo.getGrepFiltersMyschoolTeachingPath(locale, grades, subjects, coreElements, mainTopics, goals, source);
+  }
 
   public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number) {
     return this.teachingPathRepo.getGrepGoalsFilters(grepCoreElementsIds, grepMainTopicsIds, gradesIds, subjectsIds, orderGoalsCodes, perPage, page);

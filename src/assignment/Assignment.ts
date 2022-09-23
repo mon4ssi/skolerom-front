@@ -54,6 +54,8 @@ export interface AssignmentRepo {
   }>;
   copyAssignment(id: number): Promise<number>;
   getGrepFiltersAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
+  getGrepFiltersMyAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
+  getGrepFiltersMySchoolAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
   downloadTeacherGuidancePDF(id: number): Promise<void>;
 }
 
@@ -772,7 +774,7 @@ export abstract class Question {
   @observable protected _title: string;
   @observable protected _source?: string;
   @observable protected _guidance: string;
-    // tslint:disable-next-line: variable-name
+  // tslint:disable-next-line: variable-name
   @observable protected _hide_answer?: boolean | undefined;
   @observable protected _order: number;
   @observable protected _content: Array<ContentBlock> = [];
@@ -1282,7 +1284,7 @@ export interface ArticleRepo {
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchCoverImages(postIds: Array<number>): Promise<Array<Attachment>>;
-  fetchCustomImages(ids: string, page: number): Promise<ResponseFetchCustomImages>;
+  fetchCustomImages(ids: string, page: number, title: string): Promise<ResponseFetchCustomImages>;
   createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse>;
   deleteCustomImage(imageId: number): Promise<any>;
   updateCustomImage(customImageId: number, formData: FormData): Promise<any>;

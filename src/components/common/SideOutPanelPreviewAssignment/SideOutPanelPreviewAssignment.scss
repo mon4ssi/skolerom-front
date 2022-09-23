@@ -363,7 +363,7 @@
         display: flex;
 
         .listItem {
-          margin: 0px 48px 0px 44px;
+          margin: 0px 44px 0px 44px;
 
           .item {
             margin: 0;
@@ -385,7 +385,7 @@
             padding-bottom: 15px;
 
             .goalGrade {
-              width: 82px;
+              width: 97px;
               display: table-cell;
               height: auto;
               white-space: nowrap;
@@ -403,8 +403,53 @@
               /* padding-left: 36px; */
             }
           }
+        }
+      }
 
+      .flexContainerExpanded {
+        display: flex;
 
+        .listItem {
+          margin: 0px 15px 0px 15px;
+
+          .item {
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            display: inline-block;
+            background-color: #d3d9de;
+            border-radius: 4px;
+            color: #0b2541;
+            font-size: 13px;
+            font-weight: 300;
+            padding: 4px;
+            margin: 5px 5px 5px 0px;
+          }
+
+          .itemExpanded {
+            border-bottom: 1px solid #D3D9DE;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+
+            .goalGrade {
+              width: 116px;
+              display: table-cell;
+              height: auto;
+              white-space: nowrap;
+              color: #0b2541;
+              font-size: 15px;
+              font-weight: 300;
+            }
+
+            .goalDescription {
+              display: table-cell;
+              color: #0b2541;
+              font-size: 15px;
+              font-weight: 300;
+              line-height: 22px;
+              /* padding-left: 36px; */
+            }
+          }
         }
       }
 
@@ -805,7 +850,7 @@
         display: flex;
 
         .listItem {
-          margin: 0px 48px 0px 44px;
+          margin: 0px 44px 0px 44px;
 
           .item {
             margin: 0;
@@ -827,7 +872,56 @@
             padding-bottom: 15px;
 
             .goalGrade {
-              width: 82px;
+              width: 97px;
+              display: table-cell;
+              height: auto;
+              white-space: nowrap;
+              color: #0b2541;
+              font-size: 15px;
+              font-weight: 300;
+            }
+
+            .goalDescription {
+              display: table-cell;
+              color: #0b2541;
+              font-size: 15px;
+              font-weight: 300;
+              line-height: 22px;
+              /* padding-left: 36px; */
+            }
+          }
+
+
+        }
+      }
+
+      .flexContainerExpanded {
+        display: flex;
+
+        .listItem {
+          margin: 0px 15px 0px 15px;
+
+          .item {
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            display: inline-block;
+            background-color: #d3d9de;
+            border-radius: 4px;
+            color: #0b2541;
+            font-size: 13px;
+            font-weight: 300;
+            padding: 4px;
+            margin: 5px 5px 5px 0px;
+          }
+
+          .itemExpanded {
+            border-bottom: 1px solid #D3D9DE;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+
+            .goalGrade {
+              width: 116px;
               display: table-cell;
               height: auto;
               white-space: nowrap;

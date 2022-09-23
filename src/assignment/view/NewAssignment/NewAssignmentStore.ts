@@ -550,7 +550,7 @@ export class NewAssignmentStore {
     const arrayGoals: Array<String> = [];
     if (this.currentEntity!.relatedArticles.length > 0) {
       this.currentEntity!.relatedArticles.forEach((element) => {
-        if (element.grepGoals!.length > 0) {
+        if (element.grepGoals && element.grepGoals!.length > 0) {
           element.grepGoals!.forEach((e) => {
             if (!arrayGoals.includes(e.kode)) {
               arrayGoals.push(e.kode);
@@ -601,7 +601,7 @@ export class NewAssignmentStore {
           break;
         }
         case AttachmentContentType.customImage: {
-          const response = await this.articleService.fetchCustomImages('', this.currentPage);
+          const response = await this.articleService.fetchCustomImages('', this.currentPage, '');
           this.questionCustomAttachments =
             (response.myCustomImages).map(item => item).flat() || [];
           break;
@@ -630,7 +630,7 @@ export class NewAssignmentStore {
   }
 
   public async searchIdInExist(id: number, listids: string) {
-    const response = await this.articleService.fetchCustomImages(listids, this.currentPage);
+    const response = await this.articleService.fetchCustomImages(listids, this.currentPage, '');
     const allAttachments = (response.myCustomImages).map(item => item).flat() || [];
     let valueresponse = false;
     if (allAttachments) {
@@ -644,7 +644,7 @@ export class NewAssignmentStore {
   }
 
   public async searchIdInDeletes(id: number, listids: string) {
-    const response = await this.articleService.fetchCustomImages(listids, this.currentPage);
+    const response = await this.articleService.fetchCustomImages(listids, this.currentPage, '');
     const allAttachments = (response.myCustomImages).map(item => item).flat() || [];
     let valueresponse = false;
     if (allAttachments) {
@@ -659,12 +659,12 @@ export class NewAssignmentStore {
     return valueresponse;
   }
 
-  public async fetchQuestionCustomImagesAttachments(listids: string, typeAttachments: AttachmentContentType): Promise<void> {
+  public async fetchQuestionCustomImagesAttachments(listids: string, typeAttachments: AttachmentContentType, title?: string): Promise<void> {
     this.fetchingCustomImageAttachments = true;
     try {
       switch (typeAttachments) {
         case AttachmentContentType.customImage: {
-          const response = await this.articleService.fetchCustomImages(listids, this.currentPage);
+          const response =  title !== '' ? await this.articleService.fetchCustomImages(listids, this.currentPage, title!) : await this.articleService.fetchCustomImages(listids, this.currentPage, '');
           this.questionCustomAttachments =
             (response.myCustomImages).map(item => item).flat() || [];
           this.numberOfPages = response.total_pages;
@@ -753,6 +753,12 @@ export class NewAssignmentStore {
   }
   public async getGrepFiltersAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string) {
     return this.assignmentService.getGrepFiltersAssignment(locale, grades, subjects, coreElements, goals);
+  }
+  public async getGrepFiltersMyAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string) {
+    return this.assignmentService.getGrepFiltersMyAssignment(locale, grades, subjects, coreElements, goals);
+  }
+  public async getGrepFiltersMySchoolAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string) {
+    return this.assignmentService.getGrepFiltersMySchoolAssignment(locale, grades, subjects, coreElements, goals);
   }
   public async getGrepGoalsFilters(grepCoreElementsIds: Array<number>, grepMainTopicsIds: Array<number>, gradesIds: Array<number>, subjectsIds: Array<number>, orderGoalsCodes: Array<string>, perPage: number, page: number) {
     return this.teachingPathService.getGrepGoalsFilters(grepCoreElementsIds, grepMainTopicsIds, gradesIds, subjectsIds, orderGoalsCodes, perPage, page);

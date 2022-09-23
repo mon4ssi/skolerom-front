@@ -66,7 +66,7 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
       });
     }
 
-    /// const articleChildren = levels![0].childArticles!.length ? levels![0].childArticles! : [article];
+    // const articleChildren = levels![0].childArticles!.length ? levels![0].childArticles! : [article];
     // const currentArticleLevelObject = articleChildren.find(article => article.id === correspondingLevelArticleId);
 
     this.setState({
