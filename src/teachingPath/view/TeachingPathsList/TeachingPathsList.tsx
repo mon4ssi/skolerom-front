@@ -188,11 +188,6 @@ class TeachingPathsListComponent extends Component<Props, State> {
 
   public fetchTeachingPaths() {
     const { filter } = this.props.teachingPathsListStore!;
-
-    if (this.props.isNotStudent) {
-      this.assigValueData('', '', '', '', '', '', '', true, true);
-    }
-
     filter.page = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.PAGE, 1);
     filter.locale = QueryStringHelper.getString(this.props.history, QueryStringKeys.LOCALE);
     filter.grade = QueryStringHelper.getString(this.props.history, QueryStringKeys.GRADE);
@@ -391,6 +386,9 @@ class TeachingPathsListComponent extends Component<Props, State> {
     const { valueCoreOptions, valueMultiOptions, valueGradesOptions, valueSubjectsOptions } = this.state;
     this.setCurrentTab();
     this.fetchTeachingPaths();
+    if (this.props.isNotStudent) {
+      this.assigValueData('', '', '', '', '', '', '', true, true);
+    }
     this.unregisterListener = this.props.history.listen(this.locationUpdateListener);
     if (typeOfTeachingPathsList === 'myschool') {
       this.setState({
