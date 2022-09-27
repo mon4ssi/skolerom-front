@@ -30,14 +30,14 @@ const MAGICNUMBER1 = 1;
 const SOURCE = 'ASSIGNMENT';
 const renderTeacherRedirect = () => <Redirect to="/assignments/all" />;
 // const renderAllAssignments = (testFunction: any) => <MyAssignments typeOfAssignmentsList="all" />;
-function renderAllAssignments(testFunction: any) {
-  return <MyAssignments typeOfAssignmentsList="all" testFunction={testFunction} />;
+function renderAllAssignments() {
+  return <MyAssignments typeOfAssignmentsList="all" />;
 }
 // const renderMyAssignments = () => <MyAssignments typeOfAssignmentsList="my" />;
-const renderMyAssignments = (testFunction: any) => (
-  < MyAssignments typeOfAssignmentsList="my" testFunction={testFunction} />
+const renderMyAssignments = () => (
+  < MyAssignments typeOfAssignmentsList="my" />
 );
-const renderMySchoolAssignments = (testFunction: any) => (<MyAssignments typeOfAssignmentsList="myschool" testFunction={testFunction} />);
+const renderMySchoolAssignments = () => (<MyAssignments typeOfAssignmentsList="myschool" />);
 
 const renderStudentsAssignments = () => <StudentAssignments />;
 const renderStudentEvaluation = () => <StudentEvaluation />;
@@ -54,7 +54,7 @@ interface Props extends RouteComponentProps {
 
 const currentUserRole = JSON.parse(localStorage.getItem('USER_DATA') || '{}').role;
 
-const teacherRoutes = (testFunction: any) => (
+const teacherRoutes = () => (
   <Switch>
     <Route
       path="/assignments"
@@ -63,15 +63,15 @@ const teacherRoutes = (testFunction: any) => (
     />
     <Route
       path="/assignments/all"
-      render={() => (renderAllAssignments(testFunction))}
+      render={() => (renderAllAssignments())}
     />
     <Route
       path="/assignments/myschool"
-      render={() => (renderMySchoolAssignments(testFunction))}
+      render={() => (renderMySchoolAssignments())}
     />
     <Route
       path="/assignments/my"
-      render={() => (renderMyAssignments(testFunction))}
+      render={() => (renderMyAssignments())}
     />
     <Route
       path="/assignments/answers/:entityId"
@@ -84,7 +84,7 @@ const teacherRoutes = (testFunction: any) => (
   </Switch>
 );
 
-const studentRoutes = (testFunction: any) => (
+const studentRoutes = () => (
   <Switch>
     <Route
       exact
@@ -102,7 +102,7 @@ const studentRoutes = (testFunction: any) => (
   </Switch>
 );
 
-const contentManagerRoutes = (testFunction: any) => (
+const contentManagerRoutes = () => (
   <Switch>
     <Route
       path="/assignments"
@@ -124,11 +124,11 @@ const contentManagerRoutes = (testFunction: any) => (
   </Switch>
 );
 
-const AssignmentsPageRouter = (testFunction: any) => (
+const AssignmentsPageRouter = () => (
   <Switch>
-    {currentUserRole === UserType.Teacher && teacherRoutes(testFunction)}
-    {currentUserRole === UserType.Student && studentRoutes(testFunction)}
-    {currentUserRole === UserType.ContentManager && contentManagerRoutes(testFunction)}
+    {currentUserRole === UserType.Teacher && teacherRoutes()}
+    {currentUserRole === UserType.Student && studentRoutes()}
+    {currentUserRole === UserType.ContentManager && contentManagerRoutes()}
 
     <Route path="/assignments/school" />
     <Route path="/assignments/favorites" />
@@ -1156,7 +1156,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     });
 
     // const testFunction = (string: any) => (console.log(string));
-    const testFunction = (cadena: any) => (this.assigValueData('', '', '', '', '', cadena));
+    // const testFunction = (cadena: any) => (this.assigValueData('', '', '', '', '', cadena));
 
     return (
       <div className={classes}>
@@ -1164,7 +1164,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
         {this.renderTabNavigations()}
 
         {this.renderSearchFilter()}
-        {AssignmentsPageRouter(testFunction)}
+        {AssignmentsPageRouter()}
 
         {this.renderPagination()}
       </div>

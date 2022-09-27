@@ -39,9 +39,9 @@ class MyAssignments extends Component<Props> {
   private unregisterListener: () => void = () => undefined;
 
   private async fetchAssignments() {
-    if (this.props.testFunction !== undefined && typeof this.props.testFunction === 'function') {
+    /*if (this.props.testFunction !== undefined && typeof this.props.testFunction === 'function') {
       this.props.testFunction(this.props.typeOfAssignmentsList);
-    }
+    }*/
 
     const { filter } = this.props.assignmentListStore!;
     const myFilterSchool = (this.props.typeOfAssignmentsList === 'myschool') ? 1 : 0;
