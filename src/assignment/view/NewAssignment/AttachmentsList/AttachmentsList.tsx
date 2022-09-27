@@ -128,9 +128,9 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
         const response = await newAssignmentStore!.fetchQuestionCustomImagesAttachments(String(this.state.listIdsSelected), AttachmentContentType.customImage, e.target.value!);
         /* const myCustomImagesSearch: CustomImgAttachment[] = response.myCustomImages;
         const numberOfPages: number = response.total_pages; */
-        this.setState({
+        /* this.setState({
           currentPage: 1,
-        });
+        }); */
       }
     }
   }
@@ -441,7 +441,6 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
   private renderSearchBar = () => {
     const { selectedTabId } = this.state;
     const { query } = this.state;
-
     if (selectedTabId !== this.THREE) {
       return (
         <div className="search-field-block">
@@ -688,11 +687,32 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
 
   public goToCustomImgAttachmentList = async () => {
     const { newAssignmentStore } = this.props;
-    this.setState({ selectedTabId: 2, currentId: 0, currentAttachment: undefined });
+    this.setState({ selectedTabId: 2, currentId: 0, currentAttachment: undefined,  });
+    /* this.setState({
+      currentPage: 1,
+    }); */
     newAssignmentStore!.fetchingCustomImageAttachments = true;
     /* this.renderAttachmentTab(); */
     this.props.context.changeContentType(AttachmentContentType.customImage);
+    this.setState({ query: '' });
     newAssignmentStore!.fetchQuestionAttachments(AttachmentContentType.customImage);
+    /* this.articleService.fetchCustomImages('', 1, ''); */
+    newAssignmentStore!.fetchQuestionCustomImagesAttachments(String(this.state.listIdsSelected), AttachmentContentType.customImage);
+    newAssignmentStore!.fetchingCustomImageAttachments = false;
+  }
+
+  public goToCustomImgAttachmentListAfterUploading = async () => {
+    const { newAssignmentStore } = this.props;
+    this.setState({ selectedTabId: 2, currentId: 0, currentAttachment: undefined, currentPage: 1 });
+    /* this.setState({
+      currentPage: 1,
+    }); */
+    newAssignmentStore!.fetchingCustomImageAttachments = true;
+    /* this.renderAttachmentTab(); */
+    this.props.context.changeContentType(AttachmentContentType.customImage);
+    this.setState({ query: '' });
+    /* this.articleService.fetchCustomImages('', 1, ''); */
+    newAssignmentStore!.fetchQuestionCustomImagesAttachmentsAfterUploading(String(this.state.listIdsSelected), AttachmentContentType.customImage);
     newAssignmentStore!.fetchingCustomImageAttachments = false;
   }
 
@@ -860,7 +880,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
     const { currentAttachment } = this.state;
     if (id === null || id === undefined) {
       return (
-        <CustomImageFormSimple onRedirectToList={this.goToCustomImgAttachmentList} />
+        <CustomImageFormSimple onRedirectToList={this.goToCustomImgAttachmentListAfterUploading} />
       );
     }
     return (
@@ -872,7 +892,6 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
   public renderTabByOption = (id?: number) => {
     const { selectedTabId, currentId } = this.state;
     const { newAssignmentStore } = this.props;
-
     switch (selectedTabId!) {
       case 1:
         return this.renderAttachments();
