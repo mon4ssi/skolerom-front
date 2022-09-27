@@ -47,7 +47,7 @@ class MyAssignments extends Component<Props> {
     const myFilterSchool = (this.props.typeOfAssignmentsList === 'myschool') ? 1 : 0;
     filter.page = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.PAGE, 1);
     filter.locale = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.LOCALE);
-    filter.grade = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GRADE);
+    filter.grade = QueryStringHelper.getString(this.props.history, QueryStringKeys.GRADE);
     filter.subject = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.SUBJECT);
     filter.grepCoreElementsIds = QueryStringHelper.getString(this.props.history, QueryStringKeys.GREPCOREELEMENTSIDS);
     filter.grepMainTopicsIds = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GREPMAINTOPICSIDS);

@@ -1643,14 +1643,14 @@ export class EditableImageChoiceQuestion extends ImageChoiceQuestion implements 
   }
 
   @action
-  public setHiddenQuestion(value: boolean) {
-    this._hide_answer = value;
+  public setGuidance(value: string): void {
+    this._guidance = value;
     this.save();
   }
 
   @action
-  public setGuidance(value: string): void {
-    this._guidance = value;
+  public setHiddenQuestion(value: boolean) {
+    this._hide_answer = value;
     this.save();
   }
 
