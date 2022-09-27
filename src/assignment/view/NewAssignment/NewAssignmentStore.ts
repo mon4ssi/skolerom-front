@@ -664,7 +664,29 @@ export class NewAssignmentStore {
     try {
       switch (typeAttachments) {
         case AttachmentContentType.customImage: {
-          const response =  title !== '' ? await this.articleService.fetchCustomImages(listids, this.currentPage, title!) : await this.articleService.fetchCustomImages(listids, this.currentPage, '');
+          const response =  title !== '' && title !== undefined && title !== null ? await this.articleService.fetchCustomImages(listids, 0, title!) : await this.articleService.fetchCustomImages(listids, this.currentPage, '');
+          this.questionCustomAttachments =
+            (response.myCustomImages).map(item => item).flat() || [];
+          this.numberOfPages = response.total_pages;
+          break;
+        }
+        default:
+          break;
+      }
+    } catch (e) {
+      this.questionCustomAttachments = [];
+      this.fetchingCustomImageAttachments = false;
+      throw Error(`fetch question custom images attachments: ${e}`);
+    }
+    this.fetchingCustomImageAttachments = false;
+  }
+
+  public async fetchQuestionCustomImagesAttachmentsAfterUploading(listids: string, typeAttachments: AttachmentContentType, title?: string): Promise<void> {
+    this.fetchingCustomImageAttachments = true;
+    try {
+      switch (typeAttachments) {
+        case AttachmentContentType.customImage: {
+          const response =  title !== '' && title !== undefined && title !== null ? await this.articleService.fetchCustomImages(listids, 0, title!) : await this.articleService.fetchCustomImages(listids, 0, '');
           this.questionCustomAttachments =
             (response.myCustomImages).map(item => item).flat() || [];
           this.numberOfPages = response.total_pages;
