@@ -95,6 +95,8 @@ export class TeachingPathApi implements TeachingPathRepo {
 
   public storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
   public currentLocale = this.storageInteractor.getCurrentLocale()!;
+  public numberContentAll = 0;
+  public arrayNumberContentAll: Array<number> = [];
 
   public async getAllTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
     if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
@@ -206,6 +208,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         minNumberOfSteps: data.minNumberOfSteps,
         maxNumberOfSteps: data.maxNumberOfSteps,
         author: data.author,
+        authorRole: data.authorRole,
         levels: data.levels,
         answerId: data.answerId,
         isCopy: data.isCopy,
@@ -254,12 +257,16 @@ export class TeachingPathApi implements TeachingPathRepo {
         isFinished: data.isFinished,
         rootNodeId: data.rootNodeId,
         lastSelectedNodeId: data.lastSelectedNodeId,
+        featuredImage: data.featuredImage,
+        backgroundImage: data.backgroundImage,
         minNumberOfSteps: data.minNumberOfSteps,
         maxNumberOfSteps: data.maxNumberOfSteps,
         author: data.author,
         levels: data.levels,
         answerId: data.answerId,
         isCopy: data.isCopy,
+        deadline: data.deadline,
+        authorAvatar: data.authorPhoto
       });
     } catch (error) {
       if (error.response.data.message === 'Teaching path not assigned to you') {
@@ -278,13 +285,32 @@ export class TeachingPathApi implements TeachingPathRepo {
 
   }
 
+  public searchShortesPath(data: any): number | undefined {
+    const numberContent = 0;
+    if (data.shortestPath !== undefined || data.shortestPath !== null || data.shortestPath.length !== 0 || typeof(data.shortestPath) !== 'undefined') {
+      this.numberContentAll = this.numberContentAll + 1;
+      if (typeof(data.shortestPath) !== 'undefined') {
+        this.arrayNumberContentAll.push(data.shortestPath.id);
+        this.searchShortesPath(data.shortestPath);
+      }
+    } else {
+      return numberContent;
+    }
+  }
+
   public async getCurrentNode(teachingPathId: number, nodeId: number): Promise<TeachingPathNode> {
     const { data } = await API.get(`api/student/teaching-paths/${teachingPathId}/node/${nodeId}`);
-
+    this.arrayNumberContentAll = [];
+    if (!isNull(data.shortestPath)) {
+      this.arrayNumberContentAll.push(data.shortestPath.id);
+      this.searchShortesPath(data.shortestPath);
+    }
     const breadcrumbs = data.breadcrumbs.reverse().map((crumb: BreadcrumbsResponseDTO) => new Breadcrumbs({
       selectQuestion: crumb.selectQuestion,
       id: crumb.id,
       parentNodeId: crumb.parentNodeId,
+      shortest: this.numberContentAll,
+      shortpathid: this.arrayNumberContentAll,
       items: !isNull(crumb.items) ? crumb.items.map(item => new TeachingPathItem({
         type: crumb.type,
         value: item
@@ -352,6 +378,34 @@ export class TeachingPathApi implements TeachingPathRepo {
 
   public async getGrepFiltersTeachingPath(locale: string, grades: string, subjects: string, coreElements?: string, mainTopics?:string, goals?: string, source?:string): Promise<FilterGrep>  {
     const response = await API.get('api/teacher/teaching-paths/grep/filters', {
+      params: {
+        locale,
+        grades,
+        subjects,
+        coreElements,
+        mainTopics,
+        goals,
+        source
+      }
+    });
+    return response.data;
+  }
+  public async getGrepFiltersMyTeachingPath(locale: string, grades: string, subjects: string, coreElements?: string, mainTopics?:string, goals?: string, source?:string): Promise<FilterGrep>  {
+    const response = await API.get('api/teacher/teaching-paths/draft/grep/filters', {
+      params: {
+        locale,
+        grades,
+        subjects,
+        coreElements,
+        mainTopics,
+        goals,
+        source
+      }
+    });
+    return response.data;
+  }
+  public async getGrepFiltersMyschoolTeachingPath(locale: string, grades: string, subjects: string, coreElements?: string, mainTopics?:string, goals?: string, source?:string): Promise<FilterGrep>  {
+    const response = await API.get('api/teacher/teaching-paths/myschool/grep/filters', {
       params: {
         locale,
         grades,

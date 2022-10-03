@@ -5,7 +5,7 @@
     /* overflow: auto; */
     height: 100%;
     &__header {
-      height: 30%;
+      height: 45%;
       width: 100%;
       img {
         width: 100%;
@@ -104,15 +104,40 @@
     align-items: center;
 }
 
+.coverImageButtonTab {
+  cursor: pointer;
+  text-align: center;
+  border-bottom: 1px solid #d3d9de;
+  width: 100%;
+  height: 46px;
+  background: white;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 46px;
+  text-transform: uppercase;
+  padding-top: 6px;
+  &:hover,
+  &.selected,
+  &.active {
+    border-bottom: solid #e2017b 4px;
+  }
+}
+
+.buttonImgAddMedia {
+  display: inline;
+}
+
 .gapOptionsImages{
     width: 100%;
     max-width: 100%;
     padding: 20px;
     display: flex;
+    /* background-color: #e7ecef; */
     flex-wrap: wrap;
+    overflow-y: scroll;
     button {
       padding: 0px;
-      background: transparent;
+      /* background: transparent; */
       position: relative;
       width: 33.33%;
       .icon {
@@ -146,6 +171,7 @@
 
 .buttonContent {
     display: flex;
+    padding-top: 12px
 }
 
 .imageForCover {
@@ -159,4 +185,43 @@
   /* object-fit: inherit; */
   object-fit: cover;
   padding: 5px;
+}
+
+.imageForCoverCustom {
+  width: 100%;
+  /* display: inline-table; */
+  /* max-width: 240px; */
+  /* min-width: 240px; */
+  max-height: 180px;
+  height: 100%;
+  /* flex-basis: fit-content; */
+  /* object-fit: inherit; */
+  object-fit: cover;
+  padding: 5px;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+
+
+.imageInfo {
+  text-align: left;
+  margin: 5px;
+  margin-top: 0px;
+  padding: 10px;
+  background-color: white;
+}
+
+.rowImageInfo {
+  flex-wrap: nowrap;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
+    margin: 5px 0px;
+}
+
+.fixed {
+  min-height: 260px;
+  max-height: 260px;
 }

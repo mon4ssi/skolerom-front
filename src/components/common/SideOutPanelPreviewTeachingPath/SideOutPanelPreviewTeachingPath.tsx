@@ -15,7 +15,7 @@ import { deadlineDateFormat, thirdLevel } from 'utils/constants';
 import clock from 'assets/images/clock.svg';
 import close from 'assets/images/close.svg';
 
-import question from 'assets/images/questions.svg';
+import steps from 'assets/images/teaching-path.svg';
 import article from 'assets/images/article.svg';
 import person from 'assets/images/person.svg';
 import date from 'assets/images/date.svg';
@@ -34,6 +34,7 @@ import { Notification, NotificationTypes } from '../Notification/Notification';
 
 import './SideOutPanelPreviewTeachingPath.scss';
 import { UserService } from 'user/UserService';
+import { Url } from 'url';
 
 interface Props extends RouteComponentProps {
   view: string;
@@ -63,28 +64,60 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     }
   }
 
+  public openInNewTabView = () => {
+    const { currentEntity: { id } } = this.props.store!;
+    const url: URL = new URL(window.location.href);
+    const urlForEditing: string = `${url.origin}/teaching-paths/view/${id!}`;
+    window.open(urlForEditing);
+  }
+
   public renderViewButton = (isPublished: boolean, history: any, id: number, view: string) =>
   (
     <div className="actionButton">
-      <CreateButton disabled={!isPublished} onClick={() => { history.push(`/teaching-paths/view/${id}`); }} title={view} >
+      <CreateButton disabled={!isPublished} onClick={() => this.openInNewTabView()} title={view} >
         {view}
       </CreateButton>
     </div>
   )
 
+  public checkForPåbygging = () => {
+    const goalsList = this.props.store!.currentEntity!.goalsItems;
+    let counter = 0;
+    goalsList.forEach((goal) => {
+      if (goal.gradeDesc!.includes('påbygging')) {
+        counter = counter + 1;
+      }
+    });
+    const foundString = counter > 0 ? true : false;
+    return foundString;
+  }
+
+  public openInNewTabTeacherGuidance = () => {
+    const { currentEntity: { id } } = this.props.store!;
+    const url: URL = new URL(window.location.href);
+    const urlForEditing: string = `${url.origin}/teaching-paths/view/${id!}/tg=true`;
+    window.open(urlForEditing);
+  }
+
   public renderTeacherGuidanceButton = (guidanceString: string) =>
   (
     <div className="actionButton">
-      <CreateButton disabled={false} onClick={this.handleTeacherGuidance} title={guidanceString} >
+      <CreateButton disabled={false} onClick={() => this.openInNewTabTeacherGuidance()} title={guidanceString} >
         {guidanceString}
       </CreateButton>
     </div>
   )
 
+  public openInNewTabEdit = (id: number) => {
+    const url: URL = new URL(window.location.href);
+    const urlForEditing: string = `${url.origin}/teaching-paths/edit/${id}`;
+    window.open(urlForEditing);
+  }
+
   public renderEditButton = (editString: string, history: any, id: number) =>
   (
     <div className="actionButton">
-      <CreateButton disabled={false} onClick={() => { history.push(`/teaching-paths/edit/${id}`); }} title={editString} >
+      <CreateButton disabled={false} onClick={() => { this.openInNewTabEdit(id); }} title={editString} >
         {editString}
       </CreateButton>
     </div>
@@ -262,23 +295,25 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     ))
   )
 
-  public renderGrepEducationalGoals = (goalsArray: Array<GenericGrepItem>) =>
-  (
-    <>
-      <div className="entityInfoBlockExpanded">
-        <div className="imageGrep">
-          <img className="imgInfo" src={goals} />
+  public renderGrepEducationalGoals = (goalsArray: Array<GenericGrepItem>) => {
+    const expandedStyle: boolean = this.checkForPåbygging();
+    return (
+      <>
+        <div className="entityInfoBlockExpanded">
+          <div className="imageGrep">
+            <img className="imgInfo" src={goals} />
+          </div>
+          <div className="title">{intl.get('preview.teaching_path.grep.educational_goals')}</div>
         </div>
-        <div className="title">{intl.get('preview.teaching_path.grep.educational_goals')}</div>
-      </div>
-      <div className="flexContainer">
-        <ul className="listItem">
-          {this.renderGoalsArray(goalsArray)}
-        </ul>
+        <div className={expandedStyle ? 'flexContainerExpanded' : 'flexContainer'}>
+          <ul className="listItem">
+            {this.renderGoalsArray(goalsArray)}
+          </ul>
 
-      </div>
-    </>
-  )
+        </div>
+      </>
+    );
+  }
 
   public renderPublishDate = (createdAt: string) =>
   (
@@ -299,9 +334,11 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         coreElementItems,
         sourceItems,
         multiSubjectItems,
+        numberOfSteps,
         goalsItems,
         description,
         author,
+        authorRole,
         isPrivate,
         numberOfQuestions,
         hasGuidance,
@@ -311,7 +348,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const { currentEntity: { id } } = this.props.store!;
     const { history, isPublishedCurrentTeachingPath, view } = this.props;
     /* const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager; */
-    const showPublishDate = false;
+    const showPublishDate = authorRole === UserType.Teacher || !(authorRole === UserType.ContentManager && !(isPrivate!));
     const viewText = intl.get('preview.teaching_path.buttons.view');
     const guidanceText = intl.get('preview.teaching_path.buttons.teacher_guidance');
     const editText = intl.get('preview.teaching_path.buttons.edit');
@@ -341,8 +378,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
           <input type="text" aria-labelledby="aux1" autoFocus className="hidden" />
           <div className="entityInfo">
             <div className="partsInfo">
-              <img src={question} alt="question" />
-              {numberOfQuestions ? numberOfQuestions : intl.get('preview.teaching_path.headers.no')} {`${intl.get('preview.teaching_path.headers.questions')}`}
+              <img src={steps} alt="question" />
+              {numberOfSteps.min === numberOfSteps.max ? `${numberOfSteps.min}` : `${numberOfSteps.min}-${numberOfSteps.max}`} {`${intl.get('preview.teaching_path.headers.steps')}`}
             </div>
             <div className="partsInfo">
               <img src={article} alt="question" />

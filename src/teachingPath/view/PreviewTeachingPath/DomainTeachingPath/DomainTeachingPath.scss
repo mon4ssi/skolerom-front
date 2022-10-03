@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-  
+    height: 100%;
     .chooseOne {
       color: #E2017B;
       text-transform: uppercase;
@@ -20,7 +20,7 @@
       display: flex;
       flex-wrap: wrap;
       width: 100%;
-      height: inherit;
+      height: auto;
       overflow: auto;
   
       .passedStyle {

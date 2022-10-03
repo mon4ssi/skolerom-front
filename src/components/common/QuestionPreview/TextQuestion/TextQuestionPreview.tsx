@@ -71,6 +71,7 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
     const { readOnly, answer, isEvaluationStyle, question, redirectData } = this.props;
     const isHideValue = (question.hide_answer) ? '' : answer && answer!.value;
     const placeholder = (question.hide_answer) ? '' : intl.get('new assignment.Write your answer here');
+    const studentsAnswer = (question.hide_answer) ? 'studentsAnswer notline' : 'studentsAnswer';
     if (isEvaluationStyle) {
       const answerSplit = String(answer && answer.value).replace(/\n/g, '<br />');
       return <span className={'evaluationAnswer'} dangerouslySetInnerHTML={{ __html: answerSplit }} />;
@@ -87,7 +88,7 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
           <textarea
             autoFocus={!readOnly}
             value={isHideValue}
-            className="studentsAnswer"
+            className={studentsAnswer}
             placeholder={placeholder}
             readOnly={readOnly}
             onChange={this.handleChangeAnswer}

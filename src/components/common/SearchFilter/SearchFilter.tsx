@@ -24,6 +24,7 @@ import './SearchFilter.scss';
 
 const STYLE_ELEMENT_ID = 'STYLE_ELEMENT_ID';
 const MAX_HEADER_HEIGHT = 70;
+const DELAY = 500;
 
 interface Props {
   assignmentListStore?: AssignmentListStore;
@@ -41,6 +42,8 @@ interface Props {
   isArticlesListPage?: boolean;
   isAssignmentsListPage?: boolean;
   isAssignmentsListFilter?: boolean;
+  disabledInputSearch?: boolean;
+  forceFocusInputSearch?: boolean;
 
   customLanguagesList?: Array<Language>;
   customLocalesList?: Array<Greep>;
@@ -126,6 +129,7 @@ class SearchFilter extends Component<Props, State> {
   private space: RefObject<HTMLDivElement> = React.createRef();
   private subjectRef: RefObject<HTMLSelectElement> = React.createRef();
   private evaluationRef: RefObject<HTMLSelectElement> = React.createRef();
+  private searchRef: RefObject<HTMLInputElement> = React.createRef();
 
   public state = {
     displayWidthBreakpoint: 0,
@@ -824,6 +828,13 @@ class SearchFilter extends Component<Props, State> {
       if (subject.filterStatus === 'inactive') { classD += ' downlight'; }
       return <button value={subject.id} className={`itemFlexFilter subjectsFilterClass ${classD}`} onClick={handleClickSubject} key={subject.id}>{title}</button>;
     });
+    if (this.props.filtersAjaxLoading) {
+      return (
+        <div className="minimalLoading">
+          <span /><span /><span />
+        </div>
+      );
+    }
     return (
       <div className="subjectsItems flexFilter">
         {visibleSubjects}
@@ -1748,7 +1759,9 @@ class SearchFilter extends Component<Props, State> {
       isArticlesListPage,
       isStudentTpPage,
       isAssignmentsListPage,
-      isAssignmentsListFilter
+      isAssignmentsListFilter,
+      disabledInputSearch,
+      forceFocusInputSearch
     } = this.props;
     let myValue: any;
     const searchQueryValue = searchQueryFilterValue || '';
@@ -1758,6 +1771,14 @@ class SearchFilter extends Component<Props, State> {
       const inputTag = document.getElementById('ChangeForce') as HTMLInputElement;
       inputTag.value = myValue;
     };
+    if (forceFocusInputSearch) {
+      setTimeout(() => {
+        if (this.searchRef.current) {
+          this.searchRef.current.focus();
+        }
+      }, DELAY);
+    }
+
     return (
       <div className="SearchFilter" aria-controls="List" ref={this.container}>
         {!isArticlesListPage && !isStudentTpPage && isStudent && this.renderEvaluationStatus()}
@@ -1788,6 +1809,8 @@ class SearchFilter extends Component<Props, State> {
             id="SendFilter"
             aria-required="true"
             aria-invalid="false"
+            disabled={disabledInputSearch}
+            ref={this.searchRef}
           />
           <label id="searchfilterInput" className="hidden">{placeholder}</label>
           <div id="ChangeForce" className="SearchFilter__search__submit" />

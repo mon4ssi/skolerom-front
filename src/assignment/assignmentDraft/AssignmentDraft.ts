@@ -651,8 +651,8 @@ export class EditableTextQuestion extends TextQuestion implements QuestionAction
       assignmentDraft: assignment,
       title: '',
       guidance: '',
-      order: index,
       hide_answer: false,
+      order: index,
       contentBlocks: []
     });
   }
@@ -970,8 +970,8 @@ export class EditableMultipleChoiceQuestion extends MultipleChoiceQuestion imple
       assignmentDraft,
       title: '',
       guidance: '',
-      order: index,
       hide_answer: false,
+      order: index,
       options: [],
       contentBlocks: []
     });
@@ -1276,8 +1276,8 @@ export class EditableMultipleChoiceQuestion extends MultipleChoiceQuestion imple
       assignmentDraft: this.assignmentDraft!,
       title: this.title,
       guidance: this.guidance,
-      options: this._options,
       hide_answer: this.hide_answer,
+      options: this._options,
       contentBlocks: this._content.map(item => cloneDeep(item))
     });
 
@@ -1388,8 +1388,8 @@ export class EditableImageChoiceQuestion extends ImageChoiceQuestion implements 
       assignmentDraft,
       title: '',
       guidance: '',
-      order: index,
       hide_answer: false,
+      order: index,
       options: [],
       contentBlocks: []
     });

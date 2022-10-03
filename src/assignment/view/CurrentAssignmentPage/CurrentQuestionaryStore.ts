@@ -61,6 +61,18 @@ export class CurrentQuestionaryStore {
     return this.currentQuestionary;
   }
 
+  public async getQuestionaryByIdPreview(assignmentId: number) {
+    this.isLoading = true;
+    const questionary = await this.questionaryService.getAssignmentQuestionaryByIdPreview(assignmentId);
+    this.currentQuestionary = questionary;
+    this.assignment = questionary.assignment;
+    this.questions = questionary.assignment.questions;
+    this.answers = questionary.answers;
+    this.isLoading = false;
+
+    return this.currentQuestionary;
+  }
+
   public getCurrentUser = () => this.userService.getCurrentUser();
 
   @computed
@@ -96,7 +108,22 @@ export class CurrentQuestionaryStore {
 
   @computed
   public get featuredImage() {
-    return this.assignment!.featuredImage;
+    return (this.assignment) ? this.assignment!.featuredImage : '';
+  }
+
+  @computed
+  public get backgroundImage() {
+    return (this.assignment) ? this.assignment!.backgroundImage : '';
+  }
+
+  @computed
+  public get authoravatar() {
+    return this.assignment!.authoravatar;
+  }
+
+  @computed
+  public get author() {
+    return this.assignment!.author;
   }
 
   public get numberOfQuestions(): number {
@@ -118,8 +145,8 @@ export class CurrentQuestionaryStore {
     this.relatedArticles.some(i => i.isRead === true)
 
   @action
-  public async setReadStatusToArticle(idArticle: number, levelId: number, graduation: number) {
-    await this.questionaryService.setReadStatusArticle(this.assignment!.id, this.currentQuestionary!.idRevision!, idArticle, levelId, graduation);
+  public async setReadStatusToArticle(idArticle: number, levelId: number, graduation: number, isStudent: boolean) {
+    if (isStudent) await this.questionaryService.setReadStatusArticle(this.assignment!.id, this.currentQuestionary!.idRevision!, idArticle, levelId, graduation);
     let indexArticle = -1;
     const article = this.relatedArticles.find((article, index) => {
       if (article.id === idArticle) {

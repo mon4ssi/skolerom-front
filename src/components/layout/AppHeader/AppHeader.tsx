@@ -15,6 +15,7 @@ import logoImage from 'assets/images/logo.svg';
 import burger from 'assets/images/burger-icon.svg';
 import verticalDots from 'assets/images/vertical-dots.svg';
 import userPlaceholder from 'assets/images/user-placeholder.png';
+import closeicon from 'assets/images/close-rounded-black.svg';
 import question from 'assets/images/questions.svg';
 
 import './AppHeader.scss';
@@ -121,14 +122,14 @@ const renderHeaderLink = (link: HeaderNavigationLink) => {
   if (link.dropdown) {
     const renderSubMenuSubMenu = (item: HeaderNavigationLink) => (
         <li key={item.name} className={'AppHeader__dropdownItem__subItem'}>
-          <a href={item.url} title={intl.get(`header.title.${item.name}`)}>{intl.get(`header.${item.name}`)}</a>
+          <a href={item.url} title={item.name}>{item.name}</a>
         </li>
     );
     const renderSubmenu = (item: HeaderNavigationLink) => {
       if (item.dropdown) {
         return (
           <li key={item.name} className={'AppHeader__dropdownItem'}>
-            <a href={item.url} title={intl.get(`header.title.${item.name}`)}>{intl.get(`header.${item.name}`)}</a>
+            <a href={item.url} title={item.name}>{item.name}</a>
             <ul className="AppHeader__dropdownItem__subMenu">
               {item.submenuItems!.map(renderSubMenuSubMenu)}
             </ul>
@@ -137,7 +138,7 @@ const renderHeaderLink = (link: HeaderNavigationLink) => {
       }
       return (
         <li key={item.name} className={'AppHeader__dropdownItem'}>
-          <a href={item.url} title={intl.get(`header.title.${item.name}`)}>{intl.get(`header.${item.name}`)}</a>
+          <a href={item.url} title={item.name}>{item.name}</a>
         </li>
       );
     };
@@ -145,7 +146,7 @@ const renderHeaderLink = (link: HeaderNavigationLink) => {
     return (
       <li key={link.name} className="AppHeader__navigationItem tc1 fs17 fw500">
         <div className="AppHeader__navigationItemText">
-          <a href={link.url} className="AppHeader__dropdown" title={intl.get(`header.title.${link.name}`)}>{intl.get(`header.${link.name}`)}</a>
+          <a href={link.url} className="AppHeader__dropdown" title={link.name}>{link.name}</a>
           <div className={'AppHeader__submenuWrapper'}>
             <ul className={'AppHeader__submenu'}>
               {link.submenuItems!.map(renderSubmenu)}
@@ -159,7 +160,7 @@ const renderHeaderLink = (link: HeaderNavigationLink) => {
   return (
     <li key={link.name} className="AppHeader__navigationItem tc1 fs17 fw500">
       <div className="AppHeader__navigationItemText">
-        <a href={link.url} title={intl.get(`header.title.${link.name}`)}>{intl.get(`header.${link.name}`)}</a>
+        <a href={link.url} title={link.name}>{link.name}</a>
       </div>
     </li>
   );
@@ -170,6 +171,8 @@ interface HeaderProps extends RouteComponentProps {
   loginStore?: LoginStore;
   fromAssignmentPassing?: boolean;
   fromTeachingPathPassing?: boolean;
+  studentFormTeachinPath?: boolean;
+  studentFormAssignment?: boolean;
   isPreview?: boolean;
   uiStore?: UIStore;
   width?:number;
@@ -186,6 +189,7 @@ interface HeaderState {
   modalVisible: Modals;
   isModalKeyboard: boolean;
   isMobileModalOpen: boolean;
+  linksMenu: Array<HeaderNavigationLink>;
 }
 
 @inject('loginStore', 'uiStore')
@@ -194,7 +198,8 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   public readonly state: HeaderState = {
     modalVisible: Modals.NONE,
     isModalKeyboard: false,
-    isMobileModalOpen: false
+    isMobileModalOpen: false,
+    linksMenu: []
   };
 
   private renderUserModalIfNeeded() {
@@ -223,6 +228,16 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     }
 
     uiStore!.setCurrentActiveTab('activity');
+  }
+
+  private closeWindow = () => {
+    const textClose = (this.props.studentFormAssignment) ? intl.get('teaching path passing.exit') : intl.get('current_assignment_page.Exit assignment');
+    return (
+      <div className="closeHeaderTp" onClick={this.handleLogoClick}>
+        <p>{textClose}</p>
+        <img src={closeicon} />
+      </div>
+    );
   }
 
   private getFeideUrl = async () => {
@@ -256,6 +271,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   }
 
   private renderRole = () => {
+    const { studentFormTeachinPath } = this.props;
     const currentUser = this.props.loginStore!.currentUser;
 
     /*if (currentUser && currentUser.type === UserType.Teacher) {
@@ -264,6 +280,9 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     if (currentUser && currentUser.type === UserType.Student) {
       return intl.get('header.student');
     }*/
+    if (currentUser && currentUser.type === UserType.Student && studentFormTeachinPath) {
+      return intl.get('header.student');
+    }
     if (currentUser && currentUser.type === UserType.ContentManager) {
       return intl.get('header.content_manager');
     }
@@ -554,15 +573,25 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
 
   public async componentDidMount() {
     document.addEventListener('keyup', this.handleKeyboardControl);
+    this.getdataMenu();
   }
   public componentWillUnmount() {
     document.removeEventListener('keyup', this.handleKeyboardControl);
   }
 
+  public getdataMenu = async () => {
+    const { uiStore } = this.props;
+    const linksLis2t = await this.props.loginStore!.getMenuData(uiStore!.currentLocale);
+    this.setState({
+      linksMenu: linksLis2t
+    });
+  }
+
   public renderNavigation = () => {
     const { uiStore } = this.props;
-    const linksList = uiStore!.currentLocale === 'nn' ? nynorskHeaderLinks : headerLinks;
+    // const linksList = uiStore!.currentLocale === 'nn' ? nynorskHeaderLinks : headerLinks;
     const tabletLinksList = uiStore!.currentLocale === 'nn' ? nynorskHeaderLinks : headerLinks;
+    const linksList = this.state.linksMenu;
 
     return (
       <>
@@ -573,7 +602,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
           {this.renderAccountTab()}
         </ul>
         <ul className="AppHeader__navigation AppHeader__navigation_tablet">
-          {tabletLinksList.map(renderHeaderLink)}
+          {linksList.map(renderHeaderLink)}
           {this.renderQuestionTab()}
           {this.renderAccountTab()}
         </ul>
@@ -759,7 +788,8 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         {!this.props.isPreview && this.props.loginStore!.currentUser && !isStudent && fromTeachingPathPassing && this.renderCopyButton('teaching_paths_list.copy')}
         {ifLogin && this.renderNavigationNotLogin()}
 
-        {this.props.loginStore!.currentUser &&  this.renderBurgerButton()}
+        {this.props.loginStore!.currentUser && this.renderBurgerButton()}
+        {this.props.studentFormTeachinPath && this.closeWindow()}
         <div className="AppHeader__block AppHeader__block_mobile">
           <NavLink to={redirectLink} onClick={this.handleLogoClick}>
             <img src={logoImage} alt="logo mobile"/>

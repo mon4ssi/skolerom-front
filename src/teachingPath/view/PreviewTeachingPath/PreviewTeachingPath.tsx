@@ -20,6 +20,7 @@ import { BreadcrumbsTeachingPath } from 'components/common/Breadcrumbs/Breadcrum
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 
 import actualArrowLeftRounded from 'assets/images/actual-arrow-left-rounded.svg';
+import arrowLeftRounded from 'assets/images/arrow-left-rounded.svg';
 
 import './PreviewTeachingPath.scss';
 import { Loader } from '../../../components/common/Loader/Loader';
@@ -269,6 +270,43 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
       ;
   }
 
+  public itemsbyBreadcrumbs = () => {
+    const { questionaryTeachingPathStore } = this.props;
+    const node = questionaryTeachingPathStore!.currentNode;
+    if (node && node.breadcrumbs) {
+      const lengthShort = node && node.breadcrumbs[0]!.shortest!;
+      const shortpad = node.breadcrumbs[0]!.shortpathid;
+      const arrayActualyBreadCrumbs : Array<number> = [];
+      node.breadcrumbs.forEach((bread) => {
+        arrayActualyBreadCrumbs.push(bread.id);
+      });
+      const lastDrow = (arrayActualyBreadCrumbs[arrayActualyBreadCrumbs.length - 1]);
+      const newArrayCore = arrayActualyBreadCrumbs.concat(shortpad!);
+      const listcrude = newArrayCore!.map((shortitem) => {
+        const usedClass = (arrayActualyBreadCrumbs.includes(shortitem)) ? (shortitem === lastDrow) ? 'used rounded' : 'used' : '';
+        return (shortitem !== undefined) ? (<li key={shortitem} className={usedClass}/>) : '';
+      });
+      if (lengthShort === 1 || lengthShort === 0) {
+        return (
+          <ul>
+            <li className="used rounded" />
+            <li />
+          </ul>
+        );
+      }
+      return (
+        <ul>
+          {listcrude}
+        </ul>
+      );
+    }
+    return (
+      <ul>
+        <li className="used " />
+      </ul>
+    );
+  }
+
   public anyList(butList: Array<Article | Assignment>, node: EditableTeachingPathNode) {
     let returnArray : Array<Article | Assignment> = butList;
     node!.items!.forEach((e) => {
@@ -332,32 +370,82 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
     this.props.questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Root);
   }
 
+  public onClickItem = (idNode: number) => {
+    const { questionaryTeachingPathStore } = this.props;
+    if (idNode > 0) {
+      questionaryTeachingPathStore!.handleIframe(false);
+      return questionaryTeachingPathStore!.calculateCurrentNode(questionaryTeachingPathStore!.teachingPathId!, idNode);
+    }
+  }
+
+  public onClickBackButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { questionaryTeachingPathStore } = this.props;
+    const check = Number(e.currentTarget.getAttribute('data-check'));
+    const id = Number(e.currentTarget.getAttribute('data-id'));
+    if (check === 0) {
+      const exitTeachingPath = await Notification.create({
+        type: NotificationTypes.CONFIRM,
+        title: intl.get('teaching path passing.confirm_exit')
+      });
+      if (exitTeachingPath) {
+        this.props.questionaryTeachingPathStore!.resetAllInfoAboutTeachingPath();
+        this.props.history.push('/teaching-paths');
+      }
+    } else {
+      this.onClickItem(id);
+    }
+  }
+
+  public renderLeftButton = () => {
+    const { questionaryTeachingPathStore } = this.props;
+    const node = questionaryTeachingPathStore!.currentNode;
+    if (node && node.breadcrumbs) {
+      const idNode = node && node.id;
+      const indexCore = node.breadcrumbs.findIndex(element => element!.id === idNode);
+      const idSkill = (node.breadcrumbs[Number(indexCore - 1)] === undefined) ? 0 : node.breadcrumbs[Number(indexCore - 1)].id;
+      return (
+        <button className={'navigationExitButton'} data-check={indexCore} data-id={idSkill} onClick={this.onClickBackButton} title={intl.get('teaching path passing.exit')} >
+          <img src={arrowLeftRounded} alt="arrowLeftRounded"/>
+        </button>
+      );
+    }
+    return;
+  }
+
+  public renderRightButton = () => {
+    const { questionaryTeachingPathStore } = this.props;
+    const node = questionaryTeachingPathStore!.currentNode;
+    if (node && node.breadcrumbs) {
+      const idNode = node && node.id;
+      const indexCore = node.breadcrumbs.findIndex(element => element!.id === idNode);
+      const idSkill = (node.breadcrumbs[Number(indexCore - 1)] === undefined) ? 0 : node.breadcrumbs[Number(indexCore - 1)].id;
+      const isDisabled = true;
+      return (
+        <button className={'navigationNextButton '} onClick={this.onClickBackButton} title={intl.get('teaching path passing.exit')} disabled={isDisabled}>
+          <img src={arrowLeftRounded} alt="arrowLeftRounded"/>
+        </button>
+      );
+    }
+    return;
+  }
+
   public render() {
     return (
       <div className={'passageTeachingPath PreviewTeachingPath'}>
         <AppHeader fromTeachingPathPassing isPreview onLogoClick={this.handleExit}/>
-
+        <div className="passageTeachingPathBreadCrumbs">
+          {this.itemsbyBreadcrumbs()}
+        </div>
         <div className="teachingPathWrapper">
-
-          <div className="teachingPathNavigate">
-            <div className="stepOverview">
-              {this.renderOverview()}
-            </div>
-
-            <div className="arrowControlsTeachingPath">
-              <button className={'navigationExitButton'} onClick={this.handleExit} title={intl.get('teaching path passing.exit')} >
-                <img src={actualArrowLeftRounded} alt="actualArrowLeftRounded"/>
-                <span>{intl.get('teaching path passing.exit')}</span>
-              </button>
-            </div>
+        <div className="teachingPathNewBreadCrumbs">
+            {this.renderLeftButton()}
+            <BreadcrumbsTeachingPath onClickStart={this.onClickStartBreadcrumbs}/>
+            {this.renderRightButton()}
           </div>
-
           <div className="flexBox dirColumn wrapperTeachingPath">
             <div className="contentTeachingPath" ref={this.ref}>
               {this.renderContent()}
             </div>
-
-            <BreadcrumbsTeachingPath onClickStart={this.onClickStartBreadcrumbs}/>
           </div>
         </div>
       </div>

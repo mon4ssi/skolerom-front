@@ -186,6 +186,7 @@ export interface ImageChoiceQuestionOptionDTO {
 interface AssignmentByIdResponseDTO {
   id: number;
   author: string;
+  authorRole: string;
   title: string;
   description: string;
   featuredImage: string;
@@ -220,6 +221,7 @@ export class AssignmentApi implements AssignmentRepo {
     return new Assignment({
       id: assignmentDTO.id,
       author: assignmentDTO.author,
+      authorRole: assignmentDTO.authorRole,
       title: assignmentDTO.title,
       createdAt: assignmentDTO.created_at,
       description: assignmentDTO.description,
@@ -287,7 +289,7 @@ export class AssignmentApi implements AssignmentRepo {
   }
 
   public async getMyAssignmentsList(filter: Filter) {
-    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
+    if (!isNil(filter.searchQuery)) filter.searchQuery = String(filter.searchQuery!);
     const response = await API.get('api/teacher/assignments/draft', {
       params: buildFilterDTO(filter)
     });
@@ -338,6 +340,32 @@ export class AssignmentApi implements AssignmentRepo {
 
   public async getGrepFiltersAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep> {
     const response = await API.get('api/teacher/assignments/grep/filters', {
+      params: {
+        locale,
+        grades,
+        subjects,
+        coreElements,
+        goals
+      }
+    });
+    return response.data;
+  }
+
+  public async getGrepFiltersMyAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep> {
+    const response = await API.get('api/teacher/assignments/draft/grep/filters', {
+      params: {
+        locale,
+        grades,
+        subjects,
+        coreElements,
+        goals
+      }
+    });
+    return response.data;
+  }
+
+  public async getGrepFiltersMySchoolAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep> {
+    const response = await API.get('api/teacher/assignments/myschool/grep/filters', {
       params: {
         locale,
         grades,
@@ -539,14 +567,16 @@ export class WPApi implements ArticleRepo {
     return [];
   }
 
-  public async fetchCustomImages(ids:string, page: number): Promise<ResponseFetchCustomImages> {
+  public async fetchCustomImages(ids:string, page: number, titleSearch: string): Promise<ResponseFetchCustomImages> {
     const parameters = (ids) ? {
       page: page!,
       per_page: DEFAULT_CUSTOM_IMAGES_PER_PAGE,
       selectedImages: ids,
+      title: titleSearch,
     } : {
       page: page!,
       per_page: DEFAULT_CUSTOM_IMAGES_PER_PAGE,
+      title: titleSearch,
     };
     const response = await API.get(
       `${process.env.REACT_APP_BASE_URL}/api/teacher/images`, {

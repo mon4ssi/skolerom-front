@@ -21,6 +21,7 @@
       "headers": {
         "no": "Ingen",
         "questions": "spørsmål",
+        "steps": "steps",
         "articles": "artikler",
         "by": "Av"
       },
@@ -36,7 +37,11 @@
         "teacher_guidance": "Se lærerveiledning",
         "edit": "Rediger",
         "duplicate": "Kopier"
-      }
+      },
+      "read open": "Les beskrivelse",
+      "read close": "Nær description",
+      "read again": "Les igjen",
+      "read article": "Les artikkelen"
     },
     "assignment": {
       "headers": {
@@ -57,7 +62,9 @@
         "teacher_guidance": "Se lærerveiledning",
         "edit": "Rediger",
         "duplicate": "Kopier"
-      }
+      },
+      "read again": "Les igjen",
+      "read article": "Velg oppdrag"
     }
   },
   "assignments_page": {
@@ -186,6 +193,7 @@
   "pagination": {
     "Previous page": "Forrige side",
     "Next page": "Neste side",
+    "Next question": "Neste spørsmål",
     "Question": "Spørsmål",
     "Exit": "Avslutt oppgave"
   },
@@ -325,12 +333,14 @@
       "custom_images": "Egendefinerte bilder",
       "edit": "Rediger bilde",
       "delete": "Slett bilde",
-      "upload_image": "Last opp bilde"
+      "upload_image": "Last opp bilde",
+      "no_images": "Ingen bilder tilgjengelige. Vennligst last opp eget bilde."
     },
     "notification": {
       "error_single_upload": "Feil ved opplasting av gjeldende bilde",
       "error_multiple_upload": "Feil ved opplasting av gjeldende bilder",
-      "success": "Bilder ble lastet opp"
+      "success": "Bildeopplastningen var vellykket",
+      "success_removing_image": "Bildet ble fjernet"
     },
     "updateCustomImagesForm": {
       "title": "Tittel",
@@ -344,8 +354,8 @@
       "counter_message_1": "Du har valgt",
       "counter_message_2": "bilder.",
       "upload_images": "Laste opp",
-      "message_success_single": "Bildet er lastet opp",
-      "message_success_multiple": "Bilder ble lastet opp"
+      "message_success_single": "Bildeopplastningen var vellykket",
+      "message_success_multiple": "Bildeopplastningen var vellykket"
     },
     "images_empty_list": "No images available, please upload a custom image",
     "videos_from_article": "Video fra artikkel",
@@ -572,7 +582,7 @@
     "click_to_set_due_date": "(Klikk for å angi innleveringsfrist)",
     "include_exclude": "Inkluder / Ekskluder",
     "students": "elever",
-    "of": "er",
+    "of": "av",
     "my_classes": "Mine klasser",
     "level": "Spor",
     "name": "Navn",
@@ -617,7 +627,8 @@
   },
   "teaching path preview": {
     "Start teaching path": "Start læringssti",
-    "steps": "steg"
+    "steps": "steg",
+    "deadline": "Frist"
   },
   "teaching path search": {
     "Search for teaching paths": "Søk etter læringsstier...",

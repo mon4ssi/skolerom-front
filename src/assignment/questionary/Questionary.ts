@@ -19,6 +19,7 @@ export interface QuestionaryRepo {
   deleteQuestionary(questionary: Questionary): Promise<void>;
   revertQuestionary(questionary: Questionary): Promise<Questionary>;
   getAssignmentQuestionaryById(assignmentId: number): Promise<Questionary>;
+  getAssignmentQuestionaryByIdPreview(assignmentId: number): Promise<Questionary>;
   setReadStatusArticle(
     idAssignment: number,
     idRevision: number,

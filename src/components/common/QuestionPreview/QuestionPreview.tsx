@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import classnames from 'classnames';
 import intl from 'react-intl-universal';
 
@@ -8,6 +8,7 @@ import { MultipleChoiceQuestionPreview } from './MultipleChoiceQuestion/Multiple
 import { ImageChoiceQuestionPreview } from './ImageChoiceQuestion/ImageChoiceQuestionPreview';
 import { QuestionAttachments } from 'assignment/view/CurrentAssignmentPage/Images/QuestionAttachments';
 import { DescriptionEditor } from 'assignment/view/NewAssignment/Questions/DescriptionEditor';
+import { CurrentQuestionaryStore } from 'assignment/view/CurrentAssignmentPage/CurrentQuestionaryStore';
 
 import { QuestionAttachment, QuestionType, TypedQuestion } from 'assignment/Assignment';
 import { EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
@@ -20,11 +21,13 @@ import TextAreaAutosize from 'react-textarea-autosize';
 import './QuestionPreview.scss';
 import clock from 'assets/images/clock-dark.svg';
 import { fullMinute } from 'assignment/view/NewAssignment/AttachmentsList/Attachment';
+import list from 'assets/images/list-placeholder.svg';
 
 export const mxSingleNumber = 10;
 
 interface Props {
   question: TypedQuestion | EditableQuestion;
+  currentQuestionaryStore?: CurrentQuestionaryStore;
   answer?: Answer;
   readOnly?: boolean;
   isStudentView?: boolean;
@@ -45,6 +48,7 @@ interface State {
   visibleCommentPanel?: number;
 }
 
+@inject('currentQuestionaryStore')
 @observer
 export class QuestionPreview extends Component<Props, State> {
 
@@ -252,8 +256,8 @@ export class QuestionPreview extends Component<Props, State> {
   }
 
   public render() {
-    const { withQuestionCounter, isEvaluationStyle, withLargeCounter } = this.props;
-
+    const { withQuestionCounter, isEvaluationStyle, withLargeCounter, currentQuestionaryStore } = this.props;
+    const background = (currentQuestionaryStore && currentQuestionaryStore!.backgroundImage) ? currentQuestionaryStore!.backgroundImage : list;
     const contentClassnames = classnames(
       'mainContent w100 flexBox dirColumn',
       withQuestionCounter && 'withQuestionCounter',
@@ -262,13 +266,16 @@ export class QuestionPreview extends Component<Props, State> {
 
     return (
       <div className={`QuestionPreview flexBox dirColumn w100 ${isEvaluationStyle ? 'isEvaluationStyle' : 'h100'}`}>
-        {withLargeCounter && this.renderLargeCounter()}
-        {this.renderTitle()}
-        <div className={contentClassnames}>
-          {this.renderContentBlocks()}
-          {this.renderAnswerBlock()}
-          {this.renderButtonComment()}
-          {this.renderCommentPanel()}
+        <div className="QuestionPreview__background" style={{ backgroundImage: `url(${background})` }} />
+        <div className="QuestionPreview__content">
+          {withLargeCounter && this.renderLargeCounter()}
+          {this.renderTitle()}
+          <div className={contentClassnames}>
+            {this.renderContentBlocks()}
+            {this.renderAnswerBlock()}
+            {this.renderButtonComment()}
+            {this.renderCommentPanel()}
+          </div>
         </div>
       </div>
     );

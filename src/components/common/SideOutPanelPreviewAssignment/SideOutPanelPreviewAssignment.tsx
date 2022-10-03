@@ -72,28 +72,61 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     this.setState({ isSuperCMCurrentUser: isSuperCM! });
   }
 
+  public openInNewTabView = () => {
+    const { currentEntity: { id } } = this.props.store!;
+    const url: URL = new URL(window.location.href);
+    const urlForEditing: string = `${url.origin}/assignments/view/${id!}`;
+    window.open(urlForEditing);
+  }
+
   public renderViewButton = (isPublished: boolean, history: any, id: number, view: string) =>
   (
     <div className="actionButton">
-      <CreateButton disabled={!isPublished} onClick={() => { history.push(`/assignments/view/${id}`); }} title={view} >
+      <CreateButton disabled={!isPublished} onClick={() => this.openInNewTabView()} title={view} >
         {view}
       </CreateButton>
     </div>
   )
 
+  public checkForPåbygging = () => {
+    const goalsList = this.props.store!.currentAssignment!.goalsItems;
+    let counter = 0;
+    goalsList.forEach((goal) => {
+      if (goal.gradeDesc!.includes('påbygging')) {
+        counter = counter + 1;
+      }
+    });
+    const foundString = counter > 0 ? true : false;
+    return foundString;
+  }
+
+  public openInNewTabTeacherGuidance = () => {
+    const { currentEntity: { id } } = this.props.store!;
+    const url: URL = new URL(window.location.href);
+    const urlForEditing: string = `${url.origin}/assignments/view/${id!}/?open=tg`;
+    localStorage.setItem('isOpen', 'tg');
+    window.open(urlForEditing);
+  }
+
   public renderTeacherGuidanceButton = (guidanceString: string) =>
   (
     <div className="actionButton">
-      <CreateButton disabled={false} onClick={this.handleTeacherGuidance} title={guidanceString} >
+      <CreateButton disabled={false} onClick={() => this.openInNewTabTeacherGuidance()} title={guidanceString} >
         {guidanceString}
       </CreateButton>
     </div>
   )
 
+  public openInNewTabEdit = (id: number) => {
+    const url: URL = new URL(window.location.href);
+    const urlForEditing: string = `${url.origin}/assignments/edit/${id}`;
+    window.open(urlForEditing);
+  }
+
   public renderEditButton = (editString: string, history: any, id: number) =>
   (
     <div className="actionButton">
-      <CreateButton disabled={false} onClick={() => { history.push(`/assignments/edit/${id}`); }} title={editString} >
+      <CreateButton disabled={false} onClick={() => { this.openInNewTabEdit(id); }} title={editString} >
         {editString}
       </CreateButton>
     </div>
@@ -271,23 +304,24 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     ))
   )
 
-  public renderGrepEducationalGoals = (goalsArray: Array<GenericGrepItem>) =>
-  (
-    <>
-      <div className="entityInfoBlockExpanded">
-        <div className="imageGrep">
-          <img className="imgInfo" src={goals} />
+  public renderGrepEducationalGoals = (goalsArray: Array<GenericGrepItem>) => {
+    const expandedStyle: boolean = this.checkForPåbygging();
+    return (
+      <>
+        <div className="entityInfoBlockExpanded">
+          <div className="imageGrep">
+            <img className="imgInfo" src={goals} />
+          </div>
+          <div className="title">{intl.get('preview.assignment.grep.educational_goals')}</div>
         </div>
-        <div className="title">{intl.get('preview.assignment.grep.educational_goals')}</div>
-      </div>
-      <div className="flexContainer">
-        <ul className="listItem">
-          {this.renderGoalsArray(goalsArray)}
-        </ul>
-
-      </div>
-    </>
-  )
+        <div className={expandedStyle ? 'flexContainerExpanded' : 'flexContainer'}>
+          <ul className="listItem">
+            {this.renderGoalsArray(goalsArray)}
+          </ul>
+        </div>
+      </>
+    );
+  }
 
   public renderPublishDate = (createdAt: string) =>
   (
@@ -313,6 +347,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
         publishedAt,
         deadline,
         author,
+        authorRole,
         numberOfQuestions,
         hasGuidance,
         isAnswered,
@@ -323,13 +358,14 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
       } = currentAssignment!;
     const { history, isPublishedCurrentAssignment, view, store } = this.props;
     /* const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager; */
-    const showPublishDate = false;
+    const showPublishDate = authorRole === UserType.Teacher || !(authorRole === UserType.ContentManager && !(isPrivate!));
     const viewText = intl.get('preview.assignment.buttons.view');
     const guidanceText = intl.get('preview.assignment.buttons.teacher_guidance');
     const editText = intl.get('preview.assignment.buttons.edit');
     const duplicateText = intl.get('preview.assignment.buttons.duplicate');
     const activeGoals = !isPrivate || isMySchool;
     const selectedAssignment: Assignment = this.state.currentAssignment!;
+    const expandedStyle: boolean = this.checkForPåbygging();
     return (
       <div className={'previewModalInfo'} onClick={this.stopPropagation} tabIndex={0}>
         <div className="contentContainer">

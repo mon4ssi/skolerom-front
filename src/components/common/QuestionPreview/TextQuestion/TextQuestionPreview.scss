@@ -7,6 +7,9 @@
   max-height: 450px;
   resize: none;
   font-weight: 300;
+  &.notline {
+    border-bottom: none;
+  }
   &::placeholder {
     color: #596A75;
     font-weight: 300;

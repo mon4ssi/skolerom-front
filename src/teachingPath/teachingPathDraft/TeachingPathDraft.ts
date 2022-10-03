@@ -849,11 +849,53 @@ export class TeachingPathValidationError extends Error {
 
 export class AlreadyEditingTeachingPathError extends Error { }
 
+export interface ShortestPathArgs {
+  id: number;
+  selectQuestion: string;
+  type: string;
+  shortestPath: ShortestPathArgs | undefined;
+}
+
+export class ShortestPath {
+  public _id: number;
+  public _selectQuestion: string;
+  public _type: string;
+  public _shortestPath: ShortestPathArgs | undefined;
+  constructor(args: ShortestPathArgs) {
+    this._id = args.id;
+    this._selectQuestion = args.selectQuestion;
+    this._type = args.type;
+    this._shortestPath = args.shortestPath;
+  }
+
+  @computed
+  public get id() {
+    return this._id;
+  }
+
+  @computed
+  public get selectQuestion() {
+    return this._selectQuestion;
+  }
+
+  @computed
+  public get type() {
+    return this._type;
+  }
+
+  @computed
+  public get shortestPath() {
+    return this._shortestPath;
+  }
+}
+
 export interface BreadcrumbsArgs {
   id: number;
   parentNodeId: number | null;
   selectQuestion: string;
   items: Array<TeachingPathItem> | undefined;
+  shortest?: number | null | undefined;
+  shortpathid?: Array<number>;
 }
 
 export class Breadcrumbs {
@@ -861,12 +903,16 @@ export class Breadcrumbs {
   public _selectQuestion: string;
   public _parentNodeId: number | null;
   public _items: Array<TeachingPathItem> | undefined;
+  public _shortest?: number | null | undefined;
+  public _shortpathid?: Array<number>;
 
   constructor(args: BreadcrumbsArgs) {
     this._id = args.id;
     this._items = args.items ? args.items : undefined;
     this._selectQuestion = args.selectQuestion;
     this._parentNodeId = args.parentNodeId;
+    this._shortest = args.shortest;
+    this._shortpathid = args.shortpathid;
   }
 
   @computed
@@ -887,5 +933,15 @@ export class Breadcrumbs {
   @computed
   public get selectQuestion() {
     return this._selectQuestion;
+  }
+
+  @computed
+  public get shortest() {
+    return this._shortest;
+  }
+
+  @computed
+  public get shortpathid() {
+    return this._shortpathid;
   }
 }

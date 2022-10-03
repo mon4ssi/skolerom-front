@@ -39,4 +39,9 @@ export class QuestionaryService {
     this.questionary = await this.questionaryRepo.getAssignmentQuestionaryById(id);
     return this.getQuestionary();
   }
+
+  public async getAssignmentQuestionaryByIdPreview(id: number) {
+    this.questionary = await this.questionaryRepo.getAssignmentQuestionaryByIdPreview(id);
+    return this.getQuestionary();
+  }
 }

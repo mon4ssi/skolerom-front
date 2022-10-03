@@ -61,6 +61,14 @@ export class AssignmentService {
     return this.assignmentRepo.getGrepFiltersAssignment(locale, grades, subjects, coreElements, goals);
   }
 
+  public async getGrepFiltersMyAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string) {
+    return this.assignmentRepo.getGrepFiltersMyAssignment(locale, grades, subjects, coreElements, goals);
+  }
+
+  public async getGrepFiltersMySchoolAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string) {
+    return this.assignmentRepo.getGrepFiltersMySchoolAssignment(locale, grades, subjects, coreElements, goals);
+  }
+
   public async getAssignmentListOfStudentInList(studentId: number, filter: Filter) {
     return this.assignmentRepo.getAssignmentListOfStudentInList(studentId, filter);
   }
@@ -114,8 +122,8 @@ export class ArticleService {
     return this.articleRepo.fetchCoverImages(postIds);
   }
 
-  public async fetchCustomImages(ids:string, page: number): Promise<ResponseFetchCustomImages> {
-    return this.articleRepo.fetchCustomImages(ids, page);
+  public async fetchCustomImages(ids:string, page: number, title: string): Promise<ResponseFetchCustomImages> {
+    return this.articleRepo.fetchCustomImages(ids, page, title);
   }
 
   public async createCustomImage(fd: FormData): Promise<CustomImgAttachmentResponse> {
