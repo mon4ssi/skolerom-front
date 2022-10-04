@@ -571,31 +571,31 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     const mytypeFirstChildNode = (node.children.length > 0) ? node.children[0].type : 'none';
     event.currentTarget.classList.remove('imposibleDrop');
     event.currentTarget.classList.remove('posibleDrop');
-    if (this.state.isPosibleDrop) {
-      if (myNode) {
-        editTeachingPathStore!.setCurrentNode(node!);
-        editTeachingPathStore!.addChildToCurrentNodeNullPerItem(myNode);
-        this.setState({
-          isDrop: false,
-          isDropInit: false,
-          isPosibleDrop: false,
-        });
-        editTeachingPathStore!.falseIsDraggable();
-        // delete item
-        editTeachingPathStore!.setCurrentNode(myParent);
-        editTeachingPathStore!.removeChildToCurrentNodeNullPerItem(myNode);
-        // format items
-        editTeachingPathStore!.setCurrentNode(null);
-        editTeachingPathStore!.setSelectedDragNode(null);
-        editTeachingPathStore!.setParentSelectedDragNode(null);
-      } else {
-        Notification.create({
-          type: NotificationTypes.ERROR,
-          title: intl.get('edit_teaching_path.notifications.onlydraggable')
-        });
-      }
+    /*if (myNode!.type === mytypeFirstChildNode) {*/
+    if (myNode) {
+      editTeachingPathStore!.setCurrentNode(node!);
+      editTeachingPathStore!.addChildToCurrentNodeNullPerItem(myNode);
+      this.setState({
+        isDrop: false,
+        isDropInit: false,
+        isPosibleDrop: false,
+      });
+      editTeachingPathStore!.falseIsDraggable();
+      // delete item
+      editTeachingPathStore!.setCurrentNode(myParent);
+      editTeachingPathStore!.removeChildToCurrentNodeNullPerItem(myNode);
+      // format items
+      editTeachingPathStore!.setCurrentNode(null);
+      editTeachingPathStore!.setSelectedDragNode(null);
+      editTeachingPathStore!.setParentSelectedDragNode(null);
     } else {
-      if (myNode!.type === mytypeFirstChildNode) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('edit_teaching_path.notifications.onlydraggable')
+      });
+    }
+    /*} else {*/
+      /*if (myNode!.type === mytypeFirstChildNode) {
         Notification.create({
           type: NotificationTypes.ERROR,
           title: intl.get('edit_teaching_path.notifications.unable_to_drop')
@@ -605,8 +605,12 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
           type: NotificationTypes.ERROR,
           title: intl.get('edit_teaching_path.notifications.unable_to_mix_different_natures')
         });
-      }
-    }
+      }*/
+      /*Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('edit_teaching_path.notifications.unable_to_drop')
+      });
+    }*/
   }
   public ondragovertitle = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
