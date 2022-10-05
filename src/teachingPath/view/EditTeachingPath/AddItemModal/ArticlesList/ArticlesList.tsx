@@ -67,7 +67,6 @@ class ArticleItem extends Component<ArticleItemProps> {
 
   public handleSelectArticle = () => {
     const { article, addItem, removeItem } = this.props;
-
     this.isArticleSelected() ?
       removeItem(article) :
       addItem(article);
