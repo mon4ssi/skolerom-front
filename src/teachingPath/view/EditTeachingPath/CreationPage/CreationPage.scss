@@ -317,12 +317,18 @@
       left: 0px;
       top: 88px;      
       cursor: pointer;
+      width: calc(50% - 150px);
+      .midLeftLine {
+        width: 100%;
+        min-width: 100%;
+      }
+      .circleOption {
+        position: absolute;
+        left: 0px;
+      }
       &.withUnmergeButton {
         margin-top: 10px;
         top: 148px;
-      }
-      .midLeftLine {
-        width: 100px;
       }
 
       &.withPadding {
@@ -345,6 +351,14 @@
       right: -40px;
       top: 88px;  
       cursor: pointer;
+      width: calc(50% - 150px);
+      .midRightLine {
+        width: 100%;
+      }
+      .circleOption {
+        position: absolute;
+        right: 0;
+      }
       &.withUnmergeButton {
         margin-top: 10px;    
         top: 148px;
@@ -357,10 +371,7 @@
       &.withPadding {
         margin-top: 70px;
       }
-      .midRightLine {
-        width: 100px;
-      }
-
+      
       &.withoutPadding {
         margin-top: 15px !important;
       }      
