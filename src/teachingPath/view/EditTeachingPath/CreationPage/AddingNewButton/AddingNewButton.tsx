@@ -1,0 +1,254 @@
+import React, { Component } from 'react';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { observer, inject } from 'mobx-react';
+import { validDomain } from 'utils/validDomain';
+import { lettersNoEn } from 'utils/lettersNoEn';
+import intl from 'react-intl-universal';
+
+import { ItemContentTypeContext } from '../../ItemContentTypeContext';
+import { TeachingPathNodeType } from 'teachingPath/TeachingPath';
+import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
+import { EditTeachingPathStore } from '../../EditTeachingPathStore';
+import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
+import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
+
+import addArticleImg from 'assets/images/add-article.svg';
+import addAssignemntImg from 'assets/images/add-assignment.svg';
+import createAssignmentImg from 'assets/images/create-assignment.svg';
+import addDomainImg from 'assets/images/app-window-link.svg';
+import linkImg from 'assets/images/link.svg';
+
+import './AddingNewButton.scss';
+import { AddingButtons } from '../AddingButtons/AddingButtons';
+
+interface Props extends RouteComponentProps {
+  node?: EditableTeachingPathNode;
+  editTeachingPathStore?: EditTeachingPathStore;
+  newAssignmentStore?: NewAssignmentStore;
+  nester: number;
+  side: string;
+  onCancelDrag?(): void;
+
+}
+
+@inject('editTeachingPathStore', 'newAssignmentStore')
+@observer
+class AddingNewButton extends Component<Props> {
+
+  public static contextType = ItemContentTypeContext;
+  public state = {
+    modalDomain: false,
+    disabledbutton: true,
+    loading: true,
+    valueInputDomain: '',
+    itemsForNewChildren: [],
+    isOpenedModal: false,
+  };
+
+  private openArticlesList = (event: React.MouseEvent<HTMLDivElement>) => {
+    const { editTeachingPathStore, node } = this.props;
+    event.preventDefault();
+    editTeachingPathStore!.setCurrentNode(node!);
+    this.props.onCancelDrag!();
+    this.context.changeContentType(0);
+  }
+
+  private openAssignmentsList = (event: React.MouseEvent<HTMLDivElement>) => {
+    const { editTeachingPathStore, node } = this.props;
+    event.preventDefault();
+    editTeachingPathStore!.setCurrentNode(node!);
+    this.props.onCancelDrag!();
+    this.context.changeContentType(1);
+  }
+
+  private openCreatingAssignment = async (event: React.MouseEvent<HTMLDivElement>) => {
+    const { newAssignmentStore, editTeachingPathStore, history, node } = this.props;
+
+    event.preventDefault();
+    this.props.onCancelDrag!();
+    editTeachingPathStore!.setCurrentNode(node!);
+    editTeachingPathStore!.setIsAssignmentCreating(true);
+
+    const id = await newAssignmentStore!
+      .createAssigment()
+      .then(response => response.id);
+    history.push({
+      pathname: `/assignments/edit/${id}`,
+      state: { fromTeachingPath: true, teachingPathId: editTeachingPathStore!.currentEntity!.id }
+    });
+  }
+
+  private openDomainModal = () => {
+    this.setState({
+      modalDomain: true
+    });
+    this.props.onCancelDrag!();
+    document.addEventListener('keyup', this.handleKeyboardControl);
+  }
+
+  private closeDomainModal = () => {
+    if (this.state.loading) {
+      this.setState({
+        modalDomain: false
+      });
+      document.removeEventListener('keyup', this.handleKeyboardControl);
+    }
+  }
+
+  private validUrlPath = (value: string) => {
+    if (value.split('//').length > 1) {
+      return value;
+    }
+    return `https://${value}`;
+  }
+
+  private handleChangeNewQuestion = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ valueInputDomain: e.target.value });
+    if (validDomain(e.target.value)) {
+      this.setState({ disabledbutton: false });
+    } else {
+      this.setState({ disabledbutton: true });
+    }
+  }
+
+  private handleKeyboardControl = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      if (!this.state.disabledbutton) {
+        this.sendDomain();
+      }
+    }
+    if (event.key === 'Escape') {
+      this.closeDomainModal();
+    }
+  }
+
+  private sendDomain = async () => {
+    const { disabledbutton } = this.state;
+    const { editTeachingPathStore, node } = this.props;
+    if (!disabledbutton) {
+      const response = await editTeachingPathStore!.sendDataDomain(this.validUrlPath(this.state.valueInputDomain));
+      if (node !== null) {
+        editTeachingPathStore!.setCurrentNode(node!);
+        this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
+        const newChildren = this.state.itemsForNewChildren.map(
+          item => editTeachingPathStore!.createNewNode(
+            item,
+            TeachingPathNodeType.Domain
+          )
+        );
+        newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
+        editTeachingPathStore!.currentEntity!.save();
+        document.removeEventListener('keyup', this.handleKeyboardControl);
+        this.context.changeContentType(null);
+        editTeachingPathStore!.setCurrentNode(null);
+      }
+    } else {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('teaching path passing.external_error')
+      });
+    }
+  }
+
+  private renderModalDomain = () => {
+    const { disabledbutton } = this.state;
+    return (
+      <div className="modalDomain">
+        <div className="modalDomain__background" onClick={this.closeDomainModal} />
+        <div className="modalDomain__content">
+          <div className="modalDomain__context">
+            <div className="modalDomain__form">
+              <div className="modalDomain__input">
+                <img src={linkImg} alt="add-domain" />
+                <input
+                  className="newTextQuestionInput"
+                  placeholder={intl.get('new assignment.type_or_paste')}
+                  value={this.state.valueInputDomain}
+                  onChange={this.handleChangeNewQuestion}
+                  aria-required="true"
+                  aria-invalid="false"
+                  autoFocus={true}
+                />
+              </div>
+              <div className="modalDomain__button">
+                <button
+                  className="btn"
+                  onClick={this.sendDomain}
+                  title={intl.get('new assignment.add_link')}
+                >
+                  {intl.get('new assignment.add_link')}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  private renderButtonDomain = () => {
+    const { disabledbutton } = this.state;
+    return (
+      <div className="addingButton addExternalArtikle" onClick={this.openDomainModal}>
+        <button title={intl.get('edit_teaching_path.modals.add_domain')}>
+          <img src={addDomainImg} alt="add-article" />
+          {intl.get('edit_teaching_path.modals.add_domain')}
+        </button>
+      </div>
+    );
+  }
+
+  private renderAddingButtons = () =>
+  (
+    <div>
+      <AddingButtons node={this.props.node} nester={this.props.nester!} onCancelDrag={this.props.onCancelDrag} />
+    </div>
+  )
+
+  private switchModal = () => {
+    const { isOpenedModal } = this.state;
+    if (isOpenedModal) {
+      this.setState({ isOpenedModal: false });
+    } else {
+      this.setState({ isOpenedModal: true });
+    }
+  }
+
+  public render() {
+    const { isOpenedModal } = this.state;
+    const classInside = isOpenedModal ? 'circleOption active' : 'circleOption';
+    if (this.props.side!) {
+      switch (this.props.side!) {
+        case 'left':
+          return (
+            <div className={classInside}>
+              <div className="circle" onClick={this.switchModal} />
+              {isOpenedModal && this.renderAddingButtons()}
+            </div>
+          );
+          break;
+        case 'bottom':
+          return (
+            <div className={classInside}>
+              <div className="circle circleBottom" onClick={this.switchModal} />
+              {isOpenedModal && this.renderAddingButtons()}
+            </div>
+          );
+          break;
+        case 'right':
+          return (
+            <div className={classInside}>
+                <div className="circle" onClick={this.switchModal} />
+                {isOpenedModal && this.renderAddingButtons()}
+            </div>
+          );
+          break;
+        default:
+          break;
+      }
+    }
+
+  }
+}
+
+export const AddingNewButtonElement = withRouter(AddingNewButton);

@@ -41,6 +41,7 @@ import { AppHeader } from 'components/layout/AppHeader/AppHeader';
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
 import { TeacherguidanceModal } from 'teachingPath/view/TeacherGuidance/TeacherGuidanceModal';
 import { trim } from 'lodash';
+import { AddingNewButtonElement } from './AddingNewButton/AddingNewButton';
 
 const cardWidth = 322;
 const leftIndent = 160;
@@ -666,10 +667,47 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     editTeachingPathStore!.falseIsDraggable();
   }
 
+  public renderAddingButtonsLeft = (withUnmergeButton: boolean) => {
+    const { nestedOrder, node } = this.props;
+    const containerClassNames = classnames(
+      'teachingPathButtonsLeft flexBox justifyCenter centered',
+      withUnmergeButton && 'withUnmergeButton',
+      !this.renderMergeButton() && 'contentNone',
+      !(node.type !== TeachingPathNodeType.Root && node.items!.length > 1) && 'withPadding',
+      node.type === TeachingPathNodeType.Root && 'withoutPadding'
+    );
+    const isRoot = (node.type === TeachingPathNodeType.Root) ? true : false;
+    return !isRoot && (
+      <div className={containerClassNames} onDragEnter={this.dragenterthandler}>
+        {node.type !== TeachingPathNodeType.Root && <div className="midLeftLine" />}
+        {/* <AddingButtons node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/> */}
+        <AddingNewButtonElement side={'left'} node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
+      </div>
+    );
+  }
+
+  public renderAddingButtonsRight = (withUnmergeButton: boolean) => {
+    const { nestedOrder, node } = this.props;
+    const containerClassNames = classnames(
+      'teachingPathButtonsRight flexBox justifyCenter centered',
+      withUnmergeButton && 'withUnmergeButton',
+      !this.renderMergeButton() && 'contentNone',
+      !(node.type !== TeachingPathNodeType.Root && node.items!.length > 1) && 'withPadding',
+      node.type === TeachingPathNodeType.Root && 'withoutPadding'
+    );
+    const isRoot = (node.type === TeachingPathNodeType.Root) ? true : false;
+    return !isRoot && (
+      <div className={containerClassNames} onDragEnter={this.dragenterthandler}>
+        {true && <div className="midRightLine" />}
+        <AddingNewButtonElement side={'left'} node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
+      </div>
+    );
+  }
+
   public renderAddingButtons = (withUnmergeButton: boolean) => {
     const { nestedOrder, node } = this.props;
     const containerClassNames = classnames(
-      'teachingPathButtons flexBox justifyCenter',
+      'teachingPathButtons flexBox justifyCenter centered',
       withUnmergeButton && 'withUnmergeButton',
       !this.renderMergeButton() && 'contentNone',
       !(node.type !== TeachingPathNodeType.Root && node.items!.length > 1) && 'withPadding',
@@ -678,7 +716,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     return !node.children.length && (
       <div className={containerClassNames} onDragEnter={this.dragenterthandler}>
         {node.type !== TeachingPathNodeType.Root && <div className="topVerticalLine" />}
-        <AddingButtons node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
+        {/* <AddingButtons node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/> */}
+        <AddingNewButtonElement side={'bottom'} node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
       </div>
     );
   }
@@ -931,8 +970,11 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         {!readOnly && this.renderUnmergeButton()}
 
         {this.renderBoxNodeOptions()}
+        {!readOnly && this.renderAddingButtonsLeft(!!this.renderUnmergeButton())}
 
         {!readOnly && this.renderAddingButtons(!!this.renderUnmergeButton())}
+
+        {!readOnly && this.renderAddingButtonsRight(!!this.renderUnmergeButton())}
 
         <div className="childrenContainer flexBox">
           {children.length ? children.map(this.renderNodeContent) : null}
