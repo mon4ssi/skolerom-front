@@ -668,7 +668,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   }
 
   public renderAddingButtonsLeft = (withUnmergeButton: boolean) => {
-    const { nestedOrder, node } = this.props;
+    const { nestedOrder, node, parentNode } = this.props;
     const containerClassNames = classnames(
       'teachingPathButtonsLeft flexBox justifyCenter centered',
       withUnmergeButton && 'withUnmergeButton',
@@ -681,13 +681,13 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       <div className={containerClassNames} onDragEnter={this.dragenterthandler}>
         {node.type !== TeachingPathNodeType.Root && <div className="midLeftLine" />}
         {/* <AddingButtons node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/> */}
-        <AddingNewButtonElement side={'left'} node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
+        <AddingNewButtonElement side={'left'} node={node} parent={parentNode} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
       </div>
     );
   }
 
   public renderAddingButtonsRight = (withUnmergeButton: boolean) => {
-    const { nestedOrder, node } = this.props;
+    const { nestedOrder, node, parentNode } = this.props;
     const containerClassNames = classnames(
       'teachingPathButtonsRight flexBox justifyCenter centered',
       withUnmergeButton && 'withUnmergeButton',
@@ -699,13 +699,13 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     return !isRoot && (
       <div className={containerClassNames} onDragEnter={this.dragenterthandler}>
         {true && <div className="midRightLine" />}
-        <AddingNewButtonElement side={'left'} node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
+        <AddingNewButtonElement side={'right'} node={node} parent={parentNode} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
       </div>
     );
   }
 
   public renderAddingButtons = (withUnmergeButton: boolean) => {
-    const { nestedOrder, node } = this.props;
+    const { nestedOrder, node, parentNode } = this.props;
     const containerClassNames = classnames(
       'teachingPathButtons flexBox justifyCenter centered',
       withUnmergeButton && 'withUnmergeButton',
@@ -717,7 +717,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       <div className={containerClassNames} onDragEnter={this.dragenterthandler}>
         {node.type !== TeachingPathNodeType.Root && <div className="topVerticalLine" />}
         {/* <AddingButtons node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/> */}
-        <AddingNewButtonElement side={'bottom'} node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
+        <AddingNewButtonElement side={'bottom'} node={node} parent={parentNode} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
       </div>
     );
   }

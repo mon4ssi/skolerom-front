@@ -356,6 +356,11 @@ export class EditTeachingPathStore {
   }
 
   @action
+  public addChildrenByOrder = (node: EditableTeachingPathNode, search: EditableTeachingPathNode, order: string) => {
+    this.currentNode!.addChildByOrder(node, search, order);
+  }
+
+  @action
   public removeChildToCurrentNodeNullPerItem = (node: EditableTeachingPathNode) => {
     this.currentNode!.removeChild(node);
   }

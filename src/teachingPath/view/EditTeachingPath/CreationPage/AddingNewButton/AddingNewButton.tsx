@@ -25,6 +25,7 @@ interface Props extends RouteComponentProps {
   node?: EditableTeachingPathNode;
   editTeachingPathStore?: EditTeachingPathStore;
   newAssignmentStore?: NewAssignmentStore;
+  parent?: EditableTeachingPathNode;
   nester: number;
   side: string;
   onCancelDrag?(): void;
@@ -48,6 +49,13 @@ class AddingNewButton extends Component<Props> {
   private openArticlesList = (event: React.MouseEvent<HTMLDivElement>) => {
     const { editTeachingPathStore, node } = this.props;
     event.preventDefault();
+    editTeachingPathStore!.setCurrentNode(node!);
+    this.props.onCancelDrag!();
+    this.context.changeContentType(0);
+  }
+
+  private openMyArticlesList = () => {
+    const { editTeachingPathStore, node } = this.props;
     editTeachingPathStore!.setCurrentNode(node!);
     this.props.onCancelDrag!();
     this.context.changeContentType(0);
@@ -124,11 +132,25 @@ class AddingNewButton extends Component<Props> {
 
   private sendDomain = async () => {
     const { disabledbutton } = this.state;
-    const { editTeachingPathStore, node } = this.props;
+    const { editTeachingPathStore, node, parent } = this.props;
     if (!disabledbutton) {
       const response = await editTeachingPathStore!.sendDataDomain(this.validUrlPath(this.state.valueInputDomain));
       if (node !== null) {
-        editTeachingPathStore!.setCurrentNode(node!);
+        editTeachingPathStore!.setCurrentNode(parent!);
+        this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
+        const newChildren = this.state.itemsForNewChildren.map(
+          item => editTeachingPathStore!.createNewNode(
+            item,
+            TeachingPathNodeType.Domain
+          )
+        );
+        editTeachingPathStore!.addChildrenByOrder(newChildren[0], node!, this.props.side);
+        this.setState({ modalDomain : false });
+        editTeachingPathStore!.currentEntity!.save();
+        document.removeEventListener('keyup', this.handleKeyboardControl);
+        this.context.changeContentType(null);
+        editTeachingPathStore!.setCurrentNode(null);
+        /*editTeachingPathStore!.setCurrentNode(node!);
         this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
         const newChildren = this.state.itemsForNewChildren.map(
           item => editTeachingPathStore!.createNewNode(
@@ -140,7 +162,7 @@ class AddingNewButton extends Component<Props> {
         editTeachingPathStore!.currentEntity!.save();
         document.removeEventListener('keyup', this.handleKeyboardControl);
         this.context.changeContentType(null);
-        editTeachingPathStore!.setCurrentNode(null);
+        editTeachingPathStore!.setCurrentNode(null);*/
       }
     } else {
       Notification.create({
@@ -214,6 +236,53 @@ class AddingNewButton extends Component<Props> {
     }
   }
 
+  private myswitchModal = () => {
+    const { node } = this.props;
+    if (node) {
+      switch (node.type) {
+        case TeachingPathNodeType.Article:
+          this.openMyArticlesList();
+          break;
+        case TeachingPathNodeType.Assignment:
+          this.switchModal();
+          break;
+        case TeachingPathNodeType.Domain:
+          this.openDomainModal();
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  private renderMyAddingButtons = () => {
+    const { node } = this.props;
+    return (
+      <div>
+        <div className="AddingButtons flexBox dirColumn">
+          <div
+            className="addingButton"
+            onClick={this.openAssignmentsList}
+          >
+            <button title={intl.get('edit_teaching_path.modals.add_assignments')}>
+            <img src={addAssignemntImg} alt="add-assignment" />
+            {intl.get('edit_teaching_path.modals.add_assignments')}
+            </button>
+          </div>
+          <div
+            className="addingButton"
+            onClick={this.openCreatingAssignment}
+          >
+            <button title={intl.get('edit_teaching_path.modals.create_assignment')}>
+              <img src={createAssignmentImg} alt="create-assignment" />
+              {intl.get('edit_teaching_path.modals.create_assignment')}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   public render() {
     const { isOpenedModal } = this.state;
     const classInside = isOpenedModal ? 'circleOption active' : 'circleOption';
@@ -222,8 +291,9 @@ class AddingNewButton extends Component<Props> {
         case 'left':
           return (
             <div className={classInside}>
-              <div className="circle" onClick={this.switchModal} />
-              {isOpenedModal && this.renderAddingButtons()}
+              <div className="circle" onClick={this.myswitchModal} />
+              {isOpenedModal && this.renderMyAddingButtons()}
+              {this.state.modalDomain && this.renderModalDomain()}
             </div>
           );
           break;
@@ -238,8 +308,9 @@ class AddingNewButton extends Component<Props> {
         case 'right':
           return (
             <div className={classInside}>
-                <div className="circle" onClick={this.switchModal} />
-                {isOpenedModal && this.renderAddingButtons()}
+                <div className="circle" onClick={this.myswitchModal} />
+                {isOpenedModal && this.renderMyAddingButtons()}
+                {this.state.modalDomain && this.renderModalDomain()}
             </div>
           );
           break;
