@@ -816,8 +816,10 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
             if (item.children.length > 0) {
               item.children.forEach((child) => {
-                if (child.children.length > 0) {
-                  childrenTmp.push(child);
+                if (child) {
+                  if (child.children.length > 0) {
+                    childrenTmp.push(child);
+                  }
                 }
               });
 
@@ -1022,8 +1024,18 @@ export class CreationPageComponent extends Component<Props> {
       });
 
       const newChild = createNewNode(newAssignmentStore!.storedAssignment!, TeachingPathNodeType.Assignment);
-      editTeachingPathStore!.addChildToCurrentNode(newChild);
+      if (!editTeachingPathStore!.editNodeAssigmentItem) {
+        editTeachingPathStore!.addChildToCurrentNode(newChild);
+      } else {
+        const nodeuse = editTeachingPathStore!.nodeUse;
+        const parentNodeUse = editTeachingPathStore!.parentNodeUse;
+        const orientation = editTeachingPathStore!.orientationNodeArticlesItem;
+        editTeachingPathStore!.setCurrentNode(parentNodeUse!);
+        editTeachingPathStore!.addChildrenByOrder(newChild, nodeuse!, orientation);
+        editTeachingPathStore!.currentEntity!.save();
+      }
       newAssignmentStore!.clearStoredAssignment();
+      editTeachingPathStore!.setEditNodeAssigmentItem(false);
       editTeachingPathStore!.setCurrentNode(null);
     }
   }

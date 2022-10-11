@@ -38,6 +38,9 @@ export class EditTeachingPathStore {
   @observable public isDisabledButtons: boolean = false;
   @observable public hasMoreArticles: boolean = true;
   @observable public isEditArticles: boolean = false;
+  @observable public editNodeArticlesItem: boolean = false;
+  @observable public editNodeAssigmentItem: boolean = false;
+  @observable public orientationNodeArticlesItem: string = '';
   @observable public isDraggable: boolean = false;
   @observable public articleInEdit: number = 0;
   @observable public assingmentInEdit: number = 0;
@@ -56,6 +59,8 @@ export class EditTeachingPathStore {
   @observable public selectedDragNode: EditableTeachingPathNode | null = null;
   @observable public selectedParentDragNode: EditableTeachingPathNode | null = null;
   @observable public searchValue: string = '';
+  @observable public nodeUse: EditableTeachingPathNode | null = null;
+  @observable public parentNodeUse: EditableTeachingPathNode | null = null;
 
   @observable public allGrades: Array<Grade> = [];
   @observable public allSubjects: Array<Subject> = [];
@@ -141,6 +146,26 @@ export class EditTeachingPathStore {
 
   public returnIsEditArticles() {
     return this.isEditArticles;
+  }
+
+  public setEditNodeArticlesItem(value: boolean) {
+    this.editNodeArticlesItem = value;
+  }
+
+  public setEditNodeAssigmentItem(value: boolean) {
+    this.editNodeAssigmentItem = value;
+  }
+
+  public setNodeUse(node: EditableTeachingPathNode) {
+    this.nodeUse = node;
+  }
+
+  public setParentNodeUse(node: EditableTeachingPathNode) {
+    this.parentNodeUse = node;
+  }
+
+  public setOrientationNodeArticlesItem(orientation: string) {
+    this.orientationNodeArticlesItem = orientation;
   }
 
   public trueIsEditArticles() {

@@ -576,8 +576,10 @@
 .dropInfoAddtional {
   position: absolute;
   width: calc(100% - 74px);
-  bottom: 0;
-  max-width: 248px;
+  bottom: -188px;
+  max-width: 282px;
+  z-index: 2;
+  right: 40px;
   &.deletedrop {
     display: none;
   }

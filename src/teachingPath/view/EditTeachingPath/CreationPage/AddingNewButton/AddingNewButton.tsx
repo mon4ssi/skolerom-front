@@ -55,25 +55,36 @@ class AddingNewButton extends Component<Props> {
   }
 
   private openMyArticlesList = () => {
-    const { editTeachingPathStore, node } = this.props;
-    editTeachingPathStore!.setCurrentNode(node!);
+    const { editTeachingPathStore, node, parent, side } = this.props;
+    editTeachingPathStore!.setEditNodeArticlesItem(true);
+    editTeachingPathStore!.setNodeUse(node!);
+    editTeachingPathStore!.setParentNodeUse(parent!);
+    editTeachingPathStore!.setOrientationNodeArticlesItem(side);
     this.props.onCancelDrag!();
     this.context.changeContentType(0);
   }
 
   private openAssignmentsList = (event: React.MouseEvent<HTMLDivElement>) => {
-    const { editTeachingPathStore, node } = this.props;
+    const { editTeachingPathStore, node, parent, side } = this.props;
     event.preventDefault();
-    editTeachingPathStore!.setCurrentNode(node!);
+    editTeachingPathStore!.setEditNodeAssigmentItem(true);
+    editTeachingPathStore!.setNodeUse(node!);
+    editTeachingPathStore!.setParentNodeUse(parent!);
+    editTeachingPathStore!.setOrientationNodeArticlesItem(side);
     this.props.onCancelDrag!();
     this.context.changeContentType(1);
+    this.setState({ isOpenedModal: false });
   }
 
   private openCreatingAssignment = async (event: React.MouseEvent<HTMLDivElement>) => {
-    const { newAssignmentStore, editTeachingPathStore, history, node } = this.props;
+    const { newAssignmentStore, editTeachingPathStore, history, node, parent, side } = this.props;
 
     event.preventDefault();
     this.props.onCancelDrag!();
+    editTeachingPathStore!.setEditNodeAssigmentItem(true);
+    editTeachingPathStore!.setNodeUse(node!);
+    editTeachingPathStore!.setParentNodeUse(parent!);
+    editTeachingPathStore!.setOrientationNodeArticlesItem(side);
     editTeachingPathStore!.setCurrentNode(node!);
     editTeachingPathStore!.setIsAssignmentCreating(true);
 
@@ -145,24 +156,11 @@ class AddingNewButton extends Component<Props> {
           )
         );
         editTeachingPathStore!.addChildrenByOrder(newChildren[0], node!, this.props.side);
-        this.setState({ modalDomain : false });
+        this.setState({ modalDomain : false, valueInputDomain : '', itemsForNewChildren: [] });
         editTeachingPathStore!.currentEntity!.save();
         document.removeEventListener('keyup', this.handleKeyboardControl);
         this.context.changeContentType(null);
         editTeachingPathStore!.setCurrentNode(null);
-        /*editTeachingPathStore!.setCurrentNode(node!);
-        this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, response] });
-        const newChildren = this.state.itemsForNewChildren.map(
-          item => editTeachingPathStore!.createNewNode(
-            item,
-            TeachingPathNodeType.Domain
-          )
-        );
-        newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
-        editTeachingPathStore!.currentEntity!.save();
-        document.removeEventListener('keyup', this.handleKeyboardControl);
-        this.context.changeContentType(null);
-        editTeachingPathStore!.setCurrentNode(null);*/
       }
     } else {
       Notification.create({

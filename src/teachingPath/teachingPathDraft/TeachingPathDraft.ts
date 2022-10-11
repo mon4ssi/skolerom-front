@@ -784,7 +784,7 @@ export class EditableTeachingPathNode extends TeachingPathNode {
   public addChildByOrder = (child: EditableTeachingPathNode, search: EditableTeachingPathNode, order: string) => {
     const childrenCopy = this.children.slice();
     const index = childrenCopy.indexOf(search);
-    const valueInside = (index > -1) ? (order === 'left') ? (index === 0) ? 0 : index - 1 : index + 1 : 0;
+    const valueInside = (index > -1) ? (order === 'left') ? (index === 0) ? 0 : index : index + 1 : 0;
     if (index > -1) {
       childrenCopy.splice(valueInside, 0, child);
     }
