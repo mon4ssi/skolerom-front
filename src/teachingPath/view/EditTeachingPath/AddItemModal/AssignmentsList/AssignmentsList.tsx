@@ -802,8 +802,8 @@ export class AssignmentsList extends Component<Props, State> {
           key={assignment.id}
           assignment={assignment}
           allItems={this.state.itemsForNewChildren}
-          addItem={(this.props.editTeachingPathStore!.editNodeArticlesItem) ? this.addItemToNewChildNode : this.addItemToNewChild}
-          removeItem={(this.props.editTeachingPathStore!.editNodeArticlesItem) ? this.removeItemFromNewChildNode : this.removeItemFromNewChild}
+          addItem={(this.props.editTeachingPathStore!.editNodeAssigmentItem) ? this.addItemToNewChildNode : this.addItemToNewChild}
+          removeItem={(this.props.editTeachingPathStore!.editNodeAssigmentItem) ? this.removeItemFromNewChildNode : this.removeItemFromNewChild}
           toSelectItem={this.toSelectItem}
         />
       )
