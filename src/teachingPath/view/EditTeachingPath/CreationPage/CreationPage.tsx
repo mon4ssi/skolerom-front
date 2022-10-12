@@ -515,7 +515,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     if (node.type === TeachingPathNodeType.Root) {
       return null;
     }
-    const horizontalLineWidth = (node.items!.length - 1) * cardWidth;
+    const horizontalLineWidth = (node.items! && node.items!.length - 1) * cardWidth;
 
     const containerClassNames = classnames(
       'infoCardsContainer flexBox',
