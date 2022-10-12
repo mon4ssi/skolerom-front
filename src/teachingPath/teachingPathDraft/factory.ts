@@ -170,9 +170,9 @@ const buildTeachingPathItemRequestDTO = (item: TeachingPathItem): TeachingPathIt
 
 const buildImageUrlFromArticlesOrAssignment = (child: TeachingPathNodeSaveResponseDTO) => {
   if (child.type === TeachingPathNodeType.Article) {
-    const itemWithImage = child.items!.find((item: TeachingPathItemSaveResponseDTO) => !isNil(item.images) && !isNil(item.images.url));
+    const itemWithImage = child.items!.find((item: TeachingPathItemSaveResponseDTO) => !isNil(item.images) && !isNil(item.images.url_large!));
     if (itemWithImage) {
-      return itemWithImage.images!.url;
+      return itemWithImage.images!.url_large!;
     }
   }
   if (child.type === TeachingPathNodeType.Assignment) {

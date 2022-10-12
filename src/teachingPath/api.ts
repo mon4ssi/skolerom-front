@@ -458,7 +458,7 @@ export class TeachingPathApi implements TeachingPathRepo {
           },
         }
       )
-    ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
+    ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, item.url, item.duration!, item.src));
   }
 
   public async getTeachingPathListOfStudentInList(studentId: number, filter: Filter) {

@@ -80,7 +80,7 @@ export interface TeachingPathItemSaveResponseDTO {
   excerpt?: string;
   numberOfQuestions?: number;
   relatedArticles?: Array<Article>;
-  images?: { id: number, url: string };
+  images?: { id: number, url: string, url_large?: string, };
   featuredImage?: string;
   hasGuidance?: boolean;
   open?: boolean;
