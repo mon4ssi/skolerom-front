@@ -45,6 +45,7 @@ export interface AttachmentDTO {
   alt: string;
   file_name: string;
   title: string;
+  url_large?: string;
   duration?: number;
   src?: Array<string>;
 }
@@ -546,7 +547,7 @@ export class WPApi implements ArticleRepo {
       }
     );
     if (response.data.media.length > 0) {
-      return (response).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
+      return (response).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, item.url_large, item.duration, item.src));
     }
     return [];
   }
@@ -562,7 +563,7 @@ export class WPApi implements ArticleRepo {
       }
     );
     if (response.data.media.length > 0) {
-      return (response).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
+      return (response).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, item.url_large, item.duration, item.src));
     }
     return [];
   }
