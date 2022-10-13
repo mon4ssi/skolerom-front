@@ -564,7 +564,7 @@ export class WPApi implements ArticleRepo {
       }
     );
     if (response.data.media.length > 0) {
-      return (response).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, item.url, item.duration, item.src));
+      return (response).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url_large!, item.alt, item.file_name, item.title, item.url_large, item.duration, item.src));
     }
     return [];
   }
