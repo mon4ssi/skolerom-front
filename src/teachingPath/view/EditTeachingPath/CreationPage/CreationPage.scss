@@ -6,6 +6,10 @@
     position: relative;
     min-width: 100%;
     min-height: fit-content;
+    z-index: 1;
+    &:hover {
+      z-index: 3;
+    }
     // overflow-x: auto;
     &.draggableclass {
       .InfoCard {
@@ -288,6 +292,15 @@
           width: 0%;
         }
       }
+      &.first {
+        .infoCardContainer {
+          &.first {
+            &:before {
+              transform: translateX(100%);
+            }
+          }
+        }
+      }
     }
 
     .teachingPathItems {
@@ -298,6 +311,7 @@
       position: relative;
       margin-bottom: 20px;      
       margin-left: 40px;
+      min-height: 308px;
       &.withUnmergeButton {
         margin-top: 10px;
       }
