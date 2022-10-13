@@ -481,13 +481,13 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
     return !!newAssignmentStore!.currentEntity!.relatedArticles.find(article => article.id === id);
   }
 
-  public handleArticle = (id: number) => () => {
+  public handleArticle = (article: Article) => () => {
     const { newAssignmentStore } = this.props;
-    const article = newAssignmentStore!.getAllArticles().find(article => article.id === id);
+    /*const article = newAssignmentStore!.getAllArticles().find(article => article.id === id);*/
     if (article) {
       this.setState({ greeddata: true });
       this.setState({ selectedArticle: article });
-      if (this.isCheckedArticle(id)) {
+      if (this.isCheckedArticle(article.id)) {
         newAssignmentStore!.currentEntity!.removeArticle(article);
       } else {
         newAssignmentStore!.currentEntity!.addArticle(article);
@@ -580,7 +580,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
       <RelatedArticlesCard
         key={article.id}
         article={article}
-        handleArticle={this.handleArticle(article.id)}
+        handleArticle={this.handleArticle(article)}
         isCheckedArticle={this.isCheckedArticle(article.id)}
         toSelectArticle={this.toSelectArticle(article)}
       />

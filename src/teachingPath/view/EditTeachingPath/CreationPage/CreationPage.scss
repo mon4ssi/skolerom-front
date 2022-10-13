@@ -48,7 +48,7 @@
     &.rootContainer {
       padding-bottom: 50px;
       padding-top: 17px;
-
+      padding-right: 40px;
       &::before {
         content: none;
       }
@@ -59,6 +59,7 @@
         padding: 23px 0px 0px 0px;
         z-index: 3;
         position: relative !important;
+        margin-left: 40px;
         &.imposibleDrop {
           border: dashed 3px #ff4545;
           background: #ffebeb;
@@ -87,6 +88,7 @@
         padding: 25px 0px 20px 0px;
         position: relative;
         z-index: 3;
+        margin-left: 40px;
         &.imposibleDrop {
           border: dashed 3px #ff4545;
           background: #ffebeb;
@@ -150,8 +152,8 @@
     }
 
     &.first::before {
-      width: 50%;
-      transform: translateX(50%);
+      width: calc(50% - 40px);
+      transform: translateX(calc(50% + 40px));
     }
 
     &.last::before {
@@ -170,11 +172,11 @@
 
     &.mergeLineBeforeButton::after {
       content: "";
-      width: 50%;
+      width: calc(50% - 20px);
       border-top: 2px dashed #D3D9DE;
       position: absolute;
       top: 414px;
-      transform: translateX(50%);
+      transform: translateX(calc(50% + 20px));
     }
 
     &.mergeLineFullWidth::after {
@@ -188,11 +190,11 @@
 
     &.mergeLineAfterButton::after {
       content: "";
-      width: 50%;
+      width: calc(50% + 20px);
       border-top: 2px dashed #D3D9DE;
       position: absolute;
       top: 414px;
-      transform: translateX(-50%);
+      transform: translateX(calc(-50% + 20px));
     }
     .teachingPathItemsTitleDiv {
       position: relative;
@@ -258,7 +260,8 @@
       flex-direction: row;
       position: relative;
       min-height: fit-content;
-
+      padding-left: 60px;
+      padding-right: 20px;
       .infoCardContainer {
         position: relative;
 
@@ -294,7 +297,7 @@
     .teachingPathButtons {
       position: relative;
       margin-bottom: 20px;      
-
+      margin-left: 40px;
       &.withUnmergeButton {
         margin-top: 10px;
       }
@@ -303,6 +306,72 @@
         margin-top: 70px;
       }
 
+      &.withoutPadding {
+        margin-top: 15px !important;
+      }      
+    }
+
+    .teachingPathButtonsLeft {
+      margin-bottom: 20px;
+      position: absolute;
+      left: 0px;
+      top: 88px;      
+      cursor: pointer;
+      width: calc(50% - 150px);
+      .midLeftLine {
+        width: 100%;
+        min-width: 100%;
+      }
+      .circleOption {
+        position: absolute;
+        left: 0px;
+      }
+      &.withUnmergeButton {
+        margin-top: 10px;
+        top: 148px;
+      }
+
+      &.withPadding {
+        margin-top: 70px;
+      }
+
+      &.withoutPadding {
+        margin-top: 15px !important;
+      } 
+      .AddingButtons {
+        position: absolute;
+        transform: translateX(-105px)translateY(10px);
+        z-index: 4;
+      }     
+    }
+
+    .teachingPathButtonsRight {
+      margin-bottom: 20px;
+      position: absolute;
+      right: -40px;
+      top: 88px;  
+      cursor: pointer;
+      width: calc(50% - 150px);
+      .midRightLine {
+        width: 100%;
+      }
+      .circleOption {
+        position: absolute;
+        right: 0;
+      }
+      &.withUnmergeButton {
+        margin-top: 10px;    
+        top: 148px;
+      }
+      .AddingButtons {
+        position: absolute;
+        transform: translateX(-105px)translateY(10px);
+        z-index: 4;
+      }
+      &.withPadding {
+        margin-top: 70px;
+      }
+      
       &.withoutPadding {
         margin-top: 15px !important;
       }      
@@ -324,7 +393,7 @@
 
     .mergePanel {
       display: flex;
-
+      margin-left: 40px;
       .mergeTooltip {
         display: none;
         background: #596A75;
@@ -338,15 +407,15 @@
         z-index: 5;
 
         &.enLocale {
-          left: -93px;
+          left: -73px;
         }
 
         &.nbLocale {
-          left: -93px;
+          left: -73px;
         }
 
         &.nnLocale {
-          left: -93px;
+          left: -73px;
         }
       }
 
@@ -374,7 +443,7 @@
         height: 40px;
         position: absolute;
         top: 395px;
-        left: -20px;
+        left: 0px;
         cursor: pointer;
         z-index: 3;
         background: url(../../../../assets/images/merge.svg);
@@ -439,6 +508,30 @@
     z-index: -1;
   }
 
+  .midLeftLine {
+    border-bottom: 2px solid #D3D9DE;
+    /* height: 65px; */
+    /* min-height: 65px; */
+    width: 40px;
+    min-width: 40px;
+    position: absolute;
+    top: 21px;
+    left: 40px;
+    z-index: -1;
+  }
+
+  .midRightLine {
+    border-bottom: 2px solid #D3D9DE;
+    /* height: 65px; */
+    /* min-height: 65px; */
+    width: 40px;
+    min-width: 40px;
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    z-index: -1;
+  }
+
   .bottomVerticalLine {
     border-left: 2px solid #D3D9DE;
     height: 42px;
@@ -449,7 +542,7 @@
 
   .bottomHorizontalLine {
     border-bottom: 2px solid #D3D9DE;
-    left: 160px;
+    left: 223px;
     position: absolute;
     z-index: 1;
     bottom: -42px;
@@ -483,8 +576,10 @@
 .dropInfoAddtional {
   position: absolute;
   width: calc(100% - 74px);
-  bottom: 0;
-  max-width: 248px;
+  bottom: -188px;
+  max-width: 282px;
+  z-index: 2;
+  right: 40px;
   &.deletedrop {
     display: none;
   }
@@ -586,3 +681,6 @@
   border-radius: 5px;
 }
 
+.centered {
+  text-align: -webkit-center;
+}

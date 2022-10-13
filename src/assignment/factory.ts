@@ -372,7 +372,8 @@ export const buildArticle = (item: ArticleDTO) =>
     excerpt: item.excerpt,
     images: {
       id: Number(item.images.img_id),
-      url: item.images.img_url
+      url: item.images.img_url,
+      url_large: item.images.img_url_large!,
     },
     grades: item.student_grade.map(grade => buildGrade(grade)) || [],
     subjects: item.student_subject.map(subject => buildSubject(subject)) || [],
@@ -417,5 +418,5 @@ const buildArticleLevel = (levels: Array<StudentLevelDTO>) => (
 );
 
 export const buildAttachment = (item: AttachmentDTO) => (
-  new Attachment(item.id, item.url, item.alt, item.file_name, item.title, item.duration)
+  new Attachment(item.id, item.url, item.alt, item.file_name, item.title, item.url_large, item.duration)
 );

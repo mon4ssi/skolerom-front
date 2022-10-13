@@ -1,0 +1,162 @@
+.AddingNewButton {
+    cursor: pointer;
+    width: 248px;
+    height: auto;
+    background: #FFFFFF;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.09487);
+    border-radius: 5px;
+  
+    .addingButton {
+      display: flex;
+      height: 62px;
+      align-items: center;
+      background: transparent;
+      button {
+        padding: 0px;
+        width: 100%;
+        display: flex;
+        height: 62px;
+        align-items: center;
+        background: transparent;
+        font-size: 1.0625rem;
+        padding: 10px 20px;
+        &:focus {
+          outline: solid;
+          outline-style: auto;
+        }
+      }
+      img {
+        margin-right: 20px;
+        width: 38px;
+        height: 38px;
+      }
+  
+      &:first-child {
+        border-radius: 5px 5px 0 0;
+      }
+  
+      &:last-child {
+        border-radius: 0 0 5px 5px;
+      }
+  
+      &:hover {
+        background: #939FA7;
+        color: #ffffff;
+        button {
+          color: #ffffff;
+        }
+        img {
+          filter: brightness(0) invert(1);
+        }
+      }
+    }
+  }
+  .modalDomain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &__background {
+      background: #0b254175;
+      width: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+    }
+    &__content {
+      position: relative;
+      background: white;
+      border-radius: 6px;
+      overflow: hidden;
+      width: calc(100% - 40px);
+      max-width: 450px;
+    }
+    &__form {
+      display: flex;
+      align-items: stretch;
+    }
+    &__input {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      img {
+        width: 28px;
+        margin-left: 15px;
+        margin-right: 5px;
+      }
+      input {
+        border: none;
+        padding: 20px 5px;
+        font-size: 16px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+    }
+    &__button {
+      .btn {
+        height: 100%;
+        background: #0b2541;
+        color: white;
+        padding: 20px;
+        &:disabled {
+          background: #bdbdbd;
+        }
+        &:focus {
+          outline: white;
+          outline-style: auto;
+          outline-offset: -1px;
+        }
+      }
+    }
+  }
+
+  .circleOption {
+    .circle {        
+        width: 40px;
+        height: 40px;        
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.100661);
+        position: relative;
+        cursor: pointer;
+        &.circleBottom {
+            margin-bottom: 20px;
+        }
+        &:before {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 2px;
+            background: rgb(65, 80, 90);
+            left: 50%;
+            top: 50%;
+            margin-left: -6px;
+            margin-top: -1px;
+        }
+        &:after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 12px;
+            background: rgb(65, 80, 90);
+            left: 50%;
+            top: 50%;
+            margin-left: -1px;
+            margin-top: -6px;
+        }
+    }
+    &.active {
+        .circle {              
+            background: #41505a;
+            &:before, &:after {
+                background: white;
+            }
+        }
+    }
+  }

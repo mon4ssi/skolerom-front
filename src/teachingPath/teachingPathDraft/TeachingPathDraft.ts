@@ -781,6 +781,18 @@ export class EditableTeachingPathNode extends TeachingPathNode {
   }
 
   @action
+  public addChildByOrder = (child: EditableTeachingPathNode, search: EditableTeachingPathNode, order: string) => {
+    const childrenCopy = this.children.slice();
+    const index = childrenCopy.indexOf(search);
+    const valueInside = (index > -1) ? (order === 'left') ? (index === 0) ? 0 : index : index + 1 : 0;
+    if (index > -1) {
+      childrenCopy.splice(valueInside, 0, child);
+    }
+    this._children = childrenCopy;
+    this.draftTeachingPath.save();
+  }
+
+  @action
   public removeChild = (node: EditableTeachingPathNode) => {
     this._children = this.children.filter(child => node !== child);
     this.draftTeachingPath.save();

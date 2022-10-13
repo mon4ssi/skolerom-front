@@ -67,7 +67,6 @@ class ArticleItem extends Component<ArticleItemProps> {
 
   public handleSelectArticle = () => {
     const { article, addItem, removeItem } = this.props;
-
     this.isArticleSelected() ?
       removeItem(article) :
       addItem(article);
@@ -142,6 +141,7 @@ interface State {
   filtersAjaxLoadingGoals: boolean;
   isEdit: boolean;
   isEditSingle: boolean;
+
   isChangeArticle: boolean;
   idChangeArticle: number;
   gradeParentId: number;
@@ -294,7 +294,9 @@ export class ArticlesList extends Component<Props, State> {
         userFilters: false
       });
     }
-    this.setState({ itemsForNewChildren: this.getAllChildrenItems() });
+    if (!this.props.editTeachingPathStore!.editNodeArticlesItem) {
+      this.setState({ itemsForNewChildren: this.getAllChildrenItems() });
+    }
     const isNextPage = articlesList.length > 0;
 
     this.props.editTeachingPathStore!.getArticles({ isNextPage, ...appliedFilters });
@@ -1591,7 +1593,6 @@ export class ArticlesList extends Component<Props, State> {
   }
 
   public addItemToNewChild = (item: Article) => {
-
     const { currentNode } = this.props.editTeachingPathStore!;
     const ifAddingItemIsSaved = !!currentNode!.children.filter(
       child => child.items!.find(el => el.value.id === item.id)
@@ -1615,6 +1616,20 @@ export class ArticlesList extends Component<Props, State> {
       this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, item] });
       this.setState({ greeddata: true });
       this.setState({ selectedArticle: item });
+    }
+  }
+
+  public addItemToNewChildNode = (item: Article) => {
+    if (!this.state.isEditSingle) {
+      this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, item] });
+      this.setState({ greeddata: true });
+      this.setState({ selectedArticle: item });
+      this.setState({ isEditSingle: true });
+    } else {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('edit_teaching_path.notifications.neccesary_edit')
+      });
     }
   }
 
@@ -1648,54 +1663,77 @@ export class ArticlesList extends Component<Props, State> {
     });
   }
 
+  public removeItemFromNewChildNode = async (item: Article) => {
+    this.setState({ isEditSingle: false });
+    this.setState({ itemsForNewChildren: [] });
+  }
+
   public closeModal = () => {
     const { editTeachingPathStore, } = this.props;
     const { itemsForNewChildren } = this.state;
-    if (this.state.isEdit) {
+    if (editTeachingPathStore!.editNodeArticlesItem) {
+      const nodeuse = editTeachingPathStore!.nodeUse;
+      const parentNodeUse = editTeachingPathStore!.parentNodeUse;
+      const orientation = editTeachingPathStore!.orientationNodeArticlesItem;
       if (itemsForNewChildren.length) {
-        if (this.state.isChangeArticle) {
-          editTeachingPathStore!.currentNode!.editItem(this.state.idChangeArticle, itemsForNewChildren[0]);
-          editTeachingPathStore!.currentEntity!.save();
-        }
-        this.context.changeContentType(null);
-        editTeachingPathStore!.setCurrentNode(null);
-      } else {
-        editTeachingPathStore!.currentEntity!.save();
-        this.context.changeContentType(null);
-        editTeachingPathStore!.setCurrentNode(null);
-      }
-      editTeachingPathStore!.falseIsEditArticles();
-    } else {
-      if (itemsForNewChildren.length) {
+        editTeachingPathStore!.setCurrentNode(parentNodeUse!);
         const newChildren = itemsForNewChildren.map(
           item => editTeachingPathStore!.createNewNode(
             item,
             TeachingPathNodeType.Article
           )
         );
-        newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
-        editTeachingPathStore!.currentNode!.children.forEach(
-          (child) => {
-            this.state.removingItems.forEach(
-              (item: Article) => {
-                if (child.items!.filter(el => el.value.id === item.id)) {
-                  child.removeItem(item.id);
-                }
-              }
-            );
-            if (!child.items!.length) {
-              editTeachingPathStore!.currentNode!.removeChild(child);
-            }
-          }
-        );
-      } else {
-        editTeachingPathStore!.currentNode!.setChildren([]);
+        editTeachingPathStore!.addChildrenByOrder(newChildren[0], nodeuse!, orientation);
+        editTeachingPathStore!.currentEntity!.save();
       }
-
-      editTeachingPathStore!.currentEntity!.save();
-
       this.context.changeContentType(null);
       editTeachingPathStore!.setCurrentNode(null);
+      editTeachingPathStore!.setEditNodeArticlesItem(false);
+    } else {
+      if (this.state.isEdit) {
+        if (itemsForNewChildren.length) {
+          if (this.state.isChangeArticle) {
+            editTeachingPathStore!.currentNode!.editItem(this.state.idChangeArticle, itemsForNewChildren[0]);
+            editTeachingPathStore!.currentEntity!.save();
+          }
+          this.context.changeContentType(null);
+          editTeachingPathStore!.setCurrentNode(null);
+        } else {
+          editTeachingPathStore!.currentEntity!.save();
+          this.context.changeContentType(null);
+          editTeachingPathStore!.setCurrentNode(null);
+        }
+        editTeachingPathStore!.falseIsEditArticles();
+      } else {
+        if (itemsForNewChildren.length) {
+          const newChildren = itemsForNewChildren.map(
+            item => editTeachingPathStore!.createNewNode(
+              item,
+              TeachingPathNodeType.Article
+            )
+          );
+          newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
+          editTeachingPathStore!.currentNode!.children.forEach(
+            (child) => {
+              this.state.removingItems.forEach(
+                (item: Article) => {
+                  if (child.items!.filter(el => el.value.id === item.id)) {
+                    child.removeItem(item.id);
+                  }
+                }
+              );
+              if (!child.items!.length) {
+                editTeachingPathStore!.currentNode!.removeChild(child);
+              }
+            }
+          );
+        } else {
+          editTeachingPathStore!.currentNode!.setChildren([]);
+        }
+        editTeachingPathStore!.currentEntity!.save();
+        this.context.changeContentType(null);
+        editTeachingPathStore!.setCurrentNode(null);
+      }
     }
   }
 
@@ -1771,8 +1809,8 @@ export class ArticlesList extends Component<Props, State> {
       key={article.id}
       article={article}
       allItems={this.state.itemsForNewChildren}
-      addItem={this.addItemToNewChild}
-      removeItem={this.removeItemFromNewChild}
+      addItem={(this.props.editTeachingPathStore!.editNodeArticlesItem) ? this.addItemToNewChildNode : this.addItemToNewChild}
+      removeItem={(this.props.editTeachingPathStore!.editNodeArticlesItem) ? this.removeItemFromNewChildNode : this.removeItemFromNewChild}
       toSelectArticle={this.toSelectArticle}
     />
   )

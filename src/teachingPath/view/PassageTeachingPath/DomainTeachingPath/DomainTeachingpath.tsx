@@ -35,7 +35,15 @@ export class DomainTeachingPath extends Component<Props, State> {
   public chooseCard = (domain: Domain) => () => {
     const { id, url } = domain;
     this.props.questionaryTeachingPathStore!.pickUpItem(id);
-    this.setState({ canGoToNextQuestion: true });
+    let incretoRead = 0;
+    const lengthRead = this.props.questionaryTeachingPathStore!.currentDomainList.length;
+    this.props.questionaryTeachingPathStore!.currentDomainList.forEach((element) => {
+      if (element.isRead) {
+        incretoRead = incretoRead + 1;
+      }
+    });
+    const valueIsread = (incretoRead === lengthRead) ? true : false;
+    this.setState({ canGoToNextQuestion: valueIsread });
     window.open(`${url}`, '_blank');
   }
 

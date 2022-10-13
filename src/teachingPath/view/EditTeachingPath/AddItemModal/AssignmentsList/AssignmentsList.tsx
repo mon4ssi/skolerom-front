@@ -481,7 +481,9 @@ export class AssignmentsList extends Component<Props, State> {
     this.props.assignmentListStore!.clearMyAssignmentsList();
     this.props.assignmentListStore!.myAssignments = [];
     this.props.assignmentListStore!.setTypeOfAssignmentsList('all');
-    this.setState({ itemsForNewChildren: this.getAllChildrenItems() });
+    if (!this.props.editTeachingPathStore!.editNodeAssigmentItem) {
+      this.setState({ itemsForNewChildren: this.getAllChildrenItems() });
+    }
     this.props.assignmentListStore!.setFromTeachingPath(true);
     this.props.assignmentListStore!.setFiltersForTeachingPath();
     document.addEventListener('keyup', this.handleKeyboardControl);
@@ -544,6 +546,20 @@ export class AssignmentsList extends Component<Props, State> {
     }
   }
 
+  public addItemToNewChildNode = (item: Assignment) => {
+    if (!this.state.isEditSingle) {
+      this.setState({ itemsForNewChildren: [...this.state.itemsForNewChildren, item] });
+      this.setState({ greeddata: true });
+      this.setState({ selectedAssignment: item });
+      this.setState({ isEditSingle: true });
+    } else {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('edit_teaching_path.notifications.neccesary_edit')
+      });
+    }
+  }
+
   public toSelectItem = (item: Assignment) => {
     this.setState({
       greeddata: true,
@@ -577,6 +593,11 @@ export class AssignmentsList extends Component<Props, State> {
     });
   }
 
+  public removeItemFromNewChildNode = async (item: Assignment) => {
+    this.setState({ isEditSingle: false });
+    this.setState({ itemsForNewChildren: [] });
+  }
+
   public selectAllAssignmentsTab = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     this.setState({ currentTab: 'all' });
@@ -602,49 +623,69 @@ export class AssignmentsList extends Component<Props, State> {
   public closeModal = () => {
     const { editTeachingPathStore, } = this.props;
     const { itemsForNewChildren } = this.state;
-    if (this.state.isEdit) {
+    if (editTeachingPathStore!.editNodeAssigmentItem) {
+      const nodeuse = editTeachingPathStore!.nodeUse;
+      const parentNodeUse = editTeachingPathStore!.parentNodeUse;
+      const orientation = editTeachingPathStore!.orientationNodeArticlesItem;
       if (itemsForNewChildren.length) {
-        if (this.state.isChangeAssingment) {
-          editTeachingPathStore!.currentNode!.editItem(this.state.idChangeAssingment, itemsForNewChildren[0]);
-          editTeachingPathStore!.currentEntity!.save();
-        }
-        this.context.changeContentType(null);
-        editTeachingPathStore!.setCurrentNode(null);
-      } else {
-        editTeachingPathStore!.currentEntity!.save();
-        this.context.changeContentType(null);
-        editTeachingPathStore!.setCurrentNode(null);
-      }
-      editTeachingPathStore!.falseIsEditAssignments();
-    } else {
-      if (itemsForNewChildren.length) {
+        editTeachingPathStore!.setCurrentNode(parentNodeUse!);
         const newChildren = itemsForNewChildren.map(
           item => editTeachingPathStore!.createNewNode(
             item,
             TeachingPathNodeType.Assignment
           )
         );
-        newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
-        editTeachingPathStore!.currentNode!.children.forEach(
-          (child) => {
-            this.state.removingItems.forEach(
-              (item: Assignment) => {
-                if (child.items!.filter(el => el.value.id === item.id)) {
-                  child.removeItem(item.id);
-                }
-              }
-            );
-            if (!child.items!.length) {
-              editTeachingPathStore!.currentNode!.removeChild(child);
-            }
-          }
-        );
-      } else {
-        editTeachingPathStore!.currentNode!.setChildren([]);
+        editTeachingPathStore!.addChildrenByOrder(newChildren[0], nodeuse!, orientation);
+        editTeachingPathStore!.currentEntity!.save();
       }
-      editTeachingPathStore!.currentEntity!.save();
       this.context.changeContentType(null);
       editTeachingPathStore!.setCurrentNode(null);
+      editTeachingPathStore!.setEditNodeAssigmentItem(false);
+    } else {
+      if (this.state.isEdit) {
+        if (itemsForNewChildren.length) {
+          if (this.state.isChangeAssingment) {
+            editTeachingPathStore!.currentNode!.editItem(this.state.idChangeAssingment, itemsForNewChildren[0]);
+            editTeachingPathStore!.currentEntity!.save();
+          }
+          this.context.changeContentType(null);
+          editTeachingPathStore!.setCurrentNode(null);
+        } else {
+          editTeachingPathStore!.currentEntity!.save();
+          this.context.changeContentType(null);
+          editTeachingPathStore!.setCurrentNode(null);
+        }
+        editTeachingPathStore!.falseIsEditAssignments();
+      } else {
+        if (itemsForNewChildren.length) {
+          const newChildren = itemsForNewChildren.map(
+            item => editTeachingPathStore!.createNewNode(
+              item,
+              TeachingPathNodeType.Assignment
+            )
+          );
+          newChildren.forEach(child => editTeachingPathStore!.addChildToCurrentNode(child));
+          editTeachingPathStore!.currentNode!.children.forEach(
+            (child) => {
+              this.state.removingItems.forEach(
+                (item: Assignment) => {
+                  if (child.items!.filter(el => el.value.id === item.id)) {
+                    child.removeItem(item.id);
+                  }
+                }
+              );
+              if (!child.items!.length) {
+                editTeachingPathStore!.currentNode!.removeChild(child);
+              }
+            }
+          );
+        } else {
+          editTeachingPathStore!.currentNode!.setChildren([]);
+        }
+        editTeachingPathStore!.currentEntity!.save();
+        this.context.changeContentType(null);
+        editTeachingPathStore!.setCurrentNode(null);
+      }
     }
   }
 
@@ -761,8 +802,8 @@ export class AssignmentsList extends Component<Props, State> {
           key={assignment.id}
           assignment={assignment}
           allItems={this.state.itemsForNewChildren}
-          addItem={this.addItemToNewChild}
-          removeItem={this.removeItemFromNewChild}
+          addItem={(this.props.editTeachingPathStore!.editNodeAssigmentItem) ? this.addItemToNewChildNode : this.addItemToNewChild}
+          removeItem={(this.props.editTeachingPathStore!.editNodeAssigmentItem) ? this.removeItemFromNewChildNode : this.removeItemFromNewChild}
           toSelectItem={this.toSelectItem}
         />
       )

@@ -41,6 +41,7 @@ import { AppHeader } from 'components/layout/AppHeader/AppHeader';
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
 import { TeacherguidanceModal } from 'teachingPath/view/TeacherGuidance/TeacherGuidanceModal';
 import { trim } from 'lodash';
+import { AddingNewButtonElement } from './AddingNewButton/AddingNewButton';
 
 const cardWidth = 322;
 const leftIndent = 160;
@@ -514,7 +515,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     if (node.type === TeachingPathNodeType.Root) {
       return null;
     }
-    const horizontalLineWidth = (node.items!.length - 1) * cardWidth;
+    const horizontalLineWidth = (node.items! && node.items!.length - 1) * cardWidth;
 
     const containerClassNames = classnames(
       'infoCardsContainer flexBox',
@@ -670,10 +671,47 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     editTeachingPathStore!.falseIsDraggable();
   }
 
-  public renderAddingButtons = (withUnmergeButton: boolean) => {
-    const { nestedOrder, node } = this.props;
+  public renderAddingButtonsLeft = (withUnmergeButton: boolean) => {
+    const { nestedOrder, node, parentNode } = this.props;
     const containerClassNames = classnames(
-      'teachingPathButtons flexBox justifyCenter',
+      'teachingPathButtonsLeft flexBox justifyCenter centered',
+      withUnmergeButton && 'withUnmergeButton',
+      !this.renderMergeButton() && 'contentNone',
+      !(node.type !== TeachingPathNodeType.Root && node.items!.length > 1) && 'withPadding',
+      node.type === TeachingPathNodeType.Root && 'withoutPadding'
+    );
+    const isRoot = (node.type === TeachingPathNodeType.Root) ? true : false;
+    return !isRoot && (
+      <div className={containerClassNames} onDragEnter={this.dragenterthandler}>
+        {node.type !== TeachingPathNodeType.Root && <div className="midLeftLine" />}
+        {/* <AddingButtons node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/> */}
+        <AddingNewButtonElement side={'left'} node={node} parent={parentNode} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
+      </div>
+    );
+  }
+
+  public renderAddingButtonsRight = (withUnmergeButton: boolean) => {
+    const { nestedOrder, node, parentNode } = this.props;
+    const containerClassNames = classnames(
+      'teachingPathButtonsRight flexBox justifyCenter centered',
+      withUnmergeButton && 'withUnmergeButton',
+      !this.renderMergeButton() && 'contentNone',
+      !(node.type !== TeachingPathNodeType.Root && node.items!.length > 1) && 'withPadding',
+      node.type === TeachingPathNodeType.Root && 'withoutPadding'
+    );
+    const isRoot = (node.type === TeachingPathNodeType.Root) ? true : false;
+    return !isRoot && (
+      <div className={containerClassNames} onDragEnter={this.dragenterthandler}>
+        {true && <div className="midRightLine" />}
+        <AddingNewButtonElement side={'right'} node={node} parent={parentNode} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
+      </div>
+    );
+  }
+
+  public renderAddingButtons = (withUnmergeButton: boolean) => {
+    const { nestedOrder, node, parentNode } = this.props;
+    const containerClassNames = classnames(
+      'teachingPathButtons flexBox justifyCenter centered',
       withUnmergeButton && 'withUnmergeButton',
       !this.renderMergeButton() && 'contentNone',
       !(node.type !== TeachingPathNodeType.Root && node.items!.length > 1) && 'withPadding',
@@ -682,7 +720,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     return !node.children.length && (
       <div className={containerClassNames} onDragEnter={this.dragenterthandler}>
         {node.type !== TeachingPathNodeType.Root && <div className="topVerticalLine" />}
-        <AddingButtons node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
+        {/* <AddingButtons node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/> */}
+        <AddingNewButtonElement side={'bottom'} node={node} parent={parentNode} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
       </div>
     );
   }
@@ -781,8 +820,10 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
             if (item.children.length > 0) {
               item.children.forEach((child) => {
-                if (child.children.length > 0) {
-                  childrenTmp.push(child);
+                if (child) {
+                  if (child.children.length > 0) {
+                    childrenTmp.push(child);
+                  }
                 }
               });
 
@@ -935,8 +976,11 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         {!readOnly && this.renderUnmergeButton()}
 
         {this.renderBoxNodeOptions()}
+        {!readOnly && this.renderAddingButtonsLeft(!!this.renderUnmergeButton())}
 
         {!readOnly && this.renderAddingButtons(!!this.renderUnmergeButton())}
+
+        {!readOnly && this.renderAddingButtonsRight(!!this.renderUnmergeButton())}
 
         <div className="childrenContainer flexBox">
           {children.length ? children.map(this.renderNodeContent) : null}
@@ -984,8 +1028,18 @@ export class CreationPageComponent extends Component<Props> {
       });
 
       const newChild = createNewNode(newAssignmentStore!.storedAssignment!, TeachingPathNodeType.Assignment);
-      editTeachingPathStore!.addChildToCurrentNode(newChild);
+      if (!editTeachingPathStore!.editNodeAssigmentItem) {
+        editTeachingPathStore!.addChildToCurrentNode(newChild);
+      } else {
+        const nodeuse = editTeachingPathStore!.nodeUse;
+        const parentNodeUse = editTeachingPathStore!.parentNodeUse;
+        const orientation = editTeachingPathStore!.orientationNodeArticlesItem;
+        editTeachingPathStore!.setCurrentNode(parentNodeUse!);
+        editTeachingPathStore!.addChildrenByOrder(newChild, nodeuse!, orientation);
+        editTeachingPathStore!.currentEntity!.save();
+      }
       newAssignmentStore!.clearStoredAssignment();
+      editTeachingPathStore!.setEditNodeAssigmentItem(false);
       editTeachingPathStore!.setCurrentNode(null);
     }
   }

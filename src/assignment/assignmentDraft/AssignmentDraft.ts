@@ -297,7 +297,7 @@ export class DraftAssignment extends Assignment {
 
   @action
   public setFeaturedImage() {
-    this._featuredImage = this.relatedArticles[0] && this.relatedArticles[0].images && this.relatedArticles[0].images.url;
+    this._featuredImage = this.relatedArticles[0] && this.relatedArticles[0].images && this.relatedArticles[0].images.url_large;
   }
 
   @action
