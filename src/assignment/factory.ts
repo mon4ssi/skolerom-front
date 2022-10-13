@@ -373,7 +373,7 @@ export const buildArticle = (item: ArticleDTO) =>
     images: {
       id: Number(item.images.img_id),
       url: item.images.img_url,
-      url_large: item.images.img_url,
+      url_large: item.images.img_url_large!,
     },
     grades: item.student_grade.map(grade => buildGrade(grade)) || [],
     subjects: item.student_subject.map(subject => buildSubject(subject)) || [],
