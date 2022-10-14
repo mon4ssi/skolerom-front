@@ -13,7 +13,7 @@ import {
   TeachingPathNodeArgs,
   TeachingPathNodeType
 } from 'teachingPath/TeachingPath';
-import { buildTeachingPathRequestDTO, buildFeatureImageForTeachingPathRequestDTO } from './factory';
+import { buildTeachingPathRequestDTO, buildFeatureImageForTeachingPathRequestDTO, buildBackgroundImageForTeachingPathRequestDTO } from './factory';
 import { SAVE_DELAY } from 'utils/constants';
 import { Article, Grade, Subject } from 'assignment/Assignment';
 
@@ -238,7 +238,9 @@ export class DraftTeachingPath extends TeachingPath {
   public setFeaturedImage() {
     const teachingPath = buildTeachingPathRequestDTO(this);
     const image = buildFeatureImageForTeachingPathRequestDTO(teachingPath.content);
+    const bgImage = buildBackgroundImageForTeachingPathRequestDTO(teachingPath.content);
     this._featuredImage = image;
+    this._backgroundImage = bgImage;
   }
 
   @action
@@ -338,6 +340,17 @@ export class DraftTeachingPath extends TeachingPath {
   public setFeaturedImageFromCover(path: string) {
     this._featuredImage = path;
     this.save();
+  }
+
+  @action
+  public setBackgroundImageHDResFromCover(urlLarge: string) {
+    this._backgroundImage = urlLarge;
+    this.save();
+  }
+
+  @action
+  public getBackgroundImageFromCover() {
+    return this._backgroundImage;
   }
 
   public anyArticlesIds(butIds: Array<number>, node: EditableTeachingPathNode) {

@@ -82,6 +82,7 @@ export interface TeachingPathItemSaveResponseDTO {
   relatedArticles?: Array<Article>;
   images?: { id: number, url: string, url_large?: string, };
   featuredImage?: string;
+  backgroundImage?: string;
   hasGuidance?: boolean;
   open?: boolean;
 }

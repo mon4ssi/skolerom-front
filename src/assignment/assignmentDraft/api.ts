@@ -39,6 +39,7 @@ export interface NewDraftAssignmentResponseDTO {
 
 export interface DraftAssignmentRequestDTO {
   uuid: string;
+  backgroundImage: string;
   title: string;
   description: string;
   guidance: string;
