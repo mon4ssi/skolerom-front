@@ -2,7 +2,7 @@ import React, { ChangeEvent, Component } from 'react';
 import { observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 import searchIcon from 'assets/images/search.svg';
-import { ARTICLE_SERVICE_KEY, Attachment, Grade, Subject } from 'assignment/Assignment';
+import { ARTICLE_SERVICE_KEY, Attachment, CustomImgAttachment, Grade, Subject } from 'assignment/Assignment';
 import { DraftAssignment, DraftAssignmentRepo, DRAFT_ASSIGNMENT_REPO } from 'assignment/assignmentDraft/AssignmentDraft';
 import { DraftTeachingPath } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
 
@@ -170,7 +170,8 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
     )))
 
   public updateMediaCustom = async (page?: number) => {
-    const mediaCustomUpdated = (await this.articleService.fetchCustomImages('', page ? page : 1, ''));
+    this.setState({ query: '' });
+    const mediaCustomUpdated = (await this.articleService.fetchCustomImages('', page ? page : 1, this.state.query ? this.state.query : ''));
     const data = mediaCustomUpdated.myCustomImages || [];
     const numberOfPages = mediaCustomUpdated.total_pages;
     this.setState({ mediaCustomImgs: data!, totalNumberOfPages: numberOfPages });
@@ -225,7 +226,7 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
     const onlyOneSelected: Array<number> = [];
     onlyOneSelected.push(articleIds[0]);
     const mediaImgsWP: Array<Attachment> = await this.articleService.fetchCoverImages(articleIds) || [];
-    const mediaImgsCustom = (await this.articleService.fetchCustomImages('', 1, ''));
+    const mediaImgsCustom = (await this.articleService.fetchCustomImages('', 1, this.state.query));
     const data: Array<Attachment> = mediaImgsCustom.myCustomImages || [];
     const numberOfPages = mediaImgsCustom.total_pages;
     this.setState({
@@ -360,7 +361,7 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
           </div>
         </div>
         <div className="contentWrapper">
-          {false && selectedTabId !== const3 && this.renderSearchBar()}
+          {selectedTabId !== const3 && this.renderSearchBar()}
           <div className="gapOptionsImages">
             {this.renderTabById(selectedTabId !== const3 ? selectedTabId === const1 ? mediaWP : mediaCustomImgs : [], selectedTabId)}
 
@@ -392,7 +393,12 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
       );
       /* console.log(searchResults); */
       /* this.setState() */
-      if (this.state.selectedTabId === const2) {
+      // if (this.state.selectedTabId === const2) <- for not calling on the same time inside first and second tab
+      if (true) {
+        const newResults = await this.articleService.fetchCustomImages('', 1, e.target.value!.toLowerCase());
+        const myCustomImagesSearch: Array<CustomImgAttachment> = newResults.myCustomImages;
+        const numberOfPages: number = newResults.total_pages;
+        this.setState({ currentPage: 1, mediaCustomImgs: myCustomImagesSearch, totalNumberOfPages: numberOfPages });
         /* const response = await newAssignmentStore!.fetchQuestionCustomImagesAttachments(String(this.state.listIdsSelected), AttachmentContentType.customImage, e.target.value!); */
         /* const myCustomImagesSearch: CustomImgAttachment[] = response.myCustomImages;
         const numberOfPages: number = response.total_pages; */
@@ -454,7 +460,7 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
   public onChangePage = async ({ selected }: { selected: number }) => {
     /* const { newAssignmentStore } = this.props; */
     this.setState({ currentPage: selected + 1 });
-    const pageChangedCustomImgs = (await this.articleService.fetchCustomImages('', selected + 1, '')).myCustomImages || [];
+    const pageChangedCustomImgs = (await this.articleService.fetchCustomImages('', selected + 1, this.state.query)).myCustomImages || [];
     this.setState({ mediaCustomImgs: pageChangedCustomImgs! });
     /* newAssignmentStore!.currentPage = selected + 1;
     newAssignmentStore!.fetchingCustomImageAttachments = true;
