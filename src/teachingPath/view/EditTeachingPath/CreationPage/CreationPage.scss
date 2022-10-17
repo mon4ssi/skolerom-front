@@ -91,7 +91,7 @@
         margin: 65px 0px 27px 0px;
         padding: 25px 0px 20px 0px;
         position: relative;
-        z-index: 3;
+        z-index: 4;
         margin-left: 40px;
         &.imposibleDrop {
           border: dashed 3px #ff4545;
@@ -590,7 +590,7 @@
 .dropInfoAddtional {
   position: absolute;
   width: calc(100% - 74px);
-  bottom: -188px;
+  bottom: 0;
   max-width: 282px;
   z-index: 2;
   right: 40px;
