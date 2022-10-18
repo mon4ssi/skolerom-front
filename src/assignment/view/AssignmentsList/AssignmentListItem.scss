@@ -51,12 +51,23 @@ $image-height: 60px;
 }
 
 .AssignmentListItem__image {
-  @include absolute-attach(left, -1px);
+  /* @include absolute-attach(left, -1px);
   width: $image-width;
   height: $image-height;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
-  object-fit: cover;
+  object-fit: cover; */
+  position: absolute;
+  top: -0.3px;
+  left: -0.1px;
+  right: -1px;
+  bottom: 0px;
+  right: auto;
+  width: 90px;
+  height: 58.6px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  object-fit: cover;  
 }
 
 .AssignmentListItem__contentCreatorImage {
