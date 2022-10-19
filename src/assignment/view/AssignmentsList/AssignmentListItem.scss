@@ -58,16 +58,16 @@ $image-height: 60px;
   border-bottom-left-radius: 5px;
   object-fit: cover; */
   position: absolute;
-  top: -0.3px;
-  left: -0.1px;
+  top: 0px;
+  left: 0px;
   right: -1px;
-  bottom: 0px;
+  bottom: 0;
   right: auto;
   width: 90px;
-  height: 58.6px;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  object-fit: cover;  
+  height: 58px;
+  border-top-left-radius: 4.1px;
+  border-bottom-left-radius: 4.1px;
+  object-fit: cover;
 }
 
 .AssignmentListItem__contentCreatorImage {
