@@ -13,6 +13,7 @@ import { isNil } from 'lodash';
 import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
 import { createContext } from 'vm';
 import { CustomImgAttachmentResponse, ResponseFetchCustomImages } from './api';
+import { url } from 'inspector';
 
 export const ASSIGNMENT_REPO = 'ASSIGNMENT_REPO';
 
@@ -1305,6 +1306,8 @@ export class Attachment {
   public readonly alt: string;
   public readonly fileName: string;
   public readonly title: string;
+  // tslint:disable-next-line
+  public readonly url_large?: string;
   public readonly duration?: number;
   public readonly src?: Array<string> | undefined | null;
   public readonly source?: string | undefined | null;
@@ -1315,6 +1318,8 @@ export class Attachment {
     alt: string,
     fileName: string,
     title: string,
+    // tslint:disable-next-line
+    url_large?: string,
     duration?: number,
     src?: Array<string> | undefined | null,
     source?: string,
@@ -1327,6 +1332,7 @@ export class Attachment {
     this.duration = duration;
     this.src = src;
     this.source = source;
+    this.url_large = url_large;
   }
 }
 
@@ -1388,6 +1394,7 @@ export class ArticleLevel {
 export interface ImageArticle {
   id: number;
   url: string;
+  url_large: string;
 }
 
 export interface ReadLevel {

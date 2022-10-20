@@ -88,9 +88,11 @@ export class TeacherguidanceModal extends Component<Props> {
       if (itemTG.children.children[0].type ===  TeachingPathNodeType.Assignment) {
         const listItemAssignment: Array<any> = [];
         itemTG.children.children.forEach((child) => {
-          child.items!.forEach((item) => {
-            listItemAssignment.push(item);
-          });
+          if (child) {
+            child.items!.forEach((item) => {
+              listItemAssignment.push(item);
+            });
+          }
         });
 
         return listItemAssignment!.map((itemAssignment: any, index) => (
@@ -122,31 +124,35 @@ export class TeacherguidanceModal extends Component<Props> {
       nroNodes = 0;
       children = childrenTmp;
       childrenTmp = [];
-
-      children.forEach((item) => {
-        if (item.children.length > 0) {
-          item.children.forEach((child) => {
-            if (child.children.length > 0) {
-              childrenTmp.push(child);
+      if (children) {
+        children.forEach((item) => {
+          if (item && item.children.length > 0) {
+            if (item.children) {
+              item.children.forEach((child) => {
+                if (child) {
+                  if (child.children.length > 0) {
+                    childrenTmp.push(child);
+                  }
+                }
+              });
             }
-          });
 
-          const child:Teacherguidance = {
-            nroLevel: nroLevelLoop,
-            nroLetter: nroLetterLoop,
-            hideBorderTop: hideBorderTopLoop,
-            nroChild: children.length,
-            children: item,
-            hasAssignmenet: (item.children.length > 0 && item.children[0].type === TeachingPathNodeType.Assignment)
-          };
+            const child:Teacherguidance = {
+              nroLevel: nroLevelLoop,
+              nroLetter: nroLetterLoop,
+              hideBorderTop: hideBorderTopLoop,
+              nroChild: children.length,
+              children: item,
+              hasAssignmenet: (item.children.length > 0 && item.children[0].type === TeachingPathNodeType.Assignment)
+            };
 
-          childrenFinal.push(child);
-          nroLetterLoop += 1;
-          nroNodes += 1;
-          hideBorderTopLoop = false;
-        }
-      });
-
+            childrenFinal.push(child);
+            nroLetterLoop += 1;
+            nroNodes += 1;
+            hideBorderTopLoop = false;
+          }
+        });
+      }
       nroLevelLoop += 1;
       nroLetterLoop = firstLetterNumber;
       hideBorderTopLoop = true;

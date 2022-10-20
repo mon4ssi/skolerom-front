@@ -12,7 +12,7 @@ import { buildFilterDTO, GradeDTO } from 'assignment/factory';
 import { Breadcrumbs } from './teachingPathDraft/TeachingPathDraft';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { StudentTeachingPathEvaluationNodeItem } from 'evaluation/api';
-import { CONDITIONALERROR, STATUS_SERVER_ERROR, STATUS_BADREQUEST } from 'utils/constants';
+import { CONDITIONALERROR, STATUS_SERVER_ERROR, STATUS_BADREQUEST, STATUS_SERVERBADREQUEST } from 'utils/constants';
 
 export interface AttachmentDTO {
   id: number;
@@ -334,7 +334,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         featuredImage: data.image
       });
     } catch (error) {
-      if (error.response.status === STATUS_SERVER_ERROR || error.response.status === STATUS_BADREQUEST) {
+      if (error.response.status === STATUS_SERVER_ERROR || error.response.status === STATUS_BADREQUEST || error.response.status === STATUS_SERVERBADREQUEST) {
         if (error.response.data.message.code === CONDITIONALERROR) {
           Notification.create({
             type: NotificationTypes.ERROR,
@@ -458,7 +458,7 @@ export class TeachingPathApi implements TeachingPathRepo {
           },
         }
       )
-    ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
+    ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, item.url, item.duration!, item.src));
   }
 
   public async getTeachingPathListOfStudentInList(studentId: number, filter: Filter) {

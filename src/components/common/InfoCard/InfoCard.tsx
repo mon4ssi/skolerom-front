@@ -168,6 +168,15 @@ class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
           />
         </button>
       </div>
+      <div className="actionButtonsItem">
+        <button onClick={this.handleClickDelete} title={intl.get('generals.delete')}>
+          <img
+            src={trashImg}
+            alt={intl.get('generals.delete')}
+            title={intl.get('generals.delete')}
+          />
+        </button>
+      </div>
     </div>
   )
 
