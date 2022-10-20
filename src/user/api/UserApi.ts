@@ -45,7 +45,7 @@ export class UserApi implements UserRepo {
       if (error.response.status === STATUS_NOT_FOUND || error.response.status === STATUS_SERVER_ERROR) {
         Notification.create({
           type: NotificationTypes.ERROR,
-          title: error.response.message
+          title: String(error)
         });
         return null;
       }
