@@ -99,7 +99,7 @@ export class TeachingPathApi implements TeachingPathRepo {
   public arrayNumberContentAll: Array<number> = [];
 
   public async getAllTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
-    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
+    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURIComponent(filter.searchQuery!);
     const response = await API.get('api/teacher/teaching-paths', {
       params: buildFilterDTO(filter)
     });
@@ -123,7 +123,7 @@ export class TeachingPathApi implements TeachingPathRepo {
   }
 
   public async getMySchoolTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
-    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
+    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURIComponent(filter.searchQuery!);
     const response = await API.get('api/teacher/teaching-paths', {
       params: buildFilterDTO(filter)
     });
@@ -146,7 +146,7 @@ export class TeachingPathApi implements TeachingPathRepo {
   }
 
   public async getMyTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
-    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
+    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURIComponent(filter.searchQuery!);
     const response = await API.get('api/teacher/teaching-paths/draft', {
       params: buildFilterDTO(filter)
     });
@@ -168,7 +168,7 @@ export class TeachingPathApi implements TeachingPathRepo {
   }
 
   public async getStudentTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
-    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
+    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURIComponent(filter.searchQuery!);
     const response = await API.get('api/student/teaching-paths', {
       params: buildFilterDTO(filter)
     });
