@@ -172,19 +172,20 @@ class Sidebar extends Component<Props> {
 
   private renderSidebarLinks = () => {
     const { currentUser } = this.props.loginStore!;
-
-    switch (currentUser!.type) {
-      case (UserType.Teacher):
-        if (!currentUser!.teacherTrial) {
-          return teacherSidebarLinks.map(this.renderSidebarLink);
-        }
-        return teacherTrialSidebarLinks.map(this.renderSidebarLink);
-      case (UserType.Student):
-        return studentSidebarLinks.map(this.renderSidebarLink);
-      case (UserType.ContentManager):
-        return contentManagerSidebar.map(this.renderSidebarLink);
-      default:
-        return;
+    if (currentUser) {
+      switch (currentUser!.type) {
+        case (UserType.Teacher):
+          if (!currentUser!.teacherTrial) {
+            return teacherSidebarLinks.map(this.renderSidebarLink);
+          }
+          return teacherTrialSidebarLinks.map(this.renderSidebarLink);
+        case (UserType.Student):
+          return studentSidebarLinks.map(this.renderSidebarLink);
+        case (UserType.ContentManager):
+          return contentManagerSidebar.map(this.renderSidebarLink);
+        default:
+          return;
+      }
     }
   }
 
