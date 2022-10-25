@@ -517,7 +517,7 @@
     "Press Shift + Arrow Left for prev question": "Trykk Shift + \u2190 for føregåande spørsmål",
     "Notification": "Bra val! Den valde oppgåva vil bli lagd til lista di når du har fullført den noverande oppgåva.",
     "Review & Submit": "Summer opp og send inn svaret",
-    "submit_description": "Du har svart på {numberOfAnsweredQuestions} av {numberOfQuestions} spørsmål. Bruk meny til venstre for å navigere mellom spørsmåla. Naviger tilbake hit og trykk på «Send inn oppgåva» for å fullføre oppgåva og sende oppgåvesvaret til vurdering.",
+    "submit_description": "{numberOfAnsweredQuestions} av {numberOfQuestions} spørsmål er svart på. Du kan nytte tallrekka over for å navigere mellom spørsmåla. Når du er ferdig, navigerer du hit for å sende inn oppgåva.",
     "submit_all_questions_answered": "Du har svart på alle spørsmåla!",
     "submit": "Send inn svar",
     "complete_and_submit_button": "Send inn oppgåva",

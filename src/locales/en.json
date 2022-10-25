@@ -517,7 +517,7 @@
     "Press Shift + Arrow Left for prev question": "Press Shift + \u2190 for previous question",
     "Notification": "Great choice! The selected assignment will be added to your list after you have completed your current assignment.",
     "Review & Submit": "Review & Submit",
-    "submit_description": "{numberOfAnsweredQuestions} out of {numberOfQuestions} question are answered. Use the sidebar on the top left to go through and review each answer. Come back here and press «Complete and submit your answer» to submit the assignment answer to your teacher.",
+    "submit_description": "{numberOfAnsweredQuestions} of {numberOfQuestions} questions have been answered. You can use the number row above to navigate between the questions. When you have finished, navigate here to submit the assignment.",
     "submit_all_questions_answered": "All questions answered!",
     "submit": "Submit",
     "complete_and_submit_button": "Complete and submit your answer",
