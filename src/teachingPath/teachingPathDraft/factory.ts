@@ -72,6 +72,7 @@ export const buildDraftTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     schools: dto.schools,
     selectedArticlesIds: dto.selectedArticlesIds,
     selectedAssignmentsIds: dto.selectedAssignmentsIds,
+    backgroundImage: dto.backgroundImage,
     featuredImage: dto.featuredImage,
     localeId: dto.localeId
   });

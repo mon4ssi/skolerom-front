@@ -54,6 +54,7 @@ export interface DraftTeachingPathResponseDTO {
   schools?: Array<NowSchool>;
   selectedArticlesIds: Array<number>;
   selectedAssignmentsIds: Array<number>;
+  backgroundImage?: string;
   featuredImage: string;
   localeId: number | null;
 }

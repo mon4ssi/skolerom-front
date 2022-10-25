@@ -525,7 +525,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     );
 
     const lastItem = readOnly && node.children.length === 0;
-
+    // console.log(node);
     return (
       <div
         className={containerClassNames}
