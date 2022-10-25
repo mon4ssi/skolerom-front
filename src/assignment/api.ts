@@ -190,6 +190,7 @@ interface AssignmentByIdResponseDTO {
   id: number;
   author: string;
   authorRole: string;
+  backgroundImage: string;
   title: string;
   description: string;
   featuredImage: string;
@@ -225,6 +226,7 @@ export class AssignmentApi implements AssignmentRepo {
       id: assignmentDTO.id,
       author: assignmentDTO.author,
       authorRole: assignmentDTO.authorRole,
+      backgroundImage: assignmentDTO.backgroundImage,
       title: assignmentDTO.title,
       createdAt: assignmentDTO.created_at,
       description: assignmentDTO.description,

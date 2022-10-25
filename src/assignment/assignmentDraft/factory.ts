@@ -34,6 +34,7 @@ export const buildDraftAssignment = (dto: DraftAssignmentResponseDTO): DraftAssi
     isPrivate: dto.isPrivate,
     isMySchool: dto.isMySchool,
     mySchools: dto.mySchools,
+    backgroundImage: dto.backgroundImage,
     grades: dto.grades.map(grade => new Grade(grade.id, grade.title)),
     subjects: dto.subjects.map(subject => new Subject(subject.id, subject.title)),
     levels: dto.levels.map(level => level),
