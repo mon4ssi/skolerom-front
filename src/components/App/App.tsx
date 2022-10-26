@@ -241,7 +241,7 @@ class LocalizedApp extends Component<Props> {
         <Route
           exact
           path="/assignments/view/:id"
-          component={CurrentAssignmentPageView}
+          component={CurrentAssignmentPagePreviewView}
         />
 
         <Route

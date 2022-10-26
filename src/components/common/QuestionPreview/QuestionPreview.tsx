@@ -165,7 +165,6 @@ export class QuestionPreview extends Component<Props, State> {
 
   public renderAnswerBlock = () => {
     const { question, answer, readOnly, redirectData, isEvaluationStyle, isStudentView, handleShowArrowsTooltip, isPreview } = this.props;
-
     switch (question.type) {
       case QuestionType.Text:
         const onlyReadOnly = (question.hide_answer) ? true : readOnly;
@@ -176,6 +175,7 @@ export class QuestionPreview extends Component<Props, State> {
             readOnly={onlyReadOnly}
             redirectData={redirectData}
             isEvaluationStyle={isEvaluationStyle}
+            isPreview={isPreview}
             handleShowArrowsTooltip={handleShowArrowsTooltip}
           />
         );
@@ -188,6 +188,7 @@ export class QuestionPreview extends Component<Props, State> {
             redirectData={redirectData}
             isEvaluationStyle={isEvaluationStyle}
             isStudentView={isStudentView}
+            isPreview={isPreview}
             handleShowArrowsTooltip={handleShowArrowsTooltip}
           />
         );
@@ -199,6 +200,7 @@ export class QuestionPreview extends Component<Props, State> {
             answer={answer}
             readOnly={readOnly}
             redirectData={redirectData}
+            isPreview={isPreview}
             isEvaluationStyle={isEvaluationStyle}
             handleShowArrowsTooltip={handleShowArrowsTooltip}
           />
