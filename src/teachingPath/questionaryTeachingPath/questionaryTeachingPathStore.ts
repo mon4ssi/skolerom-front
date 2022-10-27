@@ -262,6 +262,9 @@ export class QuestionaryTeachingPathStore {
 
   @action
   public async getCurrentNode(teachingPathId: number, nodeId: number) {
+    this.resetCurrentArticleList();
+    this.resetCurrentAssignmentList();
+    this.resetCurrentDomainList();
     this.currentNode = await this.teachingPathService.getCurrentNode(teachingPathId, nodeId);
   }
 
@@ -367,6 +370,7 @@ export class QuestionaryTeachingPathStore {
 
   @action
   public domainFullInfo() {
+    this.currentDomainList = [];
     this.currentNode!.children.forEach((child) => {
       if (child.items) {
         return child.items.forEach((item) => {
