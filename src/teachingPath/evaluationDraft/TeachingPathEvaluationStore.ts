@@ -212,7 +212,6 @@ export class TeachingPathEvaluationStore {
 
     for (const node of response.path) {
       const nodeInfo = await this.evaluationService!.getNodeById(node, this.currentEntity!.id);
-
       if (nodeInfo.type === 'ASSIGNMENT') {
         const selectedAssignment = response.selectedAssignments.find(item => item.node_id === node);
         if (selectedAssignment && selectedAssignment.assignment_id) {
