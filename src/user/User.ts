@@ -25,7 +25,6 @@ export type UserParams = {
   schools: Array<School>;
   isSuperCM?: boolean;
   teacherTrial?: boolean;
-  isTestAccount?: boolean;
 };
 
 export abstract class User {
@@ -36,7 +35,6 @@ export abstract class User {
   public readonly schools: Array<School>;
   public readonly isSuperCM?: boolean;
   public readonly teacherTrial?: boolean;
-  public readonly isTestAccount?: boolean;
 
   protected constructor(params: UserParams & { type: UserType }) {
     this.type = params.type;
@@ -46,6 +44,5 @@ export abstract class User {
     this.schools = params.schools;
     this.isSuperCM = params.isSuperCM;
     this.teacherTrial = params.teacherTrial;
-    this.isTestAccount = params.isTestAccount;
   }
 }

@@ -18,7 +18,6 @@ export interface UserDTO {
   schools: Array<School>;
   isSuperCM: boolean;
   teacherTrial: boolean;
-  isTestAccount?: boolean;
 }
 
 export interface StudentDTO {

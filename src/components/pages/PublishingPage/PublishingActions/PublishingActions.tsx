@@ -706,27 +706,16 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     }
   }
 
-  public renderIsOpenCheck = () => {
-    const isOpen = this.state.isOpen;
-    const { from } = this.props;
-    const isChecked = (isOpen) ? PublishingActionsIcons.checkActive : PublishingActionsIcons.checkRounded;
-    const textIsOpen = (from === 'TEACHINGPATH') ? this.labels.isOpenTeachingPath : this.labels.isOpenAssignment;
-    return (
-      <div className="filterCheck isOpen" onClick={this.toggleisOpen}>
-        <img src={isChecked} />
-        <p>{textIsOpen}</p>
-      </div>
-    );
-  }
-
   public renderSourceInput = () => {
     const { store, from } = this.props;
     const sources = store!.getAllSources().map(this.sourceToTagProp);
     const selectedSources = this.grepNumbersToTagprop(store!.currentEntity!.getListOfSources(), sources);
     const myplaceholder = (selectedSources.length > 0) ? '' : this.labels.labelSource;
+    const isOpen = this.state.isOpen;
+    const isChecked = (isOpen) ? PublishingActionsIcons.checkActive : PublishingActionsIcons.checkRounded;
+    const textIsOpen = (from === 'TEACHINGPATH') ? this.labels.isOpenTeachingPath : this.labels.isOpenAssignment;
     let classHidden = 'InformationSource hidden';
     if (store!.getCurrentUser()!.type === UserType.ContentManager) { classHidden = 'InformationSource'; }
-    const testAccount = !this.props.store!.getCurrentUser()!.isTestAccount!;
 
     return (
       <div className={classHidden}>
@@ -744,7 +733,10 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
               listView
               temporaryTagsArray
             />
-            {testAccount && this.renderIsOpenCheck()}
+            <div className="filterCheck isOpen" onClick={this.toggleisOpen}>
+              <img src={isChecked} />
+              <p>{textIsOpen}</p>
+            </div>
           </div>
           {this.renderKeywordsInput()}
           {this.renderLanguagesInput()}
