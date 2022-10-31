@@ -54,6 +54,7 @@ export interface DraftTeachingPathResponseDTO {
   schools?: Array<NowSchool>;
   selectedArticlesIds: Array<number>;
   selectedAssignmentsIds: Array<number>;
+  backgroundImage?: string;
   featuredImage: string;
   localeId: number | null;
 }
@@ -80,8 +81,9 @@ export interface TeachingPathItemSaveResponseDTO {
   excerpt?: string;
   numberOfQuestions?: number;
   relatedArticles?: Array<Article>;
-  images?: { id: number, url: string };
+  images?: { id: number, url: string, url_large?: string, };
   featuredImage?: string;
+  backgroundImage?: string;
   hasGuidance?: boolean;
   open?: boolean;
 }

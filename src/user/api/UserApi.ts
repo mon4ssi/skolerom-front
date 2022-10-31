@@ -45,7 +45,7 @@ export class UserApi implements UserRepo {
       if (error.response.status === STATUS_NOT_FOUND || error.response.status === STATUS_SERVER_ERROR) {
         Notification.create({
           type: NotificationTypes.ERROR,
-          title: intl.get('login_page.not permission')
+          title: String(error.response.data.message)
         });
         return null;
       }
@@ -59,12 +59,10 @@ export class UserApi implements UserRepo {
   public async getUserWithTokenFromLogPass(email: string, password: string) {
     try {
       const response = await API.post('/api/login', { email, password }, { withCredentials: true });
-       /*
-            if (response.data.access_token === 'login_wp') {
-              window.location.href = `${process.env.REACT_APP_WP_URL}/wp-content/plugins/skolerom-sso/skolerom-sso-login.php?nl=1&sso=${response.data.sso}`;
-              return 'login_wp';
-            }
-      */
+      if (response.data.access_token === 'login_wp') {
+        window.location.href = `${process.env.REACT_APP_WP_URL}/wp-content/plugins/skolerom-sso/skolerom-sso-login.php?nl=1&sso=${response.data.sso}`;
+        return 'login_wp';
+      }
       this.storageInteractor.setUserWithToken(response.data.access_token, response.data.user);
       return response.data.access_token;
     } catch (error) {

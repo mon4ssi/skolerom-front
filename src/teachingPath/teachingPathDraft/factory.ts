@@ -72,6 +72,7 @@ export const buildDraftTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     schools: dto.schools,
     selectedArticlesIds: dto.selectedArticlesIds,
     selectedAssignmentsIds: dto.selectedAssignmentsIds,
+    backgroundImage: dto.backgroundImage,
     featuredImage: dto.featuredImage,
     localeId: dto.localeId
   });
@@ -170,7 +171,7 @@ const buildTeachingPathItemRequestDTO = (item: TeachingPathItem): TeachingPathIt
 
 const buildImageUrlFromArticlesOrAssignment = (child: TeachingPathNodeSaveResponseDTO) => {
   if (child.type === TeachingPathNodeType.Article) {
-    const itemWithImage = child.items!.find((item: TeachingPathItemSaveResponseDTO) => !isNil(item.images) && !isNil(item.images.url));
+    const itemWithImage = child.items!.find((item: TeachingPathItemSaveResponseDTO) => !isNil(item.images) && !isNil(item.images.url!));
     if (itemWithImage) {
       return itemWithImage.images!.url;
     }
@@ -207,6 +208,45 @@ export const buildFeatureImageForTeachingPathRequestDTO = (data: TeachingPathNod
   return image;
 };
 
+export const buildBackgroundImageForTeachingPathRequestDTO = (data: TeachingPathNodeSaveResponseDTO): string | undefined => {
+  let image = undefined;
+
+  data.children.find((child: TeachingPathNodeSaveResponseDTO) => {
+    if (child.items && child.items.length > 0) {
+      const imageUrl = buildBackgroundImageUrlFromArticlesOrAssignment(child);
+      if (!isNil(imageUrl) && imageUrl !== '') {
+        return image = imageUrl;
+      }
+      if (child.children && child.children.length > 0) {
+        image = buildBackgroundImageForTeachingPathRequestDTO(child);
+      }
+    }
+    return undefined;
+  });
+  return image;
+};
+
+const buildBackgroundImageUrlFromArticlesOrAssignment = (child: TeachingPathNodeSaveResponseDTO) => {
+  if (child.type === TeachingPathNodeType.Article) {
+    const itemWithImage = child.items!.find((item: TeachingPathItemSaveResponseDTO) => !isNil(item.images) && !isNil(item.images.url_large!));
+    if (itemWithImage) {
+      return itemWithImage.images!.url_large;
+    }
+  }
+  if (child.type === TeachingPathNodeType.Assignment) {
+    const itemWithImage = child.items!.find((item: TeachingPathItemSaveResponseDTO) => !isNil(item.backgroundImage));
+    if (itemWithImage) {
+      return itemWithImage.backgroundImage;
+    }
+  }
+  if (child.type === TeachingPathNodeType.Domain) {
+    const itemWithImage = child.items!.find((item: TeachingPathItemSaveResponseDTO) => !isNil(item.backgroundImage));
+    if (itemWithImage) {
+      return itemWithImage.backgroundImage;
+    }
+  }
+};
+
 const buildTeachingPathNodeRequestDTO = (content: EditableTeachingPathNode): TeachingPathNodeSaveResponseDTO => ({
   type: content.type,
   selectQuestion: content.selectQuestion,
@@ -229,6 +269,7 @@ const buildSubject = (subjects: Array<Subject>) =>
 
 export const buildTeachingPathRequestDTO = (teachingPath: DraftTeachingPath) => ({
   uuid: teachingPath.uuid!,
+  backgroundImage: teachingPath.backgroundImage!,
   title: teachingPath.title,
   description: teachingPath.description,
   guidance: teachingPath.guidance,

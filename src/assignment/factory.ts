@@ -86,6 +86,7 @@ interface DraftAssignmentResponseDTO {
   grades: Array<Grade>;
   levels: Array<number>;
   isChanged: boolean;
+  backgroundImage: string;
   createByContentManager?: boolean;
   grep_coreelements?: Array<GreepElements>;
   grep_goals?: Array<GreepElements>;
@@ -294,6 +295,7 @@ export const buildGrade = (grade: GradeDTO): Grade => ({
 export const buildMyAssignmentsList = (item: DraftAssignmentResponseDTO) => {
   const assignment = isNil(item.assignmentContent) ? undefined : item.assignmentContent;
   const image = (assignment && !isNil(assignment.featuredImage)) ? assignment.featuredImage : undefined;
+  const bgImage = (assignment && !isNil(assignment.backgroundImage)) ? assignment.backgroundImage : undefined;
 
   return new Assignment({
     id: item.id,
@@ -311,6 +313,7 @@ export const buildMyAssignmentsList = (item: DraftAssignmentResponseDTO) => {
     numberOfQuestions: item.numberOfQuestions,
     featuredImage: image,
     isChanged: item.isChanged,
+    backgroundImage: bgImage,
     levels: item.levels,
     isCreatedByContentManager: item.createByContentManager,
     grepCoreelements: item.grep_coreelements,
@@ -353,6 +356,7 @@ export const buildStudentAssignmentList = (item: StudentAssignmentResponseDTO) =
     isAnswered: item.isAnswered,
     deadline: item.endDate,
     featuredImage: isNull(item.featuredImage) ? undefined : item.featuredImage,
+    backgroundImage: isNull(item.backgroundImage) ? undefined : item.backgroundImage,
     answerId: isNull(item.answerId) ? undefined : item.answerId,
     isPassed: item.isPassed,
     mark: item.mark,
@@ -372,7 +376,8 @@ export const buildArticle = (item: ArticleDTO) =>
     excerpt: item.excerpt,
     images: {
       id: Number(item.images.img_id),
-      url: item.images.img_url
+      url: item.images.img_url,
+      url_large: item.images.img_url_large!,
     },
     grades: item.student_grade.map(grade => buildGrade(grade)) || [],
     subjects: item.student_subject.map(subject => buildSubject(subject)) || [],
@@ -417,5 +422,5 @@ const buildArticleLevel = (levels: Array<StudentLevelDTO>) => (
 );
 
 export const buildAttachment = (item: AttachmentDTO) => (
-  new Attachment(item.id, item.url, item.alt, item.file_name, item.title, item.duration)
+  new Attachment(item.id, item.url, item.alt, item.file_name, item.title, item.url_large, item.duration)
 );

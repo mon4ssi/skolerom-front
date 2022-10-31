@@ -23,6 +23,7 @@ export interface NewDraftAssignmentResponseDTO {
   id: number;
   uuid: string;
   assignmentContent: string;
+  backgroundImage: string;
   isCopy: boolean;
   keywords?: Array<string>;
   grepCoreElementsIds?: Array<number>;
@@ -39,6 +40,7 @@ export interface NewDraftAssignmentResponseDTO {
 
 export interface DraftAssignmentRequestDTO {
   uuid: string;
+  backgroundImage: string;
   title: string;
   description: string;
   guidance: string;

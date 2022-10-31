@@ -45,6 +45,7 @@ export interface AttachmentDTO {
   alt: string;
   file_name: string;
   title: string;
+  url_large?: string;
   duration?: number;
   src?: Array<string>;
 }
@@ -68,6 +69,7 @@ export interface CustomImgAttachmentResponse {
 export interface ImageArticleDTO {
   img_id: number;
   img_url: string;
+  img_url_large?: string;
 }
 
 export interface StudentLevelDTO {
@@ -141,6 +143,7 @@ export interface StudentAssignmentResponseDTO {
   isAnswered: boolean;
   endDate: Date;
   featuredImage: string | null;
+  backgroundImage: string | null;
   answerId: number | null;
   isPassed: boolean | null;
   mark: number | null;
@@ -187,6 +190,7 @@ interface AssignmentByIdResponseDTO {
   id: number;
   author: string;
   authorRole: string;
+  backgroundImage: string;
   title: string;
   description: string;
   featuredImage: string;
@@ -222,6 +226,7 @@ export class AssignmentApi implements AssignmentRepo {
       id: assignmentDTO.id,
       author: assignmentDTO.author,
       authorRole: assignmentDTO.authorRole,
+      backgroundImage: assignmentDTO.backgroundImage,
       title: assignmentDTO.title,
       createdAt: assignmentDTO.created_at,
       description: assignmentDTO.description,
@@ -321,7 +326,7 @@ export class AssignmentApi implements AssignmentRepo {
 
   public async getAllSchoolAssignmentsList(filter: Filter) {
     try {
-      if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
+      if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURIComponent(filter.searchQuery!);
       const response = await API.get('api/teacher/assignments', {
         params: buildFilterDTO(filter)
       });
@@ -379,7 +384,7 @@ export class AssignmentApi implements AssignmentRepo {
 
   public async getStudentAssignmentList(filter: Filter) {
     try {
-      if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
+      if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURIComponent(filter.searchQuery!);
       const response = await API.get('api/student/assignments', {
         params: buildFilterDTO(filter)
       });
@@ -397,7 +402,7 @@ export class AssignmentApi implements AssignmentRepo {
 
   public async getAssignmentListOfStudentInList(studentId: number, filter: Filter) {
     try {
-      if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
+      if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURIComponent(filter.searchQuery!);
       const response = await API.get('api/teacher/students/assignments', {
         params: {
           studentId,
@@ -421,7 +426,7 @@ export class AssignmentApi implements AssignmentRepo {
     distributes: Array<AssignmentDistribute>,
     total_pages: number;
   }> {
-    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
+    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURIComponent(filter.searchQuery!);
     const response = (await API.get('api/teacher/assignments/distributes', { params: filter })).data;
 
     return {
@@ -546,7 +551,7 @@ export class WPApi implements ArticleRepo {
       }
     );
     if (response.data.media.length > 0) {
-      return (response).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
+      return (response).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, item.url_large, item.duration, item.src));
     }
     return [];
   }
@@ -562,7 +567,7 @@ export class WPApi implements ArticleRepo {
       }
     );
     if (response.data.media.length > 0) {
-      return (response).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, undefined, item.src));
+      return (response).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, item.url_large, item.duration, item.src));
     }
     return [];
   }

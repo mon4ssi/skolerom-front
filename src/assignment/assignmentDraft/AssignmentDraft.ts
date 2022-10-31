@@ -298,6 +298,9 @@ export class DraftAssignment extends Assignment {
   @action
   public setFeaturedImage() {
     this._featuredImage = this.relatedArticles[0] && this.relatedArticles[0].images && this.relatedArticles[0].images.url;
+    if (this._backgroundImage === '' || this._backgroundImage === undefined || this._backgroundImage === null) {
+      this._backgroundImage = this.relatedArticles[0] && this.relatedArticles[0].images && this.relatedArticles[0].images.url_large!;
+    }
   }
 
   @action
@@ -306,9 +309,19 @@ export class DraftAssignment extends Assignment {
     this.save();
   }
 
+  public setBackgroundImageHDResFromCover(urlLarge: string) {
+    this._backgroundImage = urlLarge;
+    this.save();
+  }
+
   @action
   public getFeaturedImageFromCover() {
     return this._featuredImage;
+  }
+
+  @action
+  public getBackgroundImageFromCover() {
+    return this._backgroundImage;
   }
 
   @action

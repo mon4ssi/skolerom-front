@@ -18,10 +18,6 @@ interface Props extends RouteComponentProps<{id: string}> {
 @observer
 class PublishingPageComponent extends Component<Props> {
 
-  public componentDidMount = () => {
-    /* console.log('HOLIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII') */
-  }
-
   public render() {
     const { store, from } = this.props;
 
