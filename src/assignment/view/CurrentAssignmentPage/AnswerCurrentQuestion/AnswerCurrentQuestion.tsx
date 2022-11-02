@@ -128,7 +128,7 @@ class AnswerCurrentQuestion extends Component<Props> {
         numberOfQuestions={numberOfQuestions}
         numberOfAnsweredQuestions={numberOfAnsweredQuestions}
         publishQuestionary={publishQuestionary}
-        finishPreviewSubmit={finishPreviewSubmit}
+        finishPreviewSubmit={finishPreviewSubmit!}
         redirectData={redirectData}
         deleteQuestionary={this.deleteQuestionary}
         revertQuestionary={this.revertQuestionary}

@@ -73,6 +73,7 @@ export class SubmitComponent extends Component<Props> {
     const childNode = questionaryTeachingPathStore!.currentNode;
     await this.props.publishQuestionary();
     const isStudent = this.props.currentQuestionaryStore!.getCurrentUser()!.type === UserType.Student;
+    const isTestAccount = this.props.currentQuestionaryStore!.getCurrentUser()!.isTestAccount!;
     return (childNode && childNode.children.length > 0 && redirectData)
       ? this.props.history.push(`/teaching-path/${questionaryTeachingPathStore!.currentTeachingPath!.id}`, {
         node: history.location.state && history.location.state.node
@@ -86,7 +87,8 @@ export class SubmitComponent extends Component<Props> {
   public reloadToPreview = async () => {
     const { isPreview, finishPreviewSubmit } = this.props;
     if (isPreview) {
-      finishPreviewSubmit!();
+      /* finishPreviewSubmit!(); */
+      this.props.history.push('/assignments/all');
     }
   }
 
