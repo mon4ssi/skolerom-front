@@ -119,7 +119,7 @@ class AnswerCurrentQuestion extends Component<Props> {
         question={answer.key}
         answer={answer}
         redirectData={redirectData}
-        readOnly={readOnly}
+        readOnly={false}
         handleShowArrowsTooltip={currentQuestionaryStore!.handleShowArrowsTooltip}
         isPreview={isPreview}
       />
@@ -128,7 +128,7 @@ class AnswerCurrentQuestion extends Component<Props> {
         numberOfQuestions={numberOfQuestions}
         numberOfAnsweredQuestions={numberOfAnsweredQuestions}
         publishQuestionary={publishQuestionary}
-        finishPreviewSubmit={finishPreviewSubmit}
+        finishPreviewSubmit={finishPreviewSubmit!}
         redirectData={redirectData}
         deleteQuestionary={this.deleteQuestionary}
         revertQuestionary={this.revertQuestionary}
