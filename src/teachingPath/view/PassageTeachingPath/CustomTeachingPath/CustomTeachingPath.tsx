@@ -42,7 +42,6 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
     this.props.questionaryTeachingPathStore!.domainFullInfo();
     this.props.questionaryTeachingPathStore!.assignmentFullInfo();
     await questionaryTeachingPathStore!.getCurrentArticlesList(ids);
-    questionaryTeachingPathStore!.setFetchingDataStatus(false);
     if (this.ref.current) {
       this.ref.current!.focus();
     }
@@ -202,6 +201,7 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
   }
   public renderContent = () => {
     const { questionaryTeachingPathStore } = this.props;
+    questionaryTeachingPathStore!.setFetchingDataStatusCustom(true);
     if (questionaryTeachingPathStore!.isOpenedIframe && questionaryTeachingPathStore!.pickedItemArticle) {
       const article = questionaryTeachingPathStore!.pickedItemArticle!.item;
       const articleChildren = article.levels![0].childArticles!.length ? article.levels![0].childArticles : [article];

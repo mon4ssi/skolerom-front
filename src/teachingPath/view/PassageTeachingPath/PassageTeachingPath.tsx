@@ -187,7 +187,7 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
       case TeachingPathNodeType.Assignment:
         return <CustomTeachingPath finishReading={this.finishReading} finishReadingDomain={this.finishReadingDomain} />;
       case TeachingPathNodeType.Domain:
-        return <CustomTeachingPath finishReading={this.finishReadingDomain} finishReadingDomain={this.finishReadingDomain} />;
+        return <CustomTeachingPath finishReading={this.finishReading} finishReadingDomain={this.finishReadingDomain} />;
       default:
         return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers} onimage={this.props.questionaryTeachingPathStore!.currentTeachingPath!.backgroundImage} />;
     }
