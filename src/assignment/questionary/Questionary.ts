@@ -76,7 +76,12 @@ export class Answer {
       value;
     this.questionary.save(redirectData);
   }
-
+  @action
+  public setValueFalse(value: AnswerValue, redirectData?: RedirectData) {
+    this._value = !value.length ?
+      '' :
+      value;
+  }
 }
 
 export interface QuestionaryArgs {

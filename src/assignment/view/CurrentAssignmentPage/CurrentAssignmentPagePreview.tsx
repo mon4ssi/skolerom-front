@@ -414,7 +414,7 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
         <div className="CurrentAssignmentPage__content">
           <div className="CurrentAssignmentPage__container">
             <div className="CurrentAssignmentPage__main questionBody">
-              <div className="CurrentAssignmentPage__main__center">
+              <div className="CurrentAssignmentPage__main__center PreviewHere">
                 <div className={navBarClasses}>
                   <AssignmentOverview
                     answers={answers}
@@ -438,6 +438,7 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
                   numberOfAnsweredQuestions={numberOfAnsweredQuestions}
                   publishQuestionary={this.handlePublish}
                   readOnly={this.isReadOnly}
+                  isPreview={true}
                   switchCover={this.switchCover}
                   showCover={this.state.showCover}
                   isTeachingPath={state && !!state.teachingPath}

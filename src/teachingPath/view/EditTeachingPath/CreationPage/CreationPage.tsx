@@ -433,38 +433,52 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     // this.divRef.current!.ondrag(DragEvent, true);
   }
 
+  public temporalSearchtype = (parentNode: EditableTeachingPathNode) => {
+    if (parentNode!.children) {
+      const allTyps: Array<string> = [];
+      parentNode!.children.forEach((child) => {
+        allTyps.push(child.type);
+      });
+      return allTyps.every((val, i, arr) => val === arr[0]);
+    }
+  }
+
   public handleMergeNodes = async (event: SyntheticEvent) => {
     const { node, index, parentNode } = this.props;
 
     event.preventDefault();
-
-    if (
-      parentNode!.children[index! - 1].children.length && node.children.length &&
-      parentNode!.children[index! - 1].children[0].type !== node.children[0].type
-    ) {
+    if (this.temporalSearchtype(parentNode!)) {
+      if (
+        parentNode!.children[index! - 1].children.length && node.children.length &&
+        parentNode!.children[index! - 1].children[0].type !== node.children[0].type
+      ) {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('edit_teaching_path.notifications.unable_to_merge')
+        });
+      } else {
+        const mergeConfirm = await Notification.create({
+          type: NotificationTypes.CONFIRM,
+          title: intl.get('edit_teaching_path.notifications.merge_paths')
+        });
+        if (mergeConfirm) {
+          node.items!.forEach(
+            (item) => {
+              if (!parentNode!.children[index! - 1].items!.find(el => el.value.id === item.value.id)) {
+                parentNode!.children[index! - 1].addItem(item.value);
+              }
+            }
+          );
+          parentNode!.children[index! - 1].setChildren([...parentNode!.children[index! - 1].children, ...node.children]);
+          parentNode!.children[index! - 1].setSelectedQuestion(intl.get('edit_teaching_path.paths.node_teaching_path_title'));
+          parentNode!.removeChild(node);
+        }
+      }
+    } else {
       Notification.create({
         type: NotificationTypes.ERROR,
         title: intl.get('edit_teaching_path.notifications.unable_to_merge')
       });
-    } else {
-      const mergeConfirm = await Notification.create({
-        type: NotificationTypes.CONFIRM,
-        title: intl.get('edit_teaching_path.notifications.merge_paths')
-      });
-
-      if (mergeConfirm) {
-        node.items!.forEach(
-          (item) => {
-            if (!parentNode!.children[index! - 1].items!.find(el => el.value.id === item.value.id)) {
-              parentNode!.children[index! - 1].addItem(item.value);
-            }
-          }
-        );
-
-        parentNode!.children[index! - 1].setChildren([...parentNode!.children[index! - 1].children, ...node.children]);
-        parentNode!.children[index! - 1].setSelectedQuestion(intl.get('edit_teaching_path.paths.node_teaching_path_title'));
-        parentNode!.removeChild(node);
-      }
     }
   }
 
