@@ -139,7 +139,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
       return this.updateQueryString();
     }
     if (currentQuestionaryStore.assignment!.relatedArticles.length > 0 && !search) {
-      /* console.log('jaaaaaaaaaaaaaaaaaaaa');
+      /*
       this.props.currentQuestionaryStore.setCurrentQuestion(-1);
       return this.updateQueryString(); */
     }
