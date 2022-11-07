@@ -28,6 +28,7 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 
 import './CurrentAssignmentPage.scss';
 import { AssignmentListStore } from '../AssignmentsList/AssignmentListStore';
+import { UserType } from 'user/User';
 
 const COVER_INDEX = -2;
 const animationInDuration = 500;
@@ -121,9 +122,10 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
     const { currentQuestionaryStore, match, isTeacher, history } = this.props;
     const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
     headerArray[0].style.display = 'none';
+    const isCM = currentQuestionaryStore.getCurrentUser()!.type === UserType.ContentManager;
     const search = (history.location.search === '?preview' || history.location.search === '?preview&open=tg') ? true : false;
     // await currentQuestionaryStore.getQuestionaryByIdPreview(Number(match.params.id));
-    if (isTeacher) {
+    if (isTeacher || isCM) {
       await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
       if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles && currentQuestionaryStore!.assignment!.relatedArticles.length > 0 && currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden) {
         currentQuestionaryStore!.setCurrentQuestion(0);
@@ -421,7 +423,7 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
       history
     } = this.props;
     const { teachingPath } = (history.location.state || {}) as RedirectData;
-    const isShowAssignmentArticles = !!(assignment && assignment!.relatedArticles.length > 0);
+    const isShowAssignmentArticles = !!(assignment && assignment!.relatedArticles.length > 0 && !assignment!.relatedArticles[0].isHidden);
     const isReadArticles = getIsReadArticles();
     toJS(this.props.currentQuestionaryStore); // VALUES OF ANSWERS WILL NOT WORK WITHOUT THIS STRING
     const navBarClasses = classNames('CurrentAssignmentPage__navBar', {
