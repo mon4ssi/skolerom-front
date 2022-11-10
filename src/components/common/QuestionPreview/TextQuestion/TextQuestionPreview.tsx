@@ -111,13 +111,13 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
         </div>
       );
     }
-    if (isPreview) {
+    /* if (isPreview) {
       return (
         <div className="InputSy testest">
           <label id="titleTextAnswser" className="hidden">{intl.get('new assignment.Write your answer here')}</label>
-          <textarea
+          <TextAreaAutosize
             autoFocus={!readOnly}
-            value={isHideValue}
+            value={String(answer!.value)}
             className={studentsAnswer}
             placeholder={placeholder}
             readOnly={readOnly}
@@ -130,7 +130,7 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
           />
         </div>
       );
-    }
+    } */
     return (
       <div className="InputSy">
         <label id="titleTextAnswser" className="hidden">{intl.get('new assignment.Write your answer here')}</label>
