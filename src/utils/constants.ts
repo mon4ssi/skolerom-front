@@ -27,8 +27,8 @@ export const SLIDER_WIDGET_TIME_TIL_NEXT_SLIDE = 7000;
 
 export const MAX_TITLE_LENGTH = 60;
 export const MAX_DESCRIPTION_LENGTH = 255;
-export const MAX_DESCRIPTION_LENGTH_MAX = 700;
 export const MAX_DESCRIPTION_LENGTH_500 = 500;
+export const MAX_DESCRIPTION_LENGTH_MAX = 700;
 
 export const DEFAULT_LOCALE = Locales.NB;
 
