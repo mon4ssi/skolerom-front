@@ -685,14 +685,15 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     editTeachingPathStore!.falseIsDraggable();
   }
 
-  public renderAddingButtonsLeft = (withUnmergeButton: boolean) => {
+  public renderAddingButtonsLeft = (withUnmergeButton: boolean, isFirst: boolean) => {
     const { nestedOrder, node, parentNode } = this.props;
     const containerClassNames = classnames(
       'teachingPathButtonsLeft flexBox justifyCenter centered',
       withUnmergeButton && 'withUnmergeButton',
       !this.renderMergeButton() && 'contentNone',
       !(node.type !== TeachingPathNodeType.Root && node.items!.length > 1) && 'withPadding',
-      node.type === TeachingPathNodeType.Root && 'withoutPadding'
+      node.type === TeachingPathNodeType.Root && 'withoutPadding',
+      isFirst && 'isFirst'
     );
     const isRoot = (node.type === TeachingPathNodeType.Root) ? true : false;
     return !isRoot && (
@@ -704,14 +705,15 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     );
   }
 
-  public renderAddingButtonsRight = (withUnmergeButton: boolean) => {
+  public renderAddingButtonsRight = (withUnmergeButton: boolean, isLast: boolean) => {
     const { nestedOrder, node, parentNode } = this.props;
     const containerClassNames = classnames(
       'teachingPathButtonsRight flexBox justifyCenter centered',
       withUnmergeButton && 'withUnmergeButton',
       !this.renderMergeButton() && 'contentNone',
       !(node.type !== TeachingPathNodeType.Root && node.items!.length > 1) && 'withPadding',
-      node.type === TeachingPathNodeType.Root && 'withoutPadding'
+      node.type === TeachingPathNodeType.Root && 'withoutPadding',
+      isLast && 'isLast'
     );
     const isRoot = (node.type === TeachingPathNodeType.Root) ? true : false;
     return !isRoot && (
@@ -983,6 +985,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         mergeLineAfterButton: index === parentNode.children.length - 1 && parentNode.children.length > 1 && !readOnly
       }
     );
+    const isFirst = parentNode && (parentNode.children.length === 1) ? true : parentNode && (index === 0 && index !== parentNode.children.length - 1) ? true : false;
+    const isLast = parentNode && (parentNode.children.length === 1) ? true : parentNode && (index !== 0 && index === parentNode.children.length - 1) ? true : false;
     return (
       <div className={containerClassNames} draggable={this.state.isDraggable} onDragStart={this.dragStart} onDragLeave={this.dragleavethandler} onDragEnd={this.dragendhandler} ref={this.divRef}>
         {this.renderItems()}
@@ -990,11 +994,11 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         {!readOnly && this.renderUnmergeButton()}
 
         {this.renderBoxNodeOptions()}
-        {!readOnly && this.renderAddingButtonsLeft(!!this.renderUnmergeButton())}
+        {!readOnly && this.renderAddingButtonsLeft(!!this.renderUnmergeButton(), isFirst)}
 
         {!readOnly && this.renderAddingButtons(!!this.renderUnmergeButton())}
 
-        {!readOnly && this.renderAddingButtonsRight(!!this.renderUnmergeButton())}
+        {!readOnly && this.renderAddingButtonsRight(!!this.renderUnmergeButton(), isLast)}
 
         <div className="childrenContainer flexBox">
           {children.length ? children.map(this.renderNodeContent) : null}

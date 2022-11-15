@@ -332,6 +332,11 @@
         width: 100%;
         min-width: 100%;
       }
+      &.isFirst {
+        width: 40px;
+        left: auto;
+        margin-left: -365px;
+      }
       .circleOption {
         position: absolute;
         left: 0px;
@@ -362,6 +367,11 @@
       top: 88px;  
       cursor: pointer;
       width: calc(50% - 150px);
+      &.isLast {
+        width: 40px;
+        right: auto;
+        margin-right: -445px;
+      }
       .midRightLine {
         width: 100%;
       }
