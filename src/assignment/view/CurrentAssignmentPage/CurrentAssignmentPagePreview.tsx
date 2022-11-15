@@ -28,6 +28,7 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 
 import './CurrentAssignmentPage.scss';
 import { AssignmentListStore } from '../AssignmentsList/AssignmentListStore';
+import { UserType } from 'user/User';
 
 const COVER_INDEX = -2;
 const animationInDuration = 500;
@@ -121,8 +122,46 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
     const { currentQuestionaryStore, match, isTeacher, history } = this.props;
     const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
     headerArray[0].style.display = 'none';
-    await currentQuestionaryStore.getQuestionaryByIdPreview(Number(match.params.id));
+    const isCM = currentQuestionaryStore.getCurrentUser()!.type === UserType.ContentManager;
+    const search = (history.location.search === '?preview' || history.location.search === '?preview&open=tg') ? true : false;
+    // await currentQuestionaryStore.getQuestionaryByIdPreview(Number(match.params.id));
+    if (isTeacher || isCM) {
+      await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
+      if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles && currentQuestionaryStore!.assignment!.relatedArticles.length > 0 && currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden) {
+        currentQuestionaryStore!.setCurrentQuestion(0);
+        this.updateQueryString();
+        return;
+      }
+      if (currentQuestionaryStore!.assignment!.relatedArticles! && currentQuestionaryStore!.assignment!.relatedArticles!.length === 0) {
+        currentQuestionaryStore!.setCurrentQuestion(0);
+        this.updateQueryString();
+        return;
+      }
+      await currentQuestionaryStore.getRelatedArticles();
+      currentQuestionaryStore!.setCurrentQuestion(-1);
+      this.updateQueryString();
 
+      if (currentQuestionaryStore.assignment && currentQuestionaryStore.assignment.isOwnedByMe() && !search) {
+        /* this.props.history.replace(`/assignments/edit/${Number(match.params.id)}`); */
+        return;
+      }
+    } else {
+      const { teachingPath, node } = (history.location.state || {}) as RedirectData;
+      const redirectData = teachingPath && node ? { teachingPath, node } : undefined;
+      await currentQuestionaryStore.createQuestionaryByAssignmentId(Number(match.params.id), redirectData);
+    }
+    if (!this.isReadOnly && !search) {
+      this.setState({ showCover: true });
+      this.props.currentQuestionaryStore!.setCurrentQuestion(COVER_INDEX);
+      return this.updateQueryString();
+    }
+    if (currentQuestionaryStore.assignment!.relatedArticles.length > 0 && !search) {
+      /*
+      this.props.currentQuestionaryStore.setCurrentQuestion(-1);
+      return this.updateQueryString(); */
+    }
+    /* this.props.currentQuestionaryStore.setCurrentQuestion(0); */
+    return this.updateQueryString();
   }
   public async componentDidUpdate(prevProps: CurrentAssignmentPagePreviewProps) {
     const { currentQuestionaryStore, match, history } = this.props;
@@ -384,7 +423,7 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
       history
     } = this.props;
     const { teachingPath } = (history.location.state || {}) as RedirectData;
-    const isShowAssignmentArticles = !!(assignment && assignment!.relatedArticles.length > 0);
+    const isShowAssignmentArticles = !!(assignment && assignment!.relatedArticles.length > 0 && !assignment!.relatedArticles[0].isHidden);
     const isReadArticles = getIsReadArticles();
     toJS(this.props.currentQuestionaryStore); // VALUES OF ANSWERS WILL NOT WORK WITHOUT THIS STRING
     const navBarClasses = classNames('CurrentAssignmentPage__navBar', {
@@ -414,7 +453,7 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
         <div className="CurrentAssignmentPage__content">
           <div className="CurrentAssignmentPage__container">
             <div className="CurrentAssignmentPage__main questionBody">
-              <div className="CurrentAssignmentPage__main__center">
+              <div className="CurrentAssignmentPage__main__center PreviewHere">
                 <div className={navBarClasses}>
                   <AssignmentOverview
                     answers={answers}
@@ -438,6 +477,7 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
                   numberOfAnsweredQuestions={numberOfAnsweredQuestions}
                   publishQuestionary={this.handlePublish}
                   readOnly={this.isReadOnly}
+                  isPreview={true}
                   switchCover={this.switchCover}
                   showCover={this.state.showCover}
                   isTeachingPath={state && !!state.teachingPath}

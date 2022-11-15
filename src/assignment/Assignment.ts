@@ -1325,7 +1325,7 @@ export class Attachment {
     source?: string,
   ) {
     this.id = id;
-    this.path = url_large ? url_large : path;
+    this.path = path;
     this.alt = alt;
     this.fileName = fileName;
     this.title = title;

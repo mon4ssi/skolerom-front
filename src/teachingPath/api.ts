@@ -12,7 +12,7 @@ import { buildFilterDTO, GradeDTO } from 'assignment/factory';
 import { Breadcrumbs } from './teachingPathDraft/TeachingPathDraft';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { StudentTeachingPathEvaluationNodeItem } from 'evaluation/api';
-import { CONDITIONALERROR, STATUS_SERVER_ERROR, STATUS_BADREQUEST } from 'utils/constants';
+import { CONDITIONALERROR, STATUS_SERVER_ERROR, STATUS_BADREQUEST, STATUS_SERVERBADREQUEST } from 'utils/constants';
 
 export interface AttachmentDTO {
   id: number;
@@ -99,7 +99,7 @@ export class TeachingPathApi implements TeachingPathRepo {
   public arrayNumberContentAll: Array<number> = [];
 
   public async getAllTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
-    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
+    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURIComponent(filter.searchQuery!);
     const response = await API.get('api/teacher/teaching-paths', {
       params: buildFilterDTO(filter)
     });
@@ -123,7 +123,7 @@ export class TeachingPathApi implements TeachingPathRepo {
   }
 
   public async getMySchoolTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
-    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
+    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURIComponent(filter.searchQuery!);
     const response = await API.get('api/teacher/teaching-paths', {
       params: buildFilterDTO(filter)
     });
@@ -146,7 +146,7 @@ export class TeachingPathApi implements TeachingPathRepo {
   }
 
   public async getMyTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
-    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
+    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURIComponent(filter.searchQuery!);
     const response = await API.get('api/teacher/teaching-paths/draft', {
       params: buildFilterDTO(filter)
     });
@@ -168,7 +168,7 @@ export class TeachingPathApi implements TeachingPathRepo {
   }
 
   public async getStudentTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
-    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURI(filter.searchQuery!);
+    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURIComponent(filter.searchQuery!);
     const response = await API.get('api/student/teaching-paths', {
       params: buildFilterDTO(filter)
     });
@@ -334,7 +334,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         featuredImage: data.image
       });
     } catch (error) {
-      if (error.response.status === STATUS_SERVER_ERROR || error.response.status === STATUS_BADREQUEST) {
+      if (error.response.status === STATUS_SERVER_ERROR || error.response.status === STATUS_BADREQUEST || error.response.status === STATUS_SERVERBADREQUEST) {
         if (error.response.data.message.code === CONDITIONALERROR) {
           Notification.create({
             type: NotificationTypes.ERROR,

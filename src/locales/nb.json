@@ -21,7 +21,7 @@
       "headers": {
         "no": "Ingen",
         "questions": "spørsmål",
-        "steps": "steps",
+        "steps": "steg",
         "articles": "artikler",
         "by": "Av"
       },
@@ -517,7 +517,7 @@
     "Press Shift + Arrow Left for prev question": "Trykk Shift + \u2190 for forrige spørsmål",
     "Notification": "Bra valg! Den valgte oppgaven vil bli lagt til listen din når du har fullført den nåværende oppgaven.",
     "Review & Submit": "Oppsummer og send inn svar",
-    "submit_description": "{numberOfAnsweredQuestions} av {numberOfQuestions} spørsmål er besvart. Bruk kolonnen til venstre for å navigere mellom spørsmålene. Naviger tilbake hit og trykk på «Send inn oppgaven» for å fullføre oppgaven og sende besvarelse til vurdering.",
+    "submit_description": "{numberOfAnsweredQuestions} av {numberOfQuestions} spørsmål er besvart. Du kan bruke tallrekken over for å navigere mellom spørsmålene. Når du er ferdig, navigerer du hit for å sende inn oppgaven.",
     "submit_all_questions_answered": "Alle spørsmål besvart!",
     "submit": "Send inn svar",
     "complete_and_submit_button": "Send inn oppgaven",

@@ -125,37 +125,29 @@
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.100661);
         position: relative;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: auto;
         &.circleBottom {
             margin-bottom: 20px;
         }
-        &:before {
-            content: '';
-            position: absolute;
-            width: 12px;
-            height: 2px;
-            background: rgb(65, 80, 90);
-            left: 50%;
-            top: 50%;
-            margin-left: -6px;
-            margin-top: -1px;
-        }
-        &:after {
-            content: '';
-            position: absolute;
-            width: 2px;
-            height: 12px;
-            background: rgb(65, 80, 90);
-            left: 50%;
-            top: 50%;
-            margin-left: -1px;
-            margin-top: -6px;
+        svg {
+          width: 20px;
+          height: 20px;
+          display: block;
+          path {
+            fill: #41505a;
+          }
         }
     }
     &.active {
         .circle {              
             background: #41505a;
-            &:before, &:after {
-                background: white;
+            svg {
+              path {
+                fill: white;
+              }                
             }
         }
     }

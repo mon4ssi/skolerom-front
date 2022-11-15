@@ -36,12 +36,23 @@ $image-height: 60px;
 }
 
 .StudentAssignmentsListItem__image {
-  @include absolute-attach(left, -1px);
+  /* @include absolute-attach(left, -1px);
   width: $image-width;
   height: $image-height;
   object-fit: cover;
   border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-bottom-left-radius: 5px; */
+  position: absolute;
+  top: -0.4px;
+  left: 0px;
+  right: -1px;
+  bottom: 0;
+  right: auto;
+  width: 90px;
+  height: 58.5px;
+  border-top-left-radius: 4.1px;
+  border-bottom-left-radius: 4.1px;
+  object-fit: cover;
 }
 
 .StudentAssignmentsListItem__title {

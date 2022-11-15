@@ -26,6 +26,7 @@ export class QuestionaryTeachingPathStore {
   @observable public pickedItemAssignment: {idNode: number, item: Assignment} | undefined = undefined;
   @observable public pickedItemDomain: {idNode: number, item: Domain} | undefined = undefined;
   @observable public fetchingData: boolean = false;
+  @observable public fetchingDataCustom: boolean = false;
   @observable public isOpenIframe: boolean = false;
   @observable public isOpenAssignment: boolean = false;
   @observable public currentDisplayedElement: TeachingPathNodeType | SubmitNodeType = TeachingPathNodeType.Root;
@@ -33,6 +34,11 @@ export class QuestionaryTeachingPathStore {
   @computed
   public get isFetchingData() {
     return this.fetchingData;
+  }
+
+  @computed
+  public get isfetchingDataCustom() {
+    return this.fetchingDataCustom;
   }
 
   @computed
@@ -159,6 +165,11 @@ export class QuestionaryTeachingPathStore {
   }
 
   @action
+  public setFetchingDataStatusCustom(status: boolean) {
+    this.fetchingDataCustom = status;
+  }
+
+  @action
   public resetCurrentArticleList() {
     this.currentArticlesList = [];
   }
@@ -262,6 +273,9 @@ export class QuestionaryTeachingPathStore {
 
   @action
   public async getCurrentNode(teachingPathId: number, nodeId: number) {
+    this.resetCurrentArticleList();
+    this.resetCurrentAssignmentList();
+    this.resetCurrentDomainList();
     this.currentNode = await this.teachingPathService.getCurrentNode(teachingPathId, nodeId);
   }
 
@@ -367,6 +381,7 @@ export class QuestionaryTeachingPathStore {
 
   @action
   public domainFullInfo() {
+    this.currentDomainList = [];
     this.currentNode!.children.forEach((child) => {
       if (child.items) {
         return child.items.forEach((item) => {

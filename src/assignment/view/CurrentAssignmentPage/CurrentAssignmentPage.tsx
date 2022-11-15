@@ -139,7 +139,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
       return this.updateQueryString();
     }
     if (currentQuestionaryStore.assignment!.relatedArticles.length > 0 && !search) {
-      /* console.log('jaaaaaaaaaaaaaaaaaaaa');
+      /*
       this.props.currentQuestionaryStore.setCurrentQuestion(-1);
       return this.updateQueryString(); */
     }
@@ -222,6 +222,16 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     } else {
       // history.push('/assignments');
     }
+  }
+
+  public finishPreviewSubmit = () => {
+    const {
+      questionaryTeachingPathStore,
+      history,
+      location: { state }
+    } = this.props;
+    this.props.uiStore!.hideSidebar();
+    history.push('/assignments');
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
@@ -446,6 +456,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     const url: URL = new URL(window.location.href);
     const isOnlyAssig = (state && state.node && state.teachingPath && questionaryTeachingPathStore!.currentNode) ? true : false;
     const openTeacherGuidance: boolean = (url.searchParams.get('open') === 'tg' /* || localParamIsOpenTG!  */? true : false);
+    const isPreview = (url.pathname.split('view').length > 1) ? true : false;
     return !isLoading && (
       <div tabIndex={0} className="CurrentAssignmentPage">
         <AppHeader
@@ -491,7 +502,9 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
                   numberOfQuestions={numberOfQuestions}
                   numberOfAnsweredQuestions={numberOfAnsweredQuestions}
                   publishQuestionary={this.handlePublish}
+                  finishPreviewSubmit={this.finishPreviewSubmit}
                   readOnly={this.isReadOnly}
+                  isPreview={isPreview}
                   switchCover={this.switchCover}
                   showCover={this.state.showCover}
                   isTeachingPath={state && !!state.teachingPath}

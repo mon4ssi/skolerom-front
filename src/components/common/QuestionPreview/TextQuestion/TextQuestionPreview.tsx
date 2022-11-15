@@ -21,6 +21,7 @@ interface Props {
   readOnly?: boolean;
   redirectData?: RedirectData;
   isEvaluationStyle?: boolean;
+  isPreview?: boolean;
   handleShowArrowsTooltip?(status: boolean): void;
 }
 
@@ -37,6 +38,15 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
     event.preventDefault();
     const value = this.useValuedQuotes(event.currentTarget.value);
     answer!.setValue(value, redirectData);
+    if (handleShowArrowsTooltip) {
+      handleShowArrowsTooltip(true);
+    }
+  }
+  public handleChangeAnswerFalse = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { redirectData, answer, handleShowArrowsTooltip, question } = this.props;
+    event.preventDefault();
+    const value = this.useValuedQuotes(event.currentTarget.value);
+    answer!.setValueFalse(value, redirectData);
     if (handleShowArrowsTooltip) {
       handleShowArrowsTooltip(true);
     }
@@ -68,7 +78,7 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
   }
 
   public renderContent = () => {
-    const { readOnly, answer, isEvaluationStyle, question, redirectData } = this.props;
+    const { readOnly, answer, isEvaluationStyle, question, redirectData, isPreview } = this.props;
     const isHideValue = (question.hide_answer) ? '' : answer && answer!.value;
     const placeholder = (question.hide_answer) ? '' : intl.get('new assignment.Write your answer here');
     const studentsAnswer = (question.hide_answer) ? 'studentsAnswer notline' : 'studentsAnswer';
@@ -91,7 +101,7 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
             className={studentsAnswer}
             placeholder={placeholder}
             readOnly={readOnly}
-            onChange={this.handleChangeAnswer}
+            onChange={this.handleChangeAnswerFalse}
             onKeyUp={this.focusTextField}
             aria-labelledby="titleTextAnswser"
             aria-required="true"
@@ -101,6 +111,26 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
         </div>
       );
     }
+    /* if (isPreview) {
+      return (
+        <div className="InputSy testest">
+          <label id="titleTextAnswser" className="hidden">{intl.get('new assignment.Write your answer here')}</label>
+          <TextAreaAutosize
+            autoFocus={!readOnly}
+            value={String(answer!.value)}
+            className={studentsAnswer}
+            placeholder={placeholder}
+            readOnly={readOnly}
+            onChange={this.handleChangeAnswerFalse}
+            onKeyUp={this.focusTextField}
+            aria-labelledby="titleTextAnswser"
+            aria-required="true"
+            aria-invalid="false"
+            ref={this.titleRef}
+          />
+        </div>
+      );
+    } */
     return (
       <div className="InputSy">
         <label id="titleTextAnswser" className="hidden">{intl.get('new assignment.Write your answer here')}</label>

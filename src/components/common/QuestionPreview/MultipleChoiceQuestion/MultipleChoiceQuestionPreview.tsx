@@ -23,6 +23,7 @@ interface Props {
   redirectData?: RedirectData;
   isEvaluationStyle?: boolean;
   isStudentView?: boolean;
+  isPreview?: boolean;
   handleShowArrowsTooltip?(status: boolean): void;
 }
 
@@ -104,7 +105,7 @@ class RenderOption extends Component<RenderOptionProps>{
 class MultipleChoiceQuestionPreviewComponent extends Component<Props & RouteComponentProps<{}, {}, LocationState>> {
 
   public handleChooseAnswer = (title: string) => {
-    const { answer, readOnly, redirectData, handleShowArrowsTooltip } = this.props;
+    const { answer, readOnly, redirectData, handleShowArrowsTooltip, isPreview } = this.props;
     if (readOnly) return;
     let answerValue = answer!.value as Array<string>;
 
@@ -115,8 +116,11 @@ class MultipleChoiceQuestionPreviewComponent extends Component<Props & RouteComp
     answerValue.includes(title) ?
       answerValue = answerValue.filter(item => item !== title) :
       answerValue = [...answerValue, title];
-
-    answer!.setValue(answerValue, redirectData);
+    if (isPreview) {
+      answer!.setValueFalse(answerValue, redirectData);
+    } else {
+      answer!.setValue(answerValue, redirectData);
+    }
   }
 
   public renderOptions = () => {

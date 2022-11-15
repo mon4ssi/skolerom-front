@@ -54,6 +54,18 @@ class AddingNewButton extends Component<Props> {
     this.context.changeContentType(0);
   }
 
+  private openMyArticlesListButton = (event: React.MouseEvent<HTMLDivElement>) => {
+    const { editTeachingPathStore, node, parent, side } = this.props;
+    event.preventDefault();
+    editTeachingPathStore!.setEditNodeArticlesItem(true);
+    editTeachingPathStore!.setNodeUse(node!);
+    editTeachingPathStore!.setParentNodeUse(parent!);
+    editTeachingPathStore!.setOrientationNodeArticlesItem(side);
+    this.setState({ isOpenedModal: false });
+    this.props.onCancelDrag!();
+    this.context.changeContentType(0);
+  }
+
   private openMyArticlesList = () => {
     const { editTeachingPathStore, node, parent, side } = this.props;
     editTeachingPathStore!.setEditNodeArticlesItem(true);
@@ -161,6 +173,7 @@ class AddingNewButton extends Component<Props> {
         document.removeEventListener('keyup', this.handleKeyboardControl);
         this.context.changeContentType(null);
         editTeachingPathStore!.setCurrentNode(null);
+        this.setState({ isOpenedModal: false });
       }
     } else {
       Notification.create({
@@ -260,6 +273,21 @@ class AddingNewButton extends Component<Props> {
         <div className="AddingButtons flexBox dirColumn">
           <div
             className="addingButton"
+            onClick={this.openMyArticlesListButton}
+          >
+            <button title={intl.get('edit_teaching_path.modals.add_articles')}>
+              <img src={addArticleImg} alt="add-article" />
+              {intl.get('edit_teaching_path.modals.add_articles')}
+            </button>
+          </div>
+          <div className="addingButton addExternalArtikle" onClick={this.openDomainModal}>
+            <button title={intl.get('edit_teaching_path.modals.add_domain')}>
+              <img src={addDomainImg} alt="add-article" />
+              {intl.get('edit_teaching_path.modals.add_domain')}
+            </button>
+          </div>
+          <div
+            className="addingButton"
             onClick={this.openAssignmentsList}
           >
             <button title={intl.get('edit_teaching_path.modals.add_assignments')}>
@@ -277,6 +305,7 @@ class AddingNewButton extends Component<Props> {
             </button>
           </div>
         </div>
+        {this.state.modalDomain && this.renderModalDomain()}
       </div>
     );
   }
@@ -284,31 +313,36 @@ class AddingNewButton extends Component<Props> {
   public render() {
     const { isOpenedModal } = this.state;
     const classInside = isOpenedModal ? 'circleOption active' : 'circleOption';
+    const isOpenTabRoot = (this.props.node!.type === TeachingPathNodeType.Root && this.props.parent === undefined) ? true : isOpenedModal;
     if (this.props.side!) {
       switch (this.props.side!) {
         case 'left':
           return (
             <div className={classInside}>
-              <div className="circle" onClick={this.myswitchModal} />
+              <div className="circle" onClick={this.switchModal}>
+                <svg fill="#000000" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"/></svg>
+              </div>
               {isOpenedModal && this.renderMyAddingButtons()}
-              {this.state.modalDomain && this.renderModalDomain()}
             </div>
           );
           break;
         case 'bottom':
           return (
             <div className={classInside}>
-              <div className="circle circleBottom" onClick={this.switchModal} />
-              {isOpenedModal && this.renderAddingButtons()}
+              <div className="circle circleBottom" onClick={this.switchModal}>
+                <svg fill="#000000" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"/></svg>
+              </div>
+              {isOpenTabRoot && this.renderAddingButtons()}
             </div>
           );
           break;
         case 'right':
           return (
             <div className={classInside}>
-                <div className="circle" onClick={this.myswitchModal} />
+                <div className="circle" onClick={this.switchModal}>
+                  <svg fill="#000000" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"/></svg>
+                </div>
                 {isOpenedModal && this.renderMyAddingButtons()}
-                {this.state.modalDomain && this.renderModalDomain()}
             </div>
           );
           break;

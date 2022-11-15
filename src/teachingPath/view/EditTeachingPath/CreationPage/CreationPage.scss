@@ -87,7 +87,7 @@
         margin: 65px 0px 27px 0px;
         padding: 25px 0px 20px 0px;
         position: relative;
-        z-index: 3;
+        z-index: 4;
         margin-left: 40px;
         &.imposibleDrop {
           border: dashed 3px #ff4545;
@@ -288,6 +288,15 @@
           width: 0%;
         }
       }
+      &.first {
+        .infoCardContainer {
+          &.first {
+            &:before {
+              transform: translateX(100%);
+            }
+          }
+        }
+      }
     }
 
     .teachingPathItems {
@@ -298,6 +307,7 @@
       position: relative;
       margin-bottom: 20px;      
       margin-left: 40px;
+      min-height: 308px;
       &.withUnmergeButton {
         margin-top: 10px;
       }
@@ -388,6 +398,7 @@
     .childrenContainer {
       position: relative;
       flex-direction: row;
+      padding: 0px 25px;
       //z-index: 1;
     }
 
@@ -576,7 +587,7 @@
 .dropInfoAddtional {
   position: absolute;
   width: calc(100% - 74px);
-  bottom: -188px;
+  bottom: 0;
   max-width: 282px;
   z-index: 2;
   right: 40px;

@@ -12,6 +12,7 @@ import { ArticleTeachingPath } from './ArticleTheachingPath/ArticleTeachingPath'
 import { QuestionaryTeachingPathStore, SubmitNodeType } from '../../questionaryTeachingPath/questionaryTeachingPathStore';
 import { AssignmentTeachingPath } from './AssignmentTeachingPath/AssignmentTeachingPath';
 import { DomainTeachingPath } from './DomainTeachingPath/DomainTeachingpath';
+import { CustomTeachingPath } from './CustomTeachingPath/CustomTeachingPath';
 import { LocationState } from 'assignment/view/CurrentAssignmentPage/CurrentAssignmentPage';
 import { SubmitTeachingPath } from 'assignment/view/SubmitTeachingPath/SubmitTeachingPath';
 import { Article, Assignment } from 'assignment/Assignment';
@@ -137,6 +138,7 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
       questionaryTeachingPathStore!.teachingPathId!,
       questionaryTeachingPathStore!.pickedItemDomain!.idNode
     );
+    questionaryTeachingPathStore!.resetCurrentDomainList();
     const type = questionaryTeachingPathStore!.childrenType;
     questionaryTeachingPathStore!.setFetchingDataStatus(false);
     switch (type) {
@@ -181,11 +183,11 @@ class PassageTeachingPathComponent extends Component<PropsComponent> {
       case TeachingPathNodeType.Root:
         return <TeachingPathAnswerCover onClickStart={this.onClickStart}/>;
       case TeachingPathNodeType.Article:
-        return <ArticleTeachingPath finishReading={this.finishReading} />;
+        return <CustomTeachingPath finishReading={this.finishReading} finishReadingDomain={this.finishReadingDomain} />;
       case TeachingPathNodeType.Assignment:
-        return <AssignmentTeachingPath />;
+        return <CustomTeachingPath finishReading={this.finishReading} finishReadingDomain={this.finishReadingDomain} />;
       case TeachingPathNodeType.Domain:
-        return <DomainTeachingPath finishReading={this.finishReadingDomain} />;
+        return <CustomTeachingPath finishReading={this.finishReading} finishReadingDomain={this.finishReadingDomain} />;
       default:
         return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers} onimage={this.props.questionaryTeachingPathStore!.currentTeachingPath!.backgroundImage} />;
     }
