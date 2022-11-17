@@ -102,6 +102,13 @@ class AnswerCurrentQuestion extends Component<Props> {
       );
     }
 
+    if (isPreview && this.props.showCover) {
+      const coverInside = (isTeachingPath && state && state.node && state.teachingPath && questionaryTeachingPathStore!.currentNode) ? true : false;
+      return (
+        <AnswerCover switchCover={this.props.switchCover} isdontTeaching={coverInside}/>
+      );
+    }
+
     if (!readOnly && this.props.showCover) {
       const coverInside = (isTeachingPath && state && state.node && state.teachingPath && questionaryTeachingPathStore!.currentNode) ? true : false;
       return (
