@@ -377,7 +377,7 @@ export class EditTeachingPathStore {
 
   @action
   public addChildToCurrentNodeNullPerItem = (node: EditableTeachingPathNode) => {
-    this.currentNode!.addChild(node);
+    this.currentNode!.appEndChild(node);
   }
 
   @action

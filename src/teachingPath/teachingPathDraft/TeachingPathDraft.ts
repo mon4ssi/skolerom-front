@@ -794,6 +794,14 @@ export class EditableTeachingPathNode extends TeachingPathNode {
   }
 
   @action
+  public appEndChild = (child: EditableTeachingPathNode, index: number = -1) => {
+    const childrenCopy = this.children.slice();
+    childrenCopy.push(child);
+    this._children = childrenCopy;
+    this.draftTeachingPath.save();
+  }
+
+  @action
   public addChildByOrder = (child: EditableTeachingPathNode, search: EditableTeachingPathNode, order: string) => {
     const childrenCopy = this.children.slice();
     const index = childrenCopy.indexOf(search);

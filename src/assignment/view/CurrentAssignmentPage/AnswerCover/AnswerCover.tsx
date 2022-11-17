@@ -39,7 +39,6 @@ export class AnswerCover extends Component<Props> {
       const breadcrumbeArray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__mybreadcrumbs') as HTMLCollectionOf<HTMLElement>);
       breadcrumbeArray[0].style.display = 'none';
     }
-    await this.props.currentQuestionaryStore!.getRelatedArticles();
     if (this.ref.current) {
       this.ref.current!.focus();
       this.refEl.current!.scrollIntoView({ behavior: 'smooth' });

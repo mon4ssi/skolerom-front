@@ -75,6 +75,8 @@ interface NodeContentState {
   myNode: EditableTeachingPathNode | null;
   isPosibleDrop: boolean;
   isDropInit: boolean;
+  isHoverDropleft: boolean;
+  isHoverDropright: boolean;
 }
 
 @inject('editTeachingPathStore')
@@ -91,7 +93,9 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     isDrop: false,
     myNode: null,
     isPosibleDrop: false,
-    isDropInit: false
+    isDropInit: false,
+    isHoverDropleft: false,
+    isHoverDropright: false
   };
 
   public componentDidMount() {
@@ -643,12 +647,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       if (myChildrens.includes(myNode)) {
         event.currentTarget.classList.add('imposibleDrop');
       } else {
-        if (mytype === myNode!.type) {
-          event.currentTarget.classList.add('posibleDrop');
-          this.setState({ isPosibleDrop: true });
-        } else {
-          event.currentTarget.classList.add('imposibleDrop');
-        }
+        event.currentTarget.classList.add('posibleDrop');
+        this.setState({ isPosibleDrop: true });
       }
     }
   }
@@ -685,6 +685,46 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     editTeachingPathStore!.falseIsDraggable();
   }
 
+  public dragLaterlOverLeft = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    this.setState({ isHoverDropleft: true });
+  }
+
+  public dragLaterlLeaveLeft = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    this.setState({ isHoverDropleft: false });
+  }
+
+  public dragLaterlEnterLeft = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const { nestedOrder, node, parentNode, editTeachingPathStore } = this.props;
+    const myNode = editTeachingPathStore!.getSelectedDragNode();
+    const myParent = editTeachingPathStore!.getParentSelectedDragNode();
+    if (myNode) {
+      // detect
+      if (myParent === parentNode) {
+        this.setState({ isHoverDropleft: false });
+        this.setState({ isHoverDropright: false });
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('edit_teaching_path.notifications.onlydraggable')
+        });
+      } else {
+        editTeachingPathStore!.setCurrentNode(parentNode!);
+        editTeachingPathStore!.addChildrenByOrder(myNode, node!, 'left');
+        this.setState({ isHoverDropleft: false });
+        this.setState({ isHoverDropright: false });
+        // delete item
+        editTeachingPathStore!.setCurrentNode(myParent);
+        editTeachingPathStore!.removeChildToCurrentNodeNullPerItem(myNode);
+        // format items
+        editTeachingPathStore!.setCurrentNode(null);
+        editTeachingPathStore!.setSelectedDragNode(null);
+        editTeachingPathStore!.setParentSelectedDragNode(null);
+      }
+    }
+  }
+
   public renderAddingButtonsLeft = (withUnmergeButton: boolean, isFirst: boolean) => {
     const { nestedOrder, node, parentNode } = this.props;
     const containerClassNames = classnames(
@@ -697,12 +737,52 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     );
     const isRoot = (node.type === TeachingPathNodeType.Root) ? true : false;
     return !isRoot && (
-      <div className={containerClassNames} onDragEnter={this.dragenterthandler}>
+      <div className={containerClassNames} onDragOver={this.dragLaterlOverLeft} onDragLeave={this.dragLaterlLeaveLeft} onDrop={this.dragLaterlEnterLeft}>
         {node.type !== TeachingPathNodeType.Root && <div className="midLeftLine" />}
         {/* <AddingButtons node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/> */}
         <AddingNewButtonElement side={'left'} node={node} parent={parentNode} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
+        {this.state.isHoverDropleft && <div className="boxInformationDrop absBoxInformationDrop">{intl.get('generals.dragdrop')}</div>}
       </div>
     );
+  }
+
+  public dragLaterlOverRight = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    this.setState({ isHoverDropright: true });
+  }
+
+  public dragLaterlLeaveRight = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    this.setState({ isHoverDropright: false });
+  }
+
+  public dragLaterlEnterRight = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const { nestedOrder, node, parentNode, editTeachingPathStore } = this.props;
+    const myNode = editTeachingPathStore!.getSelectedDragNode();
+    const myParent = editTeachingPathStore!.getParentSelectedDragNode();
+    if (myNode) {
+      if (myParent === parentNode) {
+        this.setState({ isHoverDropleft: false });
+        this.setState({ isHoverDropright: false });
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('edit_teaching_path.notifications.onlydraggable')
+        });
+      } else {
+        editTeachingPathStore!.setCurrentNode(parentNode!);
+        editTeachingPathStore!.addChildrenByOrder(myNode, node!, 'right');
+        this.setState({ isHoverDropleft: false });
+        this.setState({ isHoverDropright: false });
+        // delete item
+        editTeachingPathStore!.setCurrentNode(myParent);
+        editTeachingPathStore!.removeChildToCurrentNodeNullPerItem(myNode);
+        // format items
+        editTeachingPathStore!.setCurrentNode(null);
+        editTeachingPathStore!.setSelectedDragNode(null);
+        editTeachingPathStore!.setParentSelectedDragNode(null);
+      }
+    }
   }
 
   public renderAddingButtonsRight = (withUnmergeButton: boolean, isLast: boolean) => {
@@ -717,9 +797,10 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     );
     const isRoot = (node.type === TeachingPathNodeType.Root) ? true : false;
     return !isRoot && (
-      <div className={containerClassNames} onDragEnter={this.dragenterthandler}>
+      <div className={containerClassNames} onDragOver={this.dragLaterlOverRight} onDragLeave={this.dragLaterlLeaveRight} onDrop={this.dragLaterlEnterRight}>
         {true && <div className="midRightLine" />}
         <AddingNewButtonElement side={'right'} node={node} parent={parentNode} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
+        {this.state.isHoverDropright && <div className="boxInformationDrop absBoxInformationDrop">{intl.get('generals.dragdrop')}</div>}
       </div>
     );
   }

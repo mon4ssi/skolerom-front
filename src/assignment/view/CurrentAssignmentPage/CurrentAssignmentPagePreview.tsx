@@ -124,23 +124,14 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
     headerArray[0].style.display = 'none';
     const isCM = currentQuestionaryStore.getCurrentUser()!.type === UserType.ContentManager;
     const search = (history.location.search === '?preview' || history.location.search === '?preview&open=tg') ? true : false;
+    const searchview = (history.location.search === '?view' || history.location.search === '?view&open=tg') ? true : false;
     // await currentQuestionaryStore.getQuestionaryByIdPreview(Number(match.params.id));
     if (isTeacher || isCM) {
       await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
-      if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles && currentQuestionaryStore!.assignment!.relatedArticles.length > 0 && currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden) {
-        currentQuestionaryStore!.setCurrentQuestion(0);
-        this.updateQueryString();
-        return;
-      }
-      if (currentQuestionaryStore!.assignment!.relatedArticles! && currentQuestionaryStore!.assignment!.relatedArticles!.length === 0) {
-        currentQuestionaryStore!.setCurrentQuestion(0);
-        this.updateQueryString();
-        return;
-      }
+      this.props.currentQuestionaryStore!.setCurrentQuestion(COVER_INDEX);
+      this.setState({ showCover: true });
       await currentQuestionaryStore.getRelatedArticles();
-      currentQuestionaryStore!.setCurrentQuestion(-1);
       this.updateQueryString();
-
       if (currentQuestionaryStore.assignment && currentQuestionaryStore.assignment.isOwnedByMe() && !search) {
         /* this.props.history.replace(`/assignments/edit/${Number(match.params.id)}`); */
         return;

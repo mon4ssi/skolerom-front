@@ -328,6 +328,7 @@
       top: 88px;      
       cursor: pointer;
       width: calc(50% - 150px);
+      height: 150px;
       .midLeftLine {
         width: 100%;
         min-width: 100%;
@@ -700,6 +701,13 @@
   justify-content: center;
   pointer-events: none;
   border-radius: 5px;
+  &.absBoxInformationDrop {
+    width: 248px;
+    left: 0px;
+    transform: translateX(-102px);
+    height: 250px;
+    top: 54px;
+  }
 }
 
 .centered {
