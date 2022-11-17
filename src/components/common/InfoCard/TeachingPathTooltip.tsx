@@ -12,6 +12,8 @@ interface ActionMenuItem {
 interface TooltipProps {
   view?: string;
   isContentManager?: boolean;
+  isTestAccount?: boolean;
+  ownedByMe?: boolean;
   isPublished?: boolean;
   isDistributed?: boolean;
   preventViewCard(e: SyntheticEvent): void;
@@ -65,18 +67,19 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
       {
         text: intl.get('teaching_paths_list.view answers'),
         // tslint:disable-next-line:no-empty
-        onClick: (this.props.isPublished && this.props.isDistributed) ? viewAnswers : () => {},
+        onClick: (this.props.isPublished && this.props.isDistributed) ? viewAnswers : () => { },
         disabled: !(this.props.isPublished && this.props.isDistributed)
       },
       {
         text: intl.get('teaching_paths_list.copy'),
         // tslint:disable-next-line:no-empty
-        onClick: this.props.isPublished ? copyTeachingPath : () => {},
+        onClick: this.props.isPublished ? copyTeachingPath : () => { },
         disabled: !this.props.isPublished
       },
       {
         text: intl.get('teaching_paths_list.delete'),
-        onClick: deleteTeachingPath
+        onClick: deleteTeachingPath,
+        disabled: this.props!.ownedByMe!
       }
     ];
 
@@ -88,7 +91,7 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
       {
         text: intl.get('teaching_paths_list.copy'),
         // tslint:disable-next-line:no-empty
-        onClick: this.props.isPublished ? copyTeachingPath : () => {},
+        onClick: this.props.isPublished ? copyTeachingPath : () => { },
         disabled: !this.props.isPublished
       }
     ];
@@ -101,14 +104,22 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
       {
         text: intl.get('teaching_paths_list.copy'),
         // tslint:disable-next-line:no-empty
-        onClick: this.props.isPublished ? copyTeachingPath : () => {},
+        onClick: this.props.isPublished ? copyTeachingPath : () => { },
         disabled: !this.props.isPublished
       },
-      {
+      /* {
         text: intl.get('teaching_paths_list.delete'),
         onClick: deleteTeachingPath
-      }
+      } */
     ];
+
+    const ownedByMe = this.props.view! === 'edit';
+    if (this.props.isTestAccount! && ownedByMe) {
+      contentManagerTeachingPathsActions.push({
+        text: intl.get('teaching_paths_list.delete'),
+        onClick: deleteTeachingPath
+      });
+    }
 
     switch (window.location.pathname) {
       case '/teaching-paths/all':
@@ -142,7 +153,7 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
           <ul className="flexBox dirColumn">
             {this.renderTooltipItems(this.getActionList())}
           </ul>
-          <i/>
+          <i />
         </div>
       </div>
     );

@@ -1108,6 +1108,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
         <SkeletonLoader height={heightSkeletom} key={index} className="SkeletonCard" />
       ) : (
         <InfoCard
+          isTestAccount={this.props.editTeachingPathStore!.getCurrentUser()!.isTestAccount!}
           isTeachingPath
           isContentManager={currentUserType === UserType.ContentManager}
           withTooltip={currentUserType !== UserType.Student}
@@ -1124,6 +1125,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
           setActiveTooltip={this.setActiveTooltip(item.id)}
           deleteTeachingPath={this.deleteTeachingPath(item.id)}
           idActiveCard={idActiveCard}
+          ownedByMe={item.ownedByMe}
           copyTeachingPath={this.copyTeachingPath}
           isPublished={item.isPublished}
           isDistributed={item.isDistributed}
