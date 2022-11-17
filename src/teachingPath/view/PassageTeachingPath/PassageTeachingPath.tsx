@@ -12,7 +12,6 @@ import { ArticleTeachingPath } from './ArticleTheachingPath/ArticleTeachingPath'
 import { QuestionaryTeachingPathStore, SubmitNodeType } from '../../questionaryTeachingPath/questionaryTeachingPathStore';
 import { AssignmentTeachingPath } from './AssignmentTeachingPath/AssignmentTeachingPath';
 import { DomainTeachingPath } from './DomainTeachingPath/DomainTeachingpath';
-import { CustomTeachingPath } from './CustomTeachingPath/CustomTeachingPath';
 import { LocationState } from 'assignment/view/CurrentAssignmentPage/CurrentAssignmentPage';
 import { SubmitTeachingPath } from 'assignment/view/SubmitTeachingPath/SubmitTeachingPath';
 import { Article, Assignment } from 'assignment/Assignment';
@@ -24,6 +23,7 @@ import arrowLeftRounded from 'assets/images/arrow-left-rounded.svg';
 
 import './PassageTeachingPath.scss';
 import { Loader } from '../../../components/common/Loader/Loader';
+import { CustomTeachingPath } from './CustomTeachingPath/CustomTeachingPath';
 
 const limitSplit = 4;
 const itemSplit = 2;
