@@ -46,6 +46,8 @@ interface Props {
   idActiveCard?: number | null;
   isTeachingPath?: boolean;
   isContentManager?: boolean;
+  isTestAccount?: boolean;
+  ownedByMe?: boolean;
   isPublished?: boolean;
   isDistributed?: boolean;
   isReadArticle?: boolean;
@@ -68,7 +70,7 @@ interface State {
 class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
 
   public state = {
-    showdescription: false
+    showdescription: false,
   };
 
   private handleClickDelete = (event: React.SyntheticEvent<HTMLButtonElement>) => {
@@ -290,7 +292,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
       return (
         <div className="defaultIcons flexBox">
           <div className="flexBox">
-            <img src={icon} className={`tpIcon tpIcon-${type}`} alt="info-icon" onClick={this.targetRouteDomain}/>
+            <img src={icon} className={`tpIcon tpIcon-${type}`} alt="info-icon" onClick={this.targetRouteDomain} />
             <span>{this.renderRouteDomain()}</span>
           </div>
         </div>
@@ -299,7 +301,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
     return (
       <div className="defaultIcons flexBox">
         <div className="flexBox">
-          <img src={icon} className={`tpIcon tpIcon-${type}`} alt="info-icon"/>
+          <img src={icon} className={`tpIcon tpIcon-${type}`} alt="info-icon" />
           <span>{this.renderRouteDomain()}</span>
         </div>
       </div>
@@ -322,6 +324,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
 
   public renderTooltip = () => (
     <TeachingPathTooltip
+      isTestAccount={this.props.isTestAccount!}
       preventViewCard={this.preventViewCard}
       deleteTeachingPath={this.deleteTeachingPath}
       viewTeachingPath={this.viewTeachingPath}
@@ -437,28 +440,28 @@ class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
       return (
         <div className={infoCardClassNames} data-id={this.props.id}>
           {!isDomain && withButtons && this.renderActionButtons()}
-        {isDomain && withButtons && this.renderDomainButtons()}
-        <button title={title} onClick={this.onButtonCardClick}>
-          <img src={img || placeholderImgDefault} alt={title} title={title} className="cardImage" onError={this.isErrorImg}/>
-        </button>
-        <div className="cardInfo flexBox dirColumn spaceBetween">
-          <div>
-            {!isTeachingPath && !this.props.hiddeIcons && this.renderDefaultIcons()}
-            <div className={`${!withTooltip && 'flexBox'}`}>
-              <div className="cardTitle">
-                <p className={`${!title && 'noTitle'}`}>{title ? title : intl.get('edit_teaching_path.no_title')}<span className="isDraft">{displayDraftNotation ? '' : `- ${intl.get('teaching_paths_list.Draft')}`}</span></p>
+          {isDomain && withButtons && this.renderDomainButtons()}
+          <button title={title} onClick={this.onButtonCardClick}>
+            <img src={img || placeholderImgDefault} alt={title} title={title} className="cardImage" onError={this.isErrorImg} />
+          </button>
+          <div className="cardInfo flexBox dirColumn spaceBetween">
+            <div>
+              {!isTeachingPath && !this.props.hiddeIcons && this.renderDefaultIcons()}
+              <div className={`${!withTooltip && 'flexBox'}`}>
+                <div className="cardTitle">
+                  <p className={`${!title && 'noTitle'}`}>{title ? title : intl.get('edit_teaching_path.no_title')}<span className="isDraft">{displayDraftNotation ? '' : `- ${intl.get('teaching_paths_list.Draft')}`}</span></p>
+                </div>
+                {isTeachingPath && this.renderTeachingPathIcons()}
               </div>
-              {isTeachingPath && this.renderTeachingPathIcons()}
-            </div>
 
-            {this.renderDescription()}
-            <div className="buttonRead">
-              <button className={classIsRead} onClick={this.onButtonCardClick}>
-                {textFinal}
-              </button>
+              {this.renderDescription()}
+              <div className="buttonRead">
+                <button className={classIsRead} onClick={this.onButtonCardClick}>
+                  {textFinal}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
         </div>
       );
     }
@@ -467,7 +470,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
         {!isDomain && withButtons && this.renderActionButtons()}
         {isDomain && withButtons && this.renderDomainButtons()}
         <button title={title}>
-          <img src={img || placeholderImgDefault} alt={title} title={title} className="cardImage" onClick={this.onCardImgClick} onError={this.isErrorImg}/>
+          <img src={img || placeholderImgDefault} alt={title} title={title} className="cardImage" onClick={this.onCardImgClick} onError={this.isErrorImg} />
         </button>
         <div className="cardInfo flexBox dirColumn spaceBetween">
           <div>
