@@ -34,9 +34,9 @@ class AddingButtonsContainer extends Component<Props> {
 
   public static contextType = ItemContentTypeContext;
   public state = {
-    modalDomain : false,
-    disabledbutton : true,
-    loading : true,
+    modalDomain: false,
+    disabledbutton: true,
+    loading: true,
     valueInputDomain: '',
     itemsForNewChildren: []
   };
@@ -98,7 +98,7 @@ class AddingButtonsContainer extends Component<Props> {
     return `https://${value}`;
   }
 
-  private handleChangeNewQuestion = (e:  React.ChangeEvent<HTMLInputElement>) => {
+  private handleChangeNewQuestion = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ valueInputDomain: e.target.value });
     if (validDomain(e.target.value)) {
       this.setState({ disabledbutton: false });
@@ -185,49 +185,49 @@ class AddingButtonsContainer extends Component<Props> {
   private renderButtonDomain = () => {
     const { disabledbutton } = this.state;
     return (
-    <div className="addingButton addExternalArtikle" onClick={this.openDomainModal}>
-      <button title={intl.get('edit_teaching_path.modals.add_domain')}>
-        <img src={addDomainImg} alt="add-article" />
-        {intl.get('edit_teaching_path.modals.add_domain')}
-      </button>
-    </div>
+      <div className="addingButton addExternalArtikle" onClick={this.openDomainModal}>
+        <button title={intl.get('edit_teaching_path.modals.add_domain')}>
+          <img src={addDomainImg} alt="add-article" />
+          {intl.get('edit_teaching_path.modals.add_domain')}
+        </button>
+      </div>
     );
   }
 
   public render() {
     return (
       <div>
-      <div className="AddingButtons flexBox dirColumn">
-        <div
-          className="addingButton"
-          onClick={this.openArticlesList}
-        >
-          <button title={intl.get('edit_teaching_path.modals.add_articles')}>
-            <img src={addArticleImg} alt="add-article" />
-            {intl.get('edit_teaching_path.modals.add_articles')}
-          </button>
+        <div className="AddingButtons flexBox dirColumn">
+          <div
+            className="addingButton"
+            onClick={this.openArticlesList}
+          >
+            <button title={intl.get('edit_teaching_path.modals.add_articles')}>
+              <img src={addArticleImg} alt="add-article" />
+              {intl.get('edit_teaching_path.modals.add_articles')}
+            </button>
+          </div>
+          {this.renderButtonDomain()}
+          <div
+            className="addingButton"
+            onClick={this.openAssignmentsList}
+          >
+            <button title={intl.get('edit_teaching_path.modals.add_assignments')}>
+              <img src={addAssignemntImg} alt="add-assignment" />
+              {intl.get('edit_teaching_path.modals.add_assignments')}
+            </button>
+          </div>
+          <div
+            className="addingButton"
+            onClick={this.openCreatingAssignment}
+          >
+            <button title={intl.get('edit_teaching_path.modals.create_assignment')}>
+              <img src={createAssignmentImg} alt="create-assignment" />
+              {intl.get('edit_teaching_path.modals.create_assignment')}
+            </button>
+          </div>
         </div>
-        {this.renderButtonDomain()}
-        <div
-          className="addingButton"
-          onClick={this.openAssignmentsList}
-        >
-          <button title={intl.get('edit_teaching_path.modals.add_assignments')}>
-          <img src={addAssignemntImg} alt="add-assignment" />
-          {intl.get('edit_teaching_path.modals.add_assignments')}
-          </button>
-        </div>
-        <div
-          className="addingButton"
-          onClick={this.openCreatingAssignment}
-        >
-          <button title={intl.get('edit_teaching_path.modals.create_assignment')}>
-            <img src={createAssignmentImg} alt="create-assignment" />
-            {intl.get('edit_teaching_path.modals.create_assignment')}
-          </button>
-        </div>
-      </div>
-      {this.state.modalDomain && this.renderModalDomain()}
+        {this.state.modalDomain && this.renderModalDomain()}
       </div>
     );
   }

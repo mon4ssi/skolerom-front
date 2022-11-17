@@ -168,7 +168,7 @@ class AddingNewButton extends Component<Props> {
           )
         );
         editTeachingPathStore!.addChildrenByOrder(newChildren[0], node!, this.props.side);
-        this.setState({ modalDomain : false, valueInputDomain : '', itemsForNewChildren: [] });
+        this.setState({ modalDomain: false, valueInputDomain: '', itemsForNewChildren: [] });
         editTeachingPathStore!.currentEntity!.save();
         document.removeEventListener('keyup', this.handleKeyboardControl);
         this.context.changeContentType(null);
@@ -291,8 +291,8 @@ class AddingNewButton extends Component<Props> {
             onClick={this.openAssignmentsList}
           >
             <button title={intl.get('edit_teaching_path.modals.add_assignments')}>
-            <img src={addAssignemntImg} alt="add-assignment" />
-            {intl.get('edit_teaching_path.modals.add_assignments')}
+              <img src={addAssignemntImg} alt="add-assignment" />
+              {intl.get('edit_teaching_path.modals.add_assignments')}
             </button>
           </div>
           <div
@@ -312,14 +312,18 @@ class AddingNewButton extends Component<Props> {
 
   public render() {
     const { isOpenedModal } = this.state;
+    const isFirstCircle = this.props.node!.type === TeachingPathNodeType.Root && this.props.parent === undefined;
     const classInside = isOpenedModal ? 'circleOption active' : 'circleOption';
+    const firstCircle = isFirstCircle ? 'hiddenRootCircle' : 'circle circleBottom';
+
+    const isOpenTabRoot = (this.props.node!.type === TeachingPathNodeType.Root && this.props.parent === undefined) ? true : isOpenedModal;
     if (this.props.side!) {
       switch (this.props.side!) {
         case 'left':
           return (
             <div className={classInside}>
               <div className="circle" onClick={this.switchModal}>
-                <svg fill="#000000" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"/></svg>
+                <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z" /></svg>
               </div>
               {isOpenedModal && this.renderMyAddingButtons()}
             </div>
@@ -328,8 +332,8 @@ class AddingNewButton extends Component<Props> {
         case 'bottom':
           return (
             <div className={classInside}>
-              <div className="circle circleBottom" onClick={this.switchModal}>
-                <svg fill="#000000" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"/></svg>
+              <div className={firstCircle} onClick={this.switchModal}>
+                <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z" /></svg>
               </div>
               {isOpenedModal && this.renderAddingButtons()}
             </div>
@@ -338,10 +342,10 @@ class AddingNewButton extends Component<Props> {
         case 'right':
           return (
             <div className={classInside}>
-                <div className="circle" onClick={this.switchModal}>
-                  <svg fill="#000000" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"/></svg>
-                </div>
-                {isOpenedModal && this.renderMyAddingButtons()}
+              <div className="circle" onClick={this.switchModal}>
+                <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z" /></svg>
+              </div>
+              {isOpenedModal && this.renderMyAddingButtons()}
             </div>
           );
           break;
