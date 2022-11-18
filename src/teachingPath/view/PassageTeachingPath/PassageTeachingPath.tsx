@@ -23,7 +23,7 @@ import arrowLeftRounded from 'assets/images/arrow-left-rounded.svg';
 
 import './PassageTeachingPath.scss';
 import { Loader } from '../../../components/common/Loader/Loader';
-import { CustomTeachingPath } from './CustomTeachingPath/CustomTeachingPath';
+import { CustomTeachingPath } from './CustomTeachingPath/CustomTeachingpath';
 
 const limitSplit = 4;
 const itemSplit = 2;

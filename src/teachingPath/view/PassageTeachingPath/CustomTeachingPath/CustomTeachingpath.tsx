@@ -2,8 +2,7 @@ import React, { Component, createRef } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
-
-import './CustomTeachingPath.scss';
+import './CustomTeachingpath.scss'
 import { InfoCard } from 'components/common/InfoCard/InfoCard';
 import reading from 'assets/images/reading-icon.svg';
 import domainImg from 'assets/images/app-open-icon.svg';
