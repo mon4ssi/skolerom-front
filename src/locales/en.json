@@ -282,7 +282,8 @@
     "Draft": "Draft",
     "Nothing": "No results found",
     "not for you": "Assignment not assigned to you",
-    "copy": "Copy of assignment is successfully created"
+    "copy": "Copy of assignment is successfully created",
+    "error delete": "Error Delete assignment"
   },
   "spanicon": {
     "DOMAIN": "Domain.com",

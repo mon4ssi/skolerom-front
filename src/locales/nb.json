@@ -282,7 +282,8 @@
     "Draft": "Kladd",
     "Nothing": "Søket ditt ga ingen resultater",
     "not for you": "Oppgaven er ikke tildelt deg",
-    "copy": "Kopi av oppgaven er opprettet"
+    "copy": "Kopi av oppgaven er opprettet",
+    "error delete": "Feil ved sletting av oppgave"
   },  
   "spanicon": {
     "DOMAIN": "Domene",

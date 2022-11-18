@@ -314,9 +314,15 @@ export class AssignmentListStore {
 
   @action
   public removeAssignment = async (assignmentId: number) => {
-    await this.assignmentService.removeAssignment(assignmentId);
+    try {
+      await this.assignmentService.removeAssignment(assignmentId);
+    } catch (e) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('assignment list.error delete')
+      });
+    }
     this.myAssignments = this.myAssignments.filter(assignment => assignment.id !== assignmentId);
-
     if (this.myAssignments.length) {
       this.getAssignmentsList();
     } else {
