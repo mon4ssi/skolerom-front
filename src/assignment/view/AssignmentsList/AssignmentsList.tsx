@@ -131,6 +131,7 @@ class AssignmentsList extends Component<Props, State> {
   public onClickAssignment = (id: number, view?: string) => {
     const { assignmentListStore, history } = this.props;
     const currentUserType = assignmentListStore!.getCurrentUser()!.type;
+    const isTestAccount = assignmentListStore!.getCurrentUser()!.isTestAccount;
     switch (currentUserType) {
       case UserType.Teacher:
       case UserType.ContentManager:
@@ -153,10 +154,12 @@ class AssignmentsList extends Component<Props, State> {
   public renderListItem = (assignment: Assignment, idx: number, list: Array<Assignment>) => {
     const { assignmentListStore } = this.props;
     const { isAssignmentPreviewTeacherCMVisible } = this.state;
+    const isTestAccount = assignmentListStore!.getCurrentUser()!.isTestAccount;
     return assignmentListStore!.assignmentsState === StoreState.LOADING ? (
       <SkeletonLoader key={idx} className="AssignmentListItem" />
     ) : (
       <AssignmentListItem
+        isTestAccount={isTestAccount}
         id={assignment.id}
         view={assignment.view}
         onClick={this.onClickAssignment}

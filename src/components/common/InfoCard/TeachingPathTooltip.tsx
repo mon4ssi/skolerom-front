@@ -114,11 +114,28 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
     ];
 
     const ownedByMe = this.props.view! === 'edit';
-    if (this.props.isTestAccount! && ownedByMe) {
+
+    /* if (this.props.isTestAccount! && ownedByMe) {
       contentManagerTeachingPathsActions.push({
         text: intl.get('teaching_paths_list.delete'),
         onClick: deleteTeachingPath
       });
+    } */
+
+    if (isContentManager) {
+      if (!this.props.isTestAccount) {
+        contentManagerTeachingPathsActions.push({
+          text: intl.get('teaching_paths_list.delete'),
+          onClick: deleteTeachingPath
+        });
+      } else {
+        if (ownedByMe) {
+          contentManagerTeachingPathsActions.push({
+            text: intl.get('teaching_paths_list.delete'),
+            onClick: deleteTeachingPath
+          });
+        }
+      }
     }
 
     switch (window.location.pathname) {

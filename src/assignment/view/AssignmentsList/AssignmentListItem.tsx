@@ -36,6 +36,7 @@ interface AssignmentListItemProps {
   onClick: (id: number, view?: string) => void;
   itemsToLastAssignment: number;
   isContentManager: boolean;
+  isTestAccount?: boolean;
   id?: number;
   view?: string;
 }
@@ -179,12 +180,32 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
         onClick: assignment.isPublished ? this.handleCopyAssignment : () => {},
         disabled: !assignment.isPublished
       },
-      {
+      /* {
         type: ActionMenuItemType.BUTTON,
         text: intl.get('assignment list.Delete assignment'),
         onClick: this.confirmDeleteListItem,
-      }
+      } */
     ];
+
+    const ownedByMe = this.props.view! === 'edit';
+
+    if (isContentManager) {
+      if (!this.props.isTestAccount) {
+        allAssignmentsActionsContentManager.push({
+          type: ActionMenuItemType.BUTTON,
+          text: intl.get('assignment list.Delete assignment'),
+          onClick: this.confirmDeleteListItem,
+        });
+      } else {
+        if (ownedByMe) {
+          allAssignmentsActionsContentManager.push({
+            type: ActionMenuItemType.BUTTON,
+            text: intl.get('assignment list.Delete assignment'),
+            onClick: this.confirmDeleteListItem,
+          });
+        }
+      }
+    }
 
     const myAssignmentsActionsContentManager: Array<ActionMenuItemLink | ActionMenuItemButton> = [
       {
