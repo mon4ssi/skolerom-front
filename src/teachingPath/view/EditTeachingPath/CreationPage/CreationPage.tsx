@@ -42,6 +42,7 @@ import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/Teac
 import { TeacherguidanceModal } from 'teachingPath/view/TeacherGuidance/TeacherGuidanceModal';
 import { trim } from 'lodash';
 import { AddingNewButtonElement } from './AddingNewButton/AddingNewButton';
+import { replaceQuotes } from 'utils/replaceQuotes';
 
 const cardWidth = 322;
 const leftIndent = 160;
@@ -49,9 +50,6 @@ const leftIndent = 160;
 const minNumberOfTitleCols = 20;
 const maxNumberOfTitleCols = 50;
 const num2 = 2;
-const ENTER_SINGLE_QUOTE_CODE = 219;
-const ENTER_DOUBLE_QUOTE_CODE = 50;
-const DELAY = 100;
 
 interface NodeContentProps {
   editTeachingPathStore?: EditTeachingPathStore;
@@ -130,7 +128,10 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
   public handleChangeTitle = (event: React.SyntheticEvent<HTMLTextAreaElement>) => {
     event.preventDefault();
-    const value = this.useValuedQuotes(event.currentTarget.value);
+
+    replaceQuotes(event.currentTarget);
+    const value = event.currentTarget.value;
+
     if (lettersNoEn(value)) {
       this.props.node.setSelectedQuestion(value);
       const valueLength = value.length;
@@ -821,17 +822,6 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         <AddingNewButtonElement side={'bottom'} node={node} parent={parentNode} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
       </div>
     );
-  }
-
-  public useValuedQuotes = (value: string) => {
-    const startQuote = '«';
-    const endQuote = '»';
-    let newvalue = value;
-    if (value.split("'").length > 1 || value.split('"').length > 1) {
-      const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
-      newvalue = `${initValue}${startQuote}${endQuote}`;
-    }
-    return newvalue;
   }
 
   public informativeBox = () => (<div className="boxInformationDrop">{intl.get('generals.dragdrop')}</div>);

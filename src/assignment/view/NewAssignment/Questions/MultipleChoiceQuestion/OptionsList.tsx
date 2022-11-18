@@ -14,9 +14,7 @@ import deleteIcon from 'assets/images/delete.svg';
 import { lettersNoEn } from 'utils/lettersNoEn';
 
 import './OptionsList.scss';
-const ENTER_SINGLE_QUOTE_CODE = 219;
-const ENTER_DOUBLE_QUOTE_CODE = 50;
-const DELAY = 100;
+import { replaceQuotes } from 'utils/replaceQuotes';
 type OptionDeleteHandler = (index: number) => void;
 
 interface OptionComponentProps {
@@ -34,7 +32,10 @@ class OptionComponent extends Component<OptionComponentProps> {
   private titleRef = createRef<HTMLInputElement>();
   private onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const value = this.useValuedQuotes(e.currentTarget.value);
+
+    replaceQuotes(e.currentTarget);
+    const value = e.currentTarget.value;
+
     if (lettersNoEn(value)) {
       this.props.option.setTitle(value);
     }
@@ -51,31 +52,6 @@ class OptionComponent extends Component<OptionComponentProps> {
     onDelete(indexAsProp);
   }
 
-  private focusTextField  = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-    const startQuote = '«»';
-    if (e.keyCode === ENTER_SINGLE_QUOTE_CODE || e.keyCode === ENTER_DOUBLE_QUOTE_CODE) {
-      setTimeout(
-        () => {
-          this.titleRef.current!.selectionEnd = Number(this.titleRef.current!.value!.split(startQuote)[0].length) + 1;
-          this.titleRef.current!.focus();
-        },
-        DELAY
-      );
-    }
-  }
-
-  public useValuedQuotes = (value: string) => {
-    const startQuote = '«';
-    const endQuote = '»';
-    let newvalue = value;
-    if (value.split("'").length > 1 || value.split('"').length > 1) {
-      const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
-      const secondValue = (value.split("'").length > 1) ? value.split("'")[1] : value.split('"')[1];
-      newvalue = `${initValue}${startQuote}${endQuote}${secondValue}`;
-    }
-    return newvalue;
-  }
-
   public render() {
     const { optionLengthBoolean, option, hasEnoughOptionsAndRightOptions, newAssignmentStore } = this.props;
     const placeholder = intl.get('new assignment.write_your_answer_here');
@@ -89,7 +65,6 @@ class OptionComponent extends Component<OptionComponentProps> {
         <input
           value={option.title}
           onChange={this.onTitleChange}
-          onKeyUp={this.focusTextField}
           style={option.isRight ? { color: '#0A7B24' } : undefined}
           placeholder={placeholder}
           aria-required="true"

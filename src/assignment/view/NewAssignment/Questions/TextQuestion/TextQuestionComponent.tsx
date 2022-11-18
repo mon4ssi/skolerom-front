@@ -22,10 +22,8 @@ import checkActive from 'assets/images/check-active.svg';
 import '../Questions.scss';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 import teaGuiBGImg from 'assets/images/guidance-bg.svg';
+import { replaceQuotes } from 'utils/replaceQuotes';
 
-const ENTER_SINGLE_QUOTE_CODE = 219;
-const ENTER_DOUBLE_QUOTE_CODE = 50;
-const DELAY = 100;
 interface TextQuestionProps {
   question: EditableQuestion;
   newAssignmentStore?: NewAssignmentStore;
@@ -61,36 +59,13 @@ class TextQuestionContent extends Component<TextQuestionProps, State> {
   public handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { question } = this.props;
     e.preventDefault();
-    const value = this.useValuedQuotes(e.currentTarget.value);
+
+    replaceQuotes(e.currentTarget);
+    const value = e.currentTarget.value;
+
     if (lettersNoEn(value)) {
       question.setTitle(value);
     }
-  }
-
-  public focusTextField  = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    const startQuote = '«»';
-    const isDoubleQuote = (e.shiftKey && e.keyCode === ENTER_DOUBLE_QUOTE_CODE) ? true : false;
-    if (isDoubleQuote || e.keyCode === ENTER_SINGLE_QUOTE_CODE) {
-      setTimeout(
-        () => {
-          this.titleRef.current!.selectionEnd = Number(this.titleRef.current!.value!.split(startQuote)[0].length) + 1;
-          this.titleRef.current!.focus();
-        },
-        DELAY
-      );
-    }
-  }
-
-  public useValuedQuotes = (value: string) => {
-    const startQuote = '«';
-    const endQuote = '»';
-    let newvalue = value;
-    if (value.split("'").length > 1 || value.split('"').length > 1) {
-      const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
-      const secondValue = (value.split("'").length > 1) ? value.split("'")[1] : value.split('"')[1];
-      newvalue = `${initValue}${startQuote}${endQuote}${secondValue}`;
-    }
-    return newvalue;
   }
 
   public onSortEnd = (data: SortEnd, event: SortEvent) => {
@@ -147,7 +122,6 @@ class TextQuestionContent extends Component<TextQuestionProps, State> {
           placeholder={intl.get('new assignment.Enter a question')}
           value={question.title}
           onChange={this.handleChangeTitle}
-          onKeyUp={this.focusTextField}
           inputRef={this.titleRef}
           maxLength={MAX_DESCRIPTION_LENGTH}
           aria-labelledby={titleId}

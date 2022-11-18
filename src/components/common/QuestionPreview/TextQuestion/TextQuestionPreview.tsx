@@ -12,9 +12,7 @@ import { lettersNoEn } from 'utils/lettersNoEn';
 import { MAX_DESCRIPTION_LENGTH_MAX } from 'utils/constants';
 
 import './TextQuestionPreview.scss';
-const ENTER_SINGLE_QUOTE_CODE = 219;
-const ENTER_DOUBLE_QUOTE_CODE = 50;
-const DELAY = 800;
+import { replaceQuotes } from 'utils/replaceQuotes';
 interface Props {
   question: TypedQuestion | EditableQuestion;
   answer?: Answer;
@@ -36,7 +34,10 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
   public handleChangeAnswer = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { redirectData, answer, handleShowArrowsTooltip, question } = this.props;
     event.preventDefault();
-    const value = this.useValuedQuotes(event.currentTarget.value);
+
+    replaceQuotes(event.currentTarget);
+    const value = event.currentTarget.value;
+
     answer!.setValue(value, redirectData);
     if (handleShowArrowsTooltip) {
       handleShowArrowsTooltip(true);
@@ -45,36 +46,14 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
   public handleChangeAnswerFalse = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { redirectData, answer, handleShowArrowsTooltip, question } = this.props;
     event.preventDefault();
-    const value = this.useValuedQuotes(event.currentTarget.value);
+
+    replaceQuotes(event.currentTarget);
+    const value = event.currentTarget.value;
+
     answer!.setValueFalse(value, redirectData);
     if (handleShowArrowsTooltip) {
       handleShowArrowsTooltip(true);
     }
-  }
-  public focusTextField  = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    const startQuote = '«»';
-    const isDoubleQuote = (e.shiftKey && e.keyCode === ENTER_DOUBLE_QUOTE_CODE) ? true : false;
-    if (isDoubleQuote || e.keyCode === ENTER_SINGLE_QUOTE_CODE) {
-      setTimeout(
-        () => {
-          this.titleRef.current!.selectionEnd = Number(this.titleRef.current!.value!.split(startQuote)[0].length) + 1;
-          this.titleRef.current!.focus();
-        },
-        DELAY
-      );
-    }
-  }
-
-  public useValuedQuotes = (value: string) => {
-    const startQuote = '«';
-    const endQuote = '»';
-    let newvalue = value;
-    if (value.split("'").length > 1 || value.split('"').length > 1) {
-      const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
-      const secondValue = (value.split("'").length > 1) ? value.split("'")[1] : value.split('"')[1];
-      newvalue = `${initValue}${startQuote}${endQuote}${secondValue}`;
-    }
-    return newvalue;
   }
 
   public renderContent = () => {
@@ -102,7 +81,6 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
             placeholder={placeholder}
             readOnly={readOnly}
             onChange={this.handleChangeAnswerFalse}
-            onKeyUp={this.focusTextField}
             aria-labelledby="titleTextAnswser"
             aria-required="true"
             aria-invalid="false"
@@ -122,7 +100,6 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
             placeholder={placeholder}
             readOnly={readOnly}
             onChange={this.handleChangeAnswerFalse}
-            onKeyUp={this.focusTextField}
             aria-labelledby="titleTextAnswser"
             aria-required="true"
             aria-invalid="false"
@@ -141,7 +118,6 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
           placeholder={intl.get('new assignment.Write your answer here')}
           readOnly={readOnly}
           onChange={this.handleChangeAnswer}
-          onKeyUp={this.focusTextField}
           aria-labelledby="titleTextAnswser"
           aria-required="true"
           aria-invalid="false"

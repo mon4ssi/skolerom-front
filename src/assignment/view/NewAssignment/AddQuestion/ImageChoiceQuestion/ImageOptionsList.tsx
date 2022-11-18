@@ -19,9 +19,7 @@ import minus from 'assets/images/icon-minus.svg';
 import plus from 'assets/images/icon-plus.svg';
 
 import './ImageChoiceQuestion.scss';
-const ENTER_SINGLE_QUOTE_CODE = 219;
-const ENTER_DOUBLE_QUOTE_CODE = 50;
-const DELAY = 100;
+import { replaceQuotes } from 'utils/replaceQuotes';
 type OptionDeleteHandler = (index: number) => void;
 
 interface OptionComponentProps {
@@ -44,7 +42,10 @@ class OptionComponent extends Component<OptionComponentProps> {
 
   private onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const value = this.useValuedQuotes(e.currentTarget.value);
+
+    replaceQuotes(e.currentTarget);
+    const value = e.currentTarget.value;
+
     if (lettersNoEn(value)) {
       this.props.option.setTitle(value);
     }
@@ -89,32 +90,6 @@ class OptionComponent extends Component<OptionComponentProps> {
       return option.image.path;
     }
     return landscape;
-  }
-
-  private focusTextField  = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-    const startQuote = '«»';
-    const isDoubleQuote = (e.shiftKey && e.keyCode === ENTER_DOUBLE_QUOTE_CODE) ? true : false;
-    if (isDoubleQuote || e.keyCode === ENTER_SINGLE_QUOTE_CODE) {
-      setTimeout(
-        () => {
-          this.refInput.current!.selectionEnd = Number(this.refInput.current!.value!.split(startQuote)[0].length) + 1;
-          this.refInput.current!.focus();
-        },
-        DELAY
-      );
-    }
-  }
-
-  public useValuedQuotes = (value: string) => {
-    const startQuote = '«';
-    const endQuote = '»';
-    let newvalue = value;
-    if (value.split("'").length > 1 || value.split('"').length > 1) {
-      const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
-      const secondValue = (value.split("'").length > 1) ? value.split("'")[1] : value.split('"')[1];
-      newvalue = `${initValue}${startQuote}${endQuote}${secondValue}`;
-    }
-    return newvalue;
   }
 
   public async componentDidMount() {
@@ -166,7 +141,6 @@ class OptionComponent extends Component<OptionComponentProps> {
           className="inputImageOption fw500"
           value={option.title}
           onChange={this.onTitleChange}
-          onKeyUp={this.focusTextField}
           style={option.isRight ? { color: '#0A7B24' } : undefined}
           placeholder={placeholder}
           onClick={this.closeImageChoice}

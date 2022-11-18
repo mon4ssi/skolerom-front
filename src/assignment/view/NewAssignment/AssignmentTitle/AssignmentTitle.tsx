@@ -12,11 +12,7 @@ import './AssignmentTitle.scss';
 
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 import teaGuiBGImg from 'assets/images/guidance-bg.svg';
-
-const ENTER_KEY_CODE = 13;
-const ENTER_SINGLE_QUOTE_CODE = 219;
-const ENTER_DOUBLE_QUOTE_CODE = 50;
-const DELAY = 100;
+import { replaceQuotes } from 'utils/replaceQuotes';
 
 interface Props {
   assignment: DraftAssignment;
@@ -31,53 +27,12 @@ export class AssignmentTitle extends Component<Props> {
   private titleRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
   private descriptionRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
 
-  private focusDescriptionField = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    const startQuote = '«»';
-    if (e.keyCode === ENTER_KEY_CODE) {
-      this.descriptionField!.selectionStart = this.descriptionField!.selectionEnd = this.descriptionField!.value.length;
-      this.descriptionField!.focus();
-    }
-    const isDoubleQuote = (e.shiftKey && e.keyCode === ENTER_DOUBLE_QUOTE_CODE) ? true : false;
-    if (isDoubleQuote || e.keyCode === ENTER_SINGLE_QUOTE_CODE) {
-      setTimeout(
-        () => {
-          this.titleRef.current!.selectionEnd = Number(this.titleRef.current!.value!.split(startQuote)[0].length) + 1;
-          this.titleRef.current!.focus();
-        },
-        DELAY
-      );
-    }
-  }
-
-  private focusTextField  = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    const startQuote = '«»';
-    const isDoubleQuote = (e.shiftKey && e.keyCode === ENTER_DOUBLE_QUOTE_CODE) ? true : false;
-    if (isDoubleQuote || e.keyCode === ENTER_SINGLE_QUOTE_CODE) {
-      setTimeout(
-        () => {
-          this.descriptionRef.current!.selectionEnd = Number(this.descriptionRef.current!.value!.split(startQuote)[0].length) + 1;
-          this.descriptionRef.current!.focus();
-        },
-        DELAY
-      );
-    }
-  }
-
-  public useValuedQuotes = (value: string) => {
-    const startQuote = '«';
-    const endQuote = '»';
-    let newvalue = value;
-    if (value.split("'").length > 1 || value.split('"').length > 1) {
-      const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
-      const secondValue = (value.split("'").length > 1) ? value.split("'")[1] : value.split('"')[1];
-      newvalue = `${initValue}${startQuote}${endQuote}${secondValue}`;
-    }
-    return newvalue;
-  }
-
   public setAssignmentTitle = (e: ChangeEvent<HTMLTextAreaElement>): void => {
     e.preventDefault();
-    const value = this.useValuedQuotes(e.currentTarget.value);
+
+    replaceQuotes(e.currentTarget);
+    const value = e.currentTarget.value;
+
     if (value === '' || lettersNoEn(value)) {
       this.props.assignment.setTitle(value);
     }
@@ -85,7 +40,10 @@ export class AssignmentTitle extends Component<Props> {
 
   public setAssignmentDescription = (e: ChangeEvent<HTMLTextAreaElement>): void => {
     e.preventDefault();
-    const value = this.useValuedQuotes(e.currentTarget.value);
+
+    replaceQuotes(e.currentTarget);
+    const value = e.currentTarget.value;
+
     if (value === '' || lettersNoEn(value)) {
       this.props.assignment.setDescription(value);
     }
@@ -122,7 +80,6 @@ export class AssignmentTitle extends Component<Props> {
             className={`newAssignmentTitleInput ${lightItem}`}
             onChange={this.setAssignmentTitle}
             placeholder={intl.get('new assignment.title.title_placeholder')}
-            onKeyUp={this.focusDescriptionField}
             inputRef={this.titleRef}
             maxLength={MAX_TITLE_LENGTH}
             aria-labelledby="titleInputTextArea"
@@ -133,7 +90,6 @@ export class AssignmentTitle extends Component<Props> {
             placeholder={intl.get('new assignment.title.description_placeholder')}
             value={assignment.description}
             onChange={this.setAssignmentDescription}
-            onKeyUp={this.focusTextField}
             inputRef={this.descriptionRef}
             maxLength={MAX_DESCRIPTION_LENGTH_500}
             aria-labelledby="DescriptionInputTextArea"

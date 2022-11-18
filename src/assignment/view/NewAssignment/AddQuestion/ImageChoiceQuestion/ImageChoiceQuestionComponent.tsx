@@ -21,9 +21,7 @@ import imageChoiceLightPink from 'assets/images/image-choice-light-pink.svg';
 import teaGuiBGImg from 'assets/images/guidance-bg.svg';
 
 import './ImageChoiceQuestion.scss';
-const ENTER_SINGLE_QUOTE_CODE = 219;
-const ENTER_DOUBLE_QUOTE_CODE = 50;
-const DELAY = 100;
+import { replaceQuotes } from 'utils/replaceQuotes';
 interface Props {
   question: EditableImageChoiceQuestion;
   newAssignmentStore?: NewAssignmentStore;
@@ -51,36 +49,13 @@ class ImageChoiceQuestion extends Component<Props> {
   private handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { question } = this.props;
     e.preventDefault();
-    const value = this.useValuedQuotes(e.currentTarget.value);
+
+    replaceQuotes(e.currentTarget);
+    const value = e.currentTarget.value;
+
     if (lettersNoEn(value)) {
       question.setTitle(value);
     }
-  }
-
-  private focusTextField  = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    const startQuote = '«»';
-    const isDoubleQuote = (e.shiftKey && e.keyCode === ENTER_DOUBLE_QUOTE_CODE) ? true : false;
-    if (isDoubleQuote || e.keyCode === ENTER_SINGLE_QUOTE_CODE) {
-      setTimeout(
-        () => {
-          this.titleRef.current!.selectionEnd = Number(this.titleRef.current!.value!.split(startQuote)[0].length) + 1;
-          this.titleRef.current!.focus();
-        },
-        DELAY
-      );
-    }
-  }
-
-  public useValuedQuotes = (value: string) => {
-    const startQuote = '«';
-    const endQuote = '»';
-    let newvalue = value;
-    if (value.split("'").length > 1 || value.split('"').length > 1) {
-      const initValue = (value.split("'").length > 1) ? value.split("'")[0] : value.split('"')[0];
-      const secondValue = (value.split("'").length > 1) ? value.split("'")[1] : value.split('"')[1];
-      newvalue = `${initValue}${startQuote}${endQuote}${secondValue}`;
-    }
-    return newvalue;
   }
 
   public async componentDidUpdate() {
@@ -138,7 +113,6 @@ class ImageChoiceQuestion extends Component<Props> {
           placeholder={intl.get('new assignment.Enter a question')}
           value={question.title}
           onChange={this.handleChangeTitle}
-          onKeyUp={this.focusTextField}
           inputRef={this.titleRef}
           maxLength={MAX_DESCRIPTION_LENGTH}
           autoFocus
