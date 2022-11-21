@@ -89,7 +89,6 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
 
   public switchCover = () => {
     const { currentQuestionaryStore } = this.props;
-
     this.setState({ showCover: false }, () => {
       currentQuestionaryStore!.setStartedAssignment(true);
 
@@ -99,6 +98,10 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
       }
 
       if (currentQuestionaryStore!.assignment!.relatedArticles.length > 0) {
+        if (currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden) {
+          currentQuestionaryStore!.setCurrentQuestion(0);
+          return this.updateQueryString();
+        }
         currentQuestionaryStore!.setCurrentQuestion(-1);
         return this.updateQueryString();
       }
