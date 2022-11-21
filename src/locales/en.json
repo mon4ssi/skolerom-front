@@ -283,7 +283,7 @@
     "Nothing": "No results found",
     "not for you": "Assignment not assigned to you",
     "copy": "Copy of assignment is successfully created",
-    "error delete": "Error Delete assignment"
+    "error delete": "This assignment cannot be deleted because it is being used by a teaching path"
   },
   "spanicon": {
     "DOMAIN": "Domain.com",

@@ -283,7 +283,7 @@
     "Nothing": "Søket ditt ga ingen resultater",
     "not for you": "Oppgaven er ikke tildelt deg",
     "copy": "Kopi av oppgaven er opprettet",
-    "error delete": "Feil ved sletting av oppgave"
+    "error delete": "Denne oppgaven kan ikke bli stettet, fordi den brukes av en læringssti"
   },  
   "spanicon": {
     "DOMAIN": "Domene",
