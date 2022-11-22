@@ -110,6 +110,8 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     /* currentQuestionaryStore!.setCurrentQuestion(-2); */
     if (isTeacher) {
       await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
+      this.props.currentQuestionaryStore!.setCurrentQuestion(COVER_INDEX);
+      this.setState({ showCover: true });
       if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles && currentQuestionaryStore!.assignment!.relatedArticles.length > 0 && currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden) {
         currentQuestionaryStore!.setCurrentQuestion(0);
         this.updateQueryString();
