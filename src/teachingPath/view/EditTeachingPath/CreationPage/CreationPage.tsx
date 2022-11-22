@@ -1006,7 +1006,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     const myNode = editTeachingPathStore!.getSelectedDragNode();
     const myParent = editTeachingPathStore!.getParentSelectedDragNode();
     // let isposible = true;
-    const isposible = (myNode) ? (myChildrens.includes(myNode)) ? false : (mytype === myNode!.type) ? true : false : true;
+    const isposible = (myNode) ? (myChildrens.includes(myNode)) ? false : true : true;
     /* if (myNode) {
       if (myChildrens.includes(myNode)) {
         isposible = false;
@@ -1021,7 +1021,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     return node.children.length ? (
       <div className={`${node.type === TeachingPathNodeType.Root ? 'boxNodeOptionsRoot' : 'boxNodeOptionsChildren'} ${classNodeTransparent}`} onDragOver={this.ondragovertitle} onDrop={this.ondroptitle} onDragLeave={this.ondragleavetitle}>
 
-        {editTeachingPathStore!.returnIsDraggable() && this.informativeBox()}
+        {isposible && editTeachingPathStore!.returnIsDraggable() && this.informativeBox()}
         {this.renderInput()}
         <div className={`sectImgs ${readOnly ? 'sectImgsReadOnly' : ''}`}>
           {node.type === TeachingPathNodeType.Root && this.renderNestedOrderNumber(true)}
