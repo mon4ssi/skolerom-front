@@ -29,6 +29,7 @@ import { Notification, NotificationTypes } from 'components/common/Notification/
 import './CurrentAssignmentPage.scss';
 import { AssignmentListStore } from '../AssignmentsList/AssignmentListStore';
 import { UserType } from 'user/User';
+import { TeacherGuidanceAssigModal } from '../TeacherGuidance/TeacherGuidanceAssigModal';
 
 const COVER_INDEX = -2;
 const animationInDuration = 500;
@@ -413,6 +414,7 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
       uiStore,
       isTeacher,
       assignmentListStore,
+      questionaryTeachingPathStore,
       match,
       history
     } = this.props;
@@ -431,15 +433,26 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
     if (currentAnswer) {
       isVisibleButtonRender = true;
     }
-
+    const url: URL = new URL(window.location.href);
+    const isOnlyAssig = (state && state.node && state.teachingPath && questionaryTeachingPathStore!.currentNode) ? true : false;
+    const openTeacherGuidance: boolean = (url.searchParams.get('open') === 'tg' /* || localParamIsOpenTG!  */ ? true : false);
+    const isPreview = (url.pathname.split('view').length > 1) ? true : false;
     return !isLoading && (
       <div tabIndex={0} className="CurrentAssignmentPage">
         <AppHeader
           fromAssignmentPassing
-          isPreview
+          /* isPreview */
+          studentFormTeachinPath
+          studentFormAssignment={isOnlyAssig}
           onLogoClick={this.handleExit(ExitEventTarget.HEADER_LOGO)}
           entityStore={assignmentListStore!}
           currentEntityId={Number(match.params.id)}
+        />
+
+        <TeacherGuidanceAssigModal
+          currentQuestionaryStore={this.props.currentQuestionaryStore}
+          openGuidance={openTeacherGuidance}
+          readOnly={true}
         />
 
         {this.props.uiStore!.sidebarShown && <div className="CurrentAssignmentPage__overlay" onClick={uiStore!.hideSidebar} />}
