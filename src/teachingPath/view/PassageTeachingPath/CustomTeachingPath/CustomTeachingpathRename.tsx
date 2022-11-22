@@ -1,7 +1,7 @@
 import React, { Component, createRef } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import intl from 'react-intl-universal';
+import intl, { load } from 'react-intl-universal';
 import './CustomTeachingpath.scss';
 import { InfoCard } from 'components/common/InfoCard/InfoCard';
 import reading from 'assets/images/reading-icon.svg';
@@ -11,6 +11,7 @@ import assignment from 'assets/images/assignment.svg';
 import { QuestionaryTeachingPathStore } from '../../../questionaryTeachingPath/questionaryTeachingPathStore';
 import { ReadingArticle } from 'components/pages/ReadingArticle/ReadingArticle';
 import { Article, Domain } from 'assignment/Assignment';
+import { Loader } from 'components/common/Loader/Loader';
 
 interface Props {
   questionaryTeachingPathStore?: QuestionaryTeachingPathStore;
@@ -22,6 +23,7 @@ interface State {
   shownArticleLevelId: number;
   attachedArticleId: number;
   canGoToNextQuestion: boolean;
+  isLoadingFinished: boolean;
 }
 
 type ComponentProps = Props & RouteComponentProps;
@@ -33,14 +35,22 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
   public state = {
     attachedArticleId: -1,
     shownArticleLevelId: -1,
-    canGoToNextQuestion: false
+    canGoToNextQuestion: false,
+    isLoadingFinished: false,
   };
   public async componentDidMount() {
     const { questionaryTeachingPathStore } = this.props;
     const ids = questionaryTeachingPathStore!.idsItemsNode;
-    this.props.questionaryTeachingPathStore!.domainFullInfo();
-    this.props.questionaryTeachingPathStore!.assignmentFullInfo();
+    let loadingFinished = false;
+    /* this.props.questionaryTeachingPathStore!.domainFullInfo();
+    this.props.questionaryTeachingPathStore!.assignmentFullInfo(); */
     await questionaryTeachingPathStore!.getCurrentArticlesList(ids);
+    loadingFinished = true;
+    this.setState({ isLoadingFinished: loadingFinished });
+    if (this.state.isLoadingFinished) {
+      this.props.questionaryTeachingPathStore!.domainFullInfo();
+      this.props.questionaryTeachingPathStore!.assignmentFullInfo();
+    }
     if (this.ref.current) {
       this.ref.current!.focus();
     }
@@ -49,6 +59,7 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
     this.props.questionaryTeachingPathStore!.resetCurrentArticleList();
     this.props.questionaryTeachingPathStore!.resetCurrentDomainList();
     this.props.questionaryTeachingPathStore!.clearAssignmentFullInfo();
+    this.setState({ isLoadingFinished: false });
   }
   public goToAssignment = (id: number) => () => {
     const { questionaryTeachingPathStore } = this.props;
@@ -64,20 +75,20 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
     return questionaryTeachingPathStore!.currentListAssignment.map((item) => {
       const passedStyle = item.isSelected ? '' : '';
       return (
-          <div className={passedStyle} key={item.id}>
-            <InfoCard
-              icon={assignment}
-              type="ASSIGNMENT"
-              title={item.title}
-              grades={item.grades}
-              description={item.description}
-              img={item.featuredImage ? item.featuredImage : listPlaceholderImg}
-              numberOfQuestions={item.numberOfQuestions}
-              isReadArticle={item.isSelected}
-              onClick={this.goToAssignment(item.id)}
-              hiddeIcons
-            />
-          </div>
+        <div className={passedStyle} key={item.id}>
+          <InfoCard
+            icon={assignment}
+            type="ASSIGNMENT"
+            title={item.title}
+            grades={item.grades}
+            description={item.description}
+            img={item.featuredImage ? item.featuredImage : listPlaceholderImg}
+            numberOfQuestions={item.numberOfQuestions}
+            isReadArticle={item.isSelected}
+            onClick={this.goToAssignment(item.id)}
+            hiddeIcons
+          />
+        </div>
       );
     }
     );
@@ -107,16 +118,16 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
       const passedStyle = item.isSelected ? '' : '';
       return (
         <div className={passedStyle} key={item.id} role="region" aria-live="polite" aria-atomic="true" ref={this.ref}>
-            <InfoCard
-              icon={reading}
-              title={item.title}
-              grades={item.grades}
-              description={item.excerpt}
-              img={(item.images && item.images.url) ? item.images.url : listPlaceholderImg}
-              onClick={this.chooseCard(item)}
-              isReadArticle={item.isSelected}
-              hiddeIcons
-            />
+          <InfoCard
+            icon={reading}
+            title={item.title}
+            grades={item.grades}
+            description={item.excerpt}
+            img={(item.images && item.images.url) ? item.images.url : listPlaceholderImg}
+            onClick={this.chooseCard(item)}
+            isReadArticle={item.isSelected}
+            hiddeIcons
+          />
         </div>
       );
     }
@@ -214,6 +225,14 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
           handleChangeLevel={this.handleChangeLevel}
           notFinish={true}
         />
+      );
+    }
+    if (!this.state.isLoadingFinished) {
+      return (
+        <div className={'articleTeachingPath'}>
+          {this.chooseTitle()}
+          <span className={'title'}>{questionaryTeachingPathStore!.currentNode!.selectQuestion}</span>
+        </div>
       );
     }
     return (
