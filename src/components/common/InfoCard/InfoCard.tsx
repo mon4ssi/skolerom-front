@@ -434,8 +434,9 @@ class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
     );
     const classIsRead = (this.props.isReadArticle) ? 'btn btnRead' : 'btn';
     const textsRead = (this.props.isReadArticle) ? intl.get('preview.teaching_path.read again') : intl.get('preview.teaching_path.read article');
+    const textsDomain = (this.props.isReadArticle) ? intl.get('preview.teaching_path.read again') : intl.get('preview.teaching_path.read external');
     const textsAssig = (this.props.isReadArticle) ? intl.get('preview.assignment.read again') : intl.get('preview.assignment.read article');
-    const textFinal = (this.props.type === 'ASSIGNMENT') ? textsAssig : textsRead;
+    const textFinal = (this.props.type === 'ASSIGNMENT') ? textsAssig : (this.props.type === 'DOMAIN') ? textsDomain : textsRead;
     if (this.props.hiddeIcons) {
       return (
         <div className={infoCardClassNames} data-id={this.props.id}>

@@ -1021,7 +1021,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     return node.children.length ? (
       <div className={`${node.type === TeachingPathNodeType.Root ? 'boxNodeOptionsRoot' : 'boxNodeOptionsChildren'} ${classNodeTransparent}`} onDragOver={this.ondragovertitle} onDrop={this.ondroptitle} onDragLeave={this.ondragleavetitle}>
 
-        {isposible && editTeachingPathStore!.returnIsDraggable() && this.informativeBox()}
+        {editTeachingPathStore!.returnIsDraggable() && this.informativeBox()}
         {this.renderInput()}
         <div className={`sectImgs ${readOnly ? 'sectImgsReadOnly' : ''}`}>
           {node.type === TeachingPathNodeType.Root && this.renderNestedOrderNumber(true)}

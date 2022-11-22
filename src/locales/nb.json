@@ -41,7 +41,8 @@
       "read open": "Les beskrivelse",
       "read close": "Nær description",
       "read again": "Les igjen",
-      "read article": "Les artikkelen"
+      "read article": "Les artikkelen",
+      "read external": "Åpne lenke"
     },
     "assignment": {
       "headers": {

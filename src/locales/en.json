@@ -41,7 +41,8 @@
       "read open": "Read description",
       "read close": "Close description",
       "read again": "Read again",
-      "read article": "Read article"
+      "read article": "Read article",
+      "read external": "Read external link"
     },
     "assignment": {
       "headers": {
