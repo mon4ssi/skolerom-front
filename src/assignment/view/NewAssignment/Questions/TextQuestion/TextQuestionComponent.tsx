@@ -22,7 +22,6 @@ import checkActive from 'assets/images/check-active.svg';
 import '../Questions.scss';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 import teaGuiBGImg from 'assets/images/guidance-bg.svg';
-import { replaceQuotes } from 'utils/replaceQuotes';
 
 interface TextQuestionProps {
   question: EditableQuestion;
@@ -59,10 +58,7 @@ class TextQuestionContent extends Component<TextQuestionProps, State> {
   public handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { question } = this.props;
     e.preventDefault();
-
-    replaceQuotes(e.currentTarget);
     const value = e.currentTarget.value;
-
     if (lettersNoEn(value)) {
       question.setTitle(value);
     }

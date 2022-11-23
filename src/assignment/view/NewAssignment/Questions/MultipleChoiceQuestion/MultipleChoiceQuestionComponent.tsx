@@ -19,7 +19,6 @@ import { MAX_DESCRIPTION_LENGTH } from 'utils/constants';
 import newMultipleChoiceQuestionIcon from 'assets/images/new-multiple-choice-question.svg';
 import newMultipleChoiceQuestionIconPink from 'assets/images/new-multiple-choice-question-pink.svg';
 import teaGuiBGImg from 'assets/images/guidance-bg.svg';
-import { replaceQuotes } from 'utils/replaceQuotes';
 
 interface Props {
   question: EditableMultipleChoiceQuestion;
@@ -47,10 +46,7 @@ class MultipleChoiceQuestionContent extends Component<Props> {
   private handleChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { question } = this.props;
     e.preventDefault();
-
-    replaceQuotes(e.currentTarget);
     const value = e.currentTarget.value;
-
     if (lettersNoEn(value)) {
       question.setTitle(value);
     }

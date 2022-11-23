@@ -5,7 +5,6 @@ import { AnswerMappingContentBlock } from '../AnswerMappingContentBlocks';
 import { lettersNoEn } from 'utils/lettersNoEn';
 
 import './AnswerTextQuestion.scss';
-import { replaceQuotes } from 'utils/replaceQuotes';
 interface Props {
   answer: Answer;
   readOnly: boolean;
@@ -15,10 +14,7 @@ export class AnswerTextQuestion extends Component<Props> {
   private titleRef = React.createRef<HTMLTextAreaElement>();
   public handleChangeAnswer = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     event.preventDefault();
-
-    replaceQuotes(event.currentTarget);
     const value = event.currentTarget.value;
-
     this.props.answer.setValue(value);
   }
 

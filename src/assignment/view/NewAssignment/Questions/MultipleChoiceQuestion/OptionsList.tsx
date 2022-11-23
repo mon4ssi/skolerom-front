@@ -14,7 +14,6 @@ import deleteIcon from 'assets/images/delete.svg';
 import { lettersNoEn } from 'utils/lettersNoEn';
 
 import './OptionsList.scss';
-import { replaceQuotes } from 'utils/replaceQuotes';
 type OptionDeleteHandler = (index: number) => void;
 
 interface OptionComponentProps {
@@ -32,10 +31,7 @@ class OptionComponent extends Component<OptionComponentProps> {
   private titleRef = createRef<HTMLInputElement>();
   private onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-
-    replaceQuotes(e.currentTarget);
     const value = e.currentTarget.value;
-
     if (lettersNoEn(value)) {
       this.props.option.setTitle(value);
     }

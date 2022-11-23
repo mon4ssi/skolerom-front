@@ -2,14 +2,10 @@ import React, { Component } from 'react';
 import intl from 'react-intl-universal';
 import TextAreaAutosize from 'react-textarea-autosize';
 import { inject, observer } from 'mobx-react';
-
 import { EditTeachingPathStore } from '../EditTeachingPathStore';
-
 import { lettersNoEn } from 'utils/lettersNoEn';
 import { MAX_TITLE_LENGTH, MAX_DESCRIPTION_LENGTH, MAX_DESCRIPTION_LENGTH_500 } from 'utils/constants';
-
 import './TeachingPathTitle.scss';
-import { replaceQuotes } from 'utils/replaceQuotes';
 
 interface Props {
   editTeachingPathStore?: EditTeachingPathStore;
@@ -31,10 +27,7 @@ export class TeachingPathTitle extends Component<Props> {
   public setTitle = (event: React.SyntheticEvent<HTMLTextAreaElement>) => {
     const { currentEntity: currentTeachingPath } = this.props.editTeachingPathStore!;
     event.preventDefault();
-
-    replaceQuotes(event.currentTarget);
     const value = event.currentTarget.value;
-
     if (lettersNoEn(value)) {
       currentTeachingPath!.setTitle(value);
     }
@@ -43,10 +36,7 @@ export class TeachingPathTitle extends Component<Props> {
   public setDescription = (event: React.SyntheticEvent<HTMLTextAreaElement>) => {
     const { currentEntity: currentTeachingPath } = this.props.editTeachingPathStore!;
     event.preventDefault();
-
-    replaceQuotes(event.currentTarget);
     const value = event.currentTarget.value;
-
     if (lettersNoEn(value)) {
       currentTeachingPath!.setDescription(value);
     }

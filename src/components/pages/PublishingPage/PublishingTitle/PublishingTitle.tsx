@@ -9,7 +9,6 @@ import { MAX_TITLE_LENGTH, MAX_DESCRIPTION_LENGTH } from 'utils/constants';
 import './PublishingTitle.scss';
 import { DraftAssignment } from 'assignment/assignmentDraft/AssignmentDraft';
 import { DraftTeachingPath } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
-import { replaceQuotes } from 'utils/replaceQuotes';
 
 interface Props {
   currentEntity: DraftAssignment | DraftTeachingPath;
@@ -25,10 +24,7 @@ export class PublishingTitle extends Component<Props> {
   public setTeachingPathTitle = (e: ChangeEvent<HTMLTextAreaElement>): void => {
     const { currentEntity } = this.props;
     e.preventDefault();
-
-    replaceQuotes(e.currentTarget);
     const value = e.currentTarget.value;
-
     if (lettersNoEn(value)) {
       currentEntity!.setTitle(value);
     }
@@ -37,10 +33,7 @@ export class PublishingTitle extends Component<Props> {
   public setTeachingPathDescription = (e: ChangeEvent<HTMLTextAreaElement>): void => {
     const { currentEntity } = this.props;
     e.preventDefault();
-
-    replaceQuotes(e.currentTarget);
     const value = e.currentTarget.value;
-
     if (lettersNoEn(value)) {
       currentEntity!.setDescription(value);
     }

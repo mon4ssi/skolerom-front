@@ -42,7 +42,6 @@ import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/Teac
 import { TeacherguidanceModal } from 'teachingPath/view/TeacherGuidance/TeacherGuidanceModal';
 import { trim } from 'lodash';
 import { AddingNewButtonElement } from './AddingNewButton/AddingNewButton';
-import { replaceQuotes } from 'utils/replaceQuotes';
 
 const cardWidth = 322;
 const leftIndent = 160;
@@ -128,14 +127,10 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
   public handleChangeTitle = (event: React.SyntheticEvent<HTMLTextAreaElement>) => {
     event.preventDefault();
-
-    replaceQuotes(event.currentTarget);
     const value = event.currentTarget.value;
-
     if (lettersNoEn(value)) {
       this.props.node.setSelectedQuestion(value);
       const valueLength = value.length;
-
       this.handleChangeNumberOfTitleCols(valueLength);
     }
   }

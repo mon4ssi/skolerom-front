@@ -12,7 +12,6 @@ import { lettersNoEn } from 'utils/lettersNoEn';
 import { MAX_DESCRIPTION_LENGTH_MAX } from 'utils/constants';
 
 import './TextQuestionPreview.scss';
-import { replaceQuotes } from 'utils/replaceQuotes';
 interface Props {
   question: TypedQuestion | EditableQuestion;
   answer?: Answer;
@@ -34,10 +33,7 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
   public handleChangeAnswer = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { redirectData, answer, handleShowArrowsTooltip, question } = this.props;
     event.preventDefault();
-
-    replaceQuotes(event.currentTarget);
     const value = event.currentTarget.value;
-
     answer!.setValue(value, redirectData);
     if (handleShowArrowsTooltip) {
       handleShowArrowsTooltip(true);
@@ -46,10 +42,7 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
   public handleChangeAnswerFalse = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { redirectData, answer, handleShowArrowsTooltip, question } = this.props;
     event.preventDefault();
-
-    replaceQuotes(event.currentTarget);
     const value = event.currentTarget.value;
-
     answer!.setValueFalse(value, redirectData);
     if (handleShowArrowsTooltip) {
       handleShowArrowsTooltip(true);

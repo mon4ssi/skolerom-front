@@ -12,7 +12,6 @@ import './AssignmentTitle.scss';
 
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 import teaGuiBGImg from 'assets/images/guidance-bg.svg';
-import { replaceQuotes } from 'utils/replaceQuotes';
 
 interface Props {
   assignment: DraftAssignment;
@@ -29,10 +28,7 @@ export class AssignmentTitle extends Component<Props> {
 
   public setAssignmentTitle = (e: ChangeEvent<HTMLTextAreaElement>): void => {
     e.preventDefault();
-
-    replaceQuotes(e.currentTarget);
     const value = e.currentTarget.value;
-
     if (value === '' || lettersNoEn(value)) {
       this.props.assignment.setTitle(value);
     }
@@ -40,10 +36,7 @@ export class AssignmentTitle extends Component<Props> {
 
   public setAssignmentDescription = (e: ChangeEvent<HTMLTextAreaElement>): void => {
     e.preventDefault();
-
-    replaceQuotes(e.currentTarget);
     const value = e.currentTarget.value;
-
     if (value === '' || lettersNoEn(value)) {
       this.props.assignment.setDescription(value);
     }

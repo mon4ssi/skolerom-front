@@ -19,7 +19,6 @@ import minus from 'assets/images/icon-minus.svg';
 import plus from 'assets/images/icon-plus.svg';
 
 import './ImageChoiceQuestion.scss';
-import { replaceQuotes } from 'utils/replaceQuotes';
 type OptionDeleteHandler = (index: number) => void;
 
 interface OptionComponentProps {
@@ -42,10 +41,7 @@ class OptionComponent extends Component<OptionComponentProps> {
 
   private onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-
-    replaceQuotes(e.currentTarget);
     const value = e.currentTarget.value;
-
     if (lettersNoEn(value)) {
       this.props.option.setTitle(value);
     }
