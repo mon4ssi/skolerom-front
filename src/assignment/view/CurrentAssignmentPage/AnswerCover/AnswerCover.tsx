@@ -17,6 +17,7 @@ import level2 from 'assets/images/level-2-blue.svg';
 import level3 from 'assets/images/level-3-blue.svg';
 
 import './AnswerCover.scss';
+import { UserType } from 'user/User';
 const DELAY = 800;
 interface Props {
   currentQuestionaryStore?: CurrentQuestionaryStore;
@@ -59,6 +60,11 @@ export class AnswerCover extends Component<Props> {
 
   public getStartButtonTitle = () => {
     const { currentQuestionaryStore } = this.props;
+    const currentUserIsNotStudent = currentQuestionaryStore!.getCurrentUser()!.type !== UserType.Student;
+
+    if (currentUserIsNotStudent) {
+      return intl.get('assignment preview.Start assignment');
+    }
 
     if (!currentQuestionaryStore!.numberOfAnsweredQuestions) {
       return intl.get('assignment preview.Start assignment');
