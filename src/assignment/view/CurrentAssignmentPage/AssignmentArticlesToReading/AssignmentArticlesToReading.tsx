@@ -49,6 +49,10 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
 
   public refArticle = React.createRef<HTMLDivElement>();
 
+  public componentDidMount() {
+    this.props.currentQuestionaryStore!.getRelatedArticles();
+  }
+
   public openArticle = (article: Article) => () => {
     const { title, id, levels, correspondingLevelArticleId } = article;
     const isStudent = this.props.currentQuestionaryStore!.getCurrentUser()!.type === UserType.Student;
@@ -140,6 +144,7 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
 
   public sendValidArticlesRead() {
     const { currentQuestionaryStore } = this.props;
+    currentQuestionaryStore!.allArticlesread = false;
     if (this.state.allArticlesRead > 0) {
       if (this.state.allArticles === this.state.allArticlesRead) {
         currentQuestionaryStore!.allArticlesread = true;
