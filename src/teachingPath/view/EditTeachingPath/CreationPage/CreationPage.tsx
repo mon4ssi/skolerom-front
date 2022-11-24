@@ -584,25 +584,35 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     const childrenNode = node.children;
     const allchildren = allNode.children;
     const mytypeFirstChildNode = (node.children.length > 0) ? node.children[0].type : 'none';
+    const myChildrens = (node.children.length > 0) ? node.children : [];
+    // let isposible = true;
+    const isposible = (myNode) ? (myChildrens.includes(myNode)) ? false : true : true;
     event.currentTarget.classList.remove('imposibleDrop');
     event.currentTarget.classList.remove('posibleDrop');
     /*if (myNode!.type === mytypeFirstChildNode) {*/
     if (myNode) {
-      editTeachingPathStore!.setCurrentNode(node!);
-      editTeachingPathStore!.addChildToCurrentNodeNullPerItem(myNode);
-      this.setState({
-        isDrop: false,
-        isDropInit: false,
-        isPosibleDrop: false,
-      });
-      editTeachingPathStore!.falseIsDraggable();
-      // delete item
-      editTeachingPathStore!.setCurrentNode(myParent);
-      editTeachingPathStore!.removeChildToCurrentNodeNullPerItem(myNode);
-      // format items
-      editTeachingPathStore!.setCurrentNode(null);
-      editTeachingPathStore!.setSelectedDragNode(null);
-      editTeachingPathStore!.setParentSelectedDragNode(null);
+      if (isposible) {
+        editTeachingPathStore!.setCurrentNode(node!);
+        editTeachingPathStore!.addChildToCurrentNodeNullPerItem(myNode);
+        this.setState({
+          isDrop: false,
+          isDropInit: false,
+          isPosibleDrop: false,
+        });
+        editTeachingPathStore!.falseIsDraggable();
+        // delete item
+        editTeachingPathStore!.setCurrentNode(myParent);
+        editTeachingPathStore!.removeChildToCurrentNodeNullPerItem(myNode);
+        // format items
+        editTeachingPathStore!.setCurrentNode(null);
+        editTeachingPathStore!.setSelectedDragNode(null);
+        editTeachingPathStore!.setParentSelectedDragNode(null);
+      } else {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('edit_teaching_path.notifications.onlydraggable')
+        });
+      }
     } else {
       Notification.create({
         type: NotificationTypes.ERROR,

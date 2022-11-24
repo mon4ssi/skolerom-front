@@ -235,7 +235,11 @@
   }
 }
 
-
+@media screen and (max-width: $screen-dimension-desktop-l) {
+  .AssignmentsList .assignmentsListFooter {
+    width: calc(100% - 400px);
+  }
+}
 
 @media screen and (max-width: $screen-dimension-desktop) {
   .AssignmentsList .assignmentsListFooter {
