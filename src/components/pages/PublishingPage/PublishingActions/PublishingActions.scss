@@ -86,6 +86,10 @@
         margin-right: 10px;
         max-width: 48%;
         min-width: 350px;
+        &.loadingItem {
+          opacity: 0.5;
+          pointer-events: none;
+        }
         .SearchFilter__select {
           margin-right: 0px;
           margin-bottom: 0px;

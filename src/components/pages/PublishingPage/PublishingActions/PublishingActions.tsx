@@ -877,8 +877,9 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     const selectedSubjects = this.state.optionsMySubjects.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.gradeToTagProp);
     const myplaceholder = (selectedSubjects.length > 0) ? '' : this.labels.placeholderSubjects;
     const subjects = store!.getAllSubjects().filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.subjectToTagProp);
+    const isPreloadClass = this.state.loadingGoals ? 'itemsFlex grade loadingItem' : 'itemsFlex grade';
     return (
-      <div className="itemsFlex subject">
+      <div className={isPreloadClass}>
         <TagInputComponent
           dataid="renderSubjectInput"
           className="filterBy darkTheme"
@@ -912,8 +913,9 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     const selectedGrades = this.state.optionsMyGrades.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.gradeToTagProp);
     const myplaceholder = (selectedGrades.length > 0) ? '' : this.labels.placeholderGrades;
     const grades = store!.getAllGrades().filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).map(this.gradeToTagProp).sort((a, b) => a.id - b.id);
+    const isPreloadClass = this.state.loadingGoals ? 'itemsFlex grade loadingItem' : 'itemsFlex grade';
     return (
-      <div className="itemsFlex grade">
+      <div className={isPreloadClass}>
         <TagInputComponent
           dataid="renderGradeInput"
           className="filterBy darkTheme"
@@ -1183,8 +1185,9 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     const newOptionsCore = optionsCore.map(this.grepToTagProp);
     const selectedCore = this.grepNumbersToTagprop(store!.currentEntity!.getListOfgrepCoreElementsIds(), newOptionsCore);
     const myplaceholder = (selectedCore.length > 0) ? '' : this.labels.placeholderCoreElements;
+    const isPreloadClass = this.state.loadingGoals ? 'itemsFlex grade loadingItem' : 'itemsFlex grade';
     return (
-      <div className="itemsFlex grade">
+      <div className={isPreloadClass}>
         <TagInputComponent
           dataid="renderGradeInput"
           className="filterBy darkTheme"
@@ -1298,8 +1301,9 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     const newOptionsMulti = optionsMulti.map(this.grepToTagProp);
     const selectedMulti = this.grepNumbersToTagprop(store!.currentEntity!.getListOfgrepMainTopicsIds(), newOptionsMulti);
     const myplaceholder = (selectedMulti.length > 0) ? '' : this.labels.placeholderMultiDisciplinarySubjects;
+    const isPreloadClass = this.state.loadingGoals ? 'itemsFlex grade loadingItem' : 'itemsFlex grade';
     return (
-      <div className="itemsFlex grade">
+      <div className={isPreloadClass}>
         <TagInputComponent
           dataid="renderGradeInput"
           className="filterBy darkTheme"
@@ -1375,8 +1379,9 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     const valueReading = (store!.currentEntity!.getListOfgrepReadingInSubjectId() !== undefined) ? store!.currentEntity!.getListOfgrepReadingInSubjectId() : [];
     const selectedReading = this.grepNumbersToTagprop(valueReading, newOptionsReading);
     const myplaceholder = (selectedReading.length > 0) ? '' : this.labels.placeholderReadingInSubject;
+    const isPreloadClass = this.state.loadingGoals ? 'itemsFlex grade loadingItem' : 'itemsFlex grade';
     return (
-      <div className="itemsFlex grade">
+      <div className={isPreloadClass}>
         <TagInputComponent
           dataid="renderGradeInput"
           className="filterBy darkTheme"
