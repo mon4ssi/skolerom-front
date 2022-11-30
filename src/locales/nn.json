@@ -643,6 +643,8 @@
     "errortype_101": "Nettadressa kunne ikkje analyserast. Kontroller at det er ei gyldig HTML-side.",
     "errortype_102": "Nettadressa kunne ikkje analyserast. Kontroller at ho har ein gyldig HTML-tittel.",
     "errortype_103": "Nettadressa kunne ikkje analyserast. Kontroller at ho inneheld ei gyldig HTML-beskriving.",
+    "errortype_422": "Nettadressen er ugyldig eller kunne ikke analyseres",
+    "errortype_404": "Nettadressen er ugyldig eller kunne ikke analyseres",
     "complete": {
       "title": "Læringsstien er fullført!",
       "description": "Bruk meny nede på sida til å gå gjennom kvart steg. Kom tilbake hit og trykk «Registrer og send inn» for å sende oppgåvesvaret til læraren din.",
