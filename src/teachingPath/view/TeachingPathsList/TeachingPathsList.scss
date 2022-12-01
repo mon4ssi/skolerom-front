@@ -221,11 +221,13 @@
     width: calc(100% - 50px);
   }
 }
-@media screen and (min-width: 576px) and (max-width: 767px) {
-  /*.teachingPathsList .cardList .InfoCard {
-    width: calc(50% - 15px);
+@media screen and (max-height: 820px) {
+  .css-1y8mk30-SkeletonTheme span {
+    height: 200px !important;
   }
-  .teachingPathsList.moveListBySearchFilter.active .cardList .InfoCard {
-    width: calc(50% - 15px);
-  }*/
+}
+@media screen and (max-height: 700px) {
+  .css-1y8mk30-SkeletonTheme span {
+    height: 150px !important;
+  }
 }

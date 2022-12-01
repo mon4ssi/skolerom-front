@@ -341,10 +341,17 @@ export class TeachingPathApi implements TeachingPathRepo {
             title: intl.get('teaching path passing.external_error')
           });
         } else {
-          Notification.create({
-            type: NotificationTypes.ERROR,
-            title: intl.get(`teaching path passing.errortype_${error.response.data.message.code}`)
-          });
+          if (error.response.data.message.code) {
+            Notification.create({
+              type: NotificationTypes.ERROR,
+              title: intl.get(`teaching path passing.errortype_${error.response.data.message.code}`)
+            });
+          } else {
+            Notification.create({
+              type: NotificationTypes.ERROR,
+              title: intl.get('teaching path passing.errortype_422')
+            });
+          }
         }
       }
       throw error;
