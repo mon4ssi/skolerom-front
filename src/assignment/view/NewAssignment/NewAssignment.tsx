@@ -65,7 +65,6 @@ class NewAssignmentComponent extends Component<Props & RouteComponentProps, Stat
     const { contentType } = this.state;
     const currentAssignment = newAssignmentStore!.currentEntity!;
     const backdrop = (!isNull(contentType) && Number(contentType) > 0) ? 'backdrop' : '';
-
     return !location!.pathname.includes('distribute') &&
       !location!.pathname.includes('publish') && (
         <>
@@ -74,11 +73,12 @@ class NewAssignmentComponent extends Component<Props & RouteComponentProps, Stat
             newAssignmentStore={this.props.newAssignmentStore}
           />
           <div className="main flexBox spaceBetween">
-            <div className={'addAssignmentFlow w50'}>
+            <div className="addAssignmentFlow w50">
               <AssignmentTitle assignment={currentAssignment} />
+              <div className="blur" />
               <TeacherGuidanceAssigModal
-                newAssignmentStore={newAssignmentStore}
-                drafAssignment={currentAssignment}
+                  newAssignmentStore={newAssignmentStore}
+                  drafAssignment={currentAssignment}
               />
               <SetRelatedArticles />
               <QuestionsList assignment={currentAssignment} />
@@ -95,7 +95,7 @@ class NewAssignmentComponent extends Component<Props & RouteComponentProps, Stat
     this.props.location!.pathname.includes('publish') && (
       <>
         <Header isPublishing />
-        <PublishingPage store={this.props.newAssignmentStore} from="ASSIGNMENT"/>
+        <PublishingPage store={this.props.newAssignmentStore} from="ASSIGNMENT" />
       </>
     )
   )

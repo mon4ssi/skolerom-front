@@ -27,10 +27,12 @@ interface Props {
 export class TeacherGuidanceAssigModal extends Component<Props> {
 
   public closeModalTG = () => {
-    const modalTG = Array.from(document.getElementsByClassName('modalContentTGAssig') as HTMLCollectionOf<HTMLElement>);
+    /* const modalTG = Array.from(document.getElementsByClassName('modalContentTGAssig') as HTMLCollectionOf<HTMLElement>);
     const modalTGBack = Array.from(document.getElementsByClassName('modalContentTGAssigBackground') as HTMLCollectionOf<HTMLElement>);
     modalTG[0].classList.remove('open');
-    modalTGBack[0].classList.add('hide');
+    modalTGBack[0].classList.add('hide'); */
+    const { readOnly, currentQuestionaryStore, newAssignmentStore, openGuidance } = this.props;
+    newAssignmentStore!.closeModalTG();
   }
 
   public componentDidMount() {
@@ -103,19 +105,19 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
       }
     } else {
       return drafAssignment!.questions.map((item, index) => (
-          <div className={'modalContentTG__body__row line'} key={index}>
-            <h4>
-              <div className="nestedOrderNumber">{item.orderPosition + 1}</div>
-              {item.title === intl.get('new assignment.Enter a question') ? '' : item.title}
-            </h4>
-            <DescriptionEditor
-              className={`jr-desEdit${item.orderPosition + 1}`}
-              description={item.guidance}
-              readOnly={readOnly}
-              onChange={(value: string) => { item.setGuidance(value); }}
-            />
-          </div>
-        )
+        <div className={'modalContentTG__body__row line'} key={index}>
+          <h4>
+            <div className="nestedOrderNumber">{item.orderPosition + 1}</div>
+            {item.title === intl.get('new assignment.Enter a question') ? '' : item.title}
+          </h4>
+          <DescriptionEditor
+            className={`jr-desEdit${item.orderPosition + 1}`}
+            description={item.guidance}
+            readOnly={readOnly}
+            onChange={(value: string) => { item.setGuidance(value); }}
+          />
+        </div>
+      )
       );
     }
   }
@@ -164,9 +166,9 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
             <span>{titleTGSub}</span>
             <div className="modalContentTGAssig__header__close" onClick={this.closeModalTG}>
               <svg width="31" height="30" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path className="roundedCircle" fill-rule="evenodd" clip-rule="evenodd" d="M15.2476 0.9375C23.0138 0.9375 29.3101 7.23375 29.3101 15C29.3101 22.7663 23.0138 29.0625 15.2476 29.0625C7.48131 29.0625 1.18506 22.7663 1.18506 15C1.18506 7.23375 7.48131 0.9375 15.2476 0.9375Z" stroke="#0B2541" fill="white" stroke-width="1.875" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M9.62256 20.625L20.8713 9.375" stroke="#0B2541" stroke-width="1.875" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M20.8726 20.625L9.62134 9.375" stroke="#0B2541" stroke-width="1.875" stroke-linecap="round" stroke-linejoin="round"/>
+                <path className="roundedCircle" fill-rule="evenodd" clip-rule="evenodd" d="M15.2476 0.9375C23.0138 0.9375 29.3101 7.23375 29.3101 15C29.3101 22.7663 23.0138 29.0625 15.2476 29.0625C7.48131 29.0625 1.18506 22.7663 1.18506 15C1.18506 7.23375 7.48131 0.9375 15.2476 0.9375Z" stroke="#0B2541" fill="white" stroke-width="1.875" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M9.62256 20.625L20.8713 9.375" stroke="#0B2541" stroke-width="1.875" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M20.8726 20.625L9.62134 9.375" stroke="#0B2541" stroke-width="1.875" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </div>
           </div>
@@ -175,7 +177,7 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
             {this.renderQuestions()}
           </div>
           <div className="modalContentTGAssig__footer">
-          {readOnly !== true && this.renderFooterButtons()}
+            {readOnly !== true && this.renderFooterButtons()}
             <div className="modalContentTGAssig__footer__aligRight">
               <button id="btnDownloadPDFTP" onClick={this.handleDownloadAsPDF}>
                 {intl.get('teacherGuidance.download_pdf')}

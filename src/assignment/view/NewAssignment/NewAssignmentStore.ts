@@ -791,10 +791,17 @@ export class NewAssignmentStore {
   }
   @action
   public openTeacherGuidanceAssig = (nroLevel: string): void => {
+
     const modalTG = Array.from(document.getElementsByClassName('modalContentTGAssig') as HTMLCollectionOf<HTMLElement>);
     const modalTGBack = Array.from(document.getElementsByClassName('modalContentTGAssigBackground') as HTMLCollectionOf<HTMLElement>);
+    const scrollsideElement = Array.from(document.getElementsByClassName('addAssignmentFlow w50') as HTMLCollectionOf<HTMLElement>);
+    const blurBackground = Array.from(document.getElementsByClassName('blur') as HTMLCollectionOf<HTMLElement>);
+    scrollsideElement[0].classList.add('notShow');
+    blurBackground[0].classList.remove('blur');
+    blurBackground[0].classList.add('blurShowed');
+
     modalTG[0].classList.add('open');
-    modalTGBack[0].classList.remove('hide');
+    modalTGBack[0].classList.add('hide');
 
     setTimeout(
       () => {
@@ -804,5 +811,19 @@ export class NewAssignmentStore {
       },
       delayFocus
     );
+  }
+
+  @action
+  public closeModalTG = () => {
+    const modalTG = Array.from(document.getElementsByClassName('modalContentTGAssig') as HTMLCollectionOf<HTMLElement>);
+    const modalTGBack = Array.from(document.getElementsByClassName('modalContentTGAssigBackground') as HTMLCollectionOf<HTMLElement>);
+    const scrollsideElement = Array.from(document.getElementsByClassName('addAssignmentFlow w50') as HTMLCollectionOf<HTMLElement>);
+    const blurBackground = Array.from(document.getElementsByClassName('blurShowed') as HTMLCollectionOf<HTMLElement>);
+    scrollsideElement[0].classList.remove('notShow');
+    blurBackground[0].classList.add('blur');
+    blurBackground[0].classList.remove('blurShowed');
+
+    modalTG[0].classList.remove('open');
+    modalTGBack[0].classList.add('hide');
   }
 }
