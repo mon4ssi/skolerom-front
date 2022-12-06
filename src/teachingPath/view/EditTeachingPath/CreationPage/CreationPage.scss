@@ -684,6 +684,22 @@
   }
 }
 
+.mainButtonsContent {
+  border-bottom: 1px solid #d3d9de;
+  display: flex;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  .detailsModal {
+    margin-right: 10px;
+  }
+  .btnTeacherguide {
+    margin-top: 0px;
+  }
+  .horizontalLine {
+    display: none;
+  }
+}
+
 .boxInformationDrop {
   position: absolute;
   top: 0;

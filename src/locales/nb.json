@@ -823,6 +823,8 @@
     "part2": "Følgende nettlesere er støttet: Firefox, Opera, Edge og Google Chrome."
   },
   "generals": {
+    "viewdetails": "Se Kompetansemål",
+    "viewdetails_title": "Læreplantilkobling",
     "support":"Trenger du hjelp?",
     "keyboard":"Tastatursnarveier",
     "dragdrop":"Dra og slipp her",

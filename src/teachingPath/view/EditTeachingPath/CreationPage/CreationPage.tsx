@@ -1209,9 +1209,9 @@ export class CreationPageComponent extends Component<Props> {
         <AddItemModal />
 
         <div className="main flexBox dirColumn alignCenter">
-          <DetailsModal />
           <TeachingPathTitle readOnly={readOnly} />
           <div className="mainButtonsContent">
+            <DetailsModal />
             <TeacherguidanceModal
               currentEntity={currentTeachingPath!}
               readOnly={readOnly}

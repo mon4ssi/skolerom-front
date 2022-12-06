@@ -824,6 +824,8 @@
     "part2": "Supporting browsers: Firefox, Opera, Edge and Google Chrome only."
   },
   "generals": {
+    "viewdetails": "View Details",
+    "viewdetails_title": "Details",
     "support":"Support",
     "keyboard":"Keyboard shortcuts",
     "dragdrop":"Drag and drop the item here",
