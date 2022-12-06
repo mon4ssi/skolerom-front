@@ -1209,12 +1209,13 @@ export class CreationPageComponent extends Component<Props> {
 
         <div className="main flexBox dirColumn alignCenter">
           <TeachingPathTitle readOnly={readOnly} />
-
-          <TeacherguidanceModal
-            currentEntity={currentTeachingPath!}
-            readOnly={readOnly}
-            editTeachingPathStore={editTeachingPathStore}
-          />
+          <div className="mainButtonsContent">
+            <TeacherguidanceModal
+              currentEntity={currentTeachingPath!}
+              readOnly={readOnly}
+              editTeachingPathStore={editTeachingPathStore}
+            />
+          </div>
           <NodeContent
             isRoot
             node={currentTeachingPath!.content! as EditableTeachingPathNode}
