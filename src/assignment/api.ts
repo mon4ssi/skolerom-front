@@ -258,7 +258,7 @@ export class AssignmentApi implements AssignmentRepo {
 
   public async getSubjects(): Promise<Array<Subject>> {
     return (await API.get('api/subjects')).data.data.map(
-      (item: SubjectDTO) => new Subject(item.id, item.title, item.managementId)
+      (item: SubjectDTO) => new Subject(item.id, item.title, item.description, item.managementId)
     );
   }
 

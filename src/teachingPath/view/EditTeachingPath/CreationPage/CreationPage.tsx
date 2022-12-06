@@ -509,19 +509,19 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       key={index}
       className={`flexBox ${this.props.isRoot ? 'dirColumn' : 'dirRow alingBaseLine'}`}
     >
-    <NodeContent
-      index={index}
-      parentNode={this.props.node}
-      node={childNode as EditableTeachingPathNode}
-      nestedOrder={this.props.nestedOrder! + 1}
-      editTeachingPathStore={this.props.editTeachingPathStore}
-      allNode={this.props.allNode}
-      dropArticles={this.props.dropArticles}
-      dropAssignments={this.props.dropAssignments}
-      readOnly={this.props.readOnly}
-      dragCards={this.props.dragCards}
-      onDrop={this.props.onDrop}
-    />
+      <NodeContent
+        index={index}
+        parentNode={this.props.node}
+        node={childNode as EditableTeachingPathNode}
+        nestedOrder={this.props.nestedOrder! + 1}
+        editTeachingPathStore={this.props.editTeachingPathStore}
+        allNode={this.props.allNode}
+        dropArticles={this.props.dropArticles}
+        dropAssignments={this.props.dropAssignments}
+        readOnly={this.props.readOnly}
+        dragCards={this.props.dragCards}
+        onDrop={this.props.onDrop}
+      />
     </div>
   )
 
@@ -621,22 +621,22 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       });
     }
     /*} else {*/
-      /*if (myNode!.type === mytypeFirstChildNode) {
-        Notification.create({
-          type: NotificationTypes.ERROR,
-          title: intl.get('edit_teaching_path.notifications.unable_to_drop')
-        });
-      } else {
-        Notification.create({
-          type: NotificationTypes.ERROR,
-          title: intl.get('edit_teaching_path.notifications.unable_to_mix_different_natures')
-        });
-      }*/
-      /*Notification.create({
+    /*if (myNode!.type === mytypeFirstChildNode) {
+      Notification.create({
         type: NotificationTypes.ERROR,
         title: intl.get('edit_teaching_path.notifications.unable_to_drop')
       });
+    } else {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: intl.get('edit_teaching_path.notifications.unable_to_mix_different_natures')
+      });
     }*/
+    /*Notification.create({
+      type: NotificationTypes.ERROR,
+      title: intl.get('edit_teaching_path.notifications.unable_to_drop')
+    });
+  }*/
   }
   public ondragovertitle = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -747,7 +747,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       <div className={containerClassNames} onDragOver={this.dragLaterlOverLeft} onDragLeave={this.dragLaterlLeaveLeft} onDrop={this.dragLaterlEnterLeft}>
         {node.type !== TeachingPathNodeType.Root && <div className="midLeftLine" />}
         {/* <AddingButtons node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/> */}
-        <AddingNewButtonElement side={'left'} node={node} parent={parentNode} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
+        <AddingNewButtonElement side={'left'} node={node} parent={parentNode} nester={nestedOrder} onCancelDrag={this.onCancelDrag} />
         {this.state.isHoverDropleft && <div className="boxInformationDrop absBoxInformationDrop">{intl.get('generals.dragdrop')}</div>}
       </div>
     );
@@ -806,7 +806,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     return !isRoot && (
       <div className={containerClassNames} onDragOver={this.dragLaterlOverRight} onDragLeave={this.dragLaterlLeaveRight} onDrop={this.dragLaterlEnterRight}>
         {true && <div className="midRightLine" />}
-        <AddingNewButtonElement side={'right'} node={node} parent={parentNode} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
+        <AddingNewButtonElement side={'right'} node={node} parent={parentNode} nester={nestedOrder} onCancelDrag={this.onCancelDrag} />
         {this.state.isHoverDropright && <div className="boxInformationDrop absBoxInformationDrop">{intl.get('generals.dragdrop')}</div>}
       </div>
     );
@@ -825,7 +825,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       <div className={containerClassNames} onDragEnter={this.dragenterthandler}>
         {node.type !== TeachingPathNodeType.Root && <div className="topVerticalLine" />}
         {/* <AddingButtons node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/> */}
-        <AddingNewButtonElement side={'bottom'} node={node} parent={parentNode} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/>
+        <AddingNewButtonElement side={'bottom'} node={node} parent={parentNode} nester={nestedOrder} onCancelDrag={this.onCancelDrag} />
       </div>
     );
   }
@@ -1080,7 +1080,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         <div className="childrenContainer flexBox">
           {children.length ? children.map(this.renderNodeContent) : null}
         </div>
-        {editTeachingPathStore!.returnIsDraggable() && !this.state.isDraggable  && !ifDropCant && this.dropInfoCard()}
+        {editTeachingPathStore!.returnIsDraggable() && !this.state.isDraggable && !ifDropCant && this.dropInfoCard()}
 
         {!readOnly && this.renderMergeButton()}
       </div>
@@ -1195,7 +1195,6 @@ export class CreationPageComponent extends Component<Props> {
     const { editTeachingPathStore, readOnly } = this.props;
     const { teachingPathContainer, currentEntity: currentTeachingPath } = editTeachingPathStore!;
     const allNode = currentTeachingPath!.content! as EditableTeachingPathNode;
-
     if (!teachingPathContainer) {
       return (
         <div className={'loading'}><Loader /></div>
@@ -1211,7 +1210,11 @@ export class CreationPageComponent extends Component<Props> {
         <div className="main flexBox dirColumn alignCenter">
           <TeachingPathTitle readOnly={readOnly} />
           <div className="mainButtonsContent">
-            <DetailsModal />
+            <DetailsModal
+              isTeachingPath={true}
+              currentEntityTeachingPath={currentTeachingPath!}
+              editTeachingPathStore={editTeachingPathStore}
+            />
             <TeacherguidanceModal
               currentEntity={currentTeachingPath!}
               readOnly={readOnly}

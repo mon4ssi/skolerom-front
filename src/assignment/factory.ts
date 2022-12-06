@@ -30,6 +30,7 @@ export interface SubjectDTO {
   id: number;
   name: string;
   title: string;
+  description: string;
   filterStatus: string | undefined | null;
   managementId: number | null;
 }
@@ -283,6 +284,7 @@ export const buildAssignmentDTO = (assignment: Assignment): AssignmentRequestDTO
 
 export const buildSubject = (subject: SubjectDTO): Subject => ({
   id: subject.id,
+  description: subject.description,
   title: subject.title || subject.name,
   filterStatus: subject.filterStatus,
 });

@@ -164,12 +164,14 @@ export class NowSchool {
 export class Subject {
   @observable public id: number;
   @observable public title: string;
+  @observable public description?: string | undefined | null;
   @observable public filterStatus?: string | undefined | null;
   @observable public managementId?: number | undefined | null;
 
-  constructor(id: number, title: string, managementId?: number | undefined | null) {
+  constructor(id: number, title: string, description?: string | undefined | null, managementId?: number | undefined | null) {
     this.id = id;
     this.title = title;
+    this.description = description!;
     this.filterStatus = null;
     this.managementId = managementId;
   }
@@ -1224,7 +1226,7 @@ export class AssignmentDistribute {
     this.totalDistributes = dto.totalDistributes;
     this.deadline = moment(dto.defaultEndDate);
     this.subjects = dto.subjects.map(
-      subject => new Subject(subject.id, subject.title)
+      subject => new Subject(subject.id, subject.title, subject.description)
     );
     this.grades = dto.grades.map(grade => new Grade(grade.id, grade.title));
   }

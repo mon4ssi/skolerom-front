@@ -36,7 +36,7 @@ export const buildDraftAssignment = (dto: DraftAssignmentResponseDTO): DraftAssi
     mySchools: dto.mySchools,
     backgroundImage: dto.backgroundImage,
     grades: dto.grades.map(grade => new Grade(grade.id, grade.title)),
-    subjects: dto.subjects.map(subject => new Subject(subject.id, subject.title)),
+    subjects: dto.subjects.map(subject => new Subject(subject.id, subject.title, subject.description!)),
     levels: dto.levels.map(level => level),
     ...assignmentContent,
     isCopy:dto.isCopy,
