@@ -44,6 +44,9 @@
   position: relative;
   min-height: fit-content;
   height: auto;
+  .ButtonNextNew {
+    display: none;
+  }
   &.questionBody {
     position: relative;
     .AnswerCurrentQuestion {
@@ -53,6 +56,7 @@
       padding: 0px 50px;
       padding-bottom: 40px;
       text-align: center;
+      display: block;
     }
     .CurrentAssignmentPage__main__center {
       background: white;
