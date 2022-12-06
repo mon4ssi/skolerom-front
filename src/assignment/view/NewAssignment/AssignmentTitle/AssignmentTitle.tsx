@@ -9,6 +9,7 @@ import { lettersNoEn } from 'utils/lettersNoEn';
 import { MAX_DESCRIPTION_LENGTH, MAX_DESCRIPTION_LENGTH_500, MAX_TITLE_LENGTH } from 'utils/constants';
 
 import './AssignmentTitle.scss';
+import { DetailsModal } from 'components/common/DetailsModal/DetailsModal';
 
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 import teaGuiBGImg from 'assets/images/guidance-bg.svg';
@@ -87,7 +88,8 @@ export class AssignmentTitle extends Component<Props> {
             maxLength={MAX_DESCRIPTION_LENGTH_500}
             aria-labelledby="DescriptionInputTextArea"
           />
-          <div className="sectionGuidance">
+          <div className="sectionGuidance sectionGuidanceFlex">
+            <DetailsModal />
             <CreateButton
               title={newAssignmentStore!.getTitleButtonGuidance}
               onClick={this.openModalTGAssig.bind(this, '0')}

@@ -64,3 +64,11 @@
     }
   }
 }
+
+.sectionGuidanceFlex {
+  display: flex;
+  align-items: center;
+  .detailsModal {
+    margin-right: 10px;
+  }
+}
