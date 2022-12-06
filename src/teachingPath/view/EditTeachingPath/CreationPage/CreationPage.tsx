@@ -42,6 +42,7 @@ import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/Teac
 import { TeacherguidanceModal } from 'teachingPath/view/TeacherGuidance/TeacherGuidanceModal';
 import { trim } from 'lodash';
 import { AddingNewButtonElement } from './AddingNewButton/AddingNewButton';
+import { DetailsModal } from 'components/common/DetailsModal/DetailsModal';
 
 const cardWidth = 322;
 const leftIndent = 160;
@@ -1208,6 +1209,7 @@ export class CreationPageComponent extends Component<Props> {
         <AddItemModal />
 
         <div className="main flexBox dirColumn alignCenter">
+          <DetailsModal />
           <TeachingPathTitle readOnly={readOnly} />
           <div className="mainButtonsContent">
             <TeacherguidanceModal
