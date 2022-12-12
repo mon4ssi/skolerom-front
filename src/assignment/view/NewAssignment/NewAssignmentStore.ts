@@ -664,7 +664,7 @@ export class NewAssignmentStore {
     try {
       switch (typeAttachments) {
         case AttachmentContentType.customImage: {
-          const response =  title !== '' && title !== undefined && title !== null ? await this.articleService.fetchCustomImages(listids, 0, title!) : await this.articleService.fetchCustomImages(listids, this.currentPage, '');
+          const response = title !== '' && title !== undefined && title !== null ? await this.articleService.fetchCustomImages(listids, 0, title!) : await this.articleService.fetchCustomImages(listids, this.currentPage, '');
           this.questionCustomAttachments =
             (response.myCustomImages).map(item => item).flat() || [];
           this.numberOfPages = response.total_pages;
@@ -686,7 +686,7 @@ export class NewAssignmentStore {
     try {
       switch (typeAttachments) {
         case AttachmentContentType.customImage: {
-          const response =  title !== '' && title !== undefined && title !== null ? await this.articleService.fetchCustomImages(listids, 0, title!) : await this.articleService.fetchCustomImages(listids, 0, '');
+          const response = title !== '' && title !== undefined && title !== null ? await this.articleService.fetchCustomImages(listids, 0, title!) : await this.articleService.fetchCustomImages(listids, 0, '');
           this.questionCustomAttachments =
             (response.myCustomImages).map(item => item).flat() || [];
           this.numberOfPages = response.total_pages;
@@ -791,10 +791,28 @@ export class NewAssignmentStore {
   }
   @action
   public openTeacherGuidanceAssig = (nroLevel: string): void => {
+
     const modalTG = Array.from(document.getElementsByClassName('modalContentTGAssig') as HTMLCollectionOf<HTMLElement>);
     const modalTGBack = Array.from(document.getElementsByClassName('modalContentTGAssigBackground') as HTMLCollectionOf<HTMLElement>);
+    const scrollsideElement = Array.from(document.getElementsByClassName('addAssignmentFlow w50') as HTMLCollectionOf<HTMLElement>);
+    const blurBackground = Array.from(document.getElementsByClassName('blur') as HTMLCollectionOf<HTMLElement>);
+    const bgpreview = Array.from(document.getElementsByClassName('hide') as HTMLCollectionOf<HTMLElement>);
+    // for assigment preview
+    if (bgpreview !== null && bgpreview !== undefined && bgpreview.length > 0) {
+      bgpreview[0].classList.remove('hide');
+    }
+
+    if (scrollsideElement !== null && scrollsideElement !== undefined && scrollsideElement.length > 0) {
+      scrollsideElement[0].classList.add('notShow');
+    }
+
+    if (blurBackground !== null && blurBackground !== undefined && blurBackground.length > 0) {
+      blurBackground[0].classList.remove('blur');
+      blurBackground[0].classList.add('blurShowed');
+    }
+
     modalTG[0].classList.add('open');
-    modalTGBack[0].classList.remove('hide');
+    /* modalTGBack[0].classList.add('hide'); */
 
     setTimeout(
       () => {
@@ -804,5 +822,31 @@ export class NewAssignmentStore {
       },
       delayFocus
     );
+  }
+
+  @action
+  public closeModalTG = () => {
+    const modalTG = Array.from(document.getElementsByClassName('modalContentTGAssig') as HTMLCollectionOf<HTMLElement>);
+    const modalTGBack = Array.from(document.getElementsByClassName('modalContentTGAssigBackground') as HTMLCollectionOf<HTMLElement>);
+    const bgpreview = Array.from(document.getElementsByClassName('modalContentTGAssigBackground') as HTMLCollectionOf<HTMLElement>);
+    const scrollsideElement = Array.from(document.getElementsByClassName('addAssignmentFlow w50') as HTMLCollectionOf<HTMLElement>);
+    const blurBackground = Array.from(document.getElementsByClassName('blurShowed') as HTMLCollectionOf<HTMLElement>);
+
+    // for assigment preview
+    if (bgpreview !== null && bgpreview !== undefined && bgpreview.length > 0) {
+      bgpreview[0].classList.add('hide');
+    }
+
+    // for assignment creaton
+    if (scrollsideElement !== null && scrollsideElement !== undefined && scrollsideElement.length > 0) {
+      scrollsideElement[0].classList.remove('notShow');
+    }
+    if (blurBackground !== null && blurBackground !== undefined && blurBackground.length > 0) {
+      blurBackground[0].classList.add('blur');
+      blurBackground[0].classList.remove('blurShowed');
+    }
+    modalTG[0].classList.remove('open');
+    modalTGBack[0].classList.add('hide');
+
   }
 }

@@ -10,6 +10,11 @@
   background: $color-white;
   position: relative;
   z-index: 16;
+  .copyButton {
+    button {
+      margin: 0px 5px;
+    }
+  }
   &__block {
     display: flex;
     align-items: center;
