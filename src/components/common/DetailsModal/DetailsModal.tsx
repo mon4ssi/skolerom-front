@@ -17,8 +17,9 @@ import goalsIcon from 'assets/images/goals.svg';
 import './DetailsModal.scss';
 import { injector } from 'Injector';
 import { TeachingPathService, TEACHING_PATH_SERVICE } from 'teachingPath/service';
-import { GoalsData, Subject } from 'assignment/Assignment';
+import { GenericGrepItem, GoalsData, Subject } from 'assignment/Assignment';
 import { TeachingPath } from 'teachingPath/TeachingPath';
+import { AssignmentService, ASSIGNMENT_SERVICE } from 'assignment/service';
 
 interface Props {
   isTeachingPath?: boolean;
@@ -27,7 +28,8 @@ interface Props {
   currentEntityTeachingPath?: DraftTeachingPath;
   newAssignmentStore?: NewAssignmentStore;
   drafAssignment?: DraftAssignment;
-  currentQuestionaryStore?: CurrentQuestionaryStore;
+  currentQuestionaryStore?: NewAssignmentStore;
+  id?: number;
 }
 
 interface GoalsAux {
@@ -37,11 +39,11 @@ interface GoalsAux {
 
 interface State {
   isOpen: boolean;
-  subjects: Array<string>;
-  coreElements: Array<string>;
-  multiSubjects: Array<string>;
-  sources: Array<string>;
-  goals: Array<GoalsAux>;
+  subjects: Array<string> | null;
+  coreElements: Array<string> | null;
+  multiSubjects: Array<string> | null;
+  sources: Array<string> | null;
+  goals: Array<GenericGrepItem> | null;
   entityTeachingPath: TeachingPath | undefined;
 }
 
@@ -51,6 +53,7 @@ interface State {
 
 export class DetailsModal extends Component<Props, State> {
   private teachingPathService: TeachingPathService = injector.get(TEACHING_PATH_SERVICE);
+  private assignmentService: AssignmentService = injector.get(ASSIGNMENT_SERVICE);
   public state = {
     isOpen: false,
     subjects: [],
@@ -62,35 +65,65 @@ export class DetailsModal extends Component<Props, State> {
 
   };
 
+  public convertToGoal = (item: GenericGrepItem): GenericGrepItem => {
+    const newItem: GenericGrepItem = {
+      gradeDesc: item.gradeDesc!,
+      description: item.description!,
+      id: 0
+    };
+    return newItem!;
+  }
+
   public componentDidMount = async () => {
-    const { isTeachingPath } = this.props;
+
+    const { isTeachingPath, isAssignment } = this.props;
     if (isTeachingPath) {
       const response = await this.teachingPathService.getTeachingPathDataById(this.props.currentEntityTeachingPath!.id);
+      let subjectItems = null;
+      let coreElementItems = null;
+      let multiSubjectItems = null;
+      let sourceItems = null;
+      let goalsItems = null;
       if (response !== null && response !== undefined) {
         this.setState({ entityTeachingPath: response });
-        const subjectItems = response.subjectItems!.map(item => item.description!);
-        const coreElementItems = response.coreElementItems!.map(item => item.description!);
-        const multiSubjectItems = response.multiSubjectItems!.map(item => item.description!);
-        const sourceItems = response.sourceItems!.map(item => item.description!);
-        /* const goalsItems = response.goalsItems!.map(
-          item => {
-            const newItem: GoalsAux = {
-              gradeDesc: item.gradeDesc!,
-              description: item.description!,
-            };
-            return newItem;
-          }); */
-        /* console.log(subjectItems);
-        console.log(coreElementItems);
-        console.log(multiSubjectItems);
-        console.log(sourceItems);
-        console.log(goalsItems); */
-
+        subjectItems = response.subjectItems!.map(item => item.description!);
+        coreElementItems = response.coreElementItems!.map(item => item.description!);
+        multiSubjectItems = response.multiSubjectItems!.map(item => item.description!);
+        sourceItems = response.sourceItems!.map(item => item.description!);
+        goalsItems = response.goalsItems!.map(
+          /* item => this.convertToGoal(item)); */
+          item => item);
+      }
+      this.setState({
+        subjects: subjectItems,
+        coreElements: coreElementItems,
+        multiSubjects: multiSubjectItems,
+        sources: sourceItems,
+        goals: goalsItems,
+      });
+    } else {
+      if (isAssignment) {
+        const response = this.props.drafAssignment! ? await this.assignmentService.getAssignmentById(this.props.drafAssignment!.id!) :
+          await this.assignmentService.getAssignmentById(this.props.id!);
+        let subjectItems = null;
+        let coreElementItems = null;
+        let multiSubjectItems = null;
+        let sourceItems = null;
+        let goalsItems = null;
+        if (response !== null && response !== undefined) {
+          subjectItems = response.subjectItems!.map(item => item.title!);
+          coreElementItems = response.coreElementItems!.map(item => item.description!);
+          multiSubjectItems = response.multiSubjectItems!.map(item => item.description!);
+          sourceItems = response.sourceItems!.map(item => item.description!);
+          goalsItems = response.goalsItems!.map(
+            item => this.convertToGoal(item));
+        }
         this.setState({
           subjects: subjectItems,
           coreElements: coreElementItems,
           multiSubjects: multiSubjectItems,
           sources: sourceItems,
+          goals: goalsItems,
         });
       }
     }
@@ -159,6 +192,18 @@ export class DetailsModal extends Component<Props, State> {
       </div>
     );
   }
+
+  public renderGoal = (item: any) => (
+    <div>
+      <li key={item}>
+        {/* tslint:disable-next-line:no-string-literal  */}
+        <div className="grade" key={1}>{item!['gradeDesc']}</div>
+        {/* tslint:disable-next-line:no-string-literal  */}
+        <div className="description" key={1}>{item!['description']}</div>
+      </li>
+    </div>
+  )
+
   public goalsRender = () => {
     const { isOpen } = this.state;
     const { goals } = this.state;
@@ -166,10 +211,7 @@ export class DetailsModal extends Component<Props, State> {
       <div className="modalContentTG__body__item">
         <h3><img className="imgInfo" src={goalsIcon} /> {intl.get('preview.teaching_path.grep.educational_goals')}</h3>
         <ul className="modalContentTG__body__listGoals">
-          <li>
-            <div className="grade" key={1}>{'Hola'}</div>
-            <div className="description" key={1}>{'Hola'}</div>
-          </li>
+          {goals.map(item => (this.renderGoal(item)))}
         </ul>
       </div>
     );

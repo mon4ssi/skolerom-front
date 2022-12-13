@@ -89,7 +89,11 @@ export class AssignmentTitle extends Component<Props> {
             aria-labelledby="DescriptionInputTextArea"
           />
           <div className="sectionGuidance sectionGuidanceFlex">
-            <DetailsModal />
+            <DetailsModal
+              isAssignment={true}
+              currentQuestionaryStore={newAssignmentStore!}
+              drafAssignment={assignment}
+            />
             <CreateButton
               title={newAssignmentStore!.getTitleButtonGuidance}
               onClick={this.openModalTGAssig.bind(this, '0')}

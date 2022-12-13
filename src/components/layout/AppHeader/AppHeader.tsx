@@ -22,6 +22,7 @@ import './AppHeader.scss';
 import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
 import loginBtnIcon from 'assets/images/login-btn-icon.svg';
+import { DetailsModal } from 'components/common/DetailsModal/DetailsModal';
 
 interface HeaderNavigationLink {
   name: string;
@@ -121,9 +122,9 @@ const nynorskHeaderLinks: Array<HeaderNavigationLink> = [
 const renderHeaderLink = (link: HeaderNavigationLink) => {
   if (link.dropdown) {
     const renderSubMenuSubMenu = (item: HeaderNavigationLink) => (
-        <li key={item.name} className={'AppHeader__dropdownItem__subItem'}>
-          <a href={item.url} title={item.name}>{item.name}</a>
-        </li>
+      <li key={item.name} className={'AppHeader__dropdownItem__subItem'}>
+        <a href={item.url} title={item.name}>{item.name}</a>
+      </li>
     );
     const renderSubmenu = (item: HeaderNavigationLink) => {
       if (item.dropdown) {
@@ -175,7 +176,7 @@ interface HeaderProps extends RouteComponentProps {
   studentFormAssignment?: boolean;
   isPreview?: boolean;
   uiStore?: UIStore;
-  width?:number;
+  width?: number;
   onLogoClick?: (e: MouseEvent) => void;
   currentEntityId?: number;
 }
@@ -665,23 +666,27 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     modalTGBack[0].classList.remove('hide');
   }
 
-  public renderGuidanceAndCopyButton = () => (
-    <div className="doneBox flexBox alignCenter copyButton">
-      <CreateButton
-        className="jr-btnHeaderTeacherGuidance AppHeader__btnHeaderGuidance"
-        onClick={this.openModalTGAssig.bind(this, '0')}
-        title={intl.get('teacherGuidance.name')}
-      >
-        {intl.get('teacherGuidance.name')}
-      </CreateButton>
-      <CreateButton
-        onClick={this.handleCopy}
-        title={intl.get('assignment list.Copy assignment')}
-      >
-        {intl.get('assignment list.Copy assignment')}
-      </CreateButton>
-    </div>
-  )
+  public renderGuidanceAndCopyButton = () => {
+    const { currentEntityId } = this.props;
+    return (
+      <div className="doneBox flexBox alignCenter copyButton">
+        <CreateButton
+          className="jr-btnHeaderTeacherGuidance AppHeader__btnHeaderGuidance"
+          onClick={this.openModalTGAssig.bind(this, '0')}
+          title={intl.get('teacherGuidance.name')}
+        >
+          {intl.get('teacherGuidance.name')}
+        </CreateButton>
+        <DetailsModal isAssignment={true} id={currentEntityId} />
+        <CreateButton
+          onClick={this.handleCopy}
+          title={intl.get('assignment list.Copy assignment')}
+        >
+          {intl.get('assignment list.Copy assignment')}
+        </CreateButton>
+      </div>
+    );
+  }
 
   public renderBurgerButton = () => {
     const { loginStore } = this.props;
@@ -693,7 +698,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
           onClick={this.toggleSidebar}
           title="menu button"
         >
-          <img src={burger} alt="burger button" title="menu button"/>
+          <img src={burger} alt="burger button" title="menu button" />
         </button>
       );
     }
@@ -715,7 +720,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
           onClick={this.showUserModal}
           title="user menu"
         >
-          <img src={verticalDots} alt="user menu"/>
+          <img src={verticalDots} alt="user menu" />
         </button>
       );
     }
@@ -725,7 +730,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         onClick={this.showMobileModal}
         title="user menu"
       >
-        <img src={verticalDots} alt="user menu"/>
+        <img src={verticalDots} alt="user menu" />
       </button>
     );
   }
@@ -759,7 +764,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     const currentUser = loginStore!.currentUser;
     const isStudent = loginStore!.currentUser ? loginStore!.currentUser.type === UserType.Student : false;
     const redirectLink = currentUser
-        ? '/activity'
+      ? '/activity'
       : '#';
 
     let ifLogin = true;
@@ -778,7 +783,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         <div className="AppHeader__block" aria-labelledby="LogoDescription">
           <NavLink to={redirectLink} onClick={this.handleLogoClick}>
             <div className="AppHeader__block">
-              <img src={logoImage} alt="Skolerom Logo" className="AppHeader__logo" title="Skolerom"/>
+              <img src={logoImage} alt="Skolerom Logo" className="AppHeader__logo" title="Skolerom" />
               <span className="AppHeader__role">{this.renderRole()}</span>
             </div>
           </NavLink>
@@ -792,7 +797,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         {this.props.studentFormTeachinPath && this.closeWindow()}
         <div className="AppHeader__block AppHeader__block_mobile">
           <NavLink to={redirectLink} onClick={this.handleLogoClick}>
-            <img src={logoImage} alt="logo mobile"/>
+            <img src={logoImage} alt="logo mobile" />
           </NavLink>
         </div>
         <div className={'AppHeader__block_mobile AppHeader__block'}>
