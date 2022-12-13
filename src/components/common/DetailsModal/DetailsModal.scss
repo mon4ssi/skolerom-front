@@ -25,6 +25,7 @@
         padding-left: 28px;
         &.modalContentTG__body__list {
             display: flex;
+            flex-wrap: wrap;
             li {
                 background-color: #d3d9de;
                 border-radius: 4px;
@@ -38,9 +39,12 @@
         &.modalContentTG__body__listGoals {
             li {
                 margin-bottom: 10px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #D3D9DE;
                 .grade {
                     font-size: 14px;
                     font-weight: 700;
+                    margin-bottom: 5px;
                 }
                 .description {
                     font-size: 14px;

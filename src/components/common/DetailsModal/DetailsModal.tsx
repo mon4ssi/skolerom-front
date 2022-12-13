@@ -195,7 +195,7 @@ export class DetailsModal extends Component<Props, State> {
 
   public renderGoal = (item: any) => (
     <div>
-      <li key={item}>
+      <li className="itemExpanded" key={item}>
         {/* tslint:disable-next-line:no-string-literal  */}
         <div className="grade" key={1}>{item!['gradeDesc']}</div>
         {/* tslint:disable-next-line:no-string-literal  */}
