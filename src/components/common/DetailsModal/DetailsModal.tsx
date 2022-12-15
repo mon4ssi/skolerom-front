@@ -256,7 +256,7 @@ export class DetailsModal extends Component<Props, State> {
     );
   }
   public contentDetailModal = () => {
-    const { isOpen } = this.state;
+    const { isOpen, subjects, multiSubjects, coreElements, sources, goals } = this.state;
     return (
       <div className="modalContentTG open">
         <div className="modalContentTG__header">
@@ -270,11 +270,11 @@ export class DetailsModal extends Component<Props, State> {
           </div>
         </div>
         <div className="modalContentTG__body">
-          {this.subjectRender()}
-          {this.coreElementsRender()}
-          {this.multiSubjectsRender()}
-          {this.sourcesRender()}
-          {this.goalsRender()}
+          {subjects.length > 0 && this.subjectRender()}
+          {coreElements.length > 0 && this.coreElementsRender()}
+          {multiSubjects.length > 0 && this.multiSubjectsRender()}
+          {sources.length > 0 && this.sourcesRender()}
+          {goals.length > 0 && this.goalsRender()}
         </div>
       </div>
     );
@@ -286,9 +286,11 @@ export class DetailsModal extends Component<Props, State> {
     );
   }
   public render() {
+    const { isOpen, subjects, multiSubjects, coreElements, sources, goals } = this.state;
+    const detailsclass = (subjects.length > 0) ? 'detailsModal marginLeft' : 'detailsModal';
     return (
-      <div className="detailsModal">
-        {this.buttonOpenDetailsModal()}
+      <div className={detailsclass}>
+        {subjects.length > 0 && this.buttonOpenDetailsModal()}
         {this.state.isOpen && this.contentDetailModal()}
         {this.state.isOpen && this.backgroundDetailModal()}
       </div>
