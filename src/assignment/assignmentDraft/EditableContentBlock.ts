@@ -20,7 +20,7 @@ export class EditableTextContentBlock extends TextContentBlock implements Conten
     question: EditableQuestion
   }) {
     super({ ...params });
-    this._text = params.text;
+    this.text = params.text;
     this._question = params.question;
     this._order = params.order;
   }
@@ -37,7 +37,7 @@ export class EditableTextContentBlock extends TextContentBlock implements Conten
 
   @action
   public setText(value: string) {
-    this._text = value;
+    this.text = value;
     if (this._question.assignmentDraft.questionsWithErrors === this._question.orderPosition) {
       this._question.assignmentDraft.setQuestionsWithError(null);
     }

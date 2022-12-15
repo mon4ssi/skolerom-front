@@ -96,6 +96,7 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
               <div className="nestedOrderNumber">{item.orderPosition + 1}</div>
               {item.title === intl.get('new assignment.Enter a question') ? '' : item.title}
             </h4>
+            {item.content.map(item => <div key={item.text!} dangerouslySetInnerHTML={{ __html: item.text! }} />)}
             <DescriptionEditor
               description={item.guidance}
               readOnly={readOnly}
@@ -110,6 +111,7 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
             <div className="nestedOrderNumber">{item.orderPosition + 1}</div>
             {item.title === intl.get('new assignment.Enter a question') ? '' : item.title}
           </h4>
+          {item.content.map(item => <div key={item.text!} dangerouslySetInnerHTML={{ __html: item.text! }} />)}
           <DescriptionEditor
             className={`jr-desEdit${item.orderPosition + 1}`}
             description={item.guidance}

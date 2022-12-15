@@ -11,10 +11,12 @@ export enum ContentBlockType {
 export abstract class ContentBlock {
   public readonly type: ContentBlockType;
   @observable protected _order: number;
+  @observable public text: string;
 
-  protected constructor(params: { order: number, type: ContentBlockType }) {
+  protected constructor(params: { order: number, type: ContentBlockType, text: string }) {
     this.type = params.type;
     this._order = params.order;
+    this.text = params.text;
   }
 
   @computed
@@ -24,24 +26,20 @@ export abstract class ContentBlock {
 }
 
 export class TextContentBlock extends ContentBlock {
-  @observable protected _text: string;
-
   constructor(params: { text: string, order: number }) {
-    super({ order: params.order, type: ContentBlockType.Text });
-    this._text = params.text;
+    super({ order: params.order, type: ContentBlockType.Text, text: params.text });
   }
-
-  @computed
+  /* @computed
   public get text(): string {
     return this._text;
-  }
+  } */
 }
 
-export class ImageContentBlock extends ContentBlock{
+export class ImageContentBlock extends ContentBlock {
   @observable protected _images: Array<QuestionAttachment>;
 
   constructor(params: { order: number, images: Array<QuestionAttachment> }) {
-    super({ type: ContentBlockType.Images, order: params.order });
+    super({ type: ContentBlockType.Images, order: params.order, text: '' });
     this._images = params.images;
   }
 
@@ -51,11 +49,11 @@ export class ImageContentBlock extends ContentBlock{
   }
 }
 
-export class VideoContentBlock extends ContentBlock{
+export class VideoContentBlock extends ContentBlock {
   @observable protected _videos: Array<QuestionAttachment>;
 
-  constructor(params: { order: number, videos: Array<QuestionAttachment>}) {
-    super({ type: ContentBlockType.Videos, order: params.order });
+  constructor(params: { order: number, videos: Array<QuestionAttachment> }) {
+    super({ type: ContentBlockType.Videos, order: params.order, text: '' });
     this._videos = params.videos;
   }
 
