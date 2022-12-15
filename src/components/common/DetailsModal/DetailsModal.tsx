@@ -37,6 +37,12 @@ interface GoalsAux {
   description: string;
 }
 
+interface GoalsInterface {
+  subjectId: number;
+  subjectDesc: string;
+  goalsArray: Array<GoalsAux>;
+}
+
 interface State {
   isOpen: boolean;
   subjects: Array<string> | null;
@@ -116,7 +122,8 @@ export class DetailsModal extends Component<Props, State> {
           multiSubjectItems = response.multiSubjectItems!.map(item => item.description!);
           sourceItems = response.sourceItems!.map(item => item.description!);
           goalsItems = response.goalsItems!.map(
-            item => this.convertToGoal(item));
+            /*  */
+            item => item);
         }
         this.setState({
           subjects: subjectItems,
@@ -204,6 +211,38 @@ export class DetailsModal extends Component<Props, State> {
     </div>
   )
 
+  public transformGoals = () => {
+    const { editTeachingPathStore, currentEntityTeachingPath, drafAssignment, isAssignment, isTeachingPath } = this.props;
+    const newGoalsArray: Array<GoalsInterface> = [];
+    this.state!.goals!.forEach((goal) => {
+      const newGoal = {} as GoalsInterface;
+      const newGoals = {} as GoalsAux;
+      {/* tslint:disable-next-line:no-string-literal  */}
+      const goalindex = newGoalsArray.map(e => e.subjectId).indexOf(goal['subjectId']);
+      if (goalindex < 0) {
+        {/* tslint:disable-next-line:no-string-literal  */}
+        newGoal.subjectId = goal['subjectId'];
+        {/* tslint:disable-next-line:no-string-literal  */}
+        newGoal.subjectDesc = goal['subjectDesc'];
+        {/* tslint:disable-next-line:no-string-literal  */}
+        newGoal.goalsArray = [];
+        {/* tslint:disable-next-line:no-string-literal  */}
+        newGoals.gradeDesc = goal['gradeDesc'];
+        {/* tslint:disable-next-line:no-string-literal  */}
+        newGoals.description = goal['description'];
+        newGoal.goalsArray.push(newGoals);
+        newGoalsArray.push(newGoal);
+      } else {
+        {/* tslint:disable-next-line:no-string-literal  */}
+        newGoals.gradeDesc = goal['gradeDesc'];
+        {/* tslint:disable-next-line:no-string-literal  */}
+        newGoals.description = goal['description'];
+        newGoalsArray[goalindex].goalsArray.push(newGoals);
+      }
+    });
+    return newGoalsArray;
+  }
+
   public goalsRender = () => {
     const { isOpen } = this.state;
     const { goals } = this.state;
@@ -211,7 +250,7 @@ export class DetailsModal extends Component<Props, State> {
       <div className="modalContentTG__body__item">
         <h3><img className="imgInfo" src={goalsIcon} /> {intl.get('preview.teaching_path.grep.educational_goals')}</h3>
         <ul className="modalContentTG__body__listGoals">
-          {goals.map(item => (this.renderGoal(item)))}
+        {this.transformGoals().map(item => <li key={item.subjectId}><div className="subjectTitle">{item.subjectDesc}<div className="description"><ul>{item.goalsArray.map(li => <li key={item.subjectId} className="goalsItem"><div className="goalsItem__grade">{li.gradeDesc}</div><div className="goalsItem__description">{li.description}</div></li>)}</ul></div></div></li>)}
         </ul>
       </div>
     );

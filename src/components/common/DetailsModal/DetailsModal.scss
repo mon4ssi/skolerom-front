@@ -39,12 +39,32 @@
         &.modalContentTG__body__listGoals {
             li {
                 margin-bottom: 10px;
-                padding-bottom: 10px;
-                border-bottom: 1px solid #D3D9DE;
+                .subjectTitle {
+                    border-bottom: solid 1px #0000002b;
+                    font-size: 15px;
+                    .description {
+                        margin-top: 5px;
+                        ul {
+                            padding: 0px;
+                            .goalsItem {
+                                display: flex;
+                                &__grade {
+                                    width: 70px;
+                                    flex: none;
+                                    margin-right: 10px;
+                                }
+                            }
+                        }
+                    }
+                }
+                &:last-child {
+                    .subjectTitle {
+                        border-bottom: none;
+                    }
+                }
                 .grade {
                     font-size: 14px;
                     font-weight: 700;
-                    margin-bottom: 5px;
                 }
                 .description {
                     font-size: 14px;
