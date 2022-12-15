@@ -107,12 +107,20 @@ export class GenericGrepItem {
   @observable public id: number;
   @observable public description: string;
   @observable public gradeDesc?: string | undefined | null;
+  @observable public subjectId?: number | undefined | null;
+  @observable public subjectDesc?: string | undefined | null;
 
-  constructor(id: number, description: string, gradeDesc?: string) {
+  constructor(id: number, description: string, gradeDesc?: string, subjectId?: number, subjectDesc?: string) {
     this.id = id;
     this.description = description;
     if (gradeDesc) {
       this.gradeDesc = gradeDesc;
+    }
+    if (subjectId) {
+      this.subjectId = subjectId;
+    }
+    if (subjectDesc) {
+      this.gradeDesc = subjectDesc;
     }
   }
 }
@@ -164,15 +172,28 @@ export class NowSchool {
 export class Subject {
   @observable public id: number;
   @observable public title: string;
+  @observable public description?: string | undefined | null;
   @observable public filterStatus?: string | undefined | null;
   @observable public managementId?: number | undefined | null;
 
-  constructor(id: number, title: string, managementId?: number | undefined | null) {
+  constructor(id: number, title: string, description?: string | undefined | null, managementId?: number | undefined | null) {
     this.id = id;
     this.title = title;
+    this.description = description!;
     this.filterStatus = null;
     this.managementId = managementId;
   }
+}
+
+export interface DefDto {
+  id: number;
+  description: string;
+}
+
+export interface GoalsDto {
+  id: number;
+  gradeDesc: string;
+  description: string;
 }
 
 export class Source {
@@ -1224,7 +1245,7 @@ export class AssignmentDistribute {
     this.totalDistributes = dto.totalDistributes;
     this.deadline = moment(dto.defaultEndDate);
     this.subjects = dto.subjects.map(
-      subject => new Subject(subject.id, subject.title)
+      subject => new Subject(subject.id, subject.title, subject.description)
     );
     this.grades = dto.grades.map(grade => new Grade(grade.id, grade.title));
   }

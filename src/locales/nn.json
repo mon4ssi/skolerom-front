@@ -825,6 +825,8 @@
     "part2": "Følgjande nettlesarar er støtta: Firefox, Opera, Edge og Google Chrome."
   },
   "generals": {
+    "viewdetails": "Se Kompetansemål",
+    "viewdetails_title": "Læreplantilkobling",
     "support":"Trenger du hjelp?",
     "keyboard":"Tastatursnarvegar",
     "dragdrop":"Dra og slipp her",
