@@ -40,19 +40,28 @@
             li {
                 margin-bottom: 10px;
                 .subjectTitle {
-                    border-bottom: solid 1px #0000002b;
-                    font-size: 15px;
+                    
+                    font-size: 17px;
+                    font-weight: 900;
                     .description {
-                        margin-top: 5px;
+                        margin-top: 12px;
                         ul {
-                            padding: 0px;
+                            padding: 2px;
                             .goalsItem {
                                 display: flex;
                                 &__grade {
                                     width: 70px;
                                     flex: none;
                                     margin-right: 10px;
+                                    font-weight: 700;
                                 }
+                                &__description {
+                                    /* font-weight: 400; */
+                                    color: #09213a;
+                                    padding-bottom: 10px;
+                                    border-bottom: solid 1px #0000002b;
+                                }
+                                
                             }
                         }
                     }
@@ -71,6 +80,11 @@
                     font-weight: 300;
                 }
             }
+            
         }
     }
+}
+
+.left {
+    padding-left: 9px !important;
 }
