@@ -179,6 +179,7 @@ interface HeaderProps extends RouteComponentProps {
   width?: number;
   onLogoClick?: (e: MouseEvent) => void;
   currentEntityId?: number;
+  currentEntityIsPrivate?: boolean;
 }
 
 enum Modals {
@@ -668,6 +669,8 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
 
   public renderGuidanceAndCopyButton = () => {
     const { currentEntityId } = this.props;
+    const { currentEntity } = this.props.entityStore!;
+    const isPrivateAssignment = false;
     return (
       <div className="doneBox flexBox alignCenter copyButton">
         <CreateButton
@@ -677,7 +680,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         >
           {intl.get('teacherGuidance.name')}
         </CreateButton>
-        <DetailsModal isAssignment={true} id={currentEntityId} />
+        {!isPrivateAssignment! && <DetailsModal isAssignment={true} id={currentEntityId} />}
         <CreateButton
           onClick={this.handleCopy}
           title={intl.get('assignment list.Copy assignment')}
@@ -794,7 +797,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         {ifLogin && this.renderNavigationNotLogin()}
 
         {this.props.loginStore!.currentUser && this.renderBurgerButton()}
-        {this.props.studentFormTeachinPath && this.closeWindow()}
+        {false && this.props.studentFormTeachinPath && this.closeWindow()}
         <div className="AppHeader__block AppHeader__block_mobile">
           <NavLink to={redirectLink} onClick={this.handleLogoClick}>
             <img src={logoImage} alt="logo mobile" />

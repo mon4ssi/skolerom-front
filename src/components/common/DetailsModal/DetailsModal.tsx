@@ -249,7 +249,7 @@ export class DetailsModal extends Component<Props, State> {
     return (
       <div className="modalContentTG__body__item">
         <h3><img className="imgInfo" src={goalsIcon} /> {intl.get('preview.teaching_path.grep.educational_goals')}</h3>
-        <ul className="modalContentTG__body__listGoals">
+        <ul className="modalContentTG__body__listGoals left">
         {this.transformGoals().map(item => <li key={item.subjectId}><div className="subjectTitle">{item.subjectDesc}<div className="description"><ul>{item.goalsArray.map(li => <li key={item.subjectId} className="goalsItem"><div className="goalsItem__grade">{li.gradeDesc}</div><div className="goalsItem__description">{li.description}</div></li>)}</ul></div></div></li>)}
         </ul>
       </div>
@@ -273,7 +273,7 @@ export class DetailsModal extends Component<Props, State> {
           {subjects.length > 0 && this.subjectRender()}
           {coreElements.length > 0 && this.coreElementsRender()}
           {multiSubjects.length > 0 && this.multiSubjectsRender()}
-          {sources.length > 0 && this.sourcesRender()}
+          {/* {sources.length > 0 && this.sourcesRender()} */}
           {goals.length > 0 && this.goalsRender()}
         </div>
       </div>
