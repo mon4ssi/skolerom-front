@@ -13,7 +13,7 @@ import 'assignment/view/TeacherGuidance/TeacherGuidanceAssigModal.scss';
 import { DraftAssignment } from 'assignment/assignmentDraft/AssignmentDraft';
 import { NewAssignmentStore } from '../NewAssignment/NewAssignmentStore';
 import { CurrentQuestionaryStore } from '../CurrentAssignmentPage/CurrentQuestionaryStore';
-import arrowLeftRounded from 'assets/images/arrow-left-rounded.svg';
+import TeacherGuidanceSubtext from './TeacherGuidanceSubtext/TeacherGuidanceSubtext';
 
 interface Props {
   newAssignmentStore?: NewAssignmentStore;
@@ -67,14 +67,6 @@ export class TeacherGuidanceAssigModal extends Component<Props, State> {
     </div>
   )
 
-  public toggleRead = () => {
-    if (this.state.showdescription) {
-      this.setState({ showdescription: false });
-    } else {
-      this.setState({ showdescription: true });
-    }
-  }
-
   public handleDownloadAsPDF = async () => {
     const { readOnly, newAssignmentStore, drafAssignment, currentQuestionaryStore } = this.props;
     let downloadWait = 2000;
@@ -104,9 +96,6 @@ export class TeacherGuidanceAssigModal extends Component<Props, State> {
 
   public renderQuestions = () => {
     const { readOnly, drafAssignment, currentQuestionaryStore } = this.props;
-    const ClassButton = (this.state.showdescription) ? 'toggleRead active' : 'toggleRead';
-    const expandedDiv = (this.state.showdescription) ? 'expansion full' : 'expansion';
-    const expandedparagraph = (this.state.showdescription) ? 'paragraph full' : 'paragraph';
     if (readOnly) {
       if (currentQuestionaryStore!.assignment !== null) {
         return currentQuestionaryStore!.assignment!.questions.map((item, index) => (
@@ -137,12 +126,7 @@ export class TeacherGuidanceAssigModal extends Component<Props, State> {
             <div className="nestedOrderNumber">{item.orderPosition + 1}</div>
             {item.title === intl.get('new assignment.Enter a question') ? '' : item.title}
           </h4>
-          <div className={expandedDiv}>
-            <div className={expandedparagraph}>
-              {item.content.map(item => <div key={item.text!} dangerouslySetInnerHTML={{ __html: item.text! }} />)}
-            </div>
-            <a href="javascript:void(0)" className={ClassButton} onClick={this.toggleRead}><img src={arrowLeftRounded} alt="arrowLeftRounded" /></a>
-          </div>
+          <TeacherGuidanceSubtext item={item} />
           <DescriptionEditor
             className={`jr-desEdit${item.orderPosition + 1}`}
             description={item.guidance}
