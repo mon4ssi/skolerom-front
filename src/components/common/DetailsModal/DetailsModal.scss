@@ -40,15 +40,16 @@
             li {
                 margin-bottom: 10px;
                 .subjectTitle {
-                    
+                    margin: 10px 0px 4px 0px;
                     font-size: 17px;
                     font-weight: 900;
                     .description {
                         margin-top: 12px;
                         ul {
-                            padding: 2px;
+                            padding: 4px;
                             .goalsItem {
                                 display: flex;
+                                border-bottom: solid 1px #0000002b;
                                 &__grade {
                                     width: 70px;
                                     flex: none;
@@ -56,10 +57,8 @@
                                     font-weight: 700;
                                 }
                                 &__description {
-                                    /* font-weight: 400; */
                                     color: #09213a;
                                     padding-bottom: 10px;
-                                    border-bottom: solid 1px #0000002b;
                                 }
                                 
                             }
