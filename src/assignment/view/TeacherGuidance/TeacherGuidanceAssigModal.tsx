@@ -13,6 +13,7 @@ import 'assignment/view/TeacherGuidance/TeacherGuidanceAssigModal.scss';
 import { DraftAssignment } from 'assignment/assignmentDraft/AssignmentDraft';
 import { NewAssignmentStore } from '../NewAssignment/NewAssignmentStore';
 import { CurrentQuestionaryStore } from '../CurrentAssignmentPage/CurrentQuestionaryStore';
+import arrowLeftRounded from 'assets/images/arrow-left-rounded.svg';
 
 interface Props {
   newAssignmentStore?: NewAssignmentStore;
@@ -22,10 +23,16 @@ interface Props {
   openGuidance?: boolean;
 }
 
+interface State {
+  showdescription: boolean;
+}
+
 @inject('newAssignmentStore')
 @observer
-export class TeacherGuidanceAssigModal extends Component<Props> {
-
+export class TeacherGuidanceAssigModal extends Component<Props, State> {
+  public state = {
+    showdescription: false,
+  };
   public closeModalTG = () => {
     /* const modalTG = Array.from(document.getElementsByClassName('modalContentTGAssig') as HTMLCollectionOf<HTMLElement>);
     const modalTGBack = Array.from(document.getElementsByClassName('modalContentTGAssigBackground') as HTMLCollectionOf<HTMLElement>);
@@ -59,6 +66,15 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
       </CreateButton>
     </div>
   )
+
+  public toggleRead = () => {
+    if (this.state.showdescription) {
+      this.setState({ showdescription: false });
+    } else {
+      this.setState({ showdescription: true });
+    }
+  }
+
   public handleDownloadAsPDF = async () => {
     const { readOnly, newAssignmentStore, drafAssignment, currentQuestionaryStore } = this.props;
     let downloadWait = 2000;
@@ -85,9 +101,12 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
       downloadWait
     );
   }
+
   public renderQuestions = () => {
     const { readOnly, drafAssignment, currentQuestionaryStore } = this.props;
-
+    const ClassButton = (this.state.showdescription) ? 'toggleRead active' : 'toggleRead';
+    const expandedDiv = (this.state.showdescription) ? 'expansion full' : 'expansion';
+    const expandedparagraph = (this.state.showdescription) ? 'paragraph full' : 'paragraph';
     if (readOnly) {
       if (currentQuestionaryStore!.assignment !== null) {
         return currentQuestionaryStore!.assignment!.questions.map((item, index) => (
@@ -96,7 +115,14 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
               <div className="nestedOrderNumber">{item.orderPosition + 1}</div>
               {item.title === intl.get('new assignment.Enter a question') ? '' : item.title}
             </h4>
-            {item.content.map(item => <div key={item.text!} dangerouslySetInnerHTML={{ __html: item.text! }} />)}
+            <div style={{ display: 'flex' }}>
+              <div>
+                {item.content.map(item => <div key={item.text!} dangerouslySetInnerHTML={{ __html: item.text! }} />)}
+              </div>
+              <div>
+                {'o'}
+              </div>
+            </div>
             <DescriptionEditor
               description={item.guidance}
               readOnly={readOnly}
@@ -111,7 +137,12 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
             <div className="nestedOrderNumber">{item.orderPosition + 1}</div>
             {item.title === intl.get('new assignment.Enter a question') ? '' : item.title}
           </h4>
-          {item.content.map(item => <div key={item.text!} dangerouslySetInnerHTML={{ __html: item.text! }} />)}
+          <div className={expandedDiv}>
+            <div className={expandedparagraph}>
+              {item.content.map(item => <div key={item.text!} dangerouslySetInnerHTML={{ __html: item.text! }} />)}
+            </div>
+            <a href="javascript:void(0)" className={ClassButton} onClick={this.toggleRead}><img src={arrowLeftRounded} alt="arrowLeftRounded" /></a>
+          </div>
           <DescriptionEditor
             className={`jr-desEdit${item.orderPosition + 1}`}
             description={item.guidance}
@@ -119,8 +150,7 @@ export class TeacherGuidanceAssigModal extends Component<Props> {
             onChange={(value: string) => { item.setGuidance(value); }}
           />
         </div>
-      )
-      );
+      ));
     }
   }
 

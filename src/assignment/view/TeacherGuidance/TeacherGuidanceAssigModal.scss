@@ -178,3 +178,41 @@
 .modalContentTGAssigBackground.hide {
     display: none;
 }
+
+.expansion {
+    display: flex;
+    color: #8e8e8e;
+    font-weight: 300;
+    font-style: italic;
+    overflow: hidden;
+    align-items: baseline;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #8e8e8e91;
+}
+
+.full {
+    max-height: 42px;
+}
+
+.paragraph {
+    text-overflow: ellipsis;
+}
+
+.toggleRead {
+    display: flex;
+    align-items: center;
+    img {
+        width: 20px;
+        margin-right: 5px;
+        transform: rotate(-90deg);
+    }
+    &.active img {
+        transform: rotate(90deg);
+    }
+    p {
+        font-size: 13px;
+        font-weight: 700;
+        margin: 0px;
+    }
+}
