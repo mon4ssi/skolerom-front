@@ -113,39 +113,49 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
     }
   }
 
-  private getActionList = () => {
+  private getActionList = (canEditOrDelete: boolean) => {
     const { assignment, isContentManager } = this.props;
 
     const myAssignmentsActions: Array<ActionMenuItemLink | ActionMenuItemButton> = [
       {
+        canEditOrDelete,
         type: ActionMenuItemType.LINK,
         text: intl.get('assignment list.Edit assignment'),
-        link: `/assignments/edit/${assignment.id}`
+        link: `/assignments/edit/${assignment.id}`,
+        functiontype: 'edit'
       },
       {
+        canEditOrDelete,
         type: ActionMenuItemType.LINK,
         text: intl.get('assignment list.View answers'),
         link: `/assignments/answers/${assignment!.id}`,
-        disabled: !(assignment.isPublished && assignment.isDistributed)
+        disabled: !(assignment.isPublished && assignment.isDistributed),
+        functiontype: 'view'
       },
       {
+        canEditOrDelete,
         type: ActionMenuItemType.BUTTON,
         text: intl.get('assignment list.Copy assignment'),
         // tslint:disable-next-line:no-empty
         onClick: assignment.isPublished ? this.handleCopyAssignment : () => {},
-        disabled: !assignment.isPublished
+        disabled: !assignment.isPublished,
+        functiontype: 'copy'
       },
       {
+        canEditOrDelete,
         type: ActionMenuItemType.BUTTON,
         text: intl.get('assignment list.Delete assignment'),
         onClick: this.confirmDeleteListItem,
+        functiontype: 'delete'
       }
     ];
 
     const foreignAllAssignmentsActions: Array<ActionMenuItemLink | ActionMenuItemButton> = [
       {
+        canEditOrDelete,
         type: ActionMenuItemType.LINK,
         text: intl.get('assignment list.View assignment'),
+        functiontype: 'view',
         link: {
           pathname: `/assignments/view/${assignment!.id}`,
           state: {
@@ -154,8 +164,10 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
         }
       },
       {
+        canEditOrDelete,
         type: ActionMenuItemType.BUTTON,
         text: intl.get('assignment list.Copy assignment'),
+        functiontype: 'copy',
         // tslint:disable-next-line:no-empty
         onClick: assignment.isPublished ? this.handleCopyAssignment : () => {},
         disabled: !assignment.isPublished
@@ -164,8 +176,10 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
 
     const allAssignmentsActionsContentManager: Array<ActionMenuItemLink | ActionMenuItemButton> = [
       {
+        canEditOrDelete,
         type: ActionMenuItemType.LINK,
         text: assignment.view === 'edit' ? intl.get('assignment list.Edit assignment') : intl.get('assignment list.View assignment'),
+        functiontype: 'edit',
         link: assignment.view === 'edit' ? `/assignments/edit/${assignment.id}` : {
           pathname: `/assignments/view/${assignment!.id}`,
           state: {
@@ -174,8 +188,10 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
         }
       },
       {
+        canEditOrDelete,
         type: ActionMenuItemType.BUTTON,
         text: intl.get('assignment list.Copy assignment'),
+        functiontype: 'copy',
         // tslint:disable-next-line:no-empty
         onClick: assignment.isPublished ? this.handleCopyAssignment : () => {},
         disabled: !assignment.isPublished
@@ -192,15 +208,19 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
     if (isContentManager) {
       if (!this.props.isTestAccount) {
         allAssignmentsActionsContentManager.push({
+          canEditOrDelete,
           type: ActionMenuItemType.BUTTON,
           text: intl.get('assignment list.Delete assignment'),
+          functiontype: 'edit',
           onClick: this.confirmDeleteListItem,
         });
       } else {
         if (ownedByMe) {
           allAssignmentsActionsContentManager.push({
+            canEditOrDelete,
             type: ActionMenuItemType.BUTTON,
             text: intl.get('assignment list.Delete assignment'),
+            functiontype: 'edit',
             onClick: this.confirmDeleteListItem,
           });
         }
@@ -209,21 +229,27 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
 
     const myAssignmentsActionsContentManager: Array<ActionMenuItemLink | ActionMenuItemButton> = [
       {
+        canEditOrDelete,
         type: ActionMenuItemType.LINK,
         text: intl.get('assignment list.Edit assignment'),
+        functiontype: 'edit',
         link: `/assignments/edit/${assignment.id}`
       },
       {
+        canEditOrDelete,
         type: ActionMenuItemType.BUTTON,
         text: intl.get('assignment list.Copy assignment'),
+        functiontype: 'copy',
         // tslint:disable-next-line:no-empty
         onClick: assignment.isPublished ? this.handleCopyAssignment : () => {},
         disabled: !assignment.isPublished
       },
       {
+        canEditOrDelete,
         type: ActionMenuItemType.BUTTON,
         text: intl.get('assignment list.Delete assignment'),
-        onClick: this.confirmDeleteListItem,
+        functiontype: 'delete',
+        onClick: this.confirmDeleteListItem
       }
     ];
 
@@ -366,7 +392,7 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
     );
   }
 
-  private renderActionMenu = () => {
+  private renderActionMenu = (canEditOrDelete: boolean) => {
     // don't be scared of it. it just batch of CSS media rules presented in js
     const caretHorizontalRules = [
       {
@@ -382,7 +408,7 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
 
     return (
       <ActionMenu
-        list={this.getActionList()}
+        list={this.getActionList(canEditOrDelete)}
         onClose={this.closeActionMenu}
         caretVerticalPosition={this.shouldRenderActionMenuToTop() ? CaretVerticalPosition.BOTTOM : CaretVerticalPosition.TOP}
         caretHorizontalPositionRules={caretHorizontalRules}
@@ -416,6 +442,7 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
     const actionMenuWrapperClasses = classNames('AssignmentListItem__actionMenu', {
       AssignmentListItem__actionMenu_top: this.shouldRenderActionMenuToTop(),
     });
+    const MycanEditOrDelete = (assignment.canEditOrDelete) ? assignment.canEditOrDelete : false;
 
     return (
       <div className="AssignmentListItem__super">
@@ -450,7 +477,7 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
         <div className="AssignmentListItem__moreWrapper">
           <button className={moreButtonClasses} onClick={this.toggleActionMenu} title={intl.get('activity_page.options')} />
           <div className={actionMenuWrapperClasses}>
-            {isActionMenuVisible && this.renderActionMenu()}
+            {isActionMenuVisible && this.renderActionMenu(MycanEditOrDelete)}
           </div>
         </div>
       </div>

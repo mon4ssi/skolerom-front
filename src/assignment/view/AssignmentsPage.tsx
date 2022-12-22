@@ -1005,6 +1005,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
     this.setState({ optionsGoals: [] });
     this.setState({ subjectsArrayFilter: [] });
     this.setState({ gradesArrayFilter: [] });
+    this.setState({ customGradeChildrenList: [] });
 
     const LocaleilterSubjectArray = Array.from(document.getElementsByClassName('localeFilterClass') as HTMLCollectionOf<HTMLElement>);
     LocaleilterSubjectArray.forEach((e) => {

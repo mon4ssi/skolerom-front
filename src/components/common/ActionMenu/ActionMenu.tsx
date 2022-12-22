@@ -33,14 +33,18 @@ export interface ActionMenuItemLink<T = object> {
   type: ActionMenuItemType.LINK;
   text: string;
   link: LocationDescriptor<T>;
+  functiontype?: string;
   disabled?: boolean;
+  canEditOrDelete?: boolean;
 }
 
 export interface ActionMenuItemButton {
   type: ActionMenuItemType.BUTTON;
   text: string;
   onClick: () => void | Promise<void>;
+  functiontype?: string;
   disabled?: boolean;
+  canEditOrDelete?: boolean;
 }
 
 interface ActionMenuProps {
@@ -100,6 +104,39 @@ class ActionMenu extends Component<ActionMenuProps> {
   }
 
   private renderItem(item: ActionMenuItemLink | ActionMenuItemButton) {
+    const isPosibleDeleteOrEdit = (String(item.functiontype) === 'edit' || String(item.functiontype) === 'delete') ? (item.canEditOrDelete) ? true : false : false;
+    if (isPosibleDeleteOrEdit) {
+      switch (item.type) {
+        case ActionMenuItemType.LINK:
+          if (item.disabled) {
+            return (
+              <li key={item.text} className="ActionMenu__item ActionMenu__item__disabled">
+                {item.text}
+              </li>
+            );
+          }
+          return (
+            <li key={item.text} className="ActionMenu__item">
+              <Link className="ActionMenu__actionTarget" to={item.link}>
+                {item.text}
+              </Link>
+            </li>
+          );
+
+        case ActionMenuItemType.BUTTON:
+          return (
+            <li key={item.text} className={`ActionMenu__item ${item.disabled && 'ActionMenu__item__disabled'}`}>
+              <button className={`ActionMenu__actionTarget ${item.disabled && 'ActionMenu__item__disabled'}`} onClick={item.onClick} title={item.text}>
+                {item.text}
+              </button>
+            </li>
+          );
+
+        // impossible case but should be covered
+        default:
+          return null;
+      }
+    }
     switch (item.type) {
       case ActionMenuItemType.LINK:
         if (item.disabled) {

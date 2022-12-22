@@ -52,6 +52,7 @@ interface Props {
   isDistributed?: boolean;
   isReadArticle?: boolean;
   hiddeIcons?: boolean;
+  canEditOrDelete?: boolean;
   onClick?(id: number, view?: string): void;
   onCLickImg?(url?: string): void;
   onDelete?(itemId: number): void;
@@ -337,6 +338,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
       isContentManager={this.props.isContentManager}
       isPublished={this.props.isPublished}
       isDistributed={this.props.isDistributed}
+      canEditOrDelete={this.props.canEditOrDelete}
     />
   )
 

@@ -354,6 +354,7 @@ export interface AssignmentArgs {
   open?: boolean;
   schools?: Array<NowSchool>;
   localeId?: number | null;
+  canEditOrDelete?: boolean;
 }
 
 export class Assignment {
@@ -416,6 +417,7 @@ export class Assignment {
   public _open?: boolean;
   public _schools?: Array<NowSchool>;
   @observable protected _localeId?: number | null;
+  @observable protected _canEditOrDelete?: boolean;
 
   constructor(args: AssignmentArgs) {
     this._id = args.id;
@@ -477,6 +479,7 @@ export class Assignment {
     this._open = args.open || false;
     this._schools = args.schools || [];
     this._localeId = args.localeId;
+    this._canEditOrDelete = args.canEditOrDelete;
   }
 
   public isOwnedByMe(): boolean {
@@ -685,6 +688,11 @@ export class Assignment {
   @computed
   public get view() {
     return this._view;
+  }
+
+  @computed
+  public get canEditOrDelete() {
+    return this._canEditOrDelete;
   }
 
   @computed

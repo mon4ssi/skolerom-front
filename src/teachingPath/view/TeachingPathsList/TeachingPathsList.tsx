@@ -1129,6 +1129,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
           copyTeachingPath={this.copyTeachingPath}
           isPublished={item.isPublished}
           isDistributed={item.isDistributed}
+          canEditOrDelete={item.canEditOrDelete}
         />
       )
     )
@@ -1216,6 +1217,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
     this.setState({ optionsGoals: [] });
     this.setState({ subjectsArrayFilter: [] });
     this.setState({ gradesArrayFilter: [] });
+    this.setState({ customGradeChildrenList: [] });
 
     const LocaleilterSubjectArray = Array.from(document.getElementsByClassName('localeFilterClass') as HTMLCollectionOf<HTMLElement>);
     LocaleilterSubjectArray.forEach((e) => {

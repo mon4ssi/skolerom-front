@@ -5,6 +5,7 @@ import onClickOutside from 'react-onclickoutside';
 
 interface ActionMenuItem {
   text: string;
+  type: string;
   disabled?: boolean;
   onClick(e: SyntheticEvent): void;
 }
@@ -16,6 +17,7 @@ interface TooltipProps {
   ownedByMe?: boolean;
   isPublished?: boolean;
   isDistributed?: boolean;
+  canEditOrDelete?: boolean;
   preventViewCard(e: SyntheticEvent): void;
   deleteTeachingPath(e: SyntheticEvent): void;
   viewTeachingPath(e: SyntheticEvent): void;
@@ -62,22 +64,26 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
     const myTeachingPathsActions: Array<ActionMenuItem> = [
       {
         text: intl.get('teaching_paths_list.edit'),
+        type: 'edit',
         onClick: editTeachingPath
       },
       {
         text: intl.get('teaching_paths_list.view answers'),
+        type: 'answers',
         // tslint:disable-next-line:no-empty
         onClick: (this.props.isPublished && this.props.isDistributed) ? viewAnswers : () => { },
         disabled: !(this.props.isPublished && this.props.isDistributed)
       },
       {
         text: intl.get('teaching_paths_list.copy'),
+        type: 'copy',
         // tslint:disable-next-line:no-empty
         onClick: this.props.isPublished ? copyTeachingPath : () => { },
         disabled: !this.props.isPublished
       },
       {
         text: intl.get('teaching_paths_list.delete'),
+        type: 'delete',
         onClick: deleteTeachingPath,
         disabled: this.props!.ownedByMe!
       }
@@ -86,10 +92,12 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
     const foreignAllTeachingPathsActions: Array<ActionMenuItem> = [
       {
         text: intl.get('teaching_paths_list.view'),
+        type: 'view',
         onClick: viewTeachingPath
       },
       {
         text: intl.get('teaching_paths_list.copy'),
+        type: 'copy',
         // tslint:disable-next-line:no-empty
         onClick: this.props.isPublished ? copyTeachingPath : () => { },
         disabled: !this.props.isPublished
@@ -99,10 +107,12 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
     const contentManagerTeachingPathsActions: Array<ActionMenuItem> = [
       {
         text: view === 'edit' ? intl.get('teaching_paths_list.edit') : intl.get('teaching_paths_list.view'),
+        type: 'edit',
         onClick: view === 'edit' ? editTeachingPath : viewTeachingPath
       },
       {
         text: intl.get('teaching_paths_list.copy'),
+        type: 'copy',
         // tslint:disable-next-line:no-empty
         onClick: this.props.isPublished ? copyTeachingPath : () => { },
         disabled: !this.props.isPublished
@@ -126,12 +136,14 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
       if (!this.props.isTestAccount) {
         contentManagerTeachingPathsActions.push({
           text: intl.get('teaching_paths_list.delete'),
+          type: 'delete',
           onClick: deleteTeachingPath
         });
       } else {
         if (ownedByMe) {
           contentManagerTeachingPathsActions.push({
             text: intl.get('teaching_paths_list.delete'),
+            type: 'delete',
             onClick: deleteTeachingPath
           });
         }
@@ -156,9 +168,18 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
   }
 
   private renderTooltipItems = (list: Array<ActionMenuItem>) =>
-    list.map((item, index) => (
-      <li key={index} className={`fw500 flexBox fs15 ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick}>{item.text}</a></li>
-    ))
+    list.map((item, index) => {
+      const isPosibleDeleteOrEdit = (item.type === 'edit' || item.type === 'delete') ? (this.props.canEditOrDelete) ? true : false : false;
+      if (isPosibleDeleteOrEdit) {
+        return (
+          <li key={index} className={`fw500 flexBox fs15 ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick}>{item.text}</a></li>
+        );
+      }
+      return (
+        <li key={index} className={`fw500 flexBox fs15 ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick}>{item.text}</a></li>
+      );
+    }
+  )
 
   public handleClickOutside = (e: SyntheticEvent) => this.props.handleTooltipVisible(e);
 

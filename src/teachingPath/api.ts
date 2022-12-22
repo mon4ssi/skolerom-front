@@ -69,6 +69,7 @@ export interface TeacherTeachingPathResponseDTO {
   isDistributed?: boolean;
   hasGuidance?: boolean;
   isMySchool?: boolean;
+  canEditOrDelete?: boolean;
 }
 
 export interface StudentTeachingPathResponseDTO extends TeacherTeachingPathResponseDTO {
@@ -117,6 +118,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         isPublished: item.isPublished,
         isDistributed: item.isDistributed,
         hasGuidance: item.hasGuidance,
+        canEditOrDelete: item.canEditOrDelete
       })),
       total_pages: response.data.meta.pagination.total_pages
     };
@@ -140,6 +142,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         isPublished: item.isPublished,
         isDistributed: item.isDistributed,
         isMySchool: item.isMySchool,
+        canEditOrDelete: item.canEditOrDelete
       })),
       total_pages: response.data.meta.pagination.total_pages
     };
@@ -162,6 +165,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         isPublished: item.isPublished,
         isDistributed: item.isDistributed,
         hasGuidance: item.hasGuidance,
+        canEditOrDelete: item.canEditOrDelete
       })),
       total_pages: response.data.meta.pagination.total_pages
     };

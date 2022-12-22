@@ -230,6 +230,7 @@ export interface TeachingPathArgs {
   numberOfQuestions?: number;
   numberOfArticles?: number;
   localeId?: number | null;
+  canEditOrDelete?: boolean;
 }
 
 export class TeachingPath {
@@ -293,6 +294,7 @@ export class TeachingPath {
   protected readonly _numberOfQuestions?: number = 0;
   protected readonly _numberOfArticles?: number = 0;
   @observable protected _localeId?: number | null;
+  @observable protected _canEditOrDelete?: boolean;
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;
@@ -356,6 +358,7 @@ export class TeachingPath {
     this._numberOfQuestions = args.numberOfQuestions || 0;
     this._numberOfArticles = args.numberOfArticles || 0;
     this._localeId = args.localeId;
+    this._canEditOrDelete = args.canEditOrDelete;
   }
 
   @computed
@@ -569,6 +572,11 @@ export class TeachingPath {
   @computed
   public get localeId() {
     return this._localeId;
+  }
+
+  @computed
+  public get canEditOrDelete() {
+    return this._canEditOrDelete;
   }
 
   public getListOfSubjects() {

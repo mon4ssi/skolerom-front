@@ -93,6 +93,7 @@ interface DraftAssignmentResponseDTO {
   grep_goals?: Array<GreepElements>;
   grep_maintopic?: Array<GreepElements>;
   grep_readinginsubject?: string;
+  canEditOrDelete?: boolean;
 }
 
 export interface TeacherAssignmentResponseDTO {
@@ -114,6 +115,7 @@ export interface TeacherAssignmentResponseDTO {
   grepMaintopic?: Array<GreepElements>;
   grepReadinginsubject?: string;
   open?: boolean;
+  canEditOrDelete?: boolean;
 }
 
 export const buildFilterDTO = (filter: Filter): Object => {
@@ -321,7 +323,8 @@ export const buildMyAssignmentsList = (item: DraftAssignmentResponseDTO) => {
     grepCoreelements: item.grep_coreelements,
     grepGoals: item.grep_goals,
     grepMaintopic: item.grep_maintopic,
-    grepReadingInsubject: item.grep_readinginsubject
+    grepReadingInsubject: item.grep_readinginsubject,
+    canEditOrDelete: item.canEditOrDelete
   });
 };
 
@@ -344,7 +347,8 @@ export const buildAllAssignmentsList = (item: TeacherAssignmentResponseDTO) => (
       grepGoals: item.grepGoals,
       grepMaintopic: item.grepMaintopic,
       grepReadingInsubject: item.grepReadinginsubject,
-      open: item.open || false
+      open: item.open || false,
+      canEditOrDelete: item.canEditOrDelete
     })
 );
 

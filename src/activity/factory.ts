@@ -32,5 +32,6 @@ export const buildNewestTeachingPaths = (dto: Array<TeacherTeachingPathResponseD
     description: item.description,
     grades: isNil(item.grades) ? undefined : item.grades.map(grade => new Grade(grade.id, grade.title)),
     view: item.view,
-    levels: item.levels
+    levels: item.levels,
+    canEditOrDelete: item.canEditOrDelete
   })));
