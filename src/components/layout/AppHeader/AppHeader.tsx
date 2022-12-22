@@ -23,6 +23,7 @@ import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentL
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
 import loginBtnIcon from 'assets/images/login-btn-icon.svg';
 import { DetailsModal } from 'components/common/DetailsModal/DetailsModal';
+import { divide } from 'lodash';
 
 interface HeaderNavigationLink {
   name: string;
@@ -680,7 +681,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         >
           {intl.get('teacherGuidance.name')}
         </CreateButton>
-        {!isPrivateAssignment! && <DetailsModal isAssignment={true} id={currentEntityId} />}
+        {!isPrivateAssignment! && (<div className="grepButton"><DetailsModal isAssignment={true} id={currentEntityId} /></div>)}
         <CreateButton
           onClick={this.handleCopy}
           title={intl.get('assignment list.Copy assignment')}
