@@ -67,6 +67,7 @@ interface CurrentAssignmentPageProps extends RouteComponentProps<RouteParams, {}
 
 interface State {
   showCover: boolean;
+  isPrivateAssignment: boolean;
 }
 
 enum QueryStringKeys {
@@ -86,6 +87,7 @@ export enum ContentType {
 export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps, State> {
   public state = {
     showCover: false,
+    isPrivateAssignment: false,
   };
 
   private goToNextQuestion = () => {
@@ -102,6 +104,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
 
   public async componentDidMount() {
     const { currentQuestionaryStore, match, isTeacher, history } = this.props;
+    let isPrivate = false;
     currentQuestionaryStore.handleShowArrowsTooltip(true);
     document.addEventListener('keyup', this.handleKeyboardControl);
     const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
@@ -110,6 +113,13 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     /* currentQuestionaryStore!.setCurrentQuestion(-2); */
     if (isTeacher) {
       await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
+      isPrivate = currentQuestionaryStore!.assignment!.isPrivate!;
+      this.setState({ isPrivateAssignment: isPrivate });
+      const grepButton = Array.from(document.getElementsByClassName('grepButton') as HTMLCollectionOf<HTMLElement>);
+      if (this.state.isPrivateAssignment!) {
+        grepButton[0].classList.add('grepButtonHidden');
+      }
+
       this.props.currentQuestionaryStore!.setCurrentQuestion(COVER_INDEX);
       this.setState({ showCover: true });
       if (currentQuestionaryStore!.assignment && currentQuestionaryStore!.assignment!.relatedArticles && currentQuestionaryStore!.assignment!.relatedArticles.length > 0 && currentQuestionaryStore!.assignment!.relatedArticles[0].isHidden) {
