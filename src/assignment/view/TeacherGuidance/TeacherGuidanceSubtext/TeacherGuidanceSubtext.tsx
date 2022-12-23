@@ -2,9 +2,9 @@ import { EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
 import React, { useState } from 'react';
 import arrowLeftRounded from 'assets/images/arrow-left-rounded.svg';
 
-type Props = {
-  item: EditableQuestion,
-};
+export interface Props {
+  item: EditableQuestion;
+}
 
 export const TeacherGuidanceSubtext = (props: Props) => {
   const [showDescription, setshowDescription] = useState(false);

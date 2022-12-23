@@ -13,7 +13,7 @@ import 'assignment/view/TeacherGuidance/TeacherGuidanceAssigModal.scss';
 import { DraftAssignment } from 'assignment/assignmentDraft/AssignmentDraft';
 import { NewAssignmentStore } from '../NewAssignment/NewAssignmentStore';
 import { CurrentQuestionaryStore } from '../CurrentAssignmentPage/CurrentQuestionaryStore';
-import TeacherGuidanceSubtext from './TeacherGuidanceSubtext/TeacherGuidanceSubtext';
+import { TeacherGuidanceSubtext } from './TeacherGuidanceSubtext/TeacherGuidanceSubtext';
 
 interface Props {
   newAssignmentStore?: NewAssignmentStore;
@@ -126,7 +126,7 @@ export class TeacherGuidanceAssigModal extends Component<Props, State> {
             <div className="nestedOrderNumber">{item.orderPosition + 1}</div>
             {item.title === intl.get('new assignment.Enter a question') ? '' : item.title}
           </h4>
-          <TeacherGuidanceSubtext item={item} />
+          {item.content.length > 0 && <TeacherGuidanceSubtext item={item} />}
           <DescriptionEditor
             className={`jr-desEdit${item.orderPosition + 1}`}
             description={item.guidance}
