@@ -12,6 +12,7 @@
     outline: 0;
     z-index: 15;
     display: none;
+
     /* word-break: break-all; */
     &__header {
         padding: 1rem;
@@ -177,4 +178,57 @@
 
 .modalContentTGAssigBackground.hide {
     display: none;
+}
+
+.expansion {
+    display: flex;
+    font-weight: 300;
+    font-style: italic;
+    overflow: hidden;
+    align-items: baseline;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 0.5px solid #8e8e8e48;
+    opacity: 0.6;
+}
+
+.full {
+    max-height: 42px;
+    padding-bottom: 10px;
+}
+
+.paragraph {
+    text-overflow: ellipsis;
+    min-width: 95%;
+}
+
+.toggleRead {
+    display: flex;
+    align-items: center;
+
+    img {
+        color: #8e8e8e;
+        opacity: 0.4;
+        width: 20px;
+        margin-right: 5px;
+        transform: rotate(-90deg);
+        transition: 0.5s
+    }
+
+    &.active img {
+        color: #8e8e8e;
+        transform: rotate(90deg);
+    }
+
+    p {
+        font-size: 13px;
+        font-weight: 700;
+        margin: 0px;
+        color: #9f99aa;
+
+    }
+}
+
+.image {
+    color: #8e8e8e;
 }

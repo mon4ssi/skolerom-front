@@ -405,7 +405,7 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
       const idSkill = (node.breadcrumbs[Number(indexCore - 1)] === undefined) ? 0 : node.breadcrumbs[Number(indexCore - 1)].id;
       return (
         <button className={'navigationExitButton'} data-check={indexCore} data-id={idSkill} onClick={this.onClickBackButton} title={intl.get('teaching path passing.exit')} >
-          <img src={arrowLeftRounded} alt="arrowLeftRounded"/>
+          <img className="image" src={arrowLeftRounded} alt="arrowLeftRounded"/>
         </button>
       );
     }
