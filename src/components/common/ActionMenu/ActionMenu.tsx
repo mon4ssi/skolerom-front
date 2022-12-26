@@ -104,7 +104,21 @@ class ActionMenu extends Component<ActionMenuProps> {
   }
 
   private renderItem(item: ActionMenuItemLink | ActionMenuItemButton) {
-    const isPosibleDeleteOrEdit = (String(item.functiontype) === 'edit' || String(item.functiontype) === 'delete') ? (item.canEditOrDelete) ? true : false : false;
+    let isPosibleDeleteOrEdit = false;
+    switch (String(item.functiontype)) {
+      case 'edit':
+        if (item.canEditOrDelete) {
+          isPosibleDeleteOrEdit = true;
+        }
+        break;
+      case 'delete':
+        if (item.canEditOrDelete) {
+          isPosibleDeleteOrEdit = true;
+        }
+        break;
+      default:
+        isPosibleDeleteOrEdit = false;
+    }
     if (isPosibleDeleteOrEdit) {
       switch (item.type) {
         case ActionMenuItemType.LINK:

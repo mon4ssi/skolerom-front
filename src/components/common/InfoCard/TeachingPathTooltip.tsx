@@ -169,7 +169,21 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
 
   private renderTooltipItems = (list: Array<ActionMenuItem>) =>
     list.map((item, index) => {
-      const isPosibleDeleteOrEdit = (item.type === 'edit' || item.type === 'delete') ? (this.props.canEditOrDelete) ? true : false : false;
+      let isPosibleDeleteOrEdit = false;
+      switch (item.type) {
+        case 'edit':
+          if (this.props.canEditOrDelete) {
+            isPosibleDeleteOrEdit = true;
+          }
+          break;
+        case 'delete':
+          if (this.props.canEditOrDelete) {
+            isPosibleDeleteOrEdit = true;
+          }
+          break;
+        default:
+          isPosibleDeleteOrEdit = false;
+      }
       if (isPosibleDeleteOrEdit) {
         return (
           <li key={index} className={`fw500 flexBox fs15 ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick}>{item.text}</a></li>
