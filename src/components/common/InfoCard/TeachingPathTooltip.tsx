@@ -107,7 +107,7 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
     const contentManagerTeachingPathsActions: Array<ActionMenuItem> = [
       {
         text: view === 'edit' ? intl.get('teaching_paths_list.edit') : intl.get('teaching_paths_list.view'),
-        type: 'edit',
+        type: view === 'edit' ? 'edit' : 'view',
         onClick: view === 'edit' ? editTeachingPath : viewTeachingPath
       },
       {
@@ -174,22 +174,20 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
       let isPosibleDeleteOrEdit = false;
       switch (item.type) {
         case 'edit':
-          if (this.props.canEditOrDelete) {
-            isPosibleDeleteOrEdit = true;
-          }
+          isPosibleDeleteOrEdit = true;
           break;
         case 'delete':
-          if (this.props.canEditOrDelete) {
-            isPosibleDeleteOrEdit = true;
-          }
+          isPosibleDeleteOrEdit = true;
           break;
         default:
           isPosibleDeleteOrEdit = false;
       }
       if (isPosibleDeleteOrEdit) {
-        return (
-          <li key={index} data-key={item.type} className={`fw500 flexBox fs15 editOrDeleteValue ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick}>{item.text}</a></li>
-        );
+        if (this.props.canEditOrDelete) {
+          return (
+            <li key={index} data-key={item.type} className={`fw500 flexBox fs15 editOrDeleteValue ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick}>{item.text}</a></li>
+          );
+        }
       }
       return (
         <li key={index} data-key={item.type} className={`fw500 flexBox fs15 ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick}>{item.text}</a></li>
