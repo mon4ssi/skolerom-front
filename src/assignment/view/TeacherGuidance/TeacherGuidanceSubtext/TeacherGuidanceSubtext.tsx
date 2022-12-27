@@ -1,9 +1,10 @@
 import { EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
 import React, { useState } from 'react';
 import arrowLeftRounded from 'assets/images/arrow-left-rounded.svg';
+import { Question } from 'assignment/Assignment';
 
 export interface Props {
-  item: EditableQuestion;
+  item: EditableQuestion | Question;
 }
 
 export const TeacherGuidanceSubtext = (props: Props) => {

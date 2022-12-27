@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 
@@ -14,6 +14,7 @@ import { DraftAssignment } from 'assignment/assignmentDraft/AssignmentDraft';
 import { NewAssignmentStore } from '../NewAssignment/NewAssignmentStore';
 import { CurrentQuestionaryStore } from '../CurrentAssignmentPage/CurrentQuestionaryStore';
 import { TeacherGuidanceSubtext } from './TeacherGuidanceSubtext/TeacherGuidanceSubtext';
+import { divide } from 'lodash';
 
 interface Props {
   newAssignmentStore?: NewAssignmentStore;
@@ -104,14 +105,8 @@ export class TeacherGuidanceAssigModal extends Component<Props, State> {
               <div className="nestedOrderNumber">{item.orderPosition + 1}</div>
               {item.title === intl.get('new assignment.Enter a question') ? '' : item.title}
             </h4>
-            <div style={{ display: 'flex' }}>
-              <div>
-                {item.content.map(item => <div key={item.text!} dangerouslySetInnerHTML={{ __html: item.text! }} />)}
-              </div>
-              <div>
-                {'o'}
-              </div>
-            </div>
+            {item.content.map(item => <div key={item.text} className="divHidden"><Fragment>{item.text}</Fragment></div>)}
+            {item.content.length > 0 && <TeacherGuidanceSubtext item={item} />}
             <DescriptionEditor
               description={item.guidance}
               readOnly={readOnly}
@@ -126,6 +121,7 @@ export class TeacherGuidanceAssigModal extends Component<Props, State> {
             <div className="nestedOrderNumber">{item.orderPosition + 1}</div>
             {item.title === intl.get('new assignment.Enter a question') ? '' : item.title}
           </h4>
+          {item.content.map(item => <div key={item.text} className="divHidden"><Fragment>{item.text}</Fragment></div>)}
           {item.content.length > 0 && <TeacherGuidanceSubtext item={item} />}
           <DescriptionEditor
             className={`jr-desEdit${item.orderPosition + 1}`}
