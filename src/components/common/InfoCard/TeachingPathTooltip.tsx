@@ -83,7 +83,7 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
       },
       {
         text: intl.get('teaching_paths_list.delete'),
-        type: 'edit',
+        type: 'delete',
         onClick: deleteTeachingPath,
         disabled: this.props!.ownedByMe!
       }
@@ -107,7 +107,7 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
     const contentManagerTeachingPathsActions: Array<ActionMenuItem> = [
       {
         text: view === 'edit' ? intl.get('teaching_paths_list.edit') : intl.get('teaching_paths_list.view'),
-        type: view === 'edit' ? 'edit' : 'view',
+        type: 'edit',
         onClick: view === 'edit' ? editTeachingPath : viewTeachingPath
       },
       {
@@ -119,7 +119,7 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
       },
       {
         text: intl.get('teaching_paths_list.delete'),
-        type: 'edit',
+        type: 'delete',
         onClick: deleteTeachingPath,
         disabled: this.props!.ownedByMe!
       }
@@ -155,14 +155,14 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
     switch (window.location.pathname) {
       case '/teaching-paths/all':
         const originList = view === 'edit' ? myTeachingPathsActions : foreignAllTeachingPathsActions;
-        return isContentManager ? myTeachingPathsActions : originList;
+        return isContentManager ? contentManagerTeachingPathsActions : originList;
 
       case '/teaching-paths/myschool':
         const originListmyschool = view === 'edit' ? myTeachingPathsActions : foreignAllTeachingPathsActions;
-        return isContentManager ? myTeachingPathsActions : originListmyschool;
+        return isContentManager ? contentManagerTeachingPathsActions : originListmyschool;
 
       case '/teaching-paths/my':
-        return isContentManager ? myTeachingPathsActions : myTeachingPathsActions;
+        return isContentManager ? contentManagerTeachingPathsActions : myTeachingPathsActions;
 
       default:
         return [];
@@ -172,20 +172,64 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
   private renderTooltipItems = (list: Array<ActionMenuItem>) =>
     list.map((item, index) => {
       let isPosibleDeleteOrEdit = false;
-      if (item.type === 'edit') { isPosibleDeleteOrEdit = true; }
-      if (item.type === 'delete') { isPosibleDeleteOrEdit = true; }
-      if (item.type === 'edit') {
-        if (this.props.canEditOrDelete) {
-          return (
-            <li key={index} data-key={item.type} className={`fw500 flexBox fs15 editOrDeleteValue ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick}>{item.text}</a></li>
-          );
-        }
+      switch (item.type) {
+        case 'edit':
+          if (this.props.canEditOrDelete) {
+            isPosibleDeleteOrEdit = true;
+          }
+          break;
+        case 'delete':
+          if (this.props.canEditOrDelete) {
+            isPosibleDeleteOrEdit = true;
+          }
+          break;
+        default:
+          isPosibleDeleteOrEdit = false;
+      }
+      if (isPosibleDeleteOrEdit) {
+        return (
+          <li key={index} className={`fw500 flexBox fs15 editOrDeleteValue ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick}>{item.text}</a></li>
+        );
       }
       return (
-        <li key={index} data-key={item.type} className={`fw500 flexBox fs15 ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick}>{item.text}</a></li>
+        <li key={index} className={`fw500 flexBox fs15 ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick}>{item.text}</a></li>
       );
     }
   )
+
+  private renderTooltipItemsHandle() {
+    const { canEditOrDelete,
+      deleteTeachingPath,
+      editTeachingPath,
+      viewTeachingPath,
+      isContentManager,
+      copyTeachingPath,
+      viewAnswers } = this.props;
+    if (canEditOrDelete || window.location.pathname === '/teaching-paths/my') {
+      return (
+        <ul className="flexBox dirColumn">
+          <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={viewTeachingPath}>{intl.get('teaching_paths_list.edit')}</a></li>
+          <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={editTeachingPath}>{intl.get('teaching_paths_list.view')}</a></li>
+          <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={copyTeachingPath}>{intl.get('teaching_paths_list.copy')}</a></li>
+          <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={deleteTeachingPath}>{intl.get('teaching_paths_list.delete')}</a></li>
+        </ul>
+      );
+    }
+    return (
+      <ul className="flexBox dirColumn">
+        <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={editTeachingPath}>{intl.get('teaching_paths_list.view')}</a></li>
+        <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={copyTeachingPath}>{intl.get('teaching_paths_list.copy')}</a></li>
+      </ul>
+    );
+  }
+
+  private decideHanderRender() {
+    const { isContentManager } = this.props;
+    if (isContentManager) {
+      return this.renderTooltipItemsHandle();
+    }
+    return this.renderTooltipItems(this.getActionList());
+  }
 
   public handleClickOutside = (e: SyntheticEvent) => this.props.handleTooltipVisible(e);
 
@@ -194,9 +238,7 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
     return (
       <div className="tooltip" onClick={preventViewCard}>
         <div className="left">
-          <ul className="flexBox dirColumn">
-            {this.renderTooltipItems(this.getActionList())}
-          </ul>
+          {this.decideHanderRender()}
           <i />
         </div>
       </div>
