@@ -119,7 +119,7 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
       },
       {
         text: intl.get('teaching_paths_list.delete'),
-        type: 'delete',
+        type: 'edit',
         onClick: deleteTeachingPath,
         disabled: this.props!.ownedByMe!
       }
