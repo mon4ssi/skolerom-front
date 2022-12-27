@@ -24,7 +24,8 @@ export const CustomImageFormSimple = (props: any) => {
   const fileArray: Array<File> = [];
   const filenames: Array<string> = [];
 
-  const [imagesFileList, setImagesFileList] = useState(fileArray);
+  const [imagesFileListTest, setImagesFileList] = useState(fileArray);
+
   const [imageFileArray, setImageFileArray] = useState(fileArray);
   const [value, setValue] = useState(0);
   const [fileNames, setFileNames] = useState(filenames);
@@ -86,7 +87,7 @@ export const CustomImageFormSimple = (props: any) => {
       const formData = new FormData();
       formData.append('image', image);
       formData.append('title', image.name.split('.')[0]);
-      /* formData.append('source', image.lastModified.toString()); */
+      formData.append('source', 'Skolerom Test');
       try {
         await articleService.createCustomImage(formData).then(() => {
           for (let i = 1; i <= amount; i += 1) {
@@ -125,7 +126,7 @@ export const CustomImageFormSimple = (props: any) => {
       const formData = new FormData();
       formData.append('image', image);
       formData.append('title', image.name.split('.')[0]);
-      formData.append('source', image.lastModified.toString());
+      formData.append('source', 'Skolerom Test');
       try {
         await articleService.createCustomImage(formData).then(() => {
           percentage = percentage + amount;
@@ -205,16 +206,19 @@ export const CustomImageFormSimple = (props: any) => {
   const itemImageFile = (file: File) => {
     const size = ((file.size) / THOUSAND) / THOUSAND;
     return (
-      <div className="image">
+      <div className="imageUpload">
         <div key={file.name} className="imageListItem">
           {/* <div className='icon'></div> */}
 
           <div className="imageData">
 
-            <img className="previewImage" src={URL.createObjectURL(file)} alt="" />
+            <img className="previewImageUpload" src={URL.createObjectURL(file)} alt="" />
+
             <div className="infoImage">
-              <div className="filename">{file.name}</div>
-              <div className="filesize">({parseFloat((size).toFixed(2))} MB)</div>
+              <div>
+                <input className="inputImage" type="text" defaultValue={file.name} placeholder="Tittel" />
+                <input className="inputImage" type="text" placeholder="Kilde" />
+              </div>
               {renderTrashIcon(file.name)}
             </div>
           </div>
