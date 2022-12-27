@@ -153,14 +153,14 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
     switch (window.location.pathname) {
       case '/teaching-paths/all':
         const originList = view === 'edit' ? myTeachingPathsActions : foreignAllTeachingPathsActions;
-        return isContentManager ? contentManagerTeachingPathsActions : originList;
+        return isContentManager ? myTeachingPathsActions : originList;
 
       case '/teaching-paths/myschool':
         const originListmyschool = view === 'edit' ? myTeachingPathsActions : foreignAllTeachingPathsActions;
-        return isContentManager ? contentManagerTeachingPathsActions : originListmyschool;
+        return isContentManager ? myTeachingPathsActions : originListmyschool;
 
       case '/teaching-paths/my':
-        return isContentManager ? contentManagerTeachingPathsActions : myTeachingPathsActions;
+        return isContentManager ? myTeachingPathsActions : myTeachingPathsActions;
 
       default:
         return [];

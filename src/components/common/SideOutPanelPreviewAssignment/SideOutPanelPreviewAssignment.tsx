@@ -37,6 +37,7 @@ import { AssignmentService, ASSIGNMENT_SERVICE } from 'assignment/service';
 import { UserService } from 'user/UserService';
 
 interface Props extends RouteComponentProps {
+  canEditOrDeleteValue?: boolean;
   view?: string;
   store?: AssignmentListStore;
   isPublishedCurrentAssignment?: boolean;
@@ -356,7 +357,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
         isPrivate,
         createdAt,
       } = currentAssignment!;
-    const { history, isPublishedCurrentAssignment, view, store } = this.props;
+    const { history, isPublishedCurrentAssignment, view, store, canEditOrDeleteValue } = this.props;
     /* const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager; */
     const showPublishDate = authorRole === UserType.Teacher || !(authorRole === UserType.ContentManager && !(isPrivate!));
     const viewText = intl.get('preview.assignment.buttons.view');
@@ -419,7 +420,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
         <div className="footerButtons">
           {isPublishedCurrentAssignment && (true || view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentAssignment!, history, id, viewText)}
           {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
-          {(view === 'edit' || publishedAt) && this.renderEditButton(editText, history, id)}
+          {canEditOrDeleteValue && this.renderEditButton(editText, history, id)}
           {(isPublishedCurrentAssignment! || isMySchool) && this.renderDuplicateButton(duplicateText)}
 
         </div>

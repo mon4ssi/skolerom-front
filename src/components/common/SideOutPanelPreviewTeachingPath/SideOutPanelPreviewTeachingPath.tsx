@@ -38,6 +38,7 @@ import { Url } from 'url';
 
 interface Props extends RouteComponentProps {
   view: string;
+  currentCanEditOrDelete?: boolean;
   store?: TeachingPathsListStore;
   isPublishedCurrentTeachingPath?: boolean;
   onClose?(e: SyntheticEvent): void;
@@ -346,7 +347,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         isMySchool,
       } = currentEntity;
     const { currentEntity: { id } } = this.props.store!;
-    const { history, isPublishedCurrentTeachingPath, view } = this.props;
+    const { history, isPublishedCurrentTeachingPath, view, currentCanEditOrDelete } = this.props;
     /* const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager; */
     const showPublishDate = authorRole === UserType.Teacher || !(authorRole === UserType.ContentManager && !(isPrivate!));
     const viewText = intl.get('preview.teaching_path.buttons.view');
@@ -410,7 +411,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         <div className="footerButtons">
           {isPublishedCurrentTeachingPath! && (view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentTeachingPath!, history, id, viewText)}
           {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
-          {(view === 'edit' || !isPublishedCurrentTeachingPath) && this.renderEditButton(editText, history, id)}
+          {currentCanEditOrDelete && this.renderEditButton(editText, history, id)}
           {isPublishedCurrentTeachingPath! && this.renderDuplicateButton(duplicateText)}
 
         </div>

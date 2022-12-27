@@ -28,6 +28,7 @@ interface State {
   isAssignmentPreviewTeacherCMVisible: boolean;
   isPublishedCurrentAssignment?: boolean;
   view?: string;
+  canEditOrDeleteValue?: boolean;
 }
 
 @inject('assignmentListStore', 'loginStore')
@@ -56,6 +57,7 @@ class AssignmentsList extends Component<Props, State> {
       isAssignmentPreviewTeacherCMVisible: false,
       isPublishedCurrentAssignment: false,
       view: '',
+      canEditOrDeleteValue: false
     };
   }
 
@@ -86,6 +88,7 @@ class AssignmentsList extends Component<Props, State> {
     return (
       <div className="dark" onClick={this.closeSlideOutPanel}>
         <SideOutPanelPreviewAssignment
+          canEditOrDeleteValue={this.state.canEditOrDeleteValue}
           view={view!}
           isPublishedCurrentAssignment={tempIsPublishedCurrentAssignment}
           store={assignmentListStore}
@@ -97,7 +100,7 @@ class AssignmentsList extends Component<Props, State> {
 
   public unregisterListener: () => void = () => undefined;
 
-  public manageAssignmentAction = async (id: number, userType?: UserType, viewAssignment?: string) => {
+  public manageAssignmentAction = async (id: number, userType?: UserType, viewAssignment?: string, canEditOrDeleteValue?: boolean) => {
     const { assignmentListStore, history } = this.props;
     this.unregisterListener();
     this.props.assignmentListStore!.setCurrentAssignment(id);
@@ -129,9 +132,12 @@ class AssignmentsList extends Component<Props, State> {
   }
 
   public onClickAssignment = (id: number, view?: string) => {
-    const { assignmentListStore, history } = this.props;
+    const { assignmentListStore, history, assignments } = this.props;
     const currentUserType = assignmentListStore!.getCurrentUser()!.type;
     const isTestAccount = assignmentListStore!.getCurrentUser()!.isTestAccount;
+    const canEditOrDelete = assignments.find(x => x.id === id)!.canEditOrDelete;
+    const canEditOrDeleteValue = (canEditOrDelete) ? canEditOrDelete : false;
+    this.setState({ canEditOrDeleteValue });
     switch (currentUserType) {
       case UserType.Teacher:
       case UserType.ContentManager:

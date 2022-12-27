@@ -87,6 +87,7 @@ interface State {
   filtersAjaxLoadingGoals: boolean;
   showMySchool: number;
   currentTeachingPathView: string;
+  currentCanEditOrDelete: boolean;
 }
 
 @inject('teachingPathsListStore', 'editTeachingPathStore')
@@ -181,6 +182,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
       filtersAjaxLoadingGoals: false,
       showMySchool: 0,
       currentTeachingPathView: '',
+      currentCanEditOrDelete: false
     };
   }
 
@@ -596,6 +598,10 @@ class TeachingPathsListComponent extends Component<Props, State> {
   public onClickTeachingPath = (id: number, view?: string) => {
     const { teachingPathsListStore, history } = this.props;
     const currentUserType = teachingPathsListStore!.getCurrentUser()!.type;
+    const teachingPaths = teachingPathsListStore!.teachingPathsList;
+    const canEditOrDelete = teachingPaths.find(x => x.id === id)!.canEditOrDelete;
+    const canEditOrDeleteValue = (canEditOrDelete) ? canEditOrDelete : false;
+
     switch (currentUserType) {
       case UserType.Teacher:
       case UserType.ContentManager:
@@ -605,7 +611,10 @@ class TeachingPathsListComponent extends Component<Props, State> {
           }
           history.push(`/teaching-paths/edit/${id}`);
         */
-        this.setState({ currentTeachingPathView: view! });
+        this.setState({
+          currentTeachingPathView: view!,
+          currentCanEditOrDelete: canEditOrDeleteValue
+        });
         this.manageTeachingPathAction(id, currentUserType);
         break;
       case UserType.Student:
@@ -1176,11 +1185,12 @@ class TeachingPathsListComponent extends Component<Props, State> {
   public renderSlideOutPanelTeacherCM = () => {
     const { teachingPathsListStore } = this.props;
     const { currentEntity } = teachingPathsListStore!;
-    const { isPublishedCurrentTeachingPath, currentTeachingPathView } = this.state;
+    const { isPublishedCurrentTeachingPath, currentTeachingPathView, currentCanEditOrDelete } = this.state;
     const tempIsPublishedCurrentTeachingPath = isPublishedCurrentTeachingPath!;
     return (
       <div className="dark" onClick={this.closeSlideOutPanel}>
         <SideOutPanelPreviewTeachingPath
+          currentCanEditOrDelete={currentCanEditOrDelete}
           view={currentTeachingPathView}
           isPublishedCurrentTeachingPath={tempIsPublishedCurrentTeachingPath}
           store={teachingPathsListStore}

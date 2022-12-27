@@ -256,14 +256,14 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
     switch (window.location.pathname) {
       case '/assignments/all':
         const originList = assignment!.view === 'edit' ? myAssignmentsActions : foreignAllAssignmentsActions;
-        return isContentManager ? allAssignmentsActionsContentManager : originList;
+        return isContentManager ? myAssignmentsActions : originList;
 
       case '/assignments/myschool':
         const originListSchool = assignment!.view === 'edit' ? myAssignmentsActions : foreignAllAssignmentsActions;
-        return isContentManager ? allAssignmentsActionsContentManager : originListSchool;
+        return isContentManager ? myAssignmentsActions : originListSchool;
 
       case '/assignments/my':
-        return isContentManager ? myAssignmentsActionsContentManager : myAssignmentsActions;
+        return isContentManager ? myAssignmentsActions : myAssignmentsActions;
 
       default:
         return [];
