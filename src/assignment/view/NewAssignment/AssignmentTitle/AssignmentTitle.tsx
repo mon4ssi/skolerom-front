@@ -60,6 +60,7 @@ export class AssignmentTitle extends Component<Props> {
   public render() {
     const { assignment, newAssignmentStore } = this.props;
     const lightItem = newAssignmentStore!.isHighlightedItem(CreationElements.Title) ? 'lightItem' : '';
+    const isPublishedAndPrivate = this.props.assignment!.isPrivate!;
 
     return (
       <div className={`AssignmentTitle ${lightItem}`} onClick={this.setHighlightedItem}>
@@ -89,11 +90,7 @@ export class AssignmentTitle extends Component<Props> {
             aria-labelledby="DescriptionInputTextArea"
           />
           <div className="sectionGuidance sectionGuidanceFlex">
-            <DetailsModal
-              isAssignment={true}
-              currentQuestionaryStore={newAssignmentStore!}
-              drafAssignment={assignment}
-            />
+            {!isPublishedAndPrivate && <DetailsModal isAssignment={true} currentQuestionaryStore={newAssignmentStore!} drafAssignment={assignment} />}
             <CreateButton
               title={newAssignmentStore!.getTitleButtonGuidance}
               onClick={this.openModalTGAssig.bind(this, '0')}
