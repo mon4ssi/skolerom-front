@@ -116,6 +116,12 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
         // tslint:disable-next-line:no-empty
         onClick: this.props.isPublished ? copyTeachingPath : () => { },
         disabled: !this.props.isPublished
+      },
+      {
+        text: intl.get('teaching_paths_list.delete'),
+        type: 'edit',
+        onClick: deleteTeachingPath,
+        disabled: this.props!.ownedByMe!
       }
     ];
 
