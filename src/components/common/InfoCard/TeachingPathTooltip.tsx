@@ -117,10 +117,12 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
         onClick: this.props.isPublished ? copyTeachingPath : () => { },
         disabled: !this.props.isPublished
       },
-      /* {
+      {
         text: intl.get('teaching_paths_list.delete'),
-        onClick: deleteTeachingPath
-      } */
+        type: 'delete',
+        onClick: deleteTeachingPath,
+        disabled: this.props!.ownedByMe!
+      }
     ];
 
     const ownedByMe = this.props.view! === 'edit';
@@ -132,7 +134,7 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
       });
     } */
 
-    if (isContentManager) {
+    /*if (isContentManager) {
       if (!this.props.isTestAccount) {
         contentManagerTeachingPathsActions.push({
           text: intl.get('teaching_paths_list.delete'),
@@ -148,19 +150,19 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
           });
         }
       }
-    }
+    }*/
 
     switch (window.location.pathname) {
       case '/teaching-paths/all':
         const originList = view === 'edit' ? myTeachingPathsActions : foreignAllTeachingPathsActions;
-        return isContentManager ? myTeachingPathsActions : originList;
+        return isContentManager ? contentManagerTeachingPathsActions : originList;
 
       case '/teaching-paths/myschool':
         const originListmyschool = view === 'edit' ? myTeachingPathsActions : foreignAllTeachingPathsActions;
-        return isContentManager ? myTeachingPathsActions : originListmyschool;
+        return isContentManager ? contentManagerTeachingPathsActions : originListmyschool;
 
       case '/teaching-paths/my':
-        return isContentManager ? myTeachingPathsActions : myTeachingPathsActions;
+        return isContentManager ? contentManagerTeachingPathsActions : myTeachingPathsActions;
 
       default:
         return [];

@@ -178,34 +178,31 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
       {
         canEditOrDelete,
         type: ActionMenuItemType.LINK,
-        text: assignment.view === 'edit' ? intl.get('assignment list.Edit assignment') : intl.get('assignment list.View assignment'),
-        functiontype: 'edit',
-        link: assignment.view === 'edit' ? `/assignments/edit/${assignment.id}` : {
-          pathname: `/assignments/view/${assignment!.id}`,
-          state: {
-            readOnly: true
-          }
-        }
+        text: intl.get('assignment list.Edit assignment'),
+        link: `/assignments/edit/${assignment.id}`,
+        functiontype: 'edit'
       },
       {
         canEditOrDelete,
         type: ActionMenuItemType.BUTTON,
         text: intl.get('assignment list.Copy assignment'),
-        functiontype: 'copy',
         // tslint:disable-next-line:no-empty
         onClick: assignment.isPublished ? this.handleCopyAssignment : () => {},
-        disabled: !assignment.isPublished
+        disabled: !assignment.isPublished,
+        functiontype: 'copy'
       },
-      /* {
+      {
+        canEditOrDelete,
         type: ActionMenuItemType.BUTTON,
         text: intl.get('assignment list.Delete assignment'),
         onClick: this.confirmDeleteListItem,
-      } */
+        functiontype: 'delete'
+      }
     ];
 
     const ownedByMe = this.props.view! === 'edit';
 
-    if (isContentManager) {
+    /*if (isContentManager) {
       if (!this.props.isTestAccount) {
         allAssignmentsActionsContentManager.push({
           canEditOrDelete,
@@ -225,7 +222,7 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
           });
         }
       }
-    }
+    }*/
 
     const myAssignmentsActionsContentManager: Array<ActionMenuItemLink | ActionMenuItemButton> = [
       {
@@ -256,14 +253,14 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
     switch (window.location.pathname) {
       case '/assignments/all':
         const originList = assignment!.view === 'edit' ? myAssignmentsActions : foreignAllAssignmentsActions;
-        return isContentManager ? myAssignmentsActions : originList;
+        return isContentManager ? allAssignmentsActionsContentManager : originList;
 
       case '/assignments/myschool':
         const originListSchool = assignment!.view === 'edit' ? myAssignmentsActions : foreignAllAssignmentsActions;
-        return isContentManager ? myAssignmentsActions : originListSchool;
+        return isContentManager ? allAssignmentsActionsContentManager : originListSchool;
 
       case '/assignments/my':
-        return isContentManager ? myAssignmentsActions : myAssignmentsActions;
+        return isContentManager ? myAssignmentsActionsContentManager : myAssignmentsActions;
 
       default:
         return [];
