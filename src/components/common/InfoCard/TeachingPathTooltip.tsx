@@ -172,16 +172,8 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
   private renderTooltipItems = (list: Array<ActionMenuItem>) =>
     list.map((item, index) => {
       let isPosibleDeleteOrEdit = false;
-      switch (item.type) {
-        case 'edit':
-          isPosibleDeleteOrEdit = true;
-          break;
-        case 'delete':
-          isPosibleDeleteOrEdit = true;
-          break;
-        default:
-          isPosibleDeleteOrEdit = false;
-      }
+      if (item.type === 'edit') { isPosibleDeleteOrEdit = true; }
+      if (item.type === 'delete') { isPosibleDeleteOrEdit = true; }
       if (isPosibleDeleteOrEdit) {
         if (this.props.canEditOrDelete) {
           return (
