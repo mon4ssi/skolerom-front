@@ -228,6 +228,30 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
       {
         canEditOrDelete,
         type: ActionMenuItemType.LINK,
+        text: intl.get('assignment list.View assignment'),
+        functiontype: 'view',
+        link: {
+          pathname: `/assignments/view/${assignment!.id}`,
+          state: {
+            readOnly: true
+          }
+        }
+      },
+      {
+        canEditOrDelete,
+        type: ActionMenuItemType.BUTTON,
+        text: intl.get('assignment list.Copy assignment'),
+        functiontype: 'copy',
+        // tslint:disable-next-line:no-empty
+        onClick: assignment.isPublished ? this.handleCopyAssignment : () => {},
+        disabled: !assignment.isPublished
+      }
+    ];
+
+    const myAssignmentsActionsContentManagerPlus: Array<ActionMenuItemLink | ActionMenuItemButton> = [
+      {
+        canEditOrDelete,
+        type: ActionMenuItemType.LINK,
         text: intl.get('assignment list.Edit assignment'),
         functiontype: 'edit',
         link: `/assignments/edit/${assignment.id}`
@@ -253,14 +277,14 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
     switch (window.location.pathname) {
       case '/assignments/all':
         const originList = assignment!.view === 'edit' ? myAssignmentsActions : foreignAllAssignmentsActions;
-        return isContentManager ? allAssignmentsActionsContentManager : originList;
+        return isContentManager ? canEditOrDelete ? myAssignmentsActionsContentManagerPlus : myAssignmentsActionsContentManager : originList;
 
       case '/assignments/myschool':
         const originListSchool = assignment!.view === 'edit' ? myAssignmentsActions : foreignAllAssignmentsActions;
         return isContentManager ? allAssignmentsActionsContentManager : originListSchool;
 
       case '/assignments/my':
-        return isContentManager ? myAssignmentsActionsContentManager : myAssignmentsActions;
+        return isContentManager ? canEditOrDelete ? myAssignmentsActionsContentManagerPlus : myAssignmentsActionsContentManager : myAssignmentsActions;
 
       default:
         return [];
