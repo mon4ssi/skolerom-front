@@ -83,7 +83,7 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
       },
       {
         text: intl.get('teaching_paths_list.delete'),
-        type: 'delete',
+        type: 'edit',
         onClick: deleteTeachingPath,
         disabled: this.props!.ownedByMe!
       }
@@ -174,7 +174,7 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
       let isPosibleDeleteOrEdit = false;
       if (item.type === 'edit') { isPosibleDeleteOrEdit = true; }
       if (item.type === 'delete') { isPosibleDeleteOrEdit = true; }
-      if (isPosibleDeleteOrEdit) {
+      if (item.type === 'edit') {
         if (this.props.canEditOrDelete) {
           return (
             <li key={index} data-key={item.type} className={`fw500 flexBox fs15 editOrDeleteValue ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick}>{item.text}</a></li>
