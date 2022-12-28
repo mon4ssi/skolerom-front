@@ -208,8 +208,8 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
     if (canEditOrDelete || window.location.pathname === '/teaching-paths/my') {
       return (
         <ul className="flexBox dirColumn">
-          <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={viewTeachingPath}>{intl.get('teaching_paths_list.edit')}</a></li>
-          <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={editTeachingPath}>{intl.get('teaching_paths_list.view')}</a></li>
+          <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={editTeachingPath}>{intl.get('teaching_paths_list.edit')}</a></li>
+          <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={viewTeachingPath}>{intl.get('teaching_paths_list.view')}</a></li>
           <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={copyTeachingPath}>{intl.get('teaching_paths_list.copy')}</a></li>
           <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={deleteTeachingPath}>{intl.get('teaching_paths_list.delete')}</a></li>
         </ul>
@@ -217,7 +217,7 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
     }
     return (
       <ul className="flexBox dirColumn">
-        <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={editTeachingPath}>{intl.get('teaching_paths_list.view')}</a></li>
+        <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={viewTeachingPath}>{intl.get('teaching_paths_list.view')}</a></li>
         <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={copyTeachingPath}>{intl.get('teaching_paths_list.copy')}</a></li>
       </ul>
     );
