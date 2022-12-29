@@ -14,7 +14,21 @@
     background: #000;
     color: white;
   }
-
+  &.copyInFlex {
+    display: flex;
+    align-items: center;
+    img {
+      filter: invert(1);
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
+    &.copyNotInvert {
+      img {
+        filter: invert(0);
+      }
+    }
+  }
   &.light {
     background: #939FA7;
     color: #0B2541;

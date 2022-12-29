@@ -17,6 +17,8 @@ import verticalDots from 'assets/images/vertical-dots.svg';
 import userPlaceholder from 'assets/images/user-placeholder.png';
 import closeicon from 'assets/images/close-rounded-black.svg';
 import question from 'assets/images/questions.svg';
+import copyIcon from 'assets/images/copy-icon.svg';
+import teaGuiBGImg from 'assets/images/guidance-bg.svg';
 
 import './AppHeader.scss';
 import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
@@ -653,9 +655,11 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   public renderCopyButton = (intlKey: string) => (
     <div className="doneBox flexBox alignCenter copyButton">
       <CreateButton
+        className="copyInFlex"
         onClick={this.handleCopy}
         title={intl.get(intlKey)}
       >
+        <img src={copyIcon} />
         {intl.get(intlKey)}
       </CreateButton>
     </div>
@@ -675,17 +679,20 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     return (
       <div className="doneBox flexBox alignCenter copyButton">
         <CreateButton
-          className="jr-btnHeaderTeacherGuidance AppHeader__btnHeaderGuidance"
+          className="jr-btnHeaderTeacherGuidance AppHeader__btnHeaderGuidance copyInFlex copyNotInvert"
           onClick={this.openModalTGAssig.bind(this, '0')}
-          title={intl.get('teacherGuidance.name')}
+          title={intl.get('teacherGuidance.buttons.read')}
         >
-          {intl.get('teacherGuidance.name')}
+          <img src={teaGuiBGImg} />
+          {intl.get('teacherGuidance.buttons.read')}
         </CreateButton>
         {!isPrivateAssignment! && (<div className="grepButton"><DetailsModal isAssignment={true} id={currentEntityId} /></div>)}
         <CreateButton
           onClick={this.handleCopy}
           title={intl.get('assignment list.Copy assignment')}
+          className="copyInFlex"
         >
+          <img src={copyIcon} />
           {intl.get('assignment list.Copy assignment')}
         </CreateButton>
       </div>

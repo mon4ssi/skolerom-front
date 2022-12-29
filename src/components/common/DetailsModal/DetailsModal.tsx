@@ -20,7 +20,7 @@ import { TeachingPathService, TEACHING_PATH_SERVICE } from 'teachingPath/service
 import { GenericGrepItem, GoalsData, Subject } from 'assignment/Assignment';
 import { TeachingPath } from 'teachingPath/TeachingPath';
 import { AssignmentService, ASSIGNMENT_SERVICE } from 'assignment/service';
-
+const NumberTen = 10;
 interface Props {
   isTeachingPath?: boolean;
   isAssignment?: boolean;
@@ -246,11 +246,23 @@ export class DetailsModal extends Component<Props, State> {
   public goalsRender = () => {
     const { isOpen } = this.state;
     const { goals } = this.state;
+    let classsubjectTitle = 'subjectTitle';
+    if (this.transformGoals().length > 0) {
+      this.transformGoals().forEach((e) => {
+        if (e.goalsArray.length > 0) {
+          e.goalsArray.forEach((ei) => {
+            if (ei.gradeDesc!.length > NumberTen) {
+              classsubjectTitle = 'subjectTitle subjectTitleCont';
+            }
+          });
+        }
+      });
+    }
     return (
       <div className="modalContentTG__body__item">
         <h3><img className="imgInfo" src={goalsIcon} /> {intl.get('preview.teaching_path.grep.educational_goals')}</h3>
-        <ul className="modalContentTG__body__listGoals left">
-        {this.transformGoals().map(item => <li key={item.subjectId}><div className="subjectTitle">{item.subjectDesc}<div className="description"><ul>{item.goalsArray.map(li => <li key={item.subjectId} className="goalsItem"><div className="goalsItem__grade">{li.gradeDesc}</div><div className="goalsItem__description">{li.description}</div></li>)}</ul></div></div></li>)}
+        <ul className="modalContentTG__body__listGoals">
+        {this.transformGoals().map(item => <li key={item.subjectId}><div className={classsubjectTitle}>{item.subjectDesc}<div className="description"><ul>{item.goalsArray.map(li => <li key={item.subjectId} className="goalsItem"><div className="goalsItem__grade">{li.gradeDesc}</div><div className="goalsItem__description">{li.description}</div></li>)}</ul></div></div></li>)}
         </ul>
       </div>
     );

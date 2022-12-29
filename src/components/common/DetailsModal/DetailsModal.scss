@@ -64,6 +64,13 @@
                             }
                         }
                     }
+                    &.subjectTitleCont {
+                        .description {
+                            ul {
+                                .goalsItem__grade { width: 105px; }
+                            }
+                        }
+                    }
                 }
                 &:last-child {
                     .subjectTitle {
@@ -75,8 +82,9 @@
                     font-weight: 700;
                 }
                 .description {
-                    font-size: 14px;
+                    font-size: 15px;
                     font-weight: 300;
+                    line-height: 22px;
                 }
             }
             

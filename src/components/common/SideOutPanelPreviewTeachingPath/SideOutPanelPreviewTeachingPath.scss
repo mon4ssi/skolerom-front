@@ -243,6 +243,11 @@
         display: flex;
         font-size: 13px;
         align-items: center;
+        min-width: 90px;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 350px;
 
         img {
           margin-right: 10px;
@@ -298,6 +303,11 @@
         display: flex;
         font-size: 13px;
         align-items: center;
+        min-width: 90px;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 350px;
 
         img {
           margin-right: 10px;
@@ -733,7 +743,11 @@
         display: flex;
         font-size: 13px;
         align-items: center;
-
+        min-width: 90px;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 350px;
         img {
           margin-right: 10px;
         }
@@ -788,7 +802,11 @@
         display: flex;
         font-size: 13px;
         align-items: center;
-
+        min-width: 90px;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 350px;
         img {
           margin-right: 10px;
         }
