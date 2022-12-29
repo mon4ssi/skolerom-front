@@ -17,13 +17,13 @@ import greenCheck from 'assets/images/green_check.svg';
 import { buildArticle } from 'assignment/factory';
 import { AttachmentComponent } from 'assignment/view/NewAssignment/AttachmentsList/Attachment';
 import { id } from 'date-fns/locale';
-import { CustomImageFormSimple } from './CustomImageFormSimple/CustomImageFormSimple';
 import { Pagination } from 'components/common/Pagination/Pagination';
 import { MoreOptionsCustomImage } from './MoreOptionsCustomImage/MoreOptionsCustomImage';
 import { CustomImageForm } from 'assignment/view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { AttachmentContentType } from 'assignment/view/NewAssignment/AttachmentContentTypeContext';
 import { lettersNoEn } from 'utils/lettersNoEn';
+import { CustomImageFormSimple } from 'assignment/view/NewAssignment/AttachmentsList/CustomImageFormSimple/CustomImageFormSimple';
 
 const const1 = 1;
 const const2 = 2;
