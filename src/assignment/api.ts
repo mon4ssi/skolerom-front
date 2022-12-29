@@ -48,6 +48,7 @@ export interface AttachmentDTO {
   url_large?: string;
   duration?: number;
   src?: Array<string>;
+  source?: string;
 }
 
 export interface CustomImgAttachmentDTO {
@@ -551,7 +552,7 @@ export class WPApi implements ArticleRepo {
       }
     );
     if (response.data.media.length > 0) {
-      return (response).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, item.url_large, item.duration, item.src));
+      return (response).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, item.url_large, item.duration, item.src, item.source));
     }
     return [];
   }

@@ -114,12 +114,70 @@
       margin: 10px 0 0 0;
       overflow: auto;      
       padding-bottom: 10px;
-      &__img-wrap {
+      &__img-wrap-custom {
         margin: 17px 10px 0;
         width: calc(100% * (1 / 4) - 20px);
         background-color: rgba(0, 0, 0, 0.3);
         min-height: 200px;
         max-height: 300px;
+        position: relative;
+
+        button {
+          padding: 0px;
+          height: 100%;
+          display: block;
+          width: 100%;
+          &:focus {
+            outline: auto;
+            outline-style: auto;
+            outline-offset: 3px;
+          }
+        }
+
+        &.disabled:before {
+          content: '';
+          display: block;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        &.selected {
+
+          .videoDuration {
+            margin: 10px 0 0 -5px;
+            width: calc(100% + 10px);
+          }
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+          cursor: pointer;
+          object-fit: cover;
+          background-size: cover;
+        }
+
+        .is-selected-icon {
+          cursor: pointer;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding-bottom: 50px;
+          pointer-events: none;
+        }
+      }
+
+      &__img-wrap {
+        margin: 17px 10px 0;
+        width: calc(100% * (1 / 4) - 20px);
+        background-color: rgba(0, 0, 0, 0.3);
+        min-height: 320px;
+        max-height: 320px;
         position: relative;
 
         button {
@@ -398,7 +456,8 @@
 
         img {
           width: 100%;
-          height: 100%;
+          min-height: 70%;
+          max-height: 70%;
           cursor: pointer;
           object-fit: cover;
           background-size: cover;

@@ -143,20 +143,38 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     const { isProcessing, showMoreOptions } = this.state;
 
     if (this.context.contentType === AttachmentContentType.image) {
+      const selectedItem = isSelected ? 'customImageComponente active' : 'customImageComponente';
+      const isCustomImg = (attachment.deleteddate) ? false : (attachment.path!.split(String(process.env.REACT_APP_WP_URL)).length > 1) ? false : true;
+      const isCustomImgClass = (isCustomImg) ? 'customImageComponente__image' : 'customImageComponente__image heightfull';
+
       let arraySrc = attachment.src && attachment.src[1] && attachment.src[1];
       if (!Array.isArray(attachment.src)) {
         arraySrc = attachment.path;
       }
       return (
-        <button title="Attachment Media" onClick={this.toggleAttachment}>
+        <div className={selectedItem}>
+          <div className={isCustomImgClass}>
+            <button title={attachment.title} className="customImageComponente__image__button" onClick={this.toggleAttachment}>
+              <img
+                src={attachment.path}
+                alt={attachment.alt}
+                srcSet={attachment.path}
+              />
+            </button>
+            {isCustomImg && <MoreOptionsCustomImage attachmentId={0} onEdit={this.editItem} onRemove={this.removeItem} />}
+          </div>
+          {this.renderTitleInfo(attachment.title, String(attachment.source))}
+        </div>
+      );
+      {/* <button title="Attachment Media" onClick={this.toggleAttachment}>
           <img
             src={attachment.path}
             alt={attachment.alt}
             srcSet={arraySrc!}
             sizes={'(min-width: 320px) 300px'}
           />
-        </button>
-      );
+          {this.renderTitleInfo(attachment.title, String(attachment.source))}
+      </button> */}
     }
     if (this.context.contentType === AttachmentContentType.customImage) {
       const selectedItem = isSelected ? 'customImageComponente active' : 'customImageComponente';
@@ -174,7 +192,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
             </button>
             {isCustomImg && <MoreOptionsCustomImage attachmentId={0} onEdit={this.editItem} onRemove={this.removeItem} />}
           </div>
-          {isCustomImg && this.renderTitleInfo(attachment.title, String(attachment.src))}
+          {this.renderTitleInfo(attachment.title, String(attachment.src))}
         </div>
       );
     }
@@ -223,7 +241,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
       });
     }
     if (this.context.contentType === AttachmentContentType.customImage) {
-      wrapClass = classnames('attachments-list__img-wrap', {
+      wrapClass = classnames('attachments-list__img-wrap-custom', {
         disabled: isProcessing,
         selected: isSelected,
       });
