@@ -195,7 +195,11 @@ class Sidebar extends Component<Props> {
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
     const qlEditorText = 'ql-editor';
+    const sidebarItem = Array.from(document.getElementsByClassName('Sidebar__listItem') as HTMLCollectionOf<HTMLElement>);
     if (htmlPathArea !== htmlText && htmlPathArea !== inputText && classDivPath !== qlEditorText) {
+      if ((event.shiftKey && event.key === 'S') || (event.shiftKey && event.key === 's')) {
+        sidebarItem[0]!.focus();
+      }
       if ((event.shiftKey && event.key === 'T') || (event.shiftKey && event.key === 't')) {
         window.location.href = '/teaching-paths/';
       }

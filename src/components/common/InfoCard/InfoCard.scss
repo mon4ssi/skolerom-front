@@ -25,8 +25,13 @@
   .toggleReadDescription {
     margin-top: 5px;
     .toggleRead {
-      display: flex;
+      display: inline-flex;
       align-items: center;
+      &:focus {
+        outline: black;
+        outline-style: auto;
+        outline-offset: 3px;
+      }
       img {
         width: 18px;
         margin-right: 5px;
@@ -287,6 +292,11 @@
       }
       .flexBox {
         align-items: center;
+        &:focus-within {
+          outline: black;
+          outline-style: auto;
+          outline-offset: 2px;
+        }
       }
       span {
         font-size: 14px;
@@ -336,8 +346,13 @@
       }
       .toggleReadDescription {
         .toggleRead {
-          display: flex;
+          display: inline-flex;
           align-items: center;
+          &:focus {
+            outline: black;
+            outline-style: auto;
+            outline-offset: 3px;
+          }
           img {
             width: 18px;
             margin-right: 5px;
@@ -364,6 +379,11 @@
         max-width: 170px;
         &.btnRead {
           background: #0a7b24;
+        }
+        &:focus {
+          outline: black;
+          outline-style: auto;
+          outline-offset: 2px;
         }
       }
     }

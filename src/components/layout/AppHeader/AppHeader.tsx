@@ -200,6 +200,7 @@ interface HeaderState {
 @inject('loginStore', 'uiStore')
 @observer
 class AppHeader extends Component<HeaderProps, HeaderState> {
+  private refCloseButton = React.createRef<HTMLButtonElement>();
   public readonly state: HeaderState = {
     modalVisible: Modals.NONE,
     isModalKeyboard: false,
@@ -319,7 +320,12 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     this.setState({ modalVisible: Modals.NONE });
   }
 
-  private openKeyboardModal = () => (this.setState({ isModalKeyboard: true }));
+  private openKeyboardModal = () => {
+    if (this.refCloseButton.current) {
+      this.refCloseButton.current.focus();
+    }
+    this.setState({ isModalKeyboard: true });
+  }
 
   private closeModalKeyboard = () => (this.setState({ isModalKeyboard: false }));
 
@@ -434,7 +440,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         <div className="modalKeyboard">
           <div className="modalKeyboard__background" onClick={this.closeModalKeyboard} />
           <div className="modalKeyboard__content">
-            <div className="modalKeyboard__close" onClick={this.closeModalKeyboard} />
+            <button className="modalKeyboard__close" ref={this.refCloseButton} onClick={this.closeModalKeyboard} />
             <div className="modalKeyboard__inside">
               {this.renderContentKeyboardStudent()}
             </div>
@@ -447,7 +453,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         <div className="modalKeyboard">
           <div className="modalKeyboard__background" onClick={this.closeModalKeyboard} />
           <div className="modalKeyboard__content">
-            <div className="modalKeyboard__close" onClick={this.closeModalKeyboard} />
+            <button className="modalKeyboard__close" ref={this.refCloseButton} onClick={this.closeModalKeyboard} />
             <div className="modalKeyboard__inside">
               {this.renderContentKeyboardStudentTeacher()}
               {this.renderContentKeyboardTeacher()}
@@ -461,7 +467,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         <div className="modalKeyboard">
           <div className="modalKeyboard__background" onClick={this.closeModalKeyboard} />
           <div className="modalKeyboard__content">
-            <div className="modalKeyboard__close" onClick={this.closeModalKeyboard} />
+            <button className="modalKeyboard__close" ref={this.refCloseButton} onClick={this.closeModalKeyboard} />
             <div className="modalKeyboard__inside">
               {this.renderContentKeyboardStudentTeacher()}
               {this.renderContentKeyboardTeacher()}
@@ -526,6 +532,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     const htmlText = '[object HTMLTextAreaElement]';
     const inputText = '[object HTMLInputElement]';
     const qlEditorText = 'ql-editor';
+    const navigationItem = Array.from(document.getElementsByClassName('AppHeader__navigationItem') as HTMLCollectionOf<HTMLElement>);
     if (event.key === 'Escape') {
       this.setState({
         modalVisible: Modals.NONE,
@@ -533,6 +540,10 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       this.setState({ isModalKeyboard: false });
     }
     if (htmlPathArea !== htmlText && htmlPathArea !== inputText && classDivPath !== qlEditorText) {
+      if ((event.shiftKey && event.key === 'M') || (event.shiftKey && event.key === 'm')) {
+        const dropDown = navigationItem[1].querySelector('.AppHeader__dropdown') as HTMLElement;
+        dropDown!.focus();
+      }
       if ((event.shiftKey && event.key === 'R') || (event.shiftKey && event.key === 'r')) {
         window.open(`${process.env.REACT_APP_WP_URL}/artikler/`, '_blank');
       }

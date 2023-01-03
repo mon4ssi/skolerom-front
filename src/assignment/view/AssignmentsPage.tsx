@@ -975,6 +975,18 @@ class AssignmentsPageWrapper extends Component<Props, State> {
         valueStringGoalsOptions: listGoals
       });
     }
+    document.addEventListener('keyup', this.handleKeyboardControl);
+  }
+
+  public componentWillUnmount() {
+    document.removeEventListener('keyup', this.handleKeyboardControl);
+  }
+
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    const filterButton = Array.from(document.getElementsByClassName('closehandler') as HTMLCollectionOf<HTMLElement>);
+    if ((event.shiftKey && event.key === 'Q') || (event.shiftKey && event.key === 'q')) {
+      filterButton[0]!.focus();
+    }
   }
 
   public handleClickReset = async () => {

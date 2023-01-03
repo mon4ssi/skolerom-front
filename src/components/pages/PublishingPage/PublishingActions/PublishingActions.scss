@@ -127,6 +127,11 @@
               padding: 0px;
               background: transparent;
               display: block;
+              &:focus {
+                outline: black;
+                outline-style: auto;
+                outline-offset: 2px;
+              }
               img {
                 display: block;
                 width: 20px;

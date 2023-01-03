@@ -36,10 +36,16 @@
       align-items: center;
       font-size: 16px;
       margin-left: 40px;
+      padding-right: 5px;
       img {
         margin: 5px;
         width: 20px;
         height: 20px;
+      }
+      &:focus {
+        outline: black;
+        outline-style: auto;
+        outline-offset: 0px;
       }
     }
   }
