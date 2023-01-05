@@ -56,7 +56,7 @@ export interface CustomImgAttachmentDTO {
   title: string;
   id?: number;
   filename?: string;
-  source?: Array<string>;
+  source?: string;
   deletedAt?: string | undefined | null;
 }
 
@@ -588,7 +588,7 @@ export class WPApi implements ArticleRepo {
       `${process.env.REACT_APP_BASE_URL}/api/teacher/images`, {
         params: parameters,
       });
-    const customImages = response.data.data.map((item: CustomImgAttachmentDTO) => new CustomImgAttachment(item.id!, item.path, item.title, item.title, item.title, 0, item.source, item.deletedAt));
+    const customImages = response.data.data.map((item: CustomImgAttachmentDTO) => new CustomImgAttachment(item.id!, item.path, item.title, item.title, item.title, 0, [], item.source!, item.deletedAt));
     const entirePage = Math.floor((response.data.meta.pagination.total / DEFAULT_CUSTOM_IMAGES_PER_PAGE));
     const modulePage = Math.floor((response.data.meta.pagination.total % DEFAULT_CUSTOM_IMAGES_PER_PAGE));
     return {

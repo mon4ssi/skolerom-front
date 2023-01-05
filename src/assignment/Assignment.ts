@@ -781,7 +781,7 @@ export class QuestionAttachment {
     this.path = params.path;
     this.alt = params.alt;
     this.title = params.title;
-    this.source = params.source || params.src![0];
+    this.source = params.source;
     this.src = params.src;
     this.fileName = params.fileName;
     this.duration = params.duration;

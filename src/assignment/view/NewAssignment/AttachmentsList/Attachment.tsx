@@ -192,7 +192,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
             </button>
             {isCustomImg && <MoreOptionsCustomImage attachmentId={0} onEdit={this.editItem} onRemove={this.removeItem} />}
           </div>
-          {this.renderTitleInfo(attachment.title, String(attachment.src))}
+          {this.renderTitleInfo(attachment.title, String(attachment.source))}
         </div>
       );
     }
