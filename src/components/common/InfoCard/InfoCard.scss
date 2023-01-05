@@ -217,7 +217,21 @@
           cursor: default;
           z-index: 2;
           background: #fff;
+          li {
+            cursor: pointer;
+            margin: 7px;
+            a {
+              &:focus {
+                outline: black;
+                outline-style: auto;
+              }
+            }
+          }
 
+          .disabled {
+            color: #939FA7;
+            cursor: default;
+          }
           ul {
             li {
               cursor: pointer;
