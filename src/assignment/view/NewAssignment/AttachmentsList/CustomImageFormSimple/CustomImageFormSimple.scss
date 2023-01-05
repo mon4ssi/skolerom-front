@@ -1,5 +1,12 @@
-.filenameSpan {
+.filenameSpanCounter {
     margin-left: 10px !important;
+    margin-right: 10px !important;
+    font-weight: 300;
+}
+
+.filenameSpanWarning {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
 }
 
 .label {
@@ -51,6 +58,11 @@
     margin-bottom: 10px;
 }
 
+.completeInputsWarning {
+    display: flex;
+    margin: 10px !important;
+}
+
 .previewImageUpload {
     /* max-width: 100%;
     max-height: 250px; */
@@ -88,7 +100,10 @@
     border-radius: 7px;
     background: white;
     box-shadow: 0 2px 4px 0 #d3d9de;
-}
+} ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: gray;
+    opacity: 0.7; /* Firefox */
+  }
 
 .infoImage {
     background-color: #FFFFFF;

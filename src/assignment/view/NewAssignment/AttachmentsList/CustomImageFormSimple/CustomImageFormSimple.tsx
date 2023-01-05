@@ -3,6 +3,7 @@ import { ArticleService } from 'assignment/service';
 import { injector } from 'Injector';
 import React, { useContext, useEffect, useState } from 'react';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
+import exclamationImg from 'assets/images/exclamation-round.svg';
 import intl from 'react-intl-universal';
 
 import './CustomImageFormSimple.scss';
@@ -36,6 +37,7 @@ export const CustomImageFormSimple = (props: any) => {
   const [fileNames, setFileNames] = useState(filenames);
   const [progressBar, setProgressBar] = useState(0);
   const [inProgress, setInProgress] = useState(false);
+  const [areFullInputs, setAreFullInputs] = useState(false);
 
   const isNotEmpty = fileList!.length !== 0;
 
@@ -56,6 +58,7 @@ export const CustomImageFormSimple = (props: any) => {
     }
     /* setImageFileArray(files); */
     setFileNames(filenames!);
+    validateFieldsForTitleSource();
   };
 
   const renderTrashIcon = (fileName: string) => (
@@ -76,18 +79,19 @@ export const CustomImageFormSimple = (props: any) => {
     /* setImagesFileList(temporalArray!); */
     setFileList(temporalArray!);
     setValue(value - 1);
+    validateFieldsForTitleSource();
   };
 
   const renderUploadImagesButton = () => <div className="spaced right"><button className="createButton" onClick={uploadImages}>{intl.get('new assignment.uploadCustomImages.upload_images')}</button></div>;
 
   const uploadImages = () => {
-
-    if (value === 1) {
-      uploadSingleImage();
-    } else {
-      uploadMultipleImages();
+    if (areFullInputs) {
+      if (value === 1) {
+        uploadSingleImage();
+      } else {
+        uploadMultipleImages();
+      }
     }
-
   };
 
   const uploadSingleImage = () => {
@@ -190,6 +194,17 @@ export const CustomImageFormSimple = (props: any) => {
     return true;
   }; */
 
+  const validateFieldsForTitleSource = () => {
+    setAreFullInputs(booleanNotEmptyAllInputs());
+    return booleanNotEmptyAllInputs();
+  };
+
+  const booleanNotEmptyAllInputs = (): boolean => {
+    let validation = true;
+    fileList!.forEach((item) => { item.title !== '' && item.source !== '' ? validation = validation && true : validation = validation && false; });
+    return validation;
+  };
+
   const showCustomImageUploadMessageError = () => {
     if (value === 1) {
       Notification.create({
@@ -230,6 +245,7 @@ export const CustomImageFormSimple = (props: any) => {
     if (index) {
       index!.source = newSource;
     }
+    validateFieldsForTitleSource();
   };
 
   const editTitleForImage = (newTitle: string, fileName: string, fileList: Array<CustomImageItem>): void => {
@@ -237,10 +253,12 @@ export const CustomImageFormSimple = (props: any) => {
     if (index) {
       index!.title = newTitle;
     }
+    validateFieldsForTitleSource();
   };
 
   const itemImageFile = (file: File) => {
     const size = ((file.size) / THOUSAND) / THOUSAND;
+
     return (
       <div className="imageUpload" key={file.name}>
         <div key={file.name} className="imageListItem">
@@ -288,14 +306,24 @@ export const CustomImageFormSimple = (props: any) => {
     </label>
   );
 
+  const renderWarningCompleteInputs = () => (
+    <div className="completeInputsWarning">
+      {<img src={exclamationImg} alt="recent-activity" />}
+      <span className="filenameSpanWarning">{fileList.length === 1 ? `${intl.get('new assignment.uploadCustomImages.single_all_fields_required')}` : `${intl.get('new assignment.uploadCustomImages.multi_all_fields_required')}`}</span>
+    </div>
+  );
+
   return (
     <div>
       <div className="spaced">
         {!isNotEmpty && renderInputFile()}
-        <span className="filenameSpan">{`${intl.get('new assignment.uploadCustomImages.counter_message_1')} ${value} ${intl.get('new assignment.uploadCustomImages.counter_message_2')}`}</span>
+        <span className="filenameSpanCounter">{`${intl.get('new assignment.uploadCustomImages.counter_message_1')} ${value} ${intl.get('new assignment.uploadCustomImages.counter_message_2')}`}</span>
+        <br />
+        {isNotEmpty && !areFullInputs && renderWarningCompleteInputs()}
       </div>
+
       <div style={{ display: 'inline' }}>
-        <div>{isNotEmpty && renderUploadImagesButton()}</div>
+        <div>{isNotEmpty && areFullInputs && renderUploadImagesButton()}</div>
         <div>{inProgress && renderProgressBar()}</div>
       </div>
       <div className="imagesList">
