@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
@@ -8,6 +8,7 @@ import TextAreaAutosize from 'react-textarea-autosize';
 import { EditableQuestion } from 'assignment/assignmentDraft/AssignmentDraft';
 import { Answer, RedirectData } from 'assignment/questionary/Questionary';
 import { LocationState } from 'assignment/view/CurrentAssignmentPage/CurrentAssignmentPage';
+import { QuestionaryTeachingPathStore } from 'teachingPath/questionaryTeachingPath/questionaryTeachingPathStore';
 import { lettersNoEn } from 'utils/lettersNoEn';
 import { MAX_DESCRIPTION_LENGTH_MAX } from 'utils/constants';
 
@@ -19,9 +20,11 @@ interface Props {
   redirectData?: RedirectData;
   isEvaluationStyle?: boolean;
   isPreview?: boolean;
+  questionaryTeachingPathStore?: QuestionaryTeachingPathStore;
   handleShowArrowsTooltip?(status: boolean): void;
 }
 
+@inject('questionaryTeachingPathStore')
 @observer
 class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps<{}, {}, LocationState>> {
   private titleRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
@@ -50,10 +53,13 @@ class TextQuestionPreviewComponent extends Component<Props & RouteComponentProps
   }
 
   public renderContent = () => {
-    const { readOnly, answer, isEvaluationStyle, question, redirectData, isPreview } = this.props;
+    const { readOnly, answer, isEvaluationStyle, question, redirectData, isPreview, questionaryTeachingPathStore } = this.props;
     const isHideValue = (question.hide_answer) ? '' : answer && answer!.value;
     const placeholder = (question.hide_answer) ? '' : intl.get('new assignment.Write your answer here');
     const studentsAnswer = (question.hide_answer) ? 'studentsAnswer notline' : 'studentsAnswer';
+    if (question.hide_answer) {
+      questionaryTeachingPathStore!.setIsQuestionedHiddeButton(true);
+    }
     if (isEvaluationStyle) {
       const answerSplit = String(answer && answer.value).replace(/\n/g, '<br />');
       return <span className={'evaluationAnswer'} dangerouslySetInnerHTML={{ __html: answerSplit }} />;

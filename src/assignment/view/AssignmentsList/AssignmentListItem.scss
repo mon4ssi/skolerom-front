@@ -14,7 +14,7 @@ $image-height: 60px;
   padding: 10px 48px 10px $image-width + 20px;
   margin-bottom: 10px;
   border: 1px solid $color-dark-gray;
-  display: flex;
+  display: flex !important;
   justify-content: space-between;
   cursor: pointer;
 
