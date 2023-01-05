@@ -29,6 +29,7 @@ export class QuestionaryTeachingPathStore {
   @observable public fetchingDataCustom: boolean = false;
   @observable public isOpenIframe: boolean = false;
   @observable public isOpenAssignment: boolean = false;
+  @observable public isQuestionHiddeButton: boolean = false;
   @observable public currentDisplayedElement: TeachingPathNodeType | SubmitNodeType = TeachingPathNodeType.Root;
 
   @computed
@@ -49,6 +50,11 @@ export class QuestionaryTeachingPathStore {
   @computed
   public get isOpenedAssignment() {
     return this.isOpenAssignment;
+  }
+
+  @computed
+  public get isQuestionedHiddeButton() {
+    return this.isQuestionHiddeButton;
   }
 
   @computed
@@ -118,6 +124,10 @@ export class QuestionaryTeachingPathStore {
     return ids;
   }
 
+  @action
+  public setIsQuestionedHiddeButton(value: boolean) {
+    this.isQuestionHiddeButton = value;
+  }
   @action
   public setCurrentDisplayedElement(element: TeachingPathNodeType | SubmitNodeType) {
     this.currentDisplayedElement = element;

@@ -38,7 +38,11 @@
       flex: 1;
       border: 1px solid #0B2541;
       margin: 0;
-
+      &:focus {
+        outline: black;
+        outline-style: auto;
+        outline-offset: 2px;
+      }
       &:first-child {
         border-radius: 5px 0 0 5px;
         border-right: none;

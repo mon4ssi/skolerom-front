@@ -77,7 +77,7 @@ class TextQuestionContent extends Component<TextQuestionProps, State> {
     this.props.newAssignmentStore!.openTeacherGuidanceAssig(nroLevel);
   }
 
-  public toggleHiddenQuestion = (event: React.MouseEvent<HTMLDivElement>) => {
+  public toggleHiddenQuestion = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const { question } = this.props;
     event.preventDefault();
     if (this.state.hiddenQuestion) {
@@ -149,12 +149,12 @@ class TextQuestionContent extends Component<TextQuestionProps, State> {
             <img src={teaGuiBGImg} alt={newAssignmentStore!.getTitleButtonGuidance} />
             {newAssignmentStore!.getTitleButtonGuidance}
           </CreateButton>
-          <div className="hiddenQuestionCheck" onClick={this.toggleHiddenQuestion}>
+          <a href="javascript:void(0)" className="hiddenQuestionCheck" onClick={this.toggleHiddenQuestion}>
             <img src={this.state.hiddenQuestion ? checkActive : checkInactive} alt="checkbox" className="AssignmentArticlesToReading__checkbox"/>
             <div>
               {intl.get('assignments search.hidden_question')}
             </div>
-          </div>
+          </a>
         </div>
       </div>
     );

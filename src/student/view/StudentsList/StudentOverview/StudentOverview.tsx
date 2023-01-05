@@ -1,4 +1,4 @@
-import React, { Component, MouseEvent } from 'react';
+import React, { Component, MouseEvent, createRef } from 'react';
 import classnames from 'classnames';
 import intl from 'react-intl-universal';
 import { inject, observer } from 'mobx-react';
@@ -36,6 +36,7 @@ export const STUDENT_TAB = 'student_tab';
 @inject('studentsListStore')
 @observer
 class StudentOverview extends Component<Props & RouteComponentProps, State> {
+  private reflink = createRef<HTMLAnchorElement>();
   public state = {
     currentTab: StudentOverviewTabs.ASSIGNMENTS,
   };
@@ -57,6 +58,9 @@ class StudentOverview extends Component<Props & RouteComponentProps, State> {
           currentTab: StudentOverviewTabs.ASSIGNMENTS,
         });
         QueryStringHelper.set(this.props.history, STUDENT_TAB, StudentOverviewTabs.ASSIGNMENTS);
+    }
+    if (this.reflink.current) {
+      this.reflink.current.focus();
     }
   }
 
@@ -112,6 +116,7 @@ class StudentOverview extends Component<Props & RouteComponentProps, State> {
             href="#"
             onClick={this.goToAssignments}
             aria-disabled={currentTab === StudentOverviewTabs.ASSIGNMENTS}
+            ref={this.reflink}
           >
             {intl.get('students_list.students_overview.tabs.assignments')}
           </a>

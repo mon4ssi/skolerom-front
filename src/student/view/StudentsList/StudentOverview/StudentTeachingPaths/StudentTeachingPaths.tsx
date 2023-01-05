@@ -76,7 +76,6 @@ class StudentTeachingPaths extends Component<Props> {
       aria-labelledby="renderSearchField"
       aria-required="true"
       aria-invalid="false"
-      autoFocus
     />
   )
 

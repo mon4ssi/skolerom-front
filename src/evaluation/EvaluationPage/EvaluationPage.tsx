@@ -95,6 +95,21 @@ class EvaluationPage extends Component<IEvaluationPageProps & RouteComponentProp
     }
   }
 
+  public async componentDidMount() {
+    document.addEventListener('keyup', this.handleKeyboardControl);
+  }
+
+  public componentWillUnmount() {
+    document.removeEventListener('keyup', this.handleKeyboardControl);
+  }
+
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    const filterButton = Array.from(document.getElementsByClassName('SearchFilter__select') as HTMLCollectionOf<HTMLElement>);
+    if ((event.shiftKey && event.key === 'H') || (event.shiftKey && event.key === 'h')) {
+      filterButton[0]!.focus();
+    }
+  }
+
   public render() {
     return (
       <div className="EvaluationPage">

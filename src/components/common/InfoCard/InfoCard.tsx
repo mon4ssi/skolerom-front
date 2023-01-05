@@ -1,4 +1,4 @@
-import React, { Component, SyntheticEvent } from 'react';
+import React, { Component, SyntheticEvent, createRef } from 'react';
 import intl from 'react-intl-universal';
 import classnames from 'classnames';
 import isNull from 'lodash/isNull';
@@ -69,7 +69,7 @@ interface State {
 }
 
 class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
-
+  public buttonref = React.createRef<HTMLButtonElement>();
   public state = {
     showdescription: false,
   };
@@ -444,7 +444,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
         <div className={infoCardClassNames} data-id={this.props.id}>
           {!isDomain && withButtons && this.renderActionButtons()}
           {isDomain && withButtons && this.renderDomainButtons()}
-          <button title={title} onClick={this.onButtonCardClick}>
+          <button title={title} onClick={this.onButtonCardClick} ref={this.buttonref}>
             <img src={img || placeholderImgDefault} alt={title} title={title} className="cardImage" onError={this.isErrorImg} />
           </button>
           <div className="cardInfo flexBox dirColumn spaceBetween">

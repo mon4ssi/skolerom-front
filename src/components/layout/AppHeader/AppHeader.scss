@@ -344,6 +344,11 @@ li.AppHeader__dropdownItem__subItem:hover {
     border: solid 2px;
     cursor: pointer;
     background: white;
+    &:focus {
+      outline: black;
+      outline-style: auto;
+      outline-offset: 4px;
+    }
     &:before {
       content: '';
       position: absolute;

@@ -189,7 +189,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
   public unregisterListener: () => void = () => undefined;
 
   public fetchTeachingPaths() {
-    const { filter } = this.props.teachingPathsListStore!;
+    const { filter, teachingPathsState } = this.props.teachingPathsListStore!;
     filter.page = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.PAGE, 1);
     filter.locale = QueryStringHelper.getString(this.props.history, QueryStringKeys.LOCALE);
     filter.grade = QueryStringHelper.getString(this.props.history, QueryStringKeys.GRADE);
@@ -590,6 +590,10 @@ class TeachingPathsListComponent extends Component<Props, State> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
+    const filterButton = Array.from(document.getElementsByClassName('closehandler') as HTMLCollectionOf<HTMLElement>);
+    if ((event.shiftKey && event.key === 'H') || (event.shiftKey && event.key === 'h')) {
+      filterButton[0]!.focus();
+    }
     if (event.key === 'Escape') {
       this.setState({ isTeachingPathPreviewVisible: false });
     }
@@ -1060,6 +1064,7 @@ class TeachingPathsListComponent extends Component<Props, State> {
 
   public onChangePage = ({ selected }: { selected: number }) => {
     QueryStringHelper.set(this.props.history, QueryStringKeys.PAGE, selected + 1);
+
   }
 
   public setActiveTooltip = (id: number) => () => {
