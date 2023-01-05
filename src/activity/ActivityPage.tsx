@@ -271,7 +271,7 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
     const inputText = '[object HTMLInputElement]';
     const qlEditorText = 'ql-editor';
     if (htmlPathArea !== htmlText && htmlPathArea !== inputText && classDivPath !== qlEditorText) {
-      if ((event.shiftKey && event.key === 'Q') || (event.shiftKey && event.key === 'q')) {
+      if ((event.shiftKey && event.key === 'H') || (event.shiftKey && event.key === 'h')) {
         this.ref.current!.focus();
       }
     }

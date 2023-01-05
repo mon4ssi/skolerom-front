@@ -40,6 +40,11 @@ $student-overview-user-panel-height: 63px;
   text-transform: uppercase;
   cursor: pointer;
   flex-shrink: 0;
+  &:focus {
+    outline: black;
+    outline-style: auto;
+    outline-offset: -2px;
+  }
 }
 
 .StudentOverview__tab_selected::after {

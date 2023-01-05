@@ -984,7 +984,7 @@ class AssignmentsPageWrapper extends Component<Props, State> {
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
     const filterButton = Array.from(document.getElementsByClassName('closehandler') as HTMLCollectionOf<HTMLElement>);
-    if ((event.shiftKey && event.key === 'Q') || (event.shiftKey && event.key === 'q')) {
+    if ((event.shiftKey && event.key === 'H') || (event.shiftKey && event.key === 'h')) {
       filterButton[0]!.focus();
     }
   }
