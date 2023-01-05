@@ -357,7 +357,9 @@
       "counter_message_2": "image(s).",
       "upload_images": "Upload",
       "message_success_single": "Image uploaded succesfully",
-      "message_success_multiple": "Images uploaded succesfully"
+      "message_success_multiple": "Images uploaded succesfully",
+      "single_all_fields_required": "Make sure you have filled the title and source for the selected image.",
+      "multi_all_fields_required": "Make sure you have filled the title and source for all the selected images."
     },
     "images_empty_list": "No images available, please upload a custom image",
     "videos_from_article": "Videos from article",

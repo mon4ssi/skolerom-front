@@ -1,5 +1,12 @@
-.filenameSpan {
+.filenameSpanCounter {
     margin-left: 10px !important;
+    margin-right: 10px !important;
+    font-weight: 300;
+}
+
+.filenameSpanWarning {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
 }
 
 .label {
@@ -51,12 +58,18 @@
     margin-bottom: 10px;
 }
 
-.previewImage {
+.completeInputsWarning {
+    display: flex;
+    margin: 10px !important;
+}
+
+.previewImageUpload {
     /* max-width: 100%;
     max-height: 250px; */
+    min-width: 100%;
     max-width: 100%;
-    min-height: 125px;
-    max-height: 125px;
+    min-height: 220px;
+    max-height: 220px;
     object-fit: cover;
     background-size: cover;
 }
@@ -67,14 +80,30 @@
     z-index: 0;
 }
 
-.image {
+.imageUpload {
     /* position: relative;
     width: 320px; */
     position: relative;
-    width: calc(25%);
-    min-width: calc(25%);
+    width: calc(50%);
+    min-width: calc(50%);
     padding: 10px;
 }
+
+.inputImage {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    font-size: 16px;
+    padding: 12px 16px;
+    margin: 0px 0px 5px 0px;
+    border: solid #596A75 1px;
+    border-radius: 7px;
+    background: white;
+    box-shadow: 0 2px 4px 0 #d3d9de;
+} ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: gray;
+    opacity: 0.7; /* Firefox */
+  }
 
 .infoImage {
     background-color: #FFFFFF;
@@ -84,6 +113,7 @@
 .is-selectedImage-icon {
     cursor: pointer;
     position: relative;
+    padding-top: 5px;
     width: 100%;
     /* height: 100%; */
     /* min-width: 90px;
