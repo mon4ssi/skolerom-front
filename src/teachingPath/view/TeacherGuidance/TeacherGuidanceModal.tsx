@@ -246,13 +246,13 @@ export class TeacherguidanceModal extends Component<Props> {
           <div className="modalContentTG__header">
             <h1>{titleTG}</h1>
             <span>{titleTGSub}</span>
-            <div className="modalContentTG__header__close" onClick={this.closeModalTG}>
+            <button className="modalContentTG__header__close" onClick={this.closeModalTG}>
               <svg width="31" height="30" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path className="roundedCircle" fill-rule="evenodd" clip-rule="evenodd" d="M15.2476 0.9375C23.0138 0.9375 29.3101 7.23375 29.3101 15C29.3101 22.7663 23.0138 29.0625 15.2476 29.0625C7.48131 29.0625 1.18506 22.7663 1.18506 15C1.18506 7.23375 7.48131 0.9375 15.2476 0.9375Z" stroke="#0B2541" fill="white" stroke-width="1.875" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M9.62256 20.625L20.8713 9.375" stroke="#0B2541" stroke-width="1.875" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M20.8726 20.625L9.62134 9.375" stroke="#0B2541" stroke-width="1.875" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-            </div>
+            </button>
           </div>
           <div className="modalContentTG__body">
             <div className="modalContentTG__body__row first">

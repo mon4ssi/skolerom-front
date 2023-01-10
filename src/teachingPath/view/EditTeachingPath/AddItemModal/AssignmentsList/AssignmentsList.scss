@@ -126,6 +126,9 @@
     .assignmentItem {
       @extend .skeletonAssignmentItem;
       background: #FFF;
+      &:focus-within {
+        background: #e7e7e7 !important;
+      }
       &.selectedItem {
         position: relative;
         &:before {

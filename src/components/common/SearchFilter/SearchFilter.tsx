@@ -130,6 +130,8 @@ class SearchFilter extends Component<Props, State> {
   private subjectRef: RefObject<HTMLSelectElement> = React.createRef();
   private evaluationRef: RefObject<HTMLSelectElement> = React.createRef();
   private searchRef: RefObject<HTMLInputElement> = React.createRef();
+  private refButtonClose: RefObject<HTMLButtonElement> = React.createRef();
+  private TpButtonRef: RefObject<HTMLAnchorElement> = React.createRef();
 
   public state = {
     displayWidthBreakpoint: 0,
@@ -156,7 +158,9 @@ class SearchFilter extends Component<Props, State> {
     if (isAssignmentsPathPage) {
       if (isStudent) {
         if (this.evaluationRef.current) {
-          this.evaluationRef.current!.focus();
+          if (navigator.userAgent.match(/iPad/i) === null) {
+            this.evaluationRef.current!.focus();
+          }
         }
       } else {
         if (this.subjectRef.current) {
@@ -379,12 +383,38 @@ class SearchFilter extends Component<Props, State> {
     document.getElementById(STYLE_ELEMENT_ID)!.innerHTML = this.getStyles(this.state.displayWidthBreakpoint);
   }
 
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    const moveListBySearchFilter = Array.from(document.getElementsByClassName('moveListBySearchFilterH') as HTMLCollectionOf<HTMLElement>);
+    if (event.key === 'Escape') {
+      this.setState({
+        filtersModal: false,
+        filtersAssignment: false,
+        filtersModalTp: false,
+        filtersModalAssignment: false
+      });
+      if (this.TpButtonRef.current) {
+        this.TpButtonRef.current.focus();
+      }
+      if (moveListBySearchFilter.length > 0) {
+        moveListBySearchFilter[0].classList.remove('active');
+      }
+    }
+  }
+
   public openFiltersModal = () => {
     const { filtersModal } = this.state;
     if (filtersModal) {
-      this.setState({
-        filtersModal: false
-      });
+      this.setState(
+        {
+          filtersModal: false
+        },
+        () => {
+          if (this.TpButtonRef.current) {
+            this.TpButtonRef.current.focus();
+          }
+          document.removeEventListener('keyup', this.handleKeyboardControl);
+        }
+      );
     } else {
       this.setState(
         {
@@ -394,56 +424,113 @@ class SearchFilter extends Component<Props, State> {
           if (this.props.highLightGradeSubject) {
             this.props.highLightGradeSubject();
           }
+          if (this.refButtonClose.current) {
+            this.refButtonClose.current.focus();
+          }
+          document.addEventListener('keyup', this.handleKeyboardControl);
         }
       );
     }
   }
 
   public closeFiltersModal = () => {
-    this.setState({
-      filtersModal: false
-    });
+    this.setState(
+      {
+        filtersModal: false
+      },
+      () => {
+        if (this.TpButtonRef.current) {
+          this.TpButtonRef.current.focus();
+        }
+      }
+    );
+    document.removeEventListener('keyup', this.handleKeyboardControl);
   }
 
   public openFiltersAssignments = () => {
     const { filtersAssignment } = this.state;
     if (filtersAssignment) {
-      this.setState({
-        filtersAssignment: false
-      });
+      this.setState(
+        {
+          filtersAssignment: false
+        }, () => {
+        if (this.TpButtonRef.current) {
+          this.TpButtonRef.current.focus();
+        }
+        document.removeEventListener('keyup', this.handleKeyboardControl);
+      }
+      );
     } else {
-      this.setState({
-        filtersAssignment: true
-      });
+      this.setState(
+        {
+          filtersAssignment: true
+        }, () => {
+        if (this.TpButtonRef.current) {
+          this.TpButtonRef.current.focus();
+        }
+        document.addEventListener('keyup', this.handleKeyboardControl);
+      }
+      );
     }
   }
 
   public closeFiltersAssignments = () => {
-    this.setState({
-      filtersAssignment: false
-    });
+    this.setState(
+      {
+        filtersAssignment: false
+      }, () => {
+      if (this.TpButtonRef.current) {
+        this.TpButtonRef.current.focus();
+      }
+    }
+    );
+    document.removeEventListener('keyup', this.handleKeyboardControl);
   }
 
   public openFiltersModalTp = () => {
     const { filtersModalTp } = this.state;
     const moveListBySearchFilter = Array.from(document.getElementsByClassName('moveListBySearchFilter') as HTMLCollectionOf<HTMLElement>);
     if (filtersModalTp) {
-      this.setState({
-        filtersModalTp: false
-      });
+      this.setState(
+        {
+          filtersModalTp: false
+        },
+        () => {
+          if (this.TpButtonRef.current) {
+            this.TpButtonRef.current.focus();
+          }
+          document.removeEventListener('keyup', this.handleKeyboardControl);
+        }
+      );
       moveListBySearchFilter[0].classList.remove('active');
     } else {
-      this.setState({
-        filtersModalTp: true
-      });
+      this.setState(
+        {
+          filtersModalTp: true
+        },
+        () => {
+          if (this.refButtonClose.current) {
+            this.refButtonClose.current.focus();
+          }
+          document.addEventListener('keyup', this.handleKeyboardControl);
+        }
+      );
       moveListBySearchFilter[0].classList.add('active');
     }
   }
 
   public closeFiltersModalTp = () => {
-    this.setState({
-      filtersModalTp: false
-    });
+    this.setState(
+      {
+        filtersModalTp: false
+      },
+      () => {
+        if (this.TpButtonRef.current) {
+          this.TpButtonRef.current.focus();
+        }
+      }
+    );
+    document.removeEventListener('keyup', this.handleKeyboardControl);
     const moveListBySearchFilter = Array.from(document.getElementsByClassName('moveListBySearchFilter') as HTMLCollectionOf<HTMLElement>);
     moveListBySearchFilter[0].classList.remove('active');
   }
@@ -452,22 +539,43 @@ class SearchFilter extends Component<Props, State> {
     const { filtersModalAssignment } = this.state;
     const moveListBySearchFilter = Array.from(document.getElementsByClassName('moveListBySearchFilter') as HTMLCollectionOf<HTMLElement>);
     if (filtersModalAssignment) {
-      this.setState({
-        filtersModalAssignment: false
-      });
+      this.setState(
+        {
+          filtersModalAssignment: false
+        }, () => {
+        if (this.TpButtonRef.current) {
+          this.TpButtonRef.current.focus();
+        }
+      }
+      );
       moveListBySearchFilter[0].classList.remove('active');
     } else {
-      this.setState({
-        filtersModalAssignment: true
-      });
+      this.setState(
+        {
+          filtersModalAssignment: true
+        },
+        () => {
+          if (this.refButtonClose.current) {
+            this.refButtonClose.current.focus();
+          }
+          document.addEventListener('keyup', this.handleKeyboardControl);
+        }
+      );
       moveListBySearchFilter[0].classList.add('active');
     }
   }
 
   public closeFiltersModalAssignment = () => {
-    this.setState({
-      filtersModalAssignment: false
-    });
+    this.setState(
+      {
+        filtersModalAssignment: false
+      }, () => {
+      if (this.TpButtonRef.current) {
+        this.TpButtonRef.current.focus();
+      }
+      document.removeEventListener('keyup', this.handleKeyboardControl);
+    }
+    );
     const moveListBySearchFilter = Array.from(document.getElementsByClassName('moveListBySearchFilter') as HTMLCollectionOf<HTMLElement>);
     moveListBySearchFilter[0].classList.remove('active');
   }
@@ -515,7 +623,7 @@ class SearchFilter extends Component<Props, State> {
     }
     return (
       <div className="SearchFilter__link TpButton">
-        <a href="javascript:void(0)" className={buttonClass} onClick={this.openFiltersModalTp}>
+        <a href="javascript:void(0)" className={buttonClass} onClick={this.openFiltersModalTp} ref={this.TpButtonRef}>
           <img src={imgFilter} /> {buttonTxt}
         </a>
       </div>
@@ -1329,7 +1437,7 @@ class SearchFilter extends Component<Props, State> {
       <div className="FiltersModal articleAssigModal">
         <div className="FiltersModal__header">
           <h5>{intl.get('edit_teaching_path.modals.search.header.title')}</h5>
-          <button onClick={handleClickReset}>
+          <button onClick={handleClickReset} ref={this.refButtonClose}>
             <img src={resetImg} />
             <span>{intl.get('edit_teaching_path.modals.search.header.button')}</span>
           </button>
@@ -1428,7 +1536,7 @@ class SearchFilter extends Component<Props, State> {
         <div className="FiltersModal">
           <div className="FiltersModal__header">
             <h5>{intl.get('edit_teaching_path.modals.search.header.title')}</h5>
-            <button onClick={handleClickReset}>
+            <button onClick={handleClickReset} id="ButtonCloseTp" ref={this.refButtonClose}>
               <img src={resetImg} />
               <span>{intl.get('edit_teaching_path.modals.search.header.button')}</span>
             </button>
@@ -1541,7 +1649,7 @@ class SearchFilter extends Component<Props, State> {
         <div className="FiltersModal">
           <div className="FiltersModal__header">
             <h5>{intl.get('edit_teaching_path.modals.search.header.title')}</h5>
-            <button onClick={handleClickReset}>
+            <button onClick={handleClickReset} ref={this.refButtonClose}>
               <img src={resetImg} />
               <span>{intl.get('edit_teaching_path.modals.search.header.button')}</span>
             </button>
@@ -1653,7 +1761,7 @@ class SearchFilter extends Component<Props, State> {
       <div className="FiltersModal articleAssig">
         <div className="FiltersModal__header">
           <h5>{intl.get('edit_teaching_path.modals.search.header.title')}</h5>
-          <button onClick={handleClickReset}>
+          <button onClick={handleClickReset} ref={this.refButtonClose}>
             <img src={resetImg} />
             <span>{intl.get('edit_teaching_path.modals.search.header.button')}</span>
           </button>

@@ -175,6 +175,8 @@
         margin-right: 5px;
       }
       &:focus {
+        outline: black;
+        outline-style: auto;
         outline-offset: 3px !important;
       }
     }
@@ -221,6 +223,8 @@
               color: white;
             }
             &:focus {
+              outline: black;
+              outline-style: auto;
               outline-offset: 2px;
             }
             &.downlight {

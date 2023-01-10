@@ -728,7 +728,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     if (store!.getCurrentUser()!.type === UserType.ContentManager) { classHidden = 'InformationSource'; }
     const testAccount = !this.props.store!.getCurrentUser()!.isTestAccount!;
 
-    return (
+    return store!.getCurrentUser()!.type === UserType.ContentManager && (
       <div className={classHidden}>
         <div className="infoContainer__secondTitle">
           <h2>{this.labels.labelTitleIsOpen}</h2>
