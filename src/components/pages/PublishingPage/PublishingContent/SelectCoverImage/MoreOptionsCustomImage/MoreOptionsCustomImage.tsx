@@ -78,7 +78,7 @@ class MoreOptionsCustomImageWrapper extends Component<MoreOptionsCustomImageWrap
 
     return (
       <div className="MoreOptionsCustomImageForPublishing">
-        <button onClick={this.handleClickIcon}>
+        <button className="buttonWithoutFocus" onClick={this.handleClickIcon}>
           <img
             src={image}
             alt="More"

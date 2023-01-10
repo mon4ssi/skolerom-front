@@ -425,6 +425,10 @@ pre {
   opacity: 1;
   pointer-events: all;
 }
+.AppHeader__dropdownItem__subMenu:focus-within {
+  opacity: 1;
+  pointer-events: all;
+}
 .AssignmentsList .css-1y8mk30-SkeletonTheme {
   width: 100% !important;
 }
@@ -495,6 +499,10 @@ pre {
 .MyList a:focus li.AssignmentListItem, .AssignmentDistributeList a:focus li, .StudentListItem:focus , .AssignmentDistributeList a:focus div, .StudentsList__list a:focus li, .MyList a.StudentAssignmentsListItem:focus {
   background: #e4e4e4 !important;
 }
+.AssignmentListItem:focus {
+  background: #e4e4e4 !important;
+}
+
 .SubmitTeachingPath__button:focus {
   outline: black;
   outline-style: auto;

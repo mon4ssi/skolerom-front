@@ -85,6 +85,7 @@ export enum ContentType {
 @inject('currentQuestionaryStore', 'questionaryTeachingPathStore', 'uiStore', 'assignmentListStore')
 @observer
 export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps, State> {
+  private ref = React.createRef<HTMLButtonElement>();
   public state = {
     showCover: false,
     isPrivateAssignment: false,
@@ -420,6 +421,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
           onClick={this.goToNextQuestion}
           disabled={!this.canGoToNextQuestion}
           title={intl.get('pagination.Next question')}
+          ref={this.ref}
         >
           {intl.get('pagination.Next question')}
         </button>
@@ -469,6 +471,10 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     const isOnlyAssig = (state && state.node && state.teachingPath && questionaryTeachingPathStore!.currentNode) ? true : false;
     const openTeacherGuidance: boolean = (url.searchParams.get('open') === 'tg' /* || localParamIsOpenTG!  */? true : false);
     const isPreview = (url.pathname.split('view').length > 1) ? true : false;
+    if (questionaryTeachingPathStore!.isQuestionedHiddeButton) {
+      if (this.ref.current) { this.ref.current.focus(); }
+      questionaryTeachingPathStore!.setIsQuestionedHiddeButton(false);
+    }
     return !isLoading && (
       <div tabIndex={0} className="CurrentAssignmentPage">
         <AppHeader

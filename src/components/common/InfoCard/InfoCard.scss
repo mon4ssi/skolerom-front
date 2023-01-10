@@ -25,8 +25,13 @@
   .toggleReadDescription {
     margin-top: 5px;
     .toggleRead {
-      display: flex;
+      display: inline-flex;
       align-items: center;
+      &:focus {
+        outline: black;
+        outline-style: auto;
+        outline-offset: 3px;
+      }
       img {
         width: 18px;
         margin-right: 5px;
@@ -217,7 +222,21 @@
           cursor: default;
           z-index: 2;
           background: #fff;
+          li {
+            cursor: pointer;
+            margin: 7px;
+            a {
+              &:focus {
+                outline: black;
+                outline-style: auto;
+              }
+            }
+          }
 
+          .disabled {
+            color: #939FA7;
+            cursor: default;
+          }
           ul {
             li {
               cursor: pointer;
@@ -287,6 +306,11 @@
       }
       .flexBox {
         align-items: center;
+        &:focus-within {
+          outline: black;
+          outline-style: auto;
+          outline-offset: 2px;
+        }
       }
       span {
         font-size: 14px;
@@ -336,8 +360,13 @@
       }
       .toggleReadDescription {
         .toggleRead {
-          display: flex;
+          display: inline-flex;
           align-items: center;
+          &:focus {
+            outline: black;
+            outline-style: auto;
+            outline-offset: 3px;
+          }
           img {
             width: 18px;
             margin-right: 5px;
@@ -364,6 +393,11 @@
         max-width: 170px;
         &.btnRead {
           background: #0a7b24;
+        }
+        &:focus {
+          outline: black;
+          outline-style: auto;
+          outline-offset: 2px;
         }
       }
     }

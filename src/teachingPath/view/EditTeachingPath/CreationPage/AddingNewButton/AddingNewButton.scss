@@ -136,6 +136,11 @@
         &.circleBottom {
             margin-bottom: 20px;
         }
+        &:focus {
+          outline: black;
+          outline-style: auto;
+          outline-offset: 2px;
+        }
         svg {
           width: 20px;
           height: 20px;

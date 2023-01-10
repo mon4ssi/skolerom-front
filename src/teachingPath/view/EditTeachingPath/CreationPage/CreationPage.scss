@@ -577,7 +577,13 @@
     position: fixed;
     bottom: 0;
     left: 0;
-
+    a {
+      &:focus {
+        outline: black;
+        outline-style: auto;
+        outline-offset: -4px;
+      }
+    }
     .exitTeachingPath {
       padding: 20px;
       background: #E7ECEF;

@@ -113,7 +113,7 @@ export class SetRelatedArticles extends Component<Props, State> {
     this.props.newAssignmentStore!.setHighlightingItem(CreationElements.Articles);
   }
 
-  public toggleHiddenArticles = (event: React.MouseEvent<HTMLDivElement>) => {
+  public toggleHiddenArticles = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     if (this.state.hiddenArticles) {
       this.setState({
@@ -149,12 +149,12 @@ export class SetRelatedArticles extends Component<Props, State> {
             <button className="CreateButton newAnswerButton" id="newAnswerRelatedButton" title={this.renderButtonTitle()} onClick={this.handleRelatedArticles}>
               {this.renderButtonTitle()}
             </button>
-            <div className="hiddenRelatedCheck" onClick={this.toggleHiddenArticles}>
+            <a href="javascript:void(0)" className="hiddenRelatedCheck" onClick={this.toggleHiddenArticles}>
               <img src={this.state.hiddenArticles ? checkActive : checkInactive} alt="checkbox" className="AssignmentArticlesToReading__checkbox"/>
               <div>
                 {intl.get('assignments search.hidden_related')}
               </div>
-            </div>
+            </a>
           </div>
           {this.renderArticleInput(selectedArticles)}
         </div>

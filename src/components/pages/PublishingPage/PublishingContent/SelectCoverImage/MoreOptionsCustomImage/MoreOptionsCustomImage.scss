@@ -8,10 +8,21 @@
       background: transparent;
       margin-left: 0px;
   
-      &:focus {
+      /* &:focus {
         outline: black;
         outline-style: auto;
-      }
+      } */
+    }
+
+    .buttonWithoutFocus {
+      padding: 0px;
+      background: transparent;
+      margin-left: 0px;
+  
+      /* &:focus {
+        outline: none;
+        outline-style: auto;
+      } */
     }
 
     .moreIcon{

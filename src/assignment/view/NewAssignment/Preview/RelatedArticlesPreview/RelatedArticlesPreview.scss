@@ -149,6 +149,15 @@
       color: #e2017b;
       font-weight: 500;
       cursor: pointer;
+      &__right {
+        button {
+          &:focus {
+            outline: black;
+            outline-style: auto;
+            outline-offset: 0px;
+          }
+        }
+      }
       button {
         background: transparent;
         position: relative;

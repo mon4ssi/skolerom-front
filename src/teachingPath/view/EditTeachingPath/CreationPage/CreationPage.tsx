@@ -967,14 +967,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   public renderMergeButton = () => {
     const { index, editTeachingPathStore } = this.props;
 
-    const mergeTooltipClassnames = classnames(
-      'mergeTooltip',
-      `${editTeachingPathStore!.getCurrentLocale()}Locale`
-    );
-
     return !!index && (
       <div className="mergePanel">
-        <div className={mergeTooltipClassnames}>{intl.get('edit_teaching_path.merge')}</div>
         <button className="mergeButton" onClick={this.handleMergeNodes} title={intl.get('edit_teaching_path.merge')} />
       </div>
     );
@@ -983,14 +977,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   public renderUnmergeButton = () => {
     const { node, editTeachingPathStore } = this.props;
 
-    const unmergeTooltipClassnames = classnames(
-      'unmergeTooltip',
-      `${editTeachingPathStore!.getCurrentLocale()}Locale`
-    );
-
     return node.type !== TeachingPathNodeType.Root && node.items!.length > 1 ? (
       <div className="mergePanel">
-        <div className={unmergeTooltipClassnames}>{intl.get('edit_teaching_path.expand')}</div>
         <button className="unmergeImg" onClick={this.handleUnmergeNode} title={intl.get('edit_teaching_path.expand')} />
       </div>
     ) : null;
