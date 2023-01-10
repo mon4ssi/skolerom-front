@@ -145,10 +145,10 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     if (this.context.contentType === AttachmentContentType.image) {
       const selectedItem = isSelected ? 'customImageComponente active' : 'customImageComponente';
       const isCustomImg = (attachment.deleteddate) ? false : (attachment.path!.split(String(process.env.REACT_APP_WP_URL)).length > 1) ? false : true;
-      const isCustomImgClass = (isCustomImg) ? 'customImageComponente__image' : 'customImageComponente__image heightfull';
+      const isCustomImgClass = (isCustomImg) ? 'customImageComponente__image heightfull' : 'customImageComponente__image heightfull';
 
-      let arraySrc = attachment.src && attachment.src[1] && attachment.src[1];
-      if (!Array.isArray(attachment.src)) {
+      let arraySrc = attachment.source && attachment.source[1] && attachment.source[1];
+      if (!Array.isArray(attachment.source)) {
         arraySrc = attachment.path;
       }
       return (
@@ -179,7 +179,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     if (this.context.contentType === AttachmentContentType.customImage) {
       const selectedItem = isSelected ? 'customImageComponente active' : 'customImageComponente';
       const isCustomImg = (attachment.deleteddate) ? false : (attachment.path!.split(String(process.env.REACT_APP_WP_URL)).length > 1) ? false : true;
-      const isCustomImgClass = (isCustomImg) ? 'customImageComponente__image' : 'customImageComponente__image heightfull';
+      const isCustomImgClass = (isCustomImg) ? 'customImageComponente__image heightfull' : 'customImageComponente__image heightfull';
       return (
         <div className={selectedItem}>
           <div className={isCustomImgClass}>
@@ -276,7 +276,7 @@ const ActiveIcon = () => (
     <img
       src={activeIcon}
       alt="active"
-      style={{ maxHeight: 40, maxWidth: 40, position: 'relative', zIndex: 4, top: '30%' }}
+      style={{ maxHeight: 40, maxWidth: 40, position: 'relative', zIndex: 4, top: '0' }}
     />
   </div>
 );

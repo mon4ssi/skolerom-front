@@ -374,14 +374,11 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
   }
 
   public renderPlaceholder = () => {
-    if (this.context.contentType === AttachmentContentType.image) {
+    if (this.state.selectedTabId === const1) {
       return intl.get('new assignment.search_for_images');
     }
-    if (this.context.contentType === AttachmentContentType.customImage) {
+    if (this.state.selectedTabId === const2) {
       return intl.get('new assignment.search_for_images');
-    }
-    if (this.context.contentType === AttachmentContentType.video) {
-      return intl.get('new assignment.search_for_videos');
     }
   }
 

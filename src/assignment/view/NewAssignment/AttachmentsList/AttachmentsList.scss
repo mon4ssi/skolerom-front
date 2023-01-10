@@ -119,7 +119,7 @@
         width: calc(100% * (1 / 4) - 20px);
         background-color: rgba(0, 0, 0, 0.3);
         min-height: 200px;
-        max-height: 300px;
+        max-height: 320px;
         position: relative;
 
         button {
@@ -167,7 +167,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          padding-bottom: 50px;
+          padding-bottom: 0px;
           pointer-events: none;
         }
       }
@@ -352,7 +352,7 @@
         .imageSkeletonLoader {
           @extend .attachments-list__img-wrap;
           margin: 0;
-          width: 100%;
+          width: 50%;
           background-color: #eee;
         }
       }
@@ -652,7 +652,7 @@
   &__image {
     &__button {
       position: relative;
-      min-height: 200px;
+      min-height: 300px;
       overflow: hidden;
       width: 100%;
       img {
