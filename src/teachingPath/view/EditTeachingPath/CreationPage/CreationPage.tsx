@@ -1220,7 +1220,8 @@ export class CreationPageComponent extends Component<Props> {
     const { teachingPathContainer, currentEntity: currentTeachingPath } = editTeachingPathStore!;
     const { currentEntity } = editTeachingPathStore!;
     const allNode = currentTeachingPath!.content! as EditableTeachingPathNode;
-    const isPrivateTeachingPath = currentEntity!.isPrivate;
+    const isPublicTeachingPath = !currentEntity!.isPrivate;
+    const isMySchoolTeachingPath = currentEntity!.isMySchool;
     if (!teachingPathContainer) {
       return (
         <div className={'loading'}><Loader /></div>
@@ -1236,7 +1237,7 @@ export class CreationPageComponent extends Component<Props> {
         <div className="main flexBox dirColumn alignCenter">
           <TeachingPathTitle readOnly={readOnly} />
           <div className="mainButtonsContent">
-            {!isPrivateTeachingPath && (<DetailsModal isTeachingPath={true} currentEntityTeachingPath={currentTeachingPath!} editTeachingPathStore={editTeachingPathStore} />)}
+            {(isPublicTeachingPath || isMySchoolTeachingPath) && (<DetailsModal isTeachingPath={true} currentEntityTeachingPath={currentTeachingPath!} editTeachingPathStore={editTeachingPathStore} />)}
             <TeacherguidanceModal
               currentEntity={currentTeachingPath!}
               readOnly={readOnly}
