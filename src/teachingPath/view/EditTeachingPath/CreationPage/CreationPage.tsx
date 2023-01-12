@@ -51,6 +51,9 @@ const minNumberOfTitleCols = 20;
 const maxNumberOfTitleCols = 50;
 const num2 = 2;
 
+const NumberFourTeen = 40;
+const NumberTheereTeen = 30;
+
 interface NodeContentProps {
   editTeachingPathStore?: EditTeachingPathStore;
   node: EditableTeachingPathNode;
@@ -84,6 +87,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   public titleRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
   public insideRef = React.createRef<TextAreaAutosize & HTMLTextAreaElement>();
   public divRef = React.createRef<HTMLDivElement>();
+  public infoContainerRef = React.createRef<HTMLDivElement>();
   public state = {
     numberOfTitleCols: 20,
     EditDomain: false,
@@ -544,6 +548,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     return (
       <div
         className={containerClassNames}
+        ref={this.infoContainerRef}
       >
         {node.items!.map(this.renderInfoCard)}
         {!lastItem && <div className="bottomHorizontalLine" style={{ width: horizontalLineWidth }} />}
@@ -743,6 +748,22 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       isFirst && 'isFirst'
     );
     const isRoot = (node.type === TeachingPathNodeType.Root) ? true : false;
+    const isContentLeft = (withUnmergeButton && isFirst) ? true : false;
+    if (isContentLeft && this.infoContainerRef.current) {
+      const widthInner = Number(this.infoContainerRef.current!.clientWidth) - NumberFourTeen;
+      const widthInnerCss = `-${widthInner}px`;
+      const style = {
+        marginLeft : widthInnerCss
+      };
+      return !isRoot && (
+        <div className={containerClassNames} style={style} onDragOver={this.dragLaterlOverLeft} onDragLeave={this.dragLaterlLeaveLeft} onDrop={this.dragLaterlEnterLeft}>
+          {node.type !== TeachingPathNodeType.Root && <div className="midLeftLine" />}
+          {/* <AddingButtons node={node} nester={nestedOrder} onCancelDrag={this.onCancelDrag}/> */}
+          <AddingNewButtonElement side={'left'} node={node} parent={parentNode} nester={nestedOrder} onCancelDrag={this.onCancelDrag} />
+          {this.state.isHoverDropleft && <div className="boxInformationDrop absBoxInformationDrop">{intl.get('generals.dragdrop')}</div>}
+        </div>
+      );
+    }
     return !isRoot && (
       <div className={containerClassNames} onDragOver={this.dragLaterlOverLeft} onDragLeave={this.dragLaterlLeaveLeft} onDrop={this.dragLaterlEnterLeft}>
         {node.type !== TeachingPathNodeType.Root && <div className="midLeftLine" />}
@@ -803,6 +824,21 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       isLast && 'isLast'
     );
     const isRoot = (node.type === TeachingPathNodeType.Root) ? true : false;
+    const isContentRight = (withUnmergeButton && isLast) ? true : false;
+    if (isContentRight && this.infoContainerRef.current) {
+      const widthInner = Number(this.infoContainerRef.current!.clientWidth) + NumberTheereTeen;
+      const widthInnerCss = `-${widthInner}px`;
+      const style = {
+        marginRight : widthInnerCss
+      };
+      return !isRoot && (
+        <div className={containerClassNames} style={style} onDragOver={this.dragLaterlOverRight} onDragLeave={this.dragLaterlLeaveRight} onDrop={this.dragLaterlEnterRight}>
+          {true && <div className="midRightLine" />}
+          <AddingNewButtonElement side={'right'} node={node} parent={parentNode} nester={nestedOrder} onCancelDrag={this.onCancelDrag} />
+          {this.state.isHoverDropright && <div className="boxInformationDrop absBoxInformationDrop">{intl.get('generals.dragdrop')}</div>}
+        </div>
+      );
+    }
     return !isRoot && (
       <div className={containerClassNames} onDragOver={this.dragLaterlOverRight} onDragLeave={this.dragLaterlLeaveRight} onDrop={this.dragLaterlEnterRight}>
         {true && <div className="midRightLine" />}
