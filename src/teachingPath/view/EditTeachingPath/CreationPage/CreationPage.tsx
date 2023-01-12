@@ -294,7 +294,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     if (node.items!.length === 1) {
       const deleteConfirm = await Notification.create({
         type: NotificationTypes.CONFIRM,
-        title: intl.get('edit_teaching_path.notifications.delete_path')
+        title: intl.get('edit_teaching_path.notifications.delete_element')
       });
 
       if (deleteConfirm) {

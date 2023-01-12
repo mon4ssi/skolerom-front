@@ -749,7 +749,8 @@
       "empty_content": "At least 1 path should be created"
     },
     "notifications": {
-      "delete_path": "Are you sure you want to delete this path?",
+      "delete_element": "Are you sure you want to delete this element?",
+      "delete_sub_group": "Are you sure you want to delete this sub group?",
       "assignment": "assignment",
       "article": "article",
       "delete_item": "Are you sure you want to delete this {item}?",
@@ -774,7 +775,14 @@
     "Submit": "Submit Teaching Path",
     "no_title": "No title",
     "No results found": "No results found",
-    "no_options": "No options"
+    "no_options": "No options",
+    "nodes": {
+      "delete_element": "Delete element",
+      "delete_sub_group": "Delete sub group",
+      "change_element": "Change element",
+      "drag_drop_element": "Drag and drop element",
+      "change_content_sub_group": "Change content in sub group"
+    }
   },
   "teacherGuidance": {
     "name": "Teacher guidance",

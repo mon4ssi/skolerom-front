@@ -108,36 +108,36 @@ class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
   public renderActionButtons = () => (
     <div className="actionButtons flexBox">
       <div className="actionButtonsItem dragButtonsItem">
-        <button onClick={this.activeDragClick} title={intl.get('generals.drag')} className="activeDragButton">
+        <button onClick={this.activeDragClick} title={intl.get('edit_teaching_path.nodes.drag_drop_element')} className="activeDragButton">
           <img
             src={drag}
-            alt={intl.get('generals.drag')}
-            title={intl.get('generals.drag')}
+            alt={intl.get('edit_teaching_path.nodes.drag_drop_element')}
+            title={intl.get('edit_teaching_path.nodes.drag_drop_element')}
           />
         </button>
-        <button onClick={this.desactiveDragClick} title={intl.get('generals.drag')} className="desactiveDragButton">
+        <button onClick={this.desactiveDragClick} title={intl.get('edit_teaching_path.nodes.drag_drop_element')} className="desactiveDragButton">
           <img
             src={dragActive}
-            alt={intl.get('generals.drag')}
-            title={intl.get('generals.drag')}
+            alt={intl.get('edit_teaching_path.nodes.drag_drop_element')}
+            title={intl.get('edit_teaching_path.nodes.drag_drop_element')}
           />
         </button>
       </div>
       <div className="actionButtonsItem refreshButtonsItem">
-        <button onClick={this.handleEditClick} title={intl.get('generals.edit')}>
+        <button onClick={this.handleEditClick} title={intl.get('edit_teaching_path.nodes.change_element')}>
           <img
             src={refresh}
-            alt={intl.get('generals.edit')}
-            title={intl.get('generals.edit')}
+            alt={intl.get('edit_teaching_path.nodes.change_element')}
+            title={intl.get('edit_teaching_path.nodes.change_element')}
           />
         </button>
       </div>
       <div className="actionButtonsItem">
-        <button onClick={this.handleClickDelete} title={intl.get('generals.delete')}>
+        <button onClick={this.handleClickDelete} title={intl.get('edit_teaching_path.nodes.delete_element')}>
           <img
             src={trashImg}
-            alt={intl.get('generals.delete')}
-            title={intl.get('generals.delete')}
+            alt={intl.get('edit_teaching_path.nodes.delete_element')}
+            title={intl.get('edit_teaching_path.nodes.delete_element')}
           />
         </button>
       </div>
@@ -147,36 +147,36 @@ class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
   public renderDomainButtons = () => (
     <div className="actionButtons flexBox">
       <div className="actionButtonsItem dragButtonsItem">
-        <button onClick={this.activeDragClick} title={intl.get('generals.drag')} className="activeDragButton">
+        <button onClick={this.activeDragClick} title={intl.get('edit_teaching_path.nodes.drag_drop_element')} className="activeDragButton">
           <img
             src={drag}
-            alt={intl.get('generals.drag')}
-            title={intl.get('generals.drag')}
+            alt={intl.get('edit_teaching_path.nodes.drag_drop_element')}
+            title={intl.get('edit_teaching_path.nodes.drag_drop_element')}
           />
         </button>
-        <button onClick={this.desactiveDragClick} title={intl.get('generals.drag')} className="desactiveDragButton">
+        <button onClick={this.desactiveDragClick} title={intl.get('edit_teaching_path.nodes.drag_drop_element')} className="desactiveDragButton">
           <img
             src={dragActive}
-            alt={intl.get('generals.drag')}
-            title={intl.get('generals.drag')}
+            alt={intl.get('edit_teaching_path.nodes.drag_drop_element')}
+            title={intl.get('edit_teaching_path.nodes.drag_drop_element')}
           />
         </button>
       </div>
       <div className="actionButtonsItem refreshButtonsItem">
-        <button onClick={this.handleEditClick} title={intl.get('generals.edit')}>
+        <button onClick={this.handleEditClick} title={intl.get('edit_teaching_path.nodes.change_element')}>
           <img
             src={refresh}
-            alt={intl.get('generals.edit')}
-            title={intl.get('generals.edit')}
+            alt={intl.get('edit_teaching_path.nodes.change_element')}
+            title={intl.get('edit_teaching_path.nodes.change_element')}
           />
         </button>
       </div>
       <div className="actionButtonsItem">
-        <button onClick={this.handleClickDelete} title={intl.get('generals.delete')}>
+        <button onClick={this.handleClickDelete} title={intl.get('edit_teaching_path.nodes.delete_element')}>
           <img
             src={trashImg}
-            alt={intl.get('generals.delete')}
-            title={intl.get('generals.delete')}
+            alt={intl.get('edit_teaching_path.nodes.delete_element')}
+            title={intl.get('edit_teaching_path.nodes.delete_element')}
           />
         </button>
       </div>

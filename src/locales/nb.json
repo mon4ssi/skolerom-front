@@ -748,7 +748,8 @@
       "empty_content": "Minst én sti må opprettes"
     },
     "notifications": {
-      "delete_path": "Er du sikker på at du vil slette denne stien?",
+      "delete_element": "Er du sikker på at du vil slette dette elementet?",
+      "delete_sub_group": "Er du sikker på at du vil slette denne undergruppen?",
       "assignment": "oppgaven",
       "article": "artikkelen",
       "delete_item": "Er du sikker på at du vil slette {item}?",
@@ -773,7 +774,14 @@
     "Submit": "Lever læringssti",
     "no_title": "Uten tittel",
     "No results found": "Søket ditt ga ingen resultater",
-    "no_options": "Ingen treff"
+    "no_options": "Ingen treff",
+    "nodes": {
+      "delete_element": "Slett element",
+      "delete_sub_group": "Slett undergruppe",
+      "change_element": "Endre element",
+      "drag_drop_element": "Dra og slepp element",
+      "change_content_sub_group": "Endre innhold i undergruppe"
+    }
   },
   "teacherGuidance": {
     "name": "Lærerveiledning",
