@@ -735,3 +735,12 @@
 .centered {
   text-align: -webkit-center;
 }
+
+.main .teachingPathItemsContainer .teachingPathButtonsLeft.withUnmergeButton.isFirst {
+  left: 0px;
+  margin-left: 0px;
+}
+.main .teachingPathItemsContainer .teachingPathButtonsRight.withUnmergeButton.isLast {
+    right: 0px;
+    margin-right: -40px;
+}
