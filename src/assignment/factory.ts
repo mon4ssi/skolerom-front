@@ -241,7 +241,7 @@ const buildContentBlockDTO = (block: ContentBlock): ContentBlockDTO => {
     buffer.text = block.text;
   }
   if (block instanceof EditableImagesContentBlock) {
-    buffer.images = block.images.map(i => ({ id: i.id, path: i.path, title: i.title, source: i.src || i.source })) as Array<QuestionAttachment>;
+    buffer.images = block.images.map(i => ({ id: i.id, path: i.path, title: i.title, source: i.source , src: i.src! })) as Array<QuestionAttachment>;
   }
   if (block instanceof EditableVideosContentBlock) {
     buffer.videos = block.videos;
