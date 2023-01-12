@@ -345,19 +345,19 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
       <div className="CenterImagenes">
         <div className="buttonContent">
           <div onClick={this.manageTabContentTabWP} className={`coverImageButtonTab ${this.selectClassOption(selectedTabId, const1)}`}>
-            <div className="buttonLabel" onClick={this.manageTabContentTabWP}>
+            <button className="buttonLabel" onClick={this.manageTabContentTabWP}>
               {intl.get('new assignment.images_options.images_from_article')}
-            </div>
+            </button>
           </div>
           <div onClick={this.manageTabContentTabCustom} className={`coverImageButtonTab ${this.selectClassOption(selectedTabId, const2)}`}>
-            <div className="buttonLabel" onClick={this.manageTabContentTabCustom}>
+            <button className="buttonLabel" onClick={this.manageTabContentTabCustom}>
               {intl.get('new assignment.images_options.custom_images')}
-            </div>
+            </button>
           </div>
           <div onClick={this.manageTabContentTabUpload} className={`coverImageButtonTab ${this.selectClassOption(selectedTabId, const3)}`}>
-            <div className="buttonLabel" onClick={this.manageTabContentTabUpload}>
+            <button className="buttonLabel" onClick={this.manageTabContentTabUpload}>
               {intl.get('new assignment.images_options.upload_image')}
-            </div>
+            </button>
           </div>
         </div>
         <div className="contentWrapper">

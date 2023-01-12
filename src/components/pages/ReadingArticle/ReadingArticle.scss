@@ -55,6 +55,11 @@ $header-padding-mobile: 65px;
   margin: 0 7px;
   background: #0b2541;
   color: #fff;
+  &:focus {
+    outline: black;
+    outline-style: auto;
+    outline-offset: 2px;
+  }
 }
 
 .ReadingArticle__level_active {

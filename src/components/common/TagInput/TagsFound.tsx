@@ -9,6 +9,7 @@ interface Props {
   tagInput: string;
   isTagSelected: (tag: TagProp) => boolean;
   onSelectTag: (id: number) => void;
+  onBlurTag?: (id: number) => void;
   listView?: boolean | false;
   onScroll?: (() => void) | undefined;
   temporaryTagsArray?: Array<TagProp>;
@@ -25,7 +26,7 @@ class TagsFound extends Component<Props> {
   }
 
   public renderTag = (tag: TagProp): JSX.Element => {
-    const { isTagSelected, onSelectTag } = this.props;
+    const { isTagSelected, onSelectTag, onBlurTag } = this.props;
 
     return (
       <Tag
@@ -33,6 +34,7 @@ class TagsFound extends Component<Props> {
         {...tag}
         isSelected={isTagSelected(tag)}
         onClick={onSelectTag}
+        onBlur={onBlurTag}
       />
     );
   }

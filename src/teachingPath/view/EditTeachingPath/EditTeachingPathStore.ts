@@ -70,6 +70,8 @@ export class EditTeachingPathStore {
   @observable public allArticlePanelFilters: FilterArticlePanel | null = null;
   @observable public isAssignmentCreating: boolean = false;
 
+  @observable public isTagVisibleStore: boolean = false;
+
   public localeKey: string = EditEntityLocaleKeys.EDIT_TEACHING_PATH;
 
   public getArticlesWithDebounce = debounce(this.getArticles, DEBOUNCE_TIME);

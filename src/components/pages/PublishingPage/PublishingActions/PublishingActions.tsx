@@ -712,10 +712,10 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     const isChecked = (isOpen) ? PublishingActionsIcons.checkActive : PublishingActionsIcons.checkRounded;
     const textIsOpen = (from === 'TEACHINGPATH') ? this.labels.isOpenTeachingPath : this.labels.isOpenAssignment;
     return (
-      <div className="filterCheck isOpen" onClick={this.toggleisOpen}>
+      <button className="filterCheck isOpen" onClick={this.toggleisOpen}>
         <img src={isChecked} />
         <p>{textIsOpen}</p>
-      </div>
+      </button>
     );
   }
 

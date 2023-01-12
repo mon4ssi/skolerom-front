@@ -19,6 +19,7 @@ const sixArticles = 6;
 const scrollDelay = 200;
 const timeoutlint = 4500;
 const ENTER_KEYCODE = 13;
+const five = 5;
 
 export interface TagKeywordProp {
   description: string;
@@ -66,6 +67,14 @@ class TagKeywordInputWrapper extends Component<Props, State> {
     newInputValue: '',
     isAddingNewTag: false,
   };
+
+  private onBlurTag = (description: string): void => {
+    const idc = (this.props.tags[five]) ? this.props.tags[five].description : '';
+    const idFin = this.props.tags[this.props.tags.length - 1].description;
+    if (idc === description || idFin === description) {
+      this.setState({ isTagsWindowVisible: false });
+    }
+  }
 
   private onSelectTag = (description: string): void => {
     if (this.props.addTag) {
@@ -209,6 +218,7 @@ class TagKeywordInputWrapper extends Component<Props, State> {
         tagInput={tagInput}
         listView={listView}
         onSelectTag={this.onSelectTag}
+        onBlurTag={this.onBlurTag}
         isTagSelected={this.isTagSelected}
         temporaryTagsArray={this.state.temporaryTagsArray}
         isScrollToTop={this.state.isTagInputChanged}

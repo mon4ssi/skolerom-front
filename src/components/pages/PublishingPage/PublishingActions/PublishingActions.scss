@@ -8,6 +8,13 @@
 .filterCheck {
   display: flex;
   align-items: center;
+  padding: 0px;
+  background: transparent;
+  &:focus {
+    outline: black;
+    outline-style: auto;
+    outline-offset: 2px;
+  }
   img {
     margin-right: 5px;
     display: block;

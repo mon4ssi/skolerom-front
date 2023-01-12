@@ -1,4 +1,5 @@
 import React, { Component, Suspense, lazy } from 'react';
+import { inject, observer } from 'mobx-react';
 import classnames from 'classnames';
 import intl from 'react-intl-universal';
 import onClickOutside from 'react-onclickoutside';
@@ -15,6 +16,7 @@ import './TagInput.scss';
 const sixArticles = 6;
 const scrollDelay = 200;
 const timeoutlint = 4500;
+const five = 5;
 
 export interface TagProp {
   id: number;
@@ -62,6 +64,14 @@ class TagInputWrapper extends Component<Props, State> {
     temporaryLoadedFoundedTagsArray: [],
     isTagInputChanged: false
   };
+
+  private onBlurTag = (id: number): void => {
+    const idc = (this.props.tags[five]) ? this.props.tags[five].id : 0;
+    const idFin = this.props.tags[this.props.tags.length - 1].id;
+    if (idc === id || idFin === id) {
+      this.setState({ isTagsWindowVisible: false });
+    }
+  }
 
   private onSelectTag = (id: number): void => {
     if (this.props.addTag) {
@@ -181,6 +191,7 @@ class TagInputWrapper extends Component<Props, State> {
         tagInput={tagInput}
         listView={listView}
         onSelectTag={this.onSelectTag}
+        onBlurTag={this.onBlurTag}
         isTagSelected={this.isTagSelected}
         temporaryTagsArray={this.state.temporaryTagsArray}
         isScrollToTop={this.state.isTagInputChanged}
