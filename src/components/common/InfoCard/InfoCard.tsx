@@ -203,7 +203,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
     return null;
   }
 
-  public onCardImgClick = (event: React.MouseEvent<HTMLImageElement>) => {
+  public onCardImgClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { onCLickImg, url } = this.props;
     event.preventDefault();
     if (onCLickImg) {
@@ -472,8 +472,8 @@ class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
       <div className={infoCardClassNames} onClick={this.onCardClick} data-id={this.props.id}>
         {!isDomain && withButtons && this.renderActionButtons()}
         {isDomain && withButtons && this.renderDomainButtons()}
-        <button title={title}>
-          <img src={img || placeholderImgDefault} alt={title} title={title} className="cardImage" onClick={this.onCardImgClick} onError={this.isErrorImg} />
+        <button title={title} onClick={this.onCardImgClick} >
+          <img src={img || placeholderImgDefault} alt={title} title={title} className="cardImage" onError={this.isErrorImg} />
         </button>
         <div className="cardInfo flexBox dirColumn spaceBetween">
           <div>
