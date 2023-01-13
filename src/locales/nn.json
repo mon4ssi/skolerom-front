@@ -852,9 +852,11 @@
       "shift_c": "Lag ny læringssti",
       "shift_g": "Lag ny oppgåve",
       "shift_a": "Legg til valt element",
-      "shift_s": "Lagre læringsstien/oppgåva",
       "shift_p": "Publiser læringsstien/oppgåva",
-      "shift_d": "Distribuer læringsstien/oppgåva"
+      "shift_d": "Distribuer læringsstien/oppgåva",
+      "shift_s": "Select sidebar",
+      "shift_m": "Select Menu",
+      "shift_h": "Select Content Page"
     },
     "edit": "Rediger stien",
     "delete": "Slett stien",

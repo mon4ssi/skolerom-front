@@ -850,9 +850,11 @@
       "shift_c": "Opprett ny læringssti",
       "shift_g": "Opprett ny oppgave",
       "shift_a": "Legg til valgt element",
-      "shift_s": "Lagre læringssti/oppgave",
       "shift_p": "Publiser læringssti/oppgave",
-      "shift_d": "Distribuer læringssti/oppgave"
+      "shift_d": "Distribuer læringssti/oppgave",
+      "shift_s": "Select sidebar",
+      "shift_m": "Select Menu",
+      "shift_h": "Select Content Page"
     },
     "edit": "Rediger sti",
     "delete": "Slett sti",

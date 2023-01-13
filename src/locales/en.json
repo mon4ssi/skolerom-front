@@ -850,10 +850,12 @@
       "title_when_editing": "Editing a Teaching Path or Assignment",
       "shift_c": "Create teaching path",
       "shift_g": "Create assignment",
-      "shift_a": "Add selected item",
-      "shift_s": "Save",
+      "shift_a": "Add selected item",      
       "shift_p": "Publish",
-      "shift_d": "Distribute"
+      "shift_d": "Distribute",
+      "shift_s": "Select sidebar",
+      "shift_m": "Select Menu",
+      "shift_h": "Select Content Page"
     },
     "edit": "Edith Path",
     "delete": "Delete Path",

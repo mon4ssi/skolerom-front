@@ -418,16 +418,24 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
           <p>{intl.get('generals.accesibility_text.shift_a')}</p>
         </li>
         <li>
-          <strong>Shift + S</strong>
-          <p>{intl.get('generals.accesibility_text.shift_s')}</p>
-        </li>
-        <li>
           <strong>Shift + P</strong>
           <p>{intl.get('generals.accesibility_text.shift_p')}</p>
         </li>
         <li>
           <strong>Shift + D</strong>
           <p>{intl.get('generals.accesibility_text.shift_d')}</p>
+        </li>
+        <li>
+          <strong>Shift + S</strong>
+          <p>{intl.get('generals.accesibility_text.shift_s')}</p>
+        </li>
+        <li>
+          <strong>Shift + H</strong>
+          <p>{intl.get('generals.accesibility_text.shift_h')}</p>
+        </li>
+        <li>
+          <strong>Shift + M</strong>
+          <p>{intl.get('generals.accesibility_text.shift_m')}</p>
         </li>
       </ul>
     </div>
