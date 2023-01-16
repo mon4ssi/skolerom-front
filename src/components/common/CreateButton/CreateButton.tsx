@@ -12,10 +12,11 @@ interface Props {
   title?: string;
   onClick?: () => void;
   pink?: boolean;
+  autoFocus? : boolean;
 }
 
 export const CreateButton = (props: Props) => {
-  const { light, green, disabled, children, className, onClick, title, pink } = props;
+  const { light, green, disabled, children, className, onClick, title, pink, autoFocus } = props;
   const classNames = classnames(
     'CreateButton',
     className && className,
@@ -30,6 +31,7 @@ export const CreateButton = (props: Props) => {
       disabled={disabled}
       onClick={onClick}
       title={title}
+      autoFocus={autoFocus}
     >
       {children}
     </button>

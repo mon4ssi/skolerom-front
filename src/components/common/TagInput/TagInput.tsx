@@ -73,6 +73,10 @@ class TagInputWrapper extends Component<Props, State> {
     }
   }
 
+  private onBlur = (id: number): void => {
+    this.setState({ isTagsWindowVisible: false });
+  }
+
   private onSelectTag = (id: number): void => {
     if (this.props.addTag) {
       this.props.addTag(id);
@@ -173,7 +177,7 @@ class TagInputWrapper extends Component<Props, State> {
   public renderCurrentTag = (tag: TagProp) => {
     const { className } = this.props;
     const darkTheme = !!(className && className.includes('darkTheme'));
-    return <CurrentTag key={tag.id} id={tag.id} title={tag.title} onRemove={this.onRemoveTag} dark={darkTheme} />;
+    return <CurrentTag key={tag.id} id={tag.id} title={tag.title} onRemove={this.onRemoveTag} dark={darkTheme} onBlur={this.onBlur}/>;
   }
 
   public focusInput = () => {
@@ -255,6 +259,7 @@ interface CurrentTagProps {
   title: string;
   dark?: boolean;
   onRemove: (id: number) => void;
+  onBlur: (id: number) => void;
 }
 
 class CurrentTag extends Component<CurrentTagProps> {
@@ -263,12 +268,17 @@ class CurrentTag extends Component<CurrentTagProps> {
     onRemove(id);
   }
 
+  private onBlur = () => {
+    const { id, onBlur } = this.props;
+    onBlur(id);
+  }
+
   public render() {
     const { title, dark } = this.props;
     return (
       <div className="tag">
         <span className={'title'}>{title}</span>
-        <button onClick={this.onRemove} title={title}>
+        <button onClick={this.onRemove} title={title} onBlur={this.onBlur}>
           <img src={dark ? closeCrossLight : closeCross} alt="Close" title={title} />
         </button>
       </div>

@@ -481,6 +481,9 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
               }
             }
           );
+          const tileFocus = Array.from(document.getElementsByClassName('teachingPathItemsTitle') as HTMLCollectionOf<HTMLElement>);
+          const lengthtitle = tileFocus.length - 1;
+          tileFocus[lengthtitle].focus();
           parentNode!.children[index! - 1].setChildren([...parentNode!.children[index! - 1].children, ...node.children]);
           parentNode!.children[index! - 1].setSelectedQuestion(intl.get('edit_teaching_path.paths.node_teaching_path_title'));
           parentNode!.removeChild(node);
@@ -508,6 +511,9 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       const newUnmergedNodesWithoutItems = node.items!.map(
         item => editTeachingPathStore!.createNewNode(item.value, node.type)
       );
+      const tileFocus = Array.from(document.getElementsByClassName('teachingPathItemsTitle') as HTMLCollectionOf<HTMLElement>);
+      const lengthtitle = tileFocus.length - 1;
+      tileFocus[lengthtitle].focus();
       parentNode!.removeChild(node);
       newUnmergedNodesWithoutItems[0].setChildren(nodeChildrenCopy);
       newUnmergedNodesWithoutItems.reverse().forEach(node => parentNode!.addChild(node, index));
