@@ -384,7 +384,7 @@ class SearchFilter extends Component<Props, State> {
   }
 
   public handleKeyboardControl = (event: KeyboardEvent) => {
-    const moveListBySearchFilter = Array.from(document.getElementsByClassName('moveListBySearchFilterH') as HTMLCollectionOf<HTMLElement>);
+    const moveListBySearchFilter = Array.from(document.getElementsByClassName('moveListBySearchFilter') as HTMLCollectionOf<HTMLElement>);
     if (event.key === 'Escape') {
       this.setState({
         filtersModal: false,
