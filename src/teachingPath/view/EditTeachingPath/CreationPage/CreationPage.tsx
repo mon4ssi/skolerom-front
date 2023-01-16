@@ -44,6 +44,7 @@ import { trim } from 'lodash';
 import { AddingNewButtonElement } from './AddingNewButton/AddingNewButton';
 import { DetailsModal } from 'components/common/DetailsModal/DetailsModal';
 
+const oneThousanNumber = 100;
 const cardWidth = 322;
 const leftIndent = 160;
 
@@ -78,6 +79,7 @@ interface NodeContentState {
   isDropInit: boolean;
   isHoverDropleft: boolean;
   isHoverDropright: boolean;
+  isRefExist: boolean;
 }
 
 @inject('editTeachingPathStore')
@@ -97,7 +99,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     isPosibleDrop: false,
     isDropInit: false,
     isHoverDropleft: false,
-    isHoverDropright: false
+    isHoverDropright: false,
+    isRefExist: false
   };
 
   public componentDidMount() {
@@ -112,6 +115,10 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       headerArray[0].style.display = 'flex';
     }
     this.props.editTeachingPathStore!.falseIsDraggable();
+    setTimeout(
+      () => this.setState({ isRefExist: true }),
+      oneThousanNumber
+    );
   }
 
   public onClean() {
@@ -1107,11 +1114,11 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
         {!readOnly && this.renderUnmergeButton()}
 
         {this.renderBoxNodeOptions()}
-        {!readOnly && this.renderAddingButtonsLeft(!!this.renderUnmergeButton(), isFirst)}
+        {this.state.isRefExist && !readOnly && this.renderAddingButtonsLeft(!!this.renderUnmergeButton(), isFirst)}
 
         {!readOnly && this.renderAddingButtons(!!this.renderUnmergeButton())}
 
-        {!readOnly && this.renderAddingButtonsRight(!!this.renderUnmergeButton(), isLast)}
+        {this.state.isRefExist && !readOnly && this.renderAddingButtonsRight(!!this.renderUnmergeButton(), isLast)}
 
         <div className="childrenContainer flexBox">
           {children.length ? children.map(this.renderNodeContent) : null}
