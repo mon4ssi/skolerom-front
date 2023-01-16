@@ -143,25 +143,14 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
     const { isProcessing, showMoreOptions } = this.state;
 
     if (this.context.contentType === AttachmentContentType.image) {
-      let arraySrc = attachment.src && attachment.src[1] && attachment.src[1];
-      if (!Array.isArray(attachment.src)) {
-        arraySrc = attachment.path;
-      }
-      return (
-        <button title="Attachment Media" onClick={this.toggleAttachment}>
-          <img
-            src={attachment.path}
-            alt={attachment.alt}
-            srcSet={arraySrc!}
-            sizes={'(min-width: 320px) 300px'}
-          />
-        </button>
-      );
-    }
-    if (this.context.contentType === AttachmentContentType.customImage) {
       const selectedItem = isSelected ? 'customImageComponente active' : 'customImageComponente';
       const isCustomImg = (attachment.deleteddate) ? false : (attachment.path!.split(String(process.env.REACT_APP_WP_URL)).length > 1) ? false : true;
-      const isCustomImgClass = (isCustomImg) ? 'customImageComponente__image' : 'customImageComponente__image heightfull';
+      const isCustomImgClass = (isCustomImg) ? 'customImageComponente__image heightfull' : 'customImageComponente__image heightfull';
+
+      let arraySrc = attachment.source && attachment.source[1] && attachment.source[1];
+      if (!Array.isArray(attachment.source)) {
+        arraySrc = attachment.path;
+      }
       return (
         <div className={selectedItem}>
           <div className={isCustomImgClass}>
@@ -174,7 +163,36 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
             </button>
             {isCustomImg && <MoreOptionsCustomImage attachmentId={0} onEdit={this.editItem} onRemove={this.removeItem} />}
           </div>
-          {isCustomImg && this.renderTitleInfo(attachment.title, String(attachment.src))}
+          {this.renderTitleInfo(attachment.title, String(attachment.source))}
+        </div>
+      );
+      {/* <button title="Attachment Media" onClick={this.toggleAttachment}>
+          <img
+            src={attachment.path}
+            alt={attachment.alt}
+            srcSet={arraySrc!}
+            sizes={'(min-width: 320px) 300px'}
+          />
+          {this.renderTitleInfo(attachment.title, String(attachment.source))}
+      </button> */}
+    }
+    if (this.context.contentType === AttachmentContentType.customImage) {
+      const selectedItem = isSelected ? 'customImageComponente active' : 'customImageComponente';
+      const isCustomImg = (attachment.deleteddate) ? false : (attachment.path!.split(String(process.env.REACT_APP_WP_URL)).length > 1) ? false : true;
+      const isCustomImgClass = (isCustomImg) ? 'customImageComponente__image heightfull' : 'customImageComponente__image heightfull';
+      return (
+        <div className={selectedItem}>
+          <div className={isCustomImgClass}>
+            <button title={attachment.title} className="customImageComponente__image__button" onClick={this.toggleAttachment}>
+              <img
+                src={attachment.path}
+                alt={attachment.alt}
+                srcSet={attachment.path}
+              />
+            </button>
+            {isCustomImg && <MoreOptionsCustomImage attachmentId={0} onEdit={this.editItem} onRemove={this.removeItem} />}
+          </div>
+          {this.renderTitleInfo(attachment.title, String(attachment.source))}
         </div>
       );
     }
@@ -223,7 +241,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
       });
     }
     if (this.context.contentType === AttachmentContentType.customImage) {
-      wrapClass = classnames('attachments-list__img-wrap', {
+      wrapClass = classnames('attachments-list__img-wrap-custom', {
         disabled: isProcessing,
         selected: isSelected,
       });
@@ -258,7 +276,7 @@ const ActiveIcon = () => (
     <img
       src={activeIcon}
       alt="active"
-      style={{ maxHeight: 40, maxWidth: 40, position: 'relative', zIndex: 4, top: '30%' }}
+      style={{ maxHeight: 40, maxWidth: 40, position: 'relative', zIndex: 4, top: '0' }}
     />
   </div>
 );

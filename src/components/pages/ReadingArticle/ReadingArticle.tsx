@@ -26,7 +26,7 @@ interface State {
 }
 
 export class ReadingArticle extends Component<Props, State> {
-
+  private subjectRef = React.createRef<HTMLButtonElement>();
   public state = {
     newArticleId: null,
     graduation: null,
@@ -112,6 +112,9 @@ export class ReadingArticle extends Component<Props, State> {
         return;
       }
     }
+    if (this.subjectRef.current) {
+      this.subjectRef.current!.focus();
+    }
 
     // FIXME bad solution, better to use grade or level from Student
     this.setState({
@@ -140,7 +143,7 @@ export class ReadingArticle extends Component<Props, State> {
       <div className="ReadingArticle">
         <div className="ReadingArticle__headerWrapper">
           <div className="ReadingArticle__header">
-            <button className="ReadingArticle__backButton" onClick={closeArticle} title="back">
+            <button className="ReadingArticle__backButton" ref={this.subjectRef} onClick={closeArticle} title="back">
               <img src={back} alt="back" title="back" />
               <span className="ReadingArticle__backButtonText">
                 {intl.get('header.Article')}: {titleCurrentArticle}

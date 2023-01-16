@@ -22,6 +22,7 @@ export interface AttachmentDTO {
   title: string;
   duration?: number;
   src?: Array<string>;
+  source?: string;
 }
 
 export interface TeachingPathNodeItemResponseDTO {
@@ -469,7 +470,7 @@ export class TeachingPathApi implements TeachingPathRepo {
           },
         }
       )
-    ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, item.url, item.duration!, item.src));
+    ).data.media.map((item: AttachmentDTO) => new Attachment(item.id, item.url, item.alt, item.file_name, item.title, item.url, item.duration!, item.src, item.source));
   }
 
   public async getTeachingPathListOfStudentInList(studentId: number, filter: Filter) {

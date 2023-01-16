@@ -712,10 +712,10 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     const isChecked = (isOpen) ? PublishingActionsIcons.checkActive : PublishingActionsIcons.checkRounded;
     const textIsOpen = (from === 'TEACHINGPATH') ? this.labels.isOpenTeachingPath : this.labels.isOpenAssignment;
     return (
-      <div className="filterCheck isOpen" onClick={this.toggleisOpen}>
+      <button className="filterCheck isOpen" onClick={this.toggleisOpen}>
         <img src={isChecked} />
         <p>{textIsOpen}</p>
-      </div>
+      </button>
     );
   }
 
@@ -728,7 +728,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     if (store!.getCurrentUser()!.type === UserType.ContentManager) { classHidden = 'InformationSource'; }
     const testAccount = !this.props.store!.getCurrentUser()!.isTestAccount!;
 
-    return (
+    return store!.getCurrentUser()!.type === UserType.ContentManager && (
       <div className={classHidden}>
         <div className="infoContainer__secondTitle">
           <h2>{this.labels.labelTitleIsOpen}</h2>

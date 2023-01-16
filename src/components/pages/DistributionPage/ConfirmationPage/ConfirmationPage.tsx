@@ -74,7 +74,7 @@ class ConfirmationPageComponent extends Component<Props> {
           </span>
         </div>
 
-        <CreateButton className={'backButton'} onClick={this.handleGoBackClick} title={intl.get('distribution_page.after_distribution.go_to_my_account')}>
+        <CreateButton className={'backButton'} onClick={this.handleGoBackClick} title={intl.get('distribution_page.after_distribution.go_to_my_account')} autoFocus>
           <div>
             <img src={arrowLeftImg} alt="exit"/>
             <span>{intl.get('distribution_page.after_distribution.go_to_my_account')}</span>

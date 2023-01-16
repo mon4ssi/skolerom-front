@@ -71,21 +71,23 @@ export class RelatedCard extends Component<Props> {
         onClick={handleClick}
         className={`relatedCard ${isChosen && 'isChosen'} ${!handleClick && 'withoutCursor'}`}
       >
-        <div className="relatedCard__blockMain">
-          <img
-            src={featuredImage}
-            alt="article-img"
-            className="relatedCard__featuredImage"
-          />
-          <p className={`relatedCard__title ${isChosen && 'isChosenTitle'}`}>
-            {title}
-          </p>
-        </div>
+        <a href="javascript:void(0)">
+          <div className="relatedCard__blockMain">
+            <img
+              src={featuredImage}
+              alt="article-img"
+              className="relatedCard__featuredImage"
+            />
+            <p className={`relatedCard__title ${isChosen && 'isChosenTitle'}`}>
+              {title}
+            </p>
+          </div>
 
-        <div className="relatedCard__blockSecondary">
-          {type === 'ASSIGNMENT' && questionCounter && this.renderQuestionCounter()}
-          {this.renderLevel(level)}
-        </div>
+          <div className="relatedCard__blockSecondary">
+            {type === 'ASSIGNMENT' && questionCounter && this.renderQuestionCounter()}
+            {this.renderLevel(level)}
+          </div>
+        </a>
       </div>
     );
   }

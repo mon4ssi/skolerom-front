@@ -19,6 +19,7 @@ const sixArticles = 6;
 const scrollDelay = 200;
 const timeoutlint = 4500;
 const ENTER_KEYCODE = 13;
+const five = 5;
 
 export interface TagKeywordProp {
   description: string;
@@ -66,6 +67,18 @@ class TagKeywordInputWrapper extends Component<Props, State> {
     newInputValue: '',
     isAddingNewTag: false,
   };
+
+  private onBlurTag = (description: string): void => {
+    const idc = (this.props.tags[five]) ? this.props.tags[five].description : '';
+    const idFin = this.props.tags[this.props.tags.length - 1].description;
+    if (idc === description || idFin === description) {
+      this.setState({ isTagsWindowVisible: false });
+    }
+  }
+
+  private onBlur = (description: string): void => {
+    this.setState({ isTagsWindowVisible: false });
+  }
 
   private onSelectTag = (description: string): void => {
     if (this.props.addTag) {
@@ -191,7 +204,7 @@ class TagKeywordInputWrapper extends Component<Props, State> {
   public renderCurrentTag = (tag: TagKeywordProp) => {
     const { className } = this.props;
     const darkTheme = !!(className && className.includes('darkTheme'));
-    return <CurrentKeywordTag key={tag.description} description={tag.description} title={tag.description} onRemove={this.onRemoveTag} dark={darkTheme} />;
+    return <CurrentKeywordTag key={tag.description} description={tag.description} title={tag.description} onRemove={this.onRemoveTag} dark={darkTheme} onBlur={this.onBlur}/>;
   }
 
   public focusInput = () => {
@@ -209,6 +222,7 @@ class TagKeywordInputWrapper extends Component<Props, State> {
         tagInput={tagInput}
         listView={listView}
         onSelectTag={this.onSelectTag}
+        onBlurTag={this.onBlurTag}
         isTagSelected={this.isTagSelected}
         temporaryTagsArray={this.state.temporaryTagsArray}
         isScrollToTop={this.state.isTagInputChanged}
@@ -273,6 +287,7 @@ interface CurrentKeywordTagProps {
   description: string;
   dark?: boolean;
   onRemove: (description: string) => void;
+  onBlur: (description: string) => void;
 }
 
 class CurrentKeywordTag extends Component<CurrentKeywordTagProps> {
@@ -281,12 +296,17 @@ class CurrentKeywordTag extends Component<CurrentKeywordTagProps> {
     onRemove(description);
   }
 
+  private onBlur = () => {
+    const { description, onBlur } = this.props;
+    onBlur(description);
+  }
+
   public render() {
     const { description, dark } = this.props;
     return (
       <div className="tag">
         <span className={'title'}>{description}</span>
-        <button onClick={this.onRemove} title={description}>
+        <button onClick={this.onRemove} title={description} onBlur={this.onBlur}>
           <img src={dark ? closeCrossLight : closeCross} alt="Close" title={description} />
         </button>
       </div>

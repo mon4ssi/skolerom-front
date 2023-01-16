@@ -36,6 +36,7 @@ interface State {
 @inject('currentQuestionaryStore')
 @observer
 export class AssignmentArticlesToReading extends Component<Props, State> {
+  private subjectRef = React.createRef<HTMLAnchorElement>();
   public state = {
     isShowArticle: false,
     titleCurrentArticle: '',
@@ -47,9 +48,10 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
     allArticles: 0
   };
 
-  public refArticle = React.createRef<HTMLDivElement>();
-
   public componentDidMount() {
+    if (this.subjectRef.current) {
+      this.subjectRef.current!.focus();
+    }
     this.props.currentQuestionaryStore!.getRelatedArticles();
   }
 
@@ -178,8 +180,7 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
     if (currentQuestionaryStore!.isLoadingArticles) {
       return (
         <>
-          <span className="AssignmentArticlesToReading__title">{intl.get('assignment preview.Assignment articles')}</span>
-          <div className="AssignmentArticlesToReading__articles" ref={this.refArticle}>
+          <div className="AssignmentArticlesToReading__articles" >
             {currentQuestionaryStore!.relatedAllArticles.map(this.renderArticlesCards)}
           </div>
         </>
@@ -194,6 +195,7 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
     return (
       <div className="AssignmentArticlesToReading">
         <div className="QuestionPreview__background AssignmentArticlesToReading__background" style={{ backgroundImage: `url(${background})` }} />
+        <a href="javascript:void(0)" className="AssignmentArticlesToReading__title" ref={this.subjectRef}>{intl.get('assignment preview.Assignment articles')}</a>
         {this.renderContent()}
       </div>
     );

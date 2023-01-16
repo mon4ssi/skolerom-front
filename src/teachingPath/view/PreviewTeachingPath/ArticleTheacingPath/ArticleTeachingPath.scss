@@ -15,6 +15,11 @@
       font-weight: bold;
       font-size: 1.875rem;
       margin: 20px 0;
+      &:focus {
+        outline: black;
+        outline-style: auto;
+        outline-offset: 4px;
+      }
     }
   
     .cards {

@@ -40,7 +40,19 @@
             position:absolute;
             left: 98%;
             top: -15px;
-            cursor: pointer;
+            cursor: pointer;            
+            background: transparent;
+            padding: 0px;
+            svg {
+                display: block;
+                height: 30px;
+                width: 30px;
+            }
+            &:focus {
+                outline: black;
+                outline-style: auto;
+                outline-offset: 2px;
+            }
             .roundedCircle {
                 fill: white;
             }
@@ -83,6 +95,11 @@
                     font-weight: 100;
                     display: flex;
                     width: fit-content;
+                    &:focus {
+                        outline: black;
+                        outline-style: auto;
+                        outline-offset: 2px;
+                    }
                 }
 
                 img {
@@ -143,7 +160,11 @@
             button {
                 display:flex;
                 background: transparent;
-
+                &:focus {
+                    outline: black;
+                    outline-style: auto;
+                    outline-offset: 2px;
+                }
                 img {
                     margin-left: 5px
                 }

@@ -5,6 +5,7 @@ interface TagProps {
   id: number;
   title: string;
   onClick: (id: number) => void;
+  onBlur?: (id: number) => void;
   isSelected?: boolean | false;
 }
 
@@ -15,6 +16,11 @@ export class Tag extends Component<TagProps> {
     if (!isSelected) {
       onClick(id);
     }
+  }
+
+  private onBlur = (): void => {
+    const { id, onBlur, isSelected } = this.props;
+    onBlur!(id);
   }
 
   public render() {
@@ -29,6 +35,7 @@ export class Tag extends Component<TagProps> {
         className={classNames}
         key={id}
         onClick={this.onClick}
+        onBlur={this.onBlur}
         title={title}
       >
         {title}

@@ -301,7 +301,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     if (node.items!.length === 1) {
       const deleteConfirm = await Notification.create({
         type: NotificationTypes.CONFIRM,
-        title: intl.get('edit_teaching_path.notifications.delete_path')
+        title: intl.get('edit_teaching_path.notifications.delete_element')
       });
 
       if (deleteConfirm) {
@@ -481,6 +481,9 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
               }
             }
           );
+          const tileFocus = Array.from(document.getElementsByClassName('teachingPathItemsTitle') as HTMLCollectionOf<HTMLElement>);
+          const lengthtitle = tileFocus.length - 1;
+          tileFocus[lengthtitle].focus();
           parentNode!.children[index! - 1].setChildren([...parentNode!.children[index! - 1].children, ...node.children]);
           parentNode!.children[index! - 1].setSelectedQuestion(intl.get('edit_teaching_path.paths.node_teaching_path_title'));
           parentNode!.removeChild(node);
@@ -508,6 +511,9 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       const newUnmergedNodesWithoutItems = node.items!.map(
         item => editTeachingPathStore!.createNewNode(item.value, node.type)
       );
+      const tileFocus = Array.from(document.getElementsByClassName('teachingPathItemsTitle') as HTMLCollectionOf<HTMLElement>);
+      const lengthtitle = tileFocus.length - 1;
+      tileFocus[lengthtitle].focus();
       parentNode!.removeChild(node);
       newUnmergedNodesWithoutItems[0].setChildren(nodeChildrenCopy);
       newUnmergedNodesWithoutItems.reverse().forEach(node => parentNode!.addChild(node, index));
@@ -1010,14 +1016,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   public renderMergeButton = () => {
     const { index, editTeachingPathStore } = this.props;
 
-    const mergeTooltipClassnames = classnames(
-      'mergeTooltip',
-      `${editTeachingPathStore!.getCurrentLocale()}Locale`
-    );
-
     return !!index && (
       <div className="mergePanel">
-        <div className={mergeTooltipClassnames}>{intl.get('edit_teaching_path.merge')}</div>
         <button className="mergeButton" onClick={this.handleMergeNodes} title={intl.get('edit_teaching_path.merge')} />
       </div>
     );
@@ -1026,14 +1026,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   public renderUnmergeButton = () => {
     const { node, editTeachingPathStore } = this.props;
 
-    const unmergeTooltipClassnames = classnames(
-      'unmergeTooltip',
-      `${editTeachingPathStore!.getCurrentLocale()}Locale`
-    );
-
     return node.type !== TeachingPathNodeType.Root && node.items!.length > 1 ? (
       <div className="mergePanel">
-        <div className={unmergeTooltipClassnames}>{intl.get('edit_teaching_path.expand')}</div>
         <button className="unmergeImg" onClick={this.handleUnmergeNode} title={intl.get('edit_teaching_path.expand')} />
       </div>
     ) : null;
@@ -1239,7 +1233,8 @@ export class CreationPageComponent extends Component<Props> {
     const { teachingPathContainer, currentEntity: currentTeachingPath } = editTeachingPathStore!;
     const { currentEntity } = editTeachingPathStore!;
     const allNode = currentTeachingPath!.content! as EditableTeachingPathNode;
-    const isPrivateTeachingPath = currentEntity!.isPrivate;
+    const isPublicTeachingPath = !currentEntity!.isPrivate;
+    const isMySchoolTeachingPath = currentEntity!.isMySchool;
     if (!teachingPathContainer) {
       return (
         <div className={'loading'}><Loader /></div>
@@ -1255,7 +1250,7 @@ export class CreationPageComponent extends Component<Props> {
         <div className="main flexBox dirColumn alignCenter">
           <TeachingPathTitle readOnly={readOnly} />
           <div className="mainButtonsContent">
-            {!isPrivateTeachingPath && (<DetailsModal isTeachingPath={true} currentEntityTeachingPath={currentTeachingPath!} editTeachingPathStore={editTeachingPathStore} />)}
+            {(isPublicTeachingPath || isMySchoolTeachingPath) && (<DetailsModal isTeachingPath={true} currentEntityTeachingPath={currentTeachingPath!} editTeachingPathStore={editTeachingPathStore} />)}
             <TeacherguidanceModal
               currentEntity={currentTeachingPath!}
               readOnly={readOnly}

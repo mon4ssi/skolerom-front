@@ -1,4 +1,5 @@
 import React, { Component, Suspense, lazy } from 'react';
+import { inject, observer } from 'mobx-react';
 import classnames from 'classnames';
 import intl from 'react-intl-universal';
 import onClickOutside from 'react-onclickoutside';
@@ -15,6 +16,7 @@ import './TagInput.scss';
 const sixArticles = 6;
 const scrollDelay = 200;
 const timeoutlint = 4500;
+const five = 5;
 
 export interface TagProp {
   id: number;
@@ -62,6 +64,18 @@ class TagInputWrapper extends Component<Props, State> {
     temporaryLoadedFoundedTagsArray: [],
     isTagInputChanged: false
   };
+
+  private onBlurTag = (id: number): void => {
+    const idc = (this.props.tags[five]) ? this.props.tags[five].id : 0;
+    const idFin = this.props.tags[this.props.tags.length - 1].id;
+    if (idc === id || idFin === id) {
+      this.setState({ isTagsWindowVisible: false });
+    }
+  }
+
+  private onBlur = (id: number): void => {
+    this.setState({ isTagsWindowVisible: false });
+  }
 
   private onSelectTag = (id: number): void => {
     if (this.props.addTag) {
@@ -163,7 +177,7 @@ class TagInputWrapper extends Component<Props, State> {
   public renderCurrentTag = (tag: TagProp) => {
     const { className } = this.props;
     const darkTheme = !!(className && className.includes('darkTheme'));
-    return <CurrentTag key={tag.id} id={tag.id} title={tag.title} onRemove={this.onRemoveTag} dark={darkTheme} />;
+    return <CurrentTag key={tag.id} id={tag.id} title={tag.title} onRemove={this.onRemoveTag} dark={darkTheme} onBlur={this.onBlur}/>;
   }
 
   public focusInput = () => {
@@ -181,6 +195,7 @@ class TagInputWrapper extends Component<Props, State> {
         tagInput={tagInput}
         listView={listView}
         onSelectTag={this.onSelectTag}
+        onBlurTag={this.onBlurTag}
         isTagSelected={this.isTagSelected}
         temporaryTagsArray={this.state.temporaryTagsArray}
         isScrollToTop={this.state.isTagInputChanged}
@@ -244,6 +259,7 @@ interface CurrentTagProps {
   title: string;
   dark?: boolean;
   onRemove: (id: number) => void;
+  onBlur: (id: number) => void;
 }
 
 class CurrentTag extends Component<CurrentTagProps> {
@@ -252,12 +268,17 @@ class CurrentTag extends Component<CurrentTagProps> {
     onRemove(id);
   }
 
+  private onBlur = () => {
+    const { id, onBlur } = this.props;
+    onBlur(id);
+  }
+
   public render() {
     const { title, dark } = this.props;
     return (
       <div className="tag">
         <span className={'title'}>{title}</span>
-        <button onClick={this.onRemove} title={title}>
+        <button onClick={this.onRemove} title={title} onBlur={this.onBlur}>
           <img src={dark ? closeCrossLight : closeCross} alt="Close" title={title} />
         </button>
       </div>

@@ -17,13 +17,13 @@ import greenCheck from 'assets/images/green_check.svg';
 import { buildArticle } from 'assignment/factory';
 import { AttachmentComponent } from 'assignment/view/NewAssignment/AttachmentsList/Attachment';
 import { id } from 'date-fns/locale';
-import { CustomImageFormSimple } from './CustomImageFormSimple/CustomImageFormSimple';
 import { Pagination } from 'components/common/Pagination/Pagination';
 import { MoreOptionsCustomImage } from './MoreOptionsCustomImage/MoreOptionsCustomImage';
 import { CustomImageForm } from 'assignment/view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { AttachmentContentType } from 'assignment/view/NewAssignment/AttachmentContentTypeContext';
 import { lettersNoEn } from 'utils/lettersNoEn';
+import { CustomImageFormSimple } from 'assignment/view/NewAssignment/AttachmentsList/CustomImageFormSimple/CustomImageFormSimple';
 
 const const1 = 1;
 const const2 = 2;
@@ -345,19 +345,19 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
       <div className="CenterImagenes">
         <div className="buttonContent">
           <div onClick={this.manageTabContentTabWP} className={`coverImageButtonTab ${this.selectClassOption(selectedTabId, const1)}`}>
-            <div className="buttonLabel" onClick={this.manageTabContentTabWP}>
+            <button className="buttonLabel" onClick={this.manageTabContentTabWP}>
               {intl.get('new assignment.images_options.images_from_article')}
-            </div>
+            </button>
           </div>
           <div onClick={this.manageTabContentTabCustom} className={`coverImageButtonTab ${this.selectClassOption(selectedTabId, const2)}`}>
-            <div className="buttonLabel" onClick={this.manageTabContentTabCustom}>
+            <button className="buttonLabel" onClick={this.manageTabContentTabCustom}>
               {intl.get('new assignment.images_options.custom_images')}
-            </div>
+            </button>
           </div>
           <div onClick={this.manageTabContentTabUpload} className={`coverImageButtonTab ${this.selectClassOption(selectedTabId, const3)}`}>
-            <div className="buttonLabel" onClick={this.manageTabContentTabUpload}>
+            <button className="buttonLabel" onClick={this.manageTabContentTabUpload}>
               {intl.get('new assignment.images_options.upload_image')}
-            </div>
+            </button>
           </div>
         </div>
         <div className="contentWrapper">
@@ -374,14 +374,11 @@ export class SelectCoverImage extends Component<Props, SelectCoverImageState> {
   }
 
   public renderPlaceholder = () => {
-    if (this.context.contentType === AttachmentContentType.image) {
+    if (this.state.selectedTabId === const1) {
       return intl.get('new assignment.search_for_images');
     }
-    if (this.context.contentType === AttachmentContentType.customImage) {
+    if (this.state.selectedTabId === const2) {
       return intl.get('new assignment.search_for_images');
-    }
-    if (this.context.contentType === AttachmentContentType.video) {
-      return intl.get('new assignment.search_for_videos');
     }
   }
 

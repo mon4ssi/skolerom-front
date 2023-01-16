@@ -38,20 +38,29 @@
         }
 
         &__close {
-            position: absolute;
+            position:absolute;
             left: 98%;
             top: -15px;
-            cursor: pointer;
-            border-radius: 50%;
-
+            cursor: pointer;            
+            background: transparent;
+            padding: 0px;
+            svg {
+                display: block;
+                height: 30px;
+                width: 30px;
+            }
+            &:focus {
+                outline: black;
+                outline-style: auto;
+                outline-offset: 2px;
+            }
             .roundedCircle {
                 fill: white;
             }
-
             &:hover {
                 .roundedCircle {
                     fill: rgb(211, 217, 222);
-                }
+                }  
             }
         }
     }
@@ -132,7 +141,11 @@
             button {
                 display: flex;
                 background: transparent;
-
+                &:focus {
+                    outline: black;
+                    outline-style: auto;
+                    outline-offset: 2px;
+                }
                 img {
                     margin-left: 5px
                 }
@@ -190,6 +203,17 @@
     padding-bottom: 10px;
     border-bottom: 0.5px solid #8e8e8e48;
     opacity: 0.6;
+    .toggleRead {
+        width: 20px;
+        margin-right: 3px;
+        margin-left: 2px;
+        border-radius: 50%;
+        &:focus {
+            outline: black;
+            outline-style: auto;
+            outline-offset: 2px;
+        }
+    }
 }
 
 .full {

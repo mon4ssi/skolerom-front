@@ -189,7 +189,7 @@ export class NestedOrderNumber extends Component<Props> {
     this.props.onCancelDrag!();
     const deleteConfirm = await Notification.create({
       type: NotificationTypes.CONFIRM,
-      title: intl.get('edit_teaching_path.notifications.delete_path')
+      title: intl.get('edit_teaching_path.notifications.delete_sub_group')
     });
 
     if (deleteConfirm) {
@@ -205,21 +205,21 @@ export class NestedOrderNumber extends Component<Props> {
   }
 
   public renderEditIcon = () => (
-    <button onClick={this.handleEditClick} title={intl.get('generals.edit')}>
+    <button onClick={this.handleEditClick} title={intl.get('edit_teaching_path.nodes.change_content_sub_group')}>
       <img
         src={editImg}
-        alt={intl.get('generals.edit')}
-        title={intl.get('generals.edit')}
+        alt={intl.get('edit_teaching_path.nodes.change_content_sub_group')}
+        title={intl.get('edit_teaching_path.nodes.change_content_sub_group')}
       />
     </button>
   )
 
   public renderDeleteIcon = () => (
-    <button onClick={this.handleDeleteClick} title={intl.get('generals.delete')}>
+    <button onClick={this.handleDeleteClick} title={intl.get('edit_teaching_path.nodes.delete_sub_group')}>
       <img
         src={deleteImg}
-        alt={intl.get('generals.delete')}
-        title={intl.get('generals.delete')}
+        alt={intl.get('edit_teaching_path.nodes.delete_sub_group')}
+        title={intl.get('edit_teaching_path.nodes.delete_sub_group')}
       />
     </button>
   )

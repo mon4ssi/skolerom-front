@@ -31,7 +31,7 @@ type ComponentProps = Props & RouteComponentProps;
 @inject('questionaryTeachingPathStore')
 @observer
 export class CustomTeachingPathComponent extends Component<ComponentProps, State> {
-  public ref = createRef<HTMLDivElement>();
+  public ref = createRef<HTMLAnchorElement>();
   public state = {
     attachedArticleId: -1,
     shownArticleLevelId: -1,
@@ -117,7 +117,7 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
     return questionaryTeachingPathStore!.currentArticlesList.map((item) => {
       const passedStyle = item.isSelected ? '' : '';
       return (
-        <div className={passedStyle} key={item.id} role="region" aria-live="polite" aria-atomic="true" ref={this.ref}>
+        <div className={passedStyle} key={item.id} role="region" aria-live="polite" aria-atomic="true">
           <InfoCard
             icon={reading}
             title={item.title}
@@ -231,14 +231,14 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
       return (
         <div className={'articleTeachingPath'}>
           {this.chooseTitle()}
-          <span className={'title'}>{questionaryTeachingPathStore!.currentNode!.selectQuestion}</span>
+          <a href="javascript:void(0)" className={'title'} ref={this.ref}>{questionaryTeachingPathStore!.currentNode!.selectQuestion}</a>
         </div>
       );
     }
     return (
       <div className={'articleTeachingPath'}>
         {this.chooseTitle()}
-        <span className={'title'}>{questionaryTeachingPathStore!.currentNode!.selectQuestion}</span>
+        <a href="javascript:void(0)" className={'title'} ref={this.ref}>{questionaryTeachingPathStore!.currentNode!.selectQuestion}</a>
         <div className="cards">
           {(questionaryTeachingPathStore!.currentArticlesList.length > 0) && this.renderCardsArticles()}
           {(questionaryTeachingPathStore!.currentDomainList.length > 0) && this.renderCardsDomain()}

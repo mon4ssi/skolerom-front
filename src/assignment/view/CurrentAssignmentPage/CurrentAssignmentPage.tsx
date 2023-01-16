@@ -67,7 +67,8 @@ interface CurrentAssignmentPageProps extends RouteComponentProps<RouteParams, {}
 
 interface State {
   showCover: boolean;
-  isPrivateAssignment: boolean;
+  isPublicAssignment: boolean;
+  isMySchoolAssignment: boolean;
 }
 
 enum QueryStringKeys {
@@ -85,9 +86,11 @@ export enum ContentType {
 @inject('currentQuestionaryStore', 'questionaryTeachingPathStore', 'uiStore', 'assignmentListStore')
 @observer
 export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps, State> {
+  private ref = React.createRef<HTMLButtonElement>();
   public state = {
     showCover: false,
-    isPrivateAssignment: false,
+    isPublicAssignment: false,
+    isMySchoolAssignment: false,
   };
 
   private goToNextQuestion = () => {
@@ -104,7 +107,8 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
 
   public async componentDidMount() {
     const { currentQuestionaryStore, match, isTeacher, history } = this.props;
-    let isPrivate = false;
+    let isPublic = false;
+    let isMySchool = false;
     currentQuestionaryStore.handleShowArrowsTooltip(true);
     document.addEventListener('keyup', this.handleKeyboardControl);
     const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
@@ -113,10 +117,11 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     /* currentQuestionaryStore!.setCurrentQuestion(-2); */
     if (isTeacher) {
       await currentQuestionaryStore.getQuestionaryById(Number(match.params.id));
-      isPrivate = currentQuestionaryStore!.assignment!.isPrivate!;
-      this.setState({ isPrivateAssignment: isPrivate });
+      isPublic = !(currentQuestionaryStore!.assignment!.isPrivate!);
+      isMySchool = currentQuestionaryStore!.assignment!.isMySchool!;
+      this.setState({ isPublicAssignment: isPublic, isMySchoolAssignment: isMySchool });
       const grepButton = Array.from(document.getElementsByClassName('grepButton') as HTMLCollectionOf<HTMLElement>);
-      if (this.state.isPrivateAssignment!) {
+      if (!(this.state.isPublicAssignment || this.state.isMySchoolAssignment)) {
         grepButton[0].classList.add('grepButtonHidden');
       }
 
@@ -420,6 +425,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
           onClick={this.goToNextQuestion}
           disabled={!this.canGoToNextQuestion}
           title={intl.get('pagination.Next question')}
+          ref={this.ref}
         >
           {intl.get('pagination.Next question')}
         </button>
@@ -467,8 +473,12 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
     }
     const url: URL = new URL(window.location.href);
     const isOnlyAssig = (state && state.node && state.teachingPath && questionaryTeachingPathStore!.currentNode) ? true : false;
-    const openTeacherGuidance: boolean = (url.searchParams.get('open') === 'tg' /* || localParamIsOpenTG!  */? true : false);
+    const openTeacherGuidance: boolean = (url.searchParams.get('open') === 'tg' /* || localParamIsOpenTG!  */ ? true : false);
     const isPreview = (url.pathname.split('view').length > 1) ? true : false;
+    if (questionaryTeachingPathStore!.isQuestionedHiddeButton) {
+      if (this.ref.current) { this.ref.current.focus(); }
+      questionaryTeachingPathStore!.setIsQuestionedHiddeButton(false);
+    }
     return !isLoading && (
       <div tabIndex={0} className="CurrentAssignmentPage">
         <AppHeader

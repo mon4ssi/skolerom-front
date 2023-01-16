@@ -19,7 +19,7 @@ export const CustomImageForm = (props: any) => {
   const articleService: ArticleService = injector.get(ARTICLE_REPO_KEY);
   const [image, setImage] = useState('');
   const [title, setTitle] = useState(props.attachment.title);
-  const [source, setSource] = useState(props.attachment.src);
+  const [source, setSource] = useState(props.attachment.source);
   const [fileName, setFileName] = useState(intl.get('assignments_page.img_not'));
 
   const handleChangeFile = (e: any) => {

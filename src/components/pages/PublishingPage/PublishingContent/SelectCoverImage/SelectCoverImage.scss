@@ -121,6 +121,15 @@
   &.active {
     border-bottom: solid #e2017b 4px;
   }
+  .buttonLabel {
+    background: transparent;
+    padding: 0px;
+    &:focus {
+      outline: black;
+      outline-style: auto;
+      outline-offset: 6px;
+    }
+  }
 }
 
 .buttonImgAddMedia {
@@ -140,6 +149,11 @@
       /* background: transparent; */
       position: relative;
       width: 33.33%;
+      &:focus {
+        outline: black;
+        outline-style: auto;
+        outline-offset: -2px;
+      }
       .icon {
         display: none;
         position: absolute;

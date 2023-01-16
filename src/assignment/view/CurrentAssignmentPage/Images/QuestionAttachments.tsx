@@ -75,7 +75,7 @@ export class QuestionAttachments extends Component<ImagesProps> {
         {image.title}
       </div>
       <div style={{ fontStyle: 'Italic', color: '#767168', fontWeight: 300 }}>
-      {`${intl.get('new assignment.updateCustomImagesForm.source')}: ${image.source !== undefined && image.source !== null ? image.source : '' || image.src !== undefined && image.src !== null ? image.src : ''}`}
+      {`${intl.get('new assignment.updateCustomImagesForm.source')}: ${image.source!}`}
       </div>
     </div>
   )
@@ -86,7 +86,7 @@ export class QuestionAttachments extends Component<ImagesProps> {
     return (
       <div style={{ width: '275px', minWidth: '220px', padding: '5px' }}>
         <img src={image.path} alt={`Screen ${index}`} key={image.path} onClick={onSelectAttachment} />
-        {isCustomImage && this.renderCustomImageInfo(image)}
+        {this.renderCustomImageInfo(image)}
       </div>
     );
   }

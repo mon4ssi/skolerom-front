@@ -27,6 +27,14 @@
   margin: 40px;
   text-align: center;
   font-weight: 500;
+  padding: 5px;
+  border-radius: 5px;
+  &:focus {
+    outline: #e9e9e994;
+    outline-style: auto;
+    outline-offset: 0px;
+    background: #f7f7f7;
+  }
 }
 
 .AssignmentArticlesToReading__articles {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
@@ -38,6 +38,7 @@ interface ActivityPageState {
 @inject('activityStore', 'loginStore')
 @observer
 class Activity extends Component<ActivityPageProps & RouteComponentProps, ActivityPageState> {
+  private ref = createRef<HTMLDivElement>();
   private getRecentActivityWithInterval: number = 0;
 
   public state = {
@@ -260,6 +261,20 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
       }
     }
     this.loadWidgetData();
+    document.addEventListener('keyup', this.handleKeyboardControl);
+  }
+
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    const classDivPath = (event.composedPath()[0] as Element).className;
+    const htmlPathArea = String(event.composedPath()[0]);
+    const htmlText = '[object HTMLTextAreaElement]';
+    const inputText = '[object HTMLInputElement]';
+    const qlEditorText = 'ql-editor';
+    if (htmlPathArea !== htmlText && htmlPathArea !== inputText && classDivPath !== qlEditorText) {
+      if ((event.shiftKey && event.key === 'H') || (event.shiftKey && event.key === 'h')) {
+        this.ref.current!.focus();
+      }
+    }
   }
 
   public stopComponent() {
@@ -290,6 +305,7 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
       window.clearInterval(this.getRecentActivityWithInterval);
       activityStore!.resetNewestTeachingPaths();
     }
+    document.removeEventListener('keyup', this.handleKeyboardControl);
   }
 
   public render() {
@@ -299,7 +315,7 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
 
     return (
       <div className="ActivityPage">
-        <div className="ActivityPage__greeting">
+        <div className="ActivityPage__greeting" ref={this.ref}>
           <h1>{intl.get('activity_page.Hello')} {username}</h1>
         </div>
         <div className="ActivityPage__content">

@@ -357,7 +357,9 @@
       "counter_message_2": "bilder.",
       "upload_images": "Laste opp",
       "message_success_single": "Bildeopplastningen var vellykket",
-      "message_success_multiple": "Bildeopplastningen var vellykket"
+      "message_success_multiple": "Bildeopplastningen var vellykket",
+      "single_all_fields_required": "Sørg for at du har fylt ut tittel og kilde for det valgte bildet",
+      "multi_all_fields_required": "Sørg for at du har fylt ut tittel og kilde for alle de valgte bildene"
     },
     "images_empty_list": "No images available, please upload a custom image",
     "videos_from_article": "Video frå artikkel",
@@ -747,7 +749,8 @@
       "empty_content": "Minst ein sti må lagast"
     },
     "notifications": {
-      "delete_path": "Er du sikker på at du vil slette denne stien?",
+      "delete_element": "Er du sikker på at du vil slette dette elementet?",
+      "delete_sub_group": "Er du sikker på at du vil slette denne undergruppen?",
       "assignment": "oppgåva",
       "article": "artikkelen",
       "delete_item": "Er du sikker på at du vil slette {item}?",
@@ -772,7 +775,14 @@
     "Submit": "Lever læringssti",
     "no_title": "Utan tittel",
     "No results found": "Søket ditt gav ingen resultat",
-    "no_options": "Ingen treff"
+    "no_options": "Ingen treff",
+    "nodes": {
+      "delete_element": "Slett element",
+      "delete_sub_group": "Slett undergruppe",
+      "change_element": "Endre element",
+      "drag_drop_element": "Dra og slepp element",
+      "change_content_sub_group": "Endre innhold i undergruppe"
+    }
   },
   "teacherGuidance": {
     "name":  "Lærarrettleiing",
@@ -842,9 +852,11 @@
       "shift_c": "Lag ny læringssti",
       "shift_g": "Lag ny oppgåve",
       "shift_a": "Legg til valt element",
-      "shift_s": "Lagre læringsstien/oppgåva",
       "shift_p": "Publiser læringsstien/oppgåva",
-      "shift_d": "Distribuer læringsstien/oppgåva"
+      "shift_d": "Distribuer læringsstien/oppgåva",
+      "shift_s": "Select sidebar",
+      "shift_m": "Select Menu",
+      "shift_h": "Select Content Page"
     },
     "edit": "Rediger stien",
     "delete": "Slett stien",
