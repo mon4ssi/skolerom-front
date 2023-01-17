@@ -780,7 +780,8 @@
       "delete_sub_group": "Slett undergruppe",
       "change_element": "Endre element",
       "drag_drop_element": "Dra og slepp element",
-      "change_content_sub_group": "Endre innhold i undergruppe"
+      "change_content_sub_group": "Endre innhold i undergruppe",
+      "add_content": "Legg til innhold"
     }
   },
   "teacherGuidance": {

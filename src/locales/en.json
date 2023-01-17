@@ -781,7 +781,8 @@
       "delete_sub_group": "Delete sub group",
       "change_element": "Change element",
       "drag_drop_element": "Drag and drop element",
-      "change_content_sub_group": "Change content in sub group"
+      "change_content_sub_group": "Change content in sub group",
+      "add_content": "Add content"
     }
   },
   "teacherGuidance": {
