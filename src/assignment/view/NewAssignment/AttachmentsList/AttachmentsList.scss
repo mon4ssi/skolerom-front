@@ -118,7 +118,7 @@
         margin: 17px 10px 0;
         width: calc(100% * (1 / 4) - 20px);
         background-color: rgba(0, 0, 0, 0.3);
-        min-height: 200px;
+        min-height: 320px;
         max-height: 320px;
         position: relative;
 
@@ -350,7 +350,7 @@
         margin: 17px 10px 0;
 
         .imageSkeletonLoader {
-          @extend .attachments-list__img-wrap;
+          /* @extend .attachments-list__img-wrap; */
           margin: 0;
           width: 50%;
           background-color: #eee;
