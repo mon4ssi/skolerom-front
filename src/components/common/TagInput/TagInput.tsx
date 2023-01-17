@@ -49,6 +49,7 @@ interface State {
   temporaryFoundedTagsArray: Array<TagProp>;
   temporaryLoadedFoundedTagsArray: Array<TagProp>;
   isTagInputChanged: boolean;
+  shiftTab: boolean;
 }
 
 const TagsFound = lazy(() => import('./TagsFound'));
@@ -62,7 +63,8 @@ class TagInputWrapper extends Component<Props, State> {
     temporaryTagsArray: [],
     temporaryFoundedTagsArray: [],
     temporaryLoadedFoundedTagsArray: [],
-    isTagInputChanged: false
+    isTagInputChanged: false,
+    shiftTab: false
   };
 
   private onBlurTag = (id: number): void => {

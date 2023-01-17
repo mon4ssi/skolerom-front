@@ -853,9 +853,9 @@
       "shift_a": "Legg til valgt element",
       "shift_p": "Publiser læringssti/oppgave",
       "shift_d": "Distribuer læringssti/oppgave",
-      "shift_s": "Select sidebar",
-      "shift_m": "Select Menu",
-      "shift_h": "Select Content Page"
+      "shift_s": "Velg sidemeny",
+      "shift_m": "Velg meny",
+      "shift_h": "Velg innhold"
     },
     "edit": "Rediger sti",
     "delete": "Slett sti",
