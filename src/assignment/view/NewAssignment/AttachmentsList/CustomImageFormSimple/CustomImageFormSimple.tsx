@@ -23,21 +23,22 @@ export interface CustomImageItem {
   source: string;
 }
 
+const THOUSAND = 1024;
+const HUNDRED = 100;
+const THREE_SECONDS = 0;
+
 export const CustomImageFormSimple = (props: any) => {
-  const THOUSAND = 1024;
-  const HUNDRED = 100;
-  const THREE_SECONDS = 0;
   const articleService: ArticleService = injector.get(ARTICLE_REPO_KEY);
-  const fileArray: Array<File> = [];
   const filenames: Array<string> = [];
   const filesListBase: Array<CustomImageItem> = [];
-  /* const [imageFileArray, setImageFileArray] = useState(fileArray); */
+
   const [fileList, setFileList] = useState(filesListBase);
   const [value, setValue] = useState(0);
   const [fileNames, setFileNames] = useState(filenames);
   const [progressBar, setProgressBar] = useState(0);
   const [inProgress, setInProgress] = useState(false);
   const [areFullInputs, setAreFullInputs] = useState(false);
+  const [isUploadActive, setIsUploadActive] = useState(false);
 
   const isNotEmpty = fileList!.length !== 0;
 
@@ -82,9 +83,10 @@ export const CustomImageFormSimple = (props: any) => {
     validateFieldsForTitleSource();
   };
 
-  const renderUploadImagesButton = () => <div className="spaced right"><button className="createButton" onClick={uploadImages}>{intl.get('new assignment.uploadCustomImages.upload_images')}</button></div>;
+  const renderUploadImagesButton = () => <div className="spaced right"><button className={isUploadActive ? 'createButton disabled' : 'createButton'} onClick={isUploadActive ? uploadImagesFalse : uploadImages}>{intl.get('new assignment.uploadCustomImages.upload_images')}</button></div>;
 
   const uploadImages = () => {
+    setIsUploadActive(true);
     if (areFullInputs) {
       if (value === 1) {
         uploadSingleImage();
@@ -92,6 +94,10 @@ export const CustomImageFormSimple = (props: any) => {
         uploadMultipleImages();
       }
     }
+  };
+
+  const uploadImagesFalse = () => {
+    setIsUploadActive(true);
   };
 
   const uploadSingleImage = () => {
@@ -119,6 +125,7 @@ export const CustomImageFormSimple = (props: any) => {
         setFileList([]);
         /* setImageFileArray([]); */
         setValue(0);
+        setIsUploadActive(false);
       }
       if (percentage >= HUNDRED) {
         setTimeout(async () => {
@@ -156,6 +163,7 @@ export const CustomImageFormSimple = (props: any) => {
         /* setImageFileArray([]); */
         setFileList([]);
         setValue(0);
+        setIsUploadActive(false);
       }
       if (percentage >= HUNDRED) {
         setTimeout(async () => {
