@@ -63,7 +63,7 @@ export const CustomImageFormSimple = (props: any) => {
   };
 
   const renderTrashIcon = (fileName: string) => (
-    <div className="is-selectedImage-icon">
+    <div className="CustomImageFormSimple__is-selectedImage-icon">
       <img
         onClick={() => removeFromImagesArray(fileName)}
         src={trashIcon}
@@ -83,7 +83,11 @@ export const CustomImageFormSimple = (props: any) => {
     validateFieldsForTitleSource();
   };
 
-  const renderUploadImagesButton = () => <div className="spaced right"><button className={isUploadActive ? 'createButton disabled' : 'createButton'} onClick={isUploadActive ? uploadImagesFalse : uploadImages}>{intl.get('new assignment.uploadCustomImages.upload_images')}</button></div>;
+  const renderUploadImagesButton = () => (
+    <div className="CustomImageFormSimple__spaced right">
+      <button className={isUploadActive ? 'createButton CustomImageFormSimple__disabled' : 'createButton'} onClick={isUploadActive ? uploadImagesFalse : uploadImages}>{intl.get('new assignment.uploadCustomImages.upload_images')}</button>
+    </div>
+  );
 
   const uploadImages = () => {
     setIsUploadActive(true);
@@ -268,18 +272,18 @@ export const CustomImageFormSimple = (props: any) => {
     const size = ((file.size) / THOUSAND) / THOUSAND;
 
     return (
-      <div className="imageUpload" key={file.name}>
-        <div key={file.name} className="imageListItem">
+      <div className="CustomImageFormSimple__imageUpload" key={file.name}>
+        <div key={file.name} className="CustomImageFormSimple__imageListItem">
           {/* <div className='icon'></div> */}
 
-          <div className="imageData">
+          <div className="CustomImageFormSimple__imageData">
 
-            <img className="previewImageUpload" src={URL.createObjectURL(file)} alt="" />
+            <img className="CustomImageFormSimple__previewImageUpload" src={URL.createObjectURL(file)} alt="" />
 
-            <div className="infoImage">
+            <div className="CustomImageFormSimple__infoImage">
               <div>
-                <input className="inputImage" type="text" defaultValue={getFileNameWithoutExtension(file.name)!} onChange={e => editTitleForImage(e.target!.value!, file.name!, fileList!)} placeholder="Tittel" />
-                <input className="inputImage" type="text" onChange={e => editSourceForImage(e.target!.value!, file.name!, fileList!)} placeholder="Kilde" />
+                <input className="CustomImageFormSimple__inputImage" type="text" defaultValue={getFileNameWithoutExtension(file.name)!} onChange={e => editTitleForImage(e.target!.value!, file.name!, fileList!)} placeholder="Tittel" />
+                <input className="CustomImageFormSimple__inputImage" type="text" onChange={e => editSourceForImage(e.target!.value!, file.name!, fileList!)} placeholder="Kilde" />
               </div>
               {renderTrashIcon(file.name)}
             </div>
@@ -309,23 +313,25 @@ export const CustomImageFormSimple = (props: any) => {
 
   const renderInputFile = () => (
     <label className="custom-file-upload">
-      <input onChange={(e) => { handleChangeFile(e); }} multiple className="inputFileImages" type="file" accept="image/png, image/jpg, image/jpeg" />
+      <input onChange={(e) => { handleChangeFile(e); }} multiple className="CustomImageFormSimple__inputFileImages" type="file" accept="image/png, image/jpg, image/jpeg" />
       {intl.get('new assignment.uploadCustomImages.select_images')}
     </label>
   );
 
   const renderWarningCompleteInputs = () => (
-    <div className="completeInputsWarning">
+    <div className="CustomImageFormSimple__completeInputsWarning">
       {<img src={exclamationImg} alt="recent-activity" />}
-      <span className="filenameSpanWarning">{fileList.length === 1 ? `${intl.get('new assignment.uploadCustomImages.single_all_fields_required')}` : `${intl.get('new assignment.uploadCustomImages.multi_all_fields_required')}`}</span>
+      <span className="CustomImageFormSimple__filenameSpanWarning">
+        {fileList.length === 1 ? `${intl.get('new assignment.uploadCustomImages.single_all_fields_required')}` : `${intl.get('new assignment.uploadCustomImages.multi_all_fields_required')}`}
+      </span>
     </div>
   );
 
   return (
     <div>
-      <div className="spaced">
+      <div className="CustomImageFormSimple__spaced">
         {!isNotEmpty && renderInputFile()}
-        <span className="filenameSpanCounter">{`${intl.get('new assignment.uploadCustomImages.counter_message_1')} ${value} ${intl.get('new assignment.uploadCustomImages.counter_message_2')}`}</span>
+        <span className="CustomImageFormSimple__filenameSpanCounter">{`${intl.get('new assignment.uploadCustomImages.counter_message_1')} ${value} ${intl.get('new assignment.uploadCustomImages.counter_message_2')}`}</span>
         <br />
         {isNotEmpty && !areFullInputs && renderWarningCompleteInputs()}
       </div>
@@ -334,7 +340,7 @@ export const CustomImageFormSimple = (props: any) => {
         <div>{isNotEmpty && areFullInputs && renderUploadImagesButton()}</div>
         <div>{inProgress && renderProgressBar()}</div>
       </div>
-      <div className="imagesList">
+      <div className="CustomImageFormSimple__imagesList">
         {renderPreviewImages()}
       </div>
     </div>
