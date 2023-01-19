@@ -110,6 +110,12 @@
     padding: 12px;
 }
 
+.disabled {
+    background-color: #596A75;
+    color: #FFFFFF;
+    cursor: wait;
+}
+
 .is-selectedImage-icon {
     cursor: pointer;
     position: relative;

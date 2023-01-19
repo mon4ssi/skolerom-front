@@ -781,7 +781,8 @@
       "delete_sub_group": "Slett undergruppe",
       "change_element": "Endre element",
       "drag_drop_element": "Dra og slepp element",
-      "change_content_sub_group": "Endre innhold i undergruppe"
+      "change_content_sub_group": "Endre innhold i undergruppe",
+      "add_content": "Legg til innhold"
     }
   },
   "teacherGuidance": {
@@ -854,9 +855,9 @@
       "shift_a": "Legg til valt element",
       "shift_p": "Publiser læringsstien/oppgåva",
       "shift_d": "Distribuer læringsstien/oppgåva",
-      "shift_s": "Select sidebar",
-      "shift_m": "Select Menu",
-      "shift_h": "Select Content Page"
+      "shift_s": "Velg sidemeny",
+      "shift_m": "Velg meny",
+      "shift_h": "Velg innhold"
     },
     "edit": "Rediger stien",
     "delete": "Slett stien",

@@ -18,13 +18,28 @@ export const TeacherGuidanceSubtext = (props: Props) => {
     }
   };
 
+  const hasOneTextContentAtLast = () => {
+    const index = props.item.content.findIndex(item =>
+      item.type === 'TEXT'
+    );
+    if (index >= 0) {
+      return true;
+    }
+    return false;
+  };
+
   const expandedDiv = (!showDescription) ? 'expansion full' : 'expansion';
   const expandedparagraph = (!showDescription) ? 'paragraph full' : 'paragraph';
   const ClassButton = (showDescription) ? 'toggleRead active' : 'toggleRead';
+
+  if (!hasOneTextContentAtLast()) {
+    return null;
+  }
   return (
+
     <div className={expandedDiv}>
       <div className={expandedparagraph}>
-        {props.item.content.map(item => <div key={item.text!} dangerouslySetInnerHTML={{ __html: item.text! }} />)}
+        {props.item.content.map(item => item.type === 'TEXT' && <div key={item.text!} dangerouslySetInnerHTML={{ __html: item.text! }} />)}
       </div>
       <a href="javascript:void(0)" className={ClassButton} onClick={toggleRead}><img src={arrowLeftRounded} alt="arrowLeftRounded" /></a>
     </div>

@@ -37,6 +37,7 @@ export class SubmitTeachingPath extends Component<Props> {
             className="SubmitTeachingPath__button"
             onClick={this.props.onSubmit}
             title={intl.get('current_assignment_page.submit')}
+            autoFocus
           >
             <img
               className="SubmitTeachingPath__buttonImage"
