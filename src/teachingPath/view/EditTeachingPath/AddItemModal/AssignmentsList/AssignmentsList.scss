@@ -9,8 +9,10 @@
   }
   &.loadingAssignments {
     .SearchFilter {
-      opacity: 0.4;
-      pointer-events: none;
+      .itemFilter, .SearchFilter__search__content, .SearchFilter__link {
+        opacity: 0.4;
+        pointer-events: none;
+      }       
     }
   }
   
