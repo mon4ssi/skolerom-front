@@ -126,14 +126,14 @@ const renderHeaderLink = (link: HeaderNavigationLink) => {
   if (link.dropdown) {
     const renderSubMenuSubMenu = (item: HeaderNavigationLink) => (
       <li key={item.name} className={'AppHeader__dropdownItem__subItem'}>
-        <a href={item.url} title={item.name}>{item.name}</a>
+        <a href={item.url} title={item.name} role="button">{item.name}</a>
       </li>
     );
     const renderSubmenu = (item: HeaderNavigationLink) => {
       if (item.dropdown) {
         return (
-          <li key={item.name} className={'AppHeader__dropdownItem'}>
-            <a href={item.url} title={item.name}>{item.name}</a>
+          <li key={item.name} className={'Item'}>
+            <a href={item.url} title={item.name} role="button">{item.name}</a>
             <ul className="AppHeader__dropdownItem__subMenu">
               {item.submenuItems!.map(renderSubMenuSubMenu)}
             </ul>
@@ -142,7 +142,7 @@ const renderHeaderLink = (link: HeaderNavigationLink) => {
       }
       return (
         <li key={item.name} className={'AppHeader__dropdownItem'}>
-          <a href={item.url} title={item.name}>{item.name}</a>
+          <a href={item.url} title={item.name}  role="button">{item.name}</a>
         </li>
       );
     };
@@ -150,7 +150,7 @@ const renderHeaderLink = (link: HeaderNavigationLink) => {
     return (
       <li key={link.name} className="AppHeader__navigationItem tc1 fs17 fw500">
         <div className="AppHeader__navigationItemText">
-          <a href={link.url} className="AppHeader__dropdown" title={link.name}>{link.name}</a>
+          <a href={link.url} className="AppHeader__dropdown" title={link.name} role="button">{link.name}</a>
           <div className={'AppHeader__submenuWrapper'}>
             <ul className={'AppHeader__submenu'}>
               {link.submenuItems!.map(renderSubmenu)}
@@ -164,7 +164,7 @@ const renderHeaderLink = (link: HeaderNavigationLink) => {
   return (
     <li key={link.name} className="AppHeader__navigationItem tc1 fs17 fw500">
       <div className="AppHeader__navigationItemText">
-        <a href={link.url} title={link.name}>{link.name}</a>
+        <a href={link.url} title={link.name} role="button">{link.name}</a>
       </div>
     </li>
   );
@@ -488,26 +488,26 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
 
   private dropDownKeyboard = () => (
     <li className="AppHeader__dropdownItem">
-      <a href="javascript:void(0)" onClick={this.openKeyboardModal} title={intl.get('header.title.keyboard')}>{intl.get('generals.keyboard')}</a>
+      <a href="javascript:void(0)" onClick={this.openKeyboardModal} title={intl.get('header.title.keyboard')} role="button">{intl.get('generals.keyboard')}</a>
     </li>
   )
 
   private renderQuestionTab = () => (
     <li className="AppHeader__navigationItem tc1 fs17 fw500">
       <div className="AppHeader__navigationItemText">
-        <a href="javascript:void(0)" className="AppHeader__dropdown" title={intl.get('header.About')}>
+        <a href="javascript:void(0)" className="AppHeader__dropdown" title={intl.get('header.About')} role="button">
           {intl.get('header.About')}
         </a>
         <div className="AppHeader__submenuWrapper">
           <ul className="AppHeader__submenu">
             <li className="AppHeader__dropdownItem">
-              <a href={`${process.env.REACT_APP_WP_URL}/hva-er-skolerom`} title={intl.get('header.About skolerom')} target="_blank">{intl.get('header.About skolerom')}</a>
+              <a href={`${process.env.REACT_APP_WP_URL}/hva-er-skolerom`} title={intl.get('header.About skolerom')} target="_blank" role="button">{intl.get('header.About skolerom')}</a>
             </li>
             <li className="AppHeader__dropdownItem">
-              <a href={`${process.env.REACT_APP_WP_URL}/kontakt-oss`} title={intl.get('header.contact')} target="_blank">{intl.get('header.contact')}</a>
+              <a href={`${process.env.REACT_APP_WP_URL}/kontakt-oss`} title={intl.get('header.contact')} target="_blank" role="button">{intl.get('header.contact')}</a>
             </li>
             <li className="AppHeader__dropdownItem">
-              <a href={`${process.env.REACT_APP_WP_URL}/support-skolerom`} title={intl.get('generals.support')} target="_blank">{intl.get('generals.support')}</a>
+              <a href={`${process.env.REACT_APP_WP_URL}/support-skolerom`} title={intl.get('generals.support')} target="_blank" role="button">{intl.get('generals.support')}</a>
             </li>
             {this.props.loginStore!.currentUser && this.dropDownKeyboard()}
           </ul>
@@ -519,13 +519,13 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   private renderSimpleQuestionTab = () => (
     <li className="AppHeader__navigationItem helpNavigation">
       <div className="AppHeader__navigationItemText">
-        <a href="javascript:void(0)" className="AppHeader__dropdown" title={intl.get('header.title.Help')}>
+        <a href="javascript:void(0)" className="AppHeader__dropdown" title={intl.get('header.title.Help')} role="button">
           {intl.get('header.title.Help')}
         </a>
         <div className="AppHeader__submenuWrapper">
           <ul className="AppHeader__submenu">
             <li className="AppHeader__dropdownItem">
-              <a href="https://skolerom.no/support-skolerom" title={intl.get('header.title.Help')} target="_blank">{intl.get('generals.support')}</a>
+              <a href="https://skolerom.no/support-skolerom" title={intl.get('header.title.Help')} target="_blank" role="button">{intl.get('generals.support')}</a>
             </li>
             {this.props.loginStore!.currentUser && this.dropDownKeyboard()}
           </ul>

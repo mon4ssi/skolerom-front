@@ -33,7 +33,7 @@ class TabNavigationComponent extends Component<Props> {
 
   private mainButton = () => {
     const { textMainButton, onClickMainButton } = this.props;
-    return <button className="CreateButton" title={textMainButton!} ref={this.ref} onClick={onClickMainButton}>{textMainButton!}</button>;
+    return <button className="CreateButton" role="button" title={textMainButton!} ref={this.ref} onClick={onClickMainButton}>{textMainButton!}</button>;
   }
 
   private renderTabNavigationLinks = (link: TabNavigationLink) => (
@@ -47,7 +47,7 @@ class TabNavigationComponent extends Component<Props> {
         activeClassName="activeRoute"
         onClick={this.preventLinkEvent.bind(this, link.isDisabled)}
         aria-label={intl.get(`${this.props.sourceTranslation}.${link.name}`)}
-        role="tab"
+        role="button"
         title={intl.get(`${this.props.sourceTranslation}.${link.name}`)}
       >
         {intl.get(`${this.props.sourceTranslation}.${link.name}`)}

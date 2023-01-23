@@ -115,7 +115,7 @@ class SideOutPanelComponent extends Component<Props & RouteComponentProps> {
             </div>
           </div>
           <div id="aux1" className="hidden">Not name</div>
-          <input type="text" aria-labelledby="aux1" autoFocus className="hidden"/>
+          <input type="text" aria-labelledby="aux1" className="hidden"/>
           <div className="entityInfo">
             <div className={`deadline ${isPassedDeadline && 'passed'}`}>
               <img src={clock} alt="clock"/>
@@ -145,7 +145,7 @@ class SideOutPanelComponent extends Component<Props & RouteComponentProps> {
         </div>
 
         <div className={'answerButton'}>
-          <CreateButton disabled={isPassedDeadline} onClick={this.answerEntity} title={buttonTitle} >
+          <CreateButton disabled={isPassedDeadline} onClick={this.answerEntity} title={buttonTitle} autoFocus>
             {buttonTitle}
           </CreateButton>
         </div>

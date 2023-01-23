@@ -161,6 +161,7 @@ class Sidebar extends Component<Props> {
       activeClassName="Sidebar__listItem_active"
       onClick={this.handleClickLink(link)}
       aria-label={intl.get(`sidebar.${link.name}`)}
+      role="button"
       title={intl.get(`sidebar.title.${link.name}`)}
     >
       <img className="Sidebar__icon" src={link.icon} alt={intl.get(`sidebar.alt.${link.name}`)} title={intl.get(`sidebar.title.${link.name}`)} />

@@ -75,7 +75,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   public renderViewButton = (isPublished: boolean, history: any, id: number, view: string) =>
   (
     <div className="actionButton">
-      <CreateButton disabled={!isPublished} onClick={() => this.openInNewTabView()} title={view} >
+      <CreateButton disabled={!isPublished} onClick={() => this.openInNewTabView()} title={view} autoFocus>
         {view}
       </CreateButton>
     </div>
@@ -376,7 +376,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
             </div>
           </div>
           <div id="aux1" className="hidden">Not name</div>
-          <input type="text" aria-labelledby="aux1" autoFocus className="hidden" />
+          <input type="text" aria-labelledby="aux1" className="hidden" />
           <div className="entityInfo">
             <div className="partsInfo">
               <img src={steps} alt="question" />
