@@ -108,7 +108,7 @@ class AssignmentItem extends Component<AssignmentProps> {
             {assignment.numberOfQuestions}{' '}
             {assignment.numberOfQuestions === 1 ? intl.get('assignment list.question') : intl.get('assignment list.questions')}
           </div>
-          <a href="javascript:void(0)" className="itemIsSelected" onClick={this.handleSelectAssignment}>
+          <a href="javascript:void(0)" className="itemIsSelected" onClick={this.handleSelectAssignment} role="button" tabIndex={0}>
             <img
               src={this.isAssignmentSelected() ? checkFilledImg : checkImg}
               alt={this.isAssignmentSelected() ? intl.get('generals.unselected_assignment') : intl.get('generals.selected_assignment')}

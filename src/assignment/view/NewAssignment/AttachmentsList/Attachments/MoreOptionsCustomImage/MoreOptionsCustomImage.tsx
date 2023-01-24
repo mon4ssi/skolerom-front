@@ -46,7 +46,7 @@ class MoreOptionsCustomImageWrapper extends Component<MoreOptionsCustomImageWrap
       <div className="bottom">
         <ul className="flexBox dirColumn">
           <li>
-            <a href="javascript:void(0)" onClick={this.edit} className="flexBox" >
+            <a href="javascript:void(0)" onClick={this.edit} className="flexBox" role="button">
               <span>{intl.get('new assignment.images_options.edit')}</span>
               <img src={editIcon} alt="Duplicate qustion" />
             </a>

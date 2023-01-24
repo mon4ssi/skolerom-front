@@ -135,6 +135,11 @@
         &.sectImgsReadOnly {
           margin-top: -48px;
           background: transparent;
+          .topVerticalLine {
+            height: 20px !important;
+            min-height: 20px;
+            top: -25px;
+          }
         }
       }
 

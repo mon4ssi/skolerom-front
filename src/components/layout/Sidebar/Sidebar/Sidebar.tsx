@@ -163,6 +163,7 @@ class Sidebar extends Component<Props> {
       aria-label={intl.get(`sidebar.${link.name}`)}
       role="button"
       title={intl.get(`sidebar.title.${link.name}`)}
+      tabIndex={0}
     >
       <img className="Sidebar__icon" src={link.icon} alt={intl.get(`sidebar.alt.${link.name}`)} title={intl.get(`sidebar.title.${link.name}`)} />
       <span className="Sidebar__text">
