@@ -75,7 +75,7 @@ export class QuestionAttachments extends Component<ImagesProps> {
         {image.title}
       </div>
       <div style={{ fontStyle: 'Italic', color: '#767168', fontWeight: 300 }}>
-      {image.source !== '' && image.source !== null ? `${intl.get('new assignment.updateCustomImagesForm.source')}: ${image.source!.includes('https') ? image.source!.split(',')[0] : image.source!}` : ''}
+      {image.source !== '' && image.source !== null && image.source !== undefined ? `${intl.get('new assignment.updateCustomImagesForm.source')}: ${image.source!.includes('https') ? image.source!.split(',')[0] : image.source!}` : ''}
       </div>
     </div>
   )
