@@ -133,14 +133,19 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
           if (store!.currentEntity!.isMySchool) {
             this.setState(
               {
+                isValid: true,
                 isMyStateSchool: true,
                 isValidPrivate: false
               }
             );
             this.props.store!.currentEntity!.setIsMySchool(true);
+            if (this.state.valueGoalsOptions.length === 0) {
+              this.setState({ isValid: false });
+            }
           } else {
             this.setState(
               {
+                isValid: false,
                 isMyStateSchool: false,
                 isValidPrivate: true
               }
@@ -153,6 +158,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     } else {
       this.setState(
         {
+          isValid: false,
           isValidPrivate: false,
           isMyStateSchool: false
         }
@@ -599,7 +605,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     }
     this.setState(
       {
-        isValid: true,
+        isValid: false,
         isValidPrivate: false,
         isMyStateSchool: true
       },

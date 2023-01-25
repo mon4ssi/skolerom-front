@@ -102,7 +102,7 @@ class ImageOption extends Component<ImageOptionProps, ImageOptionState> {
         <div style={{ padding: '9px', fontSize: '13px', fontStyle: 'italic', color: '#993266 !important' }}>
           <div style={{ fontStyle: 'Italic', color: '#767168', fontWeight: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{option!.title}</div>
           <div style={{ fontStyle: 'Italic', color: '#767168', fontWeight: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {option.source !== '' && option.source !== null ? `${intl.get('new assignment.updateCustomImagesForm.source')}: ${option.source!.includes(',') ? option.source!.split(',')[0] : option.source!}` : ''}
+            {option.source !== '' && option.source !== null && option.source !== undefined ? `${intl.get('new assignment.updateCustomImagesForm.source')}: ${option.source!.includes('https') ? option.source!.split(',')[0] : option.source!}` : ''}
           </div>
         </div>
       );
