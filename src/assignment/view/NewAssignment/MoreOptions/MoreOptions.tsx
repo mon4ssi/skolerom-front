@@ -79,13 +79,13 @@ class MoreOptionsWrapper extends Component<MoreOptionsWrapperProps> {
       <div className="left">
         <ul className="flexBox dirColumn">
           <li>
-            <a href="javascript:void(0)" onClick={this.duplicate} className="flexBox" >
+            <a href="javascript:void(0)" onClick={this.duplicate} className="flexBox" role="button">
               <span>{intl.get('new assignment.Duplicate question')}</span>
               <img src={duplicateIcon} alt="Duplicate qustion"/>
             </a>
           </li>
           <li>
-            <a href="javascript:void(0)" onClick={this.delete} className="flexBox">
+            <a href="javascript:void(0)" onClick={this.delete} className="flexBox" role="button">
               <span style={{ color: '#E2017B' }}>{intl.get('new assignment.Remove question')}</span>
               <img src={deleteIcon} alt="Delete qustion"/>
             </a>

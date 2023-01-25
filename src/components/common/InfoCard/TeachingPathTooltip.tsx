@@ -188,11 +188,11 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
       }
       if (isPosibleDeleteOrEdit) {
         return (
-          <li key={index} className={`fw500 flexBox fs15 editOrDeleteValue ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick}>{item.text}</a></li>
+          <li key={index} className={`fw500 flexBox fs15 editOrDeleteValue ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick} role="button">{item.text}</a></li>
         );
       }
       return (
-        <li key={index} className={`fw500 flexBox fs15 ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick}>{item.text}</a></li>
+        <li key={index} className={`fw500 flexBox fs15 ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick} role="button">{item.text}</a></li>
       );
     }
   )
