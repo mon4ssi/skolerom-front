@@ -1219,7 +1219,7 @@ export class CreationPageComponent extends Component<Props> {
 
   public renderExitButton = () => (
     <div className={'exitButton'}>
-      <Link to={'/teaching-paths/all'}>
+      <Link to={'/teaching-paths/all'} role="button">
         <div className={'flexBox alignCenter exitTeachingPath'}>
           <img src={actualArrowLeftRounded} alt="actualArrowLeftRounded" />
           <span>{intl.get('teaching path passing.exit')}</span>

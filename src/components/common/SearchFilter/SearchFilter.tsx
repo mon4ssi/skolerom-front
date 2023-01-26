@@ -598,9 +598,9 @@ class SearchFilter extends Component<Props, State> {
     }
     return (
       <div className="SearchFilter__link">
-        <a href="javascript:void(0)" className={buttonClass} onClick={this.openFiltersModal}>
+        <button className={buttonClass} onClick={this.openFiltersModal} role="button">
           <img src={imgFilter} /> {buttonTxt}
-        </a>
+        </button>
       </div>
     );
   }

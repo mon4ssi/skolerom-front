@@ -32,6 +32,7 @@ export const CreateButton = (props: Props) => {
       onClick={onClick}
       title={title}
       autoFocus={autoFocus}
+      role="button"
     >
       {children}
     </button>
