@@ -19,6 +19,7 @@ export interface TeachingPathRepo {
   getMyTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
   getMySchoolTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
   getStudentTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
+  getInReviewTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
   getTeachingPathDataById(id: number): Promise<TeachingPath>;
   getTeachingPathById(id: number): Promise<TeachingPath>;
   getCurrentNode(teachingPathId: number, nodeId: number): Promise<TeachingPathNode>;
@@ -682,6 +683,10 @@ export class TeachingPathsList {
     this.filter.showMySchoolTeachingpath = school;
   }
 
+  public setFilterInReviewTeachingPath = (review: boolean) => {
+    this.filter.inReview = review;
+  }
+
   public async getAllTeachingPathsList() {
     return this.teachingPathService.getAllTeachingPathsList(this.filter);
   }
@@ -692,6 +697,10 @@ export class TeachingPathsList {
 
   public async getMySchoolTeachingPathsList() {
     return this.teachingPathService.getMySchoolTeachingPathsList(this.filter);
+  }
+
+  public async getInReviewTeachingPathsList() {
+    return this.teachingPathService.getInReviewTeachingPathsList(this.filter);
   }
 
   public async getStudentTeachingPathsList() {

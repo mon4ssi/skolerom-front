@@ -991,6 +991,7 @@ export class Filter {
   public showMySchoolAssignments?: number | null;
   public onlyOwnSchools?: number | null;
   public articles?: string | null;
+  public inReview?: boolean;
 }
 
 export interface LanguageFilter {
