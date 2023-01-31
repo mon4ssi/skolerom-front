@@ -38,6 +38,7 @@ const renderMyAssignments = () => (
   < MyAssignments typeOfAssignmentsList="my" />
 );
 const renderMySchoolAssignments = () => (<MyAssignments typeOfAssignmentsList="myschool" />);
+const renderInReviewAssignments = () => (<MyAssignments typeOfAssignmentsList="inreview" />);
 
 const renderStudentsAssignments = () => <StudentAssignments />;
 const renderStudentEvaluation = () => <StudentEvaluation />;
@@ -116,6 +117,10 @@ const contentManagerRoutes = () => (
     <Route
       path="/assignments/my"
       render={renderMyAssignments}
+    />
+    <Route
+      path="/assignments/inreview"
+      render={renderInReviewAssignments}
     />
     <Route
       path="/*"
@@ -214,6 +219,10 @@ class AssignmentsPageWrapper extends Component<Props, State> {
       name: 'My assignments',
       url: '/assignments/my'
     },
+    {
+      name: 'In review',
+      url: '/assignments/inreview'
+    }
     /*  {
         name: 'My school',
         url: '/teacher/assignments/school'

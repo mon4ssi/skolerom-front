@@ -161,6 +161,12 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
           isValid: false,
           isValidPrivate: false,
           isMyStateSchool: false
+        },
+        () => {
+          if (store!.currentEntity!.inReview) {
+            this.setState({ isReview: true });
+            this.props.store!.currentEntity!.setIsInReview(true);
+          }
         }
       );
       this.props.store!.currentEntity!.setIsMySchool(false);
@@ -589,6 +595,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     );
     this.props.store!.currentEntity!.setIsPrivate(true);
     this.props.store!.currentEntity!.setIsMySchool(false);
+    this.props.store!.currentEntity!.setIsInReview(false);
   }
 
   public handleMySchoolOn = () => {
@@ -652,6 +659,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
       }
     );
     this.props.store!.currentEntity!.setIsPrivate(false);
+    this.props.store!.currentEntity!.setIsInReview(true);
   }
 
   public handlePrivateOff = async () => {
@@ -685,6 +693,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     );
     this.props.store!.currentEntity!.setIsPrivate(false);
     this.props.store!.currentEntity!.setIsMySchool(false);
+    this.props.store!.currentEntity!.setIsInReview(false);
   }
 
   public compareTwoArraysReturnValueSubject = (allGrades: Array<Subject>, selectedGrades: Array<Subject>) => {

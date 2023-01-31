@@ -400,6 +400,11 @@ export class DraftAssignment extends Assignment {
     this.save();
   }
 
+  public setIsInReview(inReview: boolean) {
+    this._inReview = inReview;
+    this.save();
+  }
+
   public setUpdatedAt(updatedAt: string) {
     this._updatedAt = updatedAt;
   }

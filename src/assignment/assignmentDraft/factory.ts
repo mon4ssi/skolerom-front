@@ -220,6 +220,7 @@ export const buildDraftAssignmentDTO = (
   levels: draftAssignment.levels,
   assignmentContent: buildAssignmentDTO(draftAssignment),
   isCopy: draftAssignment.isCopy,
+  inReview: draftAssignment.inReview,
   grepCoreElementsIds: draftAssignment.grepCoreElementsIds,
   grepGoalsIds: draftAssignment.grepGoalsIds,
   grepMainTopicsIds: draftAssignment.grepMainTopicsIds,

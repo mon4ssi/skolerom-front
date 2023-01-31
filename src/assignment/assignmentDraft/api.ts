@@ -55,6 +55,7 @@ export interface DraftAssignmentRequestDTO {
   levels: Array<number>;
   isPublished?: boolean;
   isCopy?: boolean;
+  inReview?: boolean;
   keywords?: Array<string>;
   grepCoreElementsIds?: Array<number>;
   grepMainTopicsIds?: Array<number>;
