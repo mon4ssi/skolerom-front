@@ -201,6 +201,7 @@
   "assignments_tabs": {
     "All assignments": "Alle oppgåver",
     "My assignments": "Mine oppgåver",
+    "In review": "Til gjennomgang",
     "My school": "Skulen min",
     "My favorites": "Mine favorittar",
     "new_assignment": "Ny oppgåve"
@@ -625,6 +626,7 @@
   },
   "teaching_path_tabs": {
     "All teaching paths": "Alle læringsstiar",
+    "In review": "Til gjennomgang",
     "My teaching paths": "Mine læringsstiar",
     "My school": "Skulen min",
     "My favorites": "Mine favorittar",

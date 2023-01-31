@@ -282,6 +282,7 @@ export const buildTeachingPathRequestDTO = (teachingPath: DraftTeachingPath) => 
   subjects: buildSubject(teachingPath.subjects),
   levels: teachingPath.levels,
   isCopy: teachingPath.isCopy,
+  inReview: teachingPath.inReview,
   grepCoreElementsIds: teachingPath.grepCoreElementsIds,
   grepMainTopicsIds: teachingPath.grepMainTopicsIds,
   grepReadingInSubjectsIds: teachingPath.grepReadingInSubjectsIds,

@@ -161,6 +161,12 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
           isValid: false,
           isValidPrivate: false,
           isMyStateSchool: false
+        },
+        () => {
+          if (store!.currentEntity!.inReview) {
+            this.setState({ isReview: true });
+            this.props.store!.currentEntity!.setIsInReview(true);
+          }
         }
       );
       this.props.store!.currentEntity!.setIsMySchool(false);
@@ -578,12 +584,18 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
         if (this.props.store!.getCurrentUser()!.type === UserType.ContentManager) {
           this.props.store!.currentEntity!.setGrepSourcesIds([]);
           this.props.store!.currentEntity!.setOpen(false);
-          this.setState({ isOpen: false });
+          this.setState(
+            {
+              isOpen: false,
+              isReview: false
+            }
+          );
         }
       }
     );
     this.props.store!.currentEntity!.setIsPrivate(true);
     this.props.store!.currentEntity!.setIsMySchool(false);
+    this.props.store!.currentEntity!.setIsInReview(false);
   }
 
   public handleMySchoolOn = () => {
@@ -618,6 +630,38 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     this.props.store!.currentEntity!.setIsMySchool(true);
   }
 
+  public handleInReviewlOn = () => {
+    const isCopy = this.props.store!.currentEntity!.isCopy;
+    const assignmentTitle = this.props.store!.currentEntity!.title;
+    if (
+      isCopy && (
+        /Copy$/.test(assignmentTitle) ||
+        /Kopi$/.test(assignmentTitle) ||
+        /copy$/.test(assignmentTitle) ||
+        /kopi$/.test(assignmentTitle))
+    ) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: this.labels.copyWordInTitleNotAllowed
+      });
+
+      return;
+    }
+    this.setState(
+      {
+        isValid: false,
+        isValidPrivate: false,
+        isReview: true
+      },
+      () => {
+        this.validateAddTeacherContentDefault(true);
+        this.sendValidbutton();
+      }
+    );
+    this.props.store!.currentEntity!.setIsPrivate(false);
+    this.props.store!.currentEntity!.setIsInReview(true);
+  }
+
   public handlePrivateOff = async () => {
     const isCopy = this.props.store!.currentEntity!.isCopy;
     const assignmentTitle = this.props.store!.currentEntity!.title;
@@ -639,7 +683,8 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
       {
         isValid: false,
         isValidPrivate: false,
-        isMyStateSchool: false
+        isMyStateSchool: false,
+        isReview: false
       },
       () => {
         this.validateAddTeacherContentDefault(false);
@@ -648,6 +693,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     );
     this.props.store!.currentEntity!.setIsPrivate(false);
     this.props.store!.currentEntity!.setIsMySchool(false);
+    this.props.store!.currentEntity!.setIsInReview(false);
   }
 
   public compareTwoArraysReturnValueSubject = (allGrades: Array<Subject>, selectedGrades: Array<Subject>) => {
@@ -941,19 +987,19 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
   public renderVisibility = () => {
     const { store } = this.props;
     const isTeacher = (store!.getCurrentUser()!.type !== UserType.Teacher) ? true : false;
+    const isCm = (store!.getCurrentUser()!.type !== UserType.ContentManager) ? true : false;
     const isTeacherTrial = (store!.getCurrentUser()!.teacherTrial) ? true : false;
-
     const privateButtonClassnames = classnames(
       'flexBox justifyCenter alignCenter w50',
       {
-        active: store!.currentEntity!.isPrivate && !this.state.isMyStateSchool,
+        active: store!.currentEntity!.isPrivate && !this.state.isMyStateSchool && !this.state.isReview,
       }
     );
 
     const publicButtonClassnames = classnames(
       'flexBox justifyCenter alignCenter w50',
       {
-        active: !store!.currentEntity!.isPrivate && !this.state.isMyStateSchool,
+        active: !store!.currentEntity!.isPrivate && !this.state.isMyStateSchool && !this.state.isReview,
         hidden: isTeacherTrial
       }
     );
@@ -963,6 +1009,14 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
       {
         active: store!.currentEntity!.isPrivate && this.state.isMyStateSchool,
         hidden: isTeacher
+      }
+    );
+
+    const inReviewButtonClassnames = classnames(
+      'flexBox justifyCenter alignCenter w50',
+      {
+        active: !store!.currentEntity!.isPrivate && this.state.isReview,
+        hidden: isCm
       }
     );
 
@@ -976,6 +1030,18 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
         </div>
         <p>{this.labels.textvisibilityDescription}</p>
         <div className={IsVisibilityButtons}>
+          <button
+            className={inReviewButtonClassnames}
+            onClick={this.handleInReviewlOn}
+            title={this.labels.labelIsReview}
+          >
+            <img
+              src={PublishingActionsIcons.publicIconImg}
+              alt="Public"
+              title={this.labels.labelIsReview}
+            />
+            {this.labels.labelIsReview}
+          </button>
           <button
             className={mySchoolButtonClassnames}
             onClick={this.handleMySchoolOn}

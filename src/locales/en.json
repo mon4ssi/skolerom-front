@@ -201,6 +201,7 @@
   "assignments_tabs": {
     "All assignments": "All assignments",
     "My assignments": "My assignments",
+    "In review": "In Review",
     "My school": "My school",
     "My favorites": "My favorites",
     "new_assignment": "New assignment"
@@ -625,6 +626,7 @@
   },
   "teaching_path_tabs": {
     "All teaching paths": "All teaching paths",
+    "In review": "In review",
     "My teaching paths": "My teaching paths",
     "My school": "My school",
     "My favorites": "My favorites",

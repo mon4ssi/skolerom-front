@@ -93,7 +93,8 @@ const routesWithSidebar = [
   '/teaching-paths/my',
   '/teaching-paths/all',
   '/teaching-paths/myschool',
-  '/teaching-paths/answers/:entityId'
+  '/teaching-paths/answers/:entityId',
+  '/teaching-paths/inreview'
 ];
 
 const emptyRouteStyle = {

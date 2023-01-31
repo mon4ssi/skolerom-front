@@ -59,6 +59,7 @@ class MyAssignments extends Component<Props> {
     filter.articles = QueryStringHelper.getString(this.props.history, QueryStringKeys.ARTICLES);
     filter.orderField = SortingFilter.CREATION_DATE;
     filter.showMySchoolTeachingpath = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.MYSCHOOL, myFilterSchool);
+
     if (filter.locale || filter.subject || filter.grade || filter.grepCoreElementsIds || filter.grepMainTopicsIds || filter.grepGoalsIds || filter.grepReadingInSubject || filter.source) {
       this.setState({ filtersisUsed: true });
     } else {

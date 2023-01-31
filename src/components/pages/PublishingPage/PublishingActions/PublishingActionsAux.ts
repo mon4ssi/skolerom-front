@@ -65,6 +65,7 @@ export interface LabelsList {
   descriptionForPrivateSelected: string;
   descriptionForPublicSelectedTeachingPath: string;
   descriptionForPublicSelectedAssignment: string;
+  labelIsReview: string;
 }
 
 export const initializeAllLabelsForUI = () => {
@@ -101,6 +102,7 @@ export const initializeAllLabelsForUI = () => {
     descriptionForPrivateSelected: intl.get('publishing_page.grep.description_privado'),
     descriptionForPublicSelectedTeachingPath: intl.get('publishing_page.grep.description'),
     descriptionForPublicSelectedAssignment: intl.get('publishing_page.grep.descrption_assignment'),
+    labelIsReview: intl.get('teaching_path_tabs.In review')
   };
   return labelsArray;
 };
@@ -142,6 +144,7 @@ export interface PublishingActionsState {
   loadingGoals: boolean;
   isOpen: boolean | undefined;
   IsVisibilityButtons: boolean;
+  isReview: boolean;
   valueLocaleId: number | null;
 }
 
@@ -185,6 +188,7 @@ export const initializePublishingActionsState = () => {
     isValid: false,
     isValidPrivate: true,
     isMyStateSchool: false,
+    isReview: false,
     page: MAGICNUMBER1,
     pageCurrent: MAGICNUMBER1,
     loadingGoals: true,
