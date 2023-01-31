@@ -796,7 +796,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
               listView
               temporaryTagsArray
             />
-            {testAccount && this.renderIsOpenCheck()}
+            {!this.state.isReview && testAccount && this.renderIsOpenCheck()}
           </div>
           {this.renderKeywordsInput()}
           {this.renderLanguagesInput()}
