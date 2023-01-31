@@ -40,6 +40,7 @@ export const buildDraftAssignment = (dto: DraftAssignmentResponseDTO): DraftAssi
     levels: dto.levels.map(level => level),
     ...assignmentContent,
     isCopy:dto.isCopy,
+    inReview:dto.inReview,
     grepCoreElementsIds:dto.grepCoreElementsIds,
     grepMainTopicsIds:dto.grepMainTopicsIds,
     grepReadingInSubjectsIds:dto.grepReadingInSubjectsIds,

@@ -62,6 +62,7 @@ export const buildDraftTeachingPath = (dto: DraftTeachingPathResponseDTO) => {
     levels: dto.levels,
     ownedByMe: dto.ownedByMe,
     isCopy: dto.isCopy,
+    inReview: dto.inReview,
     grepCoreElementsIds: dto.grepCoreElementsIds,
     grepMainTopicsIds: dto.grepMainTopicsIds,
     grepReadingInSubjectsIds: dto.grepReadingInSubjectsIds,

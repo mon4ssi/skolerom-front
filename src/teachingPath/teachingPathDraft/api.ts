@@ -44,6 +44,7 @@ export interface DraftTeachingPathResponseDTO {
   levels: Array<number>;
   ownedByMe?: boolean;
   isCopy: boolean;
+  inReview: boolean;
   grepCoreElementsIds?: Array<number>;
   grepMainTopicsIds?: Array<number>;
   grepReadingInSubjectsIds?: Array<number>;

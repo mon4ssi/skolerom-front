@@ -167,9 +167,9 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
             this.setState({ isReview: true });
             this.props.store!.currentEntity!.setIsInReview(true);
           }
+          this.props.store!.currentEntity!.setIsMySchool(false);
         }
       );
-      this.props.store!.currentEntity!.setIsMySchool(false);
       this.sendValidbutton();
     }
     this.setState({ IsVisibilityButtons: false });
