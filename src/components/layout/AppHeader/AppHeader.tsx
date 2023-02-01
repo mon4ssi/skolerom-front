@@ -132,7 +132,7 @@ const renderHeaderLink = (link: HeaderNavigationLink) => {
     const renderSubmenu = (item: HeaderNavigationLink) => {
       if (item.dropdown) {
         return (
-          <li key={item.name} className={'AppHeader__dropdownItem'}>
+          <li key={item.name} className={'AppHeader__dropdownItem Item'}>
             <a href={item.url} title={item.name} role="button">{item.name}</a>
             <ul className="AppHeader__dropdownItem__subMenu">
               {item.submenuItems!.map(renderSubMenuSubMenu)}
