@@ -101,4 +101,8 @@ export class TeachingPathService {
   public async downloadTeacherGuidancePDF(id: number) {
     return this.teachingPathRepo.downloadTeacherGuidancePDF(id);
   }
+
+  public async getLocalesByApi() {
+    return this.teachingPathRepo.getLocalesByApi();
+  }
 }

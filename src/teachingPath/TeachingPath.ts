@@ -1,7 +1,7 @@
 import { computed, observable, toJS } from 'mobx';
 import intl from 'react-intl-universal';
 
-import { Grade, GreepElements, Subject, Article, Assignment, Attachment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData, Source, NowSchool, SourceItem, CoreElementItem, EducationalGoalItem, GenericGrepItem } from 'assignment/Assignment';
+import { LenguajesB, Grade, GreepElements, Subject, Article, Assignment, Attachment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData, Source, NowSchool, SourceItem, CoreElementItem, EducationalGoalItem, GenericGrepItem } from 'assignment/Assignment';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from './service';
 import { injector } from '../Injector';
 
@@ -39,6 +39,7 @@ export interface TeachingPathRepo {
   getGradeWpIds(gradeWpIds: Array<number>): Promise<Array<Grade>>;
   getSubjectWpIds(subjectWpIds: Array<number>): Promise<Array<Subject>>;
   downloadTeacherGuidancePDF(id: number): Promise<void>;
+  getLocalesByApi(): Promise<Array<LenguajesB>>;
 }
 
 export enum TeachingPathNodeType {

@@ -88,6 +88,10 @@ export class AssignmentService {
   public async downloadTeacherGuidancePDF(id: number) {
     return this.assignmentRepo.downloadTeacherGuidancePDF(id);
   }
+
+  public async getLocalesByApi() {
+    return this.assignmentRepo.getLocalesByApi();
+  }
 }
 
 export class ArticleService {

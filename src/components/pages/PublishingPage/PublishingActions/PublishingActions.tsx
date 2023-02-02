@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { Subject, Grade, FilterGrep, GreepSelectValue, GrepFilters, GoalsData, Source, Keyword } from 'assignment/Assignment';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { TagInputComponent, TagProp } from 'components/common/TagInput/TagInput';
-import { LANGUAGES } from 'utils/constants';
+import { LANGUAGESB } from 'utils/constants';
 import './PublishingActions.scss';
 import { GreepElements } from 'assignment/factory';
 import { User, UserType } from 'user/User';
@@ -36,6 +36,12 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     const arraySelectedIdsNewsManagemdSubjects: Array<number> = [];
     let listGoals: Array<string> = [];
     /* const isTeacher = (store!.getCurrentUser()!.type === UserType.Teacher) ? true : false; */
+    try {
+      const NLenguajes = await store!.getLocalesByid();
+      this.setState({ locales: NLenguajes });
+    } catch {
+      this.setState({ locales: LANGUAGESB });
+    }
 
     this.props.store!.setIsDisabledButtonsFalse();
     this.setState({ IsVisibilityButtons: true });
@@ -204,12 +210,12 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     if (typeof (store!.currentEntity!.localeId!) !== 'undefined' && store!.currentEntity!.localeId! !== null) {
       this.setState({ valueLocaleId: store!.currentEntity!.localeId! });
     } else {
-      const currentLang = LANGUAGES.find(i => i.shortName === localStorage.getItem('currentLocale'))!;
+      const currentLang = this.state.locales.find(i => i.code === localStorage.getItem('currentLocale'))!;
       this.setState({
-        valueLocaleId: currentLang.langId
+        valueLocaleId: currentLang.id
       },
         () => {
-          store!.currentEntity!.setLocaleId(currentLang.langId);
+          store!.currentEntity!.setLocaleId(currentLang.id);
         });
     }
     if (typeof (store!.currentEntity!.getListOfgrepCoreElementsIds()) !== 'undefined') {
@@ -771,6 +777,21 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     );
   }
 
+  public renderLanguajedammeInput = () => {
+    const { store, from } = this.props;
+    let classHidden = 'InformationSource hidden';
+    if (store!.getCurrentUser()!.type === UserType.Teacher) { classHidden = 'InformationSource'; }
+
+    return store!.getCurrentUser()!.type === UserType.Teacher && (
+      <div className={classHidden}>
+        <div className="infoContainer__secondTitle">
+          <h2>{this.labels.labelTitleIsLenguajeTeacher}</h2>
+          {this.renderLANGUAGESBInput()}
+        </div>
+      </div>
+    );
+  }
+
   public renderSourceInput = () => {
     const { store, from } = this.props;
     const sources = store!.getAllSources().map(this.sourceToTagProp);
@@ -799,7 +820,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
             {!this.state.isReview && testAccount && this.renderIsOpenCheck()}
           </div>
           {this.renderKeywordsInput()}
-          {this.renderLanguagesInput()}
+          {this.renderLANGUAGESBInput()}
         </div>
       </div>
     );
@@ -871,14 +892,14 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     );
   }
 
-  public renderLanguagesInput = () => {
+  public renderLANGUAGESBInput = () => {
     const { valueLocaleId } = this.state;
 
-    const languages: Array<TagProp> = [];
-    LANGUAGES.forEach((item) => { languages.push({ id: Number(item.langId), title: item.shortDescription }); });
+    const LENtag: Array<TagProp> = [];
+    this.state.locales.forEach((item) => { LENtag.push({ id: Number(item.id), title: item.name }); });
 
     const selectedLanguage: Array<TagProp> = [];
-    if (valueLocaleId !== null) { selectedLanguage.push(languages.find(i => i.id === valueLocaleId)!); }
+    if (valueLocaleId !== null) { selectedLanguage.push(LENtag.find(i => i.id === valueLocaleId)!); }
 
     const myplaceholder = (selectedLanguage.length > 0) ? '' : this.labels.placeholderLanguages;
 
@@ -886,7 +907,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
       <div>
         <TagInputComponent
           className="filterBy darkTheme"
-          tags={languages}
+          tags={LENtag}
           addTag={this.addLanguage}
           currentTags={selectedLanguage}
           orderbyid={false}
@@ -1791,6 +1812,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
           </div>
           <div className="infoContainer__bottom">
             {!this.state.isValidPrivate && this.renderSourceInput()}
+            {!this.state.isValidPrivate && this.renderLanguajedammeInput()}
             <div className="infoContainer__secondTitle">
               <h2>{titleSimple}</h2>
               <p>{!this.state.isValidPrivate && descriptionText}</p>

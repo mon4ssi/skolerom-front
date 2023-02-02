@@ -111,6 +111,11 @@ export class NewAssignmentStore {
     });
   }
 
+  @action
+  public async getLocalesByid() {
+    return this.assignmentService.getLocalesByApi();
+  }
+
   @computed
   public get ifSearchValueIsNumber() {
     return !isNaN(Number(this.searchValue.charAt(0)));

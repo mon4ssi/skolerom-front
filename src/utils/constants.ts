@@ -71,6 +71,24 @@ export const LANGUAGES = [
     langId: 2
   }
 ];
+
+export const LANGUAGESB = [
+  {
+    name: 'English',
+    code: Locales.EN,
+    id: 1
+  },
+  {
+    name: 'Bokmål',
+    code: Locales.NB,
+    id: 3
+  },
+  {
+    name: 'Nynorsk',
+    code: Locales.NN,
+    id: 2
+  }
+];
 // STATUSES
 
 export const STATUS_CONFLICT = 409;

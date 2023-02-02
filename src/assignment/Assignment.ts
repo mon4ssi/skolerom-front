@@ -62,6 +62,7 @@ export interface AssignmentRepo {
   getGrepFiltersMyAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
   getGrepFiltersMySchoolAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
   downloadTeacherGuidancePDF(id: number): Promise<void>;
+  getLocalesByApi(): Promise<Array<LenguajesB>>;
 }
 
 export enum QuestionType {
@@ -82,6 +83,18 @@ export class Language {
     this.description = description;
     this.slug = slug;
     this.langOrder = langOrder;
+  }
+}
+
+export class LenguajesB {
+  @observable public id: number;
+  @observable public code: string;
+  @observable public name: string;
+
+  constructor(id: number, code: string, name: string) {
+    this.id = id;
+    this.code = code;
+    this.name = name;
   }
 }
 

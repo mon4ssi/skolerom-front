@@ -17,7 +17,8 @@ import {
   FilterGrep,
   GoalsData,
   GenericGrepItem,
-  CustomImgAttachment
+  CustomImgAttachment,
+  LenguajesB
 } from './Assignment';
 import {
   AssignmentDistributeDTO,
@@ -439,6 +440,15 @@ export class AssignmentApi implements AssignmentRepo {
         myAssignments: [],
         total_pages: 0
       };
+    }
+  }
+
+  public async getLocalesByApi(): Promise<Array<LenguajesB>> {
+    try {
+      const response = await API.get('/api/locales');
+      return response.data.data;
+    } catch (error) {
+      throw error;
     }
   }
 

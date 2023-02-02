@@ -85,6 +85,11 @@ export class EditTeachingPathStore {
   }
 
   @action
+  public async getLocalesByid() {
+    return this.teachingPathService.getLocalesByApi();
+  }
+
+  @action
   public resetTeachingPath() {
     this.teachingPathContainer = null;
   }

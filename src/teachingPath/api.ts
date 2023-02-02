@@ -6,7 +6,7 @@ import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteract
 import { Locales } from 'utils/enums';
 
 import { TeachingPath, TeachingPathItem, TeachingPathNode, TeachingPathNodeType, TeachingPathRepo } from './TeachingPath';
-import { Article, Filter, Grade, Domain, FilterGrep, GoalsData, Attachment } from 'assignment/Assignment';
+import { Article, Filter, Grade, Domain, FilterGrep, GoalsData, Attachment, LenguajesB } from 'assignment/Assignment';
 import { API } from '../utils/api';
 import { buildFilterDTO, GradeDTO } from 'assignment/factory';
 import { Breadcrumbs } from './teachingPathDraft/TeachingPathDraft';
@@ -273,6 +273,15 @@ export class TeachingPathApi implements TeachingPathRepo {
       throw error;
     }
 
+  }
+
+  public async getLocalesByApi(): Promise<Array<LenguajesB>> {
+    try {
+      const response = await API.get('/api/locales');
+      return response.data.data;
+    } catch (error) {
+      throw error;
+    }
   }
 
   public async getTeachingPathById(id: number): Promise<TeachingPath> {

@@ -1,4 +1,4 @@
-import { FilterGrep, GoalsData, Grade, GreepSelectValue, GrepFilters, Subject } from 'assignment/Assignment';
+import { FilterGrep, GoalsData, Grade, GreepSelectValue, GrepFilters, Subject, LenguajesB } from 'assignment/Assignment';
 import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
 
@@ -38,6 +38,7 @@ export interface LabelsList {
   isOpenTeachingPath: string;
   isOpenAssignment: string;
   labelTitleIsOpen: string;
+  labelTitleIsLenguajeTeacher: string;
   placeholderKeywords: string;
   placeholderLanguages: string;
   placeholderSubjects: string;
@@ -75,6 +76,7 @@ export const initializeAllLabelsForUI = () => {
     isOpenTeachingPath: intl.get('publishing_page.source_is_open'),
     isOpenAssignment: intl.get('publishing_page.source_is_open_assig'),
     labelTitleIsOpen: intl.get('publishing_page.source_is_open_title'),
+    labelTitleIsLenguajeTeacher: intl.get('publishing_page.lenguaje_isteacher_title'),
     placeholderKeywords: intl.get('publishing_page.keywords'),
     placeholderLanguages: intl.get('publishing_page.languages'),
     placeholderSubjects: intl.get('publishing_page.subject'),
@@ -146,6 +148,7 @@ export interface PublishingActionsState {
   IsVisibilityButtons: boolean;
   isReview: boolean;
   valueLocaleId: number | null;
+  locales: Array<LenguajesB>;
 }
 
 export interface TagPropSource {
@@ -194,7 +197,8 @@ export const initializePublishingActionsState = () => {
     loadingGoals: true,
     isOpen: false,
     IsVisibilityButtons: false,
-    valueLocaleId: null
+    valueLocaleId: null,
+    locales: []
   };
   return newState;
 };
