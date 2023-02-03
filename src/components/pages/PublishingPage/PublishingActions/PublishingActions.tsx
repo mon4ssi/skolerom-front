@@ -5,6 +5,7 @@ import { Subject, Grade, FilterGrep, GreepSelectValue, GrepFilters, GoalsData, S
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { TagInputComponent, TagProp } from 'components/common/TagInput/TagInput';
 import { LANGUAGESB } from 'utils/constants';
+import { Locales } from 'utils/enums';
 import './PublishingActions.scss';
 import { GreepElements } from 'assignment/factory';
 import { User, UserType } from 'user/User';
@@ -15,6 +16,7 @@ import {
   PublishingActionsIcons, initializePublishingActionsState,
   LabelsList, initializeAllLabelsForUI,
 } from './PublishingActionsAux';
+import { locales } from 'moment';
 
 @observer
 export class PublishingActions extends Component<PublishingActionsProps, PublishingActionsState> {
@@ -38,6 +40,26 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     /* const isTeacher = (store!.getCurrentUser()!.type === UserType.Teacher) ? true : false; */
     try {
       const NLenguajes = await store!.getLocalesByid();
+      const TransLenguaje = [];
+      NLenguajes.forEach((element) => {
+        switch (element.code) {
+          case 'eng':
+            element.code = Locales.EN;
+            break;
+          case 'nno':
+            element.code = Locales.NN;
+            break;
+          case 'nob':
+            element.code = Locales.NB;
+            break;
+          case 'fin':
+            element.code = Locales.FN;
+            break;
+          default:
+            element.code = Locales.EN;
+            break;
+        }
+      });
       this.setState({ locales: NLenguajes });
     } catch {
       this.setState({ locales: LANGUAGESB });
