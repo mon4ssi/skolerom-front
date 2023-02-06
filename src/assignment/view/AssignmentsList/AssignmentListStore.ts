@@ -63,18 +63,27 @@ export class AssignmentListStore {
     switch (this.typeOfAssignmentsList) {
       case 'all':
         this.assignmentList.setFilterSchoolAssignments(0);
+        this.assignmentList.setFilterInReviewAssignments(false);
         response =  await this.assignmentList.getAllAssignmentsList();
         break;
       case 'my':
         this.assignmentList.setFilterSchoolAssignments(0);
+        this.assignmentList.setFilterInReviewAssignments(false);
         response =  await this.assignmentList.getMyAssignmentsList();
         break;
       case 'myschool':
         this.assignmentList.setFilterSchoolAssignments(1);
+        this.assignmentList.setFilterInReviewAssignments(false);
         response =  await this.assignmentList.getAllSchoolAssignmentsList();
+        break;
+      case 'inreview':
+        this.assignmentList.setFilterSchoolAssignments(0);
+        this.assignmentList.setFilterInReviewAssignments(true);
+        response =  await this.assignmentList.getInReviewAssignmentsList();
         break;
       default:
         this.assignmentList.setFilterSchoolAssignments(0);
+        this.assignmentList.setFilterInReviewAssignments(false);
         response =  await this.assignmentList.getAllAssignmentsList();
         break;
     }

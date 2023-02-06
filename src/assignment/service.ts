@@ -49,6 +49,10 @@ export class AssignmentService {
     return this.assignmentRepo.getAllSchoolAssignmentsList(filter);
   }
 
+  public async getInReviewAssignmentsList(filter: Filter) {
+    return this.assignmentRepo.getInReviewAssignmentsList(filter);
+  }
+
   public async getMyAssignmentsList(filter: Filter) {
     return this.assignmentRepo.getMyAssignmentsList(filter);
   }
@@ -83,6 +87,10 @@ export class AssignmentService {
 
   public async downloadTeacherGuidancePDF(id: number) {
     return this.assignmentRepo.downloadTeacherGuidancePDF(id);
+  }
+
+  public async getLocalesByApi() {
+    return this.assignmentRepo.getLocalesByApi();
   }
 }
 

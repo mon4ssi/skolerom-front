@@ -24,6 +24,10 @@ export class TeachingPathService {
     return this.teachingPathRepo.getStudentTeachingPathsList(filter);
   }
 
+  public async getInReviewTeachingPathsList(filter: Filter) {
+    return this.teachingPathRepo.getInReviewTeachingPathsList(filter);
+  }
+
   public async getTeachingPathDataById(id: number): Promise<TeachingPath> {
     return this.teachingPathRepo.getTeachingPathDataById(id);
   }
@@ -96,5 +100,9 @@ export class TeachingPathService {
 
   public async downloadTeacherGuidancePDF(id: number) {
     return this.teachingPathRepo.downloadTeacherGuidancePDF(id);
+  }
+
+  public async getLocalesByApi() {
+    return this.teachingPathRepo.getLocalesByApi();
   }
 }

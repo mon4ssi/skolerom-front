@@ -119,7 +119,7 @@ export interface TeacherAssignmentResponseDTO {
 }
 
 export const buildFilterDTO = (filter: Filter): Object => {
-  const filterDTO: { [key: string]: string | number } = {};
+  const filterDTO: { [key: string]: string | number | boolean } = {};
   if (filter.page) {
     filterDTO.page = filter.page;
   }
@@ -194,6 +194,10 @@ export const buildFilterDTO = (filter: Filter): Object => {
 
   if (filter.locale) {
     filterDTO.locale = filter.locale;
+  }
+
+  if (filter.inReview) {
+    filterDTO.inReview = filter.inReview;
   }
 
   return filterDTO;

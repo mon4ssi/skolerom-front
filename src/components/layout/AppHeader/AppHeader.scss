@@ -39,6 +39,8 @@
     min-width: 0;
     a {
       transition: 0.3s;
+      overflow: hidden;
+      text-overflow: ellipsis;
       &:hover {
         color: #E2017B;   
       }

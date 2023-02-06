@@ -44,14 +44,22 @@ export class TeachingPathsListStore {
       switch (this.typeOfTeachingPathsList) {
         case 'all':
           this.listTeachingPaths.setFilterSchoolTeachingPath(0);
+          this.listTeachingPaths.setFilterInReviewTeachingPath(false);
           response =  await this.listTeachingPaths.getAllTeachingPathsList();
           break;
         case 'my':
           this.listTeachingPaths.setFilterSchoolTeachingPath(0);
+          this.listTeachingPaths.setFilterInReviewTeachingPath(false);
           response =  await this.listTeachingPaths.getMyTeachingPathsList();
+          break;
+        case 'inreview':
+          this.listTeachingPaths.setFilterSchoolTeachingPath(0);
+          this.listTeachingPaths.setFilterInReviewTeachingPath(true);
+          response =  await this.listTeachingPaths.getInReviewTeachingPathsList();
           break;
         case 'myschool':
           this.listTeachingPaths.setFilterSchoolTeachingPath(1);
+          this.listTeachingPaths.setFilterInReviewTeachingPath(false);
           response =  await this.listTeachingPaths.getMySchoolTeachingPathsList();
           break;
         default:

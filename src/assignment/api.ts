@@ -17,7 +17,8 @@ import {
   FilterGrep,
   GoalsData,
   GenericGrepItem,
-  CustomImgAttachment
+  CustomImgAttachment,
+  LenguajesB
 } from './Assignment';
 import {
   AssignmentDistributeDTO,
@@ -344,6 +345,25 @@ export class AssignmentApi implements AssignmentRepo {
     }
   }
 
+  public async getInReviewAssignmentsList(filter: Filter) {
+    try {
+      if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURIComponent(filter.searchQuery!);
+      const response = await API.get('api/teacher/assignments', {
+        params: buildFilterDTO(filter)
+      });
+
+      return {
+        myAssignments: response.data.data.map(buildAllAssignmentsList),
+        total_pages: response.data.meta.pagination.total_pages
+      };
+    } catch {
+      return {
+        myAssignments: [],
+        total_pages: 0
+      };
+    }
+  }
+
   public async getGrepFiltersAssignment(locale: string, grades: string, subjects: string, coreElements?: string, goals?: string): Promise<FilterGrep> {
     const response = await API.get('api/teacher/assignments/grep/filters', {
       params: {
@@ -420,6 +440,15 @@ export class AssignmentApi implements AssignmentRepo {
         myAssignments: [],
         total_pages: 0
       };
+    }
+  }
+
+  public async getLocalesByApi(): Promise<Array<LenguajesB>> {
+    try {
+      const response = await API.get('/api/locales');
+      return response.data.data;
+    } catch (error) {
+      throw error;
     }
   }
 
