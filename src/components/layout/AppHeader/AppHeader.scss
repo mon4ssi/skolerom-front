@@ -39,8 +39,6 @@
     min-width: 0;
     a {
       transition: 0.3s;
-      overflow: hidden;
-      text-overflow: ellipsis;
       &:hover {
         color: #E2017B;   
       }
@@ -155,8 +153,8 @@
 
 .AppHeader__dropdownItem__subMenu {
   position: absolute;
-  width: 100%;
-  left: 0;
+  width: auto;
+  right: 0;
   top: 0;
   background: white;
   z-index: 2;
@@ -168,6 +166,11 @@
   box-shadow: 0 2px 4px 0 ffffff1c;
   opacity: 0;
   pointer-events: none;
+  &.subMenuItemActive {
+    right: auto;
+    left: 0;
+    transform: translateX(-100%);
+  }
 }
 li.AppHeader__dropdownItem__subItem {
   text-decoration: none;
