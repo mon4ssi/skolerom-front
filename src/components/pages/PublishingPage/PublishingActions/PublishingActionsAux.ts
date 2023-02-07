@@ -8,6 +8,7 @@ import goalsImgIcon from 'assets/images/goals.svg';
 import visibilityImgIcon from 'assets/images/visibility.svg';
 import publicImgIcon from 'assets/images/teacher-public.svg';
 import privateImgIcon from 'assets/images/private.svg';
+import viewIcon from 'assets/images/view_icon.svg';
 import intl from 'react-intl-universal';
 
 export const PublishingActionsIcons: IconsList = {
@@ -16,7 +17,8 @@ export const PublishingActionsIcons: IconsList = {
   goalsImg: goalsImgIcon,
   visibilityImg: visibilityImgIcon,
   publicIconImg: publicImgIcon,
-  privateIconImg: privateImgIcon
+  privateIconImg: privateImgIcon,
+  viewIconImg: viewIcon
 };
 
 export const MAGICNUMBER1 = 1;
@@ -30,6 +32,7 @@ export interface IconsList {
   visibilityImg: string;
   publicIconImg: string;
   privateIconImg: string;
+  viewIconImg: string;
 }
 
 export interface LabelsList {

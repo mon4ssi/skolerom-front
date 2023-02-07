@@ -1079,7 +1079,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
             title={this.labels.labelIsReview}
           >
             <img
-              src={PublishingActionsIcons.publicIconImg}
+              src={PublishingActionsIcons.viewIconImg}
               alt="Public"
               title={this.labels.labelIsReview}
             />
