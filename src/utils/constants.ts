@@ -50,7 +50,8 @@ export const LOCALES_MAPPING_FOR_BACKEND = {
   [Locales.EN]: 'eng',
   [Locales.NB]: 'nob',
   [Locales.NN]: 'nno',
-  [Locales.FN]: 'fin'
+  [Locales.FN]: 'fin',
+  [Locales.KV]: 'kv'
 };
 export const LANGUAGES = [
   {

@@ -40,6 +40,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     /* const isTeacher = (store!.getCurrentUser()!.type === UserType.Teacher) ? true : false; */
     try {
       const NLenguajes = await store!.getLocalesByid();
+      /*
       const TransLenguaje = [];
       NLenguajes.forEach((element) => {
         switch (element.code) {
@@ -60,6 +61,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
             break;
         }
       });
+      */
       this.setState({ locales: NLenguajes });
     } catch {
       this.setState({ locales: LANGUAGESB });
