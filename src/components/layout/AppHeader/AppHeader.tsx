@@ -37,6 +37,7 @@ interface HeaderNavigationLink {
 const LEFTCODE = 8592;
 const RIGHTCODE = 8594;
 const ANIMATION_TIMEOUT = 200;
+const TwentySeven = 27;
 
 const headerLinks: Array<HeaderNavigationLink> = [
   {
@@ -131,10 +132,19 @@ const renderHeaderLink = (link: HeaderNavigationLink) => {
     );
     const renderSubmenu = (item: HeaderNavigationLink) => {
       if (item.dropdown) {
+        let maxLength = 0;
+        if (item.submenuItems) {
+          item.submenuItems.forEach((element) => {
+            if (element.name.length > maxLength) {
+              maxLength = element.name.length;
+            }
+          });
+        }
+        const classInside = (maxLength > TwentySeven) ? 'AppHeader__dropdownItem__subMenu subMenuItemActive' : 'AppHeader__dropdownItem__subMenu';
         return (
-          <li key={item.name} className={'AppHeader__dropdownItem Item'}>
+          <li key={item.name} className={'AppHeader__dropdownItem'}>
             <a href={item.url} title={item.name} role="button">{item.name}</a>
-            <ul className="AppHeader__dropdownItem__subMenu">
+            <ul className={classInside}>
               {item.submenuItems!.map(renderSubMenuSubMenu)}
             </ul>
           </li>

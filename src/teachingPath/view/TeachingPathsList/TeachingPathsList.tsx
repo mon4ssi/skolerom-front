@@ -121,6 +121,10 @@ class TeachingPathsListComponent extends Component<Props, State> {
     {
       name: 'My teaching paths',
       url: '/teaching-paths/my'
+    },
+    {
+      name: 'In review',
+      url: '/teaching-paths/inreview'
     }
     // {
     //   name: 'My favorites',
@@ -232,7 +236,9 @@ class TeachingPathsListComponent extends Component<Props, State> {
       case 'my':
         grepFiltersDataAwait = await editTeachingPathStore!.getGrepFiltersMyTeachingPath(locale, grades, subjects, core, multi, goals, source);
         break;
-
+      case 'inreview':
+        grepFiltersDataAwait = await editTeachingPathStore!.getGrepFiltersTeachingPath(locale, grades, subjects, core, multi, goals, source);
+        break;
       case 'myschool':
       case 'school':
 

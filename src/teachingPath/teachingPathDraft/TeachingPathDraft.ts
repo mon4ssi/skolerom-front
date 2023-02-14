@@ -644,6 +644,11 @@ export class DraftTeachingPath extends TeachingPath {
     this.save();
   }
 
+  public setIsInReview(inReview: boolean) {
+    this._inReview = inReview;
+    this.save();
+  }
+
   @action
   public setUpdatedAt(updatedAt: string) {
     this._updatedAt = updatedAt;

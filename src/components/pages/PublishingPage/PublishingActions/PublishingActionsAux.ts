@@ -1,4 +1,4 @@
-import { FilterGrep, GoalsData, Grade, GreepSelectValue, GrepFilters, Subject } from 'assignment/Assignment';
+import { FilterGrep, GoalsData, Grade, GreepSelectValue, GrepFilters, Subject, LenguajesB } from 'assignment/Assignment';
 import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
 
@@ -8,6 +8,7 @@ import goalsImgIcon from 'assets/images/goals.svg';
 import visibilityImgIcon from 'assets/images/visibility.svg';
 import publicImgIcon from 'assets/images/teacher-public.svg';
 import privateImgIcon from 'assets/images/private.svg';
+import viewIcon from 'assets/images/view_icon.svg';
 import intl from 'react-intl-universal';
 
 export const PublishingActionsIcons: IconsList = {
@@ -16,7 +17,8 @@ export const PublishingActionsIcons: IconsList = {
   goalsImg: goalsImgIcon,
   visibilityImg: visibilityImgIcon,
   publicIconImg: publicImgIcon,
-  privateIconImg: privateImgIcon
+  privateIconImg: privateImgIcon,
+  viewIconImg: viewIcon
 };
 
 export const MAGICNUMBER1 = 1;
@@ -30,6 +32,7 @@ export interface IconsList {
   visibilityImg: string;
   publicIconImg: string;
   privateIconImg: string;
+  viewIconImg: string;
 }
 
 export interface LabelsList {
@@ -38,6 +41,7 @@ export interface LabelsList {
   isOpenTeachingPath: string;
   isOpenAssignment: string;
   labelTitleIsOpen: string;
+  labelTitleIsLenguajeTeacher: string;
   placeholderKeywords: string;
   placeholderLanguages: string;
   placeholderSubjects: string;
@@ -65,6 +69,7 @@ export interface LabelsList {
   descriptionForPrivateSelected: string;
   descriptionForPublicSelectedTeachingPath: string;
   descriptionForPublicSelectedAssignment: string;
+  labelIsReview: string;
 }
 
 export const initializeAllLabelsForUI = () => {
@@ -74,6 +79,7 @@ export const initializeAllLabelsForUI = () => {
     isOpenTeachingPath: intl.get('publishing_page.source_is_open'),
     isOpenAssignment: intl.get('publishing_page.source_is_open_assig'),
     labelTitleIsOpen: intl.get('publishing_page.source_is_open_title'),
+    labelTitleIsLenguajeTeacher: intl.get('publishing_page.lenguaje_isteacher_title'),
     placeholderKeywords: intl.get('publishing_page.keywords'),
     placeholderLanguages: intl.get('publishing_page.languages'),
     placeholderSubjects: intl.get('publishing_page.subject'),
@@ -101,6 +107,7 @@ export const initializeAllLabelsForUI = () => {
     descriptionForPrivateSelected: intl.get('publishing_page.grep.description_privado'),
     descriptionForPublicSelectedTeachingPath: intl.get('publishing_page.grep.description'),
     descriptionForPublicSelectedAssignment: intl.get('publishing_page.grep.descrption_assignment'),
+    labelIsReview: intl.get('teaching_path_tabs.In review')
   };
   return labelsArray;
 };
@@ -142,7 +149,9 @@ export interface PublishingActionsState {
   loadingGoals: boolean;
   isOpen: boolean | undefined;
   IsVisibilityButtons: boolean;
+  isReview: boolean;
   valueLocaleId: number | null;
+  locales: Array<LenguajesB>;
 }
 
 export interface TagPropSource {
@@ -185,12 +194,14 @@ export const initializePublishingActionsState = () => {
     isValid: false,
     isValidPrivate: true,
     isMyStateSchool: false,
+    isReview: false,
     page: MAGICNUMBER1,
     pageCurrent: MAGICNUMBER1,
     loadingGoals: true,
     isOpen: false,
     IsVisibilityButtons: false,
-    valueLocaleId: null
+    valueLocaleId: null,
+    locales: []
   };
   return newState;
 };

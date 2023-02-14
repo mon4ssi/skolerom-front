@@ -49,7 +49,9 @@ export const CONDITIONALERROR = 100;
 export const LOCALES_MAPPING_FOR_BACKEND = {
   [Locales.EN]: 'eng',
   [Locales.NB]: 'nob',
-  [Locales.NN]: 'nno'
+  [Locales.NN]: 'nno',
+  [Locales.FN]: 'fin',
+  [Locales.KV]: 'kv'
 };
 export const LANGUAGES = [
   {
@@ -69,6 +71,24 @@ export const LANGUAGES = [
     shortDescription: 'Nynorsk',
     shortName: Locales.NN,
     langId: 2
+  }
+];
+
+export const LANGUAGESB = [
+  {
+    name: 'English',
+    code: Locales.EN,
+    id: 1
+  },
+  {
+    name: 'Bokmål',
+    code: Locales.NB,
+    id: 3
+  },
+  {
+    name: 'Nynorsk',
+    code: Locales.NN,
+    id: 2
   }
 ];
 // STATUSES

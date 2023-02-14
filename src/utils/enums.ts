@@ -6,7 +6,9 @@ export enum EntityType {
 export enum Locales {
   EN = 'en',
   NB = 'nb',
-  NN = 'nn'
+  NN = 'nn',
+  FN = 'fi',
+  KV = 'kv'
 }
 
 export enum BooleanFilter {

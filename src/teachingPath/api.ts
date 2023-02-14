@@ -6,7 +6,7 @@ import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteract
 import { Locales } from 'utils/enums';
 
 import { TeachingPath, TeachingPathItem, TeachingPathNode, TeachingPathNodeType, TeachingPathRepo } from './TeachingPath';
-import { Article, Filter, Grade, Domain, FilterGrep, GoalsData, Attachment } from 'assignment/Assignment';
+import { Article, Filter, Grade, Domain, FilterGrep, GoalsData, Attachment, LenguajesB } from 'assignment/Assignment';
 import { API } from '../utils/api';
 import { buildFilterDTO, GradeDTO } from 'assignment/factory';
 import { Breadcrumbs } from './teachingPathDraft/TeachingPathDraft';
@@ -149,6 +149,30 @@ export class TeachingPathApi implements TeachingPathRepo {
     };
   }
 
+  public async getInReviewTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
+    if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURIComponent(filter.searchQuery!);
+    const response = await API.get('api/teacher/teaching-paths', {
+      params: buildFilterDTO(filter)
+    });
+    return {
+      teachingPathsList: response.data.data.map((item: TeacherTeachingPathResponseDTO) => new TeachingPath({
+        id: item.id,
+        title: item.title,
+        description: item.description,
+        grades: isNil(item.grades) ? undefined : item.grades.map(grade => new Grade(grade.id, grade.title)),
+        view: item.view,
+        levels: item.levels,
+        featuredImage: item.featuredImage,
+        url: item.url,
+        isPublished: item.isPublished,
+        isDistributed: item.isDistributed,
+        isMySchool: item.isMySchool,
+        canEditOrDelete: item.canEditOrDelete
+      })),
+      total_pages: response.data.meta.pagination.total_pages
+    };
+  }
+
   public async getMyTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }> {
     if (!isNil(filter.searchQuery)) filter.searchQuery = encodeURIComponent(filter.searchQuery!);
     const response = await API.get('api/teacher/teaching-paths/draft', {
@@ -249,6 +273,15 @@ export class TeachingPathApi implements TeachingPathRepo {
       throw error;
     }
 
+  }
+
+  public async getLocalesByApi(): Promise<Array<LenguajesB>> {
+    try {
+      const response = await API.get('/api/locales');
+      return response.data.data;
+    } catch (error) {
+      throw error;
+    }
   }
 
   public async getTeachingPathById(id: number): Promise<TeachingPath> {

@@ -37,6 +37,10 @@ export interface AssignmentRepo {
     myAssignments: Array<Assignment>;
     total_pages: number;
   }>;
+  getInReviewAssignmentsList(filter: Filter): Promise<{
+    myAssignments: Array<Assignment>;
+    total_pages: number;
+  }>;
   getStudentAssignmentList(filter: Filter): Promise<{
     myAssignments: Array<Assignment>;
     total_pages: number;
@@ -58,6 +62,7 @@ export interface AssignmentRepo {
   getGrepFiltersMyAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
   getGrepFiltersMySchoolAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
   downloadTeacherGuidancePDF(id: number): Promise<void>;
+  getLocalesByApi(): Promise<Array<LenguajesB>>;
 }
 
 export enum QuestionType {
@@ -78,6 +83,18 @@ export class Language {
     this.description = description;
     this.slug = slug;
     this.langOrder = langOrder;
+  }
+}
+
+export class LenguajesB {
+  @observable public id: number;
+  @observable public code: string;
+  @observable public name: string;
+
+  constructor(id: number, code: string, name: string) {
+    this.id = id;
+    this.code = code;
+    this.name = name;
   }
 }
 
@@ -318,6 +335,7 @@ export interface AssignmentArgs {
 
   isPrivate?: boolean;
   isMySchool?: boolean;
+  inReview?: boolean;
   mySchools?: string | undefined;
   relatedArticles?: Array<Article>;
   createdAt?: string;
@@ -382,6 +400,7 @@ export class Assignment {
   @observable protected _subjectItems: Array<Subject> = [];
 
   @observable protected _isMySchool: boolean = false;
+  @observable protected _inReview: boolean = false;
   @observable protected _mySchools: string | undefined = '';
   @observable protected _relatedArticles: Array<Article> = [];
   @observable protected _createdAt: string = '';
@@ -442,6 +461,7 @@ export class Assignment {
 
     this._isPrivate = !isNil(args.isPrivate) ? args.isPrivate : true;
     this._mySchools = args.mySchools;
+    this._inReview = args.inReview || false;
     this._isMySchool = args.isMySchool || false;
     this._relatedArticles = args.relatedArticles || [];
     this._createdAt = args.createdAt || '';
@@ -638,6 +658,10 @@ export class Assignment {
 
   public get isMySchool() {
     return this._isMySchool;
+  }
+
+  public get inReview() {
+    return this._inReview;
   }
 
   @computed
@@ -991,6 +1015,7 @@ export class Filter {
   public showMySchoolAssignments?: number | null;
   public onlyOwnSchools?: number | null;
   public articles?: string | null;
+  public inReview?: boolean;
 }
 
 export interface LanguageFilter {
@@ -1151,6 +1176,10 @@ export class AssignmentList {
     this.filter.showMySchoolAssignments = number;
   }
 
+  public setFilterInReviewAssignments(value: boolean) {
+    this.filter.inReview = value;
+  }
+
   @action
   public setFiltersPerPage(number: number) {
     this.filter.per_page = number;
@@ -1215,6 +1244,10 @@ export class AssignmentList {
 
   public async getAllSchoolAssignmentsList() {
     return this.assignmentService.getAllSchoolAssignmentsList(this.filter);
+  }
+
+  public async getInReviewAssignmentsList() {
+    return this.assignmentService.getInReviewAssignmentsList(this.filter);
   }
 
   public async getMyAssignmentsList() {
