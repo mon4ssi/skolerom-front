@@ -142,7 +142,7 @@ const renderHeaderLink = (link: HeaderNavigationLink) => {
         }
         const classInside = (maxLength > TwentySeven) ? 'AppHeader__dropdownItem__subMenu subMenuItemActive' : 'AppHeader__dropdownItem__subMenu';
         return (
-          <li key={item.name} className={'AppHeader__dropdownItem'}>
+          <li key={item.name} className={'AppHeader__dropdownItem Item'}>
             <a href={item.url} title={item.name} role="button">{item.name}</a>
             <ul className={classInside}>
               {item.submenuItems!.map(renderSubMenuSubMenu)}
