@@ -96,7 +96,7 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
   public getDatateachingpath = async (id: number) => {
     const { location, questionaryTeachingPathStore, editTeachingPathStore, history } = this.props;
     try {
-      return await editTeachingPathStore!.getDraftForeignTeachingPath(id);
+      return await editTeachingPathStore!.getDraftForeignTeachingPath(id, true);
     } catch (e) {
       history.push('/teaching-paths');
     }

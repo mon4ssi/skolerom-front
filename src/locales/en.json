@@ -36,7 +36,8 @@
         "view": "View teaching path",
         "teacher_guidance": "Teacher guidance",
         "edit": "Edit",
-        "duplicate": "Duplicate"
+        "duplicate": "Duplicate",
+        "viewstudent": "View as Student"
       },
       "read open": "Read description",
       "read close": "Close description",

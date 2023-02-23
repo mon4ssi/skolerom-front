@@ -530,7 +530,12 @@
     border-top: 1px solid #D3D9DE;
     width: 100%;
     background-color: $color-white;
-
+    &.flexButtons {
+      justify-content: space-between;
+      .left {
+        display: flex;
+      }
+    }
     .actionButton {
       margin-right: 15px;
     }
@@ -652,7 +657,12 @@
       border-top: 1px solid #D3D9DE;
       width: 100%;
       background-color: $color-white;
-
+      &.flexButtons {
+        justify-content: space-between;
+        .left {
+          display: flex;
+        }
+      }
       .actionButton {
         margin-right: 8px;
       }
@@ -1024,7 +1034,12 @@
     border-top: 1px solid #D3D9DE;
     width: 100%;
     background-color: $color-white;
-
+    &.flexButtons {
+      justify-content: space-between;
+      .left {
+        display: flex;
+      }
+    }
     .actionButton {
       margin-right: 15px;
     }
@@ -1146,7 +1161,12 @@
       border-top: 1px solid #D3D9DE;
       width: 100%;
       background-color: $color-white;
-
+      &.flexButtons {
+        justify-content: space-between;
+        .left {
+          display: flex;
+        }
+      }
       .actionButton {
         margin-right: 8px;
       }

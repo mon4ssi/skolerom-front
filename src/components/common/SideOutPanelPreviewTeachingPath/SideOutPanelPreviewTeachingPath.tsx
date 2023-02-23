@@ -72,10 +72,25 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     window.open(urlForEditing);
   }
 
+  public openInNewTabPreView = () => {
+    const { currentEntity: { id } } = this.props.store!;
+    const url: URL = new URL(window.location.href);
+    const urlForEditing: string = `${url.origin}/teaching-path/preview/${id!}`;
+    window.open(urlForEditing);
+  }
+
   public renderViewButton = (isPublished: boolean, history: any, id: number, view: string) =>
   (
     <div className="actionButton">
       <CreateButton disabled={!isPublished} onClick={() => this.openInNewTabView()} title={view} autoFocus>
+        {view}
+      </CreateButton>
+    </div>
+  )
+
+  public renderPreviewButon = (isPublished: boolean, id: number, view: string) => (
+    <div className="actionButton">
+      <CreateButton disabled={!isPublished} onClick={() => this.openInNewTabPreView()} title={view} autoFocus>
         {view}
       </CreateButton>
     </div>
@@ -351,6 +366,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     /* const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager; */
     const showPublishDate = authorRole === UserType.Teacher || !(authorRole === UserType.ContentManager && !(isPrivate!));
     const viewText = intl.get('preview.teaching_path.buttons.view');
+    const viewStudentText = intl.get('preview.teaching_path.buttons.viewstudent');
     const guidanceText = intl.get('preview.teaching_path.buttons.teacher_guidance');
     const editText = intl.get('preview.teaching_path.buttons.edit');
     const duplicateText = intl.get('preview.teaching_path.buttons.duplicate');
@@ -408,12 +424,16 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
           </div>
         </div >
 
-        <div className="footerButtons">
-          {isPublishedCurrentTeachingPath! && (view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentTeachingPath!, history, id, viewText)}
-          {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
-          {currentCanEditOrDelete && this.renderEditButton(editText, history, id)}
-          {isPublishedCurrentTeachingPath! && this.renderDuplicateButton(duplicateText)}
-
+        <div className="footerButtons flexButtons">
+          <div className="left">
+            {isPublishedCurrentTeachingPath! && (view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentTeachingPath!, history, id, viewText)}
+            {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
+            {currentCanEditOrDelete && this.renderEditButton(editText, history, id)}
+            {isPublishedCurrentTeachingPath! && this.renderDuplicateButton(duplicateText)}
+          </div>
+          <div className="right">
+            {isPublishedCurrentTeachingPath! && this.renderPreviewButon(isPublishedCurrentTeachingPath!, id, viewStudentText)}
+          </div>
         </div>
       </div >
     );

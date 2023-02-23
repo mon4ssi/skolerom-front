@@ -681,8 +681,20 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     }
   }
 
+  public handlePreview = () => {
+    const { entityStore, currentEntityId, history } = this.props;
+    history.push(`/teaching-path/preview/${currentEntityId}`);
+  }
+
   public renderCopyButton = (intlKey: string) => (
     <div className="doneBox flexBox alignCenter copyButton">
+      <CreateButton
+        className="viewInFlex"
+        onClick={this.handlePreview}
+        title={intl.get('preview.teaching_path.buttons.viewstudent')}
+      >
+        {intl.get('preview.teaching_path.buttons.viewstudent')}
+      </CreateButton>
       <CreateButton
         className="copyInFlex"
         onClick={this.handleCopy}
