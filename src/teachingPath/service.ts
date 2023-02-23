@@ -86,8 +86,8 @@ export class TeachingPathService {
     return this.teachingPathRepo.finishTeachingPath(id);
   }
 
-  public async copyTeachingPath(id: number) {
-    return this.teachingPathRepo.copyTeachingPath(id);
+  public async copyTeachingPath(id: number, all?: boolean) {
+    return this.teachingPathRepo.copyTeachingPath(id, all);
   }
 
   public async deleteTeachingPathAnswers(teachingPathId: number, answerId: number) {

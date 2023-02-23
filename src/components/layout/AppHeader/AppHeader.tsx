@@ -683,7 +683,8 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
 
   public handlePreview = () => {
     const { entityStore, currentEntityId, history } = this.props;
-    history.push(`/teaching-path/preview/${currentEntityId}`);
+    const win = window.open(`/teaching-path/preview/${currentEntityId}`, '_blank');
+    win!.focus();
   }
 
   public renderCopyButton = (intlKey: string) => (

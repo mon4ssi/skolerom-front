@@ -554,10 +554,17 @@ export class TeachingPathApi implements TeachingPathRepo {
     await API.delete(`api/student/teaching-paths/${teachingPathId}/answer/${answerId}`);
   }
 
-  public async copyTeachingPath(id: number): Promise<number> {
+  public async copyTeachingPath(id: number, all?: boolean): Promise<number> {
+    if (all) {
+      try {
+        const response = await API.get(`api/teacher/teaching-paths/${id}/copy/identical`);
+        return response.data.id;
+      } catch (e) {
+        throw new Error(`copy assignment ${e}`);
+      }
+    }
     try {
       const response = await API.get(`api/teacher/teaching-paths/${id}/copy`);
-
       return response.data.id;
     } catch (e) {
       throw new Error(`copy assignment ${e}`);

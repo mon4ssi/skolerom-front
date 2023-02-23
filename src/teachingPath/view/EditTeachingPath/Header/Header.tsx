@@ -376,7 +376,8 @@ export class HeaderComponent extends Component<Props> {
 
   public handlePreview = () => {
     const { id, history } = this.props;
-    history.push(`/teaching-path/preview/${id}`);
+    const win = window.open(`/teaching-path/preview/${id}`, '_blank');
+    win!.focus();
   }
 
   public renderButtonPreview = () => (

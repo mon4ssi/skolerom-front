@@ -8,6 +8,7 @@ import { CreateButton } from 'components/common/CreateButton/CreateButton';
 import { EvaluationLabel } from 'components/common/EvaluationLabel/EvaluationLabel';
 import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
+import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
 import { Assignment, GenericGrepItem, Subject } from 'assignment/Assignment';
 
 import { deadlineDateFormat, thirdLevel } from 'utils/constants';
@@ -41,6 +42,7 @@ interface Props extends RouteComponentProps {
   currentCanEditOrDelete?: boolean;
   store?: TeachingPathsListStore;
   isPublishedCurrentTeachingPath?: boolean;
+  editTeachingPathStore?: EditTeachingPathStore;
   onClose?(e: SyntheticEvent): void;
 }
 
@@ -49,7 +51,7 @@ interface SideOutPanelPreviewState {
 }
 
 export const USER_SERVICE = 'USER_SERVICE';
-
+@inject('editTeachingPathStore')
 @observer
 class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteComponentProps, SideOutPanelPreviewState> {
   private teachingPathService: TeachingPathService = injector.get(TEACHING_PATH_SERVICE);
@@ -90,7 +92,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
 
   public renderPreviewButon = (isPublished: boolean, id: number, view: string) => (
     <div className="actionButton">
-      <CreateButton disabled={!isPublished} onClick={() => this.openInNewTabPreView()} title={view} autoFocus>
+      <CreateButton disabled={!isPublished} onClick={() => this.openInNewTabPreView()} title={view}>
         {view}
       </CreateButton>
     </div>
@@ -148,6 +150,15 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     </div>
   )
 
+  public renderDistributeButton = (duplicateString: string) =>
+  (
+    <div className="actionButton">
+      <CreateButton disabled={false} onClick={this.handleCopyDistribute} title={duplicateString} >
+        {duplicateString}
+      </CreateButton>
+    </div>
+  )
+
   public stopPropagation = (e: SyntheticEvent) => {
     e.stopPropagation();
   }
@@ -175,6 +186,27 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
       /* const currentEntityRoute = entityStore instanceof AssignmentListStore ? 'assignments' : 'teaching-paths'; */
       const copyId = await this.teachingPathService.copyTeachingPath(id!);
       history.push(`/teaching-paths/edit/${copyId}`);
+    }
+  }
+
+  public handleCopyDistribute = async () => {
+    const { history } = this.props;
+    const { currentEntity: { id } } = this.props.store!;
+    const { currentEntity } = this.props.store!;
+
+    const isCopyApproved = await Notification.create({
+      type: NotificationTypes.CONFIRM,
+      title: intl.get('assignment list.Are you sure'),
+      submitButtonTitle: intl.get('notifications.copy')
+    });
+
+    if (isCopyApproved) {
+      /* const currentEntityRoute = entityStore instanceof AssignmentListStore ? 'assignments' : 'teaching-paths'; */
+      const copyId = await this.teachingPathService.copyTeachingPath(id!, true);
+      const teachingPath = await this.props.editTeachingPathStore!.getTeachingPathForEditing(copyId);
+      await this.props.editTeachingPathStore!.save();
+      await this.props.editTeachingPathStore!.publish();
+      history.push(`/teaching-paths/edit/${copyId}/distribute`);
     }
   }
 
@@ -370,6 +402,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const guidanceText = intl.get('preview.teaching_path.buttons.teacher_guidance');
     const editText = intl.get('preview.teaching_path.buttons.edit');
     const duplicateText = intl.get('preview.teaching_path.buttons.duplicate');
+    const distributeText = intl.get('preview.teaching_path.buttons.distribuir');
     const activeGoals = !isPrivate || isMySchool;
     return (
       <div className={'previewModalInfo'} onClick={this.stopPropagation} tabIndex={0}>
@@ -424,16 +457,13 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
           </div>
         </div >
 
-        <div className="footerButtons flexButtons">
-          <div className="left">
-            {isPublishedCurrentTeachingPath! && (view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentTeachingPath!, history, id, viewText)}
-            {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
-            {currentCanEditOrDelete && this.renderEditButton(editText, history, id)}
-            {isPublishedCurrentTeachingPath! && this.renderDuplicateButton(duplicateText)}
-          </div>
-          <div className="right">
-            {isPublishedCurrentTeachingPath! && this.renderPreviewButon(isPublishedCurrentTeachingPath!, id, viewStudentText)}
-          </div>
+        <div className="footerButtons">
+          {isPublishedCurrentTeachingPath! && (view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentTeachingPath!, history, id, viewText)}
+          {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
+          {currentCanEditOrDelete && this.renderEditButton(editText, history, id)}
+          {isPublishedCurrentTeachingPath! && this.renderDuplicateButton(duplicateText)}
+          {isPublishedCurrentTeachingPath! && this.renderDistributeButton(distributeText)}
+          {isPublishedCurrentTeachingPath! && this.renderPreviewButon(isPublishedCurrentTeachingPath!, id, viewStudentText)}
         </div>
       </div >
     );
