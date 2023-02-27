@@ -34,7 +34,7 @@
       },
       "buttons": {
         "view": "Se sti",
-        "teacher_guidance": "Se lærerveiledning",
+        "teacher_guidance": "Lærerveiledning",
         "edit": "Rediger",
         "duplicate": "Kopier",
         "viewstudent": "Elevvisning",
@@ -62,7 +62,7 @@
       },
       "buttons": {
         "view": "Se oppgave",
-        "teacher_guidance": "Se lærerveiledning",
+        "teacher_guidance": "Lærerveiledning",
         "edit": "Rediger",
         "duplicate": "Kopier"
       },
