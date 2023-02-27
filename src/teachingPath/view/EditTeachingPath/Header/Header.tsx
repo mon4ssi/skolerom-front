@@ -37,6 +37,7 @@ interface Props extends RouteComponentProps<MatchProps> {
   isPublishing?: boolean;
   isDistribution?: boolean;
   readOnly?: boolean;
+  id?: number;
 }
 
 @inject('editTeachingPathStore', 'teachingPathsListStore')
@@ -373,12 +374,30 @@ export class HeaderComponent extends Component<Props> {
     }
   }
 
+  public handlePreview = () => {
+    const { id, history } = this.props;
+    const win = window.open(`/teaching-path/preview/${id}`, '_blank');
+    win!.focus();
+  }
+
+  public renderButtonPreview = () => (
+    <CreateButton
+      className="viewInFlex"
+      onClick={this.handlePreview}
+      title={intl.get('preview.teaching_path.buttons.viewstudent')}
+    >
+      {intl.get('preview.teaching_path.buttons.viewstudent')}
+    </CreateButton>
+  )
+
   public renderFunctionalSide = () => {
-    const { isCreation, isDistribution, isPublishing, editTeachingPathStore } = this.props;
+    const { isCreation, isDistribution, isPublishing, editTeachingPathStore, teachingPathsListStore } = this.props;
+    const isPublish = (editTeachingPathStore!.getPublishAt().length > 0) ? true : false;
     if (isCreation) {
       return (
         <>
           <span>{this.checkUpdatedAt()}</span>
+          {isPublish && this.renderButtonPreview()}
           <CreateButton
             onClick={this.onSave}
             disabled={this.isDisabledSaveButton()}

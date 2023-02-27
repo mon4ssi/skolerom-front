@@ -130,10 +130,14 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
     }
   }
 
-  public getDraftForeignTeachingPathById = async (id: number) => {
+  public getDraftForeignTeachingPathById = async (id: number, isPreview?: boolean) => {
     try {
       const response: AxiosResponse<DraftTeachingPathResponseDTO> = await API.get(
-        `/api/teacher/teaching-paths/${id}`
+        `/api/teacher/teaching-paths/${id}`, {
+          params: {
+            withBackground: isPreview
+          }
+        }
       );
       const draftTeachingPath = buildDraftTeachingPath(response.data);
       const allWpIds = buildArrayAllWpIds(draftTeachingPath);

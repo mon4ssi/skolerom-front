@@ -1183,7 +1183,6 @@ export class CreationPageComponent extends Component<Props> {
 
   public renderHeader = () => {
     const { readOnly, editTeachingPathStore } = this.props;
-
     return readOnly ? (
       <AppHeader
         fromTeachingPathPassing
@@ -1192,7 +1191,10 @@ export class CreationPageComponent extends Component<Props> {
         currentEntityId={editTeachingPathStore!.currentEntity!.id}
       />
     ) : (
-      <Header isCreation />
+      <Header
+        isCreation
+        id={editTeachingPathStore!.currentEntity!.id}
+      />
     );
   }
 

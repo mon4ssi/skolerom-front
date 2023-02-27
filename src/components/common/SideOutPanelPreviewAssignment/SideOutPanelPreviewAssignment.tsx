@@ -7,6 +7,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 import { EvaluationLabel } from 'components/common/EvaluationLabel/EvaluationLabel';
 import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
+import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
 import { Assignment, GenericGrepItem, Subject } from 'assignment/Assignment';
 
@@ -40,6 +41,7 @@ interface Props extends RouteComponentProps {
   canEditOrDeleteValue?: boolean;
   view?: string;
   store?: AssignmentListStore;
+  newAssignmentStore?: NewAssignmentStore;
   isPublishedCurrentAssignment?: boolean;
   onClose?(e: SyntheticEvent): void;
 }
@@ -50,7 +52,7 @@ interface SideOutPanelPreviewState {
 }
 
 export const USER_SERVICE = 'USER_SERVICE';
-
+@inject('newAssignmentStore')
 @observer
 class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComponentProps, SideOutPanelPreviewState> {
   private assignmentService: AssignmentService = injector.get(ASSIGNMENT_SERVICE);
@@ -133,6 +135,15 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     </div>
   )
 
+  public renderDistributeButton = (duplicateString: string) =>
+  (
+    <div className="actionButton">
+      <CreateButton disabled={false} onClick={this.handleCopyDistribute} title={duplicateString} >
+        {duplicateString}
+      </CreateButton>
+    </div>
+  )
+
   public renderDuplicateButton = (duplicateString: string) =>
   (
     <div className="actionButton">
@@ -169,6 +180,27 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
       /* const currentEntityRoute = entityStore instanceof AssignmentListStore ? 'assignments' : 'teaching-paths'; */
       const copyId = await this.assignmentService.copyAssignment(id!);
       history.push(`/assignments/edit/${copyId}`);
+    }
+  }
+
+  public handleCopyDistribute = async () => {
+    const { history } = this.props;
+    const { currentEntity: { id } } = this.props.store!;
+    const { currentEntity } = this.props.store!;
+
+    const isCopyApproved = await Notification.create({
+      type: NotificationTypes.CONFIRM,
+      title: intl.get('assignment list.Are you sure'),
+      submitButtonTitle: intl.get('preview.assignment.buttons.duplicate')
+    });
+
+    if (isCopyApproved) {
+      /* const currentEntityRoute = entityStore instanceof AssignmentListStore ? 'assignments' : 'teaching-paths'; */
+      const copyId = await this.assignmentService.copyAssignment(id!, true);
+      const teachingPath = await this.props.newAssignmentStore!.getAssigmentForEditing(copyId);
+      await this.props.newAssignmentStore!.save();
+      await this.props.newAssignmentStore!.publish();
+      history.push(`/assignments/edit/${copyId}/distribute`);
     }
   }
 
@@ -364,6 +396,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     const guidanceText = intl.get('preview.assignment.buttons.teacher_guidance');
     const editText = intl.get('preview.assignment.buttons.edit');
     const duplicateText = intl.get('preview.assignment.buttons.duplicate');
+    const distributeText = intl.get('preview.teaching_path.buttons.distribuir');
     const activeGoals = !isPrivate || isMySchool;
     const selectedAssignment: Assignment = this.state.currentAssignment!;
     const expandedStyle: boolean = this.checkForPåbygging();
@@ -417,11 +450,12 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
           </div>
         </div >
 
-        <div className="footerButtons">
+        <div className="footerButtons footerButtonsAssignments">
           {isPublishedCurrentAssignment && (true || view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentAssignment!, history, id, viewText)}
           {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
           {canEditOrDeleteValue && this.renderEditButton(editText, history, id)}
-          {(isPublishedCurrentAssignment! || isMySchool) && this.renderDuplicateButton(duplicateText)}
+          {authorRole === UserType.Teacher && (isPublishedCurrentAssignment! || isMySchool) && this.renderDuplicateButton(duplicateText)}
+          {(isPublishedCurrentAssignment! || isMySchool) && this.renderDistributeButton(distributeText)}
 
         </div>
       </div >
