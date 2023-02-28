@@ -671,6 +671,7 @@
       "finish": "Gå gjennom besvarelsen og send inn"
     },
     "confirm_exit": "Er du sikker på at du vil avslutte? Alle endringer blir lagret.",
+    "confirm_exit_preview": "Er du sikker på at du vil lukke elevvisningen?",
     "not for you": "Læringsstien er ikke tildelt deg"
   },
   "teaching_paths_list": {
