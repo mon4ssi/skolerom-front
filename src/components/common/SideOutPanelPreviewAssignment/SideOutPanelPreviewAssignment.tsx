@@ -191,7 +191,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     const isCopyApproved = await Notification.create({
       type: NotificationTypes.CONFIRM,
       title: intl.get('assignment list.Are you sure'),
-      submitButtonTitle: intl.get('preview.assignment.buttons.distribuir')
+      submitButtonTitle: intl.get('preview.teaching_path.buttons.distribuir')
     });
 
     if (isCopyApproved) {
@@ -455,7 +455,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
           {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
           {canEditOrDeleteValue && this.renderEditButton(editText, history, id)}
           {(isPublishedCurrentAssignment! || isMySchool) && this.renderDuplicateButton(duplicateText)}
-          {authorRole === UserType.Teacher && (isPublishedCurrentAssignment! || isMySchool) && this.renderDistributeButton(distributeText)}
+          {this.userService.getCurrentUser()!.type === UserType.Teacher && (isPublishedCurrentAssignment! || isMySchool) && this.renderDistributeButton(distributeText)}
 
         </div>
       </div >
