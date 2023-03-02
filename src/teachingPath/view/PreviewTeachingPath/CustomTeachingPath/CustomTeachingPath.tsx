@@ -17,9 +17,7 @@ import { Loader } from 'components/common/Loader/Loader';
 
 interface Props {
   questionaryTeachingPathStore?: QuestionaryTeachingPathStore;
-  content?: Array<EditableTeachingPathNode>;
-  idTeachingPath?: number;
-  finishReading?(node: EditableTeachingPathNode | undefined): void;
+  finishReading?(graduation: number): void;
   finishReadingDomain?(): void;
 }
 
@@ -48,22 +46,7 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
     let loadingFinished = false;
     /* this.props.questionaryTeachingPathStore!.domainFullInfo();
     this.props.questionaryTeachingPathStore!.assignmentFullInfo(); */
-    const { content } = this.props;
-    const MyArticlesList : Array<Article> = [];
-    const MyArticlesListIds : Array<number> = [];
-    content!.forEach((e) => {
-      e.items!.forEach((item) => {
-        if (item.type === TeachingPathNodeType.Article) {
-          if (item.value as Article) {
-            MyArticlesList.push(item.value as Article);
-          }
-        }
-      });
-    });
-    MyArticlesList.forEach((e) => {
-      MyArticlesListIds.push(e.wpId!);
-    });
-    await questionaryTeachingPathStore!.getCurrentArticlesList(MyArticlesListIds);
+    await questionaryTeachingPathStore!.getCurrentArticlesList(ids);
     loadingFinished = true;
     this.setState({ isLoadingFinished: loadingFinished });
     if (this.state.isLoadingFinished) {
@@ -84,7 +67,7 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
     const { questionaryTeachingPathStore } = this.props;
     questionaryTeachingPathStore!.handleAssignment(true);
     questionaryTeachingPathStore!.pickUpItem(id);
-    this.props.history.push(`/assignment/${id}`, {
+    this.props.history.push(`/assignments/view/${id}`, {
       teachingPath: questionaryTeachingPathStore!.teachingPathId,
       node: questionaryTeachingPathStore!.pickedItemAssignment!.idNode
     });
@@ -187,22 +170,10 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
     );
   }
   public finishReading = async (graduation: number) => {
-    const { content } = this.props;
-    const MyArticlesList : Array<Article> = [];
-    const MyArticlesListIds : Array<number> = [];
-    content!.forEach((e) => {
-      e.items!.forEach((item) => {
-        if (item.type === TeachingPathNodeType.Article) {
-          if (item.value as Article) {
-            const articleWpId = (item.value as Article).wpId;
-            if (articleWpId === this.state.attachedArticleId) {
-              this.closeArticleReading();
-              this.props.finishReading!(e);
-            }
-          }
-        }
-      });
-    });
+    this.closeArticleReading();
+    if (this.props.finishReading) {
+      this.props.finishReading(graduation);
+    }
   }
   public finishReadingDomain = () => {
     if (this.props.finishReadingDomain) {
@@ -241,7 +212,7 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
     }
   }
   public renderContent = () => {
-    const { questionaryTeachingPathStore, content } = this.props;
+    const { questionaryTeachingPathStore } = this.props;
     questionaryTeachingPathStore!.setFetchingDataStatusCustom(true);
     if (questionaryTeachingPathStore!.isOpenedIframe && questionaryTeachingPathStore!.pickedItemArticle) {
       const article = questionaryTeachingPathStore!.pickedItemArticle!.item;
@@ -262,14 +233,14 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
       return (
         <div className={'articleTeachingPath'}>
           {this.chooseTitle()}
-          <a href="javascript:void(0)" className={'title'} ref={this.ref}>{content![0].selectQuestion}</a>
+          <a href="javascript:void(0)" className={'title'} ref={this.ref}>{questionaryTeachingPathStore!.currentNode!.selectQuestion}</a>
         </div>
       );
     }
     return (
       <div className={'articleTeachingPath'}>
         {this.chooseTitle()}
-        <a href="javascript:void(0)" className={'title'} ref={this.ref}>{content![0].selectQuestion}</a>
+        <a href="javascript:void(0)" className={'title'} ref={this.ref}>{questionaryTeachingPathStore!.currentNode!.selectQuestion}</a>
         <div className="cards">
           {(questionaryTeachingPathStore!.currentArticlesList.length > 0) && this.renderCardsArticles()}
           {(questionaryTeachingPathStore!.currentDomainList.length > 0) && this.renderCardsDomain()}

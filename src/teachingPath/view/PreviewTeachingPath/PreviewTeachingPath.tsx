@@ -19,6 +19,7 @@ import { Article, Assignment } from 'assignment/Assignment';
 import { BreadcrumbsTeachingPath } from 'components/common/Breadcrumbs/BreadcrumbsComponent';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 
+import { CustomTeachingPath } from './CustomTeachingPath/CustomTeachingPath';
 import actualArrowLeftRounded from 'assets/images/actual-arrow-left-rounded.svg';
 import arrowLeftRounded from 'assets/images/arrow-left-rounded.svg';
 
@@ -55,41 +56,34 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
     };
   }
   public async componentDidMount() {
-    const { location, questionaryTeachingPathStore, editTeachingPathStore, history } = this.props;
+    const { location, questionaryTeachingPathStore, history } = this.props;
     const state = history.location.state;
     const id = Number(location.pathname.split('/', limitSplit)[itemSplit]);
     document.addEventListener('keyup', this.handleKeyboardControl);
     this.ref.current!.focus();
+
     questionaryTeachingPathStore!.setFetchingDataStatus(true);
-    const dataTeachingpath = await this.getDatateachingpath(id);
-    this.setState(
-      {
-        contenTeaching : dataTeachingpath
-      }
-    );
+
     questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Root);
-    /*questionaryTeachingPathStore!.setFetchingDataStatus(true);
 
-    questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Root);*/
-
-    /*if (isNil(state) || isNil(state.withoutRefresh) || (state && !state.withoutRefresh)) {
-      /*questionaryTeachingPathStore!.resetCurrentTeachingPath();
+    if (isNil(state) || isNil(state.withoutRefresh) || (state && !state.withoutRefresh)) {
+      questionaryTeachingPathStore!.resetCurrentTeachingPath();
       questionaryTeachingPathStore!.resetCurrentNode();
       try {
-        dataTeachingpath = await editTeachingPathStore!.getTeachingPathForEditing(id);
+        await questionaryTeachingPathStore!.getTeachingPathByIdTeacher(id);
       } catch (e) {
         history.push('/teaching-paths');
       }
-    }*/
+    }
 
-    /*if (state && state.node && questionaryTeachingPathStore!.teachingPathId) {
-      await questionaryTeachingPathStore!.calculateCurrentNode(questionaryTeachingPathStore!.teachingPathId, state.node);
+    if (state && state.node && questionaryTeachingPathStore!.teachingPathId) {
+      await questionaryTeachingPathStore!.calculateCurrentNodePreviewInside(questionaryTeachingPathStore!.teachingPathId, state.node);
     } else if (questionaryTeachingPathStore!.selectedTeachingPath && !questionaryTeachingPathStore!.selectedTeachingPath.isFinished) {
       if (questionaryTeachingPathStore!.selectedTeachingPath && !isNil(questionaryTeachingPathStore!.selectedTeachingPath.lastSelectedNodeId)) {
-        await questionaryTeachingPathStore!.calculateCurrentNode(id, questionaryTeachingPathStore!.selectedTeachingPath.lastSelectedNodeId);
+        await questionaryTeachingPathStore!.calculateCurrentNodePreviewInside(id, questionaryTeachingPathStore!.selectedTeachingPath.lastSelectedNodeId);
       }
     }
-    */
+
     questionaryTeachingPathStore!.setFetchingDataStatus(false);
   }
 
@@ -115,7 +109,7 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
           title: intl.get('teaching path passing.confirm_exit')
         });
         if (exitTeachingPath) {
-          // this.props.questionaryTeachingPathStore!.resetAllInfoAboutTeachingPath();
+          this.props.questionaryTeachingPathStore!.resetAllInfoAboutTeachingPath();
           this.props.history.push('/teaching-paths');
         }
       }
@@ -128,42 +122,48 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
 
   public onClickStart = async () => {
     const { questionaryTeachingPathStore } = this.props;
-    const contenTeaching = (typeof(this.state.contenTeaching) !== 'undefined') ? this.state.contenTeaching : undefined;
-    const type = contenTeaching!.content.children[0]!.items![0].type;
-    questionaryTeachingPathStore!.calculateCurrentNodePreview(type);
-    this.setState(
-      { selectedNode: contenTeaching!.content.children }
-    );
+    if (questionaryTeachingPathStore!.teachingPathId) {
+      await questionaryTeachingPathStore!.calculateCurrentNodePreviewInside(
+        questionaryTeachingPathStore!.teachingPathId,
+        questionaryTeachingPathStore!.rootNodeId!
+      );
+    }
   }
 
-  public finishReading = (node: EditableTeachingPathNode | undefined) => {
+  public finishReading = async (graduation: number) => {
     const { questionaryTeachingPathStore } = this.props;
     questionaryTeachingPathStore!.setFetchingDataStatus(true);
-    const type = (node!.children.length > 0) ? node!.children[0].type : '';
-    this.setState(
-      {
-        selectedNode: node!.children
-      },
-      () => {
-        questionaryTeachingPathStore!.setFetchingDataStatus(false);
-        switch (type) {
-          case TeachingPathNodeType.Article:
-            return questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Article);
-          case TeachingPathNodeType.Assignment:
-            return questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Assignment);
-          case TeachingPathNodeType.Domain:
-            return questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Domain);
-          default:
-            return questionaryTeachingPathStore!.setCurrentDisplayedElement(SubmitNodeType.Submit);
-        }
-      }
+    await questionaryTeachingPathStore!.calculateCurrentNodePreviewInside(
+      questionaryTeachingPathStore!.teachingPathId!,
+      questionaryTeachingPathStore!.pickedItemArticle!.idNode
     );
+    const ids = questionaryTeachingPathStore!.idsItemsNode;
+    if (ids.length > 0) {
+      await questionaryTeachingPathStore!.getCurrentArticlesList(ids);
+    }
+    const type = questionaryTeachingPathStore!.childrenType;
+    questionaryTeachingPathStore!.setFetchingDataStatus(false);
+    switch (type) {
+      case TeachingPathNodeType.Article:
+        return questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Article);
+      case TeachingPathNodeType.Assignment:
+        return questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Assignment);
+      case TeachingPathNodeType.Domain:
+        return questionaryTeachingPathStore!.setCurrentDisplayedElement(TeachingPathNodeType.Domain);
+      default:
+        return questionaryTeachingPathStore!.setCurrentDisplayedElement(SubmitNodeType.Submit);
+    }
   }
 
-  public finishReadingDomain = async (node: EditableTeachingPathNode | undefined) => {
+  public finishReadingDomain = async () => {
     const { questionaryTeachingPathStore } = this.props;
     questionaryTeachingPathStore!.setFetchingDataStatus(true);
-    const type = (node!.children.length > 0) ? node!.children[0].type : '';
+    await questionaryTeachingPathStore!.calculateCurrentNodePreviewInside(
+      questionaryTeachingPathStore!.teachingPathId!,
+      questionaryTeachingPathStore!.pickedItemDomain!.idNode
+    );
+    questionaryTeachingPathStore!.resetCurrentDomainList();
+    const type = questionaryTeachingPathStore!.childrenType;
     questionaryTeachingPathStore!.setFetchingDataStatus(false);
     switch (type) {
       case TeachingPathNodeType.Article:
@@ -178,11 +178,6 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
   }
 
   public finishTeachingPath = () => {
-    /*this.props.history.push('/submitted', {
-      originPath: '/teaching-paths',
-      title: 'teaching path passing.submitted',
-      isTeachingPath: true
-    });*/
     this.props.history.push('/teaching-paths');
   }
 
@@ -214,44 +209,20 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
   }
 
   public renderContent = () => {
-    const isDraftSaving = (typeof(this.state.contenTeaching) !== 'undefined') ? this.state.contenTeaching!.isDraftSaving : true;
-    const contenTeaching = (typeof(this.state.contenTeaching) !== 'undefined') ? this.state.contenTeaching : undefined;
-    const idTeachingPath = Number(this.props.location.pathname.split('/', limitSplit)[itemSplit]);
-    const { node, teachingPath } = this.props.history.location.state || {};
-    if (node !== undefined) {
-      if (this.state.contenTeaching !== undefined) {
-        const AssigMentNode = this.searchId(node, this.state.contenTeaching!.content.children);
-        let countAssigment = 0;
-        AssigMentNode.forEach((e) => {
-          if (e.children.length > 0) { countAssigment = countAssigment + 1; }
-        });
-        if (this.props.questionaryTeachingPathStore!.fetchingData) {
-          return <div className={'loading'}><Loader /></div>;
-        }
-        if (teachingPath === -1) {
-          return <AssignmentTeachingPath content={AssigMentNode} idTeachingPath={idTeachingPath}/>;
-        }
-        if (countAssigment !== 0) {
-          return <AssignmentTeachingPath content={AssigMentNode} idTeachingPath={idTeachingPath}/>;
-        }
-        return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers} onimage={this.props.questionaryTeachingPathStore!.currentTeachingPath!.backgroundImage} isPreview/>;
-      }
-    } else {
-      if (this.props.questionaryTeachingPathStore!.fetchingData) {
-        return <div className={'loading'}><Loader /></div>;
-      }
-      switch (this.props.questionaryTeachingPathStore!.displayedElement) {
-        case TeachingPathNodeType.Root:
-          return <TeachingPathAnswerCover content={contenTeaching} onClickStart={this.onClickStart}/>;
-        case TeachingPathNodeType.Article:
-          return <ArticleTeachingPath content={this.state.selectedNode} finishReading={this.finishReading} />;
-        case TeachingPathNodeType.Assignment:
-          return <AssignmentTeachingPath content={this.state.selectedNode} idTeachingPath={idTeachingPath}/>;
-        case TeachingPathNodeType.Domain:
-          return <DomainTeachingPath content={this.state.selectedNode} finishReading={this.finishReading} />;
-        default:
-          return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers} onimage={contenTeaching!.backgroundImage} isPreview/>;
-      }
+    if (this.props.questionaryTeachingPathStore!.isFetchingData) {
+      return <div className={'loading'}><Loader /></div>;
+    }
+    switch (this.props.questionaryTeachingPathStore!.displayedElement) {
+      case TeachingPathNodeType.Root:
+        return <TeachingPathAnswerCover onClickStart={this.onClickStart}/>;
+      case TeachingPathNodeType.Article:
+        return <CustomTeachingPath finishReading={this.finishReading} finishReadingDomain={this.finishReadingDomain} />;
+      case TeachingPathNodeType.Assignment:
+        return <CustomTeachingPath finishReading={this.finishReading} finishReadingDomain={this.finishReadingDomain} />;
+      case TeachingPathNodeType.Domain:
+        return <CustomTeachingPath finishReading={this.finishReading} finishReadingDomain={this.finishReadingDomain} />;
+      default:
+        return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers} onimage={this.props.questionaryTeachingPathStore!.currentTeachingPath!.backgroundImage} />;
     }
   }
 
@@ -260,11 +231,9 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
     const selectedItem = questionaryTeachingPathStore!.pickedItemArticle && item.id === questionaryTeachingPathStore!.pickedItemArticle.item.wpId
       ? 'selectedItem'
       : '';
-
     return (
       <div key={item.id} className={'questionWrapper'}>
-        <span className={`questionNumber ${selectedItem}-circle`}>{index + 1}</span>
-        <span className={`questionName ${selectedItem}`}>{item.title}</span>
+        <span className={`questionNumber ${selectedItem}-circle`} />
       </div>
     )
       ;
@@ -327,25 +296,23 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
     const { questionaryTeachingPathStore } = this.props;
     const currentTeachingPath = questionaryTeachingPathStore!.currentTeachingPath;
     const currentNode = questionaryTeachingPathStore!.currentNode;
-    const { contenTeaching } = this.state;
-    const title = (typeof(contenTeaching) !== 'undefined') ? this.state.contenTeaching!.title : '';
-    const isDraftSaving = (typeof(contenTeaching) !== 'undefined') ? this.state.contenTeaching!.isDraftSaving : true;
 
-    if (isDraftSaving) {
+    if (questionaryTeachingPathStore!.isFetchingData) {
       return <span className={'flexBox justifyCenter'}>{intl.get('loading')}</span>;
     }
 
     let currentList: Array<Article | Assignment> = [];
-    if (typeof(contenTeaching) !== 'undefined') {
-      this.state.contenTeaching!.content.children.forEach((e) => {
-        currentList = this.anyList(currentList, e);
-      });
+    if (currentNode && !isNull(currentNode.children) && currentNode.children.length > 0 && !isNil(currentNode.children[0].type)) {
+      if (currentNode.children[0].type === TeachingPathNodeType.Article) {
+        currentList = questionaryTeachingPathStore!.currentArticlesList;
+      }
+      if (currentNode.children[0].type === TeachingPathNodeType.Assignment) {
+        currentList = questionaryTeachingPathStore!.currentAssignmentList;
+      }
     }
+
     return (
       <>
-        <span className={'overview'}>{intl.get('edit_teaching_path.Step overview')}</span>
-        <h1 className={'titleTeachingPath'}>{title}</h1>
-        <span>{currentNode && currentNode.selectQuestion}</span>
         {currentList.map(this.renderQuestion)}
       </>
     );
@@ -356,9 +323,7 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
 
     const exitTeachingPath = await Notification.create({
       type: NotificationTypes.CONFIRM,
-      title: intl.get('teaching path passing.confirm_exit'),
-      submitButtonTitle: intl.get('notifications.yes'),
-      cancelButtonTitle: intl.get('notifications.no')
+      title: intl.get('teaching path passing.confirm_exit_preview')
     });
 
     if (exitTeachingPath) {
@@ -379,7 +344,6 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
       return questionaryTeachingPathStore!.calculateCurrentNode(questionaryTeachingPathStore!.teachingPathId!, idNode);
     }
   }
-
   public onClickBackButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const { questionaryTeachingPathStore } = this.props;
     const check = Number(e.currentTarget.getAttribute('data-check'));
@@ -398,6 +362,12 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
     }
   }
 
+  public NextButtonRight = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { questionaryTeachingPathStore } = this.props;
+    const id = Number(e.currentTarget.getAttribute('data-id'));
+    this.onClickItem(id);
+  }
+
   public renderLeftButton = () => {
     const { questionaryTeachingPathStore } = this.props;
     const node = questionaryTeachingPathStore!.currentNode;
@@ -407,7 +377,7 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
       const idSkill = (node.breadcrumbs[Number(indexCore - 1)] === undefined) ? 0 : node.breadcrumbs[Number(indexCore - 1)].id;
       return (
         <button className={'navigationExitButton'} data-check={indexCore} data-id={idSkill} onClick={this.onClickBackButton} title={intl.get('teaching path passing.exit')} >
-          <img className="image" src={arrowLeftRounded} alt="arrowLeftRounded"/>
+          <img src={arrowLeftRounded} alt="arrowLeftRounded"/>
         </button>
       );
     }
@@ -418,12 +388,34 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
     const { questionaryTeachingPathStore } = this.props;
     const node = questionaryTeachingPathStore!.currentNode;
     if (node && node.breadcrumbs) {
-      const idNode = node && node.id;
-      const indexCore = node.breadcrumbs.findIndex(element => element!.id === idNode);
-      const idSkill = (node.breadcrumbs[Number(indexCore - 1)] === undefined) ? 0 : node.breadcrumbs[Number(indexCore - 1)].id;
-      const isDisabled = true;
+      const onlyOnePath = (node.children.length === 1) ? true : false;
+      const checkThisType = (node.children) ? (node.children[0]) ? node.children[0].items![0].type : '' : '';
+      const idSkill = (node.children[0]) ? node.children[0].id : 0;
+      let isDisabled = true;
+      if (onlyOnePath) {
+        switch (checkThisType) {
+          case TeachingPathNodeType.Article:
+            if (questionaryTeachingPathStore!.currentArticlesList[0] && questionaryTeachingPathStore!.currentArticlesList[0].isSelected) {
+              isDisabled = false;
+            }
+            break;
+          case TeachingPathNodeType.Assignment:
+            if (questionaryTeachingPathStore!.currentAssignmentList[0] && questionaryTeachingPathStore!.currentAssignmentList[0].isSelected) {
+              isDisabled = false;
+            }
+            break;
+          case TeachingPathNodeType.Domain:
+            if (questionaryTeachingPathStore!.currentDomainList[0] && questionaryTeachingPathStore!.currentDomainList[0].isRead) {
+              isDisabled = false;
+            }
+            break;
+          default:
+            isDisabled = true;
+            break;
+        }
+      }
       return (
-        <button className={'navigationNextButton '} onClick={this.onClickBackButton} title={intl.get('teaching path passing.exit')} disabled={isDisabled}>
+        <button className={'navigationNextButton '} data-id={idSkill} onClick={this.NextButtonRight} title={intl.get('teaching path passing.exit')} disabled={isDisabled}>
           <img src={arrowLeftRounded} alt="arrowLeftRounded"/>
         </button>
       );
@@ -433,17 +425,18 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
 
   public render() {
     return (
-      <div className={'passageTeachingPath PreviewTeachingPath'}>
-        <AppHeader fromTeachingPathPassing isPreview onLogoClick={this.handleExit}/>
+      <div className={'passageTeachingPath'}>
+        <AppHeader fromTeachingPathPassing studentFormTeachinPath onLogoClick={this.handleExit}/>
         <div className="passageTeachingPathBreadCrumbs">
           {this.itemsbyBreadcrumbs()}
         </div>
         <div className="teachingPathWrapper">
-        <div className="teachingPathNewBreadCrumbs">
+          <div className="teachingPathNewBreadCrumbs">
             {this.renderLeftButton()}
             <BreadcrumbsTeachingPath onClickStart={this.onClickStartBreadcrumbs}/>
             {this.renderRightButton()}
           </div>
+
           <div className="flexBox dirColumn wrapperTeachingPath">
             <div className="contentTeachingPath" ref={this.ref}>
               {this.renderContent()}

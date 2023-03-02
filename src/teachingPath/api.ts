@@ -297,7 +297,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         description: data.description,
         isPrivate: data.isPrivate,
         isFinished: data.isFinished,
-        rootNodeId: data.rootNodeId,
+        rootNodeId: data.content.id,
         lastSelectedNodeId: data.lastSelectedNodeId,
         featuredImage: data.featuredImage,
         backgroundImage: data.backgroundImage,
@@ -383,20 +383,10 @@ export class TeachingPathApi implements TeachingPathRepo {
     const { data } = await API.get(`api/teacher/teaching-paths/${teachingPathId}/node/${nodeId}`);
     this.arrayNumberContentAll = [];
     if (!isNull(data.shortestPath)) {
-      this.arrayNumberContentAll.push(data.shortestPath.id);
-      this.searchShortesPath(data.shortestPath);
+      // this.arrayNumberContentAll.push(data.shortestPath.id);
+      // this.searchShortesPath(data.shortestPath);
     }
-    const breadcrumbs = data.breadcrumbs.reverse().map((crumb: BreadcrumbsResponseDTO) => new Breadcrumbs({
-      selectQuestion: crumb.selectQuestion,
-      id: crumb.id,
-      parentNodeId: crumb.parentNodeId,
-      shortest: this.numberContentAll,
-      shortpathid: this.arrayNumberContentAll,
-      items: !isNull(crumb.items) ? crumb.items.map(item => new TeachingPathItem({
-        type: crumb.type,
-        value: item
-      })) : undefined
-    }));
+    const breadcrumbs = undefined;
     return new TeachingPathNode({ ...data, breadcrumbs });
   }
 

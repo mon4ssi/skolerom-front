@@ -85,9 +85,13 @@ export class SubmitComponent extends Component<Props> {
   }
 
   public reloadToPreview = async () => {
-    const { isPreview, finishPreviewSubmit } = this.props;
-    if (isPreview) {
-      /* finishPreviewSubmit!(); */
+    const { redirectData, isPreview, questionaryTeachingPathStore, finishPreviewSubmit, history } = this.props;
+    const childNode = questionaryTeachingPathStore!.currentNode;
+    if (childNode && childNode.children.length > 0) {
+      this.props.history.push(`/teaching-path/preview/${questionaryTeachingPathStore!.currentTeachingPath!.id}`, {
+        node: history.location.state && history.location.state.node
+      });
+    } else {
       this.props.history.push('/assignments/all');
     }
   }
@@ -195,7 +199,7 @@ export class SubmitComponent extends Component<Props> {
     if (isPreview) {
       return (
         <button
-          className="CreateButton Submit__button"
+          className="CreateButton Submit__button reloadToPreview"
           onClick={this.reloadToPreview}
           title={intl.get('current_assignment_page.complete_and_submit_button')}
           ref={this.refbutton}

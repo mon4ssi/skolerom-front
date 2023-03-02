@@ -222,7 +222,7 @@ export class CurrentAssignmentPage extends Component<CurrentAssignmentPageProps,
       ? true
       : await Notification.create({
         type: NotificationTypes.CONFIRM,
-        title: intl.get('current_assignment_page.exit_confirm')
+        title: intl.get('teaching path passing.confirm_exit_preview')
       });
 
     if (exitQuestionary) {
