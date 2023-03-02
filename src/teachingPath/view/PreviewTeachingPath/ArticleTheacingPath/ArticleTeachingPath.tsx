@@ -16,7 +16,7 @@ import { Loader } from '../../../../components/common/Loader/Loader';
 interface Props {
   questionaryTeachingPathStore?: QuestionaryTeachingPathStore;
   content?: Array<EditableTeachingPathNode>;
-  finishReading(node: EditableTeachingPathNode | undefined): void;
+  finishReading?(node: EditableTeachingPathNode | undefined): void;
 }
 
 interface State {
@@ -122,7 +122,7 @@ export class ArticleTeachingPath extends Component<Props, State> {
             const articleWpId = (item.value as Article).wpId;
             if (articleWpId === this.state.attachedArticleId) {
               this.closeArticleReading();
-              this.props.finishReading(e);
+              this.props.finishReading!(e);
             }
           }
         }

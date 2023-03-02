@@ -672,6 +672,7 @@
       "finish": "Review & submit"
     },
     "confirm_exit": "Are you sure you want to close? All changes will be save.",
+    "confirm_exit_preview": "Are you sure you want to close the student view?",
     "not for you": "Teaching path not assigned to you"
   },
   "teaching_paths_list": {

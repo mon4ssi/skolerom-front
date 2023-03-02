@@ -234,7 +234,7 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
         if (countAssigment !== 0) {
           return <AssignmentTeachingPath content={AssigMentNode} idTeachingPath={idTeachingPath}/>;
         }
-        return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers} isPreview/>;
+        return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers} onimage={this.props.questionaryTeachingPathStore!.currentTeachingPath!.backgroundImage} isPreview/>;
       }
     } else {
       if (this.props.questionaryTeachingPathStore!.fetchingData) {
@@ -250,7 +250,7 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
         case TeachingPathNodeType.Domain:
           return <DomainTeachingPath content={this.state.selectedNode} finishReading={this.finishReading} />;
         default:
-          return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers} isPreview/>;
+          return <SubmitTeachingPath onSubmit={this.finishTeachingPath} onDelete={this.deleteTeachingPathAnswers} onimage={contenTeaching!.backgroundImage} isPreview/>;
       }
     }
   }
@@ -356,7 +356,9 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
 
     const exitTeachingPath = await Notification.create({
       type: NotificationTypes.CONFIRM,
-      title: intl.get('teaching path passing.confirm_exit')
+      title: intl.get('teaching path passing.confirm_exit'),
+      submitButtonTitle: intl.get('notifications.yes'),
+      cancelButtonTitle: intl.get('notifications.no')
     });
 
     if (exitTeachingPath) {
