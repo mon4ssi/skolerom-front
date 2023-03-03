@@ -15,6 +15,8 @@ import { StoreState, QueryStringKeys } from 'utils/enums';
 import { postperpage } from 'utils/constants';
 import teachingPathIcon from 'assets/images/teaching-path.svg';
 import listPlaceholderImg from 'assets/images/list-placeholder.svg';
+import clockDark from 'assets/images/clock-dark.svg';
+import clockGray from 'assets/images/clock-gray.svg';
 
 import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
 
@@ -63,11 +65,22 @@ class TeachingPathDistributeList extends Component<ITeachingPathDistributeListPr
     }
   }
 
+  public getDeadlineLabel = (defaultEndDate: string, defaultStartDate: string) => {
+    const locale = localStorage.getItem('currentLocale')!;
+    const isPassed = (Date.parse(locale) - Date.parse(defaultEndDate!) > 0) ? true : false;
+
+    return isPassed ?
+      intl.get('answers.past') :
+      `${intl.get('answers.Due in')}`;
+  }
+
   public renderDistribute = (item: TeachingPath, index: number) => {
     const { teachingPathList, teachingPathsState } = this.props.teachingPathsListStore!;
     const studentsLabel = item.totalDistributes === 1
       ? intl.get('evaluation_page.student')
       : intl.get('evaluation_page.students');
+    const locale = localStorage.getItem('currentLocale')!;
+    const isDeadlinePassed = (Date.parse(locale) - Date.parse(item.defaultEndDate!) > 0) ? false : true;
     return teachingPathsState === StoreState.LOADING ? (
       <SkeletonLoader key={index} className="TeachingPathDistributeItemSkeleton" />
     ) : (
@@ -84,6 +97,10 @@ class TeachingPathDistributeList extends Component<ITeachingPathDistributeListPr
               </div>
             </div>
             <div className="AssignmentDistribute__block AssignmentDistribute__blockBottom">
+              <div className="AssignmentDistribute__deadline">
+                <div className="AssignmentDistribute__deadlineText AssignmentDistribute__textBlock">{this.getDeadlineLabel(item.defaultEndDate!, item.defaultStartDate!)}</div>
+                <img src={isDeadlinePassed ? clockGray : clockDark} alt="" className="AssignmentDistribute__deadlineImage"/>
+              </div>
               <div className="AssignmentDistribute__textBlock AssignmentDistribute__students">
                 {item.answeredDistributes} {intl.get('evaluation_page.of')} {item.totalDistributes} {studentsLabel}
               </div>

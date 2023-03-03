@@ -206,6 +206,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
       const teachingPath = await this.props.editTeachingPathStore!.getTeachingPathForEditing(copyId);
       await this.props.editTeachingPathStore!.save();
       await this.props.editTeachingPathStore!.publish();
+      this.props.editTeachingPathStore!.setIsDisabledButtons();
       history.push(`/teaching-paths/edit/${copyId}/distribute`);
     }
   }

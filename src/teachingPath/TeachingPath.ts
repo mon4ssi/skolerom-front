@@ -238,6 +238,8 @@ export interface TeachingPathArgs {
   canEditOrDelete?: boolean;
   totalDistributes?: number;
   answeredDistributes?: number;
+  defaultStartDate?: string;
+  defaultEndDate?: string;
 }
 
 export class TeachingPath {
@@ -305,6 +307,8 @@ export class TeachingPath {
   @observable protected _canEditOrDelete?: boolean;
   @observable protected _totalDistributes?: number;
   @observable protected _answeredDistributes?: number;
+  @observable protected _defaultStartDate?: string;
+  @observable protected _defaultEndDate?: string;
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;
@@ -372,6 +376,8 @@ export class TeachingPath {
     this._canEditOrDelete = args.canEditOrDelete;
     this._totalDistributes = args.totalDistributes;
     this._answeredDistributes = args.answeredDistributes;
+    this._defaultStartDate = args.defaultStartDate;
+    this._defaultEndDate = args.defaultEndDate;
   }
 
   @computed
@@ -442,6 +448,16 @@ export class TeachingPath {
   @computed
   public get backgroundImage() {
     return this._backgroundImage;
+  }
+
+  @computed
+  public get defaultEndDate() {
+    return this._defaultEndDate;
+  }
+
+  @computed
+  public get defaultStartDate() {
+    return this._defaultStartDate;
   }
 
   @computed

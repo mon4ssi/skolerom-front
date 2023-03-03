@@ -200,6 +200,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
       const teachingPath = await this.props.newAssignmentStore!.getAssigmentForEditing(copyId);
       await this.props.newAssignmentStore!.save();
       await this.props.newAssignmentStore!.publish();
+      this.props.newAssignmentStore!.setIsDisabledButtons();
       history.push(`/assignments/edit/${copyId}/distribute`);
     }
   }
