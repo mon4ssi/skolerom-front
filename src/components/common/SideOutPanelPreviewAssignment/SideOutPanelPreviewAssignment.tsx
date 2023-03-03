@@ -455,7 +455,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
           {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
           {canEditOrDeleteValue && this.renderEditButton(editText, history, id)}
           {(isPublishedCurrentAssignment! || isMySchool) && this.renderDuplicateButton(duplicateText)}
-          {authorRole === UserType.Teacher && this.userService.getCurrentUser()!.type === UserType.Teacher && (isPublishedCurrentAssignment! || isMySchool) && this.renderDistributeButton(distributeText)}
+          {this.userService.getCurrentUser()!.type === UserType.Teacher && (isPublishedCurrentAssignment! || isMySchool) && this.renderDistributeButton(distributeText)}
 
         </div>
       </div >

@@ -462,7 +462,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
           {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
           {currentCanEditOrDelete && this.renderEditButton(editText, history, id)}
           {isPublishedCurrentTeachingPath! && this.renderDuplicateButton(duplicateText)}
-          {authorRole === UserType.Teacher && this.userService.getCurrentUser()!.type === UserType.Teacher && isPublishedCurrentTeachingPath! && this.renderDistributeButton(distributeText)}
+          {this.userService.getCurrentUser()!.type === UserType.Teacher && isPublishedCurrentTeachingPath! && this.renderDistributeButton(distributeText)}
           {isPublishedCurrentTeachingPath! && this.renderPreviewButon(isPublishedCurrentTeachingPath!, id, viewStudentText)}
         </div>
       </div >
