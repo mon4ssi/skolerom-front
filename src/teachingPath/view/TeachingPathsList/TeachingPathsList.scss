@@ -221,13 +221,3 @@
     width: calc(100% - 50px);
   }
 }
-@media screen and (max-height: 820px) {
-  .css-1y8mk30-SkeletonTheme span {
-    height: 200px !important;
-  }
-}
-@media screen and (max-height: 700px) {
-  .css-1y8mk30-SkeletonTheme span {
-    height: 150px !important;
-  }
-}
