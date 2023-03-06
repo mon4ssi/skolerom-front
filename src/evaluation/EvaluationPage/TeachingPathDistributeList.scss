@@ -39,6 +39,15 @@
     }
 }
 
+.TeachingPathDistributeListNotFlex {
+    .css-1y8mk30-SkeletonTheme {
+        width: 100% !important;
+        height: 60px !important;
+        span { height: 60px !important; }
+    }
+}
+
+
 @media screen and (max-width: 2350px) {
     .TeachingPathDistributeList {
         .TeachingPathDistributeItem {

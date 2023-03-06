@@ -67,11 +67,12 @@ class TeachingPathDistributeList extends Component<ITeachingPathDistributeListPr
 
   public getDeadlineLabel = (defaultEndDate: string, defaultStartDate: string) => {
     const locale = localStorage.getItem('currentLocale')!;
-    const isPassed = (Date.parse(locale) - Date.parse(defaultEndDate!) > 0) ? true : false;
+    const dueDate = moment(moment().subtract(1, 'd')).locale(locale).to(moment(defaultEndDate), true);
+    const isPassed = moment(moment(defaultEndDate)).format('YYYY-MM-DD') < moment().format('YYYY-MM-DD');
 
     return isPassed ?
       intl.get('answers.past') :
-      `${intl.get('answers.Due in')}`;
+      `${intl.get('answers.Due in')} ${dueDate}`;
   }
 
   public renderDistribute = (item: TeachingPath, index: number) => {
