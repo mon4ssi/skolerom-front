@@ -10,7 +10,68 @@
   position: fixed;
   overflow-x: hidden;
   overflow-y: hidden;
-
+  .headerButtons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 12px;
+  }
+  .previewButtons {
+    position: relative;
+    margin-left: 15px;
+  }
+  .functionsButtons {
+    position: relative;
+    margin-left: 15px;
+  }
+  .DistributeButtons {
+    margin-left: 15px;
+    .CreateButton {
+      background: #E2017B;
+    }
+  }
+  .modalToggle {
+    border: solid 2px #d3d9de;
+    border-radius: 20px;
+    padding: 7px 16px;
+    display: block;
+    min-width: 100px;
+    text-align: center;
+    color: #0b2541;
+    &:after {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-left: solid 2px #0b2541;
+      border-bottom: solid 2px #0b2541;
+      transform: rotate(-45deg);
+      margin-left: 8px;
+      top: -3px;
+      position: relative;
+    }
+    &.active {
+      border: solid 2px #0b2541;
+    }
+  }
+  .modalContent {
+    border: 1px solid #D3D9DE;
+    border-top: 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px 0 #ffffff1c;
+    position: absolute;
+    z-index: 2;
+    background: white;
+    padding: 12px 20px;
+    right: 0px;
+    padding-top: 17px;
+    min-width: 150px;
+    button {
+      background: transparent;
+      display: block;
+      margin-bottom: 5px;
+    }
+  }
   .contentContainer {
     position: relative;
     flex: 1;
@@ -89,7 +150,18 @@
   position: fixed;
   overflow-x: hidden;
   overflow-y: hidden;
-
+  .NewTitleHeader {
+    background: #0b2541;
+    padding-top: 26px;
+    padding-bottom: 27px;
+    h2 {
+      margin: 0px;
+      text-align: center;
+      color: white;
+      font-size: 36px;
+      font-weight: 400;
+    }
+  }
   .contentContainer {
     position: relative;
     flex: 1;

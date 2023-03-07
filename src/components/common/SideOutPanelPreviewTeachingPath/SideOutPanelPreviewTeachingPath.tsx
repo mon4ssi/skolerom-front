@@ -48,6 +48,8 @@ interface Props extends RouteComponentProps {
 
 interface SideOutPanelPreviewState {
   currentTeachingPath: undefined | TeachingPath;
+  modalPreview: boolean;
+  modalFunction: boolean;
 }
 
 export const USER_SERVICE = 'USER_SERVICE';
@@ -59,6 +61,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
 
   public state = {
     currentTeachingPath: undefined,
+    modalPreview: false,
+    modalFunction: false
   };
 
   private onClose = (e: SyntheticEvent) => {
@@ -84,17 +88,17 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   public renderViewButton = (isPublished: boolean, history: any, id: number, view: string) =>
   (
     <div className="actionButton">
-      <CreateButton disabled={!isPublished} onClick={() => this.openInNewTabView()} title={view} autoFocus>
+      <button disabled={!isPublished} onClick={() => this.openInNewTabView()} title={view} autoFocus>
         {view}
-      </CreateButton>
+      </button>
     </div>
   )
 
   public renderPreviewButon = (isPublished: boolean, id: number, view: string) => (
     <div className="actionButton">
-      <CreateButton disabled={!isPublished} onClick={() => this.openInNewTabPreView()} title={view}>
+      <button disabled={!isPublished} onClick={() => this.openInNewTabPreView()} title={view}>
         {view}
-      </CreateButton>
+      </button>
     </div>
   )
 
@@ -120,9 +124,9 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   public renderTeacherGuidanceButton = (guidanceString: string) =>
   (
     <div className="actionButton">
-      <CreateButton disabled={false} onClick={() => this.openInNewTabTeacherGuidance()} title={guidanceString} >
+      <button disabled={false} onClick={() => this.openInNewTabTeacherGuidance()} title={guidanceString} >
         {guidanceString}
-      </CreateButton>
+      </button>
     </div>
   )
 
@@ -135,18 +139,18 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   public renderEditButton = (editString: string, history: any, id: number) =>
   (
     <div className="actionButton">
-      <CreateButton disabled={false} onClick={() => { this.openInNewTabEdit(id); }} title={editString} >
+      <button disabled={false} onClick={() => { this.openInNewTabEdit(id); }} title={editString} >
         {editString}
-      </CreateButton>
+      </button>
     </div>
   )
 
   public renderDuplicateButton = (duplicateString: string) =>
   (
     <div className="actionButton">
-      <CreateButton disabled={false} onClick={this.handleCopy} title={duplicateString} >
+      <button disabled={false} onClick={this.handleCopy} title={duplicateString} >
         {duplicateString}
-      </CreateButton>
+      </button>
     </div>
   )
 
@@ -372,6 +376,99 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     </div>
   )
 
+  public changeOpenpreview = () => {
+    this.setState({ modalFunction: false });
+    if (this.state.modalPreview) {
+      this.setState({ modalPreview: false });
+    } else {
+      this.setState({ modalPreview: true });
+    }
+  }
+
+  public changeOpenFunction = () => {
+    this.setState({ modalPreview: false });
+    if (this.state.modalFunction) {
+      this.setState({ modalFunction: false });
+    } else {
+      this.setState({ modalFunction: true });
+    }
+  }
+
+  public contentIn = () => {
+    const { currentEntity } = this.props.store!;
+    const
+      {
+        title,
+        ownedByMe,
+        createdAt,
+        subjectItems,
+        coreElementItems,
+        sourceItems,
+        multiSubjectItems,
+        numberOfSteps,
+        goalsItems,
+        description,
+        author,
+        authorRole,
+        isPrivate,
+        numberOfQuestions,
+        hasGuidance,
+        numberOfArticles,
+        isMySchool,
+      } = currentEntity;
+    const { currentEntity: { id } } = this.props.store!;
+    const { history, isPublishedCurrentTeachingPath, view, currentCanEditOrDelete } = this.props;
+    /* const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager; */
+    const showPublishDate = authorRole === UserType.Teacher || !(authorRole === UserType.ContentManager && !(isPrivate!));
+    const viewText = intl.get('preview.assignment.buttons.view');
+    const guidanceText = intl.get('preview.assignment.buttons.teacher_guidance');
+    const viewStudentText = intl.get('preview.teaching_path.buttons.viewstudent');
+    return (
+      <div className="modalContent">
+        {isPublishedCurrentTeachingPath! && (view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentTeachingPath!, history, id, viewText)}
+        {isPublishedCurrentTeachingPath! && this.renderPreviewButon(isPublishedCurrentTeachingPath!, id, viewStudentText)}
+        {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
+      </div>
+    );
+  }
+
+  public contentIntwo = () => {
+    const { currentEntity } = this.props.store!;
+    const
+      {
+        title,
+        ownedByMe,
+        createdAt,
+        subjectItems,
+        coreElementItems,
+        sourceItems,
+        multiSubjectItems,
+        numberOfSteps,
+        goalsItems,
+        description,
+        author,
+        authorRole,
+        isPrivate,
+        numberOfQuestions,
+        hasGuidance,
+        numberOfArticles,
+        isMySchool,
+      } = currentEntity;
+    const { currentEntity: { id } } = this.props.store!;
+    const { history, isPublishedCurrentTeachingPath, view, currentCanEditOrDelete } = this.props;
+    /* const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager; */
+    const showPublishDate = authorRole === UserType.Teacher || !(authorRole === UserType.ContentManager && !(isPrivate!));
+    const guidanceText = intl.get('preview.assignment.buttons.teacher_guidance');
+    const editText = intl.get('preview.assignment.buttons.edit');
+    const duplicateText = intl.get('preview.assignment.buttons.duplicate');
+    return (
+      <div className="modalContent">
+        {currentCanEditOrDelete && this.renderEditButton(editText, history, id)}
+        {isPublishedCurrentTeachingPath! && this.renderDuplicateButton(duplicateText)}
+      </div>
+    );
+  }
+
   public render() {
     const { currentEntity } = this.props.store!;
     const
@@ -405,24 +502,27 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const duplicateText = intl.get('preview.teaching_path.buttons.duplicate');
     const distributeText = intl.get('preview.teaching_path.buttons.distribuir');
     const activeGoals = !isPrivate || isMySchool;
+    const openPreview = (this.state.modalPreview) ? 'modalToggle active' : 'modalToggle';
+    const openFunction = (this.state.modalFunction) ? 'modalToggle active' : 'modalToggle';
     return (
       <div className={'previewModalInfo'} onClick={this.stopPropagation} tabIndex={0}>
         <div className="contentContainer">
-          <div className="close-panel">
-            <img
-              src={close}
-              alt="close"
-              className="close-button"
-              onClick={this.onClose}
-            />
-          </div>
-          <div className={'headerPanel'}>
-            <div className="imageBlock">
-              <div className={'shadow'} />
-              {/* <img src={featuredImage ? featuredImage : bg} alt="img" className={'imagePlaceholder'}/> */}
+          <div className={'NewheaderPanel'}>
+            <div className="headerButtons">
+              <div className="previewButtons">
+                <a href="javascript:void(0)" className={openPreview} onClick={this.changeOpenpreview}>Preview</a>
+                {this.state.modalPreview && this.contentIn()}
+              </div>
+              <div className="functionsButtons">
+                <a href="javascript:void(0)" className={openFunction} onClick={this.changeOpenFunction}>Edit</a>
+                {this.state.modalFunction && this.contentIntwo()}
+              </div>
+              <div className="DistributeButtons">
+                {this.userService.getCurrentUser()!.type === UserType.Teacher && isPublishedCurrentTeachingPath! && this.renderDistributeButton(distributeText)}
+              </div>
             </div>
-            <div className={'subjectInfo'}>
-              <div className={'entityTitle'}>{title}</div>
+            <div className={'NewTitleHeader'}>
+              <h2>{title}</h2>
             </div>
           </div>
           <div id="aux1" className="hidden">Not name</div>
@@ -457,15 +557,6 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
 
           </div>
         </div >
-
-        <div className="footerButtons">
-          {isPublishedCurrentTeachingPath! && (view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentTeachingPath!, history, id, viewText)}
-          {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
-          {currentCanEditOrDelete && this.renderEditButton(editText, history, id)}
-          {isPublishedCurrentTeachingPath! && this.renderDuplicateButton(duplicateText)}
-          {this.userService.getCurrentUser()!.type === UserType.Teacher && isPublishedCurrentTeachingPath! && this.renderDistributeButton(distributeText)}
-          {isPublishedCurrentTeachingPath! && this.renderPreviewButon(isPublishedCurrentTeachingPath!, id, viewStudentText)}
-        </div>
       </div >
     );
   }
