@@ -188,6 +188,7 @@ interface HeaderProps extends RouteComponentProps {
   studentFormTeachinPath?: boolean;
   studentFormAssignment?: boolean;
   isPreview?: boolean;
+  isPreviewTP?: boolean;
   uiStore?: UIStore;
   width?: number;
   onLogoClick?: (e: MouseEvent) => void;
@@ -687,8 +688,9 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     win!.focus();
   }
 
-  public renderCopyButton = (intlKey: string) => (
-    <div className="doneBox flexBox alignCenter copyButton">
+  public renderPreviewButton = () => {
+    const { currentEntityId } = this.props;
+    return (
       <CreateButton
         className="viewInFlex"
         onClick={this.handlePreview}
@@ -696,6 +698,12 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       >
         {intl.get('preview.teaching_path.buttons.viewstudent')}
       </CreateButton>
+    );
+  }
+
+  public renderCopyButton = (intlKey: string) => (
+    <div className="doneBox flexBox alignCenter copyButton">
+      {!this.props.isPreviewTP && this.renderPreviewButton()}
       <CreateButton
         className="copyInFlex"
         onClick={this.handleCopy}

@@ -426,7 +426,7 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
   public render() {
     return (
       <div className={'passageTeachingPath'}>
-        <AppHeader fromTeachingPathPassing studentFormTeachinPath onLogoClick={this.handleExit}/>
+        <AppHeader fromTeachingPathPassing studentFormTeachinPath isPreviewTP onLogoClick={this.handleExit}/>
         <div className="passageTeachingPathBreadCrumbs">
           {this.itemsbyBreadcrumbs()}
         </div>
