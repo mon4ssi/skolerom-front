@@ -221,3 +221,12 @@
     width: calc(100% - 50px);
   }
 }
+
+.cardList .css-1y8mk30-SkeletonTheme {
+  height: 250px !important;
+  width: calc(25% - 20px);
+  margin-bottom: 20px;
+  span {
+    height: 250px !important;
+  }
+}
