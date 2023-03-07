@@ -112,6 +112,18 @@ class TeachingPathDistributeList extends Component<ITeachingPathDistributeListPr
     );
   }
 
+  public OnlyFirstCharge = (item: TeachingPath, index: number) => {
+    const { teachingPathList, teachingPathsState } = this.props.teachingPathsListStore!;
+    const studentsLabel = item.totalDistributes === 1
+      ? intl.get('evaluation_page.student')
+      : intl.get('evaluation_page.students');
+    const locale = localStorage.getItem('currentLocale')!;
+    const isDeadlinePassed = (Date.parse(locale) - Date.parse(item.defaultEndDate!) > 0) ? false : true;
+    return (
+      <SkeletonLoader key={index} className="TeachingPathDistributeItemSkeleton" />
+    );
+  }
+
   public async componentDidMount() {
     const { filter } = this.props.teachingPathsListStore!;
     this.fetchDistributes();
@@ -138,9 +150,11 @@ class TeachingPathDistributeList extends Component<ITeachingPathDistributeListPr
   }
 
   public render() {
+    const length = this.props.teachingPathsListStore!.teachingPathList.length;
+    const arrayForImagesSkeleton = new Array(ITEMS_PER_PAGE).fill('imageSkeletonLoader');
     return (
       <div className="TeachingPathDistributeListNotFlex" id="List" aria-live="polite">
-        {this.props.teachingPathsListStore!.teachingPathList.map(this.renderDistribute)}
+        {(length > 0) ? this.props.teachingPathsListStore!.teachingPathList.map(this.renderDistribute) : arrayForImagesSkeleton.map(this.OnlyFirstCharge)}
       </div>
     );
   }
