@@ -420,7 +420,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const { history, isPublishedCurrentTeachingPath, view, currentCanEditOrDelete } = this.props;
     /* const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager; */
     const showPublishDate = authorRole === UserType.Teacher || !(authorRole === UserType.ContentManager && !(isPrivate!));
-    const viewText = intl.get('preview.assignment.buttons.view');
+    const viewText = intl.get('preview.teaching_path.buttons.view');
     const guidanceText = intl.get('preview.assignment.buttons.teacher_guidance');
     const viewStudentText = intl.get('preview.teaching_path.buttons.viewstudent');
     return (
