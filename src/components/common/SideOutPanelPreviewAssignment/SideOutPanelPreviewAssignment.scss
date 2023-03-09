@@ -58,11 +58,13 @@
     padding: 12px 20px;
     right: 0px;
     padding-top: 17px;
-    min-width: 150px;
+    min-width: 180px;
     button {
       background: transparent;
       display: block;
       margin-bottom: 5px;
+      text-align: left;
+      white-space: nowrap;
     }
   }
 

@@ -34,7 +34,7 @@
       },
       "buttons": {
         "view": "View teaching path",
-        "teacher_guidance": "Guidance",
+        "teacher_guidance": "Teacher Guidance",
         "edit": "Edit",
         "duplicate": "Duplicate",
         "viewstudent": "View as Student",
@@ -61,8 +61,8 @@
         "educational_goals": "Educational goals"
       },
       "buttons": {
-        "view": "View",
-        "teacher_guidance": "Guidance",
+        "view": "View Assignment",
+        "teacher_guidance": "Teacher Guidance",
         "edit": "Edit",
         "duplicate": "Duplicate"
       },

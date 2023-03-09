@@ -504,11 +504,11 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
           <div className={'NewheaderPanel'}>
             <div className="headerButtons">
               <div className="previewButtons">
-                <a href="javascript:void(0)" className={openPreview} onClick={this.changeOpenpreview}>Preview</a>
+                <a href="javascript:void(0)" className={openPreview} onClick={this.changeOpenpreview}>{intl.get('new assignment.Preview')}</a>
                 {this.state.modalPreview && this.contentIn()}
               </div>
               <div className="functionsButtons">
-                <a href="javascript:void(0)" className={openFunction} onClick={this.changeOpenFunction}>Edit</a>
+                <a href="javascript:void(0)" className={openFunction} onClick={this.changeOpenFunction}>{editText}</a>
                 {this.state.modalFunction && this.contentIntwo()}
               </div>
               <div className="DistributeButtons">
