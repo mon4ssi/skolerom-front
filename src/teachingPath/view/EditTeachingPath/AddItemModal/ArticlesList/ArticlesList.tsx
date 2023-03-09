@@ -1874,14 +1874,8 @@ export class ArticlesList extends Component<Props, State> {
       return <div className={'noResults'}>{intl.get('edit_teaching_path.No results found')}</div>;
     }
 
-    return articlesForSkeletonEight.map((skeletonArticle, index) => (
-      <SkeletonLoader
-        key={index}
-        className="RelatedArticlesCard"
-        width={skeletonCardWidth}
-        height={skeletonCardHeight}
-      />
-    )
+    return (
+      selectedAndLoadedArticles.map(this.renderArticle)
     );
   }
 
