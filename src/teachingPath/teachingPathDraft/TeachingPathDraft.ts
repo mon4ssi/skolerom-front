@@ -30,7 +30,7 @@ export interface DraftTeachingPathRepo {
   createTeachingPath: () => Promise<DraftTeachingPath>;
   getKeywordsFromArticles: (arrayArticlesIds: Array<number>, arrayAsignmentsIds: Array<number>) => Promise<Array<string>>;
   getDraftTeachingPathById: (id: number) => Promise<DraftTeachingPath>;
-  getDraftForeignTeachingPathById: (id: number) => Promise<{ teachingPath: DraftTeachingPath, articles?: Array<Article> }>;
+  getDraftForeignTeachingPathById: (id: number, isPreview?: boolean) => Promise<{ teachingPath: DraftTeachingPath, articles?: Array<Article> }>;
   deleteTeachingPath: (id: number) => Promise<void>;
 }
 
@@ -74,6 +74,11 @@ export class DraftTeachingPath extends TeachingPath {
   @computed
   public get updatedAt() {
     return this._updatedAt;
+  }
+
+  @computed
+  public get publishedAt() {
+    return this._publishedAt;
   }
 
   @computed

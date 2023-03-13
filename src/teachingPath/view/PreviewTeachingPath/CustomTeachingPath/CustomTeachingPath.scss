@@ -1,0 +1,50 @@
+.articleTeachingPath {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  
+    .chooseOne {
+      color: #E2017B;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+  
+    .title {
+      font-weight: bold;
+      font-size: 1.875rem;
+      margin: 20px 0;
+      &:focus {
+        outline: black;
+        outline-style: auto;
+        outline-offset: 4px;
+      }
+    }
+  
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      height: inherit;
+      overflow: auto;
+      max-height: calc(100% - 80px);
+      overflow-y: scroll;
+      max-width: 950px;
+      margin-bottom: 20px;
+      .passedStyle {
+        .InfoCard {
+          box-shadow: 0 0 7px 0 #0A7B24;
+        }
+      }
+  
+      .InfoCard {
+        margin: 10px;
+        height: auto;
+      }
+    }
+  }
+
+  .contentTeachingPath {
+    display: flex;
+    justify-content: center;
+}

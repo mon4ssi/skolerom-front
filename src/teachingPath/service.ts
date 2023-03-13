@@ -36,8 +36,16 @@ export class TeachingPathService {
     return this.teachingPathRepo.getTeachingPathById(id);
   }
 
+  public async getTeachingPathByIdTeacher(id: number) {
+    return this.teachingPathRepo.getTeachingPathByIdTeacher(id);
+  }
+
   public async getCurrentNode(teachingPathId: number, nodeId: number) {
     return this.teachingPathRepo.getCurrentNode(teachingPathId, nodeId);
+  }
+
+  public async getCurrentNodePreview(teachingPathId: number, nodeId: number) {
+    return this.teachingPathRepo.getCurrentNodePreview(teachingPathId, nodeId);
   }
 
   public async markAsPickedArticle(teachingPathId: number, nodeId: number, idArticle: number, levelWpId: number) {
@@ -86,8 +94,8 @@ export class TeachingPathService {
     return this.teachingPathRepo.finishTeachingPath(id);
   }
 
-  public async copyTeachingPath(id: number) {
-    return this.teachingPathRepo.copyTeachingPath(id);
+  public async copyTeachingPath(id: number, all?: boolean) {
+    return this.teachingPathRepo.copyTeachingPath(id, all);
   }
 
   public async deleteTeachingPathAnswers(teachingPathId: number, answerId: number) {

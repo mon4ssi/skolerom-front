@@ -33,10 +33,12 @@
         "educational_goals": "Educational goals"
       },
       "buttons": {
-        "view": "View teaching path",
-        "teacher_guidance": "Teacher guidance",
+        "view": "View",
+        "teacher_guidance": "Guidance",
         "edit": "Edit",
-        "duplicate": "Duplicate"
+        "duplicate": "Duplicate",
+        "viewstudent": "View as Student",
+        "distribuir": "Distribute"
       },
       "read open": "Read description",
       "read close": "Close description",
@@ -59,8 +61,8 @@
         "educational_goals": "Educational goals"
       },
       "buttons": {
-        "view": "View assignment",
-        "teacher_guidance": "Teacher guidance",
+        "view": "View",
+        "teacher_guidance": "Guidance",
         "edit": "Edit",
         "duplicate": "Duplicate"
       },
@@ -670,6 +672,7 @@
       "finish": "Review & submit"
     },
     "confirm_exit": "Are you sure you want to close? All changes will be save.",
+    "confirm_exit_preview": "Are you sure you want to close the student view?",
     "not for you": "Teaching path not assigned to you"
   },
   "teaching_paths_list": {

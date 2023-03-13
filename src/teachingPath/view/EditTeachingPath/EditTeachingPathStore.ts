@@ -98,6 +98,10 @@ export class EditTeachingPathStore {
     return this.currentEntity!.updatedAt;
   }
 
+  public getPublishAt() {
+    return this.currentEntity!.publishedAt;
+  }
+
   @action
   public postSeletedArticle = (item: Article | null) => {
     this.selectedArticle = item;
@@ -285,8 +289,8 @@ export class EditTeachingPathStore {
 
   public getArticleFromUsedOne = (id: number) => this.usedArticles.find(article => article.id === id);
 
-  public getDraftForeignTeachingPath = async (id: number) => {
-    const data = await this.draftTeachingPathService.getDraftForeignTeachingPathById(id);
+  public getDraftForeignTeachingPath = async (id: number, isPreview?: boolean) => {
+    const data = await this.draftTeachingPathService.getDraftForeignTeachingPathById(id, isPreview);
     this.buildTeachingPathContainer(data.teachingPath);
     if (data.articles) {
       this.usedArticles = data.articles;

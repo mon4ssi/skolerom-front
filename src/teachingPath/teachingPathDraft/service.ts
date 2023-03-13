@@ -30,8 +30,8 @@ export class DraftTeachingPathService {
     return [];
   }
 
-  public getDraftForeignTeachingPathById = (id: number) =>
-    this.draftTeachingPathRepo.getDraftForeignTeachingPathById(id)
+  public getDraftForeignTeachingPathById = (id: number, isPreview?: boolean) =>
+    this.draftTeachingPathRepo.getDraftForeignTeachingPathById(id, isPreview)
 
   public getDraftTeachingPathById = async (id: number) => {
     this.draftTeachingPath = await this.draftTeachingPathRepo.getDraftTeachingPathById(id);

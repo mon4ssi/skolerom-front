@@ -284,6 +284,49 @@ export class TeachingPathApi implements TeachingPathRepo {
     }
   }
 
+  public async getTeachingPathByIdTeacher(id: number): Promise<TeachingPath> {
+    try {
+      const { data } = await API.get(`api/teacher/teaching-paths/${id}`, {
+        params: {
+          withBackground: true
+        }
+      });
+      return new TeachingPath({
+        id: data.id,
+        title: data.title,
+        description: data.description,
+        isPrivate: data.isPrivate,
+        isFinished: data.isFinished,
+        rootNodeId: data.content.id,
+        lastSelectedNodeId: data.lastSelectedNodeId,
+        featuredImage: data.featuredImage,
+        backgroundImage: data.backgroundImage,
+        minNumberOfSteps: data.minNumberOfSteps,
+        maxNumberOfSteps: data.maxNumberOfSteps,
+        author: data.author,
+        levels: data.levels,
+        answerId: data.answerId,
+        isCopy: data.isCopy,
+        deadline: data.deadline,
+        authorAvatar: data.authorPhoto
+      });
+    } catch (error) {
+      if (error.response.data.message === 'Teaching path not assigned to you') {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('teaching path passing.not for you')
+        });
+      } else if (error.response.data.message === 'Teaching path deadline passed') {
+        Notification.create({
+          type: NotificationTypes.ERROR,
+          title: intl.get('teaching path passing.validation.deadline')
+        });
+      }
+      throw error;
+    }
+
+  }
+
   public async getTeachingPathById(id: number): Promise<TeachingPath> {
     try {
       const { data } = await API.get(`api/student/teaching-paths/${id}`);
@@ -334,6 +377,17 @@ export class TeachingPathApi implements TeachingPathRepo {
     } else {
       return numberContent;
     }
+  }
+
+  public async getCurrentNodePreview(teachingPathId: number, nodeId: number): Promise<TeachingPathNode> {
+    const { data } = await API.get(`api/teacher/teaching-paths/${teachingPathId}/node/${nodeId}`);
+    this.arrayNumberContentAll = [];
+    if (!isNull(data.shortestPath)) {
+      // this.arrayNumberContentAll.push(data.shortestPath.id);
+      // this.searchShortesPath(data.shortestPath);
+    }
+    const breadcrumbs = undefined;
+    return new TeachingPathNode({ ...data, breadcrumbs });
   }
 
   public async getCurrentNode(teachingPathId: number, nodeId: number): Promise<TeachingPathNode> {
@@ -554,10 +608,17 @@ export class TeachingPathApi implements TeachingPathRepo {
     await API.delete(`api/student/teaching-paths/${teachingPathId}/answer/${answerId}`);
   }
 
-  public async copyTeachingPath(id: number): Promise<number> {
+  public async copyTeachingPath(id: number, all?: boolean): Promise<number> {
+    if (all) {
+      try {
+        const response = await API.get(`api/teacher/teaching-paths/${id}/copy/identical`);
+        return response.data.id;
+      } catch (e) {
+        throw new Error(`copy assignment ${e}`);
+      }
+    }
     try {
       const response = await API.get(`api/teacher/teaching-paths/${id}/copy`);
-
       return response.data.id;
     } catch (e) {
       throw new Error(`copy assignment ${e}`);

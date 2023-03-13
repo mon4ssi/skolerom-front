@@ -5,17 +5,15 @@ import intl from 'react-intl-universal';
 
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
 import { QuestionaryTeachingPathStore } from '../../../questionaryTeachingPath/questionaryTeachingPathStore';
-import { EditTeachingPathStore } from '../../EditTeachingPath/EditTeachingPathStore';
+
 import teachingPathImage from 'assets/images/teaching-path.svg';
 import userPlaceholder from 'assets/images/user-placeholder.png';
 import clock from 'assets/images/rounded-clock.svg';
 
 import './TeachingPathAnswerCover.scss';
-import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
 
 interface Props extends RouteComponentProps{
   questionaryTeachingPathStore?: QuestionaryTeachingPathStore;
-  content? : DraftTeachingPath;
   onClickStart(): void;
 }
 
@@ -43,13 +41,13 @@ class TeachingPathAnswerCoverComponent extends Component<Props>{
   }
 
   public render() {
-    const { questionaryTeachingPathStore, onClickStart, content } = this.props;
+    const { questionaryTeachingPathStore, onClickStart } = this.props;
     const currentTeachingPath = questionaryTeachingPathStore!.currentTeachingPath;
-    const background = content && content!.backgroundImage;
-    const avatarauthor = (content && content.authorAvatar) ? content.authorAvatar : userPlaceholder;
-    const authorname = content && content.author;
-    const numberOfSteps = content && content.numberOfSteps;
-    const newDate = (content && content.deadline) ? this.changeText(content.deadline) : '';
+    const numberOfSteps = currentTeachingPath && currentTeachingPath.numberOfSteps;
+    const background = currentTeachingPath && currentTeachingPath!.backgroundImage;
+    const avatarauthor = (currentTeachingPath && currentTeachingPath.authorAvatar) ? currentTeachingPath.authorAvatar : userPlaceholder;
+    const authorname = currentTeachingPath && currentTeachingPath.author;
+    const newDate = (currentTeachingPath && currentTeachingPath.deadline) ? this.changeText(currentTeachingPath.deadline) : '';
     return (
       <div className={'cover'} style={{ backgroundImage: `url(${background})` }}>
         <div className={'cover__content'}>
@@ -67,8 +65,9 @@ class TeachingPathAnswerCoverComponent extends Component<Props>{
               <p>{numberOfSteps && numberOfSteps.max} {intl.get('teaching path preview.steps')}</p>
             </div>
           </div>
-          <span className="assignmentTitle">{content && content.title}</span>
-          <span className="assignmentDescription">{content && content.description}</span>
+
+          <span className="assignmentTitle">{currentTeachingPath && currentTeachingPath.title}</span>
+          <span className="assignmentDescription">{currentTeachingPath && currentTeachingPath.description}</span>
 
           <div className={'startButton'} >
             <button className="CreateButton" onClick={onClickStart} ref={this.ref} title={intl.get('teaching path preview.Start teaching path')}>

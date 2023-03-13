@@ -320,7 +320,6 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
         disabled={!this.canGoToNextQuestion}
         title="Next"
       >
-        Next
         <img
           className="CurrentAssignmentPage__buttonImage"
           src={this.canGoToNextQuestion ? arrowRightRounded : arrowRightRoundedGray}
@@ -349,7 +348,6 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
           alt="arrow left"
           title="arrow left"
         />
-        Back
       </button>
     );
   }
@@ -447,7 +445,7 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
     const openTeacherGuidance: boolean = (url.searchParams.get('open') === 'tg' /* || localParamIsOpenTG!  */ ? true : false);
     const isPreview = (url.pathname.split('view').length > 1) ? true : false;
     return !isLoading && (
-      <div tabIndex={0} className="CurrentAssignmentPage">
+      <div tabIndex={0} className="CurrentAssignmentPage Paeged">
         <AppHeader
           fromAssignmentPassing
           /* isPreview */

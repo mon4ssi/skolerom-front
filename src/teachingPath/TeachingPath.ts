@@ -22,7 +22,9 @@ export interface TeachingPathRepo {
   getInReviewTeachingPathsList(filter: Filter): Promise<{ teachingPathsList: Array<TeachingPath>; total_pages: number; }>;
   getTeachingPathDataById(id: number): Promise<TeachingPath>;
   getTeachingPathById(id: number): Promise<TeachingPath>;
+  getTeachingPathByIdTeacher(id: number): Promise<TeachingPath>;
   getCurrentNode(teachingPathId: number, nodeId: number): Promise<TeachingPathNode>;
+  getCurrentNodePreview(teachingPathId: number, nodeId: number): Promise<TeachingPathNode>;
   markAsPickedArticle(teachingPathId: number, nodeId: number, idArticle: number, levelWpId: number): Promise<void>;
   sendDataDomain(domain: string): Promise<Domain>;
   getFiltersArticlePanel(lang: string): Promise<FilterArticlePanel>;
@@ -35,7 +37,7 @@ export interface TeachingPathRepo {
   finishTeachingPath(id: number): Promise<void>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
   deleteTeachingPathAnswers(teachingPathId: number, answerId: number): Promise<void>;
-  copyTeachingPath(id: number): Promise<number>;
+  copyTeachingPath(id: number, all?:boolean): Promise<number>;
   getGradeWpIds(gradeWpIds: Array<number>): Promise<Array<Grade>>;
   getSubjectWpIds(subjectWpIds: Array<number>): Promise<Array<Subject>>;
   downloadTeacherGuidancePDF(id: number): Promise<void>;
@@ -234,6 +236,10 @@ export interface TeachingPathArgs {
   numberOfArticles?: number;
   localeId?: number | null;
   canEditOrDelete?: boolean;
+  totalDistributes?: number;
+  answeredDistributes?: number;
+  defaultStartDate?: string;
+  defaultEndDate?: string;
 }
 
 export class TeachingPath {
@@ -299,6 +305,10 @@ export class TeachingPath {
   protected readonly _numberOfArticles?: number = 0;
   @observable protected _localeId?: number | null;
   @observable protected _canEditOrDelete?: boolean;
+  @observable protected _totalDistributes?: number;
+  @observable protected _answeredDistributes?: number;
+  @observable protected _defaultStartDate?: string;
+  @observable protected _defaultEndDate?: string;
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;
@@ -364,6 +374,10 @@ export class TeachingPath {
     this._numberOfArticles = args.numberOfArticles || 0;
     this._localeId = args.localeId;
     this._canEditOrDelete = args.canEditOrDelete;
+    this._totalDistributes = args.totalDistributes;
+    this._answeredDistributes = args.answeredDistributes;
+    this._defaultStartDate = args.defaultStartDate;
+    this._defaultEndDate = args.defaultEndDate;
   }
 
   @computed
@@ -434,6 +448,16 @@ export class TeachingPath {
   @computed
   public get backgroundImage() {
     return this._backgroundImage;
+  }
+
+  @computed
+  public get defaultEndDate() {
+    return this._defaultEndDate;
+  }
+
+  @computed
+  public get defaultStartDate() {
+    return this._defaultStartDate;
   }
 
   @computed
@@ -585,6 +609,16 @@ export class TeachingPath {
   }
 
   @computed
+  public get totalDistributes () {
+    return this._totalDistributes;
+  }
+
+  @computed
+  public get answeredDistributes () {
+    return this._answeredDistributes;
+  }
+
+  @computed
   public get canEditOrDelete() {
     return this._canEditOrDelete;
   }
@@ -730,6 +764,10 @@ export class TeachingPathsList {
 
   public async getTeachingPathById(id: number) {
     return this.teachingPathService.getTeachingPathById(id);
+  }
+
+  public async getTeachingPathByIdTeacher(id: number) {
+    return this.teachingPathService.getTeachingPathByIdTeacher(id);
   }
 
   public async copyTeachingPath(id: number) {

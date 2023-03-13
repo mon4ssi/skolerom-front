@@ -57,7 +57,7 @@ export interface AssignmentRepo {
     distributes: Array<AssignmentDistribute>;
     total_pages: number;
   }>;
-  copyAssignment(id: number): Promise<number>;
+  copyAssignment(id: number, all?: boolean): Promise<number>;
   getGrepFiltersAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
   getGrepFiltersMyAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
   getGrepFiltersMySchoolAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;

@@ -290,6 +290,38 @@ export class QuestionaryTeachingPathStore {
   }
 
   @action
+  public async getCurrentNodePreview(teachingPathId: number, nodeId: number) {
+    this.resetCurrentArticleList();
+    this.resetCurrentAssignmentList();
+    this.resetCurrentDomainList();
+    this.currentNode = await this.teachingPathService.getCurrentNodePreview(teachingPathId, nodeId);
+  }
+
+  public calculateCurrentNodePreviewInside = async (idTeachingPath: number, idNode: number) => {
+    this.setFetchingDataStatus(true);
+    this.resetCurrentArticleList();
+    this.resetCurrentAssignmentList();
+    this.resetCurrentDomainList();
+    await this.getCurrentNodePreview(idTeachingPath, idNode);
+    const type = this.childrenType;
+
+    switch (type) {
+      case TeachingPathNodeType.Article:
+        this.setCurrentDisplayedElement(TeachingPathNodeType.Article);
+        break;
+      case TeachingPathNodeType.Assignment:
+        this.setCurrentDisplayedElement(TeachingPathNodeType.Assignment);
+        break;
+      case TeachingPathNodeType.Domain:
+        this.setCurrentDisplayedElement(TeachingPathNodeType.Domain);
+        break;
+      default:
+        this.setCurrentDisplayedElement(SubmitNodeType.Submit);
+    }
+    this.setFetchingDataStatus(false);
+  }
+
+  @action
   public calculateCurrentNode = async (idTeachingPath: number, idNode: number) => {
     this.setFetchingDataStatus(true);
     this.resetCurrentArticleList();
@@ -408,5 +440,10 @@ export class QuestionaryTeachingPathStore {
   @action
   public getTeachingPathById = async (id: number) => {
     this.currentTeachingPath = await this.listTeachingPaths.getTeachingPathById(id);
+  }
+
+  @action
+  public getTeachingPathByIdTeacher = async (id: number) => {
+    this.currentTeachingPath = await this.listTeachingPaths.getTeachingPathByIdTeacher(id);
   }
 }

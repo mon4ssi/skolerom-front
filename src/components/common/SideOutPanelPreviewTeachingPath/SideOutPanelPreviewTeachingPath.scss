@@ -3,7 +3,7 @@
 .previewModalInfo {
   display: flex;
   flex-direction: column;
-  width: 722px;
+  width: 780px;
   background: white;
   height: calc(100% - #{$header-height});
   right: 0;
@@ -82,7 +82,7 @@
 .previewModalInfo {
   display: flex;
   flex-direction: column;
-  width: 722px;
+  width: 800px;
   background: white;
   height: calc(100% - #{$header-height});
   right: 0;
@@ -530,7 +530,12 @@
     border-top: 1px solid #D3D9DE;
     width: 100%;
     background-color: $color-white;
-
+    &.flexButtons {
+      justify-content: space-between;
+      .left {
+        display: flex;
+      }
+    }
     .actionButton {
       margin-right: 15px;
     }
@@ -652,7 +657,12 @@
       border-top: 1px solid #D3D9DE;
       width: 100%;
       background-color: $color-white;
-
+      &.flexButtons {
+        justify-content: space-between;
+        .left {
+          display: flex;
+        }
+      }
       .actionButton {
         margin-right: 8px;
       }
@@ -1024,9 +1034,18 @@
     border-top: 1px solid #D3D9DE;
     width: 100%;
     background-color: $color-white;
-
+    &.flexButtons {
+      justify-content: space-between;
+      .left {
+        display: flex;
+      }
+    }
     .actionButton {
-      margin-right: 15px;
+      margin-right: 10px;
+      .CreateButton {
+        padding: 0px 20px;
+        font-size: 1rem;
+      }
     }
   }
 }
@@ -1146,7 +1165,12 @@
       border-top: 1px solid #D3D9DE;
       width: 100%;
       background-color: $color-white;
-
+      &.flexButtons {
+        justify-content: space-between;
+        .left {
+          display: flex;
+        }
+      }
       .actionButton {
         margin-right: 8px;
       }

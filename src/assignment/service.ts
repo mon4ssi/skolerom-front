@@ -81,8 +81,8 @@ export class AssignmentService {
     return this.assignmentRepo.getAssignmentDistributes(filter);
   }
 
-  public async copyAssignment(id: number) {
-    return this.assignmentRepo.copyAssignment(id);
+  public async copyAssignment(id: number, all?: boolean) {
+    return this.assignmentRepo.copyAssignment(id, all);
   }
 
   public async downloadTeacherGuidancePDF(id: number) {

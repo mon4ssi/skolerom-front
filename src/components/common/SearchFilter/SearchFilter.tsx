@@ -682,7 +682,8 @@ class SearchFilter extends Component<Props, State> {
 
   public renderFiltersLocale = () => {
     const { handleClickLocale, customLocalesList, defaultValueLocaleFilter } = this.props;
-    const locales = (customLocalesList!).sort((a, b) => (a.title > b.title) ? 1 : -1);
+    // const locales = (customLocalesList!).sort((a, b) => (a.title > b.title) ? 1 : -1);
+    const locales = customLocalesList;
     const arrayDefaults = (defaultValueLocaleFilter) ? defaultValueLocaleFilter.split(',') : [];
 
     const visibleLang = locales!.map((item) => {
