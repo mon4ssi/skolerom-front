@@ -473,7 +473,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
         {!isDomain && withButtons && this.renderActionButtons()}
         {isDomain && withButtons && this.renderDomainButtons()}
         <button title={title} onClick={this.onCardImgClick} >
-          <img src={img || placeholderImgDefault} alt={title} title={title} className="cardImage" onError={this.isErrorImg} />
+          <div style={{ backgroundImage: `url(${img || placeholderImgDefault})` }} className="cardImage" />
         </button>
         <div className="cardInfo flexBox dirColumn spaceBetween">
           <div>
