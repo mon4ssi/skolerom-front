@@ -172,10 +172,6 @@ export class AnswerCover extends Component<Props> {
             <h4>{authorname}</h4>
           </div>
           <div className="metaInfo">
-            <div className="metaInfo__deadline">
-              <img src={clock} />
-              <p>{intl.get('teaching path preview.deadline')} {newDate}</p>
-            </div>
             <div className="metaInfo__steps">
               <img src={teachingPathImage} />
               <p>{currentQuestionaryStore && currentQuestionaryStore!.numberOfQuestions} {intl.get('teaching path preview.steps')}</p>

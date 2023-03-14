@@ -38,7 +38,7 @@
 
         &__close {
             position:absolute;
-            left: 98%;
+            right: -21px;
             top: -15px;
             cursor: pointer;            
             background: transparent;
@@ -209,7 +209,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 7;
+    z-index: 17;
     width: 100%;
     height: 100%;
     background: #000;
