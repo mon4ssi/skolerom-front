@@ -359,7 +359,7 @@ export class CurrentAssignmentPagePreview extends Component<CurrentAssignmentPag
     </div>
   )
 
-  public renderBreadcrumbsIfNeeded = () => this.props.location.state && this.props.location.state.node && (
+  public renderBreadcrumbsIfNeeded = () => (
     <div className="CurrentAssignmentPage__mybreadcrumbs">
       {this.renderBackButton()}
       <BreadcrumbsTeachingPath getCurrentNodeFromAssignment={this.redirectToCurrentNode} />
