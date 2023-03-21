@@ -54,7 +54,7 @@ export class AnswerCover extends Component<Props> {
     newContent[0].classList.add('questionBody');
     if (this.props.isdontTeaching) {
       const breadcrumbeArray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__mybreadcrumbs') as HTMLCollectionOf<HTMLElement>);
-      breadcrumbeArray[0].style.display = 'flex';
+      if (breadcrumbeArray[0]) { breadcrumbeArray[0].style.display = 'flex'; }
     }
   }
 
