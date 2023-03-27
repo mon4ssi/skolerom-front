@@ -170,5 +170,45 @@ $my-account-padding: 19px;
 
   .MyAccountWindow__list_mobile {
     display: block;
+    .MyAccountWindow__item {
+      display: block;
+      padding-bottom: 10px;
+      a {
+        font-weight: 300;
+        padding: 7px 0px;
+        display: block;
+        border-bottom: solid 1px #E9ECEF;
+        &.drowDown {
+          font-weight: 400;
+          position: relative;
+          &:before {
+            content: '';
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            border-left: solid 2px #0b2541;
+            border-bottom: solid 2px #0b2541;
+            transform: rotate(-45deg);
+            top: 7px;
+            right: 5px;
+          }
+        }
+      }
+      .MyAccountWindow__submenu {
+        display: none;
+      }
+      &:last-child {
+        a {
+          &.drowDown {
+            border: none;
+          }
+        }
+      }
+      &:hover {
+        .MyAccountWindow__submenu {
+          display: block;
+        }
+      }
+    }
   }
 }
