@@ -153,55 +153,6 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
         }
       );
     }
-    if (store!.currentEntity!.isPrivate) {
-      this.setState(
-        {
-          isValid: true,
-          isValidPrivate: true
-        },
-        () => {
-          if (store!.currentEntity!.isMySchool) {
-            this.setState(
-              {
-                isValid: true,
-                isMyStateSchool: true,
-                isValidPrivate: false
-              }
-            );
-            this.props.store!.currentEntity!.setIsMySchool(true);
-            if (this.state.valueGoalsOptions.length === 0) {
-              this.setState({ isValid: false });
-            }
-          } else {
-            this.setState(
-              {
-                isValid: false,
-                isMyStateSchool: false,
-                isValidPrivate: true
-              }
-            );
-            this.props.store!.currentEntity!.setIsMySchool(false);
-          }
-          this.sendValidbutton();
-        }
-      );
-    } else {
-      this.setState(
-        {
-          isValid: false,
-          isValidPrivate: false,
-          isMyStateSchool: false
-        },
-        () => {
-          if (store!.currentEntity!.inReview) {
-            this.setState({ isReview: true });
-            this.props.store!.currentEntity!.setIsInReview(true);
-          }
-          this.props.store!.currentEntity!.setIsMySchool(false);
-        }
-      );
-      this.sendValidbutton();
-    }
     this.setState({ IsVisibilityButtons: false });
     const myschools = store!.getCurrentUser()!.schools;
     const arraySchoolIds = this.state.optionsMySchool;
@@ -307,6 +258,56 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
         page: grepFiltergoalssDataAwait.total_pages
       }
     );
+
+    if (store!.currentEntity!.isPrivate) {
+      this.setState(
+        {
+          isValid: true,
+          isValidPrivate: true
+        },
+        () => {
+          if (store!.currentEntity!.isMySchool) {
+            this.setState(
+              {
+                isValid: true,
+                isMyStateSchool: true,
+                isValidPrivate: false
+              }
+            );
+            this.props.store!.currentEntity!.setIsMySchool(true);
+            if (this.state.valueGoalsOptions.length === 0) {
+              this.setState({ isValid: false });
+            }
+          } else {
+            this.setState(
+              {
+                isValid: false,
+                isMyStateSchool: false,
+                isValidPrivate: true
+              }
+            );
+            this.props.store!.currentEntity!.setIsMySchool(false);
+          }
+          this.sendValidbutton();
+        }
+      );
+    } else {
+      this.setState(
+        {
+          isValid: false,
+          isValidPrivate: false,
+          isMyStateSchool: false
+        },
+        () => {
+          if (store!.currentEntity!.inReview) {
+            this.setState({ isReview: true });
+            this.props.store!.currentEntity!.setIsInReview(true);
+          }
+          this.props.store!.currentEntity!.setIsMySchool(false);
+        }
+      );
+      this.sendValidbutton();
+    }
     if (grepFiltergoalssDataAwait.data.length > 0) { this.setState({ loadingGoals: false }); }
     if (document.getElementById('publishingInfo')) {
       document.getElementById('publishingInfo')!.addEventListener('scroll', this.handerScroll);
@@ -1533,10 +1534,18 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
               this.props.store!.setIsActiveButtonsFalse();
             }
           } else {
-            this.props.store!.setIsActiveButtonsFalse();
+            if (this.state.isValidPrivate && this.state.optionsMyGrades.length > 0 && this.state.optionsMySubjects.length > 0) {
+              this.props.store!.setIsActiveButtons();
+            } else {
+              this.props.store!.setIsActiveButtonsFalse();
+            }
           }
         } else {
-          this.props.store!.setIsActiveButtonsFalse();
+          if (this.state.isValidPrivate) {
+            this.props.store!.setIsActiveButtons();
+          } else {
+            this.props.store!.setIsActiveButtonsFalse();
+          }
         }
       }
     } else {
