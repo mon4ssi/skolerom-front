@@ -182,6 +182,55 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
         }
       );
     }
+    if (store!.currentEntity!.isPrivate) {
+      this.setState(
+        {
+          isValid: true,
+          isValidPrivate: true
+        },
+        () => {
+          if (store!.currentEntity!.isMySchool) {
+            this.setState(
+              {
+                isValid: true,
+                isMyStateSchool: true,
+                isValidPrivate: false
+              }
+            );
+            this.props.store!.currentEntity!.setIsMySchool(true);
+            if (this.state.valueGoalsOptions.length === 0) {
+              this.setState({ isValid: false });
+            }
+          } else {
+            this.setState(
+              {
+                isValid: false,
+                isMyStateSchool: false,
+                isValidPrivate: true
+              }
+            );
+            this.props.store!.currentEntity!.setIsMySchool(false);
+          }
+          this.sendValidbutton();
+        }
+      );
+    } else {
+      this.setState(
+        {
+          isValid: false,
+          isValidPrivate: false,
+          isMyStateSchool: false
+        },
+        () => {
+          if (store!.currentEntity!.inReview) {
+            this.setState({ isReview: true });
+            this.props.store!.currentEntity!.setIsInReview(true);
+          }
+          this.props.store!.currentEntity!.setIsMySchool(false);
+        }
+      );
+      this.sendValidbutton();
+    }
     if (typeof (store!.currentEntity!.localeId!) !== 'undefined' && store!.currentEntity!.localeId! !== null) {
       this.setState({ valueLocaleId: store!.currentEntity!.localeId! });
     } else {
@@ -258,56 +307,6 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
         page: grepFiltergoalssDataAwait.total_pages
       }
     );
-
-    if (store!.currentEntity!.isPrivate) {
-      this.setState(
-        {
-          isValid: true,
-          isValidPrivate: true
-        },
-        () => {
-          if (store!.currentEntity!.isMySchool) {
-            this.setState(
-              {
-                isValid: true,
-                isMyStateSchool: true,
-                isValidPrivate: false
-              }
-            );
-            this.props.store!.currentEntity!.setIsMySchool(true);
-            if (this.state.valueGoalsOptions.length === 0) {
-              this.setState({ isValid: false });
-            }
-          } else {
-            this.setState(
-              {
-                isValid: false,
-                isMyStateSchool: false,
-                isValidPrivate: true
-              }
-            );
-            this.props.store!.currentEntity!.setIsMySchool(false);
-          }
-          this.sendValidbutton();
-        }
-      );
-    } else {
-      this.setState(
-        {
-          isValid: false,
-          isValidPrivate: false,
-          isMyStateSchool: false
-        },
-        () => {
-          if (store!.currentEntity!.inReview) {
-            this.setState({ isReview: true });
-            this.props.store!.currentEntity!.setIsInReview(true);
-          }
-          this.props.store!.currentEntity!.setIsMySchool(false);
-        }
-      );
-      this.sendValidbutton();
-    }
     if (grepFiltergoalssDataAwait.data.length > 0) { this.setState({ loadingGoals: false }); }
     if (document.getElementById('publishingInfo')) {
       document.getElementById('publishingInfo')!.addEventListener('scroll', this.handerScroll);
