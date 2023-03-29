@@ -153,6 +153,35 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
         }
       );
     }
+    this.setState({ IsVisibilityButtons: false });
+    const myschools = store!.getCurrentUser()!.schools;
+    const arraySchoolIds = this.state.optionsMySchool;
+    const editSchools = this.props.store!.currentEntity!.getMySchool();
+    if (editSchools && editSchools!.length > 0) {
+      editSchools!.forEach((school) => {
+        arraySchoolIds.push(school.id);
+      });
+    } else {
+      myschools.forEach((school) => {
+        arraySchoolIds.push(school.id);
+      });
+    }
+    this.setState({ optionsMySchool: arraySchoolIds });
+    this.props.store!.currentEntity!.setMySchool(String(arraySchoolIds));
+    if (typeof (store!.currentEntity!.getListOfSources()) !== 'undefined') {
+      this.setState(
+        {
+          valueSourceOptions: store!.currentEntity!.getListOfSources()!
+        }
+      );
+    }
+    if (typeof (store!.currentEntity!.getListOfKeywords()) !== 'undefined') {
+      this.setState(
+        {
+          valueKeywordsOptions: store!.currentEntity!.getListOfKeywords()!
+        }
+      );
+    }
     if (store!.currentEntity!.isPrivate) {
       this.setState(
         {
@@ -201,35 +230,6 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
         }
       );
       this.sendValidbutton();
-    }
-    this.setState({ IsVisibilityButtons: false });
-    const myschools = store!.getCurrentUser()!.schools;
-    const arraySchoolIds = this.state.optionsMySchool;
-    const editSchools = this.props.store!.currentEntity!.getMySchool();
-    if (editSchools && editSchools!.length > 0) {
-      editSchools!.forEach((school) => {
-        arraySchoolIds.push(school.id);
-      });
-    } else {
-      myschools.forEach((school) => {
-        arraySchoolIds.push(school.id);
-      });
-    }
-    this.setState({ optionsMySchool: arraySchoolIds });
-    this.props.store!.currentEntity!.setMySchool(String(arraySchoolIds));
-    if (typeof (store!.currentEntity!.getListOfSources()) !== 'undefined') {
-      this.setState(
-        {
-          valueSourceOptions: store!.currentEntity!.getListOfSources()!
-        }
-      );
-    }
-    if (typeof (store!.currentEntity!.getListOfKeywords()) !== 'undefined') {
-      this.setState(
-        {
-          valueKeywordsOptions: store!.currentEntity!.getListOfKeywords()!
-        }
-      );
     }
     if (typeof (store!.currentEntity!.localeId!) !== 'undefined' && store!.currentEntity!.localeId! !== null) {
       this.setState({ valueLocaleId: store!.currentEntity!.localeId! });
@@ -1533,10 +1533,18 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
               this.props.store!.setIsActiveButtonsFalse();
             }
           } else {
-            this.props.store!.setIsActiveButtonsFalse();
+            if (this.state.isValidPrivate && this.state.optionsMyGrades.length > 0 && this.state.optionsMySubjects.length > 0) {
+              this.props.store!.setIsActiveButtons();
+            } else {
+              this.props.store!.setIsActiveButtonsFalse();
+            }
           }
         } else {
-          this.props.store!.setIsActiveButtonsFalse();
+          if (this.state.isValidPrivate) {
+            this.props.store!.setIsActiveButtons();
+          } else {
+            this.props.store!.setIsActiveButtonsFalse();
+          }
         }
       }
     } else {

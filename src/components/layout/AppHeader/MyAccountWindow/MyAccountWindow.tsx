@@ -22,7 +22,12 @@ interface INavigationItem {
   name: string;
   url: string;
 }
-
+interface HeaderNavigationLink {
+  name: string;
+  url: string;
+  dropdown?: boolean;
+  submenuItems?: Array<HeaderNavigationLink>;
+}
 enum Screen {
   MAIN,
   LOCALE,
@@ -32,7 +37,7 @@ enum Screen {
 interface MyAccountWindowProps {
   uiStore?: UIStore;
   loginStore?: LoginStore;
-  navigation: Array<INavigationItem>;
+  navigation: Array<HeaderNavigationLink>;
   onLogIn: () => void;
   closeMyAccountWindow(e: SyntheticEvent): void;
 }
@@ -98,13 +103,34 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
     this.containerRef.current!.style.height = 'auto';
   }
 
-  private renderNavigation = (link: INavigationItem) => (
-    <li key={link.url} className="MyAccountWindow__item">
-      <div className="MyAccountWindow__itemText">
-        <a href={link.url} className="MyAccountWindow__link">{intl.get(`header.${link.name}`)}</a>
-      </div>
-    </li>
-  )
+  private renderNavigation = (link: HeaderNavigationLink) => {
+    if (link.dropdown) {
+      const renderSubmenu = (item: HeaderNavigationLink) => (
+        <li key={item.name} className={'MyAccountWindow__link'}>
+          <a href={item.url} title={item.name} role="button">{item.name}</a>
+        </li>
+      );
+      return (
+        <li key={link.url} className="MyAccountWindow__item">
+          <div className="MyAccountWindow__itemText">
+            <a href={link.url} className="MyAccountWindow__link drowDown">{link.name}</a>
+          </div>
+          <div className="MyAccountWindow__submenu">
+            <ul>
+              {link.submenuItems!.map(renderSubmenu)}
+            </ul>
+          </div>
+        </li>
+      );
+    }
+    return (
+      <li key={link.url} className="MyAccountWindow__item">
+        <div className="MyAccountWindow__itemText">
+          <a href={link.url} className="MyAccountWindow__link drowDown">{link.name}</a>
+        </div>
+      </li>
+    );
+  }
 
   private renderLogOutButtonIfNeeded() {
     return this.props.loginStore!.currentUser
@@ -171,6 +197,24 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
         {this.renderUserNameIfPossible()}
         <ul className="MyAccountWindow__list MyAccountWindow__list_separated MyAccountWindow__list_mobile">
           {navigation.map(this.renderNavigation)}
+          <li className="MyAccountWindow__item">
+            <div className="MyAccountWindow__itemText">
+              <a href="#" className="MyAccountWindow__link drowDown">{intl.get('header.About')}</a>
+            </div>
+            <div className="MyAccountWindow__submenu">
+              <ul>
+                <li className={'MyAccountWindow__link'}>
+                  <a href={`${process.env.REACT_APP_WP_URL}/hva-er-skolerom`} title={intl.get('header.About skolerom')} target="_blank" role="button">{intl.get('header.About skolerom')}</a>
+                </li>
+                <li className={'MyAccountWindow__link'}>
+                  <a href={`${process.env.REACT_APP_WP_URL}/kontakt-oss`} title={intl.get('header.contact')} target="_blank" role="button">{intl.get('header.contact')}</a>
+                </li>
+                <li className={'MyAccountWindow__link'}>
+                  <a href={`${process.env.REACT_APP_WP_URL}/support-skolerom`} title={intl.get('generals.support')} target="_blank" role="button">{intl.get('generals.support')}</a>
+                </li>
+              </ul>
+            </div>
+          </li>
         </ul>
         {this.renderLocaleChooserIfNeeded()}
         {this.renderChangeFontSize()}
@@ -286,7 +330,7 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
         <div id="aux3" className="hidden">Not name</div>
         <input type="text" aria-labelledby="aux3" autoFocus className="hidden"/>
         <ul className="MyAccountWindow__list">
-        {fontsStore.map(renderFont)}
+          {fontsStore.map(renderFont)}
         </ul>
       </>
     );
