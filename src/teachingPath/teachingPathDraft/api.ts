@@ -104,7 +104,7 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
   public createTeachingPath = async () => {
     try {
       const response: AxiosResponse<DraftTeachingPathResponseDTO> = await API.get(
-        '/api/teacher/teaching-paths/create'
+        '/api/teacher/teaching-paths/create?locale_id=1'
       );
       return buildNewTeachingPath(response.data);
     } catch (error) {
@@ -119,7 +119,7 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
   public getDraftTeachingPathById = async (id: number) => {
     try {
       const response: AxiosResponse<DraftTeachingPathResponseDTO> = await API.get(
-        `/api/teacher/teaching-paths/draft/${id}/edit`
+        `/api/teacher/teaching-paths/draft/${id}/edit?localeId=1`
       );
       return response.data.content ?
         buildDraftTeachingPath(response.data) :
@@ -155,11 +155,11 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
 
   public saveTeachingPath = async (teachingPath: DraftTeachingPath): Promise<string> => {
     const dto = buildTeachingPathRequestDTO(teachingPath);
+    const localIdNumber = (dto.localeId) ? dto.localeId : 1;
     // const featuredImage = buildFeatureImageForTeachingPathRequestDTO(dto.content);
-
     try {
       const response = await API.put(
-        `/api/teacher/teaching-paths/draft/${teachingPath.id}`, {
+        `/api/teacher/teaching-paths/draft/${teachingPath.id}?localeId=${localIdNumber}`, {
           ...dto
         }
       );
