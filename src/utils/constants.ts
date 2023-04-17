@@ -91,6 +91,19 @@ export const LANGUAGESB = [
     id: 2
   }
 ];
+
+export const LANGUAGESC = [
+  {
+    name: 'Bokmål',
+    code: Locales.NB,
+    id: 3
+  },
+  {
+    name: 'Nynorsk',
+    code: Locales.NN,
+    id: 2
+  }
+];
 // STATUSES
 
 export const STATUS_CONFLICT = 409;
