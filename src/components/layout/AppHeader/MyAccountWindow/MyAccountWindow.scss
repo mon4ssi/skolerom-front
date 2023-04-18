@@ -170,6 +170,31 @@ $my-account-padding: 19px;
 
   .MyAccountWindow__list_mobile {
     display: block;
+    .AppHeader__dropdownItem__subMenuMobile {
+      display: none;
+    }
+
+    .activeMobileSubMenu {
+      a {
+        &.identSubMenu {
+          position: relative;
+          &:before {          
+            content: '';
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            border-left: solid 2px #0b2541;
+            border-bottom: solid 2px #0b2541;
+            transform: rotate(-45deg);
+            top: 7px;
+            right: 5px;
+          }
+        }
+      }
+      &:hover {
+        .AppHeader__dropdownItem__subMenuMobile { display: block;}
+      }
+    }
     .MyAccountWindow__item {
       display: block;
       padding-bottom: 10px;
