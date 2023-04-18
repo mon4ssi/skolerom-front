@@ -14,7 +14,6 @@ const N5 = 5;
 const N4 = 4;
 const N3 = 3;
 const N20 = 20;
-const N21 = 21;
 
 export const SAVE_DELAY = 2000;
 export const DEBOUNCE_TIME = 500;
