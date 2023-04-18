@@ -219,7 +219,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     linksMenu: []
   };
 
-  private renderUserModalIfNeeded() {
+  private renderUserModalIfNeeded(myLinks: Array<HeaderNavigationLink>) {
     return (
       <CSSTransition
         unmountOnExit
@@ -228,7 +228,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         timeout={ANIMATION_TIMEOUT}
       >
         <MyAccountWindowWrapper
-          navigation={tabletHeaderLinks}
+          navigation={myLinks}
           closeMyAccountWindow={this.closeModals}
           onLogIn={this.getFeideUrl}
         />
@@ -647,8 +647,9 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
 
   public renderNavigationNotLogin = () => {
     const { uiStore } = this.props;
-    const linksList = uiStore!.currentLocale === 'nn' ? nynorskHeaderLinks : headerLinks;
+    // const linksList = uiStore!.currentLocale === 'nn' ? nynorskHeaderLinks : headerLinks;
     const tabletLinksList = uiStore!.currentLocale === 'nn' ? nynorskHeaderLinks : headerLinks;
+    const linksList = this.state.linksMenu;
 
     return (
       <>
@@ -658,8 +659,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
           {this.renderItemsNotLogin()}
         </ul>
         <ul className="AppHeader__navigation AppHeader__navigation_tablet">
-          {tabletLinksList.map(renderHeaderLink)}
-          {this.renderQuestionTab()}
+          {linksList.map(renderHeaderLink)}
           {this.renderItemsNotLogin()}
         </ul>
       </>
@@ -773,6 +773,18 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     }
   }
 
+  public renderHelpButton = () => {
+    const { loginStore } = this.props;
+    return (
+      <a
+        className="AppHeader__block AppHeader__buttonMobile AppHeader__block_mobile AppHeader__helpMenuButton"
+        href={`${process.env.REACT_APP_WP_URL}/support-skolerom`}
+      >
+        <img src={question} alt="help menu" />
+      </a>
+    );
+  }
+
   public renderMobileButton = () => {
     if (this.props.loginStore!.currentUser) {
       return (
@@ -787,11 +799,11 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     }
     return (
       <button
-        className="AppHeader__block AppHeader__button AppHeader__block_mobile AppHeader__userMenuButton"
+        className="AppHeader__block AppHeader__buttonMobile AppHeader__block_mobile AppHeader__userMenuButton notLoginMenu"
         onClick={this.showMobileModal}
         title="user menu"
       >
-        <img src={verticalDots} alt="user menu" />
+        <img src={burger} alt="user menu" />
       </button>
     );
   }
@@ -808,14 +820,20 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     );
   }
 
+  public renderModalMobileButton = () => {
+    const linksList = this.state.linksMenu;
+    return (
+      <div className="singleElements">
+        <ul>
+          {linksList.map(renderHeaderLink)}
+          {this.renderItemsNotLogin()}
+        </ul>
+      </div>
+    );
+  }
+
   public renderLineMobileButton = () => (
     <div className="singleFlexElements AppHeader__block">
-      {this.renderItemsNotLogin()}
-    </div>
-  )
-
-  public renderModalMobileButton = () => (
-    <div className="singleElements">
       {this.renderItemsNotLogin()}
     </div>
   )
@@ -837,7 +855,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
 
     return (
       <header className={classCreation}>
-        {this.renderUserModalIfNeeded()}
+        {this.renderUserModalIfNeeded(this.state.linksMenu)}
         {this.state.modalVisible !== Modals.NONE && <div className="AppHeader__headerOverlay" onClick={this.closeModals} />}
         {!fromAssignmentPassing && !fromTeachingPathPassing && <p id="LogoDescription" className="hidden">Logo Skolerom</p>}
         {fromAssignmentPassing && fromTeachingPathPassing && <p id="LogoDescriptionStudent" className="hidden">Logo Skolerom</p>}
@@ -862,7 +880,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
           </NavLink>
         </div>
         <div className={'AppHeader__block_mobile AppHeader__block'}>
-          {this.renderQuestionTab()}
+          {this.renderHelpButton()}
           {this.renderMobileButton()}
           {this.state.isMobileModalOpen && this.renderModalMobileButton()}
         </div>

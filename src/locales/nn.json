@@ -33,7 +33,7 @@
         "educational_goals": "Kompetansemål"
       },
       "buttons": {
-        "view": "Se sti",
+        "view": "Se Læringsstier",
         "teacher_guidance": "Lærerveiledning",
         "edit": "Rediger",
         "duplicate": "Kopier",
@@ -41,7 +41,7 @@
         "distribuir": "Distribuer"
       },
       "read open": "Les beskrivelse",
-      "read close": "Nær description",
+      "read close": "Skjul beskrivelse",
       "read again": "Les igjen",
       "read article": "Les artikkelen",
       "read external": "Åpne lenke"

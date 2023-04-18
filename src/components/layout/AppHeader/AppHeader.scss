@@ -283,7 +283,9 @@ li.AppHeader__dropdownItem__subItem:hover {
     display: flex;
     justify-content: space-between;
   }
-
+  .AppHeader__buttonMobile {
+    background: transparent;
+  }
   .AppHeader__navigation_tablet {
     display: none;
   }
@@ -415,8 +417,42 @@ li.AppHeader__dropdownItem__subItem:hover {
   top: 80px;
   right: 20px;
   background: white;
-  padding: 20px;
+  padding: 20px 15px;
   box-shadow: 0 3px 5px 0 #00000024;
+  ul {
+    li {
+      margin: 0px;
+      width: 100%;
+      display: block;
+      margin-bottom: 10px;
+      .AppHeader__dropdown {
+        font-size: 18px;
+        font-weight: 300;
+        justify-content: space-between;
+        width: 100%;
+        border-bottom: 1px solid #E9ECEF;
+        padding: 5px 0px;
+      }
+      .AppHeader__submenuWrapper {
+        position: relative;
+        padding-top: 0px;
+        display: none;
+      }
+      .AppHeader__dropdown:focus {
+        display: flex;
+      }
+      .AppHeader__navigationItemText:hover .AppHeader__submenuWrapper {
+        display: block;
+      }
+      .AppHeader__submenu {
+        border: none;
+        li {
+          padding: 10px 0px;
+          margin-bottom: 0px;
+        }
+      }
+    }
+  }
 }
 
 .singleListElementsSimple {

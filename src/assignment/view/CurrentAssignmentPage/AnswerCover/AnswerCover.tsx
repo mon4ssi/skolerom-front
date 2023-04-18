@@ -38,7 +38,7 @@ export class AnswerCover extends Component<Props> {
     newContent[0].classList.remove('questionBody');
     if (this.props.isdontTeaching) {
       const breadcrumbeArray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__mybreadcrumbs') as HTMLCollectionOf<HTMLElement>);
-      breadcrumbeArray[0].style.display = 'none';
+      if (breadcrumbeArray[0]) { breadcrumbeArray[0].style.display = 'none'; }
     }
     if (this.ref.current) {
       this.ref.current!.focus();
@@ -54,7 +54,7 @@ export class AnswerCover extends Component<Props> {
     newContent[0].classList.add('questionBody');
     if (this.props.isdontTeaching) {
       const breadcrumbeArray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__mybreadcrumbs') as HTMLCollectionOf<HTMLElement>);
-      breadcrumbeArray[0].style.display = 'flex';
+      if (breadcrumbeArray[0]) { breadcrumbeArray[0].style.display = 'flex'; }
     }
   }
 
@@ -172,10 +172,6 @@ export class AnswerCover extends Component<Props> {
             <h4>{authorname}</h4>
           </div>
           <div className="metaInfo">
-            <div className="metaInfo__deadline">
-              <img src={clock} />
-              <p>{intl.get('teaching path preview.deadline')} {newDate}</p>
-            </div>
             <div className="metaInfo__steps">
               <img src={teachingPathImage} />
               <p>{currentQuestionaryStore && currentQuestionaryStore!.numberOfQuestions} {intl.get('teaching path preview.steps')}</p>

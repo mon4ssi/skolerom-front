@@ -10,7 +10,7 @@
     border: 1px solid rgba(0,0,0,.2);
     border-radius: 0.3rem;
     outline: 0;
-    z-index: 9;
+    z-index: 19;
     display: none;
 
     &__header {
@@ -38,7 +38,7 @@
 
         &__close {
             position:absolute;
-            left: 98%;
+            right: -20px;
             top: -15px;
             cursor: pointer;            
             background: transparent;
@@ -209,7 +209,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 7;
+    z-index: 17;
     width: 100%;
     height: 100%;
     background: #000;

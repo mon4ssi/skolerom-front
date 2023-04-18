@@ -119,7 +119,7 @@ export class StudentsAssigning extends Component<Props, State> {
             <img src={clockImg} alt="deadline" />
             {dueDate}
             (
-              <button onClick={this.toggleOpenCalendar} title={intl.get('distribution_page.change')}>
+              <button className="deadlineInfo__button" onClick={this.toggleOpenCalendar} title={intl.get('distribution_page.change')}>
               {intl.get('distribution_page.change')}
               </button>
             )

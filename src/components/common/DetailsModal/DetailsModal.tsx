@@ -138,9 +138,15 @@ export class DetailsModal extends Component<Props, State> {
 
   public openModalDetail = () => {
     this.setState({ isOpen: true });
+    const breadcrumbsArray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__mybreadcrumbs') as HTMLCollectionOf<HTMLElement>);
+    if (breadcrumbsArray[0]) { breadcrumbsArray[0].style.display = 'none'; }
+    if (breadcrumbsArray[1]) { breadcrumbsArray[1].style.display = 'none'; }
   }
   public closeModalDetail = () => {
     this.setState({ isOpen: false });
+    const breadcrumbsArray = Array.from(document.getElementsByClassName('CurrentAssignmentPage__mybreadcrumbs') as HTMLCollectionOf<HTMLElement>);
+    if (breadcrumbsArray[0]) { breadcrumbsArray[0].style.display = 'flex'; }
+    if (breadcrumbsArray[1]) { breadcrumbsArray[1].style.display = 'flex'; }
   }
   public buttonOpenDetailsModal = () => {
     const { isOpen } = this.state;

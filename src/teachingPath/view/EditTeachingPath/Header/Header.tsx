@@ -138,7 +138,6 @@ export class HeaderComponent extends Component<Props> {
     const isCopy = editTeachingPathStore!.teachingPathContainer!.teachingPath!.isCopy;
     const sources = editTeachingPathStore!.teachingPathContainer!.teachingPath!.sources;
     const displayInOpenSite = editTeachingPathStore!.teachingPathContainer!.teachingPath!.open;
-
     if (!editTeachingPathStore!.isActiveButtons) {
       const grepGoals = editTeachingPathStore!.teachingPathContainer!.teachingPath.grepGoalsIds;
       const msj = (typeof (grepGoals) === 'undefined') ? intl.get('edit_teaching_path.header.cant_publish_goals') : (grepGoals!.length === 0) ? intl.get('edit_teaching_path.header.cant_publish_goals') : intl.get('edit_teaching_path.header.cant_publish');
