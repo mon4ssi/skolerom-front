@@ -105,11 +105,37 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
 
   private renderNavigation = (link: HeaderNavigationLink) => {
     if (link.dropdown) {
-      const renderSubmenu = (item: HeaderNavigationLink) => (
-        <li key={item.name} className={'MyAccountWindow__link'}>
+      const renderSubMenuSubMenu = (item: HeaderNavigationLink) => (
+        <li key={item.name} className={'AppHeader__dropdownItem__subItem'}>
           <a href={item.url} title={item.name} role="button">{item.name}</a>
         </li>
       );
+      const renderSubmenu = (item: HeaderNavigationLink) => {
+        if (item.dropdown) {
+          let maxLength = 0;
+          if (item.submenuItems) {
+            item.submenuItems.forEach((element) => {
+              if (element.name.length > maxLength) {
+                maxLength = element.name.length;
+              }
+            });
+          }
+          const classInside = 'AppHeader__dropdownItem__subMenuMobile';
+          return (
+            <li key={item.name} className={'MyAccountWindow__itemText activeMobileSubMenu'}>
+              <a href={item.url} title={item.name} role="button" className="identSubMenu">{item.name}</a>
+              <ul className={classInside}>
+                {item.submenuItems!.map(renderSubMenuSubMenu)}
+              </ul>
+            </li>
+          );
+        }
+        return (
+          <li key={item.name} className={'MyAccountWindow__link'}>
+            <a href={item.url} title={item.name} role="button">{item.name}</a>
+          </li>
+        );
+      };
       return (
         <li key={link.url} className="MyAccountWindow__item">
           <div className="MyAccountWindow__itemText">
