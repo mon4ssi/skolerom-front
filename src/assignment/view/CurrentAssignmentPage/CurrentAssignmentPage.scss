@@ -231,7 +231,7 @@
   }
 }
 
-@media screen and (min-width: 1480px) {
+@media screen and (max-width: 1480px) {
   .CurrentAssignmentPage {
     .AppHeader {
       .CreateButton {
@@ -241,7 +241,7 @@
   }
 }
 
-@media screen and (min-width: 1350px) {
+@media screen and (max-width: 1350px) {
   .CurrentAssignmentPage {
     .AppHeader {
       .CreateButton {
