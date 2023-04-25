@@ -1,7 +1,7 @@
 import { computed, observable, toJS } from 'mobx';
 import intl from 'react-intl-universal';
 
-import { LenguajesB, Grade, GreepElements, Subject, Article, Assignment, Attachment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData, Source, NowSchool, SourceItem, CoreElementItem, EducationalGoalItem, GenericGrepItem } from 'assignment/Assignment';
+import { Translations, LenguajesB, Grade, GreepElements, Subject, Article, Assignment, Attachment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData, Source, NowSchool, SourceItem, CoreElementItem, EducationalGoalItem, GenericGrepItem } from 'assignment/Assignment';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from './service';
 import { injector } from '../Injector';
 
@@ -240,6 +240,7 @@ export interface TeachingPathArgs {
   answeredDistributes?: number;
   defaultStartDate?: string;
   defaultEndDate?: string;
+  translations?: Array<Translations>;
 }
 
 export class TeachingPath {
@@ -309,6 +310,7 @@ export class TeachingPath {
   @observable protected _answeredDistributes?: number;
   @observable protected _defaultStartDate?: string;
   @observable protected _defaultEndDate?: string;
+  @observable protected _translations?: Array<Translations>;
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;
@@ -378,6 +380,7 @@ export class TeachingPath {
     this._answeredDistributes = args.answeredDistributes;
     this._defaultStartDate = args.defaultStartDate;
     this._defaultEndDate = args.defaultEndDate;
+    this._translations = args.translations;
   }
 
   @computed
@@ -609,6 +612,11 @@ export class TeachingPath {
   }
 
   @computed
+  public get translations() {
+    return this._translations;
+  }
+
+  @computed
   public get totalDistributes () {
     return this._totalDistributes;
   }
@@ -621,6 +629,10 @@ export class TeachingPath {
   @computed
   public get canEditOrDelete() {
     return this._canEditOrDelete;
+  }
+
+  public getListOfTranslations() {
+    return toJS(this._translations);
   }
 
   public getListOfSubjects() {

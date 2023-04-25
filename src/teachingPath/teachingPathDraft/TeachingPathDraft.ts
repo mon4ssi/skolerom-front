@@ -28,9 +28,10 @@ export interface DraftTeachingPathRepo {
   saveTeachingPath: (teachingPath: DraftTeachingPath) => Promise<string>;
   publishTeachingPath: (teachingPath: DraftTeachingPath) => Promise<void>;
   createTeachingPath: () => Promise<DraftTeachingPath>;
+  createTeachingPathLocale: (id: number, localeid?: number) => Promise<DraftTeachingPath>;
   getKeywordsFromArticles: (arrayArticlesIds: Array<number>, arrayAsignmentsIds: Array<number>) => Promise<Array<string>>;
-  getDraftTeachingPathById: (id: number) => Promise<DraftTeachingPath>;
-  getDraftForeignTeachingPathById: (id: number, isPreview?: boolean) => Promise<{ teachingPath: DraftTeachingPath, articles?: Array<Article> }>;
+  getDraftTeachingPathById: (id: number, localeid?: number) => Promise<DraftTeachingPath>;
+  getDraftForeignTeachingPathById: (id: number, isPreview?: boolean, localeid?: number) => Promise<{ teachingPath: DraftTeachingPath, articles?: Array<Article> }>;
   deleteTeachingPath: (id: number) => Promise<void>;
 }
 

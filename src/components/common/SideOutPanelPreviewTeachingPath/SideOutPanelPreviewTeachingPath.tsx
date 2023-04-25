@@ -9,7 +9,7 @@ import { EvaluationLabel } from 'components/common/EvaluationLabel/EvaluationLab
 import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
-import { Assignment, GenericGrepItem, LenguajesB, Subject } from 'assignment/Assignment';
+import { Assignment, GenericGrepItem, LenguajesB, LenguajesC, Subject } from 'assignment/Assignment';
 
 import { deadlineDateFormat, thirdLevel, LANGUAGESC } from 'utils/constants';
 
@@ -160,6 +160,12 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   public setViewButtonEditByLenguaje = (id: number, lenguajeid: number) => {
     const url: URL = new URL(window.location.href);
     const urlForEditing: string = `${url.origin}/teaching-paths/edit/${id}?locale_id=${lenguajeid}`;
+    window.open(urlForEditing);
+  }
+
+  public setViewButtonAddByLenguaje = (id: number, lenguajeid: number) => {
+    const url: URL = new URL(window.location.href);
+    const urlForEditing: string = `${url.origin}/teaching-paths/edit/${id}?locale_id=${lenguajeid}&add=true`;
     window.open(urlForEditing);
   }
 
@@ -504,6 +510,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         hasGuidance,
         numberOfArticles,
         isMySchool,
+        translations
       } = currentEntity;
     const { currentEntity: { id } } = this.props.store!;
     const { history, isPublishedCurrentTeachingPath, view, currentCanEditOrDelete } = this.props;
@@ -512,6 +519,18 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const viewText = intl.get('preview.teaching_path.buttons.view');
     const guidanceText = intl.get('preview.assignment.buttons.teacher_guidance');
     const viewStudentText = intl.get('preview.teaching_path.buttons.viewstudent');
+    const mytranslations = this.props.store!.currentEntity.getListOfTranslations();
+    const arrayLenguajes : Array<LenguajesC> = [];
+    if (mytranslations) {
+      mytranslations.forEach((t) => {
+        if (Boolean(t.value)) {
+          const id = t.id;
+          const names = (LANGUAGESC.find(x => x.id === id)) ? '' : LANGUAGESC.find(x => x.id === id)!.name;
+          const LANG = { id: t.id , name: names, code: LANGUAGESC.find(x => x.id === id)!.name };
+          arrayLenguajes.push(LANG);
+        }
+      });
+    }
     const renderLanguage = (language: { name: string, id: number }) => (
       <li
         className="itemList"
@@ -550,7 +569,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
             <div className={simpleClassView}>
               <h2><a href="javascript:void(0)" onClick={this.insidechangeOpenFunction}>{viewText}</a></h2>
               <ul>
-                {LANGUAGESC.map(renderLanguage)}
+                {arrayLenguajes.map(renderLanguage)}
               </ul>
             </div>
           </li>
@@ -559,7 +578,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
             <div className={simpleClassPreview}>
               <h2><a href="javascript:void(0)" onClick={this.insidePreviewchangeOpenFunction}>{viewStudentText}</a></h2>
               <ul>
-                {LANGUAGESC.map(renderPreviewLanguage)}
+                {arrayLenguajes.map(renderPreviewLanguage)}
               </ul>
             </div>
           </li>
@@ -636,22 +655,52 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const editText = intl.get('preview.assignment.buttons.edit');
     const duplicateText = intl.get('preview.assignment.buttons.duplicate');
     const simpleClassView = (this.state.modalInsideEdit) ? 'modalContentInside active' : 'modalContentInside';
-    const renderLanguage = (language: { name: string, id: number }) => (
+    const mytranslations = this.props.store!.currentEntity.getListOfTranslations();
+    const arrayLenguajes : Array<LenguajesC> = [];
+    if (mytranslations) {
+      mytranslations.forEach((t) => {
+        const id = t.id;
+        if (LANGUAGESC.find(x => x.id === id)) {
+          const valueConst = Boolean(t.value) ? 'active' : 'add';
+          const LANG = { id: t.id , name: LANGUAGESC.find(x => x.id === id)!.name, code: valueConst };
+          arrayLenguajes.push(LANG);
+        }
+      });
+    }
+    const contentReturn = (langid: number, code: string) => {
+      if (code === 'active') {
+        return (
+          <div>
+            <a
+              href="javascript:void(0)"
+              // tslint:disable-next-line: jsx-no-lambda
+              onClick={() => this.setViewButtonEditByLenguaje(id, langid)}
+            >
+                <img src={editImg} />
+            </a>
+            <a href="javascript:void(0)"><img src={deleteImg} /></a>
+          </div>
+        );
+      }
+      return (
+        <div>
+          <a
+            href="javascript:void(0)"
+            // tslint:disable-next-line: jsx-no-lambda
+            onClick={() => this.setViewButtonAddByLenguaje(id, langid)}
+          >
+            <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z" /></svg>
+          </a>
+        </div>
+      );
+    };
+    const renderLanguage = (language: { name: string, id: number, code: string }) => (
       <li
         className="itemListFlex"
         key={language.id}
       >
         <p>{language.name}</p>
-        <div>
-          <a
-            href="javascript:void(0)"
-            // tslint:disable-next-line: jsx-no-lambda
-            onClick={() => this.setViewButtonEditByLenguaje(id, language.id)}
-          >
-              <img src={editImg} />
-          </a>
-          <a href="javascript:void(0)"><img src={deleteImg} /></a>
-        </div>
+        {contentReturn(language.id, language.code)}
       </li>
     );
     return (
@@ -662,7 +711,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         <div className={simpleClassView}>
           <h2><a href="javascript:void(0)" onClick={this.insidechangeEditFunction}>{editText}</a></h2>
           <ul>
-            {LANGUAGESC.map(renderLanguage)}
+            {arrayLenguajes.map(renderLanguage)}
           </ul>
         </div>
         {isPublishedCurrentTeachingPath! && this.renderDuplicateButton(duplicateText)}

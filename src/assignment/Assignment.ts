@@ -86,7 +86,29 @@ export class Language {
   }
 }
 
+export class Translations {
+  @observable public id: number;
+  @observable public value: boolean;
+
+  constructor(id: number, value: boolean) {
+    this.id = id;
+    this.value = value;
+  }
+}
+
 export class LenguajesB {
+  @observable public id: number;
+  @observable public code: string;
+  @observable public name: string;
+
+  constructor(id: number, code: string, name: string) {
+    this.id = id;
+    this.code = code;
+    this.name = name;
+  }
+}
+
+export class LenguajesC {
   @observable public id: number;
   @observable public code: string;
   @observable public name: string;

@@ -281,16 +281,23 @@ export class EditTeachingPathStore {
     return this.currentEntity!;
   }
 
-  public getTeachingPathForEditing = async (id: number) => {
-    const teachingPath = await this.draftTeachingPathService.getDraftTeachingPathById(id);
+  public createTeachingPathLocale = async (id: number, localeid?: number) => {
+    const teachingPath = await this.draftTeachingPathService.createTeachingPathLocale(id, localeid);
+    this.buildTeachingPathContainer(teachingPath);
+
+    return this.currentEntity!;
+  }
+
+  public getTeachingPathForEditing = async (id: number, localeid?: number) => {
+    const teachingPath = await this.draftTeachingPathService.getDraftTeachingPathById(id, localeid);
     this.buildTeachingPathContainer(teachingPath);
     return toJS(this.currentEntity!);
   }
 
   public getArticleFromUsedOne = (id: number) => this.usedArticles.find(article => article.id === id);
 
-  public getDraftForeignTeachingPath = async (id: number, isPreview?: boolean) => {
-    const data = await this.draftTeachingPathService.getDraftForeignTeachingPathById(id, isPreview);
+  public getDraftForeignTeachingPath = async (id: number, isPreview?: boolean, localeid?: number) => {
+    const data = await this.draftTeachingPathService.getDraftForeignTeachingPathById(id, isPreview, localeid);
     this.buildTeachingPathContainer(data.teachingPath);
     if (data.articles) {
       this.usedArticles = data.articles;

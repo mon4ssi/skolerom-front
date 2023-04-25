@@ -104,7 +104,7 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
   public createTeachingPath = async () => {
     try {
       const response: AxiosResponse<DraftTeachingPathResponseDTO> = await API.get(
-        '/api/teacher/teaching-paths/create?locale_id=1'
+        '/api/teacher/teaching-paths/create'
       );
       return buildNewTeachingPath(response.data);
     } catch (error) {
@@ -116,10 +116,27 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
     }
   }
 
-  public getDraftTeachingPathById = async (id: number) => {
+  public createTeachingPathLocale = async (id: number, localeid?: number) => {
     try {
       const response: AxiosResponse<DraftTeachingPathResponseDTO> = await API.get(
-        `/api/teacher/teaching-paths/draft/${id}/edit?localeId=1`
+        `/api/teacher/teaching-paths/draft/${id}/create?localeId=${localeid}`
+      );
+      return buildNewTeachingPath(response.data);
+    } catch (error) {
+      Notification.create({
+        type: NotificationTypes.ERROR,
+        title: error
+      });
+      throw error;
+    }
+  }
+
+  public getDraftTeachingPathById = async (id: number, localeid?: number) => {
+    try {
+      const response: AxiosResponse<DraftTeachingPathResponseDTO> = (localeid && !isNaN(localeid)) ? await API.get(
+        `/api/teacher/teaching-paths/draft/${id}/edit?localeId=${localeid}`
+      ) : await API.get(
+        `/api/teacher/teaching-paths/draft/${id}/edit`
       );
       return response.data.content ?
         buildDraftTeachingPath(response.data) :
@@ -130,11 +147,12 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
     }
   }
 
-  public getDraftForeignTeachingPathById = async (id: number, isPreview?: boolean) => {
+  public getDraftForeignTeachingPathById = async (id: number, isPreview?: boolean, localeid?: number) => {
     try {
       const response: AxiosResponse<DraftTeachingPathResponseDTO> = await API.get(
         `/api/teacher/teaching-paths/${id}`, {
           params: {
+            localeId: localeid,
             withBackground: isPreview
           }
         }
