@@ -525,7 +525,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
       mytranslations.forEach((t) => {
         if (Boolean(t.value)) {
           const id = t.id;
-          const names = (LANGUAGESC.find(x => x.id === id)) ? '' : LANGUAGESC.find(x => x.id === id)!.name;
+          const names = (LANGUAGESC.find(x => x.id === id)) ? LANGUAGESC.find(x => x.id === id)!.name : '';
           const LANG = { id: t.id , name: names, code: LANGUAGESC.find(x => x.id === id)!.name };
           arrayLenguajes.push(LANG);
         }

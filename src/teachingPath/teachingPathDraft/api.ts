@@ -171,16 +171,19 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
     }
   }
 
-  public saveTeachingPath = async (teachingPath: DraftTeachingPath): Promise<string> => {
+  public saveTeachingPath = async (teachingPath: DraftTeachingPath, localeId?: number): Promise<string> => {
     const dto = buildTeachingPathRequestDTO(teachingPath);
-    const localIdNumber = (dto.localeId) ? dto.localeId : 1;
+    const mylocaleid = (localeId && !isNaN(localeId)) ? localeId : dto.localeId;
     // const featuredImage = buildFeatureImageForTeachingPathRequestDTO(dto.content);
     try {
-      const response = await API.put(
-        `/api/teacher/teaching-paths/draft/${teachingPath.id}?localeId=${localIdNumber}`, {
+      const response = mylocaleid ? await API.put(
+        `/api/teacher/teaching-paths/draft/${teachingPath.id}?localeId=${mylocaleid}`, {
           ...dto
-        }
-      );
+        }) : await API.put(
+        `/api/teacher/teaching-paths/draft/${teachingPath.id}`, {
+          ...dto
+        })
+      ;
       return response.data.updateAt;
     } catch (error) {
       if (error.response.status === STATUS_CONFLICT) {

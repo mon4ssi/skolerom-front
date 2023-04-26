@@ -25,7 +25,7 @@ export const DRAFT_TEACHING_PATH_REPO = 'DRAFT_TEACHING_PATH_REPO';
 const TEMPORAL = 67933;
 
 export interface DraftTeachingPathRepo {
-  saveTeachingPath: (teachingPath: DraftTeachingPath) => Promise<string>;
+  saveTeachingPath: (teachingPath: DraftTeachingPath, localeId?: number) => Promise<string>;
   publishTeachingPath: (teachingPath: DraftTeachingPath) => Promise<void>;
   createTeachingPath: () => Promise<DraftTeachingPath>;
   createTeachingPathLocale: (id: number, localeid?: number) => Promise<DraftTeachingPath>;
@@ -98,6 +98,7 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   public isSavingRunning: boolean = false;
+  public localeid: number = 1;
   @observable public isDraftSaving: boolean = false;
   public isPublishing: boolean = false;
   public isRunningPublishing: boolean = false;
@@ -359,6 +360,11 @@ export class DraftTeachingPath extends TeachingPath {
     return this._backgroundImage;
   }
 
+  @action
+  public setValueLocaleid(localid: number) {
+    this.localeid = localid;
+  }
+
   public anyArticlesIds(butIds: Array<number>, node: EditableTeachingPathNode) {
     const items: TeachingPathItem = node!.getItems(node!)![0];
     let returnArray: Array<number> = butIds;
@@ -453,7 +459,7 @@ export class DraftTeachingPath extends TeachingPath {
               this.addSubjectBySave();
             }
             this.addGoalsBySave();
-            this.setUpdatedAt(await this.repo.saveTeachingPath(this));
+            this.setUpdatedAt(await this.repo.saveTeachingPath(this, this.localeid));
           } catch (error) {
             if (error instanceof AlreadyEditingTeachingPathError) {
               Notification.create({
@@ -478,7 +484,7 @@ export class DraftTeachingPath extends TeachingPath {
     this.validateContent();
 
     try {
-      await this.repo.saveTeachingPath(this);
+      await this.repo.saveTeachingPath(this, this.localeId!);
     } catch (error) {
       if (error instanceof AlreadyEditingTeachingPathError) {
         Notification.create({
@@ -701,7 +707,7 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   public async saveImmediate() {
-    await this.repo.saveTeachingPath(this);
+    await this.repo.saveTeachingPath(this, this.localeid);
   }
 
   public getOpen() {

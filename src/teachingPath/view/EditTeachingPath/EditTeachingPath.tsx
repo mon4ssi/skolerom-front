@@ -39,7 +39,7 @@ class EditTeachingPathComponent extends Component<Props & RouteComponentProps, S
   public async componentDidMount() {
     const { editTeachingPathStore, readOnly, history, location } = this.props;
     const locale = new URLSearchParams(location!.search);
-    const localeid = parseInt(locale.get('locale_id')!, 1);
+    const localeid = parseInt(locale.get('locale_id')!, 10);
     const add = Boolean(locale.get('add')!);
     const { getTeachingPathForEditing, isAssignmentCreating, getDraftForeignTeachingPath, createTeachingPathLocale } = editTeachingPathStore!;
 
@@ -58,6 +58,7 @@ class EditTeachingPathComponent extends Component<Props & RouteComponentProps, S
             await createTeachingPathLocale(this.getParams(), localeid);
           }
           await getTeachingPathForEditing(this.getParams(), localeid);
+          editTeachingPathStore!.currentEntity!.setValueLocaleid(localeid);
         } catch (error) {
           if (error.response && error.response.status === STATUS_FORBIDDEN) {
             history.push('/not-found');
@@ -84,7 +85,7 @@ class EditTeachingPathComponent extends Component<Props & RouteComponentProps, S
   public renderCreationPage = () => {
     const { location, readOnly, tgOpen } = this.props;
     const locale = new URLSearchParams(location!.search);
-    const localeid = parseInt(locale.get('locale_id')!, 1);
+    const localeid = parseInt(locale.get('locale_id')!, 10);
     return !location!.pathname.includes('distribute') &&
       !location!.pathname.includes('publish') && (
         <CreationPage readOnly={readOnly} tgOpen={tgOpen} locale={localeid}/>
