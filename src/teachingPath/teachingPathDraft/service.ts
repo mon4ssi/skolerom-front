@@ -18,6 +18,11 @@ export class DraftTeachingPathService {
     return this.draftTeachingPath;
   }
 
+  public async createTeachingPathLocale(id: number, localeid?: number) {
+    this.draftTeachingPath = await this.draftTeachingPathRepo.createTeachingPathLocale(id, localeid);
+    return this.draftTeachingPath;
+  }
+
   public async getKeywordsFromArticles(arrayArticlesIds: Array<number>, arrayAsignmentsIds: Array<number>): Promise<Array<Keyword>> {
     const keywords = await this.draftTeachingPathRepo.getKeywordsFromArticles(arrayArticlesIds, arrayAsignmentsIds);
     const entityKeywordsArray: Array<Keyword> = [];
@@ -30,11 +35,11 @@ export class DraftTeachingPathService {
     return [];
   }
 
-  public getDraftForeignTeachingPathById = (id: number, isPreview?: boolean) =>
-    this.draftTeachingPathRepo.getDraftForeignTeachingPathById(id, isPreview)
+  public getDraftForeignTeachingPathById = (id: number, isPreview?: boolean, localeid?: number) =>
+    this.draftTeachingPathRepo.getDraftForeignTeachingPathById(id, isPreview, localeid)
 
-  public getDraftTeachingPathById = async (id: number) => {
-    this.draftTeachingPath = await this.draftTeachingPathRepo.getDraftTeachingPathById(id);
+  public getDraftTeachingPathById = async (id: number, localeid?: number) => {
+    this.draftTeachingPath = await this.draftTeachingPathRepo.getDraftTeachingPathById(id, localeid);
     return this.draftTeachingPath;
   }
 
