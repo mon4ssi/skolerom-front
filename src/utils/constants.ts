@@ -94,11 +94,6 @@ export const LANGUAGESB = [
 
 export const LANGUAGESC = [
   {
-    name: 'English',
-    code: Locales.EN,
-    id: 1
-  },
-  {
     name: 'Bokmål',
     code: Locales.NB,
     id: 3
@@ -107,16 +102,6 @@ export const LANGUAGESC = [
     name: 'Nynorsk',
     code: Locales.NN,
     id: 2
-  },
-  {
-    name: 'Suomi',
-    code: Locales.FN,
-    id: 4
-  },
-  {
-    name: 'Русский',
-    code: Locales.KV,
-    id: 6
   }
 ];
 // STATUSES

@@ -241,6 +241,7 @@ export interface TeachingPathArgs {
   defaultStartDate?: string;
   defaultEndDate?: string;
   translations?: Array<Translations>;
+  isTranslations?: boolean;
 }
 
 export class TeachingPath {
@@ -311,6 +312,7 @@ export class TeachingPath {
   @observable protected _defaultStartDate?: string;
   @observable protected _defaultEndDate?: string;
   @observable protected _translations?: Array<Translations>;
+  @observable protected _isTranslations?: boolean = false;
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;
@@ -381,6 +383,7 @@ export class TeachingPath {
     this._defaultStartDate = args.defaultStartDate;
     this._defaultEndDate = args.defaultEndDate;
     this._translations = args.translations;
+    this._isTranslations = args.isTranslations;
   }
 
   @computed
@@ -614,6 +617,11 @@ export class TeachingPath {
   @computed
   public get translations() {
     return this._translations;
+  }
+
+  @computed
+  public get isTranslations() {
+    return this._isTranslations;
   }
 
   @computed

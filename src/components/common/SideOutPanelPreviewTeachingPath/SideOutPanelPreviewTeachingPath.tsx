@@ -510,7 +510,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         hasGuidance,
         numberOfArticles,
         isMySchool,
-        translations
+        translations,
+        isTranslations
       } = currentEntity;
     const { currentEntity: { id } } = this.props.store!;
     const { history, isPublishedCurrentTeachingPath, view, currentCanEditOrDelete } = this.props;
@@ -740,6 +741,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         hasGuidance,
         numberOfArticles,
         isMySchool,
+        isTranslations
       } = currentEntity;
     const { currentEntity: { id } } = this.props.store!;
     const { history, isPublishedCurrentTeachingPath, view, currentCanEditOrDelete } = this.props;
@@ -754,6 +756,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const activeGoals = !isPrivate || isMySchool;
     const openPreview = (this.state.modalPreview) ? 'modalToggle active' : 'modalToggle';
     const openFunction = (this.state.modalFunction) ? 'modalToggle active' : 'modalToggle';
+    const isTranslate = isTranslations ? isTranslations : false;
     return (
       <div className={'previewModalInfo'} onClick={this.stopPropagation} tabIndex={0}>
         <div className="contentContainer">
@@ -762,12 +765,14 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
               <div className="previewButtons">
                 <a href="javascript:void(0)" className={openPreview} onClick={this.changeOpenpreview}>{intl.get('new assignment.Preview')}</a>
                 {this.state.modalPreview && authorRole === UserType.Teacher && this.contentIn()}
-                {this.state.modalPreview && authorRole !== UserType.Teacher && this.contentInCM()}
+                {this.state.modalPreview && authorRole !== UserType.Teacher && isTranslate && this.contentInCM()}
+                {this.state.modalPreview && authorRole !== UserType.Teacher && !isTranslate && this.contentIn()}
               </div>
               <div className="functionsButtons">
                 <a href="javascript:void(0)" className={openFunction} onClick={this.changeOpenFunction}>{editText}</a>
                 {this.state.modalFunction && authorRole === UserType.Teacher && this.contentIntwo()}
-                {this.state.modalFunction && authorRole !== UserType.Teacher && this.contentIntwoCM()}
+                {this.state.modalFunction && authorRole !== UserType.Teacher && isTranslate && this.contentIntwoCM()}
+                {this.state.modalFunction && authorRole !== UserType.Teacher && !isTranslate && this.contentIntwoCM()}
               </div>
               <div className="DistributeButtons">
                 {this.userService.getCurrentUser()!.type === UserType.Teacher && isPublishedCurrentTeachingPath! && this.renderDistributeButton(distributeText)}
