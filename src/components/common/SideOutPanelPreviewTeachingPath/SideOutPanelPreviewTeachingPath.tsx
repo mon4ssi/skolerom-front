@@ -772,7 +772,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
                 <a href="javascript:void(0)" className={openFunction} onClick={this.changeOpenFunction}>{editText}</a>
                 {this.state.modalFunction && authorRole === UserType.Teacher && this.contentIntwo()}
                 {this.state.modalFunction && authorRole !== UserType.Teacher && isTranslate && this.contentIntwoCM()}
-                {this.state.modalFunction && authorRole !== UserType.Teacher && !isTranslate && this.contentIntwoCM()}
+                {this.state.modalFunction && authorRole !== UserType.Teacher && !isTranslate && this.contentIntwo()}
               </div>
               <div className="DistributeButtons">
                 {this.userService.getCurrentUser()!.type === UserType.Teacher && isPublishedCurrentTeachingPath! && this.renderDistributeButton(distributeText)}
