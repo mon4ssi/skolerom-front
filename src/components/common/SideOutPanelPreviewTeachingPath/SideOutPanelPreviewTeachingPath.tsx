@@ -534,7 +534,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         numberOfArticles,
         isMySchool,
         translations,
-        isTranslations
+        isTranslations,
+        originalLocaleId
       } = currentEntity;
     const { currentEntity: { id } } = this.props.store!;
     const { history, isPublishedCurrentTeachingPath, view, currentCanEditOrDelete } = this.props;
@@ -670,6 +671,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         hasGuidance,
         numberOfArticles,
         isMySchool,
+        originalLocaleId
       } = currentEntity;
     const { currentEntity: { id } } = this.props.store!;
     const { history, isPublishedCurrentTeachingPath, view, currentCanEditOrDelete } = this.props;
@@ -693,6 +695,19 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     }
     const contentReturn = (langid: number, code: string) => {
       if (code === 'active') {
+        const deleteFunction = (langid: number, code: string) => {
+          if (langid !== originalLocaleId) {
+            return (
+              <a
+                href="javascript:void(0)"
+                // tslint:disable-next-line: jsx-no-lambda
+                onClick={() => this.setViewButtonDeleteByLenguaje(id, langid)}
+              >
+                <img src={deleteImg} />
+              </a>
+            );
+          }
+        };
         return (
           <div>
             <a
@@ -702,13 +717,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
             >
                 <img src={editImg} />
             </a>
-            <a
-              href="javascript:void(0)"
-              // tslint:disable-next-line: jsx-no-lambda
-              onClick={() => this.setViewButtonDeleteByLenguaje(id, langid)}
-            >
-              <img src={deleteImg} />
-            </a>
+            {deleteFunction}
           </div>
         );
       }
