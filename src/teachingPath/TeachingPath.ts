@@ -37,6 +37,7 @@ export interface TeachingPathRepo {
   finishTeachingPath(id: number): Promise<void>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
   deleteTeachingPathAnswers(teachingPathId: number, answerId: number): Promise<void>;
+  deleteTeachingTranslation(teachingPathId: number, localeId: number): Promise<void>;
   copyTeachingPath(id: number, all?:boolean): Promise<number>;
   getGradeWpIds(gradeWpIds: Array<number>): Promise<Array<Grade>>;
   getSubjectWpIds(subjectWpIds: Array<number>): Promise<Array<Subject>>;

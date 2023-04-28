@@ -102,6 +102,10 @@ export class TeachingPathService {
     return this.teachingPathRepo.deleteTeachingPathAnswers(teachingPathId, answerId);
   }
 
+  public async deleteTeachingTranslation(teachingPathId: number, localeId: number) {
+    return this.teachingPathRepo.deleteTeachingTranslation(teachingPathId, localeId);
+  }
+
   public async getTeachingPathListOfStudentInList(studentId: number, filter: Filter) {
     return this.teachingPathRepo.getTeachingPathListOfStudentInList(studentId, filter);
   }

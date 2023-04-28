@@ -102,7 +102,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   public setPreViewButtonByLenguaje = (idlenguaje : number) => {
     const { currentEntity: { id } } = this.props.store!;
     const url: URL = new URL(window.location.href);
-    const urlForEditing: string = `${url.origin}/teaching-paths/preview/${id!}?locale_id=${idlenguaje}`;
+    const urlForEditing: string = `${url.origin}/teaching-path/preview/${id!}?locale_id=${idlenguaje}`;
     window.open(urlForEditing);
   }
 
@@ -151,6 +151,15 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     </div>
   )
 
+  public renderTeacherGuidanceButtonList = (guidanceString: string) =>
+  (
+    <li>
+      <a href="javascript:void(0)" className="linkOpenSite" onClick={this.openInNewTabTeacherGuidance}>
+        {guidanceString}
+      </a>
+    </li>
+  )
+
   public openInNewTabEdit = (id: number) => {
     const url: URL = new URL(window.location.href);
     const urlForEditing: string = `${url.origin}/teaching-paths/edit/${id}`;
@@ -161,6 +170,20 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const url: URL = new URL(window.location.href);
     const urlForEditing: string = `${url.origin}/teaching-paths/edit/${id}?locale_id=${lenguajeid}`;
     window.open(urlForEditing);
+  }
+
+  public setViewButtonDeleteByLenguaje = async (id: number, lenguajeid: number) => {
+    const isCopyApproved = await Notification.create({
+      type: NotificationTypes.CONFIRM,
+      title: intl.get('assignment list.Are you sure'),
+      submitButtonTitle: intl.get('notifications.delete_element')
+    });
+
+    if (isCopyApproved) {
+      /* const currentEntityRoute = entityStore instanceof AssignmentListStore ? 'assignments' : 'teaching-paths'; */
+      await this.teachingPathService.deleteTeachingTranslation(id, lenguajeid);
+      window.location.reload();
+    }
   }
 
   public setViewButtonAddByLenguaje = (id: number, lenguajeid: number) => {
@@ -583,8 +606,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
               </ul>
             </div>
           </li>
+          {hasGuidance && this.renderTeacherGuidanceButtonList(guidanceText)}
         </ul>
-        {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
       </div>
     );
   }
@@ -679,7 +702,13 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
             >
                 <img src={editImg} />
             </a>
-            <a href="javascript:void(0)"><img src={deleteImg} /></a>
+            <a
+              href="javascript:void(0)"
+              // tslint:disable-next-line: jsx-no-lambda
+              onClick={() => this.setViewButtonDeleteByLenguaje(id, langid)}
+            >
+              <img src={deleteImg} />
+            </a>
           </div>
         );
       }
@@ -765,14 +794,16 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
               <div className="previewButtons">
                 <a href="javascript:void(0)" className={openPreview} onClick={this.changeOpenpreview}>{intl.get('new assignment.Preview')}</a>
                 {this.state.modalPreview && authorRole === UserType.Teacher && this.contentIn()}
-                {this.state.modalPreview && authorRole !== UserType.Teacher && isTranslate && this.contentInCM()}
-                {this.state.modalPreview && authorRole !== UserType.Teacher && !isTranslate && this.contentIn()}
+                {this.state.modalPreview && authorRole === UserType.ContentManager && isTranslate && this.contentInCM()}
+                {this.state.modalPreview && authorRole === UserType.ContentManager && !isTranslate && this.contentIn()}
+                {this.state.modalPreview && authorRole === UserType.Student && this.contentIn()}
               </div>
               <div className="functionsButtons">
                 <a href="javascript:void(0)" className={openFunction} onClick={this.changeOpenFunction}>{editText}</a>
                 {this.state.modalFunction && authorRole === UserType.Teacher && this.contentIntwo()}
-                {this.state.modalFunction && authorRole !== UserType.Teacher && isTranslate && this.contentIntwoCM()}
-                {this.state.modalFunction && authorRole !== UserType.Teacher && !isTranslate && this.contentIntwo()}
+                {this.state.modalFunction && authorRole === UserType.Student && this.contentIntwo()}
+                {this.state.modalFunction && authorRole === UserType.ContentManager && isTranslate && this.contentIntwoCM()}
+                {this.state.modalFunction && authorRole === UserType.ContentManager && !isTranslate && this.contentIntwo()}
               </div>
               <div className="DistributeButtons">
                 {this.userService.getCurrentUser()!.type === UserType.Teacher && isPublishedCurrentTeachingPath! && this.renderDistributeButton(distributeText)}

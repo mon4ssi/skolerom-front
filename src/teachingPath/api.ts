@@ -610,6 +610,10 @@ export class TeachingPathApi implements TeachingPathRepo {
     await API.delete(`api/student/teaching-paths/${teachingPathId}/answer/${answerId}`);
   }
 
+  public async deleteTeachingTranslation(teachingPathId: number, localeId: number): Promise<void> {
+    await API.delete(`/api/teacher/teaching-paths/${teachingPathId}/destroy-translation?localeId=${localeId}`);
+  }
+
   public async copyTeachingPath(id: number, all?: boolean): Promise<number> {
     if (all) {
       try {
