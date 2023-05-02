@@ -154,7 +154,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   public renderTeacherGuidanceButtonList = (guidanceString: string) =>
   (
     <li>
-      <a href="javascript:void(0)" className="linkOpenSite" onClick={this.openInNewTabTeacherGuidance}>
+      <a href="javascript:void(0)" className="linkOpenSite LinkRollback" onClick={this.openInNewTabTeacherGuidance}>
         {guidanceString}
       </a>
     </li>
@@ -695,7 +695,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     }
     const contentReturn = (langid: number, code: string) => {
       if (code === 'active') {
-        const deleteFunction = (langid: number, code: string) => {
+        const deleteFunction = (langid: number) => {
           if (langid !== originalLocaleId) {
             return (
               <a
@@ -717,7 +717,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
             >
                 <img src={editImg} />
             </a>
-            {deleteFunction}
+            {deleteFunction(langid)}
           </div>
         );
       }

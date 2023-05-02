@@ -82,6 +82,9 @@
         top: 5px;
         right: 0px;
       }
+      &.LinkRollback {
+        &.after { display: none; }
+      }
     }
     .modalContentInside {
       position: absolute;
@@ -137,6 +140,17 @@
             display: flex;
             a {
               margin-left: 7px;
+            }
+            svg {
+              display: block;
+              border: solid 1px #979797;
+              width: 26px;
+              height: 26px;
+              border-radius: 50%;
+              padding: 5px;
+              path {
+                fill: #061626;
+              }
             }
           }
           p {

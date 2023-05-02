@@ -258,7 +258,8 @@ export class TeachingPathApi implements TeachingPathRepo {
         isPublished: data.isPublished,
         ownedByMe: data.ownedByMe,
         translations: data.translations,
-        isTranslations: data.isTranslations
+        isTranslations: data.isTranslations,
+        originalLocaleId: data.originalLocaleId
       });
     } catch (error) {
       if (error.response.data.message === 'Teaching path not assigned to you') {
