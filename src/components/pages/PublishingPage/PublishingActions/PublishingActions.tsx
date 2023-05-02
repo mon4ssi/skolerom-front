@@ -926,9 +926,11 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     if (valueLocaleId !== null) { selectedLanguage.push(LENtag.find(i => i.id === valueLocaleId)!); }
 
     const myplaceholder = (selectedLanguage.length > 0) ? '' : this.labels.placeholderLanguages;
+    const search = window.location.search;
+    const classnameHidden = search ? 'bloqued' : '';
 
     return (
-      <div>
+      <div className={classnameHidden}>
         <TagInputComponent
           className="filterBy darkTheme"
           tags={LENtag}

@@ -63,10 +63,17 @@ export class HeaderComponent extends Component<Props> {
         type: NotificationTypes.SUCCESS,
         title: intl.get('edit_teaching_path.header.after_saving')
       });
-
-      history.push({
-        pathname: `/teaching-paths/edit/${id}/publish`,
-      });
+      if (history.location.search) {
+        const searchvalue = history.location.search;
+        history.push({
+          pathname: `/teaching-paths/edit/${id}/publish`,
+          search: searchvalue
+        });
+      } else {
+        history.push({
+          pathname: `/teaching-paths/edit/${id}/publish`,
+        });
+      }
     } catch (e) {
       if (e instanceof TeachingPathValidationError) {
         Notification.create({
@@ -332,21 +339,43 @@ export class HeaderComponent extends Component<Props> {
   }
 
   private onGoBack = () => {
-    const { isCreation, isPublishing, isDistribution, teachingPathsListStore } = this.props;
+    const { isCreation, isPublishing, isDistribution, teachingPathsListStore, history } = this.props;
+    const searchvalue = history.location.search;
+    if (searchvalue) {
+      if (isCreation) {
+        history.push({
+          pathname: `/teaching-paths/${teachingPathsListStore!.typeOfTeachingPathsList}`,
+          search: searchvalue
+        });
+      }
+      if (isPublishing) {
+        history.push({
+          pathname: `/teaching-paths/edit/${this.props.match.params.id}`,
+          search: searchvalue
+        });
+      }
+      if (isDistribution) {
+        history.push({
+          pathname: `/teaching-paths/edit/${this.props.match.params.id}/publish`,
+          search: searchvalue
+        });
+      }
 
-    if (isCreation) {
-      this.props.history.push(`/teaching-paths/${teachingPathsListStore!.typeOfTeachingPathsList}`);
-      /* const url: string = localStorage!.getItem('url') !== null ? localStorage!.getItem('url')!.toString().toString().split('?')[1] : '';
-      this.props.history.push(`/teaching-paths/all?${url}`);
-      localStorage.removeItem('url'); */
-      /* localStorage.clear(); */
-    }
-    if (isPublishing) {
-      this.props.history.push(`/teaching-paths/edit/${this.props.match.params.id}/`);
-    }
+    } else {
+      if (isCreation) {
+        this.props.history.push(`/teaching-paths/${teachingPathsListStore!.typeOfTeachingPathsList}`);
+        /* const url: string = localStorage!.getItem('url') !== null ? localStorage!.getItem('url')!.toString().toString().split('?')[1] : '';
+        this.props.history.push(`/teaching-paths/all?${url}`);
+        localStorage.removeItem('url'); */
+        /* localStorage.clear(); */
+      }
+      if (isPublishing) {
+        this.props.history.push(`/teaching-paths/edit/${this.props.match.params.id}/`);
+      }
 
-    if (isDistribution) {
-      this.props.history.push(`/teaching-paths/edit/${this.props.match.params.id}/publish`);
+      if (isDistribution) {
+        this.props.history.push(`/teaching-paths/edit/${this.props.match.params.id}/publish`);
+      }
     }
   }
 
