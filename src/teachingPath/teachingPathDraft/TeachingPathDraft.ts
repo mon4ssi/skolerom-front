@@ -26,6 +26,7 @@ const TEMPORAL = 67933;
 
 export interface DraftTeachingPathRepo {
   saveTeachingPath: (teachingPath: DraftTeachingPath, localeId?: number) => Promise<string>;
+  saveTeachingPathLang: (teachingPath: DraftTeachingPath, localeId?: number, actuallocalid?: number, newlocalid?: number) => Promise<string>;
   publishTeachingPath: (teachingPath: DraftTeachingPath) => Promise<void>;
   createTeachingPath: () => Promise<DraftTeachingPath>;
   createTeachingPathLocale: (id: number, localeid?: number) => Promise<DraftTeachingPath>;
@@ -480,6 +481,37 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
+  public async saveLangs(idlocaleid: number, newlocaleid: number) {
+    if (!this.isSavingRunning) {
+      this.isSavingRunning = true;
+      setTimeout(
+        async () => {
+          this.isDraftSaving = true;
+          try {
+            if (this.isPublishing) {
+              return;
+            }
+            this.setUpdatedAt(await this.repo.saveTeachingPathLang(this, this.localeid, idlocaleid, newlocaleid));
+          } catch (error) {
+            if (error instanceof AlreadyEditingTeachingPathError) {
+              Notification.create({
+                type: NotificationTypes.ERROR,
+                title: intl.get('edit_teaching_path.validation.already_editing')
+              });
+            } else {
+              console.error('Error while saving draft:', error.message);
+            }
+          } finally {
+            this.isDraftSaving = false;
+            this.isSavingRunning = false;
+          }
+        },
+        SAVE_DELAY
+      );
+    }
+  }
+
+  @action
   public async saveTeachingPath() {
     this.validateContent();
 
@@ -740,8 +772,8 @@ export class DraftTeachingPath extends TeachingPath {
 
   @action
   public setLocaleId(localeId: number | null) {
-    this._localeId = localeId;
-    this.save();
+    // this._localeId = localeId;
+    this.saveLangs(this._localeId!, localeId!);
   }
 }
 

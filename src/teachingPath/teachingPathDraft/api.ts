@@ -193,6 +193,28 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
     }
   }
 
+  public saveTeachingPathLang = async (teachingPath: DraftTeachingPath, localeId?: number, actuallocalid?: number, newlocalid?: number): Promise<string> => {
+    const dto = buildTeachingPathRequestDTO(teachingPath);
+    const mylocaleid = (localeId && !isNaN(localeId)) ? localeId : dto.localeId;
+    // const featuredImage = buildFeatureImageForTeachingPathRequestDTO(dto.content);
+    try {
+      const response = mylocaleid ? await API.put(
+        `/api/teacher/teaching-paths/draft/${teachingPath.id}?localeId=${mylocaleid}`, {
+          ...dto
+        }) : await API.put(
+        `/api/teacher/teaching-paths/draft/${teachingPath.id}`, {
+          ...dto
+        })
+      ;
+      return response.data.updateAt;
+    } catch (error) {
+      if (error.response.status === STATUS_CONFLICT) {
+        throw new AlreadyEditingTeachingPathError();
+      }
+      throw error;
+    }
+  }
+
   public async getKeywordsFromArticles(arrayArticlesIds: Array<number>, arrayAssignmentsIds: Array<number>): Promise<any> {
     const idsArticlesString = arrayArticlesIds.toString();
     const idsAssignmentsString = arrayAssignmentsIds.toString();
