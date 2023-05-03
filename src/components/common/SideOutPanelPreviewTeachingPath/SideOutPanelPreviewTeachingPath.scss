@@ -83,7 +83,7 @@
         right: 0px;
       }
       &.LinkRollback {
-        &.after { display: none; }
+        &:after { display: none; }
       }
     }
     .modalContentInside {
