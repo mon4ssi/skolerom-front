@@ -198,14 +198,10 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
     const mylocaleid = (localeId && !isNaN(localeId)) ? localeId : dto.localeId;
     // const featuredImage = buildFeatureImageForTeachingPathRequestDTO(dto.content);
     try {
-      const response = mylocaleid ? await API.put(
-        `/api/teacher/teaching-paths/draft/${teachingPath.id}?localeId=${mylocaleid}`, {
+      const response = await API.put(
+        `/api/teacher/teaching-paths/draft/${teachingPath.id}?localeId=${actuallocalid}`, {
           ...dto
-        }) : await API.put(
-        `/api/teacher/teaching-paths/draft/${teachingPath.id}`, {
-          ...dto
-        })
-      ;
+        });
       return response.data.updateAt;
     } catch (error) {
       if (error.response.status === STATUS_CONFLICT) {

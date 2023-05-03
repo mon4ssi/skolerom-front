@@ -772,8 +772,9 @@ export class DraftTeachingPath extends TeachingPath {
 
   @action
   public setLocaleId(localeId: number | null) {
-    // this._localeId = localeId;
-    this.saveLangs(this._localeId!, localeId!);
+    const oldLocaleid = this._localeId;
+    this._localeId = localeId;
+    this.saveLangs(oldLocaleid!, localeId!);
   }
 }
 
