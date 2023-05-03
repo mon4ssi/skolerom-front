@@ -176,7 +176,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const isCopyApproved = await Notification.create({
       type: NotificationTypes.CONFIRM,
       title: intl.get('assignment list.Are you sure'),
-      submitButtonTitle: intl.get('notifications.delete_element')
+      submitButtonTitle: intl.get('edit_teaching_path.notifications.delete_element')
     });
 
     if (isCopyApproved) {
