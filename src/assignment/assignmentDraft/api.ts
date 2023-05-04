@@ -81,6 +81,12 @@ export class DraftAssignmentApi implements DraftAssignmentRepo {
     return buildNewDraftAssignment(result);
   }
 
+  public async createAssignmentLocale(id: number, localeid?: number): Promise<DraftAssignment> {
+    const result: NewDraftAssignmentResponseDTO = (await API.get(`api/teacher/assignments/draft/${id}/create?localeId=${localeid}`))
+      .data;
+    return buildNewDraftAssignment(result);
+  }
+
   public async getDraftAssignmentById(id: number, localeid?: number): Promise<DraftAssignment> {
     try {
       const response: AxiosResponse<DraftAssignmentResponseDTO> = (localeid && !isNaN(localeid)) ? await API.get(
@@ -97,10 +103,15 @@ export class DraftAssignmentApi implements DraftAssignmentRepo {
   }
 
   public async saveDraftAssignment(
-    draftAssignment: DraftAssignment
+    draftAssignment: DraftAssignment,
+    localeId?: number
   ): Promise<string> {
     try {
-      const response = await API.put(
+      const mylocaleid = (localeId && !isNaN(localeId)) ? localeId : draftAssignment.localeId;
+      const response = localeId ? await API.put(
+        `api/teacher/assignments/draft/${draftAssignment.id}?localeId=${mylocaleid}`,
+        buildDraftAssignmentDTO(draftAssignment))
+       : await API.put(
         `api/teacher/assignments/draft/${draftAssignment.id}`,
         buildDraftAssignmentDTO(draftAssignment)
       );

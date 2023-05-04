@@ -374,10 +374,9 @@ export class NewAssignmentStore {
 
   public async getAssigmentForEditing(id: number, add?: boolean, localeid?: number) {
     try {
-      /* if (add) {
-        console.log('michi');
-        //await this.draftAssignmentService.createTeachingPathLocale(this.getParams(), localeid);
-      } */
+      if (add) {
+        await this.draftAssignmentService.createAssignmentLocale(id, localeid);
+      }
       const assignment = await this.draftAssignmentService.getDraftAssignmentForEditing(id, localeid);
       this.buildAssignmentContainer(assignment);
       this.currentPreviewQuestion = this.currentEntity!.questions.length - 1;

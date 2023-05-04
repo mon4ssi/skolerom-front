@@ -176,7 +176,7 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
     const mylocaleid = (localeId && !isNaN(localeId)) ? localeId : dto.localeId;
     // const featuredImage = buildFeatureImageForTeachingPathRequestDTO(dto.content);
     try {
-      const response = mylocaleid ? await API.put(
+      const response = localeId ? await API.put(
         `/api/teacher/teaching-paths/draft/${teachingPath.id}?localeId=${mylocaleid}`, {
           ...dto
         }) : await API.put(

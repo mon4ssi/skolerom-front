@@ -45,6 +45,7 @@ export interface DraftAssignmentRepo {
   getNewAssignment(): Promise<DraftAssignment>;
   getKeywordsFromArticles(arrayWpIds: Array<number>): Promise<Array<string>>;
   getDraftAssignmentById(id: number, localeid?: number): Promise<DraftAssignment>;
+  createAssignmentLocale(id: number, localeid?: number): Promise<DraftAssignment>;
   saveDraftAssignment(draft: DraftAssignment): Promise<string>;
   publishAssignment(draft: DraftAssignment): Promise<void>;
 }
