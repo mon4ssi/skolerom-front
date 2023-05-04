@@ -9,9 +9,9 @@ import { EvaluationLabel } from 'components/common/EvaluationLabel/EvaluationLab
 import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
 import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
-import { Assignment, GenericGrepItem, Subject } from 'assignment/Assignment';
+import { Assignment, GenericGrepItem, Subject, LenguajesC } from 'assignment/Assignment';
 
-import { deadlineDateFormat, thirdLevel } from 'utils/constants';
+import { deadlineDateFormat, thirdLevel, LANGUAGESC } from 'utils/constants';
 
 import clock from 'assets/images/clock.svg';
 import close from 'assets/images/close.svg';
@@ -423,7 +423,93 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     );
   }
 
+  public contentInCM = () => {
+    const { currentAssignment } = this.props.store!;
+    const { isSuperCMCurrentUser } = this.state;
+    const
+      {
+        title,
+        id,
+        subjectItems,
+        coreElementItems,
+        sourceItems,
+        multiSubjectItems,
+        goalsItems,
+        description,
+        publishedAt,
+        deadline,
+        author,
+        authorRole,
+        numberOfQuestions,
+        hasGuidance,
+        isAnswered,
+        isPublished,
+        isMySchool,
+        isPrivate,
+        createdAt,
+        translations,
+        isTranslations,
+        originalLocaleId
+      } = currentAssignment!;
+    const { history, isPublishedCurrentAssignment, view, store, canEditOrDeleteValue } = this.props;
+    const viewText = intl.get('preview.assignment.buttons.view');
+    const guidanceText = intl.get('preview.assignment.buttons.teacher_guidance');
+    const arrayLenguajes : Array<LenguajesC> = [];
+    if (translations) {
+      translations.forEach((t) => {
+        if (Boolean(t.value)) {
+          const id = t.id;
+          const names = (LANGUAGESC.find(x => x.id === id)) ? LANGUAGESC.find(x => x.id === id)!.name : '';
+          const LANG = { id: t.id , name: names, code: LANGUAGESC.find(x => x.id === id)!.name };
+          arrayLenguajes.push(LANG);
+        }
+      });
+    }
+    return (
+      <div className="modalContent">
+        {isPublishedCurrentAssignment && (true || view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentAssignment!, history, id, viewText)}
+        {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
+      </div>
+    );
+  }
+
   public contentIntwo = () => {
+    const { currentAssignment } = this.props.store!;
+    const { isSuperCMCurrentUser } = this.state;
+    const
+      {
+        title,
+        id,
+        subjectItems,
+        coreElementItems,
+        sourceItems,
+        multiSubjectItems,
+        goalsItems,
+        description,
+        publishedAt,
+        deadline,
+        author,
+        authorRole,
+        numberOfQuestions,
+        hasGuidance,
+        isAnswered,
+        isPublished,
+        isMySchool,
+        isPrivate,
+        createdAt,
+      } = currentAssignment!;
+    const { history, isPublishedCurrentAssignment, view, store, canEditOrDeleteValue } = this.props;
+    const guidanceText = intl.get('preview.assignment.buttons.teacher_guidance');
+    const editText = intl.get('preview.assignment.buttons.edit');
+    const duplicateText = intl.get('preview.assignment.buttons.duplicate');
+    return (
+      <div className="modalContent">
+        {canEditOrDeleteValue && this.renderEditButton(editText, history, id)}
+        {(isPublishedCurrentAssignment! || isMySchool) && this.renderDuplicateButton(duplicateText)}
+      </div>
+    );
+  }
+  public contentIntwoCM = () => {
     const { currentAssignment } = this.props.store!;
     const { isSuperCMCurrentUser } = this.state;
     const
@@ -484,6 +570,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
         isMySchool,
         isPrivate,
         createdAt,
+        isTranslations
       } = currentAssignment!;
     const { history, isPublishedCurrentAssignment, view, store, canEditOrDeleteValue } = this.props;
     /* const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager; */
@@ -498,6 +585,8 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     const expandedStyle: boolean = this.checkForPåbygging();
     const openPreview = (this.state.modalPreview) ? 'modalToggle active' : 'modalToggle';
     const openFunction = (this.state.modalFunction) ? 'modalToggle active' : 'modalToggle';
+    const isTranslate = isTranslations ? isTranslations : false;
+    const typeUser = this.userService.getCurrentUser()!.type;
     return (
       <div className={'previewModalInfo'} onClick={this.stopPropagation} tabIndex={0}>
         <div className="contentContainer">
@@ -505,11 +594,17 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
             <div className="headerButtons">
               <div className="previewButtons">
                 <a href="javascript:void(0)" className={openPreview} onClick={this.changeOpenpreview}>{intl.get('new assignment.Preview')}</a>
-                {this.state.modalPreview && this.contentIn()}
+                {this.state.modalPreview && typeUser === UserType.Teacher && this.contentIn()}
+                {this.state.modalPreview && typeUser === UserType.ContentManager && isTranslate && this.contentInCM()}
+                {this.state.modalPreview && typeUser === UserType.ContentManager && !isTranslate && this.contentIn()}
+                {this.state.modalPreview && typeUser === UserType.Student && this.contentIn()}
               </div>
               <div className="functionsButtons">
                 <a href="javascript:void(0)" className={openFunction} onClick={this.changeOpenFunction}>{editText}</a>
-                {this.state.modalFunction && this.contentIntwo()}
+                {this.state.modalFunction && typeUser === UserType.Teacher && this.contentIntwo()}
+                {this.state.modalFunction && typeUser === UserType.Student && this.contentIntwo()}
+                {this.state.modalFunction && typeUser === UserType.ContentManager && isTranslate && this.contentIntwoCM()}
+                {this.state.modalFunction && typeUser === UserType.ContentManager && !isTranslate && this.contentIntwo()}
               </div>
               <div className="DistributeButtons">
               {this.userService.getCurrentUser()!.type === UserType.Teacher && (isPublishedCurrentAssignment! || isMySchool) && this.renderDistributeButton(distributeText)}
