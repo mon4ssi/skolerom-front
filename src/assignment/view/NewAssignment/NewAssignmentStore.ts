@@ -372,9 +372,13 @@ export class NewAssignmentStore {
     return this.currentEntity!;
   }
 
-  public async getAssigmentForEditing(id: number) {
+  public async getAssigmentForEditing(id: number, add?: boolean, localeid?: number) {
     try {
-      const assignment = await this.draftAssignmentService.getDraftAssignmentForEditing(id);
+      /* if (add) {
+        console.log('michi');
+        //await this.draftAssignmentService.createTeachingPathLocale(this.getParams(), localeid);
+      } */
+      const assignment = await this.draftAssignmentService.getDraftAssignmentForEditing(id, localeid);
       this.buildAssignmentContainer(assignment);
       this.currentPreviewQuestion = this.currentEntity!.questions.length - 1;
       this.setHighlightingItem(CreationElements.Title);

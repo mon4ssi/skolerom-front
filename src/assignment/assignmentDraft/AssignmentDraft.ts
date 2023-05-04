@@ -44,7 +44,7 @@ export interface DraftAssignmentRepo {
   removeAttachment(assignmentId: number, attachmentId: number): Promise<number>;
   getNewAssignment(): Promise<DraftAssignment>;
   getKeywordsFromArticles(arrayWpIds: Array<number>): Promise<Array<string>>;
-  getDraftAssignmentById(id: number): Promise<DraftAssignment>;
+  getDraftAssignmentById(id: number, localeid?: number): Promise<DraftAssignment>;
   saveDraftAssignment(draft: DraftAssignment): Promise<string>;
   publishAssignment(draft: DraftAssignment): Promise<void>;
 }

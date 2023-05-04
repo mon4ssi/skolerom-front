@@ -81,9 +81,13 @@ export class DraftAssignmentApi implements DraftAssignmentRepo {
     return buildNewDraftAssignment(result);
   }
 
-  public async getDraftAssignmentById(id: number): Promise<DraftAssignment> {
+  public async getDraftAssignmentById(id: number, localeid?: number): Promise<DraftAssignment> {
     try {
-      const response: AxiosResponse<DraftAssignmentResponseDTO> = await API.get(`api/teacher/assignments/draft/${id}/edit`);
+      const response: AxiosResponse<DraftAssignmentResponseDTO> = (localeid && !isNaN(localeid)) ? await API.get(
+        `/api/teacher/assignments/draft/${id}/edit?localeId=${localeid}`
+      ) : await API.get(
+        `/api/teacher/assignments/draft/${id}/edit`
+      );
       return response.data.assignmentContent ?
         buildDraftAssignment(response.data) :
         buildNewDraftAssignment(response.data);

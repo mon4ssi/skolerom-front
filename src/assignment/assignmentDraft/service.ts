@@ -20,8 +20,8 @@ export class DraftAssignmentService {
     return this.draftAssignment!;
   }
 
-  public async getDraftAssignmentForEditing(id: number): Promise<DraftAssignment> {
-    this.draftAssignment = await this.draftAssignmentRepo.getDraftAssignmentById(id);
+  public async getDraftAssignmentForEditing(id: number, localeid?: number): Promise<DraftAssignment> {
+    this.draftAssignment = await this.draftAssignmentRepo.getDraftAssignmentById(id, localeid);
     return this.getAssignment();
   }
 
