@@ -18,7 +18,8 @@ import {
   GoalsData,
   GenericGrepItem,
   CustomImgAttachment,
-  LenguajesB
+  LenguajesB,
+  Translations
 } from './Assignment';
 import {
   AssignmentDistributeDTO,
@@ -214,6 +215,9 @@ interface AssignmentByIdResponseDTO {
   goals: Array<any>;
   open?: boolean;
   isMySchool?: boolean;
+  isTranslations?: boolean;
+  translations?: Array<Translations>;
+  originalLocaleId?: number;
 }
 
 export class AssignmentApi implements AssignmentRepo {
@@ -249,6 +253,9 @@ export class AssignmentApi implements AssignmentRepo {
       hasGuidance: assignmentDTO.hasGuidance,
       open: assignmentDTO.open,
       isMySchool: assignmentDTO.isMySchool,
+      isTranslations: assignmentDTO.isTranslations,
+      translations: assignmentDTO.translations,
+      originalLocaleId: assignmentDTO.originalLocaleId
     });
   }
 

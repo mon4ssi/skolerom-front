@@ -395,6 +395,9 @@ export interface AssignmentArgs {
   schools?: Array<NowSchool>;
   localeId?: number | null;
   canEditOrDelete?: boolean;
+  isTranslations?: boolean;
+  translations?: Array<Translations>;
+  originalLocaleId?: number;
 }
 
 export class Assignment {
@@ -459,6 +462,9 @@ export class Assignment {
   public _schools?: Array<NowSchool>;
   @observable protected _localeId?: number | null;
   @observable protected _canEditOrDelete?: boolean;
+  @observable protected _isTranslations?: boolean;
+  @observable protected _translations?: Array<Translations>;
+  @observable protected _originalLocaleId?: number = 0;
 
   constructor(args: AssignmentArgs) {
     this._id = args.id;
@@ -522,6 +528,9 @@ export class Assignment {
     this._schools = args.schools || [];
     this._localeId = args.localeId;
     this._canEditOrDelete = args.canEditOrDelete;
+    this._translations = args.translations;
+    this._isTranslations = args.isTranslations;
+    this._originalLocaleId = args.originalLocaleId;
   }
 
   public isOwnedByMe(): boolean {
@@ -739,6 +748,21 @@ export class Assignment {
   @computed
   public get canEditOrDelete() {
     return this._canEditOrDelete;
+  }
+
+  @computed
+  public get translations() {
+    return this._translations;
+  }
+
+  @computed
+  public get isTranslations() {
+    return this._isTranslations;
+  }
+
+  @computed
+  public get originalLocaleId() {
+    return this._originalLocaleId;
   }
 
   @computed

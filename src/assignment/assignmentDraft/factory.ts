@@ -51,7 +51,10 @@ export const buildDraftAssignment = (dto: DraftAssignmentResponseDTO): DraftAssi
     hasGuidance:dto.hasGuidance,
     open: dto.open,
     schools: dto.schools,
-    localeId: dto.localeId
+    localeId: dto.localeId,
+    isTranslations: dto.isTranslations,
+    translations: dto.translations,
+    originalLocaleId: dto.originalLocaleId
   });
 
   const draftAssignment = new DraftAssignment({ assignment, sessionId: dto.uuid, questionsWithError: null });
