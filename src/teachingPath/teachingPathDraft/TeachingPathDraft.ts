@@ -15,6 +15,7 @@ import {
 } from 'teachingPath/TeachingPath';
 import { buildTeachingPathRequestDTO, buildFeatureImageForTeachingPathRequestDTO, buildBackgroundImageForTeachingPathRequestDTO } from './factory';
 import { SAVE_DELAY } from 'utils/constants';
+import { parseQueryString } from 'utils/queryString';
 import { Article, Grade, Subject } from 'assignment/Assignment';
 
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
@@ -516,7 +517,14 @@ export class DraftTeachingPath extends TeachingPath {
     this.validateContent();
 
     try {
-      await this.repo.saveTeachingPath(this, this.localeId!);
+      /* tslint:disable:no-string-literal */
+      const search = parseQueryString(window.location.search)['locale_id'];
+      /* tslint:enable:no-string-literal */
+      if (search) {
+        await this.repo.saveTeachingPath(this, Number(search));
+      } else {
+        await this.repo.saveTeachingPath(this);
+      }
     } catch (error) {
       if (error instanceof AlreadyEditingTeachingPathError) {
         Notification.create({
