@@ -62,6 +62,7 @@ export interface AssignmentRepo {
   getGrepFiltersMyAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
   getGrepFiltersMySchoolAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
   downloadTeacherGuidancePDF(id: number): Promise<void>;
+  deleteAssignmentTranslation(assignmentId: number, localeId: number): Promise<void>;
   getLocalesByApi(): Promise<Array<LenguajesB>>;
 }
 

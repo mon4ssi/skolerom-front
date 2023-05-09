@@ -450,13 +450,12 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
   public setViewButtonDeleteByLenguaje = async (id: number, lenguajeid: number) => {
     const isCopyApproved = await Notification.create({
       type: NotificationTypes.CONFIRM,
-      title: intl.get('assignment list.Are you sure'),
-      submitButtonTitle: intl.get('edit_teaching_path.notifications.delete_element')
+      title: intl.get('assignment list.Are you sure')
     });
 
     if (isCopyApproved) {
       /* const currentEntityRoute = entityStore instanceof AssignmentListStore ? 'assignments' : 'teaching-paths'; */
-      // await this.teachingPathService.deleteTeachingTranslation(id, lenguajeid);
+      await this.assignmentService.deleteAssignmentTranslation(id, lenguajeid);
       window.location.reload();
     }
   }

@@ -175,8 +175,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   public setViewButtonDeleteByLenguaje = async (id: number, lenguajeid: number) => {
     const isCopyApproved = await Notification.create({
       type: NotificationTypes.CONFIRM,
-      title: intl.get('assignment list.Are you sure'),
-      submitButtonTitle: intl.get('edit_teaching_path.notifications.delete_element')
+      title: intl.get('assignment list.Are you sure')
     });
 
     if (isCopyApproved) {

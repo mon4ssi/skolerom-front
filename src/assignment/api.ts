@@ -285,6 +285,10 @@ export class AssignmentApi implements AssignmentRepo {
     );
   }
 
+  public async deleteAssignmentTranslation(assignmentId: number, localeId: number): Promise<void> {
+    await API.delete(`/api/teacher/assignments/${assignmentId}/destroy-translation?localeId=${localeId}`);
+  }
+
   public async removeAssignment(assignmentId: number): Promise<void> {
     try {
       await API.delete(`/api/teacher/assignments/${assignmentId}`);
