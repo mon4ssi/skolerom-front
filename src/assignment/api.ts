@@ -37,6 +37,7 @@ import {
 import { DEFAULT_AMOUNT_ARTICLES_PER_PAGE, DEFAULT_CUSTOM_IMAGES_PER_PAGE, LOCALES_MAPPING_FOR_BACKEND } from 'utils/constants';
 import { ContentBlockType } from './ContentBlock';
 import { Locales } from 'utils/enums';
+import { parseQueryString } from 'utils/queryString';
 import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
 import { CustomImageAttachments } from './view/NewAssignment/AttachmentsList/Attachments/CustomImageAttachments';
 import isNil from 'lodash/isNil';
@@ -481,7 +482,13 @@ export class AssignmentApi implements AssignmentRepo {
   }
   public async downloadTeacherGuidancePDF(id: number): Promise<void> {
     try {
-      const response = await API.get(`api/teacher/assignments/${id}/guidance/download`, {
+      /* tslint:disable:no-string-literal */
+      const search = parseQueryString(window.location.search)['locale_id'];
+      /* tslint:enable:no-string-literal */
+      const response = search ? await API.get(`api/teacher/assignments/${id}/guidance/download?locale_id=${Number(search)}`, {
+        responseType: 'blob',
+        headers: { Accept: 'application/octet-stream' },
+      }) : await API.get(`api/teacher/assignments/${id}/guidance/download`, {
         responseType: 'blob',
         headers: { Accept: 'application/octet-stream' },
       });

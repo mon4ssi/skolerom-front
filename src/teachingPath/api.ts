@@ -8,6 +8,7 @@ import { Locales } from 'utils/enums';
 import { TeachingPath, TeachingPathItem, TeachingPathNode, TeachingPathNodeType, TeachingPathRepo } from './TeachingPath';
 import { Article, Filter, Grade, Domain, FilterGrep, GoalsData, Attachment, LenguajesB } from 'assignment/Assignment';
 import { API } from '../utils/api';
+import { parseQueryString } from 'utils/queryString';
 import { buildFilterDTO, GradeDTO } from 'assignment/factory';
 import { Breadcrumbs } from './teachingPathDraft/TeachingPathDraft';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
@@ -225,7 +226,10 @@ export class TeachingPathApi implements TeachingPathRepo {
 
   public async getTeachingPathDataById(id: number): Promise<TeachingPath> {
     try {
-      const { data } = await API.get(`api/teacher/teaching-paths/${id}`);
+      /* tslint:disable:no-string-literal */
+      const search = parseQueryString(window.location.search)['locale_id'];
+      /* tslint:enable:no-string-literal */
+      const { data } = search ? await API.get(`api/teacher/teaching-paths/${id}?locale_id=${Number(search)}`) : await API.get(`api/teacher/teaching-paths/${id}`);
       return new TeachingPath({
         id: data.id,
         title: data.title,
@@ -289,7 +293,15 @@ export class TeachingPathApi implements TeachingPathRepo {
 
   public async getTeachingPathByIdTeacher(id: number): Promise<TeachingPath> {
     try {
-      const { data } = await API.get(`api/teacher/teaching-paths/${id}`, {
+      /* tslint:disable:no-string-literal */
+      const search = parseQueryString(window.location.search)['locale_id'];
+      /* tslint:enable:no-string-literal */
+      const { data } = search ? await API.get(`api/teacher/teaching-paths/${id}`, {
+        params: {
+          withBackground: true,
+          locale_id: Number(search)
+        }
+      }) : await API.get(`api/teacher/teaching-paths/${id}`, {
         params: {
           withBackground: true
         }
@@ -634,7 +646,13 @@ export class TeachingPathApi implements TeachingPathRepo {
 
   public async downloadTeacherGuidancePDF(id: number): Promise<void> {
     try {
-      const response = await API.get(`api/teacher/teaching-paths/${id}/guidance/download`, {
+      /* tslint:disable:no-string-literal */
+      const search = parseQueryString(window.location.search)['locale_id'];
+      /* tslint:enable:no-string-literal */
+      const response = search ? await API.get(`api/teacher/teaching-paths/${id}/guidance/download?locale_id=${Number(search)}`, {
+        responseType: 'blob',
+        headers: { Accept: 'application/octet-stream' },
+      }) : await API.get(`api/teacher/teaching-paths/${id}/guidance/download`, {
         responseType: 'blob',
         headers: { Accept: 'application/octet-stream' },
       });
