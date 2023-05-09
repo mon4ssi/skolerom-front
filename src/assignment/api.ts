@@ -489,7 +489,7 @@ export class AssignmentApi implements AssignmentRepo {
       /* tslint:disable:no-string-literal */
       const search = parseQueryString(window.location.search)['locale_id'];
       /* tslint:enable:no-string-literal */
-      const response = search ? await API.get(`api/teacher/assignments/${id}/guidance/download?locale_id=${Number(search)}`, {
+      const response = search ? await API.get(`api/teacher/assignments/${id}/guidance/download?localeId=${Number(search)}`, {
         responseType: 'blob',
         headers: { Accept: 'application/octet-stream' },
       }) : await API.get(`api/teacher/assignments/${id}/guidance/download`, {

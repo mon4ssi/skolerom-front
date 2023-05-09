@@ -229,7 +229,7 @@ export class TeachingPathApi implements TeachingPathRepo {
       /* tslint:disable:no-string-literal */
       const search = parseQueryString(window.location.search)['locale_id'];
       /* tslint:enable:no-string-literal */
-      const { data } = search ? await API.get(`api/teacher/teaching-paths/${id}?locale_id=${Number(search)}`) : await API.get(`api/teacher/teaching-paths/${id}`);
+      const { data } = search ? await API.get(`api/teacher/teaching-paths/${id}?localeId=${Number(search)}`) : await API.get(`api/teacher/teaching-paths/${id}`);
       return new TeachingPath({
         id: data.id,
         title: data.title,
@@ -299,7 +299,7 @@ export class TeachingPathApi implements TeachingPathRepo {
       const { data } = search ? await API.get(`api/teacher/teaching-paths/${id}`, {
         params: {
           withBackground: true,
-          locale_id: Number(search)
+          localeId: Number(search)
         }
       }) : await API.get(`api/teacher/teaching-paths/${id}`, {
         params: {
@@ -649,7 +649,7 @@ export class TeachingPathApi implements TeachingPathRepo {
       /* tslint:disable:no-string-literal */
       const search = parseQueryString(window.location.search)['locale_id'];
       /* tslint:enable:no-string-literal */
-      const response = search ? await API.get(`api/teacher/teaching-paths/${id}/guidance/download?locale_id=${Number(search)}`, {
+      const response = search ? await API.get(`api/teacher/teaching-paths/${id}/guidance/download?localeId=${Number(search)}`, {
         responseType: 'blob',
         headers: { Accept: 'application/octet-stream' },
       }) : await API.get(`api/teacher/teaching-paths/${id}/guidance/download`, {
