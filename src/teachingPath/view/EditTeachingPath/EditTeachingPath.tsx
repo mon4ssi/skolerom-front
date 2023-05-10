@@ -37,21 +37,28 @@ class EditTeachingPathComponent extends Component<Props & RouteComponentProps, S
   }
 
   public async componentDidMount() {
-    const { editTeachingPathStore, readOnly, history } = this.props;
-    const { getTeachingPathForEditing, isAssignmentCreating, getDraftForeignTeachingPath } = editTeachingPathStore!;
+    const { editTeachingPathStore, readOnly, history, location } = this.props;
+    const locale = new URLSearchParams(location!.search);
+    const localeid = parseInt(locale.get('locale_id')!, 10);
+    const add = Boolean(locale.get('add')!);
+    const { getTeachingPathForEditing, isAssignmentCreating, getDraftForeignTeachingPath, createTeachingPathLocale } = editTeachingPathStore!;
 
     this.props.editTeachingPathStore!.getArticles({});
     const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
     headerArray[0].style.display = 'none';
     if (!isAssignmentCreating) {
       if (readOnly) {
-        const result = await getDraftForeignTeachingPath(this.getParams());
+        const result = await getDraftForeignTeachingPath(this.getParams(), false, localeid);
         if (result.isOwnedByMe()) {
           /* this.props.history.replace(`/teaching-paths/edit/${this.getParams()}`); */
         }
       } else {
         try {
-          await getTeachingPathForEditing(this.getParams());
+          if (add) {
+            await createTeachingPathLocale(this.getParams(), localeid);
+          }
+          await getTeachingPathForEditing(this.getParams(), localeid);
+          editTeachingPathStore!.currentEntity!.setValueLocaleid(localeid);
         } catch (error) {
           if (error.response && error.response.status === STATUS_FORBIDDEN) {
             history.push('/not-found');
@@ -77,9 +84,11 @@ class EditTeachingPathComponent extends Component<Props & RouteComponentProps, S
 
   public renderCreationPage = () => {
     const { location, readOnly, tgOpen } = this.props;
+    const locale = new URLSearchParams(location!.search);
+    const localeid = parseInt(locale.get('locale_id')!, 10);
     return !location!.pathname.includes('distribute') &&
       !location!.pathname.includes('publish') && (
-        <CreationPage readOnly={readOnly} tgOpen={tgOpen}/>
+        <CreationPage readOnly={readOnly} tgOpen={tgOpen} locale={localeid}/>
       );
   }
 

@@ -8,6 +8,7 @@ import { LANGUAGESB } from 'utils/constants';
 import { Locales } from 'utils/enums';
 import './PublishingActions.scss';
 import { GreepElements } from 'assignment/factory';
+import { parseQueryString } from 'utils/queryString';
 import { User, UserType } from 'user/User';
 import { TagKeywordInputComponent, TagKeywordProp } from 'components/common/TagInput/TagInputKeyword/TagInputKeyword';
 import {
@@ -232,7 +233,21 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
       this.sendValidbutton();
     }
     if (typeof (store!.currentEntity!.localeId!) !== 'undefined' && store!.currentEntity!.localeId! !== null) {
-      this.setState({ valueLocaleId: store!.currentEntity!.localeId! });
+      /* tslint:disable:no-string-literal */
+      const search = parseQueryString(window.location.search)['locale_id'];
+      /* tslint:enable:no-string-literal */
+      if (search) {
+        this.setState(
+          {
+            valueLocaleId: Number(search)
+          },
+          () => {
+            store!.currentEntity!.setLocaleId(Number(search));
+          }
+        );
+      } else {
+        this.setState({ valueLocaleId: store!.currentEntity!.localeId! });
+      }
     } else {
       const currentLang = this.state.locales.find(i => i.code === localStorage.getItem('currentLocale'))!;
       this.setState({
@@ -926,9 +941,11 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
     if (valueLocaleId !== null) { selectedLanguage.push(LENtag.find(i => i.id === valueLocaleId)!); }
 
     const myplaceholder = (selectedLanguage.length > 0) ? '' : this.labels.placeholderLanguages;
+    const search = window.location.search;
+    const classnameHidden = search ? 'bloqued' : '';
 
     return (
-      <div>
+      <div className={classnameHidden}>
         <TagInputComponent
           className="filterBy darkTheme"
           tags={LENtag}

@@ -123,63 +123,6 @@ const nynorskHeaderLinks: Array<HeaderNavigationLink> = [
   }
 ];
 
-const renderHeaderLink = (link: HeaderNavigationLink) => {
-  if (link.dropdown) {
-    const renderSubMenuSubMenu = (item: HeaderNavigationLink) => (
-      <li key={item.name} className={'AppHeader__dropdownItem__subItem'}>
-        <a href={item.url} title={item.name} role="button">{item.name}</a>
-      </li>
-    );
-    const renderSubmenu = (item: HeaderNavigationLink) => {
-      if (item.dropdown) {
-        let maxLength = 0;
-        if (item.submenuItems) {
-          item.submenuItems.forEach((element) => {
-            if (element.name.length > maxLength) {
-              maxLength = element.name.length;
-            }
-          });
-        }
-        const classInside = (maxLength > TwentySeven) ? 'AppHeader__dropdownItem__subMenu subMenuItemActive' : 'AppHeader__dropdownItem__subMenu';
-        return (
-          <li key={item.name} className={'AppHeader__dropdownItem'}>
-            <a href={item.url} title={item.name} role="button">{item.name}</a>
-            <ul className={classInside}>
-              {item.submenuItems!.map(renderSubMenuSubMenu)}
-            </ul>
-          </li>
-        );
-      }
-      return (
-        <li key={item.name} className={'AppHeader__dropdownItem'}>
-          <a href={item.url} title={item.name}  role="button">{item.name}</a>
-        </li>
-      );
-    };
-
-    return (
-      <li key={link.name} className="AppHeader__navigationItem tc1 fs17 fw500">
-        <div className="AppHeader__navigationItemText">
-          <a href={link.url} className="AppHeader__dropdown" title={link.name} role="button">{link.name}</a>
-          <div className={'AppHeader__submenuWrapper'}>
-            <ul className={'AppHeader__submenu'}>
-              {link.submenuItems!.map(renderSubmenu)}
-            </ul>
-          </div>
-        </div>
-      </li>
-    );
-  }
-
-  return (
-    <li key={link.name} className="AppHeader__navigationItem tc1 fs17 fw500">
-      <div className="AppHeader__navigationItemText">
-        <a href={link.url} title={link.name} role="button">{link.name}</a>
-      </div>
-    </li>
-  );
-};
-
 interface HeaderProps extends RouteComponentProps {
   entityStore?: AssignmentListStore | TeachingPathsListStore;
   loginStore?: LoginStore;
@@ -622,6 +565,63 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     });
   }
 
+  public renderHeaderLink = (link: HeaderNavigationLink, index: number) => {
+    const validIndex = (index === (this.state.linksMenu.length - 1)) ? true : false;
+    if (link.dropdown) {
+      const renderSubMenuSubMenu = (item: HeaderNavigationLink) => (
+        <li key={item.name} className={'AppHeader__dropdownItem__subItem'}>
+          <a href={item.url} title={item.name} role="button">{item.name}</a>
+        </li>
+      );
+      const renderSubmenu = (item: HeaderNavigationLink) => {
+        if (item.dropdown) {
+          let maxLength = 0;
+          if (item.submenuItems) {
+            item.submenuItems.forEach((element) => {
+              if (element.name.length > maxLength) {
+                maxLength = element.name.length;
+              }
+            });
+          }
+          const classInside = (maxLength > TwentySeven) ? 'AppHeader__dropdownItem__subMenu subMenuItemActive' : 'AppHeader__dropdownItem__subMenu';
+          return (
+            <li key={item.name} className={'AppHeader__dropdownItem'}>
+              <a href={item.url} title={item.name} role="button">{item.name}</a>
+              <ul className={classInside}>
+                {item.submenuItems!.map(renderSubMenuSubMenu)}
+              </ul>
+            </li>
+          );
+        }
+        return (
+          <li key={item.name} className={'AppHeader__dropdownItem'}>
+            <a href={item.url} title={item.name}  role="button">{item.name}</a>
+          </li>
+        );
+      };
+      return (
+        <li key={link.name} className="AppHeader__navigationItem tc1 fs17 fw500">
+          <div className="AppHeader__navigationItemText">
+            <a href={link.url} className="AppHeader__dropdown" title={link.name} role="button">{link.name}</a>
+            <div className={'AppHeader__submenuWrapper'}>
+              <ul className={'AppHeader__submenu'}>
+                {link.submenuItems!.map(renderSubmenu)}
+                {validIndex && this.props.loginStore!.currentUser && this.dropDownKeyboard()}
+              </ul>
+            </div>
+          </div>
+        </li>
+      );
+    }
+    return (
+      <li key={link.name} className="AppHeader__navigationItem tc1 fs17 fw500">
+        <div className="AppHeader__navigationItemText">
+          <a href={link.url} title={link.name} role="button">{link.name}</a>
+        </div>
+      </li>
+    );
+  }
+
   public renderNavigation = () => {
     const { uiStore } = this.props;
     // const linksList = uiStore!.currentLocale === 'nn' ? nynorskHeaderLinks : headerLinks;
@@ -632,12 +632,11 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       <>
         <ul className="AppHeader__navigation">
           {this.sendTitleActivity()}
-          {linksList.map(renderHeaderLink)}
-          {this.renderQuestionTab()}
+          {linksList.map(this.renderHeaderLink)}
           {this.renderAccountTab()}
         </ul>
         <ul className="AppHeader__navigation AppHeader__navigation_tablet">
-          {linksList.map(renderHeaderLink)}
+          {linksList.map(this.renderHeaderLink)}
           {this.renderQuestionTab()}
           {this.renderAccountTab()}
         </ul>
@@ -654,12 +653,12 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     return (
       <>
         <ul className="AppHeader__navigation">
-          {linksList.map(renderHeaderLink)}
+          {linksList.map(this.renderHeaderLink)}
           {this.renderQuestionTab()}
           {this.renderItemsNotLogin()}
         </ul>
         <ul className="AppHeader__navigation AppHeader__navigation_tablet">
-          {linksList.map(renderHeaderLink)}
+          {linksList.map(this.renderHeaderLink)}
           {this.renderItemsNotLogin()}
         </ul>
       </>
@@ -667,7 +666,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   }
 
   public handleCopy = async () => {
-    const { entityStore, currentEntityId, history } = this.props;
+    const { entityStore, currentEntityId, history, isPreviewTP } = this.props;
 
     const isCopyApproved = await Notification.create({
       type: NotificationTypes.CONFIRM,
@@ -825,7 +824,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     return (
       <div className="singleElements">
         <ul>
-          {linksList.map(renderHeaderLink)}
+          {linksList.map(this.renderHeaderLink)}
           {this.renderItemsNotLogin()}
         </ul>
       </div>

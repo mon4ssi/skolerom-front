@@ -33,6 +33,10 @@ export class AssignmentService {
     return this.assignmentRepo.getSources();
   }
 
+  public async deleteAssignmentTranslation(assignmentId: number, localeId: number) {
+    return this.assignmentRepo.deleteAssignmentTranslation(assignmentId, localeId);
+  }
+
   public async removeAssignment(assignmentId: number) {
     return this.assignmentRepo.removeAssignment(assignmentId);
   }

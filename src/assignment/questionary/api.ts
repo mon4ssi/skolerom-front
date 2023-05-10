@@ -6,6 +6,7 @@ import { Questionary, QuestionaryRepo, AlreadyEditingAssignmentError, RedirectDa
 import { buildQuestionaryRequestDTO, buildQuestionary, buildQuestionaryView } from './factory';
 import { TypedQuestion, Article, QuestionType, Subject, Grade } from 'assignment/Assignment';
 import { QuestionDTO, TeacherAssignmentByIdResponseDTO } from '../api';
+import { parseQueryString } from 'utils/queryString';
 
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import intl from 'react-intl-universal';
@@ -110,7 +111,17 @@ export class QuestionaryApi implements QuestionaryRepo {
   }
 
   public async getAssignmentQuestionaryById(assignmentId: number):Promise<Questionary> {
-    const response: AxiosResponse<TeacherAssignmentByIdResponseDTO> = await API.get(
+    /* tslint:disable:no-string-literal */
+    const search = parseQueryString(window.location.search)['locale_id'];
+    /* tslint:enable:no-string-literal */
+    const response: AxiosResponse<TeacherAssignmentByIdResponseDTO> = search ? await API.get(
+      `api/teacher/assignments/${assignmentId}`, {
+        params: {
+          localeId: search,
+          withBackground: true
+        }
+      }
+    ) : await API.get(
       `api/teacher/assignments/${assignmentId}`, {
         params: {
           withBackground: true
@@ -122,7 +133,17 @@ export class QuestionaryApi implements QuestionaryRepo {
   }
 
   public async getAssignmentQuestionaryByIdPreview(assignmentId: number):Promise<Questionary> {
-    const response: AxiosResponse<TeacherAssignmentByIdResponseDTO> = await API.get(
+    /* tslint:disable:no-string-literal */
+    const search = parseQueryString(window.location.search)['locale_id'];
+    /* tslint:enable:no-string-literal */
+    const response: AxiosResponse<TeacherAssignmentByIdResponseDTO> = search ? await API.get(
+      `api/teacher/assignments/${assignmentId}`, {
+        params: {
+          localeId: search,
+          withBackground: true
+        }
+      }
+    ) : await API.get(
       `api/teacher/assignments/${assignmentId}`, {
         params: {
           withBackground: true

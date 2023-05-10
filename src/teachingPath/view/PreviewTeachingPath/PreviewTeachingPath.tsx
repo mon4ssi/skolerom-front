@@ -18,6 +18,7 @@ import { SubmitTeachingPath } from 'assignment/view/SubmitTeachingPath/SubmitTea
 import { Article, Assignment } from 'assignment/Assignment';
 import { BreadcrumbsTeachingPath } from 'components/common/Breadcrumbs/BreadcrumbsComponent';
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
+import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
 
 import { CustomTeachingPath } from './CustomTeachingPath/CustomTeachingPath';
 import actualArrowLeftRounded from 'assets/images/actual-arrow-left-rounded.svg';
@@ -34,6 +35,7 @@ const itemSplit = 3;
 interface Props {
   questionaryTeachingPathStore?: QuestionaryTeachingPathStore;
   editTeachingPathStore? : EditTeachingPathStore;
+  teachingPathsListStore?: TeachingPathsListStore;
 }
 
 interface State {
@@ -44,7 +46,7 @@ interface State {
 type PropsComponent = Props & RouteComponentProps<{}, {}, LocationState>;
 
 @inject('questionaryTeachingPathStore')
-@inject('editTeachingPathStore')
+@inject('editTeachingPathStore', 'teachingPathsListStore')
 @observer
 class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
   public ref = createRef<HTMLDivElement>();
@@ -424,9 +426,11 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
   }
 
   public render() {
+    const { location, history } = this.props;
+    const id = Number(location.pathname.split('/', limitSplit)[itemSplit]);
     return (
       <div className={'passageTeachingPath'}>
-        <AppHeader fromTeachingPathPassing studentFormTeachinPath isPreviewTP onLogoClick={this.handleExit}/>
+        <AppHeader entityStore={this.props.teachingPathsListStore!} currentEntityId={id} fromTeachingPathPassing studentFormTeachinPath isPreviewTP onLogoClick={this.handleExit}/>
         <div className="passageTeachingPathBreadCrumbs">
           {this.itemsbyBreadcrumbs()}
         </div>
