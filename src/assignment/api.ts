@@ -226,7 +226,10 @@ export class AssignmentApi implements AssignmentRepo {
   private currentLocale = this.storageInteractor.getCurrentLocale()!;
 
   public async getAssignmentById(id: number): Promise<Assignment> {
-    const assignmentDTO: AssignmentByIdResponseDTO = (await API.get(`api/teacher/assignments/${id}`)).data;
+    /* tslint:disable:no-string-literal */
+    const search = parseQueryString(window.location.search)['locale_id'];
+    /* tslint:enable:no-string-literal */
+    const assignmentDTO: AssignmentByIdResponseDTO = search ? (await API.get(`api/teacher/assignments/${id}?localeId=${Number(search)}`)).data : (await API.get(`api/teacher/assignments/${id}`)).data;
 
     // questions and relatedArticles ignored here because it not essential for stores that use this method
     return new Assignment({

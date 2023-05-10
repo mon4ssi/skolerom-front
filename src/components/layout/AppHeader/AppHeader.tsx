@@ -666,7 +666,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   }
 
   public handleCopy = async () => {
-    const { entityStore, currentEntityId, history } = this.props;
+    const { entityStore, currentEntityId, history, isPreviewTP } = this.props;
 
     const isCopyApproved = await Notification.create({
       type: NotificationTypes.CONFIRM,
