@@ -172,6 +172,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       >
         <MyAccountWindowWrapper
           navigation={myLinks}
+          openKeyboardModal={this.openKeyboardModal}
           closeMyAccountWindow={this.closeModals}
           onLogIn={this.getFeideUrl}
         />
@@ -463,7 +464,6 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
             <li className="AppHeader__dropdownItem">
               <a href={`${process.env.REACT_APP_WP_URL}/support-skolerom`} title={intl.get('generals.support')} target="_blank" role="button">{intl.get('generals.support')}</a>
             </li>
-            {this.props.loginStore!.currentUser && this.dropDownKeyboard()}
           </ul>
         </div>
       </div>
@@ -606,7 +606,6 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
             <div className={'AppHeader__submenuWrapper'}>
               <ul className={'AppHeader__submenu'}>
                 {link.submenuItems!.map(renderSubmenu)}
-                {validIndex && this.props.loginStore!.currentUser && this.dropDownKeyboard()}
               </ul>
             </div>
           </div>
