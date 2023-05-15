@@ -114,9 +114,8 @@ class NewAssignmentComponent extends Component<Props & RouteComponentProps, Stat
 
   public render() {
     const { contentType } = this.state;
-    const { newAssignmentStore } = this.props;
+    const { newAssignmentStore, location } = this.props;
     const { assignmentContainer } = newAssignmentStore!;
-
     if (!assignmentContainer) {
       return (
         <div className={'loading'}><Loader /></div>

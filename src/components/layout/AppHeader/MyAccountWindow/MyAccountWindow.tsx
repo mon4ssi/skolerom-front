@@ -39,6 +39,7 @@ interface MyAccountWindowProps {
   loginStore?: LoginStore;
   navigation: Array<HeaderNavigationLink>;
   onLogIn: () => void;
+  openKeyboardModal: () => void;
   closeMyAccountWindow(e: SyntheticEvent): void;
 }
 
@@ -244,6 +245,11 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
         </ul>
         {this.renderLocaleChooserIfNeeded()}
         {this.renderChangeFontSize()}
+        <ul className="MyAccountWindow__list MyAccountWindow__list_separated">
+          <li className="MyAccountWindow__item">
+            <a href="javascript:void(0)" className="MyAccountWindow__itemText" onClick={this.props.openKeyboardModal} title={intl.get('header.title.keyboard')}>{intl.get('generals.keyboard')}</a>
+          </li>
+        </ul>
         {this.renderLogOutButtonIfNeeded()}
         {this.renderLogInButtonIfNeeded()}
       </>

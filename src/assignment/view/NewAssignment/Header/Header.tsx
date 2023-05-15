@@ -61,17 +61,31 @@ class HeaderWrapper extends Component<Props> {
         type: NotificationTypes.SUCCESS,
         title: intl.get('new assignment.after_saving')
       });
-
       if (history.location.search) {
         const searchvalue = history.location.search;
-        history.push({
-          pathname: `/assignments/edit/${id}/publish`,
-          search: searchvalue
-        });
+        if (location.state && location.state.fromTeachingPath) {
+          history.push({
+            pathname: `/assignments/edit/${id}/publish`,
+            search: searchvalue,
+            state: { fromTeachingPath: true, teachingPathId: location.state.teachingPathId }
+          });
+        } else {
+          history.push({
+            pathname: `/assignments/edit/${id}/publish`,
+            search: searchvalue,
+          });
+        }
       } else {
-        history.push({
-          pathname: `/assignments/edit/${id}/publish`,
-        });
+        if (location.state && location.state.fromTeachingPath) {
+          history.push({
+            pathname: `/assignments/edit/${id}/publish`,
+            state: { fromTeachingPath: true, teachingPathId: location.state.teachingPathId }
+          });
+        } else {
+          history.push({
+            pathname: `/assignments/edit/${id}/publish`,
+          });
+        }
       }
     } catch (e) {
       if (e instanceof AssignmentValidationError) {
@@ -147,7 +161,6 @@ class HeaderWrapper extends Component<Props> {
 
     try {
       await newAssignmentStore!.publish();
-
       if (location.state && location.state.fromTeachingPath) {
         Notification.create({
           type: NotificationTypes.SUCCESS,
