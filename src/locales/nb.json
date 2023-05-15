@@ -33,7 +33,9 @@
         "educational_goals": "Kompetansemål"
       },
       "buttons": {
-        "view": "Se Læringsstier",
+        "view": "Lærervisning",
+        "add": "Opprett målform",
+        "editbutton": "Rediger målform",
         "teacher_guidance": "Lærerveiledning",
         "edit": "Rediger",
         "duplicate": "Kopier",

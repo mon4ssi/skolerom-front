@@ -34,7 +34,9 @@
       },
       "buttons": {
         "view": "View teaching path",
-        "teacher_guidance": "Teacher Guidance",
+        "teacher_guidance": "Teacher Guidance",        
+        "add": "Add language",
+        "editbutton": "Edit language",
         "edit": "Edit",
         "duplicate": "Duplicate",
         "viewstudent": "View as Student",
