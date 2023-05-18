@@ -653,7 +653,6 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
       <>
         <ul className="AppHeader__navigation">
           {linksList.map(this.renderHeaderLink)}
-          {this.renderQuestionTab()}
           {this.renderItemsNotLogin()}
         </ul>
         <ul className="AppHeader__navigation AppHeader__navigation_tablet">

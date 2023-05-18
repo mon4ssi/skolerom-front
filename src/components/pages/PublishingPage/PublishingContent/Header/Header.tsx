@@ -76,7 +76,7 @@ export class Header extends Component<Props, SelectCoverImageState> {
   public firstFeaturedImage = () => {
     const { store } = this.props;
     const { currentEntity, localeKey } = store!;
-    if (currentEntity!.featuredImage === undefined || currentEntity!.featuredImage === null) {
+    if (currentEntity!.featuredImage === undefined || currentEntity!.featuredImage === null || currentEntity!.featuredImage === '') {
       currentEntity!.setFeaturedImage();
     }
   }
