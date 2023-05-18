@@ -241,9 +241,9 @@ const buildBackgroundImageUrlFromArticlesOrAssignment = (child: TeachingPathNode
     }
   }
   if (child.type === TeachingPathNodeType.Domain) {
-    const itemWithImage = child.items!.find((item: TeachingPathItemSaveResponseDTO) => !isNil(item.backgroundImage));
+    const itemWithImage = child.items!.find((item: TeachingPathItemSaveResponseDTO) => !isNil(item.featuredImage));
     if (itemWithImage) {
-      return itemWithImage.backgroundImage;
+      return itemWithImage.featuredImage;
     }
   }
 };

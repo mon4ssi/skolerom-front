@@ -16,7 +16,8 @@ import {
 import { buildTeachingPathRequestDTO, buildFeatureImageForTeachingPathRequestDTO, buildBackgroundImageForTeachingPathRequestDTO } from './factory';
 import { SAVE_DELAY } from 'utils/constants';
 import { parseQueryString } from 'utils/queryString';
-import { Article, Grade, Subject } from 'assignment/Assignment';
+import { Article, Grade, Subject, Attachment, ARTICLE_SERVICE_KEY } from 'assignment/Assignment';
+import { ArticleService } from 'assignment/service';
 
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { GreepElements } from 'assignment/factory';
@@ -51,6 +52,7 @@ export class DraftTeachingPath extends TeachingPath {
 
   protected repo: DraftTeachingPathRepo = injector.get(DRAFT_TEACHING_PATH_REPO);
   protected teachingPathRepo: TeachingPathRepo = injector.get<TeachingPathRepo>(TEACHING_PATH_REPO);
+  private articleService: ArticleService = injector.get<ArticleService>(ARTICLE_SERVICE_KEY);
 
   protected _uuid: string;
   @observable protected _createdAt: string;
@@ -244,12 +246,19 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
-  public setFeaturedImage() {
+  public async setFeaturedImage() {
     const teachingPath = buildTeachingPathRequestDTO(this);
     const image = buildFeatureImageForTeachingPathRequestDTO(teachingPath.content);
     const bgImage = buildBackgroundImageForTeachingPathRequestDTO(teachingPath.content);
-    this._featuredImage = image;
-    this._backgroundImage = bgImage;
+    if (bgImage) {
+      this._backgroundImage = bgImage;
+      this._featuredImage = image;
+    } else {
+      const articlesid = await this.addArticlesIdsBySave();
+      const mediaImgsWP: Array<Attachment> = await this.articleService.fetchCoverImages(articlesid) || [];
+      this._backgroundImage = mediaImgsWP[0].url_large;
+      this._featuredImage = mediaImgsWP[0].path;
+    }
   }
 
   @action
