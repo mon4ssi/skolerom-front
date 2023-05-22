@@ -480,8 +480,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const viewStudentText = intl.get('preview.teaching_path.buttons.viewstudent');
     return (
       <div className="modalContent">
-        {isPublishedCurrentTeachingPath! && (view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentTeachingPath!, history, id, viewText)}
         {isPublishedCurrentTeachingPath! && this.renderPreviewButon(isPublishedCurrentTeachingPath!, id, viewStudentText)}
+        {isPublishedCurrentTeachingPath! && (view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentTeachingPath!, history, id, viewText)}
         {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
       </div>
     );
