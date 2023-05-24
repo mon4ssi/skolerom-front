@@ -1,7 +1,7 @@
 import { computed, observable, toJS } from 'mobx';
 import intl from 'react-intl-universal';
 
-import { LenguajesB, Grade, GreepElements, Subject, Article, Assignment, Attachment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData, Source, NowSchool, SourceItem, CoreElementItem, EducationalGoalItem, GenericGrepItem } from 'assignment/Assignment';
+import { Translations, LenguajesB, Grade, GreepElements, Subject, Article, Assignment, Attachment, Domain, Filter, FilterArticlePanel, FilterGrep, GoalsData, Source, NowSchool, SourceItem, CoreElementItem, EducationalGoalItem, GenericGrepItem } from 'assignment/Assignment';
 import { TEACHING_PATH_SERVICE, TeachingPathService } from './service';
 import { injector } from '../Injector';
 
@@ -37,6 +37,7 @@ export interface TeachingPathRepo {
   finishTeachingPath(id: number): Promise<void>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
   deleteTeachingPathAnswers(teachingPathId: number, answerId: number): Promise<void>;
+  deleteTeachingTranslation(teachingPathId: number, localeId: number): Promise<void>;
   copyTeachingPath(id: number, all?:boolean): Promise<number>;
   getGradeWpIds(gradeWpIds: Array<number>): Promise<Array<Grade>>;
   getSubjectWpIds(subjectWpIds: Array<number>): Promise<Array<Subject>>;
@@ -240,6 +241,9 @@ export interface TeachingPathArgs {
   answeredDistributes?: number;
   defaultStartDate?: string;
   defaultEndDate?: string;
+  translations?: Array<Translations>;
+  isTranslations?: boolean;
+  originalLocaleId?: number;
 }
 
 export class TeachingPath {
@@ -309,6 +313,9 @@ export class TeachingPath {
   @observable protected _answeredDistributes?: number;
   @observable protected _defaultStartDate?: string;
   @observable protected _defaultEndDate?: string;
+  @observable protected _translations?: Array<Translations>;
+  @observable protected _isTranslations?: boolean = false;
+  @observable protected _originalLocaleId?: number = 0;
 
   constructor(args: TeachingPathArgs) {
     this._id = args.id;
@@ -378,6 +385,9 @@ export class TeachingPath {
     this._answeredDistributes = args.answeredDistributes;
     this._defaultStartDate = args.defaultStartDate;
     this._defaultEndDate = args.defaultEndDate;
+    this._translations = args.translations;
+    this._isTranslations = args.isTranslations;
+    this._originalLocaleId = args.originalLocaleId;
   }
 
   @computed
@@ -609,6 +619,21 @@ export class TeachingPath {
   }
 
   @computed
+  public get translations() {
+    return this._translations;
+  }
+
+  @computed
+  public get isTranslations() {
+    return this._isTranslations;
+  }
+
+  @computed
+  public get originalLocaleId() {
+    return this._originalLocaleId;
+  }
+
+  @computed
   public get totalDistributes () {
     return this._totalDistributes;
   }
@@ -621,6 +646,10 @@ export class TeachingPath {
   @computed
   public get canEditOrDelete() {
     return this._canEditOrDelete;
+  }
+
+  public getListOfTranslations() {
+    return toJS(this._translations);
   }
 
   public getListOfSubjects() {

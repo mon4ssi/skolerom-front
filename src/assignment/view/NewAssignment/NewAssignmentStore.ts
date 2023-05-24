@@ -372,9 +372,12 @@ export class NewAssignmentStore {
     return this.currentEntity!;
   }
 
-  public async getAssigmentForEditing(id: number) {
+  public async getAssigmentForEditing(id: number, add?: boolean, localeid?: number) {
     try {
-      const assignment = await this.draftAssignmentService.getDraftAssignmentForEditing(id);
+      if (add) {
+        await this.draftAssignmentService.createAssignmentLocale(id, localeid);
+      }
+      const assignment = await this.draftAssignmentService.getDraftAssignmentForEditing(id, localeid);
       this.buildAssignmentContainer(assignment);
       this.currentPreviewQuestion = this.currentEntity!.questions.length - 1;
       this.setHighlightingItem(CreationElements.Title);

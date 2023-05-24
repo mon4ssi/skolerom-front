@@ -29,6 +29,7 @@ import {
 import { Article, GreepElements } from 'assignment/Assignment';
 import { AssertionError } from 'assert';
 import { SAVE_DELAY } from 'utils/constants';
+import { parseQueryString } from 'utils/queryString';
 import { EditableContentBlock, EditableImagesContentBlock, EditableTextContentBlock, EditableVideosContentBlock } from './EditableContentBlock';
 import { ContentBlock, ContentBlockType } from '../ContentBlock';
 
@@ -44,8 +45,9 @@ export interface DraftAssignmentRepo {
   removeAttachment(assignmentId: number, attachmentId: number): Promise<number>;
   getNewAssignment(): Promise<DraftAssignment>;
   getKeywordsFromArticles(arrayWpIds: Array<number>): Promise<Array<string>>;
-  getDraftAssignmentById(id: number): Promise<DraftAssignment>;
-  saveDraftAssignment(draft: DraftAssignment): Promise<string>;
+  getDraftAssignmentById(id: number, localeid?: number): Promise<DraftAssignment>;
+  createAssignmentLocale(id: number, localeid?: number): Promise<DraftAssignment>;
+  saveDraftAssignment(draft: DraftAssignment, localeid?: number): Promise<string>;
   publishAssignment(draft: DraftAssignment): Promise<void>;
 }
 
@@ -462,7 +464,14 @@ export class DraftAssignment extends Assignment {
           this.isDraftSaving = true;
           try {
             if (this.isPublishing) return;
-            this.setUpdatedAt(await this.repo.saveDraftAssignment(this));
+            /* tslint:disable:no-string-literal */
+            const search = parseQueryString(window.location.search)['locale_id'];
+            /* tslint:enable:no-string-literal */
+            if (search) {
+              this.setUpdatedAt(await this.repo.saveDraftAssignment(this, Number(search)));
+            } else {
+              this.setUpdatedAt(await this.repo.saveDraftAssignment(this));
+            }
           } catch (error) {
             if (error instanceof AlreadyEditingAssignmentError) {
               Notification.create({

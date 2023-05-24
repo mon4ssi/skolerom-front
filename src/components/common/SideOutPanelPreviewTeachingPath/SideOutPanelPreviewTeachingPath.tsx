@@ -9,9 +9,9 @@ import { EvaluationLabel } from 'components/common/EvaluationLabel/EvaluationLab
 import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
-import { Assignment, GenericGrepItem, Subject } from 'assignment/Assignment';
+import { Assignment, GenericGrepItem, LenguajesB, LenguajesC, Subject } from 'assignment/Assignment';
 
-import { deadlineDateFormat, thirdLevel } from 'utils/constants';
+import { deadlineDateFormat, thirdLevel, LANGUAGESC } from 'utils/constants';
 
 import clock from 'assets/images/clock.svg';
 import close from 'assets/images/close.svg';
@@ -32,7 +32,8 @@ import { TeachingPathService, TEACHING_PATH_SERVICE } from 'teachingPath/service
 import { TeachingPathApi } from 'teachingPath/api';
 import { UserType } from 'user/User';
 import { Notification, NotificationTypes } from '../Notification/Notification';
-
+import editImg from 'assets/images/edit-tp.svg';
+import deleteImg from 'assets/images/trash-tp.svg';
 import './SideOutPanelPreviewTeachingPath.scss';
 import { UserService } from 'user/UserService';
 import { Url } from 'url';
@@ -50,6 +51,9 @@ interface SideOutPanelPreviewState {
   currentTeachingPath: undefined | TeachingPath;
   modalPreview: boolean;
   modalFunction: boolean;
+  modalInsideView: boolean;
+  modalInsidePreview: boolean;
+  modalInsideEdit: boolean;
 }
 
 export const USER_SERVICE = 'USER_SERVICE';
@@ -62,7 +66,10 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   public state = {
     currentTeachingPath: undefined,
     modalPreview: false,
-    modalFunction: false
+    modalFunction: false,
+    modalInsideView: false,
+    modalInsidePreview: false,
+    modalInsideEdit: false
   };
 
   private onClose = (e: SyntheticEvent) => {
@@ -78,10 +85,24 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     window.open(urlForEditing);
   }
 
+  public setViewButtonByLenguaje = (idlenguaje : number) => {
+    const { currentEntity: { id } } = this.props.store!;
+    const url: URL = new URL(window.location.href);
+    const urlForEditing: string = `${url.origin}/teaching-paths/view/${id!}?locale_id=${idlenguaje}`;
+    window.open(urlForEditing);
+  }
+
   public openInNewTabPreView = () => {
     const { currentEntity: { id } } = this.props.store!;
     const url: URL = new URL(window.location.href);
     const urlForEditing: string = `${url.origin}/teaching-path/preview/${id!}`;
+    window.open(urlForEditing);
+  }
+
+  public setPreViewButtonByLenguaje = (idlenguaje : number) => {
+    const { currentEntity: { id } } = this.props.store!;
+    const url: URL = new URL(window.location.href);
+    const urlForEditing: string = `${url.origin}/teaching-path/preview/${id!}?locale_id=${idlenguaje}`;
     window.open(urlForEditing);
   }
 
@@ -130,9 +151,43 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     </div>
   )
 
+  public renderTeacherGuidanceButtonList = (guidanceString: string) =>
+  (
+    <li>
+      <a href="javascript:void(0)" className="linkOpenSite LinkRollback" onClick={this.openInNewTabTeacherGuidance}>
+        {guidanceString}
+      </a>
+    </li>
+  )
+
   public openInNewTabEdit = (id: number) => {
     const url: URL = new URL(window.location.href);
     const urlForEditing: string = `${url.origin}/teaching-paths/edit/${id}`;
+    window.open(urlForEditing);
+  }
+
+  public setViewButtonEditByLenguaje = (id: number, lenguajeid: number) => {
+    const url: URL = new URL(window.location.href);
+    const urlForEditing: string = `${url.origin}/teaching-paths/edit/${id}?locale_id=${lenguajeid}`;
+    window.open(urlForEditing);
+  }
+
+  public setViewButtonDeleteByLenguaje = async (id: number, lenguajeid: number) => {
+    const isCopyApproved = await Notification.create({
+      type: NotificationTypes.CONFIRM,
+      title: intl.get('assignment list.Are you sure')
+    });
+
+    if (isCopyApproved) {
+      /* const currentEntityRoute = entityStore instanceof AssignmentListStore ? 'assignments' : 'teaching-paths'; */
+      await this.teachingPathService.deleteTeachingTranslation(id, lenguajeid);
+      window.location.reload();
+    }
+  }
+
+  public setViewButtonAddByLenguaje = (id: number, lenguajeid: number) => {
+    const url: URL = new URL(window.location.href);
+    const urlForEditing: string = `${url.origin}/teaching-paths/edit/${id}?locale_id=${lenguajeid}&add=true`;
     window.open(urlForEditing);
   }
 
@@ -425,9 +480,134 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const viewStudentText = intl.get('preview.teaching_path.buttons.viewstudent');
     return (
       <div className="modalContent">
-        {isPublishedCurrentTeachingPath! && (view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentTeachingPath!, history, id, viewText)}
         {isPublishedCurrentTeachingPath! && this.renderPreviewButon(isPublishedCurrentTeachingPath!, id, viewStudentText)}
+        {isPublishedCurrentTeachingPath! && (view === 'show' || view === 'edit') && this.renderViewButton(isPublishedCurrentTeachingPath!, history, id, viewText)}
         {hasGuidance && this.renderTeacherGuidanceButton(guidanceText)}
+      </div>
+    );
+  }
+
+  public insidechangeOpenFunction = () => {
+    if (this.state.modalInsideView) {
+      this.setState({ modalInsideView: false });
+    } else {
+      this.setState({ modalInsideView: true });
+    }
+  }
+
+  public insidePreviewchangeOpenFunction = () => {
+    if (this.state.modalInsidePreview) {
+      this.setState({ modalInsidePreview: false });
+    } else {
+      this.setState({ modalInsidePreview: true });
+    }
+  }
+
+  public insidechangeEditFunction = () => {
+    if (this.state.modalInsideEdit) {
+      this.setState({ modalInsideEdit: false });
+    } else {
+      this.setState({ modalInsideEdit: true });
+    }
+  }
+
+  public contentInCM = () => {
+    const { currentEntity } = this.props.store!;
+    const
+      {
+        title,
+        ownedByMe,
+        createdAt,
+        subjectItems,
+        coreElementItems,
+        sourceItems,
+        multiSubjectItems,
+        numberOfSteps,
+        goalsItems,
+        description,
+        author,
+        authorRole,
+        isPrivate,
+        numberOfQuestions,
+        hasGuidance,
+        numberOfArticles,
+        isMySchool,
+        translations,
+        isTranslations,
+        originalLocaleId
+      } = currentEntity;
+    const { currentEntity: { id } } = this.props.store!;
+    const { history, isPublishedCurrentTeachingPath, view, currentCanEditOrDelete } = this.props;
+    /* const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager; */
+    const showPublishDate = authorRole === UserType.Teacher || !(authorRole === UserType.ContentManager && !(isPrivate!));
+    const viewText = intl.get('preview.teaching_path.buttons.view');
+    const guidanceText = intl.get('preview.assignment.buttons.teacher_guidance');
+    const viewStudentText = intl.get('preview.teaching_path.buttons.viewstudent');
+    const mytranslations = this.props.store!.currentEntity.getListOfTranslations();
+    const arrayLenguajes : Array<LenguajesC> = [];
+    if (mytranslations) {
+      mytranslations.forEach((t) => {
+        if (Boolean(t.value)) {
+          const id = t.id;
+          const names = (LANGUAGESC.find(x => x.id === id)) ? LANGUAGESC.find(x => x.id === id)!.name : '';
+          const LANG = { id: t.id , name: names, code: LANGUAGESC.find(x => x.id === id)!.name };
+          arrayLenguajes.push(LANG);
+        }
+      });
+    }
+    const renderLanguage = (language: { name: string, id: number }) => (
+      <li
+        className="itemList"
+        key={language.id}
+      >
+        <a
+          href="javascript:void(0)"
+          // tslint:disable-next-line: jsx-no-lambda
+          onClick={() => this.setViewButtonByLenguaje(language.id)}
+        >
+          {language.name}
+        </a>
+      </li>
+    );
+    const renderPreviewLanguage = (language: { name: string, id: number }) => (
+      <li
+        className="itemList"
+        key={language.id}
+      >
+        <a
+          href="javascript:void(0)"
+          // tslint:disable-next-line: jsx-no-lambda
+          onClick={() => this.setPreViewButtonByLenguaje(language.id)}
+        >
+          {language.name}
+        </a>
+      </li>
+    );
+    const simpleClassView = (this.state.modalInsideView) ? 'modalContentInside active' : 'modalContentInside';
+    const simpleClassPreview = (this.state.modalInsidePreview) ? 'modalContentInside active' : 'modalContentInside';
+    return (
+      <div className="modalContent">
+        <ul>
+          <li>
+            <a href="javascript:void(0)" className="linkOpenSite" onClick={this.insidePreviewchangeOpenFunction}>{viewStudentText}</a>
+            <div className={simpleClassPreview}>
+              <h2><a href="javascript:void(0)" onClick={this.insidePreviewchangeOpenFunction}>{viewStudentText}</a></h2>
+              <ul>
+                {arrayLenguajes.map(renderPreviewLanguage)}
+              </ul>
+            </div>
+          </li>
+          <li>
+            <a href="javascript:void(0)" className="linkOpenSite" onClick={this.insidechangeOpenFunction}>{viewText}</a>
+            <div className={simpleClassView}>
+              <h2><a href="javascript:void(0)" onClick={this.insidechangeOpenFunction}>{viewText}</a></h2>
+              <ul>
+                {arrayLenguajes.map(renderLanguage)}
+              </ul>
+            </div>
+          </li>
+          {hasGuidance && this.renderTeacherGuidanceButtonList(guidanceText)}
+        </ul>
       </div>
     );
   }
@@ -469,6 +649,116 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     );
   }
 
+  public contentIntwoCM = () => {
+    const { currentEntity } = this.props.store!;
+    const
+      {
+        title,
+        ownedByMe,
+        createdAt,
+        subjectItems,
+        coreElementItems,
+        sourceItems,
+        multiSubjectItems,
+        numberOfSteps,
+        goalsItems,
+        description,
+        author,
+        authorRole,
+        isPrivate,
+        numberOfQuestions,
+        hasGuidance,
+        numberOfArticles,
+        isMySchool,
+        originalLocaleId
+      } = currentEntity;
+    const { currentEntity: { id } } = this.props.store!;
+    const { history, isPublishedCurrentTeachingPath, view, currentCanEditOrDelete } = this.props;
+    /* const showPublishDate = this.userService.getCurrentUser()!.type === UserType.ContentManager; */
+    const showPublishDate = authorRole === UserType.Teacher || !(authorRole === UserType.ContentManager && !(isPrivate!));
+    const guidanceText = intl.get('preview.assignment.buttons.teacher_guidance');
+    const editText = intl.get('preview.assignment.buttons.edit');
+    const duplicateText = intl.get('preview.assignment.buttons.duplicate');
+    const simpleClassView = (this.state.modalInsideEdit) ? 'modalContentInside active' : 'modalContentInside';
+    const mytranslations = this.props.store!.currentEntity.getListOfTranslations();
+    const arrayLenguajes : Array<LenguajesC> = [];
+    if (mytranslations) {
+      mytranslations.forEach((t) => {
+        const id = t.id;
+        if (LANGUAGESC.find(x => x.id === id)) {
+          const valueConst = Boolean(t.value) ? 'active' : 'add';
+          const LANG = { id: t.id , name: LANGUAGESC.find(x => x.id === id)!.name, code: valueConst };
+          arrayLenguajes.push(LANG);
+        }
+      });
+    }
+    const contentReturn = (langid: number, code: string) => {
+      if (code === 'active') {
+        const deleteFunction = (langid: number) => {
+          if (langid !== originalLocaleId) {
+            return (
+              <a
+                href="javascript:void(0)"
+                // tslint:disable-next-line: jsx-no-lambda
+                onClick={() => this.setViewButtonDeleteByLenguaje(id, langid)}
+              >
+                <img src={deleteImg} />
+              </a>
+            );
+          }
+        };
+        return (
+          <div>
+            <a
+              href="javascript:void(0)"
+              // tslint:disable-next-line: jsx-no-lambda
+              onClick={() => this.setViewButtonEditByLenguaje(id, langid)}
+              title={intl.get('preview.teaching_path.buttons.editbutton')}
+            >
+                <img src={editImg} />
+            </a>
+            {deleteFunction(langid)}
+          </div>
+        );
+      }
+      return (
+        <div>
+          <a
+            href="javascript:void(0)"
+            // tslint:disable-next-line: jsx-no-lambda
+            onClick={() => this.setViewButtonAddByLenguaje(id, langid)}
+            title={intl.get('preview.teaching_path.buttons.add')}
+          >
+            <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z" /></svg>
+          </a>
+        </div>
+      );
+    };
+    const renderLanguage = (language: { name: string, id: number, code: string }) => (
+      <li
+        className="itemListFlex"
+        key={language.id}
+      >
+        <p>{language.name}</p>
+        {contentReturn(language.id, language.code)}
+      </li>
+    );
+    return (
+      <div className="modalContent">
+        <div className="actionButton">
+          <button title={editText} onClick={this.insidechangeEditFunction}>{editText}</button>
+        </div>
+        <div className={simpleClassView}>
+          <h2><a href="javascript:void(0)" onClick={this.insidechangeEditFunction}>{editText}</a></h2>
+          <ul>
+            {arrayLenguajes.map(renderLanguage)}
+          </ul>
+        </div>
+        {isPublishedCurrentTeachingPath! && this.renderDuplicateButton(duplicateText)}
+      </div>
+    );
+  }
+
   public render() {
     const { currentEntity } = this.props.store!;
     const
@@ -490,6 +780,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         hasGuidance,
         numberOfArticles,
         isMySchool,
+        isTranslations
       } = currentEntity;
     const { currentEntity: { id } } = this.props.store!;
     const { history, isPublishedCurrentTeachingPath, view, currentCanEditOrDelete } = this.props;
@@ -504,6 +795,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const activeGoals = !isPrivate || isMySchool;
     const openPreview = (this.state.modalPreview) ? 'modalToggle active' : 'modalToggle';
     const openFunction = (this.state.modalFunction) ? 'modalToggle active' : 'modalToggle';
+    const isTranslate = isTranslations ? isTranslations : false;
+    const typeUser = this.userService.getCurrentUser()!.type;
     return (
       <div className={'previewModalInfo'} onClick={this.stopPropagation} tabIndex={0}>
         <div className="contentContainer">
@@ -511,11 +804,17 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
             <div className="headerButtons">
               <div className="previewButtons">
                 <a href="javascript:void(0)" className={openPreview} onClick={this.changeOpenpreview}>{intl.get('new assignment.Preview')}</a>
-                {this.state.modalPreview && this.contentIn()}
+                {this.state.modalPreview && typeUser === UserType.Teacher && this.contentIn()}
+                {this.state.modalPreview && typeUser === UserType.ContentManager && isTranslate && this.contentInCM()}
+                {this.state.modalPreview && typeUser === UserType.ContentManager && !isTranslate && this.contentIn()}
+                {this.state.modalPreview && typeUser === UserType.Student && this.contentIn()}
               </div>
               <div className="functionsButtons">
                 <a href="javascript:void(0)" className={openFunction} onClick={this.changeOpenFunction}>{editText}</a>
-                {this.state.modalFunction && this.contentIntwo()}
+                {this.state.modalFunction && typeUser === UserType.Teacher && this.contentIntwo()}
+                {this.state.modalFunction && typeUser === UserType.Student && this.contentIntwo()}
+                {this.state.modalFunction && typeUser === UserType.ContentManager && isTranslate && this.contentIntwoCM()}
+                {this.state.modalFunction && typeUser === UserType.ContentManager && !isTranslate && this.contentIntwo()}
               </div>
               <div className="DistributeButtons">
                 {this.userService.getCurrentUser()!.type === UserType.Teacher && isPublishedCurrentTeachingPath! && this.renderDistributeButton(distributeText)}

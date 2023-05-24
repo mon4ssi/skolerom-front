@@ -1134,6 +1134,7 @@ interface Props extends RouteComponentProps {
   location: LocationProps;
   readOnly?: boolean;
   tgOpen?: boolean;
+  locale?: number;
 }
 
 @inject('editTeachingPathStore', 'newAssignmentStore', 'teachingPathsListStore')
@@ -1146,7 +1147,7 @@ export class CreationPageComponent extends Component<Props> {
   };
 
   public componentDidMount() {
-    const { editTeachingPathStore, newAssignmentStore, location, history } = this.props;
+    const { editTeachingPathStore, newAssignmentStore, location, history, locale } = this.props;
     const { createNewNode, teachingPathContainer } = editTeachingPathStore!;
     const { currentEntity } = this.props.editTeachingPathStore!;
     const { tgOpen } = this.props;

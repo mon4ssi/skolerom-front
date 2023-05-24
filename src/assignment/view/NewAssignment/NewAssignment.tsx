@@ -41,9 +41,12 @@ class NewAssignmentComponent extends Component<Props & RouteComponentProps, Stat
   }
 
   public async componentDidMount() {
-    const { newAssignmentStore, history } = this.props;
+    const { newAssignmentStore, history, location } = this.props;
+    const locale = new URLSearchParams(location!.search);
+    const localeid = parseInt(locale.get('locale_id')!, 10);
+    const add = Boolean(locale.get('add')!);
     newAssignmentStore!.getArticles({});
-    const response = await newAssignmentStore!.getAssigmentForEditing(this.getParams());
+    const response = await newAssignmentStore!.getAssigmentForEditing(this.getParams(), add, localeid);
     const headerArray = Array.from(document.getElementsByClassName('AppHeader') as HTMLCollectionOf<HTMLElement>);
     headerArray[0].style.display = 'none';
     if (isNull(response)) {
@@ -111,9 +114,8 @@ class NewAssignmentComponent extends Component<Props & RouteComponentProps, Stat
 
   public render() {
     const { contentType } = this.state;
-    const { newAssignmentStore } = this.props;
+    const { newAssignmentStore, location } = this.props;
     const { assignmentContainer } = newAssignmentStore!;
-
     if (!assignmentContainer) {
       return (
         <div className={'loading'}><Loader /></div>

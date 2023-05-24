@@ -18,7 +18,8 @@ import {
   GoalsData,
   GenericGrepItem,
   CustomImgAttachment,
-  LenguajesB
+  LenguajesB,
+  Translations
 } from './Assignment';
 import {
   AssignmentDistributeDTO,
@@ -36,6 +37,7 @@ import {
 import { DEFAULT_AMOUNT_ARTICLES_PER_PAGE, DEFAULT_CUSTOM_IMAGES_PER_PAGE, LOCALES_MAPPING_FOR_BACKEND } from 'utils/constants';
 import { ContentBlockType } from './ContentBlock';
 import { Locales } from 'utils/enums';
+import { parseQueryString } from 'utils/queryString';
 import { CustomImage } from './view/NewAssignment/AttachmentsList/CustomImageForm/CustomImageForm';
 import { CustomImageAttachments } from './view/NewAssignment/AttachmentsList/Attachments/CustomImageAttachments';
 import isNil from 'lodash/isNil';
@@ -214,6 +216,9 @@ interface AssignmentByIdResponseDTO {
   goals: Array<any>;
   open?: boolean;
   isMySchool?: boolean;
+  isTranslations?: boolean;
+  translations?: Array<Translations>;
+  originalLocaleId?: number;
 }
 
 export class AssignmentApi implements AssignmentRepo {
@@ -221,7 +226,10 @@ export class AssignmentApi implements AssignmentRepo {
   private currentLocale = this.storageInteractor.getCurrentLocale()!;
 
   public async getAssignmentById(id: number): Promise<Assignment> {
-    const assignmentDTO: AssignmentByIdResponseDTO = (await API.get(`api/teacher/assignments/${id}`)).data;
+    /* tslint:disable:no-string-literal */
+    const search = parseQueryString(window.location.search)['locale_id'];
+    /* tslint:enable:no-string-literal */
+    const assignmentDTO: AssignmentByIdResponseDTO = search ? (await API.get(`api/teacher/assignments/${id}?localeId=${Number(search)}`)).data : (await API.get(`api/teacher/assignments/${id}`)).data;
 
     // questions and relatedArticles ignored here because it not essential for stores that use this method
     return new Assignment({
@@ -249,6 +257,9 @@ export class AssignmentApi implements AssignmentRepo {
       hasGuidance: assignmentDTO.hasGuidance,
       open: assignmentDTO.open,
       isMySchool: assignmentDTO.isMySchool,
+      isTranslations: assignmentDTO.isTranslations,
+      translations: assignmentDTO.translations,
+      originalLocaleId: assignmentDTO.originalLocaleId
     });
   }
 
@@ -275,6 +286,10 @@ export class AssignmentApi implements AssignmentRepo {
     })).data.data.map(
       (item: SourceDTO) => new Source(item.id, item.title, item.default)
     );
+  }
+
+  public async deleteAssignmentTranslation(assignmentId: number, localeId: number): Promise<void> {
+    await API.delete(`/api/teacher/assignments/${assignmentId}/destroy-translation?localeId=${localeId}`);
   }
 
   public async removeAssignment(assignmentId: number): Promise<void> {
@@ -474,7 +489,13 @@ export class AssignmentApi implements AssignmentRepo {
   }
   public async downloadTeacherGuidancePDF(id: number): Promise<void> {
     try {
-      const response = await API.get(`api/teacher/assignments/${id}/guidance/download`, {
+      /* tslint:disable:no-string-literal */
+      const search = parseQueryString(window.location.search)['locale_id'];
+      /* tslint:enable:no-string-literal */
+      const response = search ? await API.get(`api/teacher/assignments/${id}/guidance/download?localeId=${Number(search)}`, {
+        responseType: 'blob',
+        headers: { Accept: 'application/octet-stream' },
+      }) : await API.get(`api/teacher/assignments/${id}/guidance/download`, {
         responseType: 'blob',
         headers: { Accept: 'application/octet-stream' },
       });

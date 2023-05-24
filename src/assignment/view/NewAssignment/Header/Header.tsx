@@ -61,11 +61,32 @@ class HeaderWrapper extends Component<Props> {
         type: NotificationTypes.SUCCESS,
         title: intl.get('new assignment.after_saving')
       });
-
-      history.push({
-        pathname: `/assignments/edit/${id}/publish`,
-        state: location.state
-      });
+      if (history.location.search) {
+        const searchvalue = history.location.search;
+        if (location.state && location.state.fromTeachingPath) {
+          history.push({
+            pathname: `/assignments/edit/${id}/publish`,
+            search: searchvalue,
+            state: { fromTeachingPath: true, teachingPathId: location.state.teachingPathId }
+          });
+        } else {
+          history.push({
+            pathname: `/assignments/edit/${id}/publish`,
+            search: searchvalue,
+          });
+        }
+      } else {
+        if (location.state && location.state.fromTeachingPath) {
+          history.push({
+            pathname: `/assignments/edit/${id}/publish`,
+            state: { fromTeachingPath: true, teachingPathId: location.state.teachingPathId }
+          });
+        } else {
+          history.push({
+            pathname: `/assignments/edit/${id}/publish`,
+          });
+        }
+      }
     } catch (e) {
       if (e instanceof AssignmentValidationError) {
         Notification.create({
@@ -140,7 +161,6 @@ class HeaderWrapper extends Component<Props> {
 
     try {
       await newAssignmentStore!.publish();
-
       if (location.state && location.state.fromTeachingPath) {
         Notification.create({
           type: NotificationTypes.SUCCESS,
@@ -216,34 +236,71 @@ class HeaderWrapper extends Component<Props> {
   }
 
   private onGoBack = async () => {
-    const { isCreation, isPublishing, isDistribution, location, assignmentListStore } = this.props;
-    if (isCreation) {
-      if (location.state && location.state.fromTeachingPath) {
-        const goBackConfirm = await Notification.create({
-          type: NotificationTypes.CONFIRM,
-          title: intl.get('new assignment.go_back_to_teaching_path')
-        });
-        if (goBackConfirm) {
-          this.props.history.push(`/teaching-paths/edit/${location.state.teachingPathId}`);
+    const { isCreation, isPublishing, isDistribution, location, assignmentListStore, history } = this.props;
+    const searchvalue = history.location.search;
+    if (searchvalue) {
+      if (isCreation) {
+        if (location.state && location.state.fromTeachingPath) {
+          const goBackConfirm = await Notification.create({
+            type: NotificationTypes.CONFIRM,
+            title: intl.get('new assignment.go_back_to_teaching_path')
+          });
+          if (goBackConfirm) {
+            history.push({
+              pathname: `/teaching-paths/edit/${location.state.teachingPathId}`,
+              search: searchvalue
+            });
+          }
+        } else {
+          history.push({
+            pathname: `/assignments/${assignmentListStore!.typeOfAssignmentsList}`,
+            search: searchvalue
+          });
+          /* const url: string = localStorage!.getItem('url') !== null ? localStorage!.getItem('url')!.toString().split('?')[1] : '';
+          this.props.history.push(`/assignments/all?${url}`);
+          localStorage.removeItem('url'); */
+          /* localStorage.clear(); */
         }
-      } else {
-        this.props.history.push(`/assignments/${assignmentListStore!.typeOfAssignmentsList}`);
-        /* const url: string = localStorage!.getItem('url') !== null ? localStorage!.getItem('url')!.toString().split('?')[1] : '';
-        this.props.history.push(`/assignments/all?${url}`);
-        localStorage.removeItem('url'); */
-        /* localStorage.clear(); */
       }
-    }
-
-    if (isPublishing) {
-      this.props.history.push({
-        pathname: `/assignments/edit/${this.props.match.params.id}/`,
-        state: location.state
-      });
-    }
-
-    if (isDistribution) {
-      this.props.history.push(`/assignments/edit/${this.props.match.params.id}/publish`);
+      if (isPublishing) {
+        history.push({
+          pathname: `/assignments/edit/${this.props.match.params.id}/`,
+          search: searchvalue
+        });
+      }
+      if (isDistribution) {
+        history.push({
+          pathname: `/assignments/edit/${this.props.match.params.id}/publish`,
+          search: searchvalue
+        });
+      }
+    } else {
+      if (isCreation) {
+        if (location.state && location.state.fromTeachingPath) {
+          const goBackConfirm = await Notification.create({
+            type: NotificationTypes.CONFIRM,
+            title: intl.get('new assignment.go_back_to_teaching_path')
+          });
+          if (goBackConfirm) {
+            this.props.history.push(`/teaching-paths/edit/${location.state.teachingPathId}`);
+          }
+        } else {
+          this.props.history.push(`/assignments/${assignmentListStore!.typeOfAssignmentsList}`);
+          /* const url: string = localStorage!.getItem('url') !== null ? localStorage!.getItem('url')!.toString().split('?')[1] : '';
+          this.props.history.push(`/assignments/all?${url}`);
+          localStorage.removeItem('url'); */
+          /* localStorage.clear(); */
+        }
+      }
+      if (isPublishing) {
+        this.props.history.push({
+          pathname: `/assignments/edit/${this.props.match.params.id}/`,
+          state: location.state
+        });
+      }
+      if (isDistribution) {
+        this.props.history.push(`/assignments/edit/${this.props.match.params.id}/publish`);
+      }
     }
   }
 

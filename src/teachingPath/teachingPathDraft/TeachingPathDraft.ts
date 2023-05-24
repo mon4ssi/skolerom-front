@@ -15,7 +15,9 @@ import {
 } from 'teachingPath/TeachingPath';
 import { buildTeachingPathRequestDTO, buildFeatureImageForTeachingPathRequestDTO, buildBackgroundImageForTeachingPathRequestDTO } from './factory';
 import { SAVE_DELAY } from 'utils/constants';
-import { Article, Grade, Subject } from 'assignment/Assignment';
+import { parseQueryString } from 'utils/queryString';
+import { Article, Grade, Subject, Attachment, ARTICLE_SERVICE_KEY } from 'assignment/Assignment';
+import { ArticleService } from 'assignment/service';
 
 import { Notification, NotificationTypes } from 'components/common/Notification/Notification';
 import { GreepElements } from 'assignment/factory';
@@ -25,12 +27,14 @@ export const DRAFT_TEACHING_PATH_REPO = 'DRAFT_TEACHING_PATH_REPO';
 const TEMPORAL = 67933;
 
 export interface DraftTeachingPathRepo {
-  saveTeachingPath: (teachingPath: DraftTeachingPath) => Promise<string>;
+  saveTeachingPath: (teachingPath: DraftTeachingPath, localeId?: number) => Promise<string>;
+  saveTeachingPathLang: (teachingPath: DraftTeachingPath, localeId?: number, actuallocalid?: number, newlocalid?: number) => Promise<string>;
   publishTeachingPath: (teachingPath: DraftTeachingPath) => Promise<void>;
   createTeachingPath: () => Promise<DraftTeachingPath>;
+  createTeachingPathLocale: (id: number, localeid?: number) => Promise<DraftTeachingPath>;
   getKeywordsFromArticles: (arrayArticlesIds: Array<number>, arrayAsignmentsIds: Array<number>) => Promise<Array<string>>;
-  getDraftTeachingPathById: (id: number) => Promise<DraftTeachingPath>;
-  getDraftForeignTeachingPathById: (id: number, isPreview?: boolean) => Promise<{ teachingPath: DraftTeachingPath, articles?: Array<Article> }>;
+  getDraftTeachingPathById: (id: number, localeid?: number) => Promise<DraftTeachingPath>;
+  getDraftForeignTeachingPathById: (id: number, isPreview?: boolean, localeid?: number) => Promise<{ teachingPath: DraftTeachingPath, articles?: Array<Article> }>;
   deleteTeachingPath: (id: number) => Promise<void>;
 }
 
@@ -48,6 +52,7 @@ export class DraftTeachingPath extends TeachingPath {
 
   protected repo: DraftTeachingPathRepo = injector.get(DRAFT_TEACHING_PATH_REPO);
   protected teachingPathRepo: TeachingPathRepo = injector.get<TeachingPathRepo>(TEACHING_PATH_REPO);
+  private articleService: ArticleService = injector.get<ArticleService>(ARTICLE_SERVICE_KEY);
 
   protected _uuid: string;
   @observable protected _createdAt: string;
@@ -97,6 +102,7 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   public isSavingRunning: boolean = false;
+  public localeid: number = 1;
   @observable public isDraftSaving: boolean = false;
   public isPublishing: boolean = false;
   public isRunningPublishing: boolean = false;
@@ -240,12 +246,19 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   @action
-  public setFeaturedImage() {
+  public async setFeaturedImage() {
     const teachingPath = buildTeachingPathRequestDTO(this);
     const image = buildFeatureImageForTeachingPathRequestDTO(teachingPath.content);
     const bgImage = buildBackgroundImageForTeachingPathRequestDTO(teachingPath.content);
-    this._featuredImage = image;
-    this._backgroundImage = bgImage;
+    if (bgImage) {
+      this._backgroundImage = bgImage;
+      this._featuredImage = image;
+    } else {
+      const articlesid = await this.addArticlesIdsBySave();
+      const mediaImgsWP: Array<Attachment> = await this.articleService.fetchCoverImages(articlesid) || [];
+      this._backgroundImage = mediaImgsWP[0].url_large;
+      this._featuredImage = mediaImgsWP[0].path;
+    }
   }
 
   @action
@@ -358,6 +371,11 @@ export class DraftTeachingPath extends TeachingPath {
     return this._backgroundImage;
   }
 
+  @action
+  public setValueLocaleid(localid: number) {
+    this.localeid = localid;
+  }
+
   public anyArticlesIds(butIds: Array<number>, node: EditableTeachingPathNode) {
     const items: TeachingPathItem = node!.getItems(node!)![0];
     let returnArray: Array<number> = butIds;
@@ -452,7 +470,38 @@ export class DraftTeachingPath extends TeachingPath {
               this.addSubjectBySave();
             }
             this.addGoalsBySave();
-            this.setUpdatedAt(await this.repo.saveTeachingPath(this));
+            this.setUpdatedAt(await this.repo.saveTeachingPath(this, this.localeid));
+          } catch (error) {
+            if (error instanceof AlreadyEditingTeachingPathError) {
+              Notification.create({
+                type: NotificationTypes.ERROR,
+                title: intl.get('edit_teaching_path.validation.already_editing')
+              });
+            } else {
+              console.error('Error while saving draft:', error.message);
+            }
+          } finally {
+            this.isDraftSaving = false;
+            this.isSavingRunning = false;
+          }
+        },
+        SAVE_DELAY
+      );
+    }
+  }
+
+  @action
+  public async saveLangs(idlocaleid: number, newlocaleid: number) {
+    if (!this.isSavingRunning) {
+      this.isSavingRunning = true;
+      setTimeout(
+        async () => {
+          this.isDraftSaving = true;
+          try {
+            if (this.isPublishing) {
+              return;
+            }
+            this.setUpdatedAt(await this.repo.saveTeachingPathLang(this, this.localeid, idlocaleid, newlocaleid));
           } catch (error) {
             if (error instanceof AlreadyEditingTeachingPathError) {
               Notification.create({
@@ -477,7 +526,14 @@ export class DraftTeachingPath extends TeachingPath {
     this.validateContent();
 
     try {
-      await this.repo.saveTeachingPath(this);
+      /* tslint:disable:no-string-literal */
+      const search = parseQueryString(window.location.search)['locale_id'];
+      /* tslint:enable:no-string-literal */
+      if (search) {
+        await this.repo.saveTeachingPath(this, Number(search));
+      } else {
+        await this.repo.saveTeachingPath(this);
+      }
     } catch (error) {
       if (error instanceof AlreadyEditingTeachingPathError) {
         Notification.create({
@@ -700,7 +756,7 @@ export class DraftTeachingPath extends TeachingPath {
   }
 
   public async saveImmediate() {
-    await this.repo.saveTeachingPath(this);
+    await this.repo.saveTeachingPath(this, this.localeid);
   }
 
   public getOpen() {
@@ -733,7 +789,9 @@ export class DraftTeachingPath extends TeachingPath {
 
   @action
   public setLocaleId(localeId: number | null) {
+    const oldLocaleid = this._localeId;
     this._localeId = localeId;
+    // this.saveLangs(oldLocaleid!, localeId!);
     this.save();
   }
 }

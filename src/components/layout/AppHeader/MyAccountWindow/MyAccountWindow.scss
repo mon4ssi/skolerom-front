@@ -166,6 +166,8 @@ $my-account-padding: 19px;
     width: auto;
     left: 0;
     right: 0;
+    overflow-y: scroll;
+    max-height: calc(100vh - 150px);
   }
 
   .MyAccountWindow__list_mobile {
