@@ -30,6 +30,109 @@
       background: #E2017B;
     }
   }
+  .actionDistribute {
+    position: relative;
+    .actionButton {
+      button {
+        background: #E2017B;
+        color: white;
+        position: relative;
+        padding-right: 40px;
+        &:before {
+          content: '';
+          position: absolute;
+          width: 8px;
+          height: 8px;
+          border-left: solid 2px white;
+          border-bottom: solid 2px white;
+          transform: rotate(-45deg);
+          right: 18px;
+          top: 13px;
+        }
+      }      
+    }
+    .modalContentInside {
+      position: absolute;
+      top: 40px;
+      border: 1px solid #D3D9DE;
+      border-top: 0;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px 0 #ffffff1c;
+      background: white;
+      padding: 12px 20px;
+      width: 100%;
+      left: 0;
+      min-height: 100%;
+      pointer-events: none;
+      opacity: 0;
+      transition: 0.3s;
+      z-index: 2;
+      h2 {
+        display: block;
+        margin: 0px;
+        font-size: 17px;
+        border-bottom: solid 1px #0000001c;
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+        a {
+          display: block;
+          width: 100%;
+          position: relative;
+          padding-left: 20px;
+          font-size: 17px;
+          &:before {
+
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-bottom: solid 2px #0b2541;
+            border-left: solid 2px #0b2541;
+            transform: rotate(45deg);
+            top: 5px;
+            left: 0px;
+          }
+        }
+      }
+      li {
+        margin-bottom: 10px;
+        margin-top: 10px;
+        &.itemListFlex {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          div {
+            display: flex;
+            a {
+              margin-left: 7px;
+            }
+            svg {
+              display: block;
+              border: solid 1px #979797;
+              width: 26px;
+              height: 26px;
+              border-radius: 50%;
+              padding: 5px;
+              path {
+                fill: #061626;
+              }
+            }
+          }
+          p {
+            margin: 0px;
+          }
+        }
+        a {
+          display: block;
+          position: relative;
+        }
+      }
+      &.active {
+        pointer-events: all;
+        opacity: 1;
+      }
+    }
+  }
   .modalToggle {
     border: solid 2px #d3d9de;
     border-radius: 20px;

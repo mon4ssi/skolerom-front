@@ -55,6 +55,7 @@ interface SideOutPanelPreviewState {
   modalInsidePreview: boolean;
   modalInsideEdit: boolean;
   modalInsideEditTeacher: boolean;
+  modalInsideEditTeacherDistribute: boolean;
 }
 
 export const USER_SERVICE = 'USER_SERVICE';
@@ -71,7 +72,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     modalInsideView: false,
     modalInsidePreview: false,
     modalInsideEdit: false,
-    modalInsideEditTeacher: false
+    modalInsideEditTeacher: false,
+    modalInsideEditTeacherDistribute: false
   };
 
   private onClose = (e: SyntheticEvent) => {
@@ -186,8 +188,29 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
 
     if (isCopyApproved) {
       /* const currentEntityRoute = entityStore instanceof AssignmentListStore ? 'assignments' : 'teaching-paths'; */
-      const copyId = await this.teachingPathService.copyTeachingPath(id!);
+      const copyId = await this.teachingPathService.copyTeachingPathByLocale(id!, lenguajeid, false);
       history.push(`/teaching-paths/edit/${copyId}`);
+    }
+  }
+
+  public setViewButtonCopyByLenguajeDistribute  = async (id: number, lenguajeid: number) => {
+    const { history } = this.props;
+    const { currentEntity } = this.props.store!;
+
+    const isCopyApproved = await Notification.create({
+      type: NotificationTypes.CONFIRM,
+      title: intl.get('assignment list.Are you sure'),
+      submitButtonTitle: intl.get('notifications.copy')
+    });
+
+    if (isCopyApproved) {
+      /* const currentEntityRoute = entityStore instanceof AssignmentListStore ? 'assignments' : 'teaching-paths'; */
+      const copyId = await this.teachingPathService.copyTeachingPathByLocale(id!, lenguajeid, true);
+      const teachingPath = await this.props.editTeachingPathStore!.getTeachingPathForEditing(copyId);
+      await this.props.editTeachingPathStore!.save();
+      await this.props.editTeachingPathStore!.publish();
+      this.props.editTeachingPathStore!.setIsDisabledButtons();
+      history.push(`/teaching-paths/edit/${copyId}/distribute`);
     }
   }
 
@@ -259,6 +282,77 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         </div>
         <div className={simpleClassView}>
           <h2><a href="javascript:void(0)" onClick={this.insidechangeEditFunctionTeacher}>{duplicateString}</a></h2>
+          <ul>
+            {arrayLenguajes.map(renderLanguage)}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+
+  public renderDistributeSelectButton = (duplicateString: string) => {
+    const simpleClassView = (this.state.modalInsideEditTeacherDistribute) ? 'modalContentInside active' : 'modalContentInside';
+    const { currentEntity } = this.props.store!;
+    const
+      {
+        title,
+        ownedByMe,
+        createdAt,
+        subjectItems,
+        coreElementItems,
+        sourceItems,
+        multiSubjectItems,
+        numberOfSteps,
+        goalsItems,
+        description,
+        author,
+        authorRole,
+        isPrivate,
+        numberOfQuestions,
+        hasGuidance,
+        numberOfArticles,
+        isMySchool,
+      } = currentEntity;
+    const { currentEntity: { id } } = this.props.store!;
+    const mytranslations = this.props.store!.currentEntity.getListOfTranslations();
+    const arrayLenguajes : Array<LenguajesC> = [];
+    if (mytranslations) {
+      mytranslations.forEach((t) => {
+        if (Boolean(t.value)) {
+          const id = t.id;
+          const names = (LANGUAGESC.find(x => x.id === id)) ? LANGUAGESC.find(x => x.id === id)!.name : '';
+          const LANG = { id: t.id , name: names, code: LANGUAGESC.find(x => x.id === id)!.name };
+          arrayLenguajes.push(LANG);
+        }
+      });
+    }
+    const contentReturn = (langid: number, code: string) => (
+      <div>
+        <a
+          href="javascript:void(0)"
+          // tslint:disable-next-line: jsx-no-lambda
+          onClick={() => this.setViewButtonCopyByLenguajeDistribute(id, langid)}
+          title={intl.get('preview.teaching_path.buttons.editbutton')}
+        >
+            <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z" /></svg>
+        </a>
+      </div>
+    );
+    const renderLanguage = (language: { name: string, id: number, code: string }) => (
+      <li
+        className="itemListFlex"
+        key={language.id}
+      >
+        <p>{language.name}</p>
+        {contentReturn(language.id, language.code)}
+      </li>
+    );
+    return (
+      <div className="actionDistribute">
+        <div className="actionButton">
+          <button title={duplicateString} className="CreateButton" onClick={this.insidechangeEditFunctionTeacherDistribute}>{duplicateString}</button>
+        </div>
+        <div className={simpleClassView}>
           <ul>
             {arrayLenguajes.map(renderLanguage)}
           </ul>
@@ -577,6 +671,14 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     }
   }
 
+  public insidechangeEditFunctionTeacherDistribute = () => {
+    if (this.state.modalInsideEditTeacherDistribute) {
+      this.setState({ modalInsideEditTeacherDistribute: false });
+    } else {
+      this.setState({ modalInsideEditTeacherDistribute: true });
+    }
+  }
+
   public contentInCM = () => {
     const { currentEntity } = this.props.store!;
     const
@@ -862,63 +964,14 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
       mytranslations.forEach((t) => {
         const id = t.id;
         if (LANGUAGESC.find(x => x.id === id)) {
-          const valueConst = Boolean(t.value) ? 'active' : 'add';
-          const LANG = { id: t.id , name: LANGUAGESC.find(x => x.id === id)!.name, code: valueConst };
-          arrayLenguajes.push(LANG);
+          const valueConst = 'active';
+          if (Boolean(t.value)) {
+            const LANG = { id: t.id , name: LANGUAGESC.find(x => x.id === id)!.name, code: valueConst };
+            arrayLenguajes.push(LANG);
+          }
         }
       });
     }
-    const contentReturn = (langid: number, code: string) => {
-      if (code === 'active') {
-        const deleteFunction = (langid: number) => {
-          if (langid !== originalLocaleId) {
-            return (
-              <a
-                href="javascript:void(0)"
-                // tslint:disable-next-line: jsx-no-lambda
-                onClick={() => this.setViewButtonDeleteByLenguaje(id, langid)}
-              >
-                <img src={deleteImg} />
-              </a>
-            );
-          }
-        };
-        return (
-          <div>
-            <a
-              href="javascript:void(0)"
-              // tslint:disable-next-line: jsx-no-lambda
-              onClick={() => this.setViewButtonEditByLenguaje(id, langid)}
-              title={intl.get('preview.teaching_path.buttons.editbutton')}
-            >
-                <img src={editImg} />
-            </a>
-            {deleteFunction(langid)}
-          </div>
-        );
-      }
-      return (
-        <div>
-          <a
-            href="javascript:void(0)"
-            // tslint:disable-next-line: jsx-no-lambda
-            onClick={() => this.setViewButtonAddByLenguaje(id, langid)}
-            title={intl.get('preview.teaching_path.buttons.add')}
-          >
-            <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z" /></svg>
-          </a>
-        </div>
-      );
-    };
-    const renderLanguage = (language: { name: string, id: number, code: string }) => (
-      <li
-        className="itemListFlex"
-        key={language.id}
-      >
-        <p>{language.name}</p>
-        {contentReturn(language.id, language.code)}
-      </li>
-    );
     return (
       <div className="modalContent">
         {currentCanEditOrDelete && this.renderEditButton(editText, history, id)}
@@ -987,7 +1040,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
                 {this.state.modalFunction && typeUser === UserType.ContentManager && !isTranslate && this.contentIntwo()}
               </div>
               <div className="DistributeButtons">
-                {this.userService.getCurrentUser()!.type === UserType.Teacher && isPublishedCurrentTeachingPath! && this.renderDistributeButton(distributeText)}
+                {this.userService.getCurrentUser()!.type === UserType.Teacher && isPublishedCurrentTeachingPath! && !isTranslate && this.renderDistributeButton(distributeText)}
+                {this.userService.getCurrentUser()!.type === UserType.Teacher && isPublishedCurrentTeachingPath! && isTranslate && this.renderDistributeSelectButton(distributeText)}
               </div>
             </div>
             <div className={'NewTitleHeader'}>

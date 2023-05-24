@@ -89,6 +89,10 @@ export class AssignmentService {
     return this.assignmentRepo.copyAssignment(id, all);
   }
 
+  public async copyAssignmentByLocale(id: number, localeid?:number, all?: boolean) {
+    return this.assignmentRepo.copyAssignmentByLocale(id, localeid, all);
+  }
+
   public async downloadTeacherGuidancePDF(id: number) {
     return this.assignmentRepo.downloadTeacherGuidancePDF(id);
   }
