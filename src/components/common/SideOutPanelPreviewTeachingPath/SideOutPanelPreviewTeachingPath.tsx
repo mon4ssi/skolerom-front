@@ -200,14 +200,16 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     </div>
   )
 
-  public renderDuplicateButton = (duplicateString: string) =>
-  (
-    <div className="actionButton">
-      <button disabled={false} onClick={this.handleCopy} title={duplicateString} >
-        {duplicateString}
-      </button>
-    </div>
-  )
+  public renderDuplicateButton = (duplicateString: string, classDuplicate?: string) => {
+    const classNametest = `actionButton ${classDuplicate}`;
+    return (
+      <div className={classNametest}>
+        <button disabled={false} onClick={this.handleCopy} title={duplicateString} >
+          {duplicateString}
+        </button>
+      </div>
+    );
+  }
 
   public renderDistributeButton = (duplicateString: string) =>
   (
@@ -550,7 +552,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         if (Boolean(t.value)) {
           const id = t.id;
           const names = (LANGUAGESC.find(x => x.id === id)) ? LANGUAGESC.find(x => x.id === id)!.name : '';
-          const LANG = { id: t.id , name: names, code: LANGUAGESC.find(x => x.id === id)!.name };
+          const namesingle = (LANGUAGESC.find(x => x.id === id)) ? LANGUAGESC.find(x => x.id === id)!.name : '';
+          const LANG = { id: t.id , name: names, code: namesingle };
           arrayLenguajes.push(LANG);
         }
       });
@@ -687,7 +690,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         const id = t.id;
         if (LANGUAGESC.find(x => x.id === id)) {
           const valueConst = Boolean(t.value) ? 'active' : 'add';
-          const LANG = { id: t.id , name: LANGUAGESC.find(x => x.id === id)!.name, code: valueConst };
+          const singleValueName = (LANGUAGESC.find(x => x.id === id)) ? LANGUAGESC.find(x => x.id === id)!.name : '';
+          const LANG = { id: t.id , name: singleValueName, code: valueConst };
           arrayLenguajes.push(LANG);
         }
       });
@@ -745,7 +749,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     );
     return (
       <div className="modalContent">
-        <div className="actionButton">
+        <div className="actionButton actionboldButton actionAfter">
           <button title={editText} onClick={this.insidechangeEditFunction}>{editText}</button>
         </div>
         <div className={simpleClassView}>
@@ -754,7 +758,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
             {arrayLenguajes.map(renderLanguage)}
           </ul>
         </div>
-        {isPublishedCurrentTeachingPath! && this.renderDuplicateButton(duplicateText)}
+        {isPublishedCurrentTeachingPath! && this.renderDuplicateButton(duplicateText, 'actionboldButton')}
       </div>
     );
   }
