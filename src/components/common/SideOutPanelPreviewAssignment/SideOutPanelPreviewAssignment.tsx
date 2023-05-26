@@ -27,6 +27,7 @@ import source from 'assets/images/voice.svg';
 import goals from 'assets/images/goals.svg';
 import deleteImg from 'assets/images/trash-tp.svg';
 import editImg from 'assets/images/edit-tp.svg';
+import lang from 'assets/images/lang.svg';
 
 import { TeachingPath, TeachingPathRepo, TEACHING_PATH_REPO } from 'teachingPath/TeachingPath';
 import { injector } from 'Injector';
@@ -154,6 +155,15 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
   public renderEditButton = (editString: string, history: any, id: number) =>
   (
     <div className="actionButton">
+      <button disabled={false} onClick={() => { this.openInNewTabEdit(id); }} title={editString} >
+        {editString}
+      </button>
+    </div>
+  )
+
+  public renderEditButtonClass = (editString: string, history: any, id: number) =>
+  (
+    <div className="actionButton actionboldButton">
       <button disabled={false} onClick={() => { this.openInNewTabEdit(id); }} title={editString} >
         {editString}
       </button>
@@ -466,6 +476,37 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     </div>
   )
 
+  public renderLangs = () => {
+    const mytranslations = this.props.store!.currentAssignment!.translations;
+    const arrayLenguajes : Array<LenguajesC> = [];
+    if (mytranslations) {
+      mytranslations.forEach((t) => {
+        if (Boolean(t.value)) {
+          const id = t.id;
+          const names = (LANGUAGESC.find(x => x.id === id)) ? LANGUAGESC.find(x => x.id === id)!.name : '';
+          const namesingle = (LANGUAGESC.find(x => x.id === id)) ? LANGUAGESC.find(x => x.id === id)!.name : '';
+          const LANG = { id: t.id , name: names, code: namesingle };
+          arrayLenguajes.push(LANG);
+        }
+      });
+    }
+    const renderPreviewLanguage = (language: { name: string, id: number }) => (
+      <li
+        key={language.id}
+      >
+        {language.name}
+      </li>
+    );
+    return (
+      <div className="partsInfo partsInfoList">
+        <img src={lang} alt="langs" />
+        <ul>
+          {arrayLenguajes.map(renderPreviewLanguage)}
+        </ul>
+      </div>
+    );
+  }
+
   public changeOpenpreview = () => {
     this.setState({ modalFunction: false });
     if (this.state.modalPreview) {
@@ -754,7 +795,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     );
     return (
       <div>
-        <div className="actionButton">
+        <div className="actionButton actionboldButton actionAfter">
           <button title={duplicateString} onClick={this.insidechangeEditFunctionTeacher}>{duplicateString}</button>
         </div>
         <div className={simpleClassView}>
@@ -814,7 +855,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
     }
     return (
       <div className="modalContent">
-        {canEditOrDeleteValue && this.renderEditButton(editText, history, id)}
+        {canEditOrDeleteValue && this.renderEditButtonClass(editText, history, id)}
         {(isPublishedCurrentAssignment! || isMySchool) && this.renderDuplicateButtonTeacher(duplicateText, arrayLenguajes)}
       </div>
     );
@@ -1050,6 +1091,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
               {`${intl.get('preview.assignment.headers.by')}`} {author ? author : ''}
             </div>
             {showPublishDate && this.renderPublishDate(createdAt)}
+            {isTranslate && this.renderLangs()}
           </div>
           <div className="entityDescription">
 

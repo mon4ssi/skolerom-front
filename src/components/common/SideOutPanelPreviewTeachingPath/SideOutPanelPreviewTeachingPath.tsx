@@ -25,6 +25,7 @@ import coreElement from 'assets/images/core.svg';
 import multiSubject from 'assets/images/cogs.svg';
 import source from 'assets/images/voice.svg';
 import goals from 'assets/images/goals.svg';
+import lang from 'assets/images/lang.svg';
 
 import { TeachingPath, TeachingPathRepo, TEACHING_PATH_REPO } from 'teachingPath/TeachingPath';
 import { injector } from 'Injector';
@@ -242,6 +243,15 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     </div>
   )
 
+  public renderEditButtonClass = (editString: string, history: any, id: number) =>
+  (
+    <div className="actionButton actionboldButton">
+      <button disabled={false} onClick={() => { this.openInNewTabEdit(id); }} title={editString} >
+        {editString}
+      </button>
+    </div>
+  )
+
   public renderDuplicateButton = (duplicateString: string, classDuplicate?: string) => {
     const classNametest = `actionButton ${classDuplicate}`;
     return (
@@ -279,7 +289,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     );
     return (
       <div>
-        <div className="actionButton">
+        <div className="actionButton actionboldButton actionAfter">
           <button title={duplicateString} onClick={this.insidechangeEditFunctionTeacher}>{duplicateString}</button>
         </div>
         <div className={simpleClassView}>
@@ -584,6 +594,37 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
       {`${moment(createdAt).format(deadlineDateFormat)}`}
     </div>
   )
+
+  public renderLangs = () => {
+    const mytranslations = this.props.store!.currentEntity.getListOfTranslations();
+    const arrayLenguajes : Array<LenguajesC> = [];
+    if (mytranslations) {
+      mytranslations.forEach((t) => {
+        if (Boolean(t.value)) {
+          const id = t.id;
+          const names = (LANGUAGESC.find(x => x.id === id)) ? LANGUAGESC.find(x => x.id === id)!.name : '';
+          const namesingle = (LANGUAGESC.find(x => x.id === id)) ? LANGUAGESC.find(x => x.id === id)!.name : '';
+          const LANG = { id: t.id , name: names, code: namesingle };
+          arrayLenguajes.push(LANG);
+        }
+      });
+    }
+    const renderPreviewLanguage = (language: { name: string, id: number }) => (
+      <li
+        key={language.id}
+      >
+        {language.name}
+      </li>
+    );
+    return (
+      <div className="partsInfo partsInfoList">
+        <img src={lang} alt="langs" />
+        <ul>
+          {arrayLenguajes.map(renderPreviewLanguage)}
+        </ul>
+      </div>
+    );
+  }
 
   public changeOpenpreview = () => {
     this.setState({ modalFunction: false });
@@ -978,7 +1019,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     }
     return (
       <div className="modalContent">
-        {currentCanEditOrDelete && this.renderEditButton(editText, history, id)}
+        {currentCanEditOrDelete && this.renderEditButtonClass(editText, history, id)}
         {isPublishedCurrentTeachingPath! && this.renderDuplicateButtonTeacher(duplicateText, arrayLenguajes)}
       </div>
     );
@@ -1068,6 +1109,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
               {`${intl.get('preview.teaching_path.headers.by')}`} {author ? author : ''}
             </div>
             {showPublishDate && this.renderPublishDate(createdAt)}
+            {isTranslate && this.renderLangs()}
           </div>
           <div className="entityDescription">
             <div className="partsInfoDescription">

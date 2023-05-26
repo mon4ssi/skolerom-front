@@ -357,6 +357,23 @@
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 350px;
+        &.partsInfo {
+          ul {
+            display: flex;
+            li {
+              margin-right: 5px;
+              &:after {
+                content: ',';
+              }
+              &:last-child {
+                margin-right: 0;
+                &:after {
+                  content: '';
+                }
+              }
+            }
+          }
+        }
         img {
           margin-right: 10px;
         }
