@@ -498,7 +498,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
       </li>
     );
     return (
-      <div className="partsInfo partsInfoList">
+      <div className="partsInfo partsInfoAssignments">
         <img src={lang} alt="langs" />
         <ul>
           {arrayLenguajes.map(renderPreviewLanguage)}
