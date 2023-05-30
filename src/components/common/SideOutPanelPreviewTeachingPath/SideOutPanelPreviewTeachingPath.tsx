@@ -11,7 +11,7 @@ import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/Teac
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
 import { Assignment, GenericGrepItem, LenguajesB, LenguajesC, Subject } from 'assignment/Assignment';
 
-import { deadlineDateFormat, thirdLevel, LANGUAGESC } from 'utils/constants';
+import { deadlineDateFormat, thirdLevel, LANGUAGESC, LANGUAGESD } from 'utils/constants';
 
 import clock from 'assets/images/clock.svg';
 import close from 'assets/images/close.svg';
@@ -614,8 +614,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
       mytranslations.forEach((t) => {
         if (Boolean(t.value)) {
           const id = t.id;
-          const names = (LANGUAGESC.find(x => x.id === id)) ? LANGUAGESC.find(x => x.id === id)!.name : '';
-          const namesingle = (LANGUAGESC.find(x => x.id === id)) ? LANGUAGESC.find(x => x.id === id)!.name : '';
+          const names = (LANGUAGESD.find(x => x.id === id)) ? LANGUAGESD.find(x => x.id === id)!.name : '';
+          const namesingle = (LANGUAGESD.find(x => x.id === id)) ? LANGUAGESD.find(x => x.id === id)!.name : '';
           const LANG = { id: t.id , name: names, code: namesingle };
           arrayLenguajes.push(LANG);
         }
