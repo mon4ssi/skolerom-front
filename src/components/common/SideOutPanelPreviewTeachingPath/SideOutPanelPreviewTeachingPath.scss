@@ -12,7 +12,7 @@
   overflow-y: hidden;
   .DistributeButtons .modalContentInside {
     min-width: 190px;
-    left: auto;
+    left: auto !important;
     right: 0;
   }
   .DistributeButtons .itemListFlex a {

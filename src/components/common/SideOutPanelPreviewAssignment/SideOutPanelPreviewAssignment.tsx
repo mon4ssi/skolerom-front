@@ -1107,7 +1107,7 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
               {`${intl.get('preview.assignment.headers.by')}`} {author ? author : ''}
             </div>
             {showPublishDate && this.renderPublishDate(createdAt)}
-            {isTranslate && this.renderLangs()}
+            {this.renderLangs()}
           </div>
           <div className="entityDescription">
 

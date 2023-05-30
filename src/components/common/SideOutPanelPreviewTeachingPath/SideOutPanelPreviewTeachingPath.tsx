@@ -1125,7 +1125,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
               {`${intl.get('preview.teaching_path.headers.by')}`} {author ? author : ''}
             </div>
             {showPublishDate && this.renderPublishDate(createdAt)}
-            {isTranslate && this.renderLangs()}
+            {this.renderLangs()}
           </div>
           <div className="entityDescription">
             <div className="partsInfoDescription">
