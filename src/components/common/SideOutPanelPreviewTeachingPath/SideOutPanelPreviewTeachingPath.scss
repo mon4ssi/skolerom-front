@@ -10,6 +10,14 @@
   position: fixed;
   overflow-x: hidden;
   overflow-y: hidden;
+  .DistributeButtons .modalContentInside {
+    min-width: 190px;
+    left: auto;
+    right: 0;
+  }
+  .DistributeButtons .itemListFlex a {
+    white-space: nowrap;
+  }
   .partsInfoList {
     ul {
       display: flex;
