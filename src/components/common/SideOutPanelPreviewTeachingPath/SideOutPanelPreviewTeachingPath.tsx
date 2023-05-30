@@ -367,7 +367,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
           onClick={() => this.setViewButtonCopyByLenguajeDistribute(id, language.id)}
           title={intl.get('preview.teaching_path.buttons.editbutton')}
         >
-          <p>{intl.get('preview.buttons.distribuir')} {language.name}</p>
+          <p>{intl.get('preview.teaching_path.buttons.distribuir')} {language.name}</p>
         </a>
       </li>
     );
