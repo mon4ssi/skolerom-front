@@ -1110,7 +1110,6 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
             {this.renderLangs()}
           </div>
           <div className="entityDescription">
-
             <div className="partsInfoDescription">
               {description ? description : ''}
               {/* Bli med på innsiden av kroppens immunsystem – ditt eget fantastiske forsvarsverk som holder deg frisk og rask. */}
