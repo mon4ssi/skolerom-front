@@ -11,6 +11,23 @@
   overflow-x: hidden;
   overflow-y: hidden;
 
+  &.partsInfoAssignments {
+    ul {
+      display: flex;
+      li {
+        margin-right: 5px;
+        &:after {
+          content: ',';
+        }
+        &:last-child {
+          margin-right: 0;
+          &:after {
+            content: '';
+          }
+        }
+      }
+    }
+  }
   .NewTitleHeader {
     background: #0b2541;
     padding-top: 26px;
@@ -374,25 +391,9 @@
             }
           }
         }
-        &.partsInfoAssignments {
-          ul {
-            display: flex;
-            li {
-              margin-right: 5px;
-              &:after {
-                content: ',';
-              }
-              &:last-child {
-                margin-right: 0;
-                &:after {
-                  content: '';
-                }
-              }
-            }
-          }
-        }
         img {
           margin-right: 10px;
+          max-width: 22px;
         }
       }
     }
@@ -452,6 +453,7 @@
         max-width: 350px;
         img {
           margin-right: 10px;
+          max-width: 22px;
         }
       }
     }
@@ -888,6 +890,7 @@
         max-width: 350px;
         img {
           margin-right: 10px;
+          max-width: 22px;
         }
       }
     }
@@ -947,6 +950,7 @@
         max-width: 350px;
         img {
           margin-right: 10px;
+          max-width: 22px;
         }
       }
     }

@@ -283,8 +283,14 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         className="itemListFlex"
         key={language.id}
       >
-        <p>{language.name}</p>
-        {contentReturn(language.id, language.code)}
+        <a
+          href="javascript:void(0)"
+          // tslint:disable-next-line: jsx-no-lambda
+          onClick={() => this.setViewButtonCopyByLenguaje(id, language.id)}
+          title={intl.get('preview.teaching_path.buttons.editbutton')}
+        >
+          <p>{language.name}</p>
+        </a>
       </li>
     );
     return (
@@ -355,8 +361,14 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         className="itemListFlex"
         key={language.id}
       >
-        <p>{language.name}</p>
-        {contentReturn(language.id, language.code)}
+        <a
+          href="javascript:void(0)"
+          // tslint:disable-next-line: jsx-no-lambda
+          onClick={() => this.setViewButtonCopyByLenguajeDistribute(id, language.id)}
+          title={intl.get('preview.teaching_path.buttons.editbutton')}
+        >
+          <p>{intl.get('preview.buttons.distribuir')} {language.name}</p>
+        </a>
       </li>
     );
     return (
@@ -628,6 +640,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
 
   public changeOpenpreview = () => {
     this.setState({ modalFunction: false });
+    this.setState({ modalInsideEditTeacherDistribute: false });
     if (this.state.modalPreview) {
       this.setState({ modalPreview: false });
     } else {
@@ -637,6 +650,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
 
   public changeOpenFunction = () => {
     this.setState({ modalPreview: false });
+    this.setState({ modalInsideEditTeacherDistribute: false });
     if (this.state.modalFunction) {
       this.setState({ modalFunction: false });
     } else {
@@ -715,6 +729,8 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   }
 
   public insidechangeEditFunctionTeacherDistribute = () => {
+    this.setState({ modalFunction: false });
+    this.setState({ modalPreview: false });
     if (this.state.modalInsideEditTeacherDistribute) {
       this.setState({ modalInsideEditTeacherDistribute: false });
     } else {

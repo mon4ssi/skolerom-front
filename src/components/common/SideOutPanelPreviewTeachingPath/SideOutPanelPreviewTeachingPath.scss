@@ -10,6 +10,23 @@
   position: fixed;
   overflow-x: hidden;
   overflow-y: hidden;
+  .partsInfoList {
+    ul {
+      display: flex;
+      li {
+        margin-right: 5px;
+        &:after {
+          content: ',';
+        }
+        &:last-child {
+          margin-right: 0;
+          &:after {
+            content: '';
+          }
+        }
+      }
+    }
+  }
   .headerButtons {
     display: flex;
     align-items: center;
@@ -581,6 +598,7 @@
         }
         img {
           margin-right: 10px;
+          max-width: 22px;
         }
       }
     }
@@ -641,6 +659,7 @@
 
         img {
           margin-right: 10px;
+          max-width: 22px;
         }
       }
     }
@@ -1090,6 +1109,7 @@
         max-width: 350px;
         img {
           margin-right: 10px;
+          max-width: 22px;
         }
       }
     }
@@ -1149,6 +1169,7 @@
         max-width: 350px;
         img {
           margin-right: 10px;
+          max-width: 22px;
         }
       }
     }
