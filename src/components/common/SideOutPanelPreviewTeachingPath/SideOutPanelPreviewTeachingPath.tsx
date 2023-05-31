@@ -1120,9 +1120,9 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
               <img src={article} alt="question" />
               {numberOfArticles ? numberOfArticles : intl.get('preview.teaching_path.headers.no')} {`${intl.get('preview.teaching_path.headers.articles')}`}
             </div>
-            <div className="partsInfo">
+            <div className="partsInfo partsInfoAutor">
               <img src={person} alt="question" />
-              {`${intl.get('preview.teaching_path.headers.by')}`} {author ? author : ''}
+              <p>{`${intl.get('preview.teaching_path.headers.by')}`} {author ? author : ''}</p>
             </div>
             {showPublishDate && this.renderPublishDate(createdAt)}
             {this.renderLangs()}

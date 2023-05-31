@@ -1102,9 +1102,9 @@ class SideOutPanelPreviewAssignmentComponent extends Component<Props & RouteComp
               <img src={question} alt="question" />
               {numberOfQuestions ? numberOfQuestions : intl.get('preview.assignment.headers.no')} {`${intl.get('preview.assignment.headers.questions')}`}
             </div>
-            <div className="partsInfo">
+            <div className="partsInfo partsInfoAutor">
               <img src={person} alt="question" />
-              {`${intl.get('preview.assignment.headers.by')}`} {author ? author : ''}
+              <p>{`${intl.get('preview.assignment.headers.by')}`} {author ? author : ''}</p>
             </div>
             {showPublishDate && this.renderPublishDate(createdAt)}
             {this.renderLangs()}
