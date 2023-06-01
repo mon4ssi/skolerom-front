@@ -58,6 +58,7 @@ export interface AssignmentRepo {
     total_pages: number;
   }>;
   copyAssignment(id: number, all?: boolean): Promise<number>;
+  copyAssignmentByLocale(id: number, localeid?:number, all?: boolean): Promise<number>;
   getGrepFiltersAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
   getGrepFiltersMyAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;
   getGrepFiltersMySchoolAssignment(locale: string, grades: string, subjects: string, coreElements?: string, $goals?: string): Promise<FilterGrep>;

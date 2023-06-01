@@ -318,6 +318,24 @@ export class AssignmentApi implements AssignmentRepo {
     }
   }
 
+  public async copyAssignmentByLocale(id: number, localeid?: number, all?:boolean): Promise<number> {
+    if (all) {
+      try {
+        const response = await API.get(`api/teacher/assignments/${id}/copy/identical?localeId=${localeid}`);
+        return response.data.id;
+      } catch (e) {
+        throw new Error(`copy assignment ${e}`);
+      }
+    }
+    try {
+      const response = await API.get(`api/teacher/assignments/${id}/copy?localeId=${localeid}`);
+
+      return response.data.id;
+    } catch (e) {
+      throw new Error(`copy assignment ${e}`);
+    }
+  }
+
   public async getMyAssignmentsList(filter: Filter) {
     if (!isNil(filter.searchQuery)) filter.searchQuery = String(filter.searchQuery!);
     const response = await API.get('api/teacher/assignments/draft', {

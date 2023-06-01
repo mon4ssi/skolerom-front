@@ -105,6 +105,29 @@ export const LANGUAGESC = [
     id: 2
   }
 ];
+
+export const LANGUAGESD = [
+  {
+    name: 'Soumi',
+    code: Locales.KV,
+    id: 4
+  },
+  {
+    name: 'Bokmål',
+    code: Locales.NB,
+    id: 3
+  },
+  {
+    name: 'Nynorsk',
+    code: Locales.NN,
+    id: 2
+  },
+  {
+    name: 'English',
+    code: Locales.NN,
+    id: 1
+  }
+];
 // STATUSES
 
 export const STATUS_CONFLICT = 409;

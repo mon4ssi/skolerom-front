@@ -98,6 +98,10 @@ export class TeachingPathService {
     return this.teachingPathRepo.copyTeachingPath(id, all);
   }
 
+  public async copyTeachingPathByLocale(id: number, localeid: number, all?: boolean) {
+    return this.teachingPathRepo.copyTeachingPathByLocale(id, localeid, all);
+  }
+
   public async deleteTeachingPathAnswers(teachingPathId: number, answerId: number) {
     return this.teachingPathRepo.deleteTeachingPathAnswers(teachingPathId, answerId);
   }
