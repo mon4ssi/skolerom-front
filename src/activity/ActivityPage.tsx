@@ -13,6 +13,7 @@ import { Assignment } from '../assignment/Assignment';
 import { TeachingPath } from '../teachingPath/TeachingPath';
 import { UserType } from '../user/User';
 import { Popup } from 'components/common/Popup/Popup';
+import { Loader } from 'components/common/Loader/Loader';
 
 import placeholder from 'assets/images/list-placeholder.svg';
 
@@ -22,6 +23,7 @@ const loadRecentActivityInterval = 30000;
 
 const studentAmountArticles = 7;
 const teacherAmountArticles = 4;
+const number200 = 200;
 
 interface ActivityPageProps {
   activityStore?: ActivityStore;
@@ -33,18 +35,22 @@ interface ActivityPageState {
   iframeURL: string;
   popupShown: boolean;
   isPause: boolean;
+  chargeIframe: boolean;
 }
 
 @inject('activityStore', 'loginStore')
 @observer
 class Activity extends Component<ActivityPageProps & RouteComponentProps, ActivityPageState> {
   private ref = createRef<HTMLDivElement>();
+  private activityAsideReft = createRef<HTMLDivElement>();
+  private iframeref = createRef<HTMLIFrameElement>();
   private getRecentActivityWithInterval: number = 0;
 
   public state = {
     iframeURL: '',
     popupShown: false,
-    isPause: false
+    isPause: false,
+    chargeIframe: false
   };
 
   private loadWidgetData() {
@@ -308,11 +314,37 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
     document.removeEventListener('keyup', this.handleKeyboardControl);
   }
 
+  public iframeRender = () => {
+    const { activityStore, role } = this.props;
+    activityStore!.getIframeContent();
+    const url = activityStore!.urliframe.toString();
+    const anyclass = this.state.chargeIframe ? 'iframeContent' : 'iframeContent hidden';
+    return (
+      <div className={anyclass}>
+        <iframe
+          src={url}
+          ref={this.iframeref}
+          width={'100%'}
+          onLoad={() => this.resize()}
+          frameBorder="0"
+        />
+      </div>
+    );
+  }
+
+  public resize = () => {
+    const heightActivy = Number(this.activityAsideReft.current!.clientHeight) - number200;
+    const stringHeight = `${String(heightActivy)}px`;
+    this.iframeref.current!.setAttribute('height', stringHeight);
+    this.setState({
+      chargeIframe: true
+    });
+  }
+
   public render() {
     const { activityStore, loginStore } = this.props;
     const username = loginStore!.currentUser ? loginStore!.currentUser.name : 'username';
     const isContentManager = loginStore!.currentUser!.type === UserType.ContentManager;
-
     return (
       <div className="ActivityPage">
         <div className="ActivityPage__greeting" ref={this.ref}>
@@ -320,14 +352,11 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
         </div>
         <div className="ActivityPage__content">
           <div className="ActivityPage__main">
-            {this.renderSliderWidgetBlock()}
-            {/* {/* {role === UserType.Teacher && this.renderStatisticWidget()} */}
-            <div className="recentActivityNewContent">
-            {/* {role === UserType.Teacher && this.renderRecentActivitiesList()} */}
-            </div>
+            {!this.state.chargeIframe && <Loader />}
+            {this.iframeRender()}
           </div>
 
-          <div className={`ActivityPage__aside ${isContentManager && 'marginTop'}`}>
+          <div className="ActivityPage__aside" ref={this.activityAsideReft}>
             <div className="ActivityPage__widget">
               <ListWidget
                 state={activityStore!.newestArticlesState}
