@@ -15,6 +15,8 @@ import {
   QuestionType,
   Subject,
   TextQuestion,
+  Attachment,
+  ARTICLE_SERVICE_KEY
 } from '../Assignment';
 import {
   TeachingPath,
@@ -26,6 +28,7 @@ import {
   TEACHING_PATH_REPO,
   TeachingPathNodeArgs
 } from 'teachingPath/TeachingPath';
+import { ArticleService } from 'assignment/service';
 import { Article, GreepElements } from 'assignment/Assignment';
 import { AssertionError } from 'assert';
 import { SAVE_DELAY } from 'utils/constants';
@@ -65,6 +68,7 @@ export interface DraftAssignmentArgs {
 export class DraftAssignment extends Assignment {
 
   protected teachingPathRepo: TeachingPathRepo = injector.get<TeachingPathRepo>(TEACHING_PATH_REPO);
+  private articleService: ArticleService = injector.get<ArticleService>(ARTICLE_SERVICE_KEY);
   protected repo: DraftAssignmentRepo = injector.get<DraftAssignmentRepo>(
     DRAFT_ASSIGNMENT_REPO
   );
@@ -298,11 +302,10 @@ export class DraftAssignment extends Assignment {
   }
 
   @action
-  public setFeaturedImage() {
-    this._featuredImage = this.relatedArticles[0] && this.relatedArticles[0].images && this.relatedArticles[0].images.url;
-    if (this._backgroundImage === '' || this._backgroundImage === undefined || this._backgroundImage === null) {
-      this._backgroundImage = this.relatedArticles[0] && this.relatedArticles[0].images && this.relatedArticles[0].images.url_large!;
-    }
+  public async setFeaturedImage() {
+    const mediaImgsWP: Array<Attachment> = await this.articleService.fetchCoverImages([this.relatedArticles[0].id]) || [];
+    this._backgroundImage = mediaImgsWP[0].url_large;
+    this._featuredImage = mediaImgsWP[0].path;
   }
 
   @action
