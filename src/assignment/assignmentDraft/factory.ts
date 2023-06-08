@@ -211,6 +211,7 @@ export const buildDraftAssignmentDTO = (
 ): DraftAssignmentRequestDTO => ({
   uuid: draftAssignment.sessionId,
   backgroundImage: draftAssignment.backgroundImage!,
+  featuredImage: draftAssignment.featuredImage!,
   title: draftAssignment.title,
   description: draftAssignment.description,
   guidance: draftAssignment.guidance,
