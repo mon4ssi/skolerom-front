@@ -18,6 +18,7 @@
     padding-top: 5px;
     transition: 0.3s;
     padding-left: 5px;
+    min-height: calc(100% - 270px);
     &.onlyOneLine {
       padding-bottom: 90px;
     }
@@ -27,6 +28,7 @@
       margin-right: 30px;
       height: auto;
       min-height: auto;
+      max-height: 350px;
       &:hover {
         box-shadow: 0 8px 10px #00000061;
       }
