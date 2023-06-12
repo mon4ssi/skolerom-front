@@ -10,7 +10,38 @@
   position: fixed;
   overflow-x: hidden;
   overflow-y: hidden;
-
+  .partsInfo.partsInfoAutor p {
+    white-space: nowrap;
+    max-width: 180px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .DistributeButtons .modalContentInside {
+    min-width: 190px;
+    left: auto !important;
+    right: 0;
+    top: 45px !important;
+  }
+  .DistributeButtons .itemListFlex a {
+    white-space: nowrap;
+  }
+  .partsInfoAssignments {
+    ul {
+      display: flex;
+      li {
+        margin-right: 5px;
+        &:after {
+          content: ',';
+        }
+        &:last-child {
+          margin-right: 0;
+          &:after {
+            content: '';
+          }
+        }
+      }
+    }
+  }
   .NewTitleHeader {
     background: #0b2541;
     padding-top: 26px;
@@ -357,8 +388,26 @@
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 350px;
+        &.partsInfo {
+          ul {
+            display: flex;
+            li {
+              margin-right: 5px;
+              &:after {
+                content: ',';
+              }
+              &:last-child {
+                margin-right: 0;
+                &:after {
+                  content: '';
+                }
+              }
+            }
+          }
+        }
         img {
           margin-right: 10px;
+          max-width: 22px;
         }
       }
     }
@@ -418,6 +467,7 @@
         max-width: 350px;
         img {
           margin-right: 10px;
+          max-width: 22px;
         }
       }
     }
@@ -854,6 +904,7 @@
         max-width: 350px;
         img {
           margin-right: 10px;
+          max-width: 22px;
         }
       }
     }
@@ -913,6 +964,7 @@
         max-width: 350px;
         img {
           margin-right: 10px;
+          max-width: 22px;
         }
       }
     }
@@ -1158,7 +1210,7 @@
   }
 }
 
-@media screen and (max-width: 1536px) {
+@media screen and (max-width: 1535px) {
   .summary {
     height: calc(100% - 259px) !important;
   }

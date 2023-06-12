@@ -644,6 +644,23 @@ export class TeachingPathApi implements TeachingPathRepo {
     }
   }
 
+  public async copyTeachingPathByLocale(id: number, localeid?: number, all?: boolean): Promise<number> {
+    if (all) {
+      try {
+        const response = await API.get(`api/teacher/teaching-paths/${id}/copy/identical?localeId=${localeid}`);
+        return response.data.id;
+      } catch (e) {
+        throw new Error(`copy assignment ${e}`);
+      }
+    }
+    try {
+      const response = await API.get(`api/teacher/teaching-paths/${id}/copy?localeId=${localeid}`);
+      return response.data.id;
+    } catch (e) {
+      throw new Error(`copy assignment ${e}`);
+    }
+  }
+
   public async downloadTeacherGuidancePDF(id: number): Promise<void> {
     try {
       /* tslint:disable:no-string-literal */

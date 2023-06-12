@@ -964,6 +964,7 @@ export class AssignmentsList extends Component<Props, State> {
       },
       () => {
         this.assigValueData(String(this.state.myValueLocale), String(this.state.myValueGrade), String(this.state.myValueSubject), '', '');
+        assignmentListStore!.setFiltersLocale(String(filterLocale));
       }
     );
   }
@@ -1118,6 +1119,7 @@ export class AssignmentsList extends Component<Props, State> {
     assignmentListStore!.setFiltersSubjectID(null);
     assignmentListStore!.setFiltersCoreID(null);
     assignmentListStore!.setFiltersGoalID(null);
+    assignmentListStore!.setFiltersLocale(null);
     this.setState({
       myValueMulti : [],
       myValueReading : [],
