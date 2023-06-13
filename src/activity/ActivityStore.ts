@@ -2,12 +2,13 @@ import { action, computed, observable } from 'mobx';
 
 import { injector } from 'Injector';
 
-import { ActivityList, RecentActivity, SliderWidgetDomain, StatisticWidgetDomain } from './Activity';
+import { ActivityList, RecentActivity, SliderWidgetDomain, StatisticWidgetDomain, ActivityRepo, ACTIVITY_REPO_KEY } from './Activity';
 import { SortingFilter, StoreState } from 'utils/enums';
 import { Article, Assignment, ARTICLE_SERVICE_KEY } from '../assignment/Assignment';
 import { ArticleService } from 'assignment/service';
 import { TeachingPath } from '../teachingPath/TeachingPath';
 import { UserType } from 'user/User';
+import { ACTIVITY_SERVICE_KEY, ActivityService } from './service';
 
 const assignmentsAmount = 4;
 
@@ -30,8 +31,10 @@ export class ActivityStore {
 
   private activityList = new ActivityList();
   private articleService: ArticleService = injector.get<ArticleService>(ARTICLE_SERVICE_KEY);
+  private activityService: ActivityService = injector.get(ACTIVITY_SERVICE_KEY);
 
   @observable private _sliderWidgetMap: SliderWidgetMap = {};
+  @observable private _urliframe: String = '';
   @observable private _statisticWidget?: StatisticWidgetDomain;
   @observable private _sliderWidgetState: SliderWidgetStateMap = {
     [UserType.Student]: StoreState.PENDING,
@@ -83,10 +86,14 @@ export class ActivityStore {
   }
 
   @computed
+  public get urliframe() {
+    return this._urliframe;
+  }
+
+  @computed
   public get newestTeachingPathState() {
     return this._newestTeachingPathState;
   }
-
   public getSliderWidget(role: UserType.Teacher | UserType.Student): SliderWidgetDomain | undefined {
     return this._sliderWidgetMap[role];
   }
@@ -108,6 +115,12 @@ export class ActivityStore {
   @action
   public resetNewestTeachingPaths = () => {
     this._newestTeachingPaths = [];
+  }
+
+  @action
+  public getIframeContent = async () => {
+    const url = await this.activityList.getIframeContent();
+    this._urliframe = url;
   }
 
   @action
