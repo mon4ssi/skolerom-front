@@ -327,13 +327,15 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
           width={'100%'}
           onLoad={() => this.resize()}
           frameBorder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
         />
       </div>
     );
   }
 
   public resize = () => {
-    const heightActivy = Number(this.activityAsideReft.current!.clientHeight) - number200;
+    const heightActivy = Number(this.activityAsideReft.current!.clientHeight) + number200;
     const stringHeight = `${String(heightActivy)}px`;
     this.iframeref.current!.setAttribute('height', stringHeight);
     this.setState({
