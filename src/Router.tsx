@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect, Route, Switch, RouteComponentProps } from 'react-router-dom';
 
 import { ActivityPage } from './activity/ActivityPage';
+import { SearchPage } from './search/SearchPage';
 import { AssignmentsPage } from 'assignment/view/AssignmentsPage';
 import { TeachingPathsPage } from 'teachingPath/view/TeachingPathsPage';
 import { StudentsListPage } from 'student/view/StudentsListPage';
@@ -13,6 +14,7 @@ import { Page404 } from './components/pages/Page404/Page404';
 
 const AssignmentsPageComponent = () => <AssignmentsPage isStudent />;
 const TeachingPathsPageComponent = () => <TeachingPathsPage isStudent />;
+const SearchPageCompontent = () => <SearchPage />;
 
 const ContentManagerAssignments = () => <AssignmentsPage isContentManager />;
 const ContentManagerTeachingPaths = () => <TeachingPathsPage isContentManager />;
@@ -57,6 +59,12 @@ export const Router = () => {
       <Route path="/activity">
         <ActivityPage role={UserType.Teacher}/>
       </Route>
+
+      <Route
+        path="/search"
+        component={SearchPageCompontent}
+      />
+
       <Route
         path="/assignments"
         component={AssignmentsPage}
@@ -91,6 +99,10 @@ export const Router = () => {
         <ActivityPage role={UserType.Student}/>
       </Route>
       <Route
+        path="/search"
+        component={SearchPageCompontent}
+      />
+      <Route
         path="/teaching-paths"
         component={TeachingPathsPageComponent}
       />
@@ -115,6 +127,10 @@ export const Router = () => {
       <Route path="/activity">
         <ActivityPage role={UserType.ContentManager}/>
       </Route>
+      <Route
+        path="/search"
+        component={SearchPageCompontent}
+      />
       <Route
         path="/assignments"
         component={ContentManagerAssignments}

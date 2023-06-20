@@ -166,12 +166,14 @@
   "sidebar": {
     "Activity": "Activity",
     "Teaching Paths": "Teaching Paths",
+    "Articles": "Articles",
+    "Search": "Search",
     "Assignments": "Assignments",
     "Students": "Students",
     "Favorites": "Favorites",
     "Forum": "Forum",
     "Log out": "Log out",
-    "Evaluation": "Evaluation",
+    "Evaluation": "Evaluation",    
     "alt": {
       "Activity": "Go to activity overview",
       "Teaching Paths": "Go to teaching paths",

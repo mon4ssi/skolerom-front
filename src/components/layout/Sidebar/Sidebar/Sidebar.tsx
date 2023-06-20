@@ -16,6 +16,7 @@ import teachingPathImg from 'assets/images/teaching-path.svg';
 import toggleSidebarIcon from 'assets/images/icon-sidebar.svg';
 import studentsImg from 'assets/images/students-circle.svg';
 import evaluationIcon from 'assets/images/evaluation-menu-icon.svg';
+import searchIcon from 'assets/images/search-bold.svg';
 
 import './Sidebar.scss';
 
@@ -30,6 +31,11 @@ const teacherSidebarLinks = [
     icon: activityIcon,
     name: 'Activity',
     url: '/activity'
+  },
+  {
+    icon: searchIcon,
+    name: 'Search',
+    url: '/search'
   },
   {
     icon: teachingPathImg,
@@ -70,6 +76,11 @@ const teacherTrialSidebarLinks = [
     url: '/activity'
   },
   {
+    icon: searchIcon,
+    name: 'Search',
+    url: '/search'
+  },
+  {
     icon: teachingPathImg,
     name: 'Teaching Paths',
     url: '/teaching-paths'
@@ -98,6 +109,11 @@ const studentSidebarLinks = [
     url: '/activity'
   },
   {
+    icon: searchIcon,
+    name: 'Search',
+    url: '/search'
+  },
+  {
     icon: teachingPathImg,
     name: 'Teaching Paths',
     url: '/teaching-paths'
@@ -114,6 +130,11 @@ const contentManagerSidebar = [
     icon: activityIcon,
     name: 'Activity',
     url: '/activity'
+  },
+  {
+    icon: searchIcon,
+    name: 'Search',
+    url: '/search'
   },
   {
     icon: teachingPathImg,
