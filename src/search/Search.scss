@@ -33,6 +33,7 @@
                 align-items: center;
                 width: 340px;
                 justify-content: flex-end;
+                position: relative;
                 .CreateButton {
                     background: #e7ecef;
                     padding: 5px 10px;
@@ -49,6 +50,13 @@
                         margin-right: 10px;
                     }
                     &:hover {
+                        img {
+                            filter: brightness(0)invert(1);
+                        }
+                    }
+                    &.active {
+                        background: #000;
+                        color: white;
                         img {
                             filter: brightness(0)invert(1);
                         }
@@ -77,6 +85,33 @@
                     }
                 }
             }
+        }
+    }
+}
+
+.absModalTinker {
+    position: absolute;
+    background-color: #FFF;
+    border: 1px solid #D3D9DE;
+    top: 45px;
+    border-radius: 7px;
+    overflow: hidden;
+    right: 0;
+    z-index: 2;
+    button {
+        display: block;
+        width: 100%;
+        background: white;
+        border-bottom: solid 1px #d7d7d769;
+        padding: 5px 10px;
+        min-width: 150px;
+        box-sizing: border-box;
+        &:hover, &.active {
+            background: #000;
+            color: white;
+        }
+        &.active {
+            pointer-events: none;
         }
     }
 }

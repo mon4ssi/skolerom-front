@@ -4,7 +4,7 @@ import { observable, computed } from 'mobx';
 export const SEARCH_REPO = 'SEARCH_REPO';
 
 export interface SearchRepo {
-  getDataSearch(filter: Filter): Promise<Array<Search>>;
+  getDataSearch(filter: Filter): Promise<{items: Array<Search>, filters: FilterMeta, totalpage: number}>;
 }
 
 export interface SimpleNumberData {
@@ -36,6 +36,7 @@ export interface SearchArgs {
   relatedTp?: Array<number>;
   relatedAssignment?: Array<number>;
 }
+
 export class Search {
   public type: string;
   public id: number;
@@ -88,4 +89,13 @@ export class Filter {
   @observable public topics?: Array<string> | null;
   @observable public source?: Array<number> | null;
   @observable public goals?: Array<string> | null;
+}
+
+export class FilterMeta {
+  @observable public grades?: Array<SimpleNumberData> | null;
+  @observable public subjects?: Array<SimpleNumberData> | null;
+  @observable public coreElements?: Array<SimpleStringData> | null;
+  @observable public topics?: Array<SimpleStringData> | null;
+  @observable public source?: Array<SimpleNumberData> | null;
+  @observable public goals?: Array<SimpleStringData> | null;
 }

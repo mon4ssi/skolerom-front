@@ -16,7 +16,7 @@ import teachingPathImg from 'assets/images/teaching-path.svg';
 import toggleSidebarIcon from 'assets/images/icon-sidebar.svg';
 import studentsImg from 'assets/images/students-circle.svg';
 import evaluationIcon from 'assets/images/evaluation-menu-icon.svg';
-import searchIcon from 'assets/images/search-bold.svg';
+import searchIcon from 'assets/images/search_circle_icon.svg';
 
 import './Sidebar.scss';
 

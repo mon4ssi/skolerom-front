@@ -58,8 +58,10 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
   public async componentDidMount() {
     const dataSearch = await this.getDataSearchComponents();
+    this.props.searchStore!.paginationTotalPages = dataSearch.totalpage;
+    this.props.searchStore!.getFilters = dataSearch.filters;
     this.setState({
-      searchItems : dataSearch
+      searchItems : dataSearch.items
     });
   }
   public render() {

@@ -1,7 +1,7 @@
 import { injector } from 'Injector';
 import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteractor';
 import { API } from 'utils/api';
-import { Search, Filter, SearchRepo } from './Search';
+import { Search, Filter, SearchRepo, FilterMeta } from './Search';
 import isNil from 'lodash/isNil';
 
 export const buildFilterDTO = (filter: Filter): Object => {
@@ -44,12 +44,16 @@ export const buildFilterDTO = (filter: Filter): Object => {
 };
 export class SearchApi implements SearchRepo {
   private storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
-  public async getDataSearch(filter: Filter): Promise<Array<Search>>  {
+  public async getDataSearch(filter: Filter): Promise<{items: Array<Search>, filters: FilterMeta, totalpage: number}>  {
     if (!isNil(filter.searchQuery)) filter.searchQuery = String(filter.searchQuery!);
     /* const response = await API.get('https://searchpoint.free.beeceptor.com/all', {
       params: buildFilterDTO(filter)
     }); */
     const response = await API.get('https://searchpoint2.free.beeceptor.com/todos');
-    return response.data.data;
+    return {
+      items: response.data.data,
+      filters: response.data.filters,
+      totalpage: response.data.meta.pagination.totalpages
+    };
   }
 }
