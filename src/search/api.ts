@@ -49,7 +49,7 @@ export class SearchApi implements SearchRepo {
     /* const response = await API.get('https://searchpoint.free.beeceptor.com/all', {
       params: buildFilterDTO(filter)
     }); */
-    const response = await API.get('https://searchpoint.free.beeceptor.com/all');
+    const response = await API.get('https://searchpoint2.free.beeceptor.com/todos');
     return response.data.data;
   }
 }

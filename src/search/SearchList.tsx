@@ -4,6 +4,7 @@ import intl from 'react-intl-universal';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { SearchComponentList } from '../search/searchListCompontent/searchListComponent';
+import { SearchFilter } from '../search/searchFilters/searchFilters';
 
 import searchIcon from 'assets/images/search.svg';
 import searchPinkIcon from 'assets/images/searchpink.svg';
@@ -15,6 +16,7 @@ import tpIcon from 'assets/images/teaching-path.svg';
 import tpPinkIcon from 'assets/images/teaching-path-pink.svg';
 import assigIcon from 'assets/images/assignment.svg';
 import assigPinkIcon from 'assets/images/assignmentpink.svg';
+
 import './Search.scss';
 
 interface SearchProps {
@@ -68,6 +70,25 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     });
   }
 
+  public closeFiltersModalTp = () =>  {
+    this.setState({
+      filtersModalTp: false
+    });
+  }
+
+  public openFiltersModalTp = () => {
+    this.setState({
+      filtersModalTp: true
+    });
+  }
+
+  public filters = () => (
+    <div className="fixedsModal">
+      <SearchFilter />
+      <div className="filtersModalBackground" onClick={this.closeFiltersModalTp} />
+    </div>
+  )
+
   public renderTabsInside = (item : any) => {
     const activeClass = (this.props.type === item.data) ?  'renderTab active' : 'renderTab';
     const icondem = (this.props.type === item.data) ? item.iconHover : item.icon;
@@ -78,6 +99,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
       </a>
     );
   }
+
   public renderTabs = () =>  (
     <div className="renderTabs">
       {this.tabNavigationLinks.map(this.renderTabsInside)}
@@ -96,7 +118,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
               <input type="text"/>
             </div>
             <div className="SearchPage__header__top__right">
-              <a href="javascript:void(0)" className="CreateButton">
+              <a href="javascript:void(0)" className="CreateButton" onClick={this.openFiltersModalTp}>
                 <img src={filterIcon} />
                 {btnText}
               </a>
@@ -113,6 +135,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
         <div className="SearchPage__body">
           <SearchComponentList type={this.state.type}/>
         </div>
+        {this.state.filtersModalTp && this.filters()}
       </div>
     );
   }
