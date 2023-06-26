@@ -1,4 +1,5 @@
 import { injector } from 'Injector';
+import { action, computed, observable, toJS } from 'mobx';
 import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteractor';
 import { API } from 'utils/api';
 import { Search, Filter, SearchRepo, FilterMeta } from './Search';
@@ -23,22 +24,22 @@ export const buildFilterDTO = (filter: Filter): Object => {
     filterDTO.searchQuery = filter.searchQuery;
   }
   if (filter.grades) {
-    filterDTO.grades = filter.grades;
+    filterDTO.grades = toJS(filter.grades);
   }
   if (filter.subjects) {
-    filterDTO.subjects = filter.subjects;
+    filterDTO.subjects = toJS(filter.subjects);
   }
   if (filter.coreElements) {
-    filterDTO.coreElements = filter.coreElements;
+    filterDTO.coreElements = toJS(filter.coreElements);
   }
   if (filter.topics) {
-    filterDTO.topics = filter.topics;
+    filterDTO.topics = toJS(filter.topics);
   }
   if (filter.source) {
-    filterDTO.source = filter.source;
+    filterDTO.source = toJS(filter.source);
   }
   if (filter.goals) {
-    filterDTO.goals = filter.goals;
+    filterDTO.goals = toJS(filter.goals);
   }
   return filterDTO;
 };
@@ -49,7 +50,7 @@ export class SearchApi implements SearchRepo {
     /* const response = await API.get('https://searchpoint.free.beeceptor.com/all', {
       params: buildFilterDTO(filter)
     }); */
-    const response = await API.get('https://searchpoint2.free.beeceptor.com/todos');
+    const response = await API.get('https://skolerom.proxy.beeceptor.com/todos');
     return {
       items: response.data.data,
       filters: response.data.filters,

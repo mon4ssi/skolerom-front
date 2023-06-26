@@ -30,6 +30,7 @@ interface SearchState {
   type : string;
   filtersModalTp: boolean;
   filterModalLang: boolean;
+  useFilters: boolean;
 }
 
 @inject('searchStore')
@@ -38,6 +39,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   public state = {
     filtersModalTp : false,
     filterModalLang : false,
+    useFilters: false,
     type : 'ARTICLE'
   };
   public tabNavigationLinks = [
@@ -171,8 +173,8 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   )
 
   public render() {
-    const btnText = this.state.filtersModalTp ? intl.get('edit_teaching_path.modals.search.buttons.button_open') : intl.get('edit_teaching_path.modals.search.buttons.button_open');
-    const classbtnText = this.state.filtersModalTp ? 'CreateButton active' : 'CreateButton';
+    const btnText = this.props.searchStore!.useFilters ? intl.get('edit_teaching_path.modals.search.buttons.button_open') : intl.get('edit_teaching_path.modals.search.buttons.button_change');
+    const classbtnText = this.props.searchStore!.useFilters ? 'CreateButton active' : 'CreateButton';
     const classbtnlang = this.state.filterModalLang ? 'CreateButton active' : 'CreateButton';
     const langText = intl.get('publishing_page.languages');
     return (

@@ -9,6 +9,8 @@ import resetImg from 'assets/images/reset-icon.svg';
 import { SearchStore } from '../SearchStore';
 import { SimpleNumberData, SimpleStringData } from '../Search';
 import { WPLENGUAGES } from '../../utils/constants';
+import * as QueryStringHelper from 'utils/QueryStringHelper';
+import { BooleanFilter, SortingFilter, QueryStringKeysSearch, StoreState } from 'utils/enums';
 
 import filterImg from 'assets/images/filter.svg';
 import filterWhiteImg from 'assets/images/filter_white.svg';
@@ -46,11 +48,18 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     goals: [],
     source: []
   };
+  // Langs init
   public changeLang = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const { searchStore } = this.props;
     const value = e.currentTarget.value;
     searchStore!.myfilterLang = value;
     searchStore!.myfilter.lang = value;
+    QueryStringHelper.set(
+      this.props.history,
+      QueryStringKeysSearch.LANG,
+      value ? value : ''
+    );
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
     await searchStore!.getDataSearch();
   }
   public renderLangs = (item: SimpleStringData) => {
@@ -77,45 +86,124 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       </button>
     );
   }
-  public renderGrades = (item: SimpleNumberData) => (
-    <button
-      value={item.id}
-      key={item.id}
-      className="itemFlexFilter"
-    >
-      {item.name}
-    </button>
-  )
-  public renderSubjects = (item: SimpleNumberData) => (
-    <button
-      value={item.id}
-      key={item.id}
-      className="itemFlexFilter"
-    >
-      {item.name}
-    </button>
-  )
-  public renderCoreElements = (item: SimpleStringData) => (
-    <button
-      value={item.id}
-      key={item.id}
-      className="itemFlexFilter"
-    >
-      {item.name}
-    </button>
-  )
+  // Langs end
+  // Grades init
+  public changeGrade = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { searchStore } = this.props;
+    const value = e.currentTarget.value;
+    if (searchStore!.myfilter.grades!.includes(Number(value))) {
+      searchStore!.myfilter.grades! = searchStore!.myfilter.grades!.filter(item => item !== Number(value));
+    } else {
+      searchStore!.myfilter.grades!.push(Number(value));
+    }
+    QueryStringHelper.set(
+      this.props.history,
+      QueryStringKeysSearch.GRADE,
+      String(searchStore!.myfilter.grades!) ? String(searchStore!.myfilter.grades!) : ''
+    );
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    await searchStore!.getDataSearch();
+  }
+  public renderGrades = (item: SimpleNumberData) => {
+    const { myfilter } = this.props.searchStore!;
+    let activeclass = 'itemFlexFilter';
+    if (myfilter.grades!) {
+      myfilter.grades!.forEach((g) => {
+        if (item.id === g) {
+          activeclass = 'itemFlexFilter active';
+        }
+      });
+    }
+    return (
+      <button
+        value={item.id}
+        key={item.id}
+        className={activeclass}
+        onClick={this.changeGrade}
+      >
+        {item.name}
+      </button>
+    );
+  }
+  // Grades end
+  // Subjects init
+  public changeSubject = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { searchStore } = this.props;
+    const value = e.currentTarget.value;
+    if (searchStore!.myfilter.subjects!.includes(Number(value))) {
+      searchStore!.myfilter.subjects! = searchStore!.myfilter.subjects!.filter(item => item !== Number(value));
+    } else {
+      searchStore!.myfilter.subjects!.push(Number(value));
+    }
+    QueryStringHelper.set(
+      this.props.history,
+      QueryStringKeysSearch.SUBJECT,
+      String(searchStore!.myfilter.subjects!) ? String(searchStore!.myfilter.subjects!) : ''
+    );
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    await searchStore!.getDataSearch();
+  }
+  public renderSubjects = (item: SimpleNumberData) => {
+    const { myfilter } = this.props.searchStore!;
+    let activeclass = 'itemFlexFilter';
+    if (myfilter.subjects!) {
+      myfilter.subjects!.forEach((g) => {
+        if (item.id === g) {
+          activeclass = 'itemFlexFilter active';
+        }
+      });
+    }
+    return (
+      <button
+        value={item.id}
+        key={item.id}
+        className={activeclass}
+        onClick={this.changeSubject}
+      >
+        {item.name}
+      </button>
+    );
+  }
+  // Subjects end
+  // Core Elements init
   public renderValueOptions = (data: Array<SimpleStringData>) => {
     const returnArray: Array<GreepSelectValue> = [];
     data.forEach((element) => {
       returnArray.push({
         // tslint:disable-next-line: variable-name
-        value: Number(element.id),
+        value: element.id,
         label: element.name
       });
     });
     return returnArray;
   }
+  public handleChangeSelectCore = async (newValue: any) => {
+    const { searchStore } = this.props!;
+    const valueString: Array<string> = [];
+    if (newValue) {
+      newValue.forEach((f: any) => {
+        valueString.push(f.value);
+      });
+    }
+    if (searchStore!.myfilter.coreElements) {
+      searchStore!.myfilter.coreElements = valueString;
+    }
+    QueryStringHelper.set(
+      this.props.history,
+      QueryStringKeysSearch.GREPCOREELEMENTSIDS,
+      String(searchStore!.myfilter.coreElements!) ? String(searchStore!.myfilter.coreElements!) : ''
+    );
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    await searchStore!.getDataSearch();
+  }
   public renderCoreElementsSelected = () => {
+    const { myfilter } = this.props.searchStore!;
+    const valueString: Array<string> = [];
+    if (myfilter!.coreElements) {
+      myfilter!.coreElements.forEach((f: any) => {
+        valueString.push(f.value);
+      });
+    }
     const options = this.renderValueOptions(this.state.coreElements);
     const customStyles = {
       option: () => ({
@@ -157,22 +245,82 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
         components={{ NoOptionsMessage }}
         styles={customStyles}
         options={options}
+        onChange={this.handleChangeSelectCore}
+        defaultValue={valueString}
         placeholder={intl.get('new assignment.greep.core')}
         isClearable={true}
         isMulti
       />
     );
   }
-  public renderTopics = (item: SimpleStringData) => (
-    <button
-      value={item.id}
-      key={item.id}
-      className="itemFlexFilter"
-    >
-      {item.name}
-    </button>
-  )
+  // Core Elements end
+  // Topics init
+  public changeTopic = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { searchStore } = this.props;
+    const value = e.currentTarget.value;
+    if (searchStore!.myfilter.topics!.includes(String(value))) {
+      searchStore!.myfilter.topics! = searchStore!.myfilter.topics!.filter(item => item !== String(value));
+    } else {
+      searchStore!.myfilter.topics!.push(String(value));
+    }
+    QueryStringHelper.set(
+      this.props.history,
+      QueryStringKeysSearch.GREPMAINTOPICSIDS,
+      String(searchStore!.myfilter.topics!) ? String(searchStore!.myfilter.topics!) : ''
+    );
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    await searchStore!.getDataSearch();
+  }
+  public renderTopics = (item: SimpleStringData) => {
+    const { myfilter } = this.props.searchStore!;
+    let activeclass = 'itemFlexFilter';
+    if (myfilter.topics!) {
+      myfilter.topics!.forEach((g) => {
+        if (item.id === g) {
+          activeclass = 'itemFlexFilter active';
+        }
+      });
+    }
+    return (
+      <button
+        value={item.id}
+        key={item.id}
+        className={activeclass}
+        onClick={this.changeTopic}
+      >
+        {item.name}
+      </button>
+    );
+  }
+  // Topics End
+  // Goals Init
+  public handleChangeSelectGoals = async (newValue: any) => {
+    const { searchStore } = this.props!;
+    const valueString: Array<string> = [];
+    if (newValue) {
+      newValue.forEach((f: any) => {
+        valueString.push(f.value);
+      });
+    }
+    if (searchStore!.myfilter.goals) {
+      searchStore!.myfilter.goals = valueString;
+    }
+    QueryStringHelper.set(
+      this.props.history,
+      QueryStringKeysSearch.GREEPGOALSIDS,
+      String(searchStore!.myfilter.goals!) ? String(searchStore!.myfilter.goals!) : ''
+    );
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    await searchStore!.getDataSearch();
+  }
   public renderCoreGoalsSelected = () => {
+    const { myfilter } = this.props.searchStore!;
+    const valueString: Array<string> = [];
+    if (myfilter!.coreElements) {
+      myfilter!.coreElements.forEach((f: any) => {
+        valueString.push(f.value);
+      });
+    }
     const options = this.renderValueOptions(this.state.goals);
     const customStyles = {
       option: () => ({
@@ -214,6 +362,8 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
         components={{ NoOptionsMessage }}
         styles={customStyles}
         options={options}
+        onChange={this.handleChangeSelectGoals}
+        defaultValue={valueString}
         placeholder={intl.get('new assignment.greep.goals')}
         isClearable={true}
         isMulti
@@ -229,15 +379,69 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       {item.name}
     </button>
   )
-  public renderSource = (item: SimpleNumberData) => (
-    <button
-      value={item.id}
-      key={item.id}
-      className="itemFlexFilter"
-    >
-      {item.name}
-    </button>
-  )
+  // Goals End
+  // Source Init
+  public changeSource = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { searchStore } = this.props;
+    const value = e.currentTarget.value;
+    if (searchStore!.myfilter.source!.includes(Number(value))) {
+      searchStore!.myfilter.source! = searchStore!.myfilter.source!.filter(item => item !== Number(value));
+    } else {
+      searchStore!.myfilter.source!.push(Number(value));
+    }
+    QueryStringHelper.set(
+      this.props.history,
+      QueryStringKeysSearch.SOURCE,
+      String(searchStore!.myfilter.source!) ? String(searchStore!.myfilter.source!) : ''
+    );
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    await searchStore!.getDataSearch();
+  }
+  public renderSource = (item: SimpleNumberData) => {
+    const { myfilter } = this.props.searchStore!;
+    let activeclass = 'itemFlexFilter';
+    if (myfilter.source!) {
+      myfilter.source!.forEach((g) => {
+        if (item.id === g) {
+          activeclass = 'itemFlexFilter active';
+        }
+      });
+    }
+    return (
+      <button
+        value={item.id}
+        key={item.id}
+        className={activeclass}
+        onClick={this.changeSource}
+      >
+        {item.name}
+      </button>
+    );
+  }
+
+  public resetFilters = async () => {
+    const filters = this.props.searchStore!.getFilters;
+    this.props.searchStore!.resetFilters();
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.LANG, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GRADE, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.SUBJECT, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GREEPGOALSIDS, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GREPCOREELEMENTSIDS, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GREPMAINTOPICSIDS, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GREPREADINGINSUBJECT, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.SOURCE, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    this.setState({
+      langs: WPLENGUAGES,
+      grades: filters!.grades!,
+      subjects: filters!.subjects!,
+      coreElements: filters!.coreElements!,
+      topics: filters!.topics!,
+      goals: filters!.goals!,
+      source: filters!.source!
+    });
+    await this.props.searchStore!.getDataSearch();
+  }
 
   public async componentDidMount() {
     const filters = this.props.searchStore!.getFilters;
@@ -251,12 +455,13 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       source: filters!.source!
     });
   }
+
   public render() {
     return(
       <div className="FiltersModal">
         <div className="FiltersModal__header">
           <h5>{intl.get('edit_teaching_path.modals.search.header.title')}</h5>
-          <button id="ButtonCloseTp">
+          <button id="ButtonCloseTp" onClick={this.resetFilters}>
             <img src={resetImg} />
             <span>{intl.get('edit_teaching_path.modals.search.header.button')}</span>
           </button>

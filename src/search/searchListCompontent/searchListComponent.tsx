@@ -8,7 +8,7 @@ import { Search } from '../Search';
 import { SearchItemComponent } from '../searchItem/searchItem';
 import { DEBOUNCE_TIME } from 'utils/constants';
 import { lettersNoEn } from 'utils/lettersNoEn';
-import { SortingFilter, StoreState, QueryStringKeys } from 'utils/enums';
+import { SortingFilter, StoreState, QueryStringKeys, QueryStringKeysSearch } from 'utils/enums';
 import * as QueryStringHelper from 'utils/QueryStringHelper';
 import './searchListComponent.scss';
 
@@ -30,23 +30,66 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     searchItems: []
   };
   public getDataSearchComponents = async () => {
+    const { myfilter } = this.props.searchStore!;
     switch (this.props.type) {
       case 'ARTICLE':
-        this.props.searchStore!.myfilter.type = 1;
+        myfilter.type = 1;
         break;
       case 'TEACHING-PATH':
-        this.props.searchStore!.myfilter.type = number2;
+        myfilter.type = number2;
         break;
       case 'ASSIGNMENT':
-        this.props.searchStore!.myfilter.type = number3;
+        myfilter.type = number3;
         break;
       default:
-        this.props.searchStore!.myfilter.type = 1;
+        myfilter.type = 1;
         break;
     }
-    // locale
-    // page
-    // perpage
+    const mygrades : Array<number> = [];
+    if (QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.GRADE)) {
+      QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.GRADE)!.split(',').forEach((e) => {
+        mygrades.push(Number(e));
+      });
+    }
+    const mysubjects : Array<number> = [];
+    if (QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SUBJECT)) {
+      QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SUBJECT)!.split(',').forEach((e) => {
+        mygrades.push(Number(e));
+      });
+    }
+    const mycoreelements : Array<string> = [];
+    if (QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.GREPCOREELEMENTSIDS)) {
+      QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.GREPCOREELEMENTSIDS)!.split(',').forEach((e) => {
+        mycoreelements.push(e);
+      });
+    }
+    const mytopics : Array<string> = [];
+    if (QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.GREPMAINTOPICSIDS)) {
+      QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.GREPMAINTOPICSIDS)!.split(',').forEach((e) => {
+        mytopics.push(e);
+      });
+    }
+    const mygoalss : Array<string> = [];
+    if (QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.GREEPGOALSIDS)) {
+      QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.GREEPGOALSIDS)!.split(',').forEach((e) => {
+        mygoalss.push(e);
+      });
+    }
+    const mysources : Array<number> = [];
+    if (QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SOURCE)) {
+      QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SOURCE)!.split(',').forEach((e) => {
+        mysources.push(Number(e));
+      });
+    }
+    myfilter.page = QueryStringHelper.getNumber(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    myfilter.lang = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.LANG);
+    myfilter.grades = mygrades;
+    myfilter.subjects = mysubjects;
+    myfilter.coreElements = mycoreelements;
+    myfilter.topics = mytopics;
+    myfilter.goals = mygoalss;
+    myfilter.source = mysources;
+    myfilter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
     return this.props.searchStore!.getDataSearch();
   }
   public renderContentList(item : Search) {
