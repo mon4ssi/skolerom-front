@@ -22,12 +22,14 @@ interface SearchProps {
 
 interface SearchState {
   searchItems: Array<Search>;
+  type: string;
 }
 @inject('searchStore')
 @observer
 class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchState> {
   public state = {
-    searchItems: []
+    searchItems: [],
+    type: ''
   };
   public getDataSearchComponents = async () => {
     const { myfilter } = this.props.searchStore!;
@@ -54,7 +56,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     const mysubjects : Array<number> = [];
     if (QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SUBJECT)) {
       QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SUBJECT)!.split(',').forEach((e) => {
-        mygrades.push(Number(e));
+        mysubjects.push(Number(e));
       });
     }
     const mycoreelements : Array<string> = [];
@@ -92,11 +94,42 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     myfilter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
     return this.props.searchStore!.getDataSearch();
   }
-  public renderContentList(item : Search) {
+  public renderSwitchContentList() {
+    const { searchItems } = this.state;
+    switch (this.props.type) {
+      case 'ARTICLE':
+        return searchItems.map(this.renderContentListArticle);
+        break;
+      case 'TEACHING-PATH':
+        return searchItems.map(this.renderContentListTP);
+        break;
+      case 'ASSIGNMENT':
+        return searchItems.map(this.renderContentListAssignment);
+        break;
+      default:
+        return searchItems.map(this.renderContentListArticle);
+        break;
+    }
+  }
+  public renderContentListArticle(item : Search) {
     return (
-        <div key={item.id} className="Inside">
-            <SearchItemComponent item={item} />
-        </div>
+      <div key={item.id} className="Inside">
+        <SearchItemComponent item={item} type="ARTICLE" />
+      </div>
+    );
+  }
+  public renderContentListAssignment(item : Search) {
+    return (
+      <div key={item.id} className="Inside Inside--horizontal">
+        <SearchItemComponent item={item} type="ASSIGNMENT" />
+      </div>
+    );
+  }
+  public renderContentListTP(item : Search) {
+    return (
+      <div key={item.id} className="Inside Inside--horizontal">
+        <SearchItemComponent item={item} type="TEACHING-PATH" />
+      </div>
     );
   }
   public async componentDidMount() {
@@ -104,14 +137,14 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     this.props.searchStore!.paginationTotalPages = dataSearch.totalpage;
     this.props.searchStore!.getFilters = dataSearch.filters;
     this.setState({
+      type: this.props.type,
       searchItems : dataSearch.items
     });
   }
   public render() {
-    const { searchItems } = this.state;
     return (
       <div className="contentListSearch">
-        {searchItems.map(this.renderContentList)}
+        {this.renderSwitchContentList()}
       </div>
     );
   }

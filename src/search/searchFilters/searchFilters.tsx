@@ -109,7 +109,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     let activeclass = 'itemFlexFilter';
     if (myfilter.grades!) {
       myfilter.grades!.forEach((g) => {
-        if (item.id === g) {
+        if (Number(item.id) === Number(g)) {
           activeclass = 'itemFlexFilter active';
         }
       });
@@ -148,7 +148,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     let activeclass = 'itemFlexFilter';
     if (myfilter.subjects!) {
       myfilter.subjects!.forEach((g) => {
-        if (item.id === g) {
+        if (Number(item.id) === Number(g)) {
           activeclass = 'itemFlexFilter active';
         }
       });
@@ -198,13 +198,16 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
   }
   public renderCoreElementsSelected = () => {
     const { myfilter } = this.props.searchStore!;
-    const valueString: Array<string> = [];
+    const options = this.renderValueOptions(this.state.coreElements);
+    const valueString: Array<any> = [];
     if (myfilter!.coreElements) {
       myfilter!.coreElements.forEach((f: any) => {
-        valueString.push(f.value);
+        const enjoy = options.find(x => x.value === f);
+        if (enjoy) {
+          valueString.push(enjoy);
+        }
       });
     }
-    const options = this.renderValueOptions(this.state.coreElements);
     const customStyles = {
       option: () => ({
         fontSize: '14px',
@@ -276,7 +279,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     let activeclass = 'itemFlexFilter';
     if (myfilter.topics!) {
       myfilter.topics!.forEach((g) => {
-        if (item.id === g) {
+        if (String(item.id) === String(g)) {
           activeclass = 'itemFlexFilter active';
         }
       });
@@ -402,7 +405,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     let activeclass = 'itemFlexFilter';
     if (myfilter.source!) {
       myfilter.source!.forEach((g) => {
-        if (item.id === g) {
+        if (Number(item.id) === Number(g)) {
           activeclass = 'itemFlexFilter active';
         }
       });

@@ -33,6 +33,54 @@
                     line-height: 20px;                
                 }
             }
+            &__left {
+                display: flex;
+                align-items: center;
+                img {
+                    height: 60px;
+                    margin-right: 10px;
+                    width: 90px;
+                    object-fit: cover;
+                }
+                h2 {
+                    font-size: 17px;
+                    font-weight: 400;
+                }
+            }
+            &__right {
+                display: flex;
+                align-items: center;
+                .subjectItems {
+                    display: flex;
+                    align-items: center;
+                    .subjectItem {
+                        font-size: 0.9375rem;
+                        padding: 7px 18px 8px 21px;
+                        background: #E7ECEF;
+                        border: 1px solid #D3D9DE;
+                        border-radius: 17px;
+                        margin-right: 10px;
+                    }
+                }
+                .more-show {
+                    margin-right: 10px;
+                    button {
+                        background: transparent;
+                    }
+                }
+            }
+            &.cardInfoItem--horizontal {
+                min-height: 60px;
+                height: 60px;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+        &.Inside--horizontal {
+            width: 100%;
+            margin-right: 0px;
+            min-height: 60px;
+            height: 60px;
         }
     }
 }
