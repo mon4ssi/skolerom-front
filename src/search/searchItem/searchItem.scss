@@ -69,11 +69,41 @@
                     }
                 }
             }
+            &__tooltip {
+                position: absolute;
+                box-shadow: 0 2px 2px rgba(255, 255, 255, 0.129753);
+                border-radius: 4px;
+                border: 1px solid #939fa7;
+                padding: 13px 20px 13px 20px;
+                cursor: default;
+                background: #FFF;
+                z-index: 20;
+                top: 55px;
+                right: 10px;
+                &:before {
+                    content: '';
+                    border-top: 1px solid #939fa7;
+                    border-right: 1px solid #939fa7;
+                    width: 12px;
+                    height: 12px;
+                    position: absolute;
+                    background: white;
+                    transform: rotate(-45deg);
+                    top: -8px;
+                    right: 11px;
+                }
+                li {
+                    margin-top: 5px;
+                    margin-bottom: 5px;
+                }
+            }
             &.cardInfoItem--horizontal {
                 min-height: 60px;
                 height: 60px;
                 display: flex;
                 justify-content: space-between;
+                position: relative;
+                overflow: inherit;
             }
         }
         &.Inside--horizontal {
