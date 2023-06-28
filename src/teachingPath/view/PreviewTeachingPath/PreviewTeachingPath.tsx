@@ -164,7 +164,6 @@ class PreviewTeachingPathComponent extends Component<PropsComponent, State> {
       questionaryTeachingPathStore!.teachingPathId!,
       questionaryTeachingPathStore!.pickedItemDomain!.idNode
     );
-    questionaryTeachingPathStore!.resetCurrentDomainList();
     const type = questionaryTeachingPathStore!.childrenType;
     questionaryTeachingPathStore!.setFetchingDataStatus(false);
     switch (type) {
