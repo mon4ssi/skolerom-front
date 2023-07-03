@@ -1,14 +1,195 @@
 .contentListSearch {
     display: flex;
     flex-wrap: wrap;
+    position: relative;
     .Inside {
         margin-bottom: 20px;
         .cardInfoItem {
-            background: white;
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.100661);
-            min-height: 332px;
+            .triangleCard {
+                width: 100%;
+                position: relative;
+                &:before {
+                    content: '';
+                    width: 0;
+                    height: 0;
+                    border-style: solid;
+                    border-width: 10px 15px 0;
+                    border-color: #737474 transparent transparent;
+                    position: absolute;
+                    left: 50%;
+                    margin-left: -12px;
+                }
+                &:after {
+                    content: '';
+                    width: 0;
+                    height: 0;
+                    border-style: solid;
+                    border-width: 10px 15px 0;
+                    border-color: white transparent transparent;
+                    position: absolute;
+                    left: 50%;
+                    margin-left: -12px;
+                    top: -1px;
+                }
+            }
+            &__card {
+                cursor: pointer;
+                background: white;
+                border-radius: 5px;
+                overflow: hidden;
+                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.100661);
+                min-height: 332px;
+                &.active {
+                    position: relative;
+                    &:before {
+                        content: '';
+                        position: absolute;
+                        pointer-events: none;
+                        width: calc(100% - 1px);
+                        height: calc(100% - 2px);
+                        background: transparent;
+                        border: 1px solid #737474;
+                        border-radius: 6px;
+                        left: 0px;
+                        top: 0px;
+                    }
+                }
+            }
+            &__detail {
+                overflow: hidden;
+                pointer-events: all;
+                z-index: 3;
+                height: 0px;
+                transition: 0.8s;
+                &.active {
+                    height: 590px;
+                    margin-top: 20px;
+                }
+                .cardTemplateArticle {
+                    width: calc(100% - 20px);
+                    background: white;
+                    position: absolute;
+                    left: 0;
+                    border: 1px solid #737474;
+                    overflow: hidden;
+                    border-radius: 5px;
+                    &__header {
+                        padding: 20px;
+                        &__top {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: flex-start;
+                            margin-bottom: 20px;
+                            .description {
+                                max-width: 650px;
+                                font-weight: 300;
+                                font-size: 18px;
+                                line-height: 24px;
+                            }
+                            .close {
+                                border: solid 1px black;
+                                border-radius: 50%;
+                                cursor: pointer;
+                            }
+                        }
+                        &__bottom {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            .links {
+                                ul {
+                                    display: flex;
+                                    a {
+                                        display: flex;
+                                        align-items: center;
+                                        margin-right: 10px;
+                                        background: #E2017B;
+                                    }
+                                }
+                            }
+                            .relateds {
+                                h3 {
+                                    margin-top: 0px;
+                                    margin-bottom: 10px;
+                                    font-weight: 300;
+                                }
+                                ul {
+                                    display: flex;
+                                    li {
+                                        margin-right: 15px;
+                                        a {
+                                            font-size: 18px;
+                                            font-weight: 700;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    &__body {
+                        background: #e6e9ed;
+                        padding: 20px;
+                        box-sizing: border-box;
+                        height: 400px;
+                        overflow-y: scroll;
+                        &__top {
+                            display: flex;
+                        }
+                        &__item {
+                            flex: 1;
+                            margin-bottom: 20px;
+                            h2 {
+                                margin: 0px;
+                                display: flex;
+                                align-items: center;
+                                font-size: 18px;
+                                font-weight: 500;
+                                margin-bottom: 15px;
+                                img {
+                                    width: 22px;
+                                    margin-right: 10px;
+                                }
+                            }
+                            .list {
+                                ul {
+                                    display: flex;
+                                    li {
+                                        background: #d3d9de;
+                                        font-size: 14px;
+                                        margin-right: 5px;
+                                        margin-bottom: 5px;
+                                        padding: 3px 6px;
+                                        border-radius: 5px;
+                                        color: #0a003d;
+                                        font-weight: 300;
+                                    }
+                                }
+                            }
+                        }
+                        &__goals {
+                            ul {
+                                .goalData {
+                                    display: flex;
+                                    font-size: 16px;
+                                    border-bottom: 1px solid rgba(0,0,0,.0901960784);
+                                    padding: 10px 0;
+                                    color: #0a003d;
+                                    font-weight: 300;
+                                    &__grade {
+                                        margin-right: 20px;
+                                        min-width: 110px;
+                                        text-decoration: none;
+                                    }
+                                    &__subject {
+                                        margin-right: 20px;
+                                        min-width: 150px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             &__imagen {
                 img {
                     width: 100%;
@@ -62,12 +243,6 @@
                         margin-right: 10px;
                     }
                 }
-                .more-show {
-                    margin-right: 10px;
-                    button {
-                        background: transparent;
-                    }
-                }
             }
             &__tooltip {
                 position: absolute;
@@ -78,8 +253,9 @@
                 cursor: default;
                 background: #FFF;
                 z-index: 20;
-                top: 55px;
-                right: 10px;
+                top: 42px;
+                right: 2px;
+                min-width: 185px;
                 &:before {
                     content: '';
                     border-top: 1px solid #939fa7;
@@ -97,13 +273,32 @@
                     margin-bottom: 5px;
                 }
             }
-            &.cardInfoItem--horizontal {
+            &.cardInfoItem--relative {
+                position: relative;
+            }
+            .cardInfoItem--horizontal {
                 min-height: 60px;
                 height: 60px;
                 display: flex;
                 justify-content: space-between;
                 position: relative;
                 overflow: inherit;
+                cursor: pointer;
+                background: white;
+                border-radius: 5px;
+                overflow: hidden;
+                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.100661); 
+                padding-right: 45px;
+            }
+            .cardInfoItem--absolute {
+                position: absolute;
+                top: 15px;
+                right: 5px;
+                .more-show {
+                    button {
+                        background: transparent;
+                    }
+                }
             }
         }
         &.Inside--horizontal {

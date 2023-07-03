@@ -35,8 +35,8 @@ export const buildFilterDTO = (filter: Filter): Object => {
   if (filter.topics) {
     filterDTO.topics = toJS(filter.topics);
   }
-  if (filter.source) {
-    filterDTO.source = toJS(filter.source);
+  if (filter.sources) {
+    filterDTO.source = toJS(filter.sources);
   }
   if (filter.goals) {
     filterDTO.goals = toJS(filter.goals);

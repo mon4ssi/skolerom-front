@@ -90,7 +90,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     myfilter.coreElements = mycoreelements;
     myfilter.topics = mytopics;
     myfilter.goals = mygoalss;
-    myfilter.source = mysources;
+    myfilter.sources = mysources;
     myfilter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
     return this.props.searchStore!.getDataSearch();
   }

@@ -20,7 +20,8 @@ export class SearchStore {
     coreElements: [],
     topics: [],
     goals: [],
-    source: [],
+    sources: [],
+    readingInSubjects: [],
     searchQuery: ''
   };
   @observable public getFilters?: FilterMeta;
@@ -41,13 +42,15 @@ export class SearchStore {
       coreElements: [],
       topics: [],
       goals: [],
-      source: [],
+      sources: [],
+      readingInSubjects: [],
       searchQuery: ''
     };
   }
   @action
   public validIfUsed() {
-    if (this.myfilter.grades!.length > 0 || this.myfilter.subjects!.length > 0 || this.myfilter.coreElements!.length > 0 || this.myfilter.topics!.length > 0 || this.myfilter.goals!.length > 0 || this.myfilter.source!.length > 0) {
+    // tslint:disable-next-line:max-line-length
+    if (this.myfilter.grades!.length > 0 || this.myfilter.subjects!.length > 0 || this.myfilter.coreElements!.length > 0 || this.myfilter.topics!.length > 0 || this.myfilter.goals!.length > 0 || this.myfilter.sources!.length > 0 || this.myfilter.readingInSubjects!.length > 0) {
       this.useFilters = true;
     }
   }

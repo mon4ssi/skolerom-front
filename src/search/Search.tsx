@@ -17,6 +17,25 @@ export interface SimpleStringData {
   name: string;
 }
 
+export interface SimpleGoalData {
+  id: string;
+  name: string;
+  // tslint:disable-next-line: variable-name
+  grade_id: string;
+  // tslint:disable-next-line: variable-name
+  grade_name: string;
+  // tslint:disable-next-line: variable-name
+  subject_id: string;
+  // tslint:disable-next-line: variable-name
+  subject_name: string;
+}
+
+export interface LvlData {
+  level: number;
+  // tslint:disable-next-line: variable-name
+  article_id: number;
+}
+
 export interface SearchArgs {
   type: string;
   id: number;
@@ -24,14 +43,15 @@ export interface SearchArgs {
   subjects?: Array<SimpleNumberData>;
   coreElements?: Array<SimpleStringData>;
   topics?: Array<SimpleStringData>;
+  reading?: Array<SimpleStringData>;
   source?: Array<SimpleNumberData>;
-  goals?: Array<SimpleStringData>;
+  goals?: Array<SimpleGoalData>;
   localeid: string;
   keywords?: Array<string>;
   title: string;
-  featuredImg?: string;
+  featureImg?: string;
   description: string;
-  lvlArticles?: Array<number>;
+  lvlArticles?: Array<LvlData>;
   relatedArticles?: Array<number>;
   relatedTp?: Array<number>;
   relatedAssignment?: Array<number>;
@@ -45,13 +65,14 @@ export class Search {
   public coreElements: Array<SimpleStringData>;
   public topics: Array<SimpleStringData>;
   public source: Array<SimpleNumberData>;
-  public goals: Array<SimpleStringData>;
+  public goals: Array<SimpleGoalData>;
+  public reading: Array<SimpleStringData>;
   public localeid: string;
   public keywords: Array<string>;
   public title: string;
-  public featuredImg: string;
+  public featureImg: string;
   public description: string;
-  public lvlArticles: Array<number>;
+  public lvlArticles: Array<LvlData>;
   public relatedArticles: Array<number>;
   public relatedTp: Array<number>;
   public relatedAssignment: Array<number>;
@@ -64,9 +85,10 @@ export class Search {
     this.topics = args.topics || [];
     this.source = args.source || [];
     this.goals = args.goals || [];
+    this.reading = args.reading || [];
     this.localeid = args.localeid;
     this.keywords = args.keywords || [];
-    this.featuredImg = args.featuredImg || '';
+    this.featureImg = args.featureImg || '';
     this. title = args.title;
     this.description = args.description;
     this.lvlArticles = args.lvlArticles || [];
@@ -87,8 +109,9 @@ export class Filter {
   @observable public subjects?: Array<number> | null;
   @observable public coreElements?: Array<string> | null;
   @observable public topics?: Array<string> | null;
-  @observable public source?: Array<number> | null;
+  @observable public sources?: Array<number> | null;
   @observable public goals?: Array<string> | null;
+  @observable public readingInSubjects?: Array<number> | null;
 }
 
 export class FilterMeta {
@@ -96,6 +119,7 @@ export class FilterMeta {
   @observable public subjects?: Array<SimpleNumberData> | null;
   @observable public coreElements?: Array<SimpleStringData> | null;
   @observable public topics?: Array<SimpleStringData> | null;
-  @observable public source?: Array<SimpleNumberData> | null;
+  @observable public sources?: Array<SimpleNumberData> | null;
   @observable public goals?: Array<SimpleStringData> | null;
+  @observable public readingInSubjects?: Array<SimpleNumberData> | null;
 }

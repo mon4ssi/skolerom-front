@@ -22,6 +22,7 @@ import coreImg from 'assets/images/core.svg';
 import goalsImg from 'assets/images/goals.svg';
 import voiceImg from 'assets/images/voice.svg';
 import readingImg from 'assets/images/reading-second-icon.svg';
+import { filter } from 'lodash';
 
 interface SearchProps {
   searchStore?: SearchStore;
@@ -35,6 +36,7 @@ interface SearchState {
   topics: Array<SimpleStringData>;
   goals: Array<SimpleStringData>;
   source: Array<SimpleNumberData>;
+  reading: Array<SimpleNumberData>;
 }
 @inject('searchStore')
 @observer
@@ -46,7 +48,8 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     coreElements:[],
     topics: [],
     goals: [],
-    source: []
+    source: [],
+    reading: []
   };
   // Langs init
   public changeLang = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -387,15 +390,15 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
   public changeSource = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const { searchStore } = this.props;
     const value = e.currentTarget.value;
-    if (searchStore!.myfilter.source!.includes(Number(value))) {
-      searchStore!.myfilter.source! = searchStore!.myfilter.source!.filter(item => item !== Number(value));
+    if (searchStore!.myfilter.sources!.includes(Number(value))) {
+      searchStore!.myfilter.sources! = searchStore!.myfilter.sources!.filter(item => item !== Number(value));
     } else {
-      searchStore!.myfilter.source!.push(Number(value));
+      searchStore!.myfilter.sources!.push(Number(value));
     }
     QueryStringHelper.set(
       this.props.history,
       QueryStringKeysSearch.SOURCE,
-      String(searchStore!.myfilter.source!) ? String(searchStore!.myfilter.source!) : ''
+      String(searchStore!.myfilter.sources!) ? String(searchStore!.myfilter.sources!) : ''
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
     await searchStore!.getDataSearch();
@@ -403,8 +406,8 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
   public renderSource = (item: SimpleNumberData) => {
     const { myfilter } = this.props.searchStore!;
     let activeclass = 'itemFlexFilter';
-    if (myfilter.source!) {
-      myfilter.source!.forEach((g) => {
+    if (myfilter.sources!) {
+      myfilter.sources!.forEach((g) => {
         if (Number(item.id) === Number(g)) {
           activeclass = 'itemFlexFilter active';
         }
@@ -416,6 +419,46 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
         key={item.id}
         className={activeclass}
         onClick={this.changeSource}
+      >
+        {item.name}
+      </button>
+    );
+  }
+
+  // end source
+  // init reading
+  public changeReading = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { searchStore } = this.props;
+    const value = e.currentTarget.value;
+    if (searchStore!.myfilter.readingInSubjects!.includes(Number(value))) {
+      searchStore!.myfilter.readingInSubjects! = searchStore!.myfilter.readingInSubjects!.filter(item => item !== Number(value));
+    } else {
+      searchStore!.myfilter.readingInSubjects!.push(Number(value));
+    }
+    QueryStringHelper.set(
+      this.props.history,
+      QueryStringKeysSearch.GREPREADINGINSUBJECT,
+      String(searchStore!.myfilter.readingInSubjects!) ? String(searchStore!.myfilter.readingInSubjects!) : ''
+    );
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    await searchStore!.getDataSearch();
+  }
+  public renderReading = (item: SimpleNumberData) => {
+    const { myfilter } = this.props.searchStore!;
+    let activeclass = 'itemFlexFilter';
+    if (myfilter.readingInSubjects!) {
+      myfilter.readingInSubjects!.forEach((g) => {
+        if (Number(item.id) === Number(g)) {
+          activeclass = 'itemFlexFilter active';
+        }
+      });
+    }
+    return (
+      <button
+        value={item.id}
+        key={item.id}
+        className={activeclass}
+        onClick={this.changeReading}
       >
         {item.name}
       </button>
@@ -441,7 +484,8 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       coreElements: filters!.coreElements!,
       topics: filters!.topics!,
       goals: filters!.goals!,
-      source: filters!.source!
+      source: filters!.sources!,
+      reading: filters!.readingInSubjects!
     });
     await this.props.searchStore!.getDataSearch();
   }
@@ -455,7 +499,8 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       coreElements: filters!.coreElements!,
       topics: filters!.topics!,
       goals: filters!.goals!,
-      source: filters!.source!
+      source: filters!.sources!,
+      reading: filters!.readingInSubjects!
     });
   }
 
@@ -559,6 +604,19 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
                   <h3>{intl.get('new assignment.greep.source')}</h3>
                   <div className="itemFilter__core">
                     {this.state.source.map(this.renderSource)}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="FiltersModal__body__item">
+              <div className="itemFilter">
+                <div className="itemFilter__left">
+                  <img src={readingImg} />
+                </div>
+                <div className="itemFilter__right">
+                  <h3>{intl.get('new assignment.greep.reading')}</h3>
+                  <div className="itemFilter__core">
+                    {this.state.reading.map(this.renderReading)}
                   </div>
                 </div>
               </div>

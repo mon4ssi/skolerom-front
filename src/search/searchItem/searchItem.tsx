@@ -9,6 +9,8 @@ import { Search, SimpleNumberData } from '../Search';
 import { DEBOUNCE_TIME } from 'utils/constants';
 import { lettersNoEn } from 'utils/lettersNoEn';
 import { ActionMenu } from 'search/searchItem/searchItemModal/searchItemModal';
+import { ArticleContent } from 'search/searchItem/searchItemModal/searchItemContentArticle';
+import { TPContent } from 'search/searchItem/searchItemModal/searchItemContentTP';
 import { SortingFilter, StoreState, QueryStringKeys } from 'utils/enums';
 import { UserType } from 'user/User';
 import * as QueryStringHelper from 'utils/QueryStringHelper';
@@ -30,6 +32,9 @@ interface SearchProps {
 interface SearchState {
   stateTP: boolean;
   stateAssignment: boolean;
+  article: boolean;
+  sideteachingpath: boolean;
+  sideassignment: boolean;
 }
 
 @inject('searchStore', 'teachingPathsListStore', 'editTeachingPathStore')
@@ -38,7 +43,10 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
   private assignmentService: AssignmentService = injector.get(ASSIGNMENT_SERVICE);
   public state = {
     stateTP: false,
-    stateAssignment: false
+    stateAssignment: false,
+    article: false,
+    sideteachingpath: false,
+    sideassignment: false
   };
 
   public renderItemSubject = (item: string) => (
@@ -75,6 +83,18 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
     }
   }
 
+  public changeStateArticle = () => {
+    if (this.state.article) {
+      this.setState({
+        article: false
+      });
+    } else {
+      this.setState({
+        article: true
+      });
+    }
+  }
+
   public changeStateAssignment = () => {
     if (this.state.stateAssignment) {
       this.setState({
@@ -98,6 +118,31 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
       stateAssignment: false
     });
   }
+
+  public onCloseArticle = () => {
+    this.setState({
+      article: false
+    });
+  }
+
+  public onCloseTPSide = () => {
+    this.setState({
+      sideteachingpath: false
+    });
+  }
+
+  public openArticle = () => {
+    this.setState({
+      article: true
+    });
+  }
+
+  public openSideTP = () => {
+    this.setState({
+      sideteachingpath: true
+    });
+  }
+
   public editTeachingPath = (id: number) => {
     const { history } = this.props;
     history.push(`/teaching-paths/edit/${id}`);
@@ -239,13 +284,27 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
     </div>
   )
 
-  public asideContent = () => (
-    <div>aqui va contenido de wordpress OMG</div>
-  )
+  public asideContent = () => {
+    const {
+      item
+    } = this.props;
+    return (
+      <ArticleContent item={item} onClose={this.onCloseArticle} />
+    );
+  }
+
+  public renderSideTP = () => {
+    const {
+      item
+    } = this.props;
+    return (
+      <TPContent item={item} onClose={this.onCloseTPSide} />
+    );
+  }
 
   public render() {
     const {
-      featuredImg,
+      featureImg,
       description,
       title,
       subjects,
@@ -253,49 +312,61 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
     } = this.props.item;
     const currentUserType = this.props.teachingPathsListStore!.getCurrentUser()!.type;
     const visibility = (currentUserType === UserType.Teacher || currentUserType === UserType.ContentManager) ? true : false;
+    const articleOpen = (this.state.article) ? 'cardInfoItem__detail active' : 'cardInfoItem__detail';
+    const articleOpenCard = (this.state.article) ? 'cardInfoItem__card active' : 'cardInfoItem__card';
     switch (this.props.type) {
       case 'ARTICLE':
         return (
           <div className="cardInfoItem">
-            <div className="cardInfoItem__card">
+            <div className={articleOpenCard} onClick={this.openArticle}>
               <div className="cardInfoItem__imagen">
-                <img src={featuredImg} />
+                <img src={featureImg} />
               </div>
               <div className="cardInfoItem__description">
                 <div className="title"><h2>{title}</h2></div>
                 <div className="description">{description}</div>
               </div>
             </div>
-            <div className="cardInfoItem__detail">
-              {this.asideContent()}
+            {this.state.article && <div className="triangleCard" />}
+            <div className={articleOpen}>
+              {this.state.article && this.asideContent()}
             </div>
           </div>
         );
         break;
       case 'TEACHING-PATH':
         return (
-          <div className="cardInfoItem cardInfoItem--horizontal">
-            <div className="cardInfoItem__left">
-              <img src={featuredImg} />
-              <h2>{title}</h2>
+          <div className="cardInfoItem cardInfoItem--relative">
+            <div className="cardInfoItem--horizontal" onClick={this.openSideTP}>
+              <div className="cardInfoItem__left">
+                <img src={featureImg} />
+                <h2>{title}</h2>
+              </div>
+              <div className="cardInfoItem__right">
+                {this.renderSubject(subjects)}
+              </div>
             </div>
-            <div className="cardInfoItem__right">
-              {this.renderSubject(subjects)}
+            <div className="cardInfoItem--absolute">
               {visibility && this.renderMoreTP()}
               {visibility && this.state.stateTP && this.renderTPOptions()}
             </div>
+            {this.state.sideteachingpath && this.renderSideTP()}
           </div>
         );
         break;
       case 'ASSIGNMENT':
         return (
-          <div className="cardInfoItem cardInfoItem--horizontal">
-            <div className="cardInfoItem__left">
-              <img src={featuredImg} />
-              <h2>{title}</h2>
+          <div className="cardInfoItem cardInfoItem--relative">
+            <div className="cardInfoItem--horizontal">
+              <div className="cardInfoItem__left">
+                <img src={featureImg} />
+                <h2>{title}</h2>
+              </div>
+              <div className="cardInfoItem__right">
+                {this.renderSubject(subjects)}
+              </div>
             </div>
-            <div className="cardInfoItem__right">
-              {this.renderSubject(subjects)}
+            <div className="cardInfoItem--absolute">
               {visibility && this.renderMoreAssigment()}
               {visibility && this.state.stateAssignment && this.renderAssignmentOptions()}
             </div>
@@ -306,7 +377,7 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
         return (
           <div className="cardInfoItem">
             <div className="cardInfoItem__imagen">
-              <img src={featuredImg} />
+              <img src={featureImg} />
             </div>
             <div className="cardInfoItem__description">
               <div className="title"><h2>{title}</h2></div>
