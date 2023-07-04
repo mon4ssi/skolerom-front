@@ -44,7 +44,7 @@ export interface SearchArgs {
   coreElements?: Array<SimpleStringData>;
   topics?: Array<SimpleStringData>;
   reading?: Array<SimpleStringData>;
-  source?: Array<SimpleNumberData>;
+  sources?: Array<SimpleNumberData>;
   goals?: Array<SimpleGoalData>;
   localeid: string;
   keywords?: Array<string>;
@@ -64,7 +64,7 @@ export class Search {
   public subjects: Array<SimpleNumberData>;
   public coreElements: Array<SimpleStringData>;
   public topics: Array<SimpleStringData>;
-  public source: Array<SimpleNumberData>;
+  public sources: Array<SimpleNumberData>;
   public goals: Array<SimpleGoalData>;
   public reading: Array<SimpleStringData>;
   public localeid: string;
@@ -83,7 +83,7 @@ export class Search {
     this.subjects = args.subjects || [];
     this.coreElements = args.coreElements || [];
     this.topics = args.topics || [];
-    this.source = args.source || [];
+    this.sources = args.sources || [];
     this.goals = args.goals || [];
     this.reading = args.reading || [];
     this.localeid = args.localeid;

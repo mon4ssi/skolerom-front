@@ -11,6 +11,7 @@ import { lettersNoEn } from 'utils/lettersNoEn';
 import { ActionMenu } from 'search/searchItem/searchItemModal/searchItemModal';
 import { ArticleContent } from 'search/searchItem/searchItemModal/searchItemContentArticle';
 import { TPContent } from 'search/searchItem/searchItemModal/searchItemContentTP';
+import { AssignmentContent } from 'search/searchItem/searchItemModal/searchItemContentAssignment';
 import { SortingFilter, StoreState, QueryStringKeys } from 'utils/enums';
 import { UserType } from 'user/User';
 import * as QueryStringHelper from 'utils/QueryStringHelper';
@@ -131,6 +132,12 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
     });
   }
 
+  public onCloseAssignmentSide = () => {
+    this.setState({
+      sideassignment: false
+    });
+  }
+
   public openArticle = () => {
     this.setState({
       article: true
@@ -140,6 +147,12 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
   public openSideTP = () => {
     this.setState({
       sideteachingpath: true
+    });
+  }
+
+  public openSideAssignment = () => {
+    this.setState({
+      sideassignment: true
     });
   }
 
@@ -302,6 +315,15 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
     );
   }
 
+  public renderSideAssignment = () => {
+    const {
+      item
+    } = this.props;
+    return (
+      <AssignmentContent item={item} onClose={this.onCloseAssignmentSide} />
+    );
+  }
+
   public render() {
     const {
       featureImg,
@@ -357,7 +379,7 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
       case 'ASSIGNMENT':
         return (
           <div className="cardInfoItem cardInfoItem--relative">
-            <div className="cardInfoItem--horizontal">
+            <div className="cardInfoItem--horizontal" onClick={this.openSideAssignment}>
               <div className="cardInfoItem__left">
                 <img src={featureImg} />
                 <h2>{title}</h2>
@@ -370,6 +392,7 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
               {visibility && this.renderMoreAssigment()}
               {visibility && this.state.stateAssignment && this.renderAssignmentOptions()}
             </div>
+            {this.state.sideassignment && this.renderSideAssignment()}
           </div>
         );
         break;
