@@ -140,10 +140,32 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
       type: this.props.type,
       searchItems : dataSearch.items
     });
+    if (document.getElementById('searchListInfo')) {
+      document.getElementById('searchListInfo')!.addEventListener('scroll', this.handerScroll);
+    }
   }
+
+  public handerScroll = async () => {
+    const { myfilter, paginationTotalPages } = this.props.searchStore!;
+    const IDHtml = document.getElementById('searchListInfo')! as HTMLElement;
+    let searchItemsStet = this.state.searchItems as Array<Search>;
+    if (IDHtml.scrollHeight - Math.abs(IDHtml.scrollTop) === IDHtml.clientHeight) {
+      myfilter.page = myfilter.page! + 1;
+      if (myfilter.page <= paginationTotalPages) {
+        const dataSearch = await this.getDataSearchComponents();
+        this.props.searchStore!.paginationTotalPages = dataSearch.totalpage;
+        this.props.searchStore!.getFilters = dataSearch.filters;
+        searchItemsStet = searchItemsStet.concat(dataSearch.items!);
+        this.setState({
+          searchItems : searchItemsStet
+        });
+      }
+    }
+  }
+
   public render() {
     return (
-      <div className="contentListSearch">
+      <div className="contentListSearch" id="searchListInfo">
         {this.renderSwitchContentList()}
       </div>
     );
