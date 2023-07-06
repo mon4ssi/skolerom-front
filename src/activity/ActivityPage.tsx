@@ -1,7 +1,8 @@
-import React, { Component, createRef } from 'react';
+import React, { Component, createRef, ChangeEvent } from 'react';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { lettersNoEn } from 'utils/lettersNoEn';
 
 import { IListWidgetItem, ListWidget } from './Widget/ListWidget';
 import { SliderWidget } from './Widget/SliderWidget';
@@ -14,18 +15,29 @@ import { TeachingPath } from '../teachingPath/TeachingPath';
 import { UserType } from '../user/User';
 import { Popup } from 'components/common/Popup/Popup';
 import { Loader } from 'components/common/Loader/Loader';
+import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
+import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
+import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
+
+import assignmentsImg from 'assets/images/assignment.svg';
+import teachingPathImg from 'assets/images/teaching-path.svg';
+import search from 'assets/images/search-bold.svg';
 
 import placeholder from 'assets/images/list-placeholder.svg';
 
 import './ActivityPage.scss';
 
 const loadRecentActivityInterval = 30000;
-
+const ENTER_KEYCODE = 13;
 const studentAmountArticles = 7;
 const teacherAmountArticles = 4;
 const number200 = 200;
+const number2 = 2;
 
 interface ActivityPageProps {
+  newAssignmentStore?: NewAssignmentStore;
+  editTeachingPathStore?: EditTeachingPathStore;
+  assignmentListStore?: AssignmentListStore;
   activityStore?: ActivityStore;
   loginStore?: LoginStore;
   role: UserType;
@@ -36,9 +48,11 @@ interface ActivityPageState {
   popupShown: boolean;
   isPause: boolean;
   chargeIframe: boolean;
+  openModalInside: boolean;
+  searchQueryValue : string;
 }
 
-@inject('activityStore', 'loginStore')
+@inject('activityStore', 'loginStore', 'newAssignmentStore', 'editTeachingPathStore', 'assignmentListStore')
 @observer
 class Activity extends Component<ActivityPageProps & RouteComponentProps, ActivityPageState> {
   private ref = createRef<HTMLDivElement>();
@@ -50,7 +64,9 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
     iframeURL: '',
     popupShown: false,
     isPause: false,
-    chargeIframe: false
+    chargeIframe: false,
+    openModalInside: false,
+    searchQueryValue : '',
   };
 
   private loadWidgetData() {
@@ -334,6 +350,70 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
     );
   }
 
+  public changeModalInside = () => {
+    if (this.state.openModalInside) {
+      this.setState({ openModalInside: false });
+    } else {
+      this.setState({ openModalInside: true });
+    }
+  }
+
+  public async createAndGoToAssignment() {
+    const { newAssignmentStore, history } = this.props;
+
+    const id = await newAssignmentStore!
+      .createAssigment()
+      .then(response => response.id);
+    history.push(`/assignments/edit/${id}`);
+  }
+
+  public createTeachingPath = async () => {
+    const { editTeachingPathStore, history } = this.props;
+    const id = await editTeachingPathStore!
+      .createTeachingPath()
+      .then(response => response.id);
+    history.push(`/teaching-paths/edit/${id}`);
+  }
+
+  public renderModal = () => (
+    <div className="insideModal">
+      <ul>
+        <li>
+          <a href="javascript:void(0)" onClick={this.createTeachingPath}>
+            <img src={teachingPathImg} />
+            {intl.get('teaching path')}
+          </a>
+        </li>
+        <li>
+          <a href="javascript:void(0)" onClick={this.createAndGoToAssignment}>
+            <img src={assignmentsImg} />
+            {intl.get('assignment')}
+          </a>
+        </li>
+      </ul>
+    </div>
+  )
+
+  public handleInputSearchQueryonKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const { history } = this.props;
+    const val = e.currentTarget.value;
+    if (lettersNoEn(val)) {
+      this.setState({ searchQueryValue: e.currentTarget.value });
+      if (val.length > number2) {
+        if (e.key === 'Enter' || e.keyCode === ENTER_KEYCODE) {
+          history.push(`/search/article?search=${val}`);
+        }
+      }
+    }
+  }
+
+  public handleInputSearchQuery = async (e: ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    if (lettersNoEn(val)) {
+      this.setState({ searchQueryValue: e.target.value });
+    }
+  }
+
   public resize = () => {
     /* const heightActivy = Number(this.activityAsideReft.current!.clientHeight) + number200;
     const stringHeight = `${String(heightActivy)}px`;
@@ -351,6 +431,27 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
       <div className="ActivityPage">
         <div className="ActivityPage__greeting" ref={this.ref}>
           <h1>{intl.get('activity_page.Hello')} {username}</h1>
+        </div>
+        <div className="ActivityPage__searchBar">
+          <div className="ActivityPage__searchBar__left">
+            <img src={search} />
+            <input
+              type="text"
+              placeholder={intl.get('assignments search.Search')}
+              aria-required="true"
+              aria-invalid="false"
+              value={this.state.searchQueryValue}
+              onChange={this.handleInputSearchQuery}
+              onKeyUp={this.handleInputSearchQueryonKeyUp}
+            />
+          </div>
+          <div className="ActivityPage__searchBar__right">
+            <button className="CreateButton" onClick={this.changeModalInside}>
+              <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z" /></svg>
+              {intl.get('new')}
+            </button>
+            {this.state.openModalInside && this.renderModal()}
+          </div>
         </div>
         <div className="ActivityPage__content">
           <div className="ActivityPage__main">

@@ -5,12 +5,83 @@ $second-column-with-desktop-l: 252px;
 $second-column-with-desktop: 212px;
 
 .ActivityPage {
-
+  &__searchBar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 2;
+    &__left {
+      border-radius: 8px;
+      background-color: #FFF;
+      border: 1px solid #D3D9DE;
+      padding: 15px;
+      width: calc(100% - 140px);
+      img {
+        position: absolute;
+        top: 27px;
+        left: 26px;
+        pointer-events: none;
+      }
+      input {
+        width: 100%;
+        padding: 10px;
+        padding-left: 35px;
+        border: solid 1px #b8b8b8;
+        border-radius: 40px;
+      }
+    }
+    &__right {
+      width: 120px;
+      button {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        border-radius: 10px;
+        justify-content: center;
+        text-transform: capitalize;
+        max-height: initial;
+        height: 100%;
+        svg {
+          width: 30px;
+          height: 30px;
+          border: solid 2px white;
+          border-radius: 50%;
+          padding: 5px;
+          margin-right: 10px;
+          path {
+            fill: white;
+            stroke: white;
+          }
+        }
+      }
+      .insideModal {
+        border-radius: 8px;
+        background-color: #FFF;
+        border: 1px solid #D3D9DE;
+        padding: 15px;
+        position: absolute;
+        width: 200px;
+        right: 0px;
+        bottom: -120px;
+        li a {
+          display: flex;
+          margin: 10px 0px;
+          align-items: center;
+          font-size: 18px;
+          text-transform: capitalize;
+          img {
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+  }
 }
 
 
 .iframeContent iframe {
-  height: calc(100vh - 160px);
+  height: calc(100vh - 232px);
 }
 .ActivityPage__main .css-0 {
   border-radius: 8px;
@@ -89,13 +160,10 @@ $second-column-with-desktop: 212px;
 
 .ActivityPage__content {
   display: flex;
-  margin-right: -2px;
-  margin-left: -2px;
 }
 
 .ActivityPage__main {
   flex: 1 1 auto;
-  padding-right: 19px;
   z-index: 1;
 }
 

@@ -10,6 +10,32 @@
   background: $color-white;
   position: relative;
   z-index: 16;
+  &__left {
+    display: flex;
+    .AppHeader__block {
+      margin-right: 15px;
+    }
+  }
+  &__right {
+    display: flex;
+    align-items: center;
+    .barSearch {
+      position: relative;
+      img {
+        position: absolute;
+        pointer-events: none;
+        top: 11px;
+        left: 13px;
+      }
+      input {
+        border-radius: 28px;
+        border: solid 1px #cccccc;
+        padding: 10px 5px;
+        padding-left: 37px;
+        width: 180px;
+     } 
+    }
+  }
   .copyButton {
     button {
       margin: 0px 5px;
