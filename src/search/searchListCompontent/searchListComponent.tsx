@@ -17,6 +17,7 @@ const number3 = 3;
 
 interface SearchProps {
   type : string;
+  isFilter: boolean;
   searchStore?: SearchStore;
 }
 
@@ -31,7 +32,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     searchItems: [],
     type: ''
   };
-  public getDataSearchComponents = async () => {
+  public getDataSearchComponents = () => {
     const { myfilter } = this.props.searchStore!;
     switch (this.props.type) {
       case 'ARTICLE':
@@ -92,7 +93,6 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     myfilter.goals = mygoalss;
     myfilter.sources = mysources;
     myfilter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
-    return this.props.searchStore!.getDataSearch();
   }
   public renderSwitchContentList() {
     const { searchItems } = this.state;
@@ -132,8 +132,15 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
       </div>
     );
   }
+  public async forceUpdate() {
+    const dataSearch = await this.props.searchStore!.dataitems;
+    this.setState({
+      searchItems : dataSearch.items
+    });
+  }
   public async componentDidMount() {
-    const dataSearch = await this.getDataSearchComponents();
+    this.getDataSearchComponents();
+    const dataSearch = await this.props.searchStore!.getDataSearch();
     this.props.searchStore!.paginationTotalPages = dataSearch.totalpage;
     this.props.searchStore!.getFilters = dataSearch.filters;
     this.setState({
@@ -152,7 +159,8 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     if (IDHtml.scrollHeight - Math.abs(IDHtml.scrollTop) === IDHtml.clientHeight) {
       myfilter.page = myfilter.page! + 1;
       if (myfilter.page <= paginationTotalPages) {
-        const dataSearch = await this.getDataSearchComponents();
+        this.getDataSearchComponents();
+        const dataSearch = await this.props.searchStore!.getDataSearch();
         this.props.searchStore!.paginationTotalPages = dataSearch.totalpage;
         this.props.searchStore!.getFilters = dataSearch.filters;
         searchItemsStet = searchItemsStet.concat(dataSearch.items!);
@@ -164,6 +172,9 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
 
   public render() {
+    if (this.props.isFilter) {
+      this.forceUpdate();
+    }
     return (
       <div className="contentListSearch" id="searchListInfo">
         {this.renderSwitchContentList()}

@@ -26,6 +26,8 @@ import { filter } from 'lodash';
 
 interface SearchProps {
   searchStore?: SearchStore;
+  onSearch?(): void;
+  onSearchEnd?(): void;
 }
 
 interface SearchState {
@@ -105,7 +107,9 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       String(searchStore!.myfilter.grades!) ? String(searchStore!.myfilter.grades!) : ''
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    this.props.onSearch!();
     await searchStore!.getDataSearch();
+    this.props.onSearchEnd!();
   }
   public renderGrades = (item: SimpleNumberData) => {
     const { myfilter } = this.props.searchStore!;
@@ -144,7 +148,9 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       String(searchStore!.myfilter.subjects!) ? String(searchStore!.myfilter.subjects!) : ''
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    this.props.onSearch!();
     await searchStore!.getDataSearch();
+    this.props.onSearchEnd!();
   }
   public renderSubjects = (item: SimpleNumberData) => {
     const { myfilter } = this.props.searchStore!;
@@ -197,7 +203,9 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       String(searchStore!.myfilter.coreElements!) ? String(searchStore!.myfilter.coreElements!) : ''
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    this.props.onSearch!();
     await searchStore!.getDataSearch();
+    this.props.onSearchEnd!();
   }
   public renderCoreElementsSelected = () => {
     const { myfilter } = this.props.searchStore!;
@@ -275,7 +283,9 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       String(searchStore!.myfilter.topics!) ? String(searchStore!.myfilter.topics!) : ''
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    this.props.onSearch!();
     await searchStore!.getDataSearch();
+    this.props.onSearchEnd!();
   }
   public renderTopics = (item: SimpleStringData) => {
     const { myfilter } = this.props.searchStore!;
@@ -317,7 +327,9 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       String(searchStore!.myfilter.goals!) ? String(searchStore!.myfilter.goals!) : ''
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    this.props.onSearch!();
     await searchStore!.getDataSearch();
+    this.props.onSearchEnd!();
   }
   public renderCoreGoalsSelected = () => {
     const { myfilter } = this.props.searchStore!;
@@ -401,7 +413,9 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       String(searchStore!.myfilter.sources!) ? String(searchStore!.myfilter.sources!) : ''
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    this.props.onSearch!();
     await searchStore!.getDataSearch();
+    this.props.onSearchEnd!();
   }
   public renderSource = (item: SimpleNumberData) => {
     const { myfilter } = this.props.searchStore!;
@@ -441,7 +455,9 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       String(searchStore!.myfilter.readingInSubjects!) ? String(searchStore!.myfilter.readingInSubjects!) : ''
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    this.props.onSearch!();
     await searchStore!.getDataSearch();
+    this.props.onSearchEnd!();
   }
   public renderReading = (item: SimpleNumberData) => {
     const { myfilter } = this.props.searchStore!;
@@ -515,21 +531,6 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
           </button>
           </div>
           <div className="FiltersModal__body">
-            <div className="FiltersModal__body__item">
-              <div className="itemFilter">
-                <div className="itemFilter__left">
-                  <img src={langImg} />
-                </div>
-                <div className="itemFilter__right">
-                  <h3>{intl.get('generals.language')}</h3>
-                  <div className="itemFilter__core">
-                    <div className="flexFilter langsItem">
-                      {this.state.langs.map(this.renderLangs)}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
             <div className="FiltersModal__body__item">
               <div className="itemFilter">
                 <div className="itemFilter__left">

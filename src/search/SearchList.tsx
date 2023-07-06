@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react';
+import React, { Component, createRef, RefObject, ChangeEvent } from 'react';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
@@ -7,6 +7,9 @@ import { SearchComponentList } from '../search/searchListCompontent/searchListCo
 import { SearchFilter } from '../search/searchFilters/searchFilters';
 import { SearchStore } from '../search/SearchStore';
 import { WPLENGUAGES } from '../utils/constants';
+import { lettersNoEn } from 'utils/lettersNoEn';
+import * as QueryStringHelper from 'utils/QueryStringHelper';
+import { BooleanFilter, SortingFilter, QueryStringKeysSearch, StoreState } from 'utils/enums';
 
 import searchIcon from 'assets/images/search.svg';
 import searchPinkIcon from 'assets/images/searchpink.svg';
@@ -20,7 +23,7 @@ import assigIcon from 'assets/images/assignment.svg';
 import assigPinkIcon from 'assets/images/assignmentpink.svg';
 
 import './Search.scss';
-
+const number2 = 2;
 interface SearchProps {
   searchStore?: SearchStore;
   type : string;
@@ -28,19 +31,24 @@ interface SearchProps {
 
 interface SearchState {
   type : string;
+  searchQueryValue : string;
   filtersModalTp: boolean;
   filterModalLang: boolean;
   useFilters: boolean;
+  isFilter: boolean;
 }
 
 @inject('searchStore')
 @observer
 class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchState> {
+  private searchRef: RefObject<HTMLInputElement> = React.createRef();
   public state = {
     filtersModalTp : false,
     filterModalLang : false,
     useFilters: false,
-    type : 'ARTICLE'
+    type : 'ARTICLE',
+    searchQueryValue : '',
+    isFilter: false
   };
   public tabNavigationLinks = [
     {
@@ -77,6 +85,9 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     this.setState({
       type : this.props.type
     });
+    if (this.searchRef.current) {
+      this.searchRef.current.focus();
+    }
   }
 
   public closeFiltersModalTp = () =>  {
@@ -105,9 +116,20 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     }
   }
 
+  public onSearch = () => {
+    this.setState({
+      isFilter: true
+    });
+  }
+  public onSearchEnd = () => {
+    this.setState({
+      isFilter: false
+    });
+  }
+
   public filters = () => (
     <div className="fixedsModal">
-      <SearchFilter />
+      <SearchFilter onSearch={this.onSearch} onSearchEnd={this.onSearchEnd}/>
       <div className="filtersModalBackground" onClick={this.closeFiltersModalTp} />
     </div>
   )
@@ -117,7 +139,13 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     const value = e.currentTarget.value;
     searchStore!.myfilterLang = value;
     searchStore!.myfilter.lang = value;
+    this.setState({
+      isFilter: true
+    });
     await searchStore!.getDataSearch();
+    this.setState({
+      isFilter: false
+    });
     this.closeFiltersModalTp();
   }
 
@@ -172,10 +200,30 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     </div>
   )
 
+  public handleInputSearchQuery = async (e: ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    if (lettersNoEn(val)) {
+      this.setState({ searchQueryValue: e.target.value });
+      if (val.length > number2) {
+        QueryStringHelper.set(this.props.history, QueryStringKeysSearch.SEARCH, val);
+        QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+        this.props.searchStore!.myfilter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
+        this.setState({
+          isFilter: true
+        });
+        await this.props.searchStore!.getDataSearch();
+        this.setState({
+          isFilter: false
+        });
+      }
+    }
+  }
+
   public render() {
     const btnText = this.props.searchStore!.useFilters ? intl.get('edit_teaching_path.modals.search.buttons.button_open') : intl.get('edit_teaching_path.modals.search.buttons.button_change');
     const classbtnText = this.props.searchStore!.useFilters ? 'CreateButton active' : 'CreateButton';
     const classbtnlang = this.state.filterModalLang ? 'CreateButton active' : 'CreateButton';
+    const placeholder = intl.get('assignments search.Search');
     const langText = intl.get('publishing_page.languages');
     return (
       <div className="SearchPage">
@@ -183,7 +231,17 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
           <div className="SearchPage__header__top">
             <div className="SearchPage__header__top__left">
               <img src={searchPinkIcon} />
-              <input type="text"/>
+              <input
+                type="text"
+                placeholder={placeholder}
+                value={this.state.searchQueryValue}
+                onChange={this.handleInputSearchQuery}
+                aria-labelledby="searchfilterInput"
+                id="SendFilter"
+                aria-required="true"
+                aria-invalid="false"
+                ref={this.searchRef}
+              />
             </div>
             <div className="SearchPage__header__top__right">
               <a href="javascript:void(0)" className={classbtnText} onClick={this.openFiltersModalTp}>
@@ -202,7 +260,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
           </div>
         </div>
         <div className="SearchPage__body">
-          <SearchComponentList type={this.state.type}/>
+          <SearchComponentList isFilter={this.state.isFilter} type={this.state.type}/>
         </div>
         {this.state.filtersModalTp && this.filters()}
       </div>

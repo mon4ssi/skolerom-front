@@ -9,6 +9,8 @@ export class SearchStore {
   private storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
   @observable public paginationTotalPages: number = 1;
   @observable public useFilters: boolean = false;
+  @observable public dataitems: any;
+  @observable public isFilters: boolean = false;
   @observable public myfilterLang: string | null = this.storageInteractor.getCurrentLocale();
   @observable public myfilter: Filter = {
     page: 1,
@@ -28,7 +30,10 @@ export class SearchStore {
   @action
   public async getDataSearch() {
     this.validIfUsed();
-    return this.searchService.getDataSearch(this.myfilter);
+    const data = this.searchService.getDataSearch(this.myfilter);
+    this.dataitems = data;
+    this.isFilters = false;
+    return data;
   }
   @action
   public resetFilters() {
