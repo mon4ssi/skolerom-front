@@ -7,6 +7,11 @@ $second-column-with-desktop: 212px;
 .ActivityPage {
 
 }
+
+
+.iframeContent iframe {
+  height: calc(100vh - 160px);
+}
 .ActivityPage__main .css-0 {
   border-radius: 8px;
   background-color: #FFF;

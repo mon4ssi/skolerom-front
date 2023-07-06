@@ -63,6 +63,7 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
     this.props.questionaryTeachingPathStore!.clearAssignmentFullInfo();
     this.setState({ isLoadingFinished: false });
   }
+
   public goToAssignment = (id: number) => () => {
     const { questionaryTeachingPathStore } = this.props;
     questionaryTeachingPathStore!.handleAssignment(true);

@@ -335,9 +335,9 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
   }
 
   public resize = () => {
-    const heightActivy = Number(this.activityAsideReft.current!.clientHeight) + number200;
+    /* const heightActivy = Number(this.activityAsideReft.current!.clientHeight) + number200;
     const stringHeight = `${String(heightActivy)}px`;
-    this.iframeref.current!.setAttribute('height', stringHeight);
+    this.iframeref.current!.setAttribute('height', stringHeight); */
     this.setState({
       chargeIframe: true
     });
@@ -356,18 +356,6 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
           <div className="ActivityPage__main">
             {!this.state.chargeIframe && <Loader />}
             {this.iframeRender()}
-          </div>
-
-          <div className="ActivityPage__aside" ref={this.activityAsideReft}>
-            <div className="ActivityPage__widget">
-              <ListWidget
-                state={activityStore!.newestArticlesState}
-                title={intl.get('activity_page.new_articles')}
-                items={this.getNewestArticles()}
-              />
-            </div>
-            {this.renderAssignmentWidget()}
-            {this.renderTeachingPathList()}
           </div>
         </div>
       </div>
