@@ -358,9 +358,8 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
     }
   }
 
-  public async createAndGoToAssignment() {
+  public createAndGoToAssignment = async () => {
     const { newAssignmentStore, history } = this.props;
-
     const id = await newAssignmentStore!
       .createAssigment()
       .then(response => response.id);

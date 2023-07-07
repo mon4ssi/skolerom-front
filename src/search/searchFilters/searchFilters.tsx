@@ -113,6 +113,9 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
   }
   public renderGrades = (item: SimpleNumberData) => {
     const { myfilter } = this.props.searchStore!;
+    const gradetitle: Array<string> = item.name.split(' ');
+    let title:string = gradetitle[1];
+    if (gradetitle.length > 1) { title = gradetitle[1] + intl.get('new assignment.grade'); }
     let activeclass = 'itemFlexFilter';
     if (myfilter.grades!) {
       myfilter.grades!.forEach((g) => {
@@ -128,7 +131,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
         className={activeclass}
         onClick={this.changeGrade}
       >
-        {item.name}
+        {title}
       </button>
     );
   }

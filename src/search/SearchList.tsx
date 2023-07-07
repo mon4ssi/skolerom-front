@@ -220,7 +220,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
 
   public render() {
-    const btnText = this.props.searchStore!.useFilters ? intl.get('edit_teaching_path.modals.search.buttons.button_open') : intl.get('edit_teaching_path.modals.search.buttons.button_change');
+    const btnText = this.props.searchStore!.useFilters ? intl.get('edit_teaching_path.modals.search.buttons.button_open') : intl.get('edit_teaching_path.modals.search.buttons.button_close');
     const classbtnText = this.props.searchStore!.useFilters ? 'CreateButton active' : 'CreateButton';
     const classbtnlang = this.state.filterModalLang ? 'CreateButton active' : 'CreateButton';
     const placeholder = intl.get('assignments search.Search');
