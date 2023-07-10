@@ -422,17 +422,29 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
     });
   }
 
+  public renderNewButton = () => (
+    <div className="ActivityPage__searchBar__right">
+      <button className="CreateButton" onClick={this.changeModalInside}>
+        <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z" /></svg>
+        {intl.get('new')}
+      </button>
+      {this.state.openModalInside && this.renderModal()}
+    </div>
+  )
+
   public render() {
-    const { activityStore, loginStore } = this.props;
+    const { activityStore, loginStore, role } = this.props;
     const username = loginStore!.currentUser ? loginStore!.currentUser.name : 'username';
     const isContentManager = loginStore!.currentUser!.type === UserType.ContentManager;
+    const isNotStudent = (role === UserType.Teacher || role === UserType.ContentManager) ? true : false ;
+    const classIsNotStudent = isNotStudent ? 'ActivityPage__searchBar__left' : 'ActivityPage__searchBar__left active';
     return (
       <div className="ActivityPage">
         <div className="ActivityPage__greeting" ref={this.ref}>
           <h1>{intl.get('activity_page.Hello')} {username}</h1>
         </div>
         <div className="ActivityPage__searchBar">
-          <div className="ActivityPage__searchBar__left">
+          <div className={classIsNotStudent}>
             <img src={search} />
             <input
               type="text"
@@ -444,13 +456,7 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
               onKeyUp={this.handleInputSearchQueryonKeyUp}
             />
           </div>
-          <div className="ActivityPage__searchBar__right">
-            <button className="CreateButton" onClick={this.changeModalInside}>
-              <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z" /></svg>
-              {intl.get('new')}
-            </button>
-            {this.state.openModalInside && this.renderModal()}
-          </div>
+          {(isNotStudent) && this.renderNewButton()}
         </div>
         <div className="ActivityPage__content">
           <div className="ActivityPage__main">

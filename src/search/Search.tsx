@@ -115,6 +115,7 @@ export class Filter {
 }
 
 export class FilterMeta {
+  @observable public locales?: Array<string> | null;
   @observable public grades?: Array<SimpleNumberData> | null;
   @observable public subjects?: Array<SimpleNumberData> | null;
   @observable public coreElements?: Array<SimpleStringData> | null;

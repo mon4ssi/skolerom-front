@@ -18,6 +18,12 @@
                     position: absolute;
                     top: 10px;
                     left: 10px;
+                    &.closeIcon {
+                        top: 5px;
+                        left: auto;
+                        right: 10px;
+                        cursor: pointer;
+                    }
                 }
                 input {
                     width: 100%;

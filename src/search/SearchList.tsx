@@ -9,6 +9,9 @@ import { SearchStore } from '../search/SearchStore';
 import { WPLENGUAGES } from '../utils/constants';
 import { lettersNoEn } from 'utils/lettersNoEn';
 import * as QueryStringHelper from 'utils/QueryStringHelper';
+import { injector } from 'Injector';
+import { UserType } from 'user/User';
+import { UserService } from 'user/UserService';
 import { BooleanFilter, SortingFilter, QueryStringKeysSearch, StoreState } from 'utils/enums';
 
 import searchIcon from 'assets/images/search.svg';
@@ -21,6 +24,7 @@ import tpIcon from 'assets/images/teaching-path.svg';
 import tpPinkIcon from 'assets/images/teaching-path-pink.svg';
 import assigIcon from 'assets/images/assignment.svg';
 import assigPinkIcon from 'assets/images/assignmentpink.svg';
+import closeicon from 'assets/images/close-rounded-black.svg';
 
 import './Search.scss';
 const number2 = 2;
@@ -36,11 +40,13 @@ interface SearchState {
   filterModalLang: boolean;
   useFilters: boolean;
   isFilter: boolean;
+  useSearch: boolean;
 }
-
+export const USER_SERVICE = 'USER_SERVICE';
 @inject('searchStore')
 @observer
 class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchState> {
+  private userService: UserService = injector.get<UserService>(USER_SERVICE);
   private searchRef: RefObject<HTMLInputElement> = React.createRef();
   public state = {
     filtersModalTp : false,
@@ -48,7 +54,8 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     useFilters: false,
     type : 'ARTICLE',
     searchQueryValue : '',
-    isFilter: false
+    isFilter: false,
+    useSearch: false
   };
   public tabNavigationLinks = [
     {
@@ -71,6 +78,15 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
       icon: assigIcon,
       iconHover: assigPinkIcon,
       data: 'ASSIGNMENT'
+    }
+  ];
+  public tabNavigationLinksStudent = [
+    {
+      name: 'Articles',
+      url: '/search/article',
+      icon: articleIcon,
+      iconHover: articlePinkIcon,
+      data: 'ARTICLE'
     }
   ];
 
@@ -176,9 +192,19 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
 
   public modalFilterlang = () => {
     const { searchStore } = this.props;
+    const NewwpLenguajes : Array<any> = [];
+    if (searchStore!.getFilters!.locales) {
+      searchStore!.getFilters!.locales!.forEach((locale) => {
+        WPLENGUAGES.forEach((wp) => {
+          if (locale === wp.id) {
+            NewwpLenguajes.push(wp);
+          }
+        });
+      });
+    }
     return (
       <div className="absModalTinker">
-        {WPLENGUAGES.map(this.itemFilterlang)}
+        {NewwpLenguajes.map(this.itemFilterlang)}
       </div>
     );
   }
@@ -196,7 +222,8 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
 
   public renderTabs = () =>  (
     <div className="renderTabs">
-      {this.tabNavigationLinks.map(this.renderTabsInside)}
+      {(this.userService.getCurrentUser()!.type === UserType.Student) && this.tabNavigationLinksStudent.map(this.renderTabsInside)}
+      {!(this.userService.getCurrentUser()!.type === UserType.Student) && this.tabNavigationLinks.map(this.renderTabsInside)}
     </div>
   )
 
@@ -209,13 +236,31 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
         QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
         this.props.searchStore!.myfilter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
         this.setState({
-          isFilter: true
+          isFilter: true,
+          useSearch: true
         });
         await this.props.searchStore!.getDataSearch();
         this.setState({
           isFilter: false
         });
       }
+    }
+  }
+
+  public cleanSearchInput = async () => {
+    if (this.searchRef) {
+      this.searchRef.current!.value = '';
+      QueryStringHelper.set(this.props.history, QueryStringKeysSearch.SEARCH, '');
+      QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+      this.props.searchStore!.myfilter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
+      this.setState({
+        isFilter: true,
+        useSearch: true
+      });
+      await this.props.searchStore!.getDataSearch();
+      this.setState({
+        isFilter: false
+      });
     }
   }
 
@@ -242,6 +287,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
                 aria-invalid="false"
                 ref={this.searchRef}
               />
+              {this.state.useSearch && <img src={closeicon} className="closeIcon" onClick={this.cleanSearchInput}/>}
             </div>
             <div className="SearchPage__header__top__right">
               <a href="javascript:void(0)" className={classbtnText} onClick={this.openFiltersModalTp}>
