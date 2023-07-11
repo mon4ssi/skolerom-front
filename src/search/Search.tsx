@@ -102,7 +102,7 @@ export class Filter {
   @observable public page?: number | null;
   // tslint:disable-next-line: variable-name
   @observable public per_page?: number | null;
-  @observable public lang?: string | null;
+  @observable public localeId?: string | null;
   @observable public type?: number | null;
   @observable public searchQuery?: string | null;
   @observable public grades?: Array<number> | null;
@@ -119,7 +119,7 @@ export class FilterMeta {
   @observable public grades?: Array<SimpleNumberData> | null;
   @observable public subjects?: Array<SimpleNumberData> | null;
   @observable public coreElements?: Array<SimpleStringData> | null;
-  @observable public topics?: Array<SimpleStringData> | null;
+  @observable public mainTopics?: Array<SimpleStringData> | null;
   @observable public sources?: Array<SimpleNumberData> | null;
   @observable public goals?: Array<SimpleStringData> | null;
   @observable public readingInSubjects?: Array<SimpleNumberData> | null;

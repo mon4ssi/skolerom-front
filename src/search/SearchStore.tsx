@@ -15,7 +15,7 @@ export class SearchStore {
   @observable public myfilter: Filter = {
     page: 1,
     per_page: 24,
-    lang: this.myfilterLang,
+    localeId: this.storageInteractor.getCurrentLocale(),
     type: 1,
     grades: [],
     subjects: [],
@@ -40,7 +40,7 @@ export class SearchStore {
     this.myfilter = {
       page: 1,
       per_page: 24,
-      lang: this.myfilterLang,
+      localeId: this.myfilterLang,
       type: 1,
       grades: [],
       subjects: [],

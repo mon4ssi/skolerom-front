@@ -256,7 +256,6 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   private showUserModal = () => {
     const { sidebarShown } = this.props.uiStore!;
     const { modalVisible } = this.state;
-
     if (sidebarShown) {
       this.props.uiStore!.hideSidebar();
     }

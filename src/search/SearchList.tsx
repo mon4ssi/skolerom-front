@@ -6,6 +6,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { SearchComponentList } from '../search/searchListCompontent/searchListComponent';
 import { SearchFilter } from '../search/searchFilters/searchFilters';
 import { SearchStore } from '../search/SearchStore';
+import { Search, FilterMeta } from '../search/Search';
 import { WPLENGUAGES } from '../utils/constants';
 import { lettersNoEn } from 'utils/lettersNoEn';
 import * as QueryStringHelper from 'utils/QueryStringHelper';
@@ -13,6 +14,7 @@ import { injector } from 'Injector';
 import { UserType } from 'user/User';
 import { UserService } from 'user/UserService';
 import { BooleanFilter, SortingFilter, QueryStringKeysSearch, StoreState } from 'utils/enums';
+import { StorageInteractor, STORAGE_INTERACTOR_KEY } from '../utils/storageInteractor';
 
 import searchIcon from 'assets/images/search.svg';
 import searchPinkIcon from 'assets/images/searchpink.svg';
@@ -24,10 +26,11 @@ import tpIcon from 'assets/images/teaching-path.svg';
 import tpPinkIcon from 'assets/images/teaching-path-pink.svg';
 import assigIcon from 'assets/images/assignment.svg';
 import assigPinkIcon from 'assets/images/assignmentpink.svg';
-import closeicon from 'assets/images/close-rounded-black.svg';
+import closeicon from 'assets/images/close-button.svg';
 
 import './Search.scss';
 const number2 = 2;
+const number3 = 3;
 interface SearchProps {
   searchStore?: SearchStore;
   type : string;
@@ -41,13 +44,19 @@ interface SearchState {
   useFilters: boolean;
   isFilter: boolean;
   useSearch: boolean;
+  usedFiltereds: boolean;
+  items: Array<Search>;
+  getFilters: FilterMeta;
+  page: number;
 }
 export const USER_SERVICE = 'USER_SERVICE';
 @inject('searchStore')
 @observer
 class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchState> {
   private userService: UserService = injector.get<UserService>(USER_SERVICE);
+  private storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
   private searchRef: RefObject<HTMLInputElement> = React.createRef();
+  private refBody: RefObject<HTMLDivElement> = React.createRef();
   public state = {
     filtersModalTp : false,
     filterModalLang : false,
@@ -55,7 +64,11 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     type : 'ARTICLE',
     searchQueryValue : '',
     isFilter: false,
-    useSearch: false
+    useSearch: false,
+    usedFiltereds: false,
+    items: [],
+    getFilters: this.props.searchStore!.getFilters!,
+    page: 1
   };
   public tabNavigationLinks = [
     {
@@ -97,13 +110,127 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     this.props.history.push(url);
   }
 
-  public async componentDidMount() {
+  public myFilters = () => {
+    // typs logic
+    switch (this.props.type) {
+      case 'ARTICLE':
+        this.props.searchStore!.myfilter.type = 1;
+        break;
+      case 'TEACHING-PATH':
+        this.props.searchStore!.myfilter.type = number2;
+        break;
+      case 'ASSIGNMENT':
+        this.props.searchStore!.myfilter.type = number3;
+        break;
+      default:
+        this.props.searchStore!.myfilter.type = 1;
+        break;
+    }
+    // grades logic
+    const mygrades : Array<number> = [];
+    if (QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.GRADE)) {
+      QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.GRADE)!.split(',').forEach((e) => {
+        mygrades.push(Number(e));
+      });
+    }
+    const mysubjects : Array<number> = [];
+    if (QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SUBJECT)) {
+      QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SUBJECT)!.split(',').forEach((e) => {
+        mysubjects.push(Number(e));
+      });
+    }
+    const mycoreelements : Array<string> = [];
+    if (QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.GREPCOREELEMENTSIDS)) {
+      QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.GREPCOREELEMENTSIDS)!.split(',').forEach((e) => {
+        mycoreelements.push(e);
+      });
+    }
+    const mytopics : Array<string> = [];
+    if (QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.GREPMAINTOPICSIDS)) {
+      QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.GREPMAINTOPICSIDS)!.split(',').forEach((e) => {
+        mytopics.push(e);
+      });
+    }
+    const mygoalss : Array<string> = [];
+    if (QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.GREEPGOALSIDS)) {
+      QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.GREEPGOALSIDS)!.split(',').forEach((e) => {
+        mygoalss.push(e);
+      });
+    }
+    const mysources : Array<number> = [];
+    if (QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SOURCE)) {
+      QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SOURCE)!.split(',').forEach((e) => {
+        mysources.push(Number(e));
+      });
+    }
+    const basicPage = QueryStringHelper.getNumber(this.props.history, QueryStringKeysSearch.PAGE);
+    const paged = (basicPage) ? basicPage : 1;
+    const basicLang = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.LANG);
+    const storagelocale = this.storageInteractor.getCurrentLocale();
+    const lang = (basicLang) ? basicLang : (storagelocale) ? storagelocale : 'nb' ;
+    this.props.searchStore!.myfilter.page = paged;
+    this.props.searchStore!.myfilter.localeId = lang;
+    this.props.searchStore!.myfilter.grades = mygrades;
+    this.props.searchStore!.myfilter.subjects = mysubjects;
+    this.props.searchStore!.myfilter.coreElements = mycoreelements;
+    this.props.searchStore!. myfilter.topics = mytopics;
+    this.props.searchStore!.myfilter.goals = mygoalss;
+    this.props.searchStore!.myfilter.sources = mysources;
+    this.props.searchStore!.myfilter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
+  }
+
+  public featchFilters = async () => {
     this.setState({
-      type : this.props.type
+      usedFiltereds: false
+    });
+    this.myFilters();
+    const dataSearch = await this.props.searchStore!.getDataSearch();
+    this.props.searchStore!.paginationTotalPages = dataSearch.totalpage;
+    this.props.searchStore!.getFilters = dataSearch.filters;
+    this.setState(
+      {
+        items: dataSearch.items,
+        getFilters: dataSearch.filters,
+        usedFiltereds: true
+      }
+    );
+  }
+
+  public featchFiltersNew = async () => {
+    this.myFilters();
+    const dataSearch = await this.props.searchStore!.getDataSearch();
+    let searchItemsStet = this.state.items as Array<Search>;
+    searchItemsStet = searchItemsStet.concat(dataSearch.items!);
+    this.setState(
+      {
+        items: searchItemsStet
+      },
+      () => {
+        this.refBody.current!.scrollIntoView({ behavior: 'smooth' });
+      }
+    );
+  }
+  public handleClickOutside = () => {
+    if (this.state.filterModalLang) {
+      this.setState({
+        filterModalLang: false
+      });
+    }
+  }
+  public componentWillUnmount() {
+    document.removeEventListener('click', this.handleClickOutside, true);
+  }
+  public async componentDidMount() {
+    const isValue = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
+    this.featchFilters();
+    this.setState({
+      type : this.props.type,
+      searchQueryValue: (isValue !== undefined && isValue !== null) ? isValue : ''
     });
     if (this.searchRef.current) {
       this.searchRef.current.focus();
     }
+    document.addEventListener('click', this.handleClickOutside, true);
   }
 
   public closeFiltersModalTp = () =>  {
@@ -133,19 +260,12 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
 
   public onSearch = () => {
-    this.setState({
-      isFilter: true
-    });
-  }
-  public onSearchEnd = () => {
-    this.setState({
-      isFilter: false
-    });
+    this.featchFilters();
   }
 
   public filters = () => (
     <div className="fixedsModal">
-      <SearchFilter onSearch={this.onSearch} onSearchEnd={this.onSearchEnd}/>
+      {this.state.usedFiltereds && <SearchFilter filters={this.state.getFilters!} onSearch={this.onSearch}/>}
       <div className="filtersModalBackground" onClick={this.closeFiltersModalTp} />
     </div>
   )
@@ -154,14 +274,13 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     const { searchStore } = this.props;
     const value = e.currentTarget.value;
     searchStore!.myfilterLang = value;
-    searchStore!.myfilter.lang = value;
-    this.setState({
-      isFilter: true
-    });
-    await searchStore!.getDataSearch();
-    this.setState({
-      isFilter: false
-    });
+    QueryStringHelper.set(
+      this.props.history,
+      QueryStringKeysSearch.LANG,
+      value ? value : ''
+    );
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    this.featchFilters();
     this.closeFiltersModalTp();
   }
 
@@ -192,7 +311,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
 
   public modalFilterlang = () => {
     const { searchStore } = this.props;
-    const NewwpLenguajes : Array<any> = [];
+    let NewwpLenguajes : Array<any> = [];
     if (searchStore!.getFilters!.locales) {
       searchStore!.getFilters!.locales!.forEach((locale) => {
         WPLENGUAGES.forEach((wp) => {
@@ -201,12 +320,21 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
           }
         });
       });
+    } else {
+      NewwpLenguajes = WPLENGUAGES;
     }
     return (
       <div className="absModalTinker">
         {NewwpLenguajes.map(this.itemFilterlang)}
       </div>
     );
+  }
+
+  public handerScroll = () => {
+    const mypage = this.props.searchStore!.myfilter.page;
+    this.setState({ page : mypage! });
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, mypage!);
+    this.featchFiltersNew();
   }
 
   public renderTabsInside = (item : any) => {
@@ -236,13 +364,11 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
         QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
         this.props.searchStore!.myfilter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
         this.setState({
-          isFilter: true,
           useSearch: true
         });
-        await this.props.searchStore!.getDataSearch();
-        this.setState({
-          isFilter: false
-        });
+        QueryStringHelper.set(this.props.history, QueryStringKeysSearch.SEARCH, val);
+        QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+        this.featchFilters();
       }
     }
   }
@@ -253,13 +379,10 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
       QueryStringHelper.set(this.props.history, QueryStringKeysSearch.SEARCH, '');
       QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
       this.props.searchStore!.myfilter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
+      this.featchFilters();
       this.setState({
-        isFilter: true,
-        useSearch: true
-      });
-      await this.props.searchStore!.getDataSearch();
-      this.setState({
-        isFilter: false
+        searchQueryValue: '',
+        useSearch: false
       });
     }
   }
@@ -305,8 +428,8 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
             {this.renderTabs()}
           </div>
         </div>
-        <div className="SearchPage__body">
-          <SearchComponentList isFilter={this.state.isFilter} type={this.state.type}/>
+        <div className="SearchPage__body" ref={this.refBody}>
+          {this.state.usedFiltereds && <SearchComponentList items={this.state.items} isFilter={this.state.isFilter} type={this.props.type} />}
         </div>
         {this.state.filtersModalTp && this.filters()}
       </div>

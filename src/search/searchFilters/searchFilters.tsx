@@ -7,7 +7,7 @@ import { Grade, Subject, Greep, GreepSelectValue, Language } from 'assignment/As
 import './searchFilters.scss';
 import resetImg from 'assets/images/reset-icon.svg';
 import { SearchStore } from '../SearchStore';
-import { SimpleNumberData, SimpleStringData } from '../Search';
+import { SimpleNumberData, SimpleStringData, FilterMeta } from '../Search';
 import { WPLENGUAGES } from '../../utils/constants';
 import * as QueryStringHelper from 'utils/QueryStringHelper';
 import { BooleanFilter, SortingFilter, QueryStringKeysSearch, StoreState } from 'utils/enums';
@@ -25,6 +25,7 @@ import readingImg from 'assets/images/reading-second-icon.svg';
 import { filter } from 'lodash';
 
 interface SearchProps {
+  filters: FilterMeta;
   searchStore?: SearchStore;
   onSearch?(): void;
   onSearchEnd?(): void;
@@ -58,7 +59,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     const { searchStore } = this.props;
     const value = e.currentTarget.value;
     searchStore!.myfilterLang = value;
-    searchStore!.myfilter.lang = value;
+    searchStore!.myfilter.localeId = value;
     QueryStringHelper.set(
       this.props.history,
       QueryStringKeysSearch.LANG,
@@ -108,14 +109,14 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
     this.props.onSearch!();
-    await searchStore!.getDataSearch();
-    this.props.onSearchEnd!();
   }
   public renderGrades = (item: SimpleNumberData) => {
     const { myfilter } = this.props.searchStore!;
-    const gradetitle: Array<string> = item.name.split(' ');
-    let title:string = gradetitle[1];
-    if (gradetitle.length > 1) { title = gradetitle[1] + intl.get('new assignment.grade'); }
+    const gradetitle: Array<string> = item.name.split('. ');
+    let title:string = gradetitle[0];
+    if (gradetitle.length > 1) {
+      title = gradetitle[0] + intl.get('new assignment.grade');
+    }
     let activeclass = 'itemFlexFilter';
     if (myfilter.grades!) {
       myfilter.grades!.forEach((g) => {
@@ -152,8 +153,6 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
     this.props.onSearch!();
-    await searchStore!.getDataSearch();
-    this.props.onSearchEnd!();
   }
   public renderSubjects = (item: SimpleNumberData) => {
     const { myfilter } = this.props.searchStore!;
@@ -207,8 +206,6 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
     this.props.onSearch!();
-    await searchStore!.getDataSearch();
-    this.props.onSearchEnd!();
   }
   public renderCoreElementsSelected = () => {
     const { myfilter } = this.props.searchStore!;
@@ -287,8 +284,6 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
     this.props.onSearch!();
-    await searchStore!.getDataSearch();
-    this.props.onSearchEnd!();
   }
   public renderTopics = (item: SimpleStringData) => {
     const { myfilter } = this.props.searchStore!;
@@ -331,8 +326,6 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
     this.props.onSearch!();
-    await searchStore!.getDataSearch();
-    this.props.onSearchEnd!();
   }
   public renderCoreGoalsSelected = () => {
     const { myfilter } = this.props.searchStore!;
@@ -417,8 +410,6 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
     this.props.onSearch!();
-    await searchStore!.getDataSearch();
-    this.props.onSearchEnd!();
   }
   public renderSource = (item: SimpleNumberData) => {
     const { myfilter } = this.props.searchStore!;
@@ -459,8 +450,6 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
     this.props.onSearch!();
-    await searchStore!.getDataSearch();
-    this.props.onSearchEnd!();
   }
   public renderReading = (item: SimpleNumberData) => {
     const { myfilter } = this.props.searchStore!;
@@ -497,26 +486,24 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.SOURCE, '');
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
     this.setState({
-      langs: WPLENGUAGES,
       grades: filters!.grades!,
       subjects: filters!.subjects!,
       coreElements: filters!.coreElements!,
-      topics: filters!.topics!,
+      topics: filters!.mainTopics!,
       goals: filters!.goals!,
       source: filters!.sources!,
       reading: filters!.readingInSubjects!
     });
-    await this.props.searchStore!.getDataSearch();
+    this.props.onSearch!();
   }
 
   public async componentDidMount() {
-    const filters = this.props.searchStore!.getFilters;
+    const filters = this.props.filters;
     this.setState({
-      langs: WPLENGUAGES,
       grades: filters!.grades!,
       subjects: filters!.subjects!,
       coreElements: filters!.coreElements!,
-      topics: filters!.topics!,
+      topics: filters!.mainTopics!,
       goals: filters!.goals!,
       source: filters!.sources!,
       reading: filters!.readingInSubjects!

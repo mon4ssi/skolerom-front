@@ -528,3 +528,47 @@ li.AppHeader__dropdownItem__subItem:hover {
     }
   }
 }
+
+@media (max-width: 1158px) {
+  .AppHeader__right .barSearch input {
+    width: 120px;
+  }
+  .AppHeader__role {
+    display: none;
+  }
+  .AppHeader__left .AppHeader__block {
+    margin-right: 0px;
+  }
+}
+
+@media (max-width: 987px) {
+  .AppHeader__right .barSearch {
+    display: none;
+  }
+}
+
+@media (max-width: 870px) {
+  .AppHeader__left {
+    display: block;
+    width: 0px;
+  }
+  .AppHeader__userMenuButton img {
+    width: 2.5px;
+  }
+  .AppHeader__userMenuButton {
+      border: solid 1.5px black;
+      border-radius: 50%;
+      width: 21px;
+      height: 21px;
+      padding-left: 0px;
+      justify-content: center;
+      margin-left: 5px;
+  }
+  .AppHeader__right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .AppHeader__navigationItem {
+    display: none;
+  }
+}

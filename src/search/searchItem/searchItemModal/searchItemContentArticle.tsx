@@ -46,7 +46,8 @@ class ArticleContent extends Component<Props> {
         relatedTp
     } = this.props.item;
     if (relatedTp && relatedTp.length > 0) {
-      const link = `${process.env.REACT_APP_BASE_URL}/teaching-paths/all?articles=${String(relatedTp)}`;
+      const url: URL = new URL(window.location.origin);
+      const link = `${url}/teaching-paths/all?articles=${String(relatedTp)}`;
       return (
         <li><a href={link} target="_blank">{intl.get('teaching path')}</a></li>
       );
@@ -57,11 +58,22 @@ class ArticleContent extends Component<Props> {
         relatedAssignment
     } = this.props.item;
     if (relatedAssignment && relatedAssignment.length > 0) {
-      const link = `${process.env.REACT_APP_BASE_URL}/assignments/all?articles=${String(relatedAssignment)}`;
+      const url: URL = new URL(window.location.origin);
+      const link = `${url}/assignments/all?articles=${String(relatedAssignment)}`;
       return (
         <li><a href={link} target="_blank">{intl.get('assignment')}</a></li>
       );
     }
+  }
+  public renderListNumberGrade = (item: SimpleNumberData) => {
+    const gradetitle: Array<string> = item.name.split('. ');
+    let title:string = gradetitle[0];
+    if (gradetitle.length > 1) {
+      title = gradetitle[0] + intl.get('new assignment.grade');
+    }
+    return (
+      <li>{title}</li>
+    );
   }
   public renderListNumber = (item: SimpleNumberData) => (
     <li>{item.name}</li>
@@ -117,7 +129,7 @@ class ArticleContent extends Component<Props> {
               </h2>
               <div className="list">
                 <ul>
-                    {grades.map(this.renderListNumber)}
+                    {grades.map(this.renderListNumberGrade)}
                 </ul>
               </div>
             </div>
