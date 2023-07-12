@@ -333,7 +333,8 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
   public iframeRender = () => {
     const { activityStore, role } = this.props;
     activityStore!.getIframeContent();
-    const url = activityStore!.urliframe.toString();
+    // const url = activityStore!.urliframe.toString();
+    const url = `${process.env.REACT_APP_WP_URL}/main-app/`;
     const anyclass = this.state.chargeIframe ? 'iframeContent' : 'iframeContent hidden';
     return (
       <div className={anyclass}>
