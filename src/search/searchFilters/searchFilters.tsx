@@ -429,7 +429,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
         className={activeclass}
         onClick={this.changeSource}
       >
-        {item.title}
+        {item.name}
       </button>
     );
   }
@@ -469,7 +469,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
         className={activeclass}
         onClick={this.changeReading}
       >
-        {item.title}
+        {item.name}
       </button>
     );
   }

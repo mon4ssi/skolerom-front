@@ -14,7 +14,7 @@ export interface SimpleNumberData {
 
 export interface SimpleNumberDataTitle {
   id: number;
-  title: string;
+  name: string;
 }
 
 export interface SimpleStringData {

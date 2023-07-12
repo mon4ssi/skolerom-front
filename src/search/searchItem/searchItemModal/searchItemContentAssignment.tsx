@@ -79,7 +79,7 @@ class AssignmentContent extends Component<Props, State> {
   public close = () => this.props.onClose();
   public renderNumberArrayTitle = (item: SimpleNumberDataTitle) => (
     <li className="item">
-      {item.title}
+      {item.name}
     </li>
   )
   public renderNumberArray = (item: SimpleNumberData) => (
