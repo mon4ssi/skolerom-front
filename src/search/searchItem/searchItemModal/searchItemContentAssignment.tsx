@@ -12,7 +12,7 @@ import { Assignment, GenericGrepItem, LenguajesB, LenguajesC, Translations } fro
 import { UserType } from 'user/User';
 import { UserService } from 'user/UserService';
 import { Notification, NotificationTypes } from '../../../components/common/Notification/Notification';
-import { Search, SimpleNumberData, SimpleStringData, SimpleGoalData, LvlData } from '../../Search';
+import { Search, SimpleNumberData, SimpleStringData, SimpleGoalData, LvlData, SimpleNumberDataTitle } from '../../Search';
 import { deadlineDateFormat, thirdLevel, LANGUAGESC, LANGUAGESD } from 'utils/constants';
 import closeimg from 'assets/images/close-button.svg';
 import gradeImg from 'assets/images/grade.svg';
@@ -77,6 +77,11 @@ class AssignmentContent extends Component<Props, State> {
   };
   public handleClickOutside = () => this.props.onClose();
   public close = () => this.props.onClose();
+  public renderNumberArrayTitle = (item: SimpleNumberDataTitle) => (
+    <li className="item">
+      {item.title}
+    </li>
+  )
   public renderNumberArray = (item: SimpleNumberData) => (
     <li className="item">
       {item.name}
@@ -173,7 +178,7 @@ class AssignmentContent extends Component<Props, State> {
           <div className="title">{intl.get('preview.teaching_path.grep.sources')}</div>
           <div>
             <ul className="listItem">
-              {sources.map(this.renderNumberArray)}
+              {sources.map(this.renderNumberArrayTitle)}
             </ul>
           </div>
         </div>

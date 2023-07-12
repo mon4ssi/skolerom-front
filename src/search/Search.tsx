@@ -12,6 +12,11 @@ export interface SimpleNumberData {
   name: string;
 }
 
+export interface SimpleNumberDataTitle {
+  id: number;
+  title: string;
+}
+
 export interface SimpleStringData {
   id: string;
   name: string;
@@ -44,7 +49,7 @@ export interface SearchArgs {
   coreElements?: Array<SimpleStringData>;
   topics?: Array<SimpleStringData>;
   reading?: Array<SimpleStringData>;
-  sources?: Array<SimpleNumberData>;
+  sources?: Array<SimpleNumberDataTitle>;
   goals?: Array<SimpleGoalData>;
   localeid: string;
   keywords?: Array<string>;
@@ -64,7 +69,7 @@ export class Search {
   public subjects: Array<SimpleNumberData>;
   public coreElements: Array<SimpleStringData>;
   public topics: Array<SimpleStringData>;
-  public sources: Array<SimpleNumberData>;
+  public sources: Array<SimpleNumberDataTitle>;
   public goals: Array<SimpleGoalData>;
   public reading: Array<SimpleStringData>;
   public localeid: string;
@@ -120,7 +125,7 @@ export class FilterMeta {
   @observable public subjects?: Array<SimpleNumberData> | null;
   @observable public coreElements?: Array<SimpleStringData> | null;
   @observable public mainTopics?: Array<SimpleStringData> | null;
-  @observable public sources?: Array<SimpleNumberData> | null;
+  @observable public sources?: Array<SimpleNumberDataTitle> | null;
   @observable public goals?: Array<SimpleStringData> | null;
-  @observable public readingInSubjects?: Array<SimpleNumberData> | null;
+  @observable public readingInSubjects?: Array<SimpleNumberDataTitle> | null;
 }

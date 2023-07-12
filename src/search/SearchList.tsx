@@ -265,7 +265,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
 
   public filters = () => (
     <div className="fixedsModal">
-      {this.state.usedFiltereds && <SearchFilter filters={this.state.getFilters!} onSearch={this.onSearch}/>}
+      <SearchFilter visible={this.state.usedFiltereds} filters={this.state.getFilters!} onSearch={this.onSearch}/>
       <div className="filtersModalBackground" onClick={this.closeFiltersModalTp} />
     </div>
   )
