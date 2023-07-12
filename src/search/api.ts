@@ -47,7 +47,7 @@ export class SearchApi implements SearchRepo {
   private storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
   public async getDataSearch(filter: Filter): Promise<{items: Array<Search>, filters: FilterMeta, totalpage: number}>  {
     if (!isNil(filter.searchQuery)) filter.searchQuery = String(filter.searchQuery!);
-    const response = await API.get('http://142.44.161.184:8081/api/content', {
+    const response = await API.get('http://3.66.29.210:8081/api/content', {
       params: buildFilterDTO(filter)
     });
     // const response = await API.get('https://skolerom.proxy.beeceptor.com/todos');
