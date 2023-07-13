@@ -41,6 +41,7 @@ interface SearchState {
   searchQueryValue : string;
   filtersModalTp: boolean;
   filterModalLang: boolean;
+  useLang: boolean;
   useFilters: boolean;
   isFilter: boolean;
   useSearch: boolean;
@@ -60,6 +61,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   public state = {
     filtersModalTp : false,
     filterModalLang : false,
+    useLang: false,
     useFilters: false,
     type : 'ARTICLE',
     searchQueryValue : '',
@@ -211,7 +213,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     );
   }
   public handleClickOutside = () => {
-    if (this.state.filterModalLang) {
+    if (this.state.filterModalLang && !this.state.useLang) {
       this.setState({
         filterModalLang: false
       });
@@ -272,6 +274,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
 
   public changeItemFilterlang = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const { searchStore } = this.props;
+    e.stopPropagation();
     const value = e.currentTarget.value;
     searchStore!.myfilterLang = value;
     QueryStringHelper.set(
@@ -309,6 +312,14 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     );
   }
 
+  public LangMouseEnter = () => {
+    this.setState({ useLang: true });
+  }
+
+  public LangMouseLeave = () => {
+    this.setState({ useLang: false });
+  }
+
   public modalFilterlang = () => {
     const { searchStore } = this.props;
     let NewwpLenguajes : Array<any> = [];
@@ -324,7 +335,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
       NewwpLenguajes = WPLENGUAGES;
     }
     return (
-      <div className="absModalTinker">
+      <div className="absModalTinker" onMouseEnter={this.LangMouseEnter} onMouseLeave={this.LangMouseLeave}>
         {NewwpLenguajes.map(this.itemFilterlang)}
       </div>
     );
