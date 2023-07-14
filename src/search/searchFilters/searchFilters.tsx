@@ -422,16 +422,18 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
         }
       });
     }
-    return (
-      <button
-        value={item.id}
-        key={item.id}
-        className={activeclass}
-        onClick={this.changeSource}
-      >
-        {item.name}
-      </button>
-    );
+    if (item.name) {
+      return (
+        <button
+          value={item.id}
+          key={item.id}
+          className={activeclass}
+          onClick={this.changeSource}
+        >
+          {item.name}
+        </button>
+      );
+    }
   }
 
   // end source
@@ -511,7 +513,52 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     });
   }
 
+  public pateticRenderTopics = () => (
+    <div className="itemFilter">
+      <div className="itemFilter__left">
+        <img src={cogsImg} />
+      </div>
+      <div className="itemFilter__right">
+        <h3>{intl.get('new assignment.greep.subjects')}</h3>
+        <div className="itemFilter__core">
+          {this.props.visible && this.state.topics.map(this.renderTopics)}
+        </div>
+      </div>
+    </div>
+  )
+
+  public renderPateticSource = () => (
+    <div className="itemFilter">
+      <div className="itemFilter__left">
+        <img src={voiceImg} />
+      </div>
+      <div className="itemFilter__right">
+        <h3>{intl.get('new assignment.greep.source')}</h3>
+        <div className="itemFilter__core">
+          {this.props.visible && this.state.source.map(this.renderSource)}
+        </div>
+      </div>
+    </div>
+  )
+
+  public pateticRenderReading = () => (
+    <div className="itemFilter">
+      <div className="itemFilter__left">
+        <img src={readingImg} />
+      </div>
+      <div className="itemFilter__right">
+        <h3>{intl.get('new assignment.greep.reading')}</h3>
+        <div className="itemFilter__core">
+          {this.props.visible && this.state.reading.map(this.renderReading)}
+        </div>
+      </div>
+    </div>
+  )
+
   public render() {
+    const renderSource = (this.state.source.length > 0) ? true : false;
+    const renderReading = (this.state.reading.length > 0) ? true : false;
+    const renderTopicsL = (this.state.topics.length > 0) ? true : false;
     return(
       <div className="FiltersModal">
         <div className="FiltersModal__header">
@@ -562,17 +609,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
               </div>
             </div>
             <div className="FiltersModal__body__item">
-              <div className="itemFilter">
-                <div className="itemFilter__left">
-                  <img src={cogsImg} />
-                </div>
-                <div className="itemFilter__right">
-                  <h3>{intl.get('new assignment.greep.subjects')}</h3>
-                  <div className="itemFilter__core">
-                    {this.props.visible && this.state.topics.map(this.renderTopics)}
-                  </div>
-                </div>
-              </div>
+              {renderTopicsL && this.pateticRenderTopics()}
             </div>
             <div className="FiltersModal__body__item">
               <div className="itemFilter">
@@ -588,30 +625,10 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
               </div>
             </div>
             <div className="FiltersModal__body__item">
-              <div className="itemFilter">
-                <div className="itemFilter__left">
-                  <img src={voiceImg} />
-                </div>
-                <div className="itemFilter__right">
-                  <h3>{intl.get('new assignment.greep.source')}</h3>
-                  <div className="itemFilter__core">
-                    {this.props.visible && this.state.source.map(this.renderSource)}
-                  </div>
-                </div>
-              </div>
+              {renderSource && this.renderPateticSource()}
             </div>
             <div className="FiltersModal__body__item">
-              <div className="itemFilter">
-                <div className="itemFilter__left">
-                  <img src={readingImg} />
-                </div>
-                <div className="itemFilter__right">
-                  <h3>{intl.get('new assignment.greep.reading')}</h3>
-                  <div className="itemFilter__core">
-                    {this.props.visible && this.state.reading.map(this.renderReading)}
-                  </div>
-                </div>
-              </div>
+              {renderReading && this.pateticRenderReading()}
             </div>
           </div>
       </div>

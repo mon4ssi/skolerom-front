@@ -109,7 +109,12 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     this.setState({
       type
     });
-    this.props.history.push(url);
+    if (window.location.search) {
+      const myUrl = `${url}${window.location.search}`;
+      this.props.history.push(myUrl);
+    } else {
+      this.props.history.push(url);
+    }
   }
 
   public myFilters = () => {
