@@ -21,25 +21,25 @@ export const buildFilterDTO = (filter: Filter): Object => {
     filterDTO.type = filter.type;
   }
   if (filter.searchQuery) {
-    filterDTO.searchQuery = filter.searchQuery;
+    filterDTO.query = filter.searchQuery;
   }
   if (filter.grades) {
-    filterDTO.grades = (toJS(filter.grades).length > 0) ? String(filter.grades) : toJS(filter.grades);
+    filterDTO.grade = (toJS(filter.grades).length > 0) ? String(filter.grades) : toJS(filter.grades);
   }
   if (filter.subjects) {
-    filterDTO.subjects = (toJS(filter.subjects).length > 0) ? String(filter.subjects) : toJS(filter.subjects);
+    filterDTO.subject = (toJS(filter.subjects).length > 0) ? String(filter.subjects) : toJS(filter.subjects);
   }
   if (filter.coreElements) {
-    filterDTO.coreElements = (toJS(filter.coreElements).length > 0) ? String(filter.coreElements) : toJS(filter.coreElements);
+    filterDTO.coreElement = (toJS(filter.coreElements).length > 0) ? String(filter.coreElements) : toJS(filter.coreElements);
   }
   if (filter.topics) {
-    filterDTO.topics = (toJS(filter.topics).length > 0) ? String(filter.topics) : toJS(filter.topics);
+    filterDTO.topic = (toJS(filter.topics).length > 0) ? String(filter.topics) : toJS(filter.topics);
   }
   if (filter.sources) {
     filterDTO.source = (toJS(filter.sources).length > 0) ? String(filter.sources) : toJS(filter.sources);
   }
   if (filter.goals) {
-    filterDTO.goals = (toJS(filter.goals).length > 0) ? String(filter.goals) : toJS(filter.goals);
+    filterDTO.goal = (toJS(filter.goals).length > 0) ? String(filter.goals) : toJS(filter.goals);
   }
   return filterDTO;
 };
