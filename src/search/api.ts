@@ -15,7 +15,7 @@ export const buildFilterDTO = (filter: Filter): Object => {
   }
   if (filter.localeId) {
     // logic per langs
-    filterDTO.localeId = filter.localeId;
+    filterDTO.locale = filter.localeId;
   }
   if (filter.type) {
     filterDTO.type = filter.type;
@@ -40,6 +40,9 @@ export const buildFilterDTO = (filter: Filter): Object => {
   }
   if (filter.goals) {
     filterDTO.goal = (toJS(filter.goals).length > 0) ? String(filter.goals) : toJS(filter.goals);
+  }
+  if (filter.readingInSubjects) {
+    filterDTO.readingInSubject = (toJS(filter.readingInSubjects).length > 0) ? String(filter.readingInSubjects) : toJS(filter.readingInSubjects);
   }
   return filterDTO;
 };

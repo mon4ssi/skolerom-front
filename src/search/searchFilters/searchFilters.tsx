@@ -29,6 +29,7 @@ interface SearchProps {
   visible: boolean;
   searchStore?: SearchStore;
   onSearch?(): void;
+  resetSearch?(): void;
   onSearchEnd?(): void;
 }
 
@@ -497,6 +498,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       source: filters!.sources!,
       reading: filters!.readingInSubjects!
     });
+    this.props.resetSearch!();
     this.props.onSearch!();
   }
 

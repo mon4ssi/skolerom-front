@@ -109,6 +109,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     this.setState({
       type
     });
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
     if (window.location.search) {
       const myUrl = `${url}${window.location.search}`;
       this.props.history.push(myUrl);
@@ -270,9 +271,13 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     this.featchFilters();
   }
 
+  public onReset = () => {
+    this.setState({ useFilters: false });
+  }
+
   public filters = () => (
     <div className="fixedsModal">
-      <SearchFilter visible={this.state.usedFiltereds} filters={this.state.getFilters!} onSearch={this.onSearch}/>
+      <SearchFilter visible={this.state.usedFiltereds} filters={this.state.getFilters!} onSearch={this.onSearch} resetSearch={this.onReset}/>
       <div className="filtersModalBackground" onClick={this.closeFiltersModalTp} />
     </div>
   )
@@ -375,7 +380,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     const val = e.target.value;
     if (lettersNoEn(val)) {
       this.setState({ searchQueryValue: e.target.value });
-      if (val.length > number2) {
+      if (val.length > number2 || val.length === 0) {
         QueryStringHelper.set(this.props.history, QueryStringKeysSearch.SEARCH, val);
         QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
         this.props.searchStore!.myfilter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);

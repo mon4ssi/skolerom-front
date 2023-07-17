@@ -35,7 +35,7 @@ class ArticleContent extends Component<Props> {
         relatedArticles
     } = this.props.item;
     if (relatedArticles && relatedArticles.length > 0) {
-      const link = `${process.env.REACT_APP_WP_URL}/undervisning/?fwp_ids==${String(relatedArticles)}`;
+      const link = `${process.env.REACT_APP_WP_URL}/undervisning/?fwp_ids=${String(relatedArticles)}`;
       return (
         <li><a href={link} target="_blank">{intl.get('edit_teaching_path.modals.articles')}</a></li>
       );
@@ -47,7 +47,7 @@ class ArticleContent extends Component<Props> {
     } = this.props.item;
     if (relatedTp && relatedTp.length > 0) {
       const url: URL = new URL(window.location.origin);
-      const link = `${url}/teaching-paths/all?articles=${String(relatedTp)}`;
+      const link = `${url}teaching-paths/all?articles=${String(relatedTp)}`;
       return (
         <li><a href={link} target="_blank">{intl.get('teaching path')}</a></li>
       );
@@ -59,7 +59,7 @@ class ArticleContent extends Component<Props> {
     } = this.props.item;
     if (relatedAssignment && relatedAssignment.length > 0) {
       const url: URL = new URL(window.location.origin);
-      const link = `${url}/assignments/all?articles=${String(relatedAssignment)}`;
+      const link = `${url}assignments/all?articles=${String(relatedAssignment)}`;
       return (
         <li><a href={link} target="_blank">{intl.get('assignment')}</a></li>
       );
@@ -113,9 +113,9 @@ class ArticleContent extends Component<Props> {
             <div className="relateds">
                 <h3>{intl.get('assignment preview.Related')}</h3>
                 <ul>
-                    {this.relatedArticles()}
-                    {this.relatedTP()}
-                    {this.relatedAssignments()}
+                  {this.relatedArticles()}
+                  {this.relatedTP()}
+                  {this.relatedAssignments()}
                 </ul>
             </div>
           </div>

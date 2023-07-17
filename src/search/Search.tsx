@@ -54,7 +54,7 @@ export interface SearchArgs {
   localeid: string;
   keywords?: Array<string>;
   title: string;
-  featureImg?: string;
+  featuredImg?: string;
   description: string;
   lvlArticles?: Array<LvlData>;
   relatedArticles?: Array<number>;
@@ -75,7 +75,7 @@ export class Search {
   public localeid: string;
   public keywords: Array<string>;
   public title: string;
-  public featureImg: string;
+  public featuredImg: string;
   public description: string;
   public lvlArticles: Array<LvlData>;
   public relatedArticles: Array<number>;
@@ -93,7 +93,7 @@ export class Search {
     this.reading = args.reading || [];
     this.localeid = args.localeid;
     this.keywords = args.keywords || [];
-    this.featureImg = args.featureImg || '';
+    this.featuredImg = args.featuredImg || '';
     this. title = args.title;
     this.description = args.description;
     this.lvlArticles = args.lvlArticles || [];

@@ -20,6 +20,7 @@ import { EditTeachingPathStore } from '../../teachingPath/view/EditTeachingPath/
 import { AssignmentService, ASSIGNMENT_SERVICE } from 'assignment/service';
 
 import more from 'assets/images/hovered-more.svg';
+import lisplacehoder from 'assets/images/list-placeholder.svg';
 import './searchItem.scss';
 const number3 = 3;
 const number2 = 2;
@@ -326,7 +327,7 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
 
   public render() {
     const {
-      featureImg,
+      featuredImg,
       description,
       title,
       subjects,
@@ -336,13 +337,14 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
     const visibility = (currentUserType === UserType.Teacher || currentUserType === UserType.ContentManager) ? true : false;
     const articleOpen = (this.state.article) ? 'cardInfoItem__detail active' : 'cardInfoItem__detail';
     const articleOpenCard = (this.state.article) ? 'cardInfoItem__card active' : 'cardInfoItem__card';
+    const myimg = featuredImg ? featuredImg : lisplacehoder;
     switch (this.props.type) {
       case 'ARTICLE':
         return (
           <div className="cardInfoItem">
             <div className={articleOpenCard} onClick={this.openArticle}>
               <div className="cardInfoItem__imagen">
-                <img src={featureImg} />
+                <img src={myimg} />
               </div>
               <div className="cardInfoItem__description">
                 <div className="title"><h2>{title}</h2></div>
@@ -361,7 +363,7 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
           <div className="cardInfoItem cardInfoItem--relative">
             <div className="cardInfoItem--horizontal" onClick={this.openSideTP}>
               <div className="cardInfoItem__left">
-                <img src={featureImg} />
+                <img src={myimg} />
                 <h2>{title}</h2>
               </div>
               <div className="cardInfoItem__right">
@@ -381,7 +383,7 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
           <div className="cardInfoItem cardInfoItem--relative">
             <div className="cardInfoItem--horizontal" onClick={this.openSideAssignment}>
               <div className="cardInfoItem__left">
-                <img src={featureImg} />
+                <img src={myimg} />
                 <h2>{title}</h2>
               </div>
               <div className="cardInfoItem__right">
@@ -400,7 +402,7 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
         return (
           <div className="cardInfoItem">
             <div className="cardInfoItem__imagen">
-              <img src={featureImg} />
+              <img src={myimg} />
             </div>
             <div className="cardInfoItem__description">
               <div className="title"><h2>{title}</h2></div>
