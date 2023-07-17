@@ -493,7 +493,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       grades: filters!.grades!,
       subjects: filters!.subjects!,
       coreElements: filters!.coreElements!,
-      topics: filters!.mainTopics!,
+      topics: filters!.topics!,
       goals: filters!.goals!,
       source: filters!.sources!,
       reading: filters!.readingInSubjects!
@@ -508,7 +508,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       grades: filters!.grades!,
       subjects: filters!.subjects!,
       coreElements: filters!.coreElements!,
-      topics: filters!.mainTopics!,
+      topics: filters!.topics!,
       goals: filters!.goals!,
       source: filters!.sources!,
       reading: filters!.readingInSubjects!

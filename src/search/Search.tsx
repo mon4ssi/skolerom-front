@@ -124,7 +124,7 @@ export class FilterMeta {
   @observable public grades?: Array<SimpleNumberData> | null;
   @observable public subjects?: Array<SimpleNumberData> | null;
   @observable public coreElements?: Array<SimpleStringData> | null;
-  @observable public mainTopics?: Array<SimpleStringData> | null;
+  @observable public topics?: Array<SimpleStringData> | null;
   @observable public sources?: Array<SimpleNumberDataTitle> | null;
   @observable public goals?: Array<SimpleStringData> | null;
   @observable public readingInSubjects?: Array<SimpleNumberDataTitle> | null;

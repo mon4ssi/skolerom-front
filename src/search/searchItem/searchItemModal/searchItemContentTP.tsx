@@ -330,7 +330,7 @@ class TPContent extends Component<Props, State> {
     if (isCopyApproved) {
       /* const currentEntityRoute = entityStore instanceof AssignmentListStore ? 'assignments' : 'teaching-paths'; */
       const copyId = await this.teachingPathService.copyTeachingPath(id!);
-      const urlForEditing: string = `${url.origin}/teaching-path/edit/${copyId!}`;
+      const urlForEditing: string = `${url.origin}/teaching-paths/edit/${copyId!}`;
       window.open(urlForEditing);
     }
   }
