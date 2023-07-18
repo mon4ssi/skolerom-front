@@ -244,8 +244,15 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
     const id = item.id;
     if (currentUserType === UserType.Teacher || currentUserType === UserType.ContentManager) {
       /* const currentEntityRoute = entityStore instanceof AssignmentListStore ? 'assignments' : 'teaching-paths'; */
-      const copyId = await this.assignmentService.copyAssignment(id!);
-      history.push(`/assignments/edit/${copyId}`);
+      const isCopyApproved = await Notification.create({
+        type: NotificationTypes.CONFIRM,
+        title: intl.get('assignment list.Are you sure'),
+        submitButtonTitle: intl.get('notifications.copy')
+      });
+      if (isCopyApproved) {
+        const copyId = await this.assignmentService.copyAssignment(id!);
+        history.push(`/assignments/edit/${copyId}`);
+      }
     }
   }
 
