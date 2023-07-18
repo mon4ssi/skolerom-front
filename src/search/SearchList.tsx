@@ -6,7 +6,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { SearchComponentList } from '../search/searchListCompontent/searchListComponent';
 import { SearchFilter } from '../search/searchFilters/searchFilters';
 import { SearchStore } from '../search/SearchStore';
-import { Search, FilterMeta } from '../search/Search';
+import { Search, FilterMeta, SimpleNumberData, SimpleStringData, SimpleNumberDataTitle } from '../search/Search';
 import { WPLENGUAGES } from '../utils/constants';
 import { lettersNoEn } from 'utils/lettersNoEn';
 import * as QueryStringHelper from 'utils/QueryStringHelper';
@@ -15,6 +15,7 @@ import { UserType } from 'user/User';
 import { UserService } from 'user/UserService';
 import { BooleanFilter, SortingFilter, QueryStringKeysSearch, StoreState } from 'utils/enums';
 import { StorageInteractor, STORAGE_INTERACTOR_KEY } from '../utils/storageInteractor';
+import { parseQueryString } from 'utils/queryString';
 
 import searchIcon from 'assets/images/search.svg';
 import searchPinkIcon from 'assets/images/searchpink.svg';
@@ -48,6 +49,13 @@ interface SearchState {
   usedFiltereds: boolean;
   items: Array<Search>;
   getFilters: FilterMeta;
+  mygrades: Array<SimpleNumberData>;
+  mysubjects: Array<SimpleNumberData>;
+  mycoreElements: Array<SimpleStringData>;
+  mytopics: Array<SimpleStringData>;
+  mygoals: Array<SimpleStringData>;
+  mysource: Array<SimpleNumberDataTitle>;
+  myreading: Array<SimpleNumberDataTitle>;
   page: number;
 }
 export const USER_SERVICE = 'USER_SERVICE';
@@ -70,7 +78,14 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     usedFiltereds: false,
     items: [],
     getFilters: this.props.searchStore!.getFilters!,
-    page: 1
+    page: 1,
+    mygrades: [],
+    mysubjects: [],
+    mycoreElements: [],
+    mytopics: [],
+    mygoals: [],
+    mysource: [],
+    myreading: []
   };
   public tabNavigationLinks = [
     {
@@ -181,10 +196,15 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     this.props.searchStore!.myfilter.grades = mygrades;
     this.props.searchStore!.myfilter.subjects = mysubjects;
     this.props.searchStore!.myfilter.coreElements = mycoreelements;
-    this.props.searchStore!. myfilter.topics = mytopics;
+    this.props.searchStore!.myfilter.topics = mytopics;
     this.props.searchStore!.myfilter.goals = mygoalss;
     this.props.searchStore!.myfilter.sources = mysources;
     this.props.searchStore!.myfilter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
+    if (mygrades.length > 0 || mysubjects.length > 0 || mytopics.length > 0 || mycoreelements.length > 0 || mygoalss.length > 0 || mysources.length > 0) {
+      this.setState({
+        useFilters: true
+      });
+    }
   }
 
   public featchFilters = async () => {
@@ -199,6 +219,13 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
       {
         items: dataSearch.items,
         getFilters: dataSearch.filters,
+        mygrades: dataSearch.filters.grades!,
+        mysubjects: dataSearch.filters.subjects!,
+        mycoreElements: dataSearch.filters.coreElements!,
+        mytopics: dataSearch.filters.topics!,
+        mygoals: dataSearch.filters.goals!,
+        mysource: dataSearch.filters.sources!,
+        myreading: dataSearch.filters.readingInSubjects!,
         usedFiltereds: true
       }
     );
@@ -227,6 +254,9 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
   public componentWillUnmount() {
     document.removeEventListener('click', this.handleClickOutside, true);
+    this.setState({
+      useFilters : false
+    });
   }
   public async componentDidMount() {
     const isValue = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
@@ -271,16 +301,178 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     this.featchFilters();
   }
 
-  public onReset = () => {
-    this.setState({ useFilters: false });
+  public onSearchGrades = async () => {
+    this.setState({
+      usedFiltereds: false
+    });
+    this.myFilters();
+    const dataSearch = await this.props.searchStore!.getDataSearch();
+    this.props.searchStore!.paginationTotalPages = dataSearch.totalpage;
+    this.props.searchStore!.getFilters = dataSearch.filters;
+    this.setState(
+      {
+        items: dataSearch.items,
+        getFilters: dataSearch.filters,
+        mysubjects: dataSearch.filters.subjects!,
+        mycoreElements: dataSearch.filters.coreElements!,
+        mytopics: dataSearch.filters.topics!,
+        mygoals: dataSearch.filters.goals!,
+        mysource: dataSearch.filters.sources!,
+        myreading: dataSearch.filters.readingInSubjects!,
+        usedFiltereds: true
+      }
+    );
+  }
+  public onSearchSubjects = async () => {
+    this.setState({
+      usedFiltereds: false
+    });
+    this.myFilters();
+    const dataSearch = await this.props.searchStore!.getDataSearch();
+    this.props.searchStore!.paginationTotalPages = dataSearch.totalpage;
+    this.props.searchStore!.getFilters = dataSearch.filters;
+    this.setState(
+      {
+        items: dataSearch.items,
+        getFilters: dataSearch.filters,
+        mycoreElements: dataSearch.filters.coreElements!,
+        mytopics: dataSearch.filters.topics!,
+        mygoals: dataSearch.filters.goals!,
+        mysource: dataSearch.filters.sources!,
+        myreading: dataSearch.filters.readingInSubjects!,
+        usedFiltereds: true
+      }
+    );
+  }
+  public onSearchElements = async () => {
+    this.setState({
+      usedFiltereds: false
+    });
+    this.myFilters();
+    const dataSearch = await this.props.searchStore!.getDataSearch();
+    this.props.searchStore!.paginationTotalPages = dataSearch.totalpage;
+    this.props.searchStore!.getFilters = dataSearch.filters;
+    this.setState(
+      {
+        items: dataSearch.items,
+        getFilters: dataSearch.filters,
+        mytopics: dataSearch.filters.topics!,
+        mygoals: dataSearch.filters.goals!,
+        mysource: dataSearch.filters.sources!,
+        myreading: dataSearch.filters.readingInSubjects!,
+        usedFiltereds: true
+      }
+    );
   }
 
-  public filters = () => (
-    <div className="fixedsModal">
-      <SearchFilter visible={this.state.usedFiltereds} filters={this.state.getFilters!} onSearch={this.onSearch} resetSearch={this.onReset}/>
-      <div className="filtersModalBackground" onClick={this.closeFiltersModalTp} />
-    </div>
-  )
+  public onSearchTopics = async () => {
+    this.setState({
+      usedFiltereds: false
+    });
+    this.myFilters();
+    const dataSearch = await this.props.searchStore!.getDataSearch();
+    this.props.searchStore!.paginationTotalPages = dataSearch.totalpage;
+    this.props.searchStore!.getFilters = dataSearch.filters;
+    this.setState(
+      {
+        items: dataSearch.items,
+        getFilters: dataSearch.filters,
+        mygoals: dataSearch.filters.goals!,
+        mysource: dataSearch.filters.sources!,
+        myreading: dataSearch.filters.readingInSubjects!,
+        usedFiltereds: true
+      }
+    );
+  }
+
+  public onSearchGoals = async () => {
+    this.setState({
+      usedFiltereds: false
+    });
+    this.myFilters();
+    const dataSearch = await this.props.searchStore!.getDataSearch();
+    this.props.searchStore!.paginationTotalPages = dataSearch.totalpage;
+    this.props.searchStore!.getFilters = dataSearch.filters;
+    this.setState(
+      {
+        items: dataSearch.items,
+        getFilters: dataSearch.filters,
+        mysource: dataSearch.filters.sources!,
+        myreading: dataSearch.filters.readingInSubjects!,
+        usedFiltereds: true
+      }
+    );
+  }
+
+  public onSearchSource = async () => {
+    this.setState({
+      usedFiltereds: false
+    });
+    this.myFilters();
+    const dataSearch = await this.props.searchStore!.getDataSearch();
+    this.props.searchStore!.paginationTotalPages = dataSearch.totalpage;
+    this.props.searchStore!.getFilters = dataSearch.filters;
+    this.setState(
+      {
+        items: dataSearch.items,
+        getFilters: dataSearch.filters,
+        myreading: dataSearch.filters.readingInSubjects!,
+        usedFiltereds: true
+      }
+    );
+  }
+
+  public onSearchReading = async () => {
+    this.setState({
+      usedFiltereds: false
+    });
+    this.myFilters();
+    const dataSearch = await this.props.searchStore!.getDataSearch();
+    this.props.searchStore!.paginationTotalPages = dataSearch.totalpage;
+    this.props.searchStore!.getFilters = dataSearch.filters;
+    this.setState(
+      {
+        items: dataSearch.items,
+        getFilters: dataSearch.filters,
+        usedFiltereds: true
+      }
+    );
+  }
+
+  public onReset = () => {
+    this.setState({
+      useFilters: false
+    });
+  }
+
+  public filters = () => {
+    const { searchStore } = this.props;
+    return (
+      <div className="fixedsModal">
+        <SearchFilter
+          visible={this.state.usedFiltereds}
+          filters={this.state.getFilters!}
+          mygrades={this.state.mygrades}
+          mysubjects={this.state.mysubjects}
+          mycoreElements={this.state.mycoreElements}
+          topics={this.state.mytopics}
+          mygoals={this.state.mygoals}
+          myreading={this.state.myreading}
+          mysource={this.state.mysource}
+          onSearchGrades={this.onSearchGrades}
+          onSearchSubjects={this.onSearchSubjects}
+          onSearchElements={this.onSearchElements}
+          onSearchTopics={this.onSearchTopics}
+          onSearchSource={this.onSearchSource}
+          onSearchGoals={this.onSearchGoals}
+          onSearchReading={this.onSearchReading}
+          onSearch={this.onSearch}
+          resetSearch={this.onReset}
+        />
+        <div className="filtersModalBackground" onClick={this.closeFiltersModalTp} />
+      </div>
+    );
+  }
 
   public changeItemFilterlang = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const { searchStore } = this.props;
@@ -409,9 +601,9 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
 
   public render() {
-    const btnText = this.props.searchStore!.useFilters ? intl.get('edit_teaching_path.modals.search.buttons.button_open') : intl.get('edit_teaching_path.modals.search.buttons.button_close');
-    const classbtnText = this.props.searchStore!.useFilters ? 'CreateButton active' : 'CreateButton';
-    const classbtnlang = this.state.filterModalLang ? 'CreateButton active' : 'CreateButton';
+    const btnText = this.state.useFilters ? intl.get('edit_teaching_path.modals.search.buttons.button_open') : intl.get('edit_teaching_path.modals.search.buttons.button_close');
+    const classbtnText = this.state.useFilters ? 'CreateButton active' : 'CreateButton';
+    const classbtnlang = this.state.filterModalLang ? 'CreateButton active' : 'CreateButton active';
     const placeholder = intl.get('assignments search.Search');
     const langText = intl.get('publishing_page.languages');
     return (

@@ -26,9 +26,23 @@ import { filter } from 'lodash';
 
 interface SearchProps {
   filters: FilterMeta;
+  mygrades: Array<SimpleNumberData>;
+  mysubjects: Array<SimpleNumberData>;
+  mycoreElements: Array<SimpleStringData>;
+  topics: Array<SimpleStringData>;
+  mygoals: Array<SimpleStringData>;
+  mysource: Array<SimpleNumberDataTitle>;
+  myreading: Array<SimpleNumberDataTitle>;
   visible: boolean;
   searchStore?: SearchStore;
   onSearch?(): void;
+  onSearchGrades?(): void;
+  onSearchSubjects?(): void;
+  onSearchElements?(): void;
+  onSearchTopics?(): void;
+  onSearchGoals?(): void;
+  onSearchSource?(): void;
+  onSearchReading?(): void;
   resetSearch?(): void;
   onSearchEnd?(): void;
 }
@@ -110,7 +124,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       String(searchStore!.myfilter.grades!) ? String(searchStore!.myfilter.grades!) : ''
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
-    this.props.onSearch!();
+    this.props.onSearchGrades!();
   }
   public renderGrades = (item: SimpleNumberData) => {
     const { myfilter } = this.props.searchStore!;
@@ -154,7 +168,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       String(searchStore!.myfilter.subjects!) ? String(searchStore!.myfilter.subjects!) : ''
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
-    this.props.onSearch!();
+    this.props.onSearchSubjects!();
   }
   public renderSubjects = (item: SimpleNumberData) => {
     const { myfilter } = this.props.searchStore!;
@@ -207,11 +221,11 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       String(searchStore!.myfilter.coreElements!) ? String(searchStore!.myfilter.coreElements!) : ''
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
-    this.props.onSearch!();
+    this.props.onSearchElements!();
   }
   public renderCoreElementsSelected = () => {
     const { myfilter } = this.props.searchStore!;
-    const options = this.renderValueOptions(this.state.coreElements);
+    const options = this.renderValueOptions(this.props.mycoreElements);
     const valueString: Array<any> = [];
     if (myfilter!.coreElements) {
       myfilter!.coreElements.forEach((f: any) => {
@@ -285,7 +299,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       String(searchStore!.myfilter.topics!) ? String(searchStore!.myfilter.topics!) : ''
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
-    this.props.onSearch!();
+    this.props.onSearchTopics!();
   }
   public renderTopics = (item: SimpleStringData) => {
     const { myfilter } = this.props.searchStore!;
@@ -327,17 +341,20 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       String(searchStore!.myfilter.goals!) ? String(searchStore!.myfilter.goals!) : ''
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
-    this.props.onSearch!();
+    this.props.onSearchGoals!();
   }
   public renderCoreGoalsSelected = () => {
     const { myfilter } = this.props.searchStore!;
-    const valueString: Array<string> = [];
-    if (myfilter!.coreElements) {
-      myfilter!.coreElements.forEach((f: any) => {
-        valueString.push(f.value);
+    const valueString: Array<any> = [];
+    const options = this.renderValueOptions(this.props.mygoals);
+    if (myfilter!.goals) {
+      myfilter!.goals.forEach((f: any) => {
+        const enjoy = options.find(x => x.value === f);
+        if (enjoy) {
+          valueString.push(enjoy);
+        }
       });
     }
-    const options = this.renderValueOptions(this.state.goals);
     const customStyles = {
       option: () => ({
         fontSize: '14px',
@@ -411,7 +428,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       String(searchStore!.myfilter.sources!) ? String(searchStore!.myfilter.sources!) : ''
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
-    this.props.onSearch!();
+    this.props.onSearchSource!();
   }
   public renderSource = (item: SimpleNumberDataTitle) => {
     const { myfilter } = this.props.searchStore!;
@@ -453,7 +470,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       String(searchStore!.myfilter.readingInSubjects!) ? String(searchStore!.myfilter.readingInSubjects!) : ''
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
-    this.props.onSearch!();
+    this.props.onSearchReading!();
   }
   public renderReading = (item: SimpleNumberDataTitle) => {
     const { myfilter } = this.props.searchStore!;
@@ -515,6 +532,8 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     });
   }
 
+  public emptyData = () => <div className="minimalLoading"><span /><span /><span /></div>;
+
   public pateticRenderTopics = () => (
     <div className="itemFilter">
       <div className="itemFilter__left">
@@ -523,7 +542,8 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       <div className="itemFilter__right">
         <h3>{intl.get('new assignment.greep.subjects')}</h3>
         <div className="itemFilter__core">
-          {this.props.visible && this.state.topics.map(this.renderTopics)}
+          {this.props.visible && this.props.topics.map(this.renderTopics)}
+          {!this.props.visible && this.emptyData()}
         </div>
       </div>
     </div>
@@ -537,7 +557,8 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       <div className="itemFilter__right">
         <h3>{intl.get('new assignment.greep.source')}</h3>
         <div className="itemFilter__core">
-          {this.props.visible && this.state.source.map(this.renderSource)}
+          {this.props.visible && this.props.mysource.map(this.renderSource)}
+          {!this.props.visible && this.emptyData()}
         </div>
       </div>
     </div>
@@ -551,16 +572,17 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
       <div className="itemFilter__right">
         <h3>{intl.get('new assignment.greep.reading')}</h3>
         <div className="itemFilter__core">
-          {this.props.visible && this.state.reading.map(this.renderReading)}
+          {this.props.visible && this.props.myreading.map(this.renderReading)}
+          {!this.props.visible && this.emptyData()}
         </div>
       </div>
     </div>
   )
 
   public render() {
-    const renderSource = (this.state.source.length > 0) ? true : false;
-    const renderReading = (this.state.reading.length > 0) ? true : false;
-    const renderTopicsL = (this.state.topics.length > 0) ? true : false;
+    const renderSource = (this.props.mysource.length > 0) ? true : false;
+    const renderReading = (this.props.myreading.length > 0) ? true : false;
+    const renderTopicsL = (this.props.topics.length > 0) ? true : false;
     return(
       <div className="FiltersModal">
         <div className="FiltersModal__header">
@@ -579,7 +601,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
                 <div className="itemFilter__right">
                   <h3>{intl.get('generals.grade')}</h3>
                   <div className="itemFilter__core">
-                    {this.props.visible && this.state.grades.map(this.renderGrades)}
+                    {this.props.mygrades.map(this.renderGrades)}
                   </div>
                 </div>
               </div>
@@ -592,7 +614,8 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
                 <div className="itemFilter__right">
                   <h3>{intl.get('new assignment.Subject')}</h3>
                   <div className="itemFilter__core">
-                    {this.props.visible && this.state.subjects.map(this.renderSubjects)}
+                    {this.props.visible && this.props.mysubjects.map(this.renderSubjects)}
+                    {!this.props.visible && this.emptyData()}
                   </div>
                 </div>
               </div>
@@ -606,6 +629,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
                   <h3>{intl.get('new assignment.greep.core')}</h3>
                   <div className="itemFilter__core">
                     {this.props.visible && this.renderCoreElementsSelected()}
+                    {!this.props.visible && this.emptyData()}
                   </div>
                 </div>
               </div>
@@ -622,6 +646,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
                   <h3>{intl.get('new assignment.greep.goals')}</h3>
                   <div className="itemFilter__core">
                     {this.props.visible && this.renderCoreGoalsSelected()}
+                    {!this.props.visible && this.emptyData()}
                   </div>
                 </div>
               </div>

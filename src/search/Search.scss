@@ -94,7 +94,15 @@
         }
     }
 }
-
+.emptyTeachingPaths {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 300;
+    height: 100%;
+}
 .absModalTinker {
     position: absolute;
     background-color: #FFF;

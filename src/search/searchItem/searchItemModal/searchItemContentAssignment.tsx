@@ -124,7 +124,7 @@ class AssignmentContent extends Component<Props, State> {
           <div className="title">{intl.get('preview.teaching_path.grep.subjects')}</div>
           <div>
             <ul className="listItem">
-                {subjects.map(this.renderNumberArray)}
+              {subjects.map(this.renderNumberArray)}
             </ul>
           </div>
         </div>
@@ -294,9 +294,9 @@ class AssignmentContent extends Component<Props, State> {
   public renderEditButtonClass = (editString: string) =>
   (
     <div className="actionButton actionboldButton">
-    <button disabled={false} onClick={() => { this.openInNewTabEdit(); }} title={editString} >
-    {editString}
-    </button>
+      <button disabled={false} onClick={() => { this.openInNewTabEdit(); }} title={editString} >
+        {editString}
+      </button>
     </div>
   )
 

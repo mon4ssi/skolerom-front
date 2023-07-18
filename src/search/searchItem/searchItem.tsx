@@ -12,6 +12,7 @@ import { ActionMenu } from 'search/searchItem/searchItemModal/searchItemModal';
 import { ArticleContent } from 'search/searchItem/searchItemModal/searchItemContentArticle';
 import { TPContent } from 'search/searchItem/searchItemModal/searchItemContentTP';
 import { AssignmentContent } from 'search/searchItem/searchItemModal/searchItemContentAssignment';
+import { Notification, NotificationTypes } from '../../components/common/Notification/Notification';
 import { SortingFilter, StoreState, QueryStringKeys } from 'utils/enums';
 import { UserType } from 'user/User';
 import * as QueryStringHelper from 'utils/QueryStringHelper';
@@ -167,8 +168,15 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
     const currentUserType = teachingPathsListStore!.getCurrentUser()!.type;
 
     if (currentUserType === UserType.Teacher || currentUserType === UserType.ContentManager) {
-      const copyId = await teachingPathsListStore!.copyEntity(id);
-      history.push(`/teaching-paths/edit/${copyId}`);
+      const isCopyApproved = await Notification.create({
+        type: NotificationTypes.CONFIRM,
+        title: intl.get('assignment list.Are you sure'),
+        submitButtonTitle: intl.get('notifications.copy')
+      });
+      if (isCopyApproved) {
+        const copyId = await teachingPathsListStore!.copyEntity(id);
+        history.push(`/teaching-paths/edit/${copyId}`);
+      }
     }
     history.push(`/teaching-paths/view/${id}`);
   }
@@ -217,8 +225,15 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
     const currentUserType = teachingPathsListStore!.getCurrentUser()!.type;
     const id = item.id;
     if (currentUserType === UserType.Teacher || currentUserType === UserType.ContentManager) {
-      const copyId = await teachingPathsListStore!.copyEntity(id);
-      history.push(`/teaching-paths/edit/${copyId}`);
+      const isCopyApproved = await Notification.create({
+        type: NotificationTypes.CONFIRM,
+        title: intl.get('assignment list.Are you sure'),
+        submitButtonTitle: intl.get('notifications.copy')
+      });
+      if (isCopyApproved) {
+        const copyId = await teachingPathsListStore!.copyEntity(id);
+        history.push(`/teaching-paths/edit/${copyId}`);
+      }
     }
     history.push(`/teaching-paths/view/${id}`);
   }

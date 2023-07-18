@@ -116,6 +116,12 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
         break;
     }
   }
+  public renderEmpty() {
+    const { searchItems } = this.state;
+    return (
+      <div className="emptyTeachingPaths">{intl.get('edit_teaching_path.No results found')}</div>
+    );
+  }
   public renderContentListArticle(item : Search) {
     return (
       <div key={item.id} className="Inside">
@@ -254,12 +260,14 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
 
   public render() {
+    const searchLength = (this.state.searchItems.length > 0) ? true : false;
     if (this.props.isFilter) {
       this.forceUpdate();
     }
     return (
       <div className="contentListSearch" id="searchListInfo">
-        {this.renderSwitchContentList()}
+        {searchLength && this.renderSwitchContentList()}
+        {!searchLength && this.renderEmpty()}
       </div>
     );
   }
