@@ -20,7 +20,7 @@ class ArticleContent extends Component<Props> {
   public handleClickOutside = () => this.props.onClose();
   public close = () => this.props.onClose();
   public lvlArticles = (item: LvlData) => {
-    const link = `${process.env.REACT_APP_WP_URL}?p=${item.article_id}`;
+    const link = `${process.env.REACT_APP_WP_URL}?p=${item.id}`;
     const name = `${intl.get('assignment preview.Level')} ${item.level}`;
     return (
       <li>

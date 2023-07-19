@@ -37,8 +37,7 @@ export interface SimpleGoalData {
 
 export interface LvlData {
   level: number;
-  // tslint:disable-next-line: variable-name
-  article_id: number;
+  id: number;
 }
 
 export interface SearchArgs {
