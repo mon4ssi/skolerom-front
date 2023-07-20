@@ -1,4 +1,4 @@
-import React, { Component, SyntheticEvent } from 'react';
+import React, { Component, SyntheticEvent, createRef } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import intl from 'react-intl-universal';
 import { inject, observer } from 'mobx-react';
@@ -30,6 +30,7 @@ interface SearchProps {
   type: string;
   teachingPathsListStore?: TeachingPathsListStore;
   editTeachingPathStore? :EditTeachingPathStore;
+  searchStore?: SearchStore;
 }
 
 interface SearchState {
@@ -44,6 +45,7 @@ interface SearchState {
 @observer
 class SearchItem extends Component<SearchProps & RouteComponentProps, SearchState> {
   private assignmentService: AssignmentService = injector.get(ASSIGNMENT_SERVICE);
+  private scrollref = createRef<HTMLDivElement>();
   public state = {
     stateTP: false,
     stateAssignment: false,
@@ -359,6 +361,7 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
     const visibility = (currentUserType === UserType.Teacher || currentUserType === UserType.ContentManager) ? true : false;
     const articleOpen = (this.state.article) ? 'cardInfoItem__detail active' : 'cardInfoItem__detail';
     const articleOpenCard = (this.state.article) ? 'cardInfoItem__card active' : 'cardInfoItem__card';
+    const sendId = (this.state.article) ? 'activeArticle' : '';
     const myimg = featuredImg ? featuredImg : lisplacehoder;
     switch (this.props.type) {
       case 'ARTICLE':
@@ -370,11 +373,10 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
               </div>
               <div className="cardInfoItem__description">
                 <div className="title"><h2>{title}</h2></div>
-                <div className="description">{description}</div>
               </div>
             </div>
             {this.state.article && <div className="triangleCard" />}
-            <div className={articleOpen}>
+            <div className={articleOpen} ref={this.scrollref} id={sendId}>
               {this.state.article && this.asideContent()}
             </div>
           </div>
@@ -428,7 +430,6 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
             </div>
             <div className="cardInfoItem__description">
               <div className="title"><h2>{title}</h2></div>
-              <div className="description">{description}</div>
             </div>
           </div>
         );

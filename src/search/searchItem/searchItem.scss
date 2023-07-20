@@ -41,7 +41,7 @@
                 border-radius: 5px;
                 overflow: hidden;
                 box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.100661);
-                min-height: 332px;
+                min-height: 250px;
                 &.active {
                     position: relative;
                     &:before {
@@ -65,7 +65,7 @@
                 height: 0px;
                 transition: 0.8s;
                 &.active {
-                    height: 640px;
+                    height: 580px;
                     margin-top: 20px;
                 }
                 .cardTemplateArticle {
@@ -202,14 +202,14 @@
                 img {
                     width: 100%;
                     height: auto;
-                    min-height: 180px;
+                    height: 180px;
                     object-fit: cover;
                 }
             }
             &__description {
                 padding: 10px;
                 overflow: hidden;
-                height: 200px;
+                height: auto;
                 position: relative;
                 /*&:before {
                     content: '';
@@ -227,7 +227,6 @@
                     h2 {
                         margin: 0px;
                         font-size: 18px;
-                        margin-bottom: 10px;
                         line-height: 22px;
                         -webkit-line-clamp: 2;
                         -webkit-box-orient: vertical;
@@ -441,6 +440,9 @@
                         transform: rotate(-45deg);
                         top: 5px;
                         right: 0px;
+                    }
+                    &.LinkRollback {
+                       &:after { display: none; }
                     }
                 }
                 .modalContentInside {
@@ -720,6 +722,12 @@
         }
     }
 }
+.contentListSearch {
+    .Inside {
+        width: calc(100% / 7 - 20px);
+        margin-right: 20px;
+    }
+}
 @media screen and (max-width: 2350px) {
     .contentListSearch {
         .Inside {
@@ -776,7 +784,14 @@
         }
     }
 }
-
+@media screen and (max-width: 870px) {
+    .SearchPage__header__top__left {
+        width: calc(100% - 400px);
+    }
+    .SearchPage__header__top__right a {
+        margin-top: 0px !important;
+    }
+}
 @media screen and (max-width: 750px) {
     .contentListSearch {
         .Inside {
@@ -793,6 +808,22 @@
             margin-right: 20px;
         }
     }
+    .SearchPage__header__top {
+        display: block !important;
+    }
+    .SearchPage__header__top__left {
+        width: 100% !important;
+        margin-bottom: 10px;
+    }
+    .SearchPage__header__top__right {
+        width: 100% !important;
+        justify-content: space-between !important;
+    }
+    .SearchPage__header__top__right a {
+        margin: 0px !important;
+        width: calc(50% - 5px);
+    }
+    
 }
 
 
@@ -801,6 +832,23 @@
         .Inside {
             width: calc(100% / 2 - 20px);
             margin-right: 20px;
+        }
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .SearchPage__header__top__right {
+        display: block !important;
+    }
+    .SearchPage__header__top__right a {
+        margin: 0px !important;
+        width: 100% !important;
+        margin-bottom: 10px !important;
+    }
+    .contentListSearch {
+        .Inside {
+            width: 100%;
+            margin-right: 0px;
         }
     }
 }

@@ -443,6 +443,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     this.setState({
       useFilters: false
     });
+    this.props.searchStore!.myfilterLang = this.storageInteractor.getCurrentLocale();
   }
 
   public filters = () => {

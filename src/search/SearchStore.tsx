@@ -7,6 +7,7 @@ import { injector } from 'Injector';
 export class SearchStore {
   private searchService: SearchService = injector.get<SearchService>(SEARCH_SERVICE);
   private storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
+  @observable public scroll: number = 0;
   @observable public paginationTotalPages: number = 1;
   @observable public useFilters: boolean = false;
   @observable public dataitems: any;

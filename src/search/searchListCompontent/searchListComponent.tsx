@@ -1,4 +1,4 @@
-import React, { Component, SyntheticEvent } from 'react';
+import React, { Component, SyntheticEvent, createRef } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import intl from 'react-intl-universal';
 import { inject, observer } from 'mobx-react';
@@ -33,6 +33,7 @@ interface SearchState {
 @observer
 class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchState> {
   private storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
+  private scrollref = createRef<HTMLDivElement>();
   public state = {
     searchItems: [],
     type: ''
@@ -236,6 +237,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     const { myfilter, paginationTotalPages } = this.props.searchStore!;
     const IDHtml = document.getElementById('searchListInfo')! as HTMLElement;
     let searchItemsStet = this.state.searchItems as Array<Search>;
+    this.props.searchStore!.scroll = Math.abs(IDHtml.scrollTop);
     if (IDHtml.scrollHeight - Math.abs(IDHtml.scrollTop) === IDHtml.clientHeight) {
       myfilter.page = myfilter.page! + 1;
       if (myfilter.page < paginationTotalPages + 1) {
@@ -264,8 +266,9 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     if (this.props.isFilter) {
       this.forceUpdate();
     }
+    const classNameT = (this.props.type === 'ARTICLE') ? 'contentListSearch articlesList' : 'contentListSearch';
     return (
-      <div className="contentListSearch" id="searchListInfo">
+      <div className={classNameT} id="searchListInfo" ref={this.scrollref}>
         {searchLength && this.renderSwitchContentList()}
         {!searchLength && this.renderEmpty()}
       </div>
