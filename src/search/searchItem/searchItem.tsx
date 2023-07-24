@@ -237,7 +237,7 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
         history.push(`/teaching-paths/edit/${copyId}`);
       }
     }
-    history.push(`/teaching-paths/view/${id}`);
+    // history.push(`/teaching-paths/view/${id}`);
   }
 
   public MycopyAssignment = async () => {
