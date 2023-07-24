@@ -30,6 +30,17 @@ class ArticleContent extends Component<Props> {
       </li>
     );
   }
+  public lvlArticlesEmpty = () => {
+    const link = `${process.env.REACT_APP_WP_URL}?p=${this.props.item.id}`;
+    const name = intl.get('preview.teaching_path.read article');
+    return (
+      <li>
+        <a className="CreateButton" href={link} target="_blank">
+          {name}
+        </a>
+      </li>
+    );
+  }
   public relatedArticles = () => {
     const {
         relatedArticles
@@ -97,6 +108,7 @@ class ArticleContent extends Component<Props> {
         goals,
         lvlArticles
     } = this.props.item;
+    const lengtArticles = (lvlArticles.length === 0) ? false : true;
     return (
       <div className="cardTemplateArticle">
         <div className="cardTemplateArticle__header">
@@ -108,7 +120,10 @@ class ArticleContent extends Component<Props> {
           </div>
           <div className="cardTemplateArticle__header__bottom">
             <div className="links">
-              <ul>{lvlArticles.map(this.lvlArticles)}</ul>
+              <ul>
+                {lengtArticles && lvlArticles.map(this.lvlArticles)}
+                {!lengtArticles && this.lvlArticlesEmpty()}
+              </ul>
             </div>
             <div className="relateds">
                 <h3>{intl.get('assignment preview.Related')}</h3>
