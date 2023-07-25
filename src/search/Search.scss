@@ -132,3 +132,28 @@
         }
     }
 }
+
+@media (max-width: 800px) {
+    .SearchPage__header__bottom .renderTabs {
+        width: 100%;
+        overflow-x: scroll;
+    }
+    .contentListSearch .Inside.Inside--horizontal {
+        min-height: auto;
+        height: auto;
+    }
+    .contentListSearch .Inside .cardInfoItem .cardInfoItem--horizontal {
+        display: block;
+        min-height: auto;
+        height: auto;
+    }
+    .contentListSearch .Inside .cardInfoItem__right .subjectItems .subjectItem {
+        margin-bottom: 5px;
+    }
+    .contentListSearch .Inside .cardInfoItem__right {
+        padding: 5px;
+    }
+    .contentListSearch .Inside .cardInfoItem__right .subjectItems {
+        flex-wrap: wrap;
+    }
+}

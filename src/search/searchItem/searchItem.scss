@@ -634,7 +634,7 @@
             padding: 20px;
             background: white;
             overflow: auto;
-            height: calc(100vh - 400px);
+            height: calc(100vh - 385px) !important;
             .entityInfoBlock {
                 display: -webkit-inline-box;
                 max-width: 46%;

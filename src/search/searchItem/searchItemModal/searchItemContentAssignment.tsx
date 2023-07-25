@@ -725,8 +725,8 @@ class AssignmentContent extends Component<Props, State> {
                 <img src={person} alt="question" />
                 <p>{`${intl.get('preview.teaching_path.headers.by')}`} {this.state.author ? this.state.author : ''}</p>
               </div>
-              {showPublishDate && this.renderPublishDate(this.state.createdAt)}
-              {this.renderLangs()}
+              {showPublishDate && this.state.createdAt && this.renderPublishDate(this.state.createdAt)}
+              {this.state.translations.length > 0 && this.renderLangs()}
             </div>
             <div className="entityDescription">
               <div className="partsInfoDescription">

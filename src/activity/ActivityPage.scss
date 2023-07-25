@@ -17,7 +17,7 @@ $second-column-with-desktop: 212px;
       border: 1px solid #D3D9DE;
       padding: 15px;
       width: calc(100% - 140px);
-      .active {
+      &.active {
         width: 100%;
       }
       img {
@@ -263,6 +263,9 @@ $second-column-with-desktop: 212px;
   }
   .ActivityPage__searchBar__left {
     width: calc(100% - 125px);
+    &.active {
+      width: 100%;
+    }
   }
   .ActivityPage__searchBar {
     margin-top: 10px;
