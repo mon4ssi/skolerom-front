@@ -32,6 +32,7 @@ import closeicon from 'assets/images/close-button.svg';
 import './Search.scss';
 const number2 = 2;
 const number3 = 3;
+const number13 = 13;
 interface SearchProps {
   searchStore?: SearchStore;
   type : string;
@@ -580,8 +581,32 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
         this.setState({
           useSearch: true
         });
+        this.featchFilters();
+        if (val.length === 0) {
+          this.setState({
+            useSearch: false
+          });
+        }
+      }
+    }
+  }
+  public handleInputSearchQueryonKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const { history } = this.props;
+    const val = e.currentTarget.value;
+    if (lettersNoEn(val)) {
+      this.setState({ searchQueryValue: e.currentTarget.value });
+      if (e.key === 'Enter' || e.keyCode === number13) {
         QueryStringHelper.set(this.props.history, QueryStringKeysSearch.SEARCH, val);
         QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+        this.props.searchStore!.myfilter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
+        this.setState({
+          useSearch: true
+        });
+        if (val.length === 0) {
+          this.setState({
+            useSearch: false
+          });
+        }
         this.featchFilters();
       }
     }
@@ -618,6 +643,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
                 placeholder={placeholder}
                 value={this.state.searchQueryValue}
                 onChange={this.handleInputSearchQuery}
+                onKeyUp={this.handleInputSearchQueryonKeyUp}
                 aria-labelledby="searchfilterInput"
                 id="SendFilter"
                 aria-required="true"

@@ -21,7 +21,7 @@ class ArticleContent extends Component<Props> {
   public close = () => this.props.onClose();
   public lvlArticles = (item: LvlData) => {
     const link = `${process.env.REACT_APP_WP_URL}?p=${item.id}`;
-    const name = (this.props.item!.lvlArticles.length > 1) ? `${intl.get('assignment preview.Level')} ${item.level}` : intl.get('preview.teaching_path.read article');
+    const name = (this.props.item!.lvlArticles.length > 1) ? `${intl.get('assignment preview.Level less')} ${item.level}` : intl.get('preview.teaching_path.read article');
     return (
       <li>
         <a className="CreateButton" href={link} target="_blank">

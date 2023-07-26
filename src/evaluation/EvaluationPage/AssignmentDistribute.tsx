@@ -9,6 +9,7 @@ import { AssignmentDistribute as AssignmentDistributeClass } from 'assignment/As
 import clockDark from 'assets/images/clock-dark.svg';
 import clockGray from 'assets/images/clock-gray.svg';
 import leaf from 'assets/images/leaf-white.svg';
+import listPlaceholderImg from 'assets/images/list-placeholder.svg';
 
 import './AssignmentDistribute.scss';
 import { UIStore } from 'locales/UIStore';
@@ -123,7 +124,7 @@ export class AssignmentDistribute extends Component<Props> {
         <div className="AssignmentDistribute">
           <div className="AssignmentDistribute__block AssignmentDistribute__blockTop">
             <div className="AssignmentDistribute__imageContainer">
-              <img src={distribute.image || leaf} alt="distribute-img" className={imageClasses}/>
+              <img src={distribute.image || listPlaceholderImg} alt="distribute-img" className={imageClasses}/>
             </div>
             <div className="AssignmentDistribute__textBlock AssignmentDistribute__title">{distribute.title}</div>
             <div className="AssignmentDistribute__textBlock AssignmentDistribute__questions AssignmentDistribute__questions_mobile">
