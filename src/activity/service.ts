@@ -19,10 +19,6 @@ export class ActivityService {
     return this.activityRepo.getSlider(role);
   }
 
-  public async getIframeContent(): Promise<String> {
-    return this.activityRepo.getIframeContent();
-  }
-
   public async getNewestAssignments(filter: Filter): Promise<Array<Assignment>> {
     return this.activityRepo.getNewestAssignments(filter);
   }

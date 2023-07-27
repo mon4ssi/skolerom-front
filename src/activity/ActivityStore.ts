@@ -118,12 +118,6 @@ export class ActivityStore {
   }
 
   @action
-  public getIframeContent = async () => {
-    const url = await this.activityList.getIframeContent();
-    this._urliframe = url;
-  }
-
-  @action
   public loadNewestTeachingPaths = async () => {
     this._newestTeachingPathState = StoreState.LOADING;
     try {

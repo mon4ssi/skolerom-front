@@ -20,7 +20,7 @@ class ArticleContent extends Component<Props> {
   public handleClickOutside = () => this.props.onClose();
   public close = () => this.props.onClose();
   public lvlArticles = (item: LvlData) => {
-    const link = `${process.env.REACT_APP_WP_URL}?p=${item.id}`;
+    const link = item.url;
     const name = (this.props.item!.lvlArticles.length > 1) ? `${intl.get('assignment preview.Level less')} ${item.level}` : intl.get('preview.teaching_path.read article');
     return (
       <li>
@@ -31,7 +31,8 @@ class ArticleContent extends Component<Props> {
     );
   }
   public lvlArticlesEmpty = () => {
-    const link = `${process.env.REACT_APP_WP_URL}?p=${this.props.item.id}`;
+    // const link = `${process.env.REACT_APP_WP_URL}?p=${this.props.item.id}`;
+    const link = this.props.item.url!;
     const name = intl.get('preview.teaching_path.read article');
     return (
       <li>

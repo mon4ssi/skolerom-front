@@ -38,6 +38,7 @@ export interface SimpleGoalData {
 export interface LvlData {
   level: number;
   id: number;
+  url: string;
 }
 
 export interface SearchArgs {
@@ -59,6 +60,7 @@ export interface SearchArgs {
   relatedArticles?: Array<number>;
   relatedTp?: Array<number>;
   relatedAssignment?: Array<number>;
+  url?: string;
 }
 
 export class Search {
@@ -80,6 +82,7 @@ export class Search {
   public relatedArticles: Array<number>;
   public relatedTp: Array<number>;
   public relatedAssignment: Array<number>;
+  public url: string | null | undefined;
   constructor(args: SearchArgs) {
     this.type = args.type;
     this.id = args.id;
@@ -99,6 +102,7 @@ export class Search {
     this.relatedArticles = args.relatedArticles || [];
     this.relatedTp = args.relatedTp || [];
     this.relatedAssignment = args.relatedAssignment || [];
+    this.url = args.url;
   }
 }
 

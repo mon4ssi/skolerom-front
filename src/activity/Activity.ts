@@ -105,7 +105,6 @@ export interface ActivityRepo {
   getActiveTeachingPaths(): Promise<ActiveTeachingPathsDTO>;
   getEvaluatedAnswers(): Promise<EvaluatedAnswersDTO>;
   getRecentActivity(): Promise<Array<RecentActivity>>;
-  getIframeContent(): Promise<String>;
 }
 
 export enum RecentActivityAction {
@@ -205,7 +204,4 @@ export class ActivityList {
     return this.activityService.getSlider(role);
   }
 
-  public async getIframeContent() {
-    return this.activityService.getIframeContent();
-  }
 }

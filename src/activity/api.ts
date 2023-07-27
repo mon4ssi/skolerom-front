@@ -55,11 +55,6 @@ export class ActivityApi implements ActivityRepo {
     return new SliderWidgetDomain(sliderData);
   }
 
-  public async getIframeContent(): Promise<String> {
-    const url = (await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/mainapp/v1/details`)).data.data.url;
-    return url;
-  }
-
   public async getRecentActivity() {
     const response = await API.get('api/teacher/dashboard/task-activity');
 
