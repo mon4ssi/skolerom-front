@@ -33,6 +33,7 @@ import './Search.scss';
 const number2 = 2;
 const number3 = 3;
 const number13 = 13;
+const number500 = 500;
 interface SearchProps {
   searchStore?: SearchStore;
   type : string;
@@ -581,7 +582,11 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
         this.setState({
           useSearch: true
         });
-        this.featchFilters();
+        if (this.state.usedFiltereds) {
+          setTimeout(() => {
+            this.featchFilters();
+          }, number500);
+        }
         if (val.length === 0) {
           this.setState({
             useSearch: false
