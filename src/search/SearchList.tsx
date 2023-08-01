@@ -14,8 +14,10 @@ import { injector } from 'Injector';
 import { UserType } from 'user/User';
 import { UserService } from 'user/UserService';
 import { BooleanFilter, SortingFilter, QueryStringKeysSearch, StoreState } from 'utils/enums';
+import { DEBOUNCE_TIME, postperpage } from 'utils/constants';
 import { StorageInteractor, STORAGE_INTERACTOR_KEY } from '../utils/storageInteractor';
 import { parseQueryString } from 'utils/queryString';
+import { SkeletonLoader } from 'components/common/SkeletonLoader/SkeletonLoader';
 
 import searchIcon from 'assets/images/search.svg';
 import searchPinkIcon from 'assets/images/searchpink.svg';
@@ -34,6 +36,8 @@ const number2 = 2;
 const number3 = 3;
 const number13 = 13;
 const number500 = 500;
+const TEACHING_PATHS_PER_PAGE_IN_LIST = postperpage;
+
 interface SearchProps {
   searchStore?: SearchStore;
   type : string;
@@ -617,6 +621,16 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     }
   }
 
+  public Skeleton = () => {
+    const SkeletonArray: Array<number> = new Array(TEACHING_PATHS_PER_PAGE_IN_LIST).fill(0);
+    return SkeletonArray.map((item, index) => (
+      <SkeletonLoader
+        key={index}
+        className="SearchListItem__skeleton"
+      />
+    ));
+  }
+
   public cleanSearchInput = async () => {
     if (this.searchRef) {
       this.searchRef.current!.value = '';
@@ -637,6 +651,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     const classbtnlang = this.state.filterModalLang ? 'CreateButton active' : 'CreateButton active';
     const placeholder = intl.get('assignments search.Search');
     const langText = intl.get('publishing_page.languages');
+    const classInsideBody = (this.props.type === 'ARTICLE') ? (!this.state.usedFiltereds) ? 'SearchPage__body body_ARTICLES' : 'SearchPage__body' : 'SearchPage__body';
     return (
       <div className="SearchPage">
         <div className="SearchPage__header">
@@ -673,8 +688,9 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
             {this.renderTabs()}
           </div>
         </div>
-        <div className="SearchPage__body" ref={this.refBody}>
+        <div className={classInsideBody} ref={this.refBody}>
           {this.state.usedFiltereds && <SearchComponentList items={this.state.items} isFilter={this.state.isFilter} type={this.props.type} />}
+          {!this.state.usedFiltereds && this.Skeleton()}
         </div>
         {this.state.filtersModalTp && this.filters()}
       </div>

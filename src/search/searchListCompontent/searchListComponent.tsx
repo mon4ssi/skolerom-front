@@ -123,9 +123,9 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
       <div className="emptyTeachingPaths">{intl.get('edit_teaching_path.No results found')}</div>
     );
   }
-  public renderContentListArticle(item : Search) {
+  public renderContentListArticle(item : Search, index: number) {
     return (
-      <div key={item.id} className="Inside">
+      <div key={item.id} className="Inside" data-index={index}>
         <SearchItemComponent item={item} type="ARTICLE" />
       </div>
     );

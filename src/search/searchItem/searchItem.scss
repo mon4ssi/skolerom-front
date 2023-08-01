@@ -728,6 +728,25 @@
         margin-right: 20px;
     }
 }
+
+.body_ARTICLES {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.body_ARTICLES .css-1y8mk30-SkeletonTheme {
+    width: calc(16.66% - 20px);
+    flex: none;
+    height: 250px;
+}
+.body_ARTICLES .css-1y8mk30-SkeletonTheme .SearchListItem__skeleton {
+    height: 250px !important;
+}
+.SearchPage__body {
+    .css-1y8mk30-SkeletonTheme {        
+        margin-bottom: 20px;
+    }
+}
 @media screen and (max-width: 2350px) {
     .contentListSearch {
         .Inside {
@@ -759,6 +778,9 @@
             margin-right: 20px;
         }
     }
+    .body_ARTICLES .css-1y8mk30-SkeletonTheme {
+        width: calc(20% - 20px);
+    }
 }
 @media screen and (max-width: 1500px) {
     .contentListSearch {
@@ -766,6 +788,9 @@
             width: calc(100% / 4 - 20px);
             margin-right: 20px;
         }
+    }
+    .body_ARTICLES .css-1y8mk30-SkeletonTheme {
+        width: calc(25% - 20px);
     }
 }
 @media screen and (max-width: 1250px) {
@@ -775,6 +800,10 @@
             margin-right: 20px;
         }
     }
+    
+    .body_ARTICLES .css-1y8mk30-SkeletonTheme {
+        width: calc(33.33% - 20px);
+    }
 }
 @media screen and (max-width: 1000px) {
     .contentListSearch {
@@ -782,6 +811,9 @@
             width: calc(100% / 3 - 20px);
             margin-right: 20px;
         }
+    }
+    .body_ARTICLES .css-1y8mk30-SkeletonTheme {
+        width: calc(33.33% - 20px);
     }
 }
 @media screen and (max-width: 870px) {
@@ -798,6 +830,9 @@
             width: calc(100% / 2 - 20px);
             margin-right: 20px;
         }
+    }
+    .body_ARTICLES .css-1y8mk30-SkeletonTheme {
+        width: calc(50% - 20px);
     }
 }
 
@@ -824,6 +859,9 @@
         width: calc(50% - 5px);
     }
     
+    .body_ARTICLES .css-1y8mk30-SkeletonTheme {
+        width: calc(50% - 20px);
+    }
 }
 
 
@@ -833,6 +871,10 @@
             width: calc(100% / 2 - 20px);
             margin-right: 20px;
         }
+    }
+    
+    .body_ARTICLES .css-1y8mk30-SkeletonTheme {
+        width: calc(50% - 20px);
     }
 }
 
@@ -845,10 +887,17 @@
         width: 100% !important;
         margin-bottom: 10px !important;
     }
+    .contentListSearch.articlesList {
+        margin-right: 0px !important;
+    }
     .contentListSearch {
         .Inside {
             width: 100%;
             margin-right: 0px;
         }
+    }
+    
+    .body_ARTICLES .css-1y8mk30-SkeletonTheme {
+        width: 100%;
     }
 }

@@ -81,6 +81,7 @@
                     border-bottom: solid 3px #ffffff;
                     display: flex;
                     align-items: center;
+                    white-space: nowrap;
                     img {
                         width: 18px;
                         margin-right: 5px;
@@ -132,7 +133,6 @@
         }
     }
 }
-
 @media (max-width: 800px) {
     .SearchPage__header__bottom .renderTabs {
         width: 100%;

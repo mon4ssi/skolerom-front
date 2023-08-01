@@ -23,8 +23,23 @@ import { AssignmentService, ASSIGNMENT_SERVICE } from 'assignment/service';
 import more from 'assets/images/hovered-more.svg';
 import lisplacehoder from 'assets/images/list-placeholder.svg';
 import './searchItem.scss';
+
+const number7 = 7;
+const number6 = 6;
+const number5 = 5;
+const number4 = 4;
 const number3 = 3;
 const number2 = 2;
+const number2150 = 2150;
+const number1800 = 1800;
+const number1500 = 1500;
+const number1250 = 1250;
+const number750 = 750;
+const number400 = 400;
+const number250 = 250;
+const number10 = 10;
+const number700 = 700;
+
 interface SearchProps {
   item: Search;
   type: string;
@@ -142,10 +157,62 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
     });
   }
 
+  public calculateline = (width: number) => {
+    if (width >= number2150) {
+      return number7;
+    }
+    if (number1800 < width && width < number2150) {
+      return number6;
+    }
+    if (number1500 < width && width <= number1800) {
+      return number5;
+    }
+    if (number1250 < width && width <= number1500) {
+      return number4;
+    }
+    if (number750 < width && width <= number1250) {
+      return number3;
+    }
+    if (number400 < width && width <= number750) {
+      return number2;
+    }
+    if (width <= number400) {
+      return 1;
+    }
+    return number7;
+  }
+
+  public ubicarNumero = (numero: number, multiplo: number) => {
+    const rango = Math.floor((numero - 1) / multiplo) + 1;
+    return rango;
+  }
+
   public openArticle = () => {
-    this.setState({
-      article: true
-    });
+    this.setState(
+      {
+        article: true
+      },
+      () => {
+        const searchListInfo = document.getElementById('searchListInfo');
+        const activeArticle = document.getElementById('activeArticle');
+        const line = this.calculateline(window.innerWidth);
+        // this.ref.current!.scrollHeight - (this.ref.current!.clientHeight * SCROLL_OFFSET) <= this.ref.current!.scrollTop
+        if (searchListInfo) {
+          if (activeArticle) {
+            setTimeout(() => {
+              const index = Number(activeArticle.closest('.Inside')!.getAttribute('data-index')) + 1;
+              // const indexNotZero = (index == 0) ? 1 : index;
+              const ubication = this.ubicarNumero(index, line);
+              const multiplesimple = number250 * ubication + number10 * ubication + number10 * (ubication - 1);
+              searchListInfo.scroll({
+                top: multiplesimple,
+                behavior: 'smooth'
+              });
+            }, number700);
+          }
+        }
+      }
+    );
   }
 
   public openSideTP = () => {
