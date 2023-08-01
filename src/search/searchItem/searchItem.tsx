@@ -38,7 +38,7 @@ const number750 = 750;
 const number400 = 400;
 const number250 = 250;
 const number10 = 10;
-const number700 = 700;
+const number700 = 200;
 
 interface SearchProps {
   item: Search;
