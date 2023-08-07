@@ -65,7 +65,7 @@
                 height: 0px;
                 transition: 0.8s;
                 &.active {
-                    height: 600px;
+                    height: 630px;
                     margin-top: 20px;
                 }
                 .cardTemplateArticle {
@@ -84,10 +84,11 @@
                             align-items: flex-start;
                             margin-bottom: 20px;
                             .description {
-                                max-width: 900px;
+                                max-width: 650px;
                                 font-weight: 300;
                                 font-size: 16px;
                                 line-height: 22px;
+                                color: #0a003d;
                             }
                             .close {
                                 border: solid 1px black;
@@ -97,9 +98,9 @@
                         }
                         &__bottom {
                             display: flex;
-                            justify-content: space-between;
                             align-items: center;
                             .links {
+                                margin-right: 40px;
                                 ul {
                                     display: flex;
                                     a {
@@ -107,6 +108,8 @@
                                         align-items: center;
                                         margin-right: 10px;
                                         background: #E2017B;
+                                        color: white;
+                                        font-size: 14px;
                                     }
                                 }
                             }
@@ -132,12 +135,13 @@
                     }
                     &__body {
                         background: #e6e9ed;
-                        padding: 20px;
+                        padding: 30px 20px;
                         box-sizing: border-box;
                         height: 400px;
                         overflow-y: scroll;
                         &__top {
                             display: flex;
+                            margin-bottom: 10px;
                         }
                         &__item {
                             flex: 1;
