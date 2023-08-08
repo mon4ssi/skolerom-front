@@ -21,7 +21,7 @@ class ArticleContent extends Component<Props> {
   public close = () => this.props.onClose();
   public lvlArticles = (item: LvlData) => {
     const link = item.url;
-    const name = (this.props.item!.lvlArticles.length > 1) ? `${intl.get('assignment preview.Level less')} ${item.level}` : intl.get('preview.teaching_path.read article');
+    const name = (this.props.item!.lvlArticles.length > 1) ? `${intl.get('assignment preview.Level less')} ${item.level}` : intl.get('preview.teaching_path.read');
     return (
       <li>
         <a className="CreateButton" href={link} target="_blank">
@@ -104,6 +104,7 @@ class ArticleContent extends Component<Props> {
     const {
         description,
         grades,
+        coreElements,
         subjects,
         topics,
         goals,
@@ -140,17 +141,6 @@ class ArticleContent extends Component<Props> {
           <div className="cardTemplateArticle__body__top">
             <div className="cardTemplateArticle__body__item">
               <h2>
-                <img src={gradeImg} />
-                {intl.get('generals.grade')}
-              </h2>
-              <div className="list">
-                <ul>
-                    {grades.map(this.renderListNumberGrade)}
-                </ul>
-              </div>
-            </div>
-            <div className="cardTemplateArticle__body__item">
-              <h2>
                 <img src={tagsImg} />
                 {intl.get('new assignment.Subject')}
               </h2>
@@ -161,15 +151,26 @@ class ArticleContent extends Component<Props> {
               </div>
             </div>
             <div className="cardTemplateArticle__body__item">
-                <h2>
-                    <img src={cogsImg} />
-                    {intl.get('new assignment.greep.subjects')}
-                </h2>
-                <div className="list">
-                    <ul>
-                        {topics.map(this.renderListString)}
-                    </ul>
-                </div>
+              <h2>
+                <img src={gradeImg} />
+                {intl.get('new assignment.greep.core')}
+              </h2>
+              <div className="list">
+                <ul>
+                  {coreElements.map(this.renderListString)}
+                </ul>
+              </div>
+            </div>
+            <div className="cardTemplateArticle__body__item">
+              <h2>
+                <img src={cogsImg} />
+                {intl.get('new assignment.greep.subjects')}
+              </h2>
+              <div className="list">
+                <ul>
+                  {topics.map(this.renderListString)}
+                </ul>
+              </div>
             </div>
           </div>
           <div className="cardTemplateArticle__body__bottom">
