@@ -305,7 +305,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
       });
 
       if (deleteConfirm) {
-        parentNode!.removeChild(node);
+        parentNode!.removeChildUnique(node);
       }
     } else {
       const deleteConfirm = await Notification.create({
