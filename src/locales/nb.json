@@ -2,6 +2,7 @@
   "loading": "Laster...",
   "assignment": "oppgave",
   "teaching path": "læringssti",
+  "new": "ny",
   "login_page": {
     "Log in to Temabok": "Logg inn på Skolerom",
     "Log in with Feide": "Logg inn med Feide",
@@ -46,6 +47,7 @@
       "read close": "Skjul beskrivelse",
       "read again": "Les igjen",
       "read article": "Les artikkelen",
+      "read": "LES ARTIKKEL",
       "read external": "Åpne lenke"
     },
     "assignment": {
@@ -164,7 +166,9 @@
     }
   },
   "sidebar": {
-    "Activity": "Aktivitet",
+    "Activity": "Hjem",
+    "Search": "Søk",
+    "Articles": "Artikler",
     "Teaching Paths": "Læringsstier",
     "Assignments": "Oppgaver",
     "Students": "Elever",
@@ -219,6 +223,8 @@
     "versions": "versjoner",
     "By date": "Etter dato",
     "Level": "Spor",
+    "Level less": "LES SPOR",
+    "Related": "Relatert innhold",
     "m": "min.",
     "que": "spm.",
     "VIEWS": "Visninger",

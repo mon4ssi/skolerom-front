@@ -39,6 +39,7 @@ import { UIStore } from 'locales/UIStore';
 import { LoginStore } from 'user/view/LoginStore';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
+import { SearchStore } from 'search/SearchStore';
 import { StudentsListStore } from 'student/StudentsListStore';
 import { ActivityStore } from 'activity/ActivityStore';
 import { UserType } from 'user/User';
@@ -420,6 +421,7 @@ export class App extends Component {
         teachingPathEvaluationStore={new TeachingPathEvaluationStore()}
         studentsListStore={new StudentsListStore()}
         activityStore={new ActivityStore()}
+        searchStore={new SearchStore()}
       >
         <LocalizedApp />
       </Provider>

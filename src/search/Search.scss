@@ -1,0 +1,159 @@
+.SearchPage {
+    &__header {
+        border-radius: 8px;
+        background-color: #FFF;
+        border: 1px solid #D3D9DE;
+        margin-bottom: 20px;
+        padding-left: 20px;
+        padding-top: 20px;
+        padding-right: 20px;
+        &__top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            &__left {
+                width: calc(100% - 340px);
+                position: relative;
+                img {
+                    position: absolute;
+                    top: 10px;
+                    left: 10px;
+                    &.closeIcon {
+                        top: 5px;
+                        left: auto;
+                        right: 10px;
+                        cursor: pointer;
+                    }
+                }
+                input {
+                    width: 100%;
+                    border-radius: 28px;
+                    border: solid 1px #cccccc;
+                    padding-left: 35px;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                }
+            }
+            &__right {
+                display: flex;
+                align-items: center;
+                width: 350px;
+                justify-content: flex-end;
+                position: relative;
+                .CreateButton {
+                    background: #e7ecef;
+                    padding: 5px 10px;
+                    border: 1px solid #939fa7;
+                    color: #0B2541;
+                    display: flex;
+                    align-items: center;
+                    margin-left: 10px;
+                    min-width: 160px;
+                    justify-content: center;
+                    font-weight: 300;
+                    img {
+                        max-width: 20px;
+                        margin-right: 10px;
+                    }
+                    &:hover {
+                        img {
+                            filter: brightness(0)invert(1);
+                        }
+                    }
+                    &.active {
+                        background: #000;
+                        color: white;
+                        img {
+                            filter: brightness(0)invert(1);
+                        }
+                    }
+                }
+            }
+        }
+        &__bottom {
+            position: relative;
+            .renderTabs {
+                display: flex;
+                .renderTab {
+                    font-size: 15px;
+                    margin-right: 20px;
+                    padding-bottom: 8px;
+                    border-bottom: solid 3px #ffffff;
+                    display: flex;
+                    align-items: center;
+                    white-space: nowrap;
+                    img {
+                        width: 18px;
+                        margin-right: 5px;
+                    }
+                    &.active {
+                        border-bottom: solid 3px #E2017B;
+                        color: #E2017B;
+                    }
+                }
+            }
+        }
+    }
+}
+.emptyTeachingPaths {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 300;
+    height: 100%;
+}
+.contentListSearch.articlesList {
+    margin-right: -18px;
+}
+.absModalTinker {
+    position: absolute;
+    background-color: #FFF;
+    border: 1px solid #D3D9DE;
+    top: 45px;
+    border-radius: 7px;
+    overflow: hidden;
+    right: 0;
+    z-index: 2;
+    button {
+        display: block;
+        width: 100%;
+        background: white;
+        border-bottom: solid 1px #d7d7d769;
+        padding: 5px 10px;
+        min-width: 150px;
+        box-sizing: border-box;
+        &:hover, &.active {
+            background: #E7ECEF;
+            color: #E2017B;
+        }
+        &.active {
+            pointer-events: none;
+        }
+    }
+}
+@media (max-width: 800px) {
+    .SearchPage__header__bottom .renderTabs {
+        width: 100%;
+        overflow-x: scroll;
+    }
+    .contentListSearch .Inside.Inside--horizontal {
+        min-height: auto;
+        height: auto;
+    }
+    .contentListSearch .Inside .cardInfoItem .cardInfoItem--horizontal {
+        display: block;
+        min-height: auto;
+        height: auto;
+    }
+    .contentListSearch .Inside .cardInfoItem__right .subjectItems .subjectItem {
+        margin-bottom: 5px;
+    }
+    .contentListSearch .Inside .cardInfoItem__right {
+        padding: 5px;
+    }
+    .contentListSearch .Inside .cardInfoItem__right .subjectItems {
+        flex-wrap: wrap;
+    }
+}

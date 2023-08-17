@@ -10,6 +10,32 @@
   background: $color-white;
   position: relative;
   z-index: 16;
+  &__left {
+    display: flex;
+    .AppHeader__block {
+      margin-right: 15px;
+    }
+  }
+  &__right {
+    display: flex;
+    align-items: center;
+    .barSearch {
+      position: relative;
+      img {
+        position: absolute;
+        pointer-events: none;
+        top: 11px;
+        left: 13px;
+      }
+      input {
+        border-radius: 28px;
+        border: solid 1px #cccccc;
+        padding: 10px 5px;
+        padding-left: 37px;
+        width: 180px;
+     } 
+    }
+  }
   .copyButton {
     button {
       margin: 0px 5px;
@@ -242,7 +268,7 @@ li.AppHeader__dropdownItem__subItem:hover {
 }
 
 .AppHeader__modal_animated-exit-active {
-  transform: scale(0.8) translateY(-20px);
+  transform: scale(0.85) translateY(-20px);
   opacity: 0;
 }
 
@@ -500,5 +526,49 @@ li.AppHeader__dropdownItem__subItem:hover {
         margin-left: 20px;
       }
     }
+  }
+}
+
+@media (max-width: 1158px) {
+  .AppHeader__right .barSearch input {
+    width: 120px;
+  }
+  .AppHeader__role {
+    display: none;
+  }
+  .AppHeader__left .AppHeader__block {
+    margin-right: 0px;
+  }
+}
+
+@media (max-width: 987px) {
+  .AppHeader__right .barSearch {
+    display: none;
+  }
+}
+
+@media (max-width: 870px) {
+  .AppHeader__left {
+    display: block;
+    width: 0px;
+  }
+  .AppHeader__userMenuButton img {
+    width: 2.5px;
+  }
+  .AppHeader__userMenuButton {
+      border: solid 1.5px black;
+      border-radius: 50%;
+      width: 21px;
+      height: 21px;
+      padding-left: 0px;
+      justify-content: center;
+      margin-left: 5px;
+  }
+  .AppHeader__right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .AppHeader__navigationItem {
+    display: none;
   }
 }
