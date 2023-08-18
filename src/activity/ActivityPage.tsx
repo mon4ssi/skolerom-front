@@ -333,7 +333,6 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
   public iframeRender = () => {
     const { activityStore, role } = this.props;
     // const url = activityStore!.urliframe.toString();
-    // const url = `${process.env.REACT_APP_WP_URL}/test-nd/test-nd.html`;
     const url = `${process.env.REACT_APP_WP_URL}/geografi-for-videregaende-skole/demografiske-endringer-og-levekar`;
     const anyclass = this.state.chargeIframe ? 'iframeContent' : 'iframeContent hidden';
     return (
