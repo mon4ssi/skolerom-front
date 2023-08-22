@@ -894,6 +894,18 @@ export class EditableTeachingPathNode extends TeachingPathNode {
   }
 
   @action
+  public removeChildUnique = (node: EditableTeachingPathNode) => {
+    if (node.children && node.children.length > 0) {
+      const myChild = node.children;
+      this._children = this.children.filter(child => node !== child);
+      this._children = this._children.concat(myChild);
+    } else {
+      this._children = this.children.filter(child => node !== child);
+    }
+    this.draftTeachingPath.save();
+  }
+
+  @action
   public setSelectedQuestion = (title: string) => {
     this._selectQuestion = title;
     this.draftTeachingPath.save();

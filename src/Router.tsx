@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect, Route, Switch, RouteComponentProps } from 'react-router-dom';
+import { injector } from 'Injector';
 
 import { ActivityPage } from './activity/ActivityPage';
 import { SearchPage } from './search/SearchPage';
