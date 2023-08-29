@@ -143,7 +143,9 @@ const buildAssignmentItemDTO = (
   grepMaintopic: item.grepMaintopic,
   grepReadingInsubject: item.grepReadingInsubject,
   hasGuidance: item.hasGuidance,
-  open: item.open
+  open: item.open,
+  // tslint:disable-next-line: variable-name
+  locale_id: item.locale_id
 });
 
 const buildDomainItemDTO = (
