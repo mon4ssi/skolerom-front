@@ -451,14 +451,13 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
         break;
       case 'TEACHING-PATH':
         return (
-          <div className="cardInfoItem cardInfoItem--relative">
-            <div className="cardInfoItem--horizontal" onClick={this.openSideTP}>
-              <div className="cardInfoItem__left">
+          <div className="cardInfoItem cardInfoItem--TP">
+            <div className="cardInfoItem__card" onClick={this.openSideTP}>
+              <div className="cardInfoItem__imagen">
                 <img src={myimg} />
-                <h2>{title}</h2>
               </div>
-              <div className="cardInfoItem__right">
-                {this.renderSubject(subjects)}
+              <div className="cardInfoItem__description">
+                <div className="title"><h2>{title}</h2></div>
               </div>
             </div>
             <div className="cardInfoItem--absolute">

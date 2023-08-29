@@ -139,7 +139,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
   public renderContentListTP(item : Search) {
     return (
-      <div key={item.id} className="Inside Inside--horizontal">
+      <div key={item.id} className="Inside">
         <SearchItemComponent item={item} type="TEACHING-PATH" />
       </div>
     );
@@ -266,7 +266,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     if (this.props.isFilter) {
       this.forceUpdate();
     }
-    const classNameT = (this.props.type === 'ARTICLE') ? 'contentListSearch articlesList' : 'contentListSearch';
+    const classNameT = (this.props.type === 'ARTICLE' || this.props.type === 'TEACHING-PATH') ? 'contentListSearch articlesList' : 'contentListSearch';
     return (
       <div className={classNameT} id="searchListInfo" ref={this.scrollref}>
         {searchLength && this.renderSwitchContentList()}
