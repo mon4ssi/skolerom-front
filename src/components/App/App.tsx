@@ -352,6 +352,22 @@ class LocalizedApp extends Component<Props> {
       });
     }*/
 
+    if (!loginStore!.currentUser) {
+      const mypathname = window.location.pathname;
+      const myurl = window.location.href;
+      if (myurl.split('login').length === 1) {
+        if (mypathname.split('/')[1] === '') {
+          localStorage.removeItem('urlredirect');
+        } else {
+          if (myurl.split('dataporten').length === 1) {
+            localStorage.setItem('urlredirect', myurl);
+          }
+        }
+      } else {
+        localStorage.removeItem('urlredirect');
+      }
+    }
+
     return (
       <BrowserRouter>
         <div className={`App flexBox fw500 ${isMaintenance ? 'isMaintenance' : ''}`}>

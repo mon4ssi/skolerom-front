@@ -11,6 +11,7 @@ const TEACHING_PATH_REFERRAL_TOKEN = 'teachingPathReferralToken';
 const TEACHING_PATH_ID = 'teachingPathId';
 const ARTICLES_LOCALE_ID = 'articlesLocaleId';
 const TAXONOMY_LOCALE_ID = 'taxonomyLocaleId';
+const REDIRECTURL = 'REDIRECTURL';
 
 export const STORAGE_INTERACTOR_KEY = 'STORAGE_INTERACTOR_KEY';
 
@@ -18,6 +19,14 @@ export class StorageInteractor {
   public setUserWithToken(token: string, user: Object) {
     localStorage.setItem(USER_TOKEN, token);
     localStorage.setItem(USER_DATA, JSON.stringify(user));
+  }
+
+  public setUrlAfterLogin(url: string) {
+    localStorage.setItem(REDIRECTURL, url);
+  }
+
+  public getUrlAfterLogin() {
+    localStorage.getItem(REDIRECTURL);
   }
 
   public getUser(): User | null {
