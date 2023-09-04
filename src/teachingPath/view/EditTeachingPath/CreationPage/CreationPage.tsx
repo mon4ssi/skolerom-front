@@ -260,6 +260,9 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     if (item.type === TeachingPathNodeType.Assignment) {
       imagenType = assignmentImg;
       urlBasic = `/assignments/view/${item.value.id}?preview`;
+      if (item.value.locale_id) {
+        urlBasic = `/assignments/view/${item.value.id}?locale_id=${item.value.locale_id}&preview`;
+      }
     }
     if (item.type === TeachingPathNodeType.Domain) {
       imagenType = domainImg;
