@@ -65,7 +65,7 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
     const { questionaryTeachingPathStore } = this.props;
     questionaryTeachingPathStore!.handleAssignment(true);
     questionaryTeachingPathStore!.pickUpItem(id);
-    const urlbasic = (locale > 0) ? `/assignments/view/${id}?locale_id${locale}` : `/assignments/view/${id}`;
+    const urlbasic = (locale > 0) ? `/assignments/view/${id}?locale_id=${locale}` : `/assignments/view/${id}`;
     this.props.history.push(urlbasic, {
       teachingPath: questionaryTeachingPathStore!.teachingPathId,
       node: questionaryTeachingPathStore!.pickedItemAssignment!.idNode
