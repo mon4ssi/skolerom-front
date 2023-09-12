@@ -64,11 +64,12 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
     this.setState({ isLoadingFinished: false });
   }
 
-  public goToAssignment = (id: number) => () => {
+  public goToAssignment = (id: number, locale: number) => () => {
     const { questionaryTeachingPathStore } = this.props;
     questionaryTeachingPathStore!.handleAssignment(true);
     questionaryTeachingPathStore!.pickUpItem(id);
-    this.props.history.push(`/assignments/view/${id}`, {
+    const urlbasic = (locale > 0) ? `/assignments/view/${id}?locale_id=${locale}` : `/assignments/view/${id}`;
+    this.props.history.push(urlbasic, {
       teachingPath: questionaryTeachingPathStore!.teachingPathId,
       node: questionaryTeachingPathStore!.pickedItemAssignment!.idNode
     });
@@ -77,6 +78,7 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
     const { questionaryTeachingPathStore } = this.props;
     return questionaryTeachingPathStore!.currentListAssignment.map((item) => {
       const passedStyle = item.isSelected ? '' : '';
+      const localeid = (item.locale_id) ? item.locale_id : -1;
       return (
         <div className={passedStyle} key={item.id}>
           <InfoCard
@@ -88,7 +90,7 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
             img={item.featuredImage ? item.featuredImage : listPlaceholderImg}
             numberOfQuestions={item.numberOfQuestions}
             isReadArticle={item.isSelected}
-            onClick={this.goToAssignment(item.id)}
+            onClick={this.goToAssignment(item.id, localeid)}
             hiddeIcons
           />
         </div>

@@ -651,7 +651,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     const classbtnlang = this.state.filterModalLang ? 'CreateButton active' : 'CreateButton active';
     const placeholder = intl.get('assignments search.Search');
     const langText = intl.get('publishing_page.languages');
-    const classInsideBody = (this.props.type === 'ARTICLE') ? (!this.state.usedFiltereds) ? 'SearchPage__body body_ARTICLES' : 'SearchPage__body' : 'SearchPage__body';
+    const classInsideBody = (this.props.type === 'ARTICLE' || this.props.type === 'TEACHING-PATH') ? (!this.state.usedFiltereds) ? 'SearchPage__body body_ARTICLES' : 'SearchPage__body' : 'SearchPage__body';
     return (
       <div className="SearchPage">
         <div className="SearchPage__header">

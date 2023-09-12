@@ -400,6 +400,8 @@ export interface AssignmentArgs {
   isTranslations?: boolean;
   translations?: Array<Translations>;
   originalLocaleId?: number;
+  // tslint:disable-next-line: variable-name
+  locale_id?: number;
 }
 
 export class Assignment {
@@ -467,6 +469,8 @@ export class Assignment {
   @observable protected _isTranslations?: boolean;
   @observable protected _translations?: Array<Translations>;
   @observable protected _originalLocaleId?: number = 0;
+  // tslint:disable-next-line: variable-name
+  @observable protected _locale_id?: number = 0;
 
   constructor(args: AssignmentArgs) {
     this._id = args.id;
@@ -533,6 +537,8 @@ export class Assignment {
     this._translations = args.translations;
     this._isTranslations = args.isTranslations;
     this._originalLocaleId = args.originalLocaleId;
+    // tslint:disable-next-line: variable-name
+    this._locale_id = args.locale_id;
   }
 
   public isOwnedByMe(): boolean {
@@ -795,6 +801,13 @@ export class Assignment {
   @computed
   public get localeId() {
     return this._localeId;
+  }
+
+  @computed
+  // tslint:disable-next-line: variable-name
+  public get locale_id() {
+    // tslint:disable-next-line: variable-name
+    return this._locale_id;
   }
 
   @computed

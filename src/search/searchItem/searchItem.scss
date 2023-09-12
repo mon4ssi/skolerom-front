@@ -313,6 +313,16 @@
             &.cardInfoItem--relative {
                 position: relative;
             }
+            &.cardInfoItem--TP {
+                position: relative;
+                .cardInfoItem--absolute {
+                    top: auto !important;
+                    bottom: 30px;
+                }
+                .cardInfoItem__description {
+                    padding-right: 45px;
+                }
+            }
             .cardInfoItem--horizontal {
                 min-height: 60px;
                 height: 60px;
