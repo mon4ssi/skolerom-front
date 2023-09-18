@@ -39,6 +39,7 @@ import { UIStore } from 'locales/UIStore';
 import { LoginStore } from 'user/view/LoginStore';
 import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
+import { SearchStore } from 'search/SearchStore';
 import { StudentsListStore } from 'student/StudentsListStore';
 import { ActivityStore } from 'activity/ActivityStore';
 import { UserType } from 'user/User';
@@ -351,6 +352,22 @@ class LocalizedApp extends Component<Props> {
       });
     }*/
 
+    if (!loginStore!.currentUser) {
+      const mypathname = window.location.pathname;
+      const myurl = window.location.href;
+      if (myurl.split('login').length === 1) {
+        if (mypathname.split('/')[1] === '') {
+          localStorage.removeItem('urlredirect');
+        } else {
+          if (myurl.split('dataporten').length === 1) {
+            localStorage.setItem('urlredirect', myurl);
+          }
+        }
+      } else {
+        localStorage.removeItem('urlredirect');
+      }
+    }
+
     return (
       <BrowserRouter>
         <div className={`App flexBox fw500 ${isMaintenance ? 'isMaintenance' : ''}`}>
@@ -420,6 +437,7 @@ export class App extends Component {
         teachingPathEvaluationStore={new TeachingPathEvaluationStore()}
         studentsListStore={new StudentsListStore()}
         activityStore={new ActivityStore()}
+        searchStore={new SearchStore()}
       >
         <LocalizedApp />
       </Provider>

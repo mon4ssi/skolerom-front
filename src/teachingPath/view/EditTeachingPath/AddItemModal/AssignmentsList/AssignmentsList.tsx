@@ -77,7 +77,6 @@ class AssignmentItem extends Component<AssignmentProps> {
   public render() {
     const { assignment } = this.props;
     const itemImage = assignment.featuredImage ? assignment.featuredImage : imagePlaceholderImg;
-
     const itemSubject = assignment.subjects.length ?
       assignment.subjects[0].title :
       null;

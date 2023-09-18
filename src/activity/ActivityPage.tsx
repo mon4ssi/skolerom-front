@@ -1,7 +1,8 @@
-import React, { Component, createRef } from 'react';
+import React, { Component, createRef, ChangeEvent } from 'react';
 import { inject, observer } from 'mobx-react';
 import intl from 'react-intl-universal';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { lettersNoEn } from 'utils/lettersNoEn';
 
 import { IListWidgetItem, ListWidget } from './Widget/ListWidget';
 import { SliderWidget } from './Widget/SliderWidget';
@@ -13,17 +14,30 @@ import { Assignment } from '../assignment/Assignment';
 import { TeachingPath } from '../teachingPath/TeachingPath';
 import { UserType } from '../user/User';
 import { Popup } from 'components/common/Popup/Popup';
+import { Loader } from 'components/common/Loader/Loader';
+import { NewAssignmentStore } from 'assignment/view/NewAssignment/NewAssignmentStore';
+import { EditTeachingPathStore } from 'teachingPath/view/EditTeachingPath/EditTeachingPathStore';
+import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentListStore';
+
+import assignmentsImg from 'assets/images/assignment.svg';
+import teachingPathImg from 'assets/images/teaching-path.svg';
+import search from 'assets/images/search-bold.svg';
 
 import placeholder from 'assets/images/list-placeholder.svg';
 
 import './ActivityPage.scss';
 
 const loadRecentActivityInterval = 30000;
-
+const ENTER_KEYCODE = 13;
 const studentAmountArticles = 7;
 const teacherAmountArticles = 4;
+const number200 = 200;
+const number2 = 2;
 
 interface ActivityPageProps {
+  newAssignmentStore?: NewAssignmentStore;
+  editTeachingPathStore?: EditTeachingPathStore;
+  assignmentListStore?: AssignmentListStore;
   activityStore?: ActivityStore;
   loginStore?: LoginStore;
   role: UserType;
@@ -33,18 +47,26 @@ interface ActivityPageState {
   iframeURL: string;
   popupShown: boolean;
   isPause: boolean;
+  chargeIframe: boolean;
+  openModalInside: boolean;
+  searchQueryValue : string;
 }
 
-@inject('activityStore', 'loginStore')
+@inject('activityStore', 'loginStore', 'newAssignmentStore', 'editTeachingPathStore', 'assignmentListStore')
 @observer
 class Activity extends Component<ActivityPageProps & RouteComponentProps, ActivityPageState> {
   private ref = createRef<HTMLDivElement>();
+  private activityAsideReft = createRef<HTMLDivElement>();
+  private iframeref = createRef<HTMLIFrameElement>();
   private getRecentActivityWithInterval: number = 0;
 
   public state = {
     iframeURL: '',
     popupShown: false,
-    isPause: false
+    isPause: false,
+    chargeIframe: false,
+    openModalInside: false,
+    searchQueryValue : '',
   };
 
   private loadWidgetData() {
@@ -308,35 +330,138 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
     document.removeEventListener('keyup', this.handleKeyboardControl);
   }
 
+  public iframeRender = () => {
+    const { activityStore, role } = this.props;
+    // const url = activityStore!.urliframe.toString();
+    const url = `${process.env.REACT_APP_WP_URL}/wp-content/uploads/sites/2/mainapp/main_app_page.html`;
+    const anyclass = this.state.chargeIframe ? 'iframeContent' : 'iframeContent hidden';
+    return (
+      <div className={anyclass}>
+        <iframe
+          src={url}
+          ref={this.iframeref}
+          width={'100%'}
+          onLoad={() => this.resize()}
+          frameBorder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
+    );
+  }
+
+  public changeModalInside = () => {
+    if (this.state.openModalInside) {
+      this.setState({ openModalInside: false });
+    } else {
+      this.setState({ openModalInside: true });
+    }
+  }
+
+  public createAndGoToAssignment = async () => {
+    const { newAssignmentStore, history } = this.props;
+    const id = await newAssignmentStore!
+      .createAssigment()
+      .then(response => response.id);
+    history.push(`/assignments/edit/${id}`);
+  }
+
+  public createTeachingPath = async () => {
+    const { editTeachingPathStore, history } = this.props;
+    const id = await editTeachingPathStore!
+      .createTeachingPath()
+      .then(response => response.id);
+    history.push(`/teaching-paths/edit/${id}`);
+  }
+
+  public renderModal = () => (
+    <div className="insideModal">
+      <ul>
+        <li>
+          <a href="javascript:void(0)" onClick={this.createTeachingPath}>
+            <img src={teachingPathImg} />
+            {intl.get('teaching path')}
+          </a>
+        </li>
+        <li>
+          <a href="javascript:void(0)" onClick={this.createAndGoToAssignment}>
+            <img src={assignmentsImg} />
+            {intl.get('assignment')}
+          </a>
+        </li>
+      </ul>
+    </div>
+  )
+
+  public handleInputSearchQueryonKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const { history } = this.props;
+    const val = e.currentTarget.value;
+    if (lettersNoEn(val)) {
+      this.setState({ searchQueryValue: e.currentTarget.value });
+      if (val.length > number2) {
+        if (e.key === 'Enter' || e.keyCode === ENTER_KEYCODE) {
+          history.push(`/search/article?search=${val}`);
+        }
+      }
+    }
+  }
+
+  public handleInputSearchQuery = async (e: ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    if (lettersNoEn(val)) {
+      this.setState({ searchQueryValue: e.target.value });
+    }
+  }
+
+  public resize = () => {
+    /* const heightActivy = Number(this.activityAsideReft.current!.clientHeight) + number200;
+    const stringHeight = `${String(heightActivy)}px`;
+    this.iframeref.current!.setAttribute('height', stringHeight); */
+    this.setState({
+      chargeIframe: true
+    });
+  }
+
+  public renderNewButton = () => (
+    <div className="ActivityPage__searchBar__right">
+      <button className="CreateButton" onClick={this.changeModalInside}>
+        <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z" /></svg>
+        {intl.get('new')}
+      </button>
+      {this.state.openModalInside && this.renderModal()}
+    </div>
+  )
+
   public render() {
-    const { activityStore, loginStore } = this.props;
+    const { activityStore, loginStore, role } = this.props;
     const username = loginStore!.currentUser ? loginStore!.currentUser.name : 'username';
     const isContentManager = loginStore!.currentUser!.type === UserType.ContentManager;
-
+    const isNotStudent = (role === UserType.Teacher || role === UserType.ContentManager) ? true : false ;
+    const classIsNotStudent = isNotStudent ? 'ActivityPage__searchBar__left' : 'ActivityPage__searchBar__left active';
     return (
       <div className="ActivityPage">
         <div className="ActivityPage__greeting" ref={this.ref}>
           <h1>{intl.get('activity_page.Hello')} {username}</h1>
         </div>
+        <div className="ActivityPage__searchBar">
+          <div className={classIsNotStudent}>
+            <img src={search} />
+            <input
+              type="text"
+              placeholder={intl.get('assignments search.Search')}
+              aria-required="true"
+              aria-invalid="false"
+              value={this.state.searchQueryValue}
+              onChange={this.handleInputSearchQuery}
+              onKeyUp={this.handleInputSearchQueryonKeyUp}
+            />
+          </div>
+          {(isNotStudent) && this.renderNewButton()}
+        </div>
         <div className="ActivityPage__content">
           <div className="ActivityPage__main">
-            {this.renderSliderWidgetBlock()}
-            {/* {/* {role === UserType.Teacher && this.renderStatisticWidget()} */}
-            <div className="recentActivityNewContent">
-            {/* {role === UserType.Teacher && this.renderRecentActivitiesList()} */}
-            </div>
-          </div>
-
-          <div className={`ActivityPage__aside ${isContentManager && 'marginTop'}`}>
-            <div className="ActivityPage__widget">
-              <ListWidget
-                state={activityStore!.newestArticlesState}
-                title={intl.get('activity_page.new_articles')}
-                items={this.getNewestArticles()}
-              />
-            </div>
-            {this.renderAssignmentWidget()}
-            {this.renderTeachingPathList()}
+            {!this.state.chargeIframe && <Loader />}
+            {this.iframeRender()}
           </div>
         </div>
       </div>

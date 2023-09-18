@@ -203,4 +203,5 @@ export class ActivityList {
   public async getSlider(role: string) {
     return this.activityService.getSlider(role);
   }
+
 }

@@ -54,6 +54,38 @@ export const LOCALES_MAPPING_FOR_BACKEND = {
   [Locales.FN]: 'fin',
   [Locales.KV]: 'kv'
 };
+
+export const WPLENGUAGES = [
+  {
+    id: 'en',
+    name: 'English'
+  },
+  {
+    id: 'nn',
+    name: 'Nynorsk'
+  },
+  {
+    id: 'nb',
+    name: 'Bokmål'
+  }
+  /*{
+    id: 'fi',
+    name: 'Suomi'
+  },
+  {
+    id: 'kv',
+    name: 'Kvensk'
+  },
+  {
+    id: 'ru',
+    name: 'Русский'
+  },
+  {
+    id: 'uk',
+    name: 'Українська'
+  }*/
+];
+
 export const LANGUAGES = [
   {
     description: 'English',

@@ -34,12 +34,17 @@ export class LoginPage extends Component<LoginPageProps> {
             redirectPath = `/assignments/edit?post_id=${postID}`;
           } else {
             redirectPath = '/activity';
+            if (localStorage.getItem('urlredirect') !== null) {
+              redirectPath = localStorage.getItem('urlredirect')!;
+            }
           }
 
           return window.location.href = redirectPath;
         case UserType.ContentManager:
           redirectPath = '/activity';
-
+          if (localStorage.getItem('urlredirect') !== null) {
+            redirectPath = localStorage.getItem('urlredirect')!;
+          }
           return window.location.href = redirectPath;
         case UserType.Student:
           if (assignmentReferralToken) {
@@ -52,6 +57,9 @@ export class LoginPage extends Component<LoginPageProps> {
             redirectPath = `/teaching-path/${teachingPathID}/invitation?referral_token=${teachingPathReferralToken}`;
           } else {
             redirectPath = '/activity';
+            if (localStorage.getItem('urlredirect') !== null) {
+              redirectPath = localStorage.getItem('urlredirect')!;
+            }
           }
 
           return window.location.href = redirectPath;
@@ -67,7 +75,6 @@ export class LoginPage extends Component<LoginPageProps> {
     if (currentUser) {
       return this.redirectToDashboard();
     }
-
     return (
       <div
         className="LoginPage flexBox spaceBetween alignCenter"

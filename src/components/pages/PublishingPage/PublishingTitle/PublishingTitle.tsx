@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import TextAreaAutosize from 'react-textarea-autosize';
 
 import { lettersNoEn } from 'utils/lettersNoEn';
-import { MAX_TITLE_LENGTH, MAX_DESCRIPTION_LENGTH } from 'utils/constants';
+import { MAX_TITLE_LENGTH, MAX_DESCRIPTION_LENGTH, MAX_DESCRIPTION_LENGTH_500 } from 'utils/constants';
 
 import './PublishingTitle.scss';
 import { DraftAssignment } from 'assignment/assignmentDraft/AssignmentDraft';
@@ -73,7 +73,7 @@ export class PublishingTitle extends Component<Props> {
             value={currentEntity!.description}
             onChange={this.setTeachingPathDescription}
             inputRef={this.descriptionRef}
-            maxLength={MAX_DESCRIPTION_LENGTH}
+            maxLength={MAX_DESCRIPTION_LENGTH_500}
             aria-labelledby="DescriptionInputTextArea"
           />
         </div>

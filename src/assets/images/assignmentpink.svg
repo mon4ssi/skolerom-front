@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 62 (91390) - https://sketch.com -->
+    <title>Ikon</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Ikon---oppgaver" transform="translate(-10.000000, -9.000000)" stroke="#E2017B" stroke-width="1.5">
+            <g id="Ikon" transform="translate(11.000000, 10.000000)">
+                <path d="M12,0 C18.6272,0 24,5.3728 24,12 C24,18.6272 18.6272,24 12,24 C5.3728,24 0,18.6272 0,12 C0,5.3728 5.3728,0 12,0 Z" id="Path"></path>
+                <line x1="6" y1="18" x2="12" y2="12" id="Path"></line>
+                <path d="M17.9264261,6.0617096 C17.1609844,5.97943013 16.3893782,5.97943013 15.6239366,6.0617096 L13.5690597,9.33231855 L12.3042831,6.9791257 C7.72293518,9.2304977 5.9341649,14.6701992 7.62841085,16.3692703 C9.90315949,18.6463546 18.9014651,14.6547718 17.9264261,6.0617096 Z" id="Path"></path>
+            </g>
+        </g>
+    </g>
+</svg>

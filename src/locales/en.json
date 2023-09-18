@@ -2,6 +2,7 @@
   "loading": "Loading...",
   "assignment": "assignment",
   "teaching path": "teaching path",
+  "new": "new",
   "login_page": {
     "Log in to Temabok": "Log in to Skolerom",
     "Log in with Feide": "Log in with Feide",
@@ -46,6 +47,7 @@
       "read close": "Close description",
       "read again": "Read again",
       "read article": "Read article",
+      "read": "READ",
       "read external": "Read external link"
     },
     "assignment": {
@@ -164,14 +166,16 @@
     }
   },
   "sidebar": {
-    "Activity": "Activity",
+    "Activity": "Home",
     "Teaching Paths": "Teaching Paths",
+    "Articles": "Articles",
+    "Search": "Search",
     "Assignments": "Assignments",
     "Students": "Students",
     "Favorites": "Favorites",
     "Forum": "Forum",
     "Log out": "Log out",
-    "Evaluation": "Evaluation",
+    "Evaluation": "Evaluation",    
     "alt": {
       "Activity": "Go to activity overview",
       "Teaching Paths": "Go to teaching paths",
@@ -218,7 +222,9 @@
     "version": "version",
     "versions": "versions",
     "By date": "By date",
+    "Related": "Related",
     "Level": "Level",
+    "Level less": "Level",
     "m": "m.",
     "que": "que.",
     "VIEWS": "VIEWS",

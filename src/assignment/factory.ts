@@ -116,6 +116,7 @@ export interface TeacherAssignmentResponseDTO {
   grepReadinginsubject?: string;
   open?: boolean;
   canEditOrDelete?: boolean;
+  locale_id?: number;
 }
 
 export const buildFilterDTO = (filter: Filter): Object => {
@@ -352,7 +353,9 @@ export const buildAllAssignmentsList = (item: TeacherAssignmentResponseDTO) => (
       grepMaintopic: item.grepMaintopic,
       grepReadingInsubject: item.grepReadinginsubject,
       open: item.open || false,
-      canEditOrDelete: item.canEditOrDelete
+      canEditOrDelete: item.canEditOrDelete,
+      // tslint:disable-next-line: variable-name
+      locale_id: item.locale_id
     })
 );
 

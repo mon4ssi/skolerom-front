@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="21px" height="21px" viewBox="0 0 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <title>DB10B525-7ECC-4796-89C6-4352EAFC3E34@1x</title>
+  <defs>
+    <filter x="-1.7%" y="-1.3%" width="103.4%" height="102.5%" filterUnits="objectBoundingBox" id="filter-1">
+      <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"/>
+      <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+      <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.13 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"/>
+      <feMerge>
+        <feMergeNode in="shadowMatrixOuter1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <g id="Designs" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" transform="matrix(1, 0, 0, 1, -9.024418, -9.069766)">
+    <g id="Teaching-path-preview-(overview)" transform="translate(-939.000000, -289.000000)" stroke="#E2017B" stroke-width="1.5">
+      <g id="Forhåndsvisning" transform="translate(720.000000, 77.000000)" filter="url(#filter-1)">
+        <g id="Skillelinjer" transform="translate(0.000000, 221.000000)">
+          <g id="Article" transform="translate(229.000000, 1.000000)">
+            <rect id="Rectangle" x="0" y="0" width="19" height="19" rx="1.5"/>
+            <line x1="8" y1="3.5" x2="15" y2="3.5" id="Path"/>
+            <line x1="4" y1="11.5" x2="16" y2="11.5" id="Path"/>
+            <line x1="4" y1="7.5" x2="16" y2="7.5" id="Path"/>
+            <line x1="4" y1="15.5" x2="10" y2="15.5" id="Path"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

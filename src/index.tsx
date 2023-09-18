@@ -14,6 +14,8 @@ import {
   ARTICLE_SERVICE_KEY
 } from 'assignment/Assignment';
 import { AssignmentService, ASSIGNMENT_SERVICE, ArticleService } from 'assignment/service';
+import { SEARCH_SERVICE, SearchService } from 'search/service';
+import { SEARCH_REPO, SearchRepo } from 'search/Search';
 import { DraftAssignmentRepo, DRAFT_ASSIGNMENT_REPO } from 'assignment/assignmentDraft/AssignmentDraft';
 import { DraftAssignmentApi } from 'assignment/assignmentDraft/api';
 import { DraftAssignmentService, DRAFT_ASSIGNMENT_SERVICE } from 'assignment/assignmentDraft/service';
@@ -51,6 +53,7 @@ import { STUDENT_SERVICE, StudentService } from 'student/service';
 import { ACTIVITY_REPO_KEY, ActivityRepo } from 'activity/Activity';
 import { ActivityApi } from 'activity/api';
 import { ActivityService, ACTIVITY_SERVICE_KEY } from 'activity/service';
+import { SearchApi } from 'search/api';
 
 injector.set<StorageInteractor>(STORAGE_INTERACTOR_KEY, new StorageInteractor());
 injector.set<ArticleRepo>(ARTICLE_REPO_KEY, new WPApi());
@@ -87,6 +90,9 @@ injector.set<StudentService>(STUDENT_SERVICE, new StudentService());
 
 injector.set<ActivityRepo>(ACTIVITY_REPO_KEY, new ActivityApi());
 injector.set<ActivityService>(ACTIVITY_SERVICE_KEY, new ActivityService());
+
+injector.set<SearchRepo>(SEARCH_REPO, new SearchApi());
+injector.set<SearchService>(SEARCH_SERVICE, new SearchService());
 
 if (process.env.REACT_APP_SENTRY_DSN) {
   init({ dsn: process.env.REACT_APP_SENTRY_DSN });

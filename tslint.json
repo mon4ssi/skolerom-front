@@ -83,7 +83,8 @@
         "distribution",
         "student",
         "activity",
-        "evaluation"
+        "evaluation",
+        "search"
       ]
     ],
     "import-name": [

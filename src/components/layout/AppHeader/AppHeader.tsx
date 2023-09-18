@@ -1,8 +1,9 @@
-import React, { Component, MouseEvent } from 'react';
+import React, { Component, MouseEvent, ChangeEvent } from 'react';
 import intl from 'react-intl-universal';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { CSSTransition } from 'react-transition-group';
+import { lettersNoEn } from 'utils/lettersNoEn';
 
 import { LoginStore } from 'user/view/LoginStore';
 import { UserType } from 'user/User';
@@ -25,6 +26,7 @@ import { AssignmentListStore } from 'assignment/view/AssignmentsList/AssignmentL
 import { TeachingPathsListStore } from 'teachingPath/view/TeachingPathsList/TeachingPathsListStore';
 import loginBtnIcon from 'assets/images/login-btn-icon.svg';
 import { DetailsModal } from 'components/common/DetailsModal/DetailsModal';
+import search from 'assets/images/search-bold.svg';
 import { divide } from 'lodash';
 
 interface HeaderNavigationLink {
@@ -38,6 +40,8 @@ const LEFTCODE = 8592;
 const RIGHTCODE = 8594;
 const ANIMATION_TIMEOUT = 200;
 const TwentySeven = 27;
+const number2 = 2;
+const number13 = 13;
 
 const headerLinks: Array<HeaderNavigationLink> = [
   {
@@ -149,6 +153,7 @@ interface HeaderState {
   isModalKeyboard: boolean;
   isMobileModalOpen: boolean;
   linksMenu: Array<HeaderNavigationLink>;
+  searchQueryValue: string;
 }
 
 @inject('loginStore', 'uiStore')
@@ -159,7 +164,8 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     modalVisible: Modals.NONE,
     isModalKeyboard: false,
     isMobileModalOpen: false,
-    linksMenu: []
+    linksMenu: [],
+    searchQueryValue: ''
   };
 
   private renderUserModalIfNeeded(myLinks: Array<HeaderNavigationLink>) {
@@ -212,9 +218,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
 
     return loginStore!.currentUser ? (
       <li className="AppHeader__navigationItem" onClick={this.showUserModal}>
-        <a href="javascript:void(0)" className="AppHeader__navigationItemText" title={intl.get('header.title.My account')}>
-          {intl.get('header.My account')}
-        </a>
+        <a href="javascript:void(0)" className="AppHeader__navigationItemText" title={intl.get('header.title.My account')} />
         <img
           className="AppHeader__userLogo"
           src={loginStore!.currentUser.photo ? loginStore!.currentUser.photo : userPlaceholder}
@@ -252,7 +256,6 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   private showUserModal = () => {
     const { sidebarShown } = this.props.uiStore!;
     const { modalVisible } = this.state;
-
     if (sidebarShown) {
       this.props.uiStore!.hideSidebar();
     }
@@ -632,12 +635,10 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
         <ul className="AppHeader__navigation">
           {this.sendTitleActivity()}
           {linksList.map(this.renderHeaderLink)}
-          {this.renderAccountTab()}
         </ul>
         <ul className="AppHeader__navigation AppHeader__navigation_tablet">
           {linksList.map(this.renderHeaderLink)}
           {this.renderQuestionTab()}
-          {this.renderAccountTab()}
         </ul>
       </>
     );
@@ -817,6 +818,44 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     );
   }
 
+  public handleInputSearchQueryonKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const { history } = this.props;
+    const val = e.currentTarget.value;
+    if (lettersNoEn(val)) {
+      this.setState({ searchQueryValue: e.currentTarget.value });
+      if (val.length > number2) {
+        if (e.key === 'Enter' || e.keyCode === number13) {
+          // history.push(`/search/article?search=${val}`);
+          const url: URL = new URL(window.location.href);
+          const urlForEditing: string = `${url.origin}/search/article?search=${val}`;
+          window.location.href = urlForEditing;
+        }
+      }
+    }
+  }
+
+  public handleInputSearchQuery = async (e: ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    if (lettersNoEn(val)) {
+      this.setState({ searchQueryValue: e.target.value });
+    }
+  }
+
+  public searchBar = () => (
+    <div className="barSearch">
+      <img src={search} />
+      <input
+        type="text"
+        placeholder={intl.get('assignments search.Search')}
+        aria-required="true"
+        aria-invalid="false"
+        value={this.state.searchQueryValue}
+        onChange={this.handleInputSearchQuery}
+        onKeyUp={this.handleInputSearchQueryonKeyUp}
+      />
+    </div>
+  )
+
   public renderModalMobileButton = () => {
     const linksList = this.state.linksMenu;
     return (
@@ -852,36 +891,42 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
 
     return (
       <header className={classCreation}>
-        {this.renderUserModalIfNeeded(this.state.linksMenu)}
-        {this.state.modalVisible !== Modals.NONE && <div className="AppHeader__headerOverlay" onClick={this.closeModals} />}
-        {!fromAssignmentPassing && !fromTeachingPathPassing && <p id="LogoDescription" className="hidden">Logo Skolerom</p>}
-        {fromAssignmentPassing && fromTeachingPathPassing && <p id="LogoDescriptionStudent" className="hidden">Logo Skolerom</p>}
-        <div className="AppHeader__block" aria-labelledby="LogoDescription">
-          <NavLink to={redirectLink} onClick={this.handleLogoClick}>
-            <div className="AppHeader__block">
-              <img src={logoImage} alt="Skolerom Logo" className="AppHeader__logo" title="Skolerom" />
-              <span className="AppHeader__role">{this.renderRole()}</span>
-            </div>
-          </NavLink>
+        <div className="AppHeader__left">
+          {this.renderUserModalIfNeeded(this.state.linksMenu)}
+          {this.state.modalVisible !== Modals.NONE && <div className="AppHeader__headerOverlay" onClick={this.closeModals} />}
+          {!fromAssignmentPassing && !fromTeachingPathPassing && <p id="LogoDescription" className="hidden">Logo Skolerom</p>}
+          {fromAssignmentPassing && fromTeachingPathPassing && <p id="LogoDescriptionStudent" className="hidden">Logo Skolerom</p>}
+          <div className="AppHeader__block" aria-labelledby="LogoDescription">
+            <NavLink to={redirectLink} onClick={this.handleLogoClick}>
+              <div className="AppHeader__block">
+                <img src={logoImage} alt="Skolerom Logo" className="AppHeader__logo" title="Skolerom" />
+                <span className="AppHeader__role">{this.renderRole()}</span>
+              </div>
+            </NavLink>
+          </div>
+          {this.props.loginStore!.currentUser && !fromAssignmentPassing && !fromTeachingPathPassing && this.renderNavigation()}
         </div>
-        {this.props.loginStore!.currentUser && !fromAssignmentPassing && !fromTeachingPathPassing && this.renderNavigation()}
-        {!this.props.isPreview && this.props.loginStore!.currentUser && !isStudent && fromAssignmentPassing && this.renderGuidanceAndCopyButton()}
-        {!this.props.isPreview && this.props.loginStore!.currentUser && !isStudent && fromTeachingPathPassing && this.renderCopyButton('teaching_paths_list.copy')}
-        {ifLogin && this.renderNavigationNotLogin()}
+        <div className="AppHeader__right">
+          {this.props.loginStore!.currentUser && !fromAssignmentPassing && !fromTeachingPathPassing && this.searchBar()}
+          {this.props.loginStore!.currentUser && !fromAssignmentPassing && !fromTeachingPathPassing && this.renderAccountTab()}
+          {!this.props.isPreview && this.props.loginStore!.currentUser && !isStudent && fromAssignmentPassing && this.renderGuidanceAndCopyButton()}
+          {!this.props.isPreview && this.props.loginStore!.currentUser && !isStudent && fromTeachingPathPassing && this.renderCopyButton('teaching_paths_list.copy')}
+          {ifLogin && this.renderNavigationNotLogin()}
 
-        {this.props.loginStore!.currentUser && this.renderBurgerButton()}
-        {false && this.props.studentFormTeachinPath && this.closeWindow()}
-        <div className="AppHeader__block AppHeader__block_mobile">
-          <NavLink to={redirectLink} onClick={this.handleLogoClick}>
-            <img src={logoImage} alt="logo mobile" />
-          </NavLink>
+          {this.props.loginStore!.currentUser && this.renderBurgerButton()}
+          {false && this.props.studentFormTeachinPath && this.closeWindow()}
+          <div className="AppHeader__block AppHeader__block_mobile">
+            <NavLink to={redirectLink} onClick={this.handleLogoClick}>
+              <img src={logoImage} alt="logo mobile" />
+            </NavLink>
+          </div>
+          <div className={'AppHeader__block_mobile AppHeader__block'}>
+            {this.renderHelpButton()}
+            {this.renderMobileButton()}
+            {this.state.isMobileModalOpen && this.renderModalMobileButton()}
+          </div>
+          {this.props.loginStore!.currentUser && this.state.isModalKeyboard && this.renderKeyboardModal()}
         </div>
-        <div className={'AppHeader__block_mobile AppHeader__block'}>
-          {this.renderHelpButton()}
-          {this.renderMobileButton()}
-          {this.state.isMobileModalOpen && this.renderModalMobileButton()}
-        </div>
-        {this.props.loginStore!.currentUser && this.state.isModalKeyboard && this.renderKeyboardModal()}
       </header>
     );
   }

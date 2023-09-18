@@ -73,6 +73,22 @@ export enum QueryStringKeys {
   ARTICLES = 'articles',
 }
 
+export enum QueryStringKeysSearch {
+  LANG = 'lang',
+  GRADE = 'grade',
+  SUBJECT = 'subject',
+  SEARCH = 'search',
+  PAGE = 'page',
+  ACTIVITY = 'activity',
+  GREPCOREELEMENTSIDS = 'grepCoreElementsIds',
+  GREPMAINTOPICSIDS = 'grepMainTopicsIds',
+  GREEPGOALSIDS = 'grepGoalsIds',
+  GREPREADINGINSUBJECT = 'grepReadingInSubject',
+  SOURCE = 'source',
+  MYSCHOOL = 'onlyOwnSchools',
+  ARTICLES = 'articles',
+}
+
 export enum ReturnUrl {
   RETURN_URL = 'return_url',
   TIME_EXPIRED = 'return_url_expired'
