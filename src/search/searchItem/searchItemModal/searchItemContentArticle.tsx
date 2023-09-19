@@ -48,7 +48,7 @@ class ArticleContent extends Component<Props> {
     } = this.props.item;
     if (relatedArticles && relatedArticles.length > 0) {
       let stt = 'undervisning';
-      switch (this.props.item.localeid) {
+      switch (this.props.item.localeId) {
         case 'nn':
           stt = 'nn/undervisning';
           break;

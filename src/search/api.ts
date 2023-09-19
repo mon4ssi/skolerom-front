@@ -55,7 +55,7 @@ export class SearchApi implements SearchRepo {
     });
     /* const response = await API.get(`https://search.beta.skolerom.no/api/content`, {
       params: buildFilterDTO(filter)
-    }); */
+    });*/
     // const response = await API.get('https://skolerom.proxy.beeceptor.com/todos');
     return {
       items: response.data.data,
