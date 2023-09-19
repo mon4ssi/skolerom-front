@@ -52,6 +52,7 @@ export interface SearchArgs {
   sources?: Array<SimpleNumberDataTitle>;
   goals?: Array<SimpleGoalData>;
   localeid: string;
+  localeId: string;
   keywords?: Array<string>;
   title: string;
   featuredImg?: string;
@@ -74,6 +75,7 @@ export class Search {
   public goals: Array<SimpleGoalData>;
   public reading: Array<SimpleStringData>;
   public localeid: string;
+  public localeId: string;
   public keywords: Array<string>;
   public title: string;
   public featuredImg: string;
@@ -94,9 +96,10 @@ export class Search {
     this.goals = args.goals || [];
     this.reading = args.reading || [];
     this.localeid = args.localeid;
+    this.localeId = args.localeId || '';
     this.keywords = args.keywords || [];
     this.featuredImg = args.featuredImg || '';
-    this. title = args.title;
+    this.title = args.title;
     this.description = args.description;
     this.lvlArticles = args.lvlArticles || [];
     this.relatedArticles = args.relatedArticles || [];
