@@ -47,7 +47,19 @@ class ArticleContent extends Component<Props> {
         relatedArticles
     } = this.props.item;
     if (relatedArticles && relatedArticles.length > 0) {
-      const link = `${process.env.REACT_APP_WP_URL}/undervisning/?fwp_ids=${String(relatedArticles)}`;
+      let stt = 'undervisning';
+      switch (this.props.item.localeid) {
+        case 'nn':
+          stt = 'nn/undervisning';
+          break;
+        case 'en':
+          stt = 'en/undervisning';
+          break;
+        default:
+          stt = 'undervisning';
+          break;
+      }
+      const link = `${process.env.REACT_APP_WP_URL}/${stt}/?fwp_ids=${String(relatedArticles)}`;
       return (
         <li><a href={link} target="_blank">{intl.get('edit_teaching_path.modals.articles')}</a></li>
       );
