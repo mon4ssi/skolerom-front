@@ -33,6 +33,8 @@ const studentAmountArticles = 7;
 const teacherAmountArticles = 4;
 const number200 = 200;
 const number2 = 2;
+const numb99 = 90000;
+const num100 = 10000;
 
 interface ActivityPageProps {
   newAssignmentStore?: NewAssignmentStore;
@@ -50,6 +52,7 @@ interface ActivityPageState {
   chargeIframe: boolean;
   openModalInside: boolean;
   searchQueryValue : string;
+  mathversion: number;
 }
 
 @inject('activityStore', 'loginStore', 'newAssignmentStore', 'editTeachingPathStore', 'assignmentListStore')
@@ -67,6 +70,7 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
     chargeIframe: false,
     openModalInside: false,
     searchQueryValue : '',
+    mathversion: 0
   };
 
   private loadWidgetData() {
@@ -265,14 +269,17 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
 
   public componentDidMount() {
     const { activityStore, role } = this.props;
-    activityStore!.loadNewestArticles(role === UserType.Student ? studentAmountArticles : teacherAmountArticles);
+    this.setState({
+      mathversion : Math.floor(Math.random() * numb99) + num100
+    });
+    // activityStore!.loadNewestArticles(role === UserType.Student ? studentAmountArticles : teacherAmountArticles);
     if (role === UserType.Teacher || role === UserType.ContentManager) {
-      activityStore!.loadNewestTeachingPaths();
-      activityStore!.loadNewestAssignments();
+      // activityStore!.loadNewestTeachingPaths();
+      // activityStore!.loadNewestAssignments();
     }
     if (role === UserType.Teacher) {
-      activityStore!.loadRecentActivity();
-      activityStore!.loadStatisticWidget();
+      // activityStore!.loadRecentActivity();
+      // activityStore!.loadStatisticWidget();
       if (!this.state.isPause) {
         this.getRecentActivityWithInterval = window.setInterval(
           () => {
@@ -282,7 +289,7 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
         );
       }
     }
-    this.loadWidgetData();
+    // this.loadWidgetData();
     document.addEventListener('keyup', this.handleKeyboardControl);
   }
 
@@ -322,10 +329,10 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
 
   public componentWillUnmount() {
     const { activityStore, role } = this.props;
-    activityStore!.resetNewestArticles();
+    // activityStore!.resetNewestArticles();
     if (role === UserType.Teacher) {
-      window.clearInterval(this.getRecentActivityWithInterval);
-      activityStore!.resetNewestTeachingPaths();
+      // window.clearInterval(this.getRecentActivityWithInterval);
+      // activityStore!.resetNewestTeachingPaths();
     }
     document.removeEventListener('keyup', this.handleKeyboardControl);
   }
@@ -333,7 +340,7 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
   public iframeRender = () => {
     const { activityStore, role } = this.props;
     // const url = activityStore!.urliframe.toString();
-    const url = `${process.env.REACT_APP_WP_URL}/wp-content/uploads/sites/2/mainapp/main_app_page.html`;
+    const url = `${process.env.REACT_APP_WP_URL}/wp-content/uploads/sites/2/mainapp/main_app_page.html?version=${this.state.mathversion}`;
     const anyclass = this.state.chargeIframe ? 'iframeContent' : 'iframeContent hidden';
     return (
       <div className={anyclass}>
