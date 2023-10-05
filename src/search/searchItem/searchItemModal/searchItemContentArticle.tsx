@@ -1,4 +1,6 @@
 import React, { Component, SyntheticEvent } from 'react';
+import { inject, observer } from 'mobx-react';
+import { injector } from 'Injector';
 import intl from 'react-intl-universal';
 import { Link } from 'react-router-dom';
 import { LocationDescriptor } from 'history';
@@ -10,13 +12,16 @@ import gradeImg from 'assets/images/grade.svg';
 import tagsImg from 'assets/images/tags.svg';
 import cogsImg from 'assets/images/cogs.svg';
 import goalsImg from 'assets/images/goals.svg';
+import { UserType } from 'user/User';
+import { UserService } from 'user/UserService';
 
 interface Props {
   item: Search;
   onClose: () => void;
 }
-
+export const USER_SERVICE = 'USER_SERVICE';
 class ArticleContent extends Component<Props> {
+  private userService: UserService = injector.get<UserService>(USER_SERVICE);
   public handleClickOutside = () => this.props.onClose();
   public close = () => this.props.onClose();
   public lvlArticles = (item: LvlData) => {
@@ -143,8 +148,8 @@ class ArticleContent extends Component<Props> {
                 <h3>{intl.get('assignment preview.Related')}</h3>
                 <ul>
                   {this.relatedArticles()}
-                  {this.relatedTP()}
-                  {this.relatedAssignments()}
+                  {!(this.userService.getCurrentUser()!.type === UserType.Student) && this.relatedTP()}
+                  {!(this.userService.getCurrentUser()!.type === UserType.Student) && this.relatedAssignments()}
                 </ul>
             </div>
           </div>
