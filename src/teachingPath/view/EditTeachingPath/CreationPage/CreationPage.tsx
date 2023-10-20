@@ -205,7 +205,7 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
 
   // tslint:disable-next-line: no-any
   public renderInfoCard = (rawItem: any, index: number) => {
-    const { parentNode, readOnly, editTeachingPathStore } = this.props;
+    const { parentNode, readOnly, editTeachingPathStore, allNode } = this.props;
     let item = clone(rawItem);
 
     if (readOnly && item.value && !item.value.excerpt && !item.value.grades && !item.value.images && item.type === TeachingPathNodeType.Article) {
@@ -259,7 +259,8 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
     }
     if (item.type === TeachingPathNodeType.Assignment) {
       imagenType = assignmentImg;
-      urlBasic = `/assignments/view/${item.value.id}?preview`;
+      const myLocalId = allNode!.draftTeachingPath.localeId;
+      urlBasic = `/assignments/view/${item.value.id}?locale_id=${myLocalId}&preview`;
       if (item.value.locale_id) {
         urlBasic = `/assignments/view/${item.value.id}?locale_id=${item.value.locale_id}&preview`;
       }
