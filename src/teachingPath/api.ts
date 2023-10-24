@@ -395,7 +395,9 @@ export class TeachingPathApi implements TeachingPathRepo {
   }
 
   public async getCurrentNodePreview(teachingPathId: number, nodeId: number): Promise<TeachingPathNode> {
-    const { data } = await API.get(`api/teacher/teaching-paths/${teachingPathId}/node/${nodeId}`);
+     /* tslint:disable:no-string-literal */
+    const search = parseQueryString(window.location.search)['locale_id'];
+    const { data } = search ? await API.get(`api/teacher/teaching-paths/${teachingPathId}/node/${nodeId}?localeId=${Number(search)}`) : await API.get(`api/teacher/teaching-paths/${teachingPathId}/node/${nodeId}`);
     this.arrayNumberContentAll = [];
     if (!isNull(data.shortestPath)) {
       // this.arrayNumberContentAll.push(data.shortestPath.id);
@@ -406,7 +408,8 @@ export class TeachingPathApi implements TeachingPathRepo {
   }
 
   public async getCurrentNode(teachingPathId: number, nodeId: number): Promise<TeachingPathNode> {
-    const { data } = await API.get(`api/student/teaching-paths/${teachingPathId}/node/${nodeId}`);
+    const search = parseQueryString(window.location.search)['locale_id'];
+    const { data } = search ? await API.get(`api/student/teaching-paths/${teachingPathId}/node/${nodeId}?localeId=${Number(search)}`) : await API.get(`api/student/teaching-paths/${teachingPathId}/node/${nodeId}`);
     this.arrayNumberContentAll = [];
     if (!isNull(data.shortestPath)) {
       this.arrayNumberContentAll.push(data.shortestPath.id);
