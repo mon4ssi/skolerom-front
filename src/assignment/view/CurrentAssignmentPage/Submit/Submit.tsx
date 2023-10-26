@@ -6,6 +6,7 @@ import { Location } from 'history';
 
 import { RedirectData } from 'assignment/questionary/Questionary';
 import { Article } from 'assignment/Assignment';
+import { parseQueryString } from 'utils/queryString';
 import { QuestionaryTeachingPathStore } from 'teachingPath/questionaryTeachingPath/questionaryTeachingPathStore';
 import { LocationState } from '../CurrentAssignmentPage';
 import { CreateButton } from 'components/common/CreateButton/CreateButton';
@@ -88,9 +89,18 @@ export class SubmitComponent extends Component<Props> {
     const { redirectData, isPreview, questionaryTeachingPathStore, finishPreviewSubmit, history } = this.props;
     const childNode = questionaryTeachingPathStore!.currentNode;
     if (childNode && childNode.children.length > 0) {
-      this.props.history.push(`/teaching-path/preview/${questionaryTeachingPathStore!.currentTeachingPath!.id}`, {
-        node: history.location.state && history.location.state.node
-      });
+      /* tslint:disable:no-string-literal */
+      const search = parseQueryString(window.location.search)['teachingpathlocaleid'];
+      if (search) {
+        /* tslint:enable:no-string-literal */
+        this.props.history.push(`/teaching-path/preview/${questionaryTeachingPathStore!.currentTeachingPath!.id}?locale_id=${Number(search)}`, {
+          node: history.location.state && history.location.state.node
+        });
+      } else {
+        this.props.history.push(`/teaching-path/preview/${questionaryTeachingPathStore!.currentTeachingPath!.id}`, {
+          node: history.location.state && history.location.state.node
+        });
+      }
     } else {
       this.props.history.push('/assignments/all');
     }
