@@ -14,6 +14,7 @@ import { ReadingArticle } from 'components/pages/ReadingArticle/ReadingArticle';
 import { DraftTeachingPath, EditableTeachingPathNode } from 'teachingPath/teachingPathDraft/TeachingPathDraft';
 import { Article, Domain } from 'assignment/Assignment';
 import { Loader } from 'components/common/Loader/Loader';
+import { parseQueryString } from 'utils/queryString';
 
 interface Props {
   questionaryTeachingPathStore?: QuestionaryTeachingPathStore;
@@ -68,7 +69,9 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
     const { questionaryTeachingPathStore } = this.props;
     questionaryTeachingPathStore!.handleAssignment(true);
     questionaryTeachingPathStore!.pickUpItem(id);
-    const urlbasic = (locale > 0) ? `/assignments/view/${id}?locale_id=${locale}` : `/assignments/view/${id}`;
+    /* tslint:disable:no-string-literal */
+    const search = parseQueryString(window.location.search)['locale_id'];
+    const urlbasic = (locale > 0) ? search ? `/assignments/view/${id}?locale_id=${locale}&teachingpathlocaleid=${search}` : `/assignments/view/${id}?locale_id=${locale}` : search ? `/assignments/view/${id}?teachingpathlocaleid=${search}` : `/assignments/view/${id}`;
     this.props.history.push(urlbasic, {
       teachingPath: questionaryTeachingPathStore!.teachingPathId,
       node: questionaryTeachingPathStore!.pickedItemAssignment!.idNode
