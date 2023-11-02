@@ -241,7 +241,8 @@
     "Assignment articles": "Oppgåve til artiklar",
     "Finish reading article": "Fortsett med oppgåve",
     "Questions count": "{answeredQuestionsCount} av {totalQuestionsCount}",
-    "questions answered": "spørsmåla er svart på"
+    "questions answered": "spørsmåla er svart på",
+    "sharedicon": "Link kopiert"
   },
   "assignments search": {
     "title": "Oppgåver",

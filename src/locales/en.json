@@ -241,7 +241,8 @@
     "Assignment articles": "Assignment articles",
     "Finish reading article": "Finish reading article",
     "Questions count": "{answeredQuestionsCount} out of {totalQuestionsCount}",
-    "questions answered": "questions answered"
+    "questions answered": "questions answered",
+    "sharedicon": "Link copied"
   },
   "assignments search": {
     "title": "Assignments",

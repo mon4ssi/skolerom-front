@@ -241,7 +241,8 @@
     "Assignment articles": "Artikler tilknyttet oppgave",
     "Finish reading article": "Fortsett med oppgave",
     "Questions count": "{answeredQuestionsCount} av {totalQuestionsCount}",
-    "questions answered": "spørsmål er besvart"
+    "questions answered": "spørsmål er besvart",
+    "sharedicon": "Link kopiert"
   },
   "assignments search": {
     "title": "Oppgaver",
