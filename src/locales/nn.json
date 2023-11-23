@@ -241,8 +241,7 @@
     "Assignment articles": "Oppgåve til artiklar",
     "Finish reading article": "Fortsett med oppgåve",
     "Questions count": "{answeredQuestionsCount} av {totalQuestionsCount}",
-    "questions answered": "spørsmåla er svart på",
-    "sharedicon": "Link kopiert"
+    "questions answered": "spørsmåla er svart på"
   },
   "assignments search": {
     "title": "Oppgåver",
@@ -822,6 +821,7 @@
   "students_list": {
     "change_font_size": "Endre skriftstorleik",
     "title":"Elevar",
+    "empty": " Vel eit trinn for å sjå elevane dine.",
     "tabs": {
       "my_students": "Mine elevar",
       "previous_students": "Tidlegare elevar",

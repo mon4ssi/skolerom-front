@@ -241,8 +241,7 @@
     "Assignment articles": "Artikler tilknyttet oppgave",
     "Finish reading article": "Fortsett med oppgave",
     "Questions count": "{answeredQuestionsCount} av {totalQuestionsCount}",
-    "questions answered": "spørsmål er besvart",
-    "sharedicon": "Link kopiert"
+    "questions answered": "spørsmål er besvart"
   },
   "assignments search": {
     "title": "Oppgaver",
@@ -820,6 +819,7 @@
   },
   "students_list": {
     "title":"Elever",
+    "empty": "Velg et trinn for å se dine elever.",
     "tabs": {
       "my_students": "Mine elever",
       "previous_students": "Tidligere elever",
