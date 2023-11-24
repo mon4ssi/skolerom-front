@@ -819,6 +819,7 @@
   },
   "students_list": {
     "title":"Elever",
+    "empty": "Velg et trinn for å se dine elever.",
     "tabs": {
       "my_students": "Mine elever",
       "previous_students": "Tidligere elever",

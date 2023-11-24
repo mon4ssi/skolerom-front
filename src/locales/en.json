@@ -820,6 +820,7 @@
   },
   "students_list": {
     "title":"Students",
+    "empty": "Please select a group to display the students",
     "tabs": {
       "my_students": "My students",
       "previous_students": "Previous students",

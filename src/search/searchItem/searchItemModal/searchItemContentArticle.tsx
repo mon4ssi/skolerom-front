@@ -12,6 +12,7 @@ import gradeImg from 'assets/images/grade.svg';
 import tagsImg from 'assets/images/tags.svg';
 import cogsImg from 'assets/images/cogs.svg';
 import goalsImg from 'assets/images/goals.svg';
+import sharedicon from 'assets/images/shared.svg';
 import { UserType } from 'user/User';
 import { UserService } from 'user/UserService';
 
@@ -46,6 +47,11 @@ class ArticleContent extends Component<Props> {
         </a>
       </li>
     );
+  }
+  public copylink = () => {
+    const {
+        relatedArticles
+    } = this.props.item;
   }
   public relatedArticles = () => {
     const {
@@ -104,6 +110,18 @@ class ArticleContent extends Component<Props> {
       <li>{title}</li>
     );
   }
+
+  public renderSharedarticle = () =>  {
+    const {
+      relatedAssignment
+  } = this.props.item;
+    return (
+      <a href="javascript:void(0)" onClick={this.copylink}>
+        <img src={sharedicon} />
+        <span>{intl.get('assignment preview.sharedicon')}</span>
+      </a>
+    );
+  }
   public renderListNumber = (item: SimpleNumberData) => (
     <li>{item.name}</li>
   )
@@ -138,19 +156,26 @@ class ArticleContent extends Component<Props> {
             </div>
           </div>
           <div className="cardTemplateArticle__header__bottom">
-            <div className="links">
-              <ul>
-                {lengtArticles && lvlArticles.map(this.lvlArticles)}
-                {!lengtArticles && this.lvlArticlesEmpty()}
-              </ul>
-            </div>
-            <div className="relateds">
-                <h3>{intl.get('assignment preview.Related')}</h3>
-                <ul>
-                  {this.relatedArticles()}
-                  {!(this.userService.getCurrentUser()!.type === UserType.Student) && this.relatedTP()}
-                  {!(this.userService.getCurrentUser()!.type === UserType.Student) && this.relatedAssignments()}
-                </ul>
+            <div className="cardTemplateArticle__header__bottom__flex">
+              <div className="cardTemplateArticle__header__bottom__left">
+                <div className="links">
+                  <ul>
+                    {lengtArticles && lvlArticles.map(this.lvlArticles)}
+                    {!lengtArticles && this.lvlArticlesEmpty()}
+                  </ul>
+                </div>
+                <div className="relateds">
+                    <h3>{intl.get('assignment preview.Related')}</h3>
+                    <ul>
+                      {this.relatedArticles()}
+                      {!(this.userService.getCurrentUser()!.type === UserType.Student) && this.relatedTP()}
+                      {!(this.userService.getCurrentUser()!.type === UserType.Student) && this.relatedAssignments()}
+                    </ul>
+                </div>
+              </div>
+              <div className="cardTemplateArticle__header__bottom__right">
+                {lengtArticles && this.renderSharedarticle()}
+              </div>
             </div>
           </div>
         </div>
