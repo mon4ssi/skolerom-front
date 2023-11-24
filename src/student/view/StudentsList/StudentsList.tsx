@@ -62,8 +62,11 @@ export class StudentsListComponent extends Component<Props> {
     filter.grade = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.GRADE);
     filter.subject = QueryStringHelper.getNumber(this.props.history, QueryStringKeys.SUBJECT);
     filter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeys.SEARCH);
-
-    this.props.studentsListStore!.getStudentsList();
+    if (filter.grade || filter.subject || filter.searchQuery) {
+      this.props.studentsListStore!.getStudentsList();
+    } else {
+      this.props.studentsListStore!.studentsList = [];
+    }
   }
 
   public async componentDidMount() {
@@ -170,6 +173,13 @@ export class StudentsListComponent extends Component<Props> {
   public renderStudents = () => {
     const { studentsListStore, currentTab } = this.props;
     const { studentsList, studentsListForSkeleton, studentsListState } = studentsListStore!;
+    if (studentsList.length === 0) {
+      return (
+        <div className="emptyStudent">
+          {intl.get('students_list.empty')}
+        </div>
+      );
+    }
     return currentTab === 'my' ? (
       (studentsListState === StoreState.PENDING ? studentsList : studentsListForSkeleton).map(student => (
         studentsListState === StoreState.LOADING ? (

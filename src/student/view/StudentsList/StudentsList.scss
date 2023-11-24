@@ -6,7 +6,12 @@
   display: flex;
   flex-direction: column;
 }
-
+.emptyStudent {
+  text-align: center;
+  padding-top: 50px;
+  font-size: 25px;
+  font-weight: 400;
+}
 .StudentsList__list {
   margin: 10px 0 0 0;
   height: 100%;

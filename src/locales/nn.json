@@ -821,6 +821,7 @@
   "students_list": {
     "change_font_size": "Endre skriftstorleik",
     "title":"Elevar",
+    "empty": " Vel eit trinn for å sjå elevane dine.",
     "tabs": {
       "my_students": "Mine elevar",
       "previous_students": "Tidlegare elevar",
