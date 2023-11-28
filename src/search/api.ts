@@ -53,7 +53,7 @@ export class SearchApi implements SearchRepo {
     const response = await API.get(`${process.env.REACT_APP_SEARCH}/api/content`, {
       params: buildFilterDTO(filter)
     });
-    /* const response = await API.get(`https://search.beta.skolerom.no/api/content`, {
+    /*const response = await API.get(`https://search.skolerom-beta.com/api/content`, {
       params: buildFilterDTO(filter)
     });*/
     // const response = await API.get('https://skolerom.proxy.beeceptor.com/todos');

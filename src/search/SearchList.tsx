@@ -62,6 +62,8 @@ interface SearchState {
   mygoals: Array<SimpleStringData>;
   mysource: Array<SimpleNumberDataTitle>;
   myreading: Array<SimpleNumberDataTitle>;
+  langFilters: Array<string>;
+  langWpFilters: Array<SimpleStringData>;
   page: number;
 }
 export const USER_SERVICE = 'USER_SERVICE';
@@ -91,7 +93,9 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     mytopics: [],
     mygoals: [],
     mysource: [],
-    myreading: []
+    myreading: [],
+    langFilters: [''],
+    langWpFilters: []
   };
   public tabNavigationLinks = [
     {
@@ -196,7 +200,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     const paged = (basicPage) ? basicPage : 1;
     const basicLang = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.LANG);
     const storagelocale = this.storageInteractor.getCurrentLocale();
-    const lang = (basicLang) ? basicLang : (storagelocale) ? storagelocale : 'nb' ;
+    const lang = (basicLang) ? basicLang : String(this.state.langFilters);
     this.props.searchStore!.myfilter.page = paged;
     this.props.searchStore!.myfilter.localeId = lang;
     this.props.searchStore!.myfilter.grades = mygrades;
@@ -265,15 +269,38 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     });
   }
   public async componentDidMount() {
+    const { searchStore } = this.props;
+    const NewwpLenguajes : Array<SimpleStringData> = WPLENGUAGES;
     const isValue = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
-    this.featchFilters();
-    this.setState({
-      type : this.props.type,
-      searchQueryValue: (isValue !== undefined && isValue !== null) ? isValue : ''
-    });
-    if (this.searchRef.current) {
-      this.searchRef.current.focus();
+    const idWpLangs: Array<string> = [];
+    if (searchStore!.getFilters) {
+      if (searchStore!.getFilters!.locales) {
+        searchStore!.getFilters!.locales!.forEach((locale) => {
+          WPLENGUAGES.forEach((wp) => {
+            if (locale === wp.id) {
+              NewwpLenguajes.push(wp);
+            }
+          });
+        });
+      }
     }
+    NewwpLenguajes.forEach((wp) => {
+      idWpLangs.push(wp.id);
+    });
+    this.setState(
+      {
+        type : this.props.type,
+        langFilters: idWpLangs,
+        langWpFilters: NewwpLenguajes,
+        searchQueryValue: (isValue !== undefined && isValue !== null) ? isValue : ''
+      },
+      () => {
+        this.featchFilters();
+        if (this.searchRef.current) {
+          this.searchRef.current.focus();
+        }
+      }
+    );
     document.addEventListener('click', this.handleClickOutside, true);
   }
 
@@ -449,7 +476,6 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     this.setState({
       useFilters: false
     });
-    this.props.searchStore!.myfilterLang = this.storageInteractor.getCurrentLocale();
   }
 
   public filters = () => {
@@ -483,37 +509,38 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
 
   public changeItemFilterlang = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const { searchStore } = this.props;
+    const mylangFilters = this.state.langFilters;
     e.stopPropagation();
     const value = e.currentTarget.value;
-    searchStore!.myfilterLang = value;
+    if ((mylangFilters.includes(value))) {
+      const index = mylangFilters.indexOf(value);
+      mylangFilters.splice(index, 1);
+    } else {
+      mylangFilters.push(value);
+    }
+    searchStore!.myfilterLang = String(mylangFilters);
+    this.setState({
+      langFilters : mylangFilters
+    });
     QueryStringHelper.set(
       this.props.history,
       QueryStringKeysSearch.LANG,
-      value ? value : ''
+      value ? String(mylangFilters) : ''
     );
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
     this.featchFilters();
     this.closeFiltersModalTp();
   }
 
-  public itemFilterlang = (item: any) => {
+  public itemFilterlang = (item: SimpleStringData) => {
     const { searchStore } = this.props;
-    if (item.id === searchStore!.myfilterLang) {
-      return (
-        <button
-          value={item.id}
-          key={item.id}
-          className="buttonLang active"
-        >
-          {item.name}
-        </button>
-      );
-    }
+    const { langFilters } = this.state;
+    const buttonsClass = (langFilters.includes(item.id)) ? 'buttonLang active' : 'buttonLang';
     return (
       <button
         value={item.id}
         key={item.id}
-        className="buttonLang"
+        className={buttonsClass}
         onClick={this.changeItemFilterlang}
       >
         {item.name}
@@ -531,20 +558,9 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
 
   public modalFilterlang = () => {
     const { searchStore } = this.props;
-    let NewwpLenguajes : Array<any> = [];
-    if (searchStore!.getFilters!.locales) {
-      searchStore!.getFilters!.locales!.forEach((locale) => {
-        WPLENGUAGES.forEach((wp) => {
-          if (locale === wp.id) {
-            NewwpLenguajes.push(wp);
-          }
-        });
-      });
-    } else {
-      NewwpLenguajes = WPLENGUAGES;
-    }
+    const NewwpLenguajes : Array<SimpleStringData> = this.state.langWpFilters;
     return (
-      <div className="absModalTinker" onMouseEnter={this.LangMouseEnter} onMouseLeave={this.LangMouseLeave}>
+      <div className="listLenguajes" >
         {NewwpLenguajes.map(this.itemFilterlang)}
       </div>
     );
@@ -677,15 +693,15 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
                 <img src={filterIcon} />
                 {btnText}
               </a>
-              <a href="javascript:void(0)" className={classbtnlang} onClick={this.openFiltersModalLang}>
-                <img src={langIcon} />
-                {langText}
-              </a>
-              {this.state.filterModalLang && this.modalFilterlang()}
             </div>
           </div>
           <div className="SearchPage__header__bottom">
-            {this.renderTabs()}
+            <div className="SearchPage__header__bottom__left">
+              {this.renderTabs()}
+            </div>
+            <div className="SearchPage__header__bottom__right">
+              {this.modalFilterlang()}
+            </div>
           </div>
         </div>
         <div className={classInsideBody} ref={this.refBody}>

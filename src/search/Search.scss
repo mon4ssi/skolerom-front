@@ -72,6 +72,9 @@
         }
         &__bottom {
             position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             .renderTabs {
                 display: flex;
                 .renderTab {
@@ -89,6 +92,47 @@
                     &.active {
                         border-bottom: solid 3px #E2017B;
                         color: #E2017B;
+                    }
+                }
+            }
+            .listLenguajes {
+                padding-bottom: 8px;
+                button {
+                    background: transparent;
+                    padding: 0px;
+                    position: relative;
+                    padding-left: 22px;
+                    margin-left: 18px;
+                    font-size: 14px;
+                    cursor: pointer;
+                    &:before {
+                        content: '';
+                        width: 16px;
+                        height: 16px;
+                        position: absolute;
+                        border: solid 1px #0b2541;
+                        left: 0px;
+                        border-radius: 3px;
+                    }
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        width: 4px;
+                        height: 10px;
+                        border-bottom: solid 2px white;
+                        border-right: solid 2px white;
+                        transform: rotate(45deg);
+                        left: 6px;
+                        top: 1px;
+                        opacity: 0;
+                    }
+                    &.active {
+                        &:before {
+                            background: #0b2541;
+                        }
+                        &:after {
+                            opacity: 1;
+                        }
                     }
                 }
             }

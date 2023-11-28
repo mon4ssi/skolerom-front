@@ -67,8 +67,8 @@ export const WPLENGUAGES = [
   {
     id: 'nb',
     name: 'Bokmål'
-  }
-  /*{
+  },
+  {
     id: 'fi',
     name: 'Suomi'
   },
@@ -76,7 +76,7 @@ export const WPLENGUAGES = [
     id: 'kv',
     name: 'Kvensk'
   },
-  {
+  /*{
     id: 'ru',
     name: 'Русский'
   },
