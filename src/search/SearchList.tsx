@@ -30,6 +30,7 @@ import tpPinkIcon from 'assets/images/teaching-path-pink.svg';
 import assigIcon from 'assets/images/assignment.svg';
 import assigPinkIcon from 'assets/images/assignmentpink.svg';
 import closeicon from 'assets/images/close-button.svg';
+import resetImg from 'assets/images/reset-icon.svg';
 
 import './Search.scss';
 const number2 = 2;
@@ -257,9 +258,9 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
   public handleClickOutside = () => {
     if (this.state.filterModalLang && !this.state.useLang) {
-      this.setState({
+      /*this.setState({
         filterModalLang: false
-      });
+      });*/
     }
   }
   public componentWillUnmount() {
@@ -270,10 +271,10 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
   public async componentDidMount() {
     const { searchStore } = this.props;
-    const NewwpLenguajes : Array<SimpleStringData> = WPLENGUAGES;
+    let NewwpLenguajes : Array<SimpleStringData> = [];
     const isValue = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
     const idWpLangs: Array<string> = [];
-    if (searchStore!.getFilters) {
+    /*if (searchStore!.getFilters) {
       if (searchStore!.getFilters!.locales) {
         searchStore!.getFilters!.locales!.forEach((locale) => {
           WPLENGUAGES.forEach((wp) => {
@@ -282,8 +283,13 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
             }
           });
         });
+      } else {
+        NewwpLenguajes = WPLENGUAGES;
       }
-    }
+    } else {
+      NewwpLenguajes = WPLENGUAGES;
+    }*/
+    NewwpLenguajes = WPLENGUAGES;
     NewwpLenguajes.forEach((wp) => {
       idWpLangs.push(wp.id);
     });
@@ -478,6 +484,30 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     });
   }
 
+  public resetFilters = async () => {
+    const filters = this.props.searchStore!.getFilters;
+    this.props.searchStore!.resetFilters();
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.LANG, 'nn,en,fi,kv,nb');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GRADE, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.SUBJECT, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GREEPGOALSIDS, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GREPCOREELEMENTSIDS, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GREPMAINTOPICSIDS, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GREPREADINGINSUBJECT, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.SOURCE, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    const idWpLangs: Array<string> = [];
+    WPLENGUAGES.forEach((wp) => {
+      idWpLangs.push(wp.id);
+    });
+    this.setState({
+      langFilters: idWpLangs,
+      langWpFilters: WPLENGUAGES,
+      useFilters: false
+    });
+    this.featchFilters();
+  }
+
   public filters = () => {
     const { searchStore } = this.props;
     return (
@@ -536,16 +566,36 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     const { searchStore } = this.props;
     const { langFilters } = this.state;
     const buttonsClass = (langFilters.includes(item.id)) ? 'buttonLang active' : 'buttonLang';
-    return (
-      <button
-        value={item.id}
-        key={item.id}
-        className={buttonsClass}
-        onClick={this.changeItemFilterlang}
-      >
-        {item.name}
-      </button>
-    );
+    if (item.id === 'en' || item.id === 'fi' || item.id === 'kv' || item.id === 'ru') {
+      return (
+        <button
+          value={item.id}
+          key={item.id}
+          className={buttonsClass}
+          onClick={this.changeItemFilterlang}
+        >
+          {item.name}
+        </button>
+      );
+    }
+  }
+
+  public itemFilterlangFilter = (item: SimpleStringData) => {
+    const { searchStore } = this.props;
+    const { langFilters } = this.state;
+    const buttonsClass = (langFilters.includes(item.id)) ? 'CreateButton active' : 'CreateButton';
+    if (item.id === 'nb' || item.id === 'nn') {
+      return (
+        <button
+          value={item.id}
+          key={item.id}
+          className={buttonsClass}
+          onClick={this.changeItemFilterlang}
+        >
+          {item.id}
+        </button>
+      );
+    }
   }
 
   public LangMouseEnter = () => {
@@ -556,12 +606,32 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     this.setState({ useLang: false });
   }
 
-  public modalFilterlang = () => {
+  public getModalFilterLenguajes = () => {
     const { searchStore } = this.props;
     const NewwpLenguajes : Array<SimpleStringData> = this.state.langWpFilters;
     return (
-      <div className="listLenguajes" >
+      <div className="modalFilterLenguagesContent absModalTinker">
         {NewwpLenguajes.map(this.itemFilterlang)}
+      </div>
+    );
+  }
+
+  public modalFilterlang = () => {
+    const { searchStore } = this.props;
+    const NewwpLenguajes : Array<SimpleStringData> = this.state.langWpFilters;
+    const classbtnlang = this.state.filterModalLang ? 'CreateButton active' : 'CreateButton active';
+    return (
+      <div className="listLenguagesComplete">
+        <div className="listLenguajesList" >
+          <a href="javascript:void(0)" className={classbtnlang} onClick={this.openFiltersModalLang}>
+            <img src={langIcon} />
+            {intl.get('generals.languagesimple')}
+          </a>
+          {this.state.filterModalLang && this.getModalFilterLenguajes()}
+        </div>
+        <div className="listLenguajes" >
+          {NewwpLenguajes.map(this.itemFilterlangFilter)}
+        </div>
       </div>
     );
   }
@@ -664,7 +734,6 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   public render() {
     const btnText = this.state.useFilters ? intl.get('edit_teaching_path.modals.search.buttons.button_open') : intl.get('edit_teaching_path.modals.search.buttons.button_close');
     const classbtnText = this.state.useFilters ? 'CreateButton active' : 'CreateButton';
-    const classbtnlang = this.state.filterModalLang ? 'CreateButton active' : 'CreateButton active';
     const placeholder = intl.get('assignments search.Search');
     const langText = intl.get('publishing_page.languages');
     const classInsideBody = (this.props.type === 'ARTICLE' || this.props.type === 'TEACHING-PATH') ? (!this.state.usedFiltereds) ? 'SearchPage__body body_ARTICLES' : 'SearchPage__body' : 'SearchPage__body';
@@ -693,6 +762,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
                 <img src={filterIcon} />
                 {btnText}
               </a>
+              {this.modalFilterlang()}
             </div>
           </div>
           <div className="SearchPage__header__bottom">
@@ -700,7 +770,10 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
               {this.renderTabs()}
             </div>
             <div className="SearchPage__header__bottom__right">
-              {this.modalFilterlang()}
+              <button id="ButtonCloseTpInside" onClick={this.resetFilters}>
+                <img src={resetImg} />
+                <span>{intl.get('edit_teaching_path.modals.search.header.button')}</span>
+              </button>
             </div>
           </div>
         </div>
