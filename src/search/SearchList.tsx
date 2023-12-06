@@ -658,7 +658,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     WPLENGUAGES.forEach((wp) => {
       idWpLangs.push(wp.id);
     });
-    const buttonsClass = (this.arraysSonIguales(isLangs!.split(','), idWpLangs)) ? 'CreateButton active' : 'CreateButton';
+    const buttonsClass = (isLangs) ? (this.arraysSonIguales(isLangs!.split(','), idWpLangs)) ? 'CreateButton active' : 'CreateButton' : 'CreateButton active';
     return (
       <button
         className={buttonsClass}
