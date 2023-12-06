@@ -273,6 +273,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     const { searchStore } = this.props;
     let NewwpLenguajes : Array<SimpleStringData> = [];
     const isValue = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
+    const isLangs = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.LANG);
     const idWpLangs: Array<string> = [];
     /*if (searchStore!.getFilters) {
       if (searchStore!.getFilters!.locales) {
@@ -296,7 +297,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     this.setState(
       {
         type : this.props.type,
-        langFilters: idWpLangs,
+        langFilters: (isLangs) ? isLangs.split(',') : idWpLangs,
         langWpFilters: NewwpLenguajes,
         searchQueryValue: (isValue !== undefined && isValue !== null) ? isValue : ''
       },
@@ -616,12 +617,67 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     );
   }
 
+  public arraysSonIguales = (arr1: Array<String>, arr2: Array<String>)  => {
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
+    const sortedArr1 = arr1.slice().sort();
+    const sortedArr2 = arr2.slice().sort();
+    for (let i = 0; i < sortedArr1.length; i += 1) {
+      if (sortedArr1[i] !== sortedArr2[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public changeItemAllButton = () => {
+    const { searchStore } = this.props;
+    const idWpLangs: Array<string> = [];
+    WPLENGUAGES.forEach((wp) => {
+      idWpLangs.push(wp.id);
+    });
+    searchStore!.myfilterLang = String(idWpLangs);
+    this.setState({
+      langFilters : idWpLangs
+    });
+    QueryStringHelper.set(
+      this.props.history,
+      QueryStringKeysSearch.LANG,
+      String(idWpLangs)
+    );
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    this.featchFilters();
+    this.closeFiltersModalTp();
+  }
+
+  public allLangButton = () => {
+    const { langFilters } = this.state;
+    const isLangs = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.LANG);
+    const idWpLangs: Array<string> = [];
+    WPLENGUAGES.forEach((wp) => {
+      idWpLangs.push(wp.id);
+    });
+    const buttonsClass = (this.arraysSonIguales(isLangs!.split(','), idWpLangs)) ? 'CreateButton active' : 'CreateButton';
+    return (
+      <button
+        className={buttonsClass}
+        onClick={this.changeItemAllButton}
+      >
+        {intl.get('generals.languageall')}
+      </button>
+    );
+  }
+
   public modalFilterlang = () => {
     const { searchStore } = this.props;
     const NewwpLenguajes : Array<SimpleStringData> = this.state.langWpFilters;
-    const classbtnlang = this.state.filterModalLang ? 'CreateButton active' : 'CreateButton active';
+    const classbtnlang = this.state.filterModalLang ? 'CreateButton' : 'CreateButton active';
     return (
       <div className="listLenguagesComplete">
+        <div className="allSpark">
+          {this.allLangButton()}
+        </div>
         <div className="listLenguajesList" >
           <a href="javascript:void(0)" className={classbtnlang} onClick={this.openFiltersModalLang}>
             <img src={langIcon} />
