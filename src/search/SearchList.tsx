@@ -49,6 +49,7 @@ interface SearchState {
   searchQueryValue : string;
   filtersModalTp: boolean;
   filterModalLang: boolean;
+  filterModalLangsInside: boolean;
   useLang: boolean;
   useFilters: boolean;
   isFilter: boolean;
@@ -64,7 +65,9 @@ interface SearchState {
   mysource: Array<SimpleNumberDataTitle>;
   myreading: Array<SimpleNumberDataTitle>;
   langFilters: Array<string>;
+  langFiltersUsed: Array<string>;
   langWpFilters: Array<SimpleStringData>;
+  allButton: boolean;
   page: number;
 }
 export const USER_SERVICE = 'USER_SERVICE';
@@ -78,6 +81,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   public state = {
     filtersModalTp : false,
     filterModalLang : false,
+    filterModalLangsInside : false,
     useLang: false,
     useFilters: false,
     type : 'ARTICLE',
@@ -95,8 +99,10 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     mygoals: [],
     mysource: [],
     myreading: [],
-    langFilters: [''],
-    langWpFilters: []
+    langFilters: [],
+    langFiltersUsed: [],
+    langWpFilters: [],
+    allButton: true
   };
   public tabNavigationLinks = [
     {
@@ -298,10 +304,21 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
       {
         type : this.props.type,
         langFilters: (isLangs) ? isLangs.split(',') : idWpLangs,
+        langFiltersUsed: ((isLangs && this.arraysSonIguales(isLangs!.split(','), idWpLangs))) ? [] : (isLangs) ? isLangs.split(',') : [],
+        allButton : ((isLangs && this.arraysSonIguales(isLangs!.split(','), idWpLangs))) ? true : (isLangs) ? false : true,
         langWpFilters: NewwpLenguajes,
         searchQueryValue: (isValue !== undefined && isValue !== null) ? isValue : ''
       },
       () => {
+        if (isLangs && isLangs.includes('en') || isLangs && isLangs.includes('fi') || isLangs && isLangs.includes('kv') || isLangs && isLangs.includes('ru')) {
+          this.setState({
+            filterModalLangsInside: true
+          });
+        } else {
+          this.setState({
+            filterModalLangsInside: false
+          });
+        }
         this.featchFilters();
         if (this.searchRef.current) {
           this.searchRef.current.focus();
@@ -540,7 +557,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
 
   public changeItemFilterlang = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const { searchStore } = this.props;
-    const mylangFilters = this.state.langFilters;
+    const mylangFilters : Array<string> = this.state.langFiltersUsed;
     e.stopPropagation();
     const value = e.currentTarget.value;
     if ((mylangFilters.includes(value))) {
@@ -551,8 +568,19 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     }
     searchStore!.myfilterLang = String(mylangFilters);
     this.setState({
-      langFilters : mylangFilters
+      langFilters : mylangFilters,
+      langFiltersUsed : mylangFilters,
+      allButton : false
     });
+    if (mylangFilters.includes('en') || mylangFilters.includes('fi') || mylangFilters.includes('kv') || mylangFilters.includes('ru')) {
+      this.setState({
+        filterModalLangsInside: true
+      });
+    } else {
+      this.setState({
+        filterModalLangsInside: false
+      });
+    }
     QueryStringHelper.set(
       this.props.history,
       QueryStringKeysSearch.LANG,
@@ -565,8 +593,9 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
 
   public itemFilterlang = (item: SimpleStringData) => {
     const { searchStore } = this.props;
-    const { langFilters } = this.state;
-    const buttonsClass = (langFilters.includes(item.id)) ? 'buttonLang active' : 'buttonLang';
+    const { langFilters, langFiltersUsed } = this.state;
+    const mylangFilters : Array<string> = langFiltersUsed;
+    const buttonsClass = (mylangFilters.includes(item.id)) ? 'buttonLang active' : 'buttonLang';
     if (item.id === 'en' || item.id === 'fi' || item.id === 'kv' || item.id === 'ru') {
       return (
         <button
@@ -583,8 +612,9 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
 
   public itemFilterlangFilter = (item: SimpleStringData) => {
     const { searchStore } = this.props;
-    const { langFilters } = this.state;
-    const buttonsClass = (langFilters.includes(item.id)) ? 'CreateButton active' : 'CreateButton';
+    const { langFilters, langFiltersUsed } = this.state;
+    const mylangFilters : Array<string> = langFiltersUsed;
+    const buttonsClass = (mylangFilters.includes(item.id)) ? 'CreateButton active' : 'CreateButton';
     if (item.id === 'nb' || item.id === 'nn') {
       return (
         <button
@@ -639,7 +669,9 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     });
     searchStore!.myfilterLang = String(idWpLangs);
     this.setState({
-      langFilters : idWpLangs
+      langFilters : idWpLangs,
+      langFiltersUsed : [],
+      allButton : true
     });
     QueryStringHelper.set(
       this.props.history,
@@ -652,13 +684,12 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
 
   public allLangButton = () => {
-    const { langFilters } = this.state;
-    const isLangs = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.LANG);
+    const { allButton } = this.state;
     const idWpLangs: Array<string> = [];
     WPLENGUAGES.forEach((wp) => {
       idWpLangs.push(wp.id);
     });
-    const buttonsClass = (isLangs) ? (this.arraysSonIguales(isLangs!.split(','), idWpLangs)) ? 'CreateButton active' : 'CreateButton' : 'CreateButton active';
+    const buttonsClass = (allButton) ? 'CreateButton active' : 'CreateButton';
     return (
       <button
         className={buttonsClass}
@@ -672,11 +703,14 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   public modalFilterlang = () => {
     const { searchStore } = this.props;
     const NewwpLenguajes : Array<SimpleStringData> = this.state.langWpFilters;
-    const classbtnlang = this.state.filterModalLang ? 'CreateButton' : 'CreateButton active';
+    const classbtnlang = this.state.filterModalLangsInside ? 'CreateButton active' : 'CreateButton';
     return (
       <div className="listLenguagesComplete">
         <div className="allSpark">
           {this.allLangButton()}
+        </div>
+        <div className="listLenguajes" >
+          {NewwpLenguajes.map(this.itemFilterlangFilter)}
         </div>
         <div className="listLenguajesList" >
           <a href="javascript:void(0)" className={classbtnlang} onClick={this.openFiltersModalLang}>
@@ -684,9 +718,6 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
             {intl.get('generals.languagesimple')}
           </a>
           {this.state.filterModalLang && this.getModalFilterLenguajes()}
-        </div>
-        <div className="listLenguajes" >
-          {NewwpLenguajes.map(this.itemFilterlangFilter)}
         </div>
       </div>
     );

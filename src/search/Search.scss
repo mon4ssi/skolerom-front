@@ -58,9 +58,6 @@
                     &:hover {
                         background: white;
                         color:  #0b2541;
-                        img {
-                            filter: brightness(0)invert(1);
-                        }
                     }
                     &.active {
                         background: #0b2541;
