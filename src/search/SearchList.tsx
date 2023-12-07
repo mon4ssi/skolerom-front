@@ -521,7 +521,9 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     this.setState({
       langFilters: idWpLangs,
       langWpFilters: WPLENGUAGES,
-      useFilters: false
+      useFilters: false,
+      filterModalLangsInside: false,
+      allButton : true,
     });
     this.featchFilters();
   }
