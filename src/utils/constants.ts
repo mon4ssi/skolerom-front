@@ -57,23 +57,23 @@ export const LOCALES_MAPPING_FOR_BACKEND = {
 
 export const WPLENGUAGES = [
   {
-    id: 'nb',
-    name: 'Bokmål'
-  },
-  {
-    id: 'nn',
-    name: 'Nynorsk'
-  },
-  {
     id: 'en',
+    shortname: 'en',
     name: 'English'
   },
   {
-    id: 'fi',
-    name: 'Suomi'
+    id: 'nn',
+    shortname: 'nn',
+    name: 'Nynorsk'
+  },
+  {
+    id: 'nb',
+    shortname: 'bm',
+    name: 'Bokmål'
   },
   {
     id: 'kv',
+    shortname: 'kv',
     name: 'Kvensk'
   },
   /*{

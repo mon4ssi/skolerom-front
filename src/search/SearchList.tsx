@@ -6,7 +6,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { SearchComponentList } from '../search/searchListCompontent/searchListComponent';
 import { SearchFilter } from '../search/searchFilters/searchFilters';
 import { SearchStore } from '../search/SearchStore';
-import { Search, FilterMeta, SimpleNumberData, SimpleStringData, SimpleNumberDataTitle } from '../search/Search';
+import { Search, FilterMeta, SimpleNumberData, SimpleStringData, SimpleStringShortData, SimpleNumberDataTitle } from '../search/Search';
 import { WPLENGUAGES } from '../utils/constants';
 import { lettersNoEn } from 'utils/lettersNoEn';
 import * as QueryStringHelper from 'utils/QueryStringHelper';
@@ -66,7 +66,7 @@ interface SearchState {
   myreading: Array<SimpleNumberDataTitle>;
   langFilters: Array<string>;
   langFiltersUsed: Array<string>;
-  langWpFilters: Array<SimpleStringData>;
+  langWpFilters: Array<SimpleStringShortData>;
   allButton: boolean;
   page: number;
 }
@@ -277,7 +277,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
   public async componentDidMount() {
     const { searchStore } = this.props;
-    let NewwpLenguajes : Array<SimpleStringData> = [];
+    let NewwpLenguajes : Array<SimpleStringShortData> = [];
     const isValue = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
     const isLangs = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.LANG);
     const idWpLangs: Array<string> = [];
@@ -610,7 +610,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     }
   }
 
-  public itemFilterlangFilter = (item: SimpleStringData) => {
+  public itemFilterlangFilter = (item: SimpleStringShortData) => {
     const { searchStore } = this.props;
     const { langFilters, langFiltersUsed } = this.state;
     const mylangFilters : Array<string> = langFiltersUsed;
@@ -623,7 +623,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
           className={buttonsClass}
           onClick={this.changeItemFilterlang}
         >
-          {item.id}
+          {item.shortname}
         </button>
       );
     }
@@ -671,7 +671,8 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     this.setState({
       langFilters : idWpLangs,
       langFiltersUsed : [],
-      allButton : true
+      allButton : true,
+      filterModalLangsInside: false
     });
     QueryStringHelper.set(
       this.props.history,
@@ -702,7 +703,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
 
   public modalFilterlang = () => {
     const { searchStore } = this.props;
-    const NewwpLenguajes : Array<SimpleStringData> = this.state.langWpFilters;
+    const NewwpLenguajes : Array<SimpleStringShortData> = this.state.langWpFilters;
     const classbtnlang = this.state.filterModalLangsInside ? 'CreateButton active' : 'CreateButton';
     return (
       <div className="listLenguagesComplete">
