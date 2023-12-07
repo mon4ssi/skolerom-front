@@ -520,6 +520,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     });
     this.setState({
       langFilters: idWpLangs,
+      langFiltersUsed: [],
       langWpFilters: WPLENGUAGES,
       useFilters: false,
       filterModalLangsInside: false,
