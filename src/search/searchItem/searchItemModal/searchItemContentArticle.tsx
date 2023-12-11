@@ -156,26 +156,19 @@ class ArticleContent extends Component<Props> {
             </div>
           </div>
           <div className="cardTemplateArticle__header__bottom">
-            <div className="cardTemplateArticle__header__bottom__flex">
-              <div className="cardTemplateArticle__header__bottom__left">
-                <div className="links">
-                  <ul>
-                    {lengtArticles && lvlArticles.map(this.lvlArticles)}
-                    {!lengtArticles && this.lvlArticlesEmpty()}
-                  </ul>
-                </div>
-                <div className="relateds">
-                    <h3>{intl.get('assignment preview.Related')}</h3>
-                    <ul>
-                      {this.relatedArticles()}
-                      {!(this.userService.getCurrentUser()!.type === UserType.Student) && this.relatedTP()}
-                      {!(this.userService.getCurrentUser()!.type === UserType.Student) && this.relatedAssignments()}
-                    </ul>
-                </div>
-              </div>
-              <div className="cardTemplateArticle__header__bottom__right">
-                {lengtArticles && this.renderSharedarticle()}
-              </div>
+            <div className="links">
+              <ul>
+                {lengtArticles && lvlArticles.map(this.lvlArticles)}
+                {!lengtArticles && this.lvlArticlesEmpty()}
+              </ul>
+            </div>
+            <div className="relateds">
+                <h3>{intl.get('assignment preview.Related')}</h3>
+                <ul>
+                  {this.relatedArticles()}
+                  {!(this.userService.getCurrentUser()!.type === UserType.Student) && this.relatedTP()}
+                  {!(this.userService.getCurrentUser()!.type === UserType.Student) && this.relatedAssignments()}
+                </ul>
             </div>
           </div>
         </div>

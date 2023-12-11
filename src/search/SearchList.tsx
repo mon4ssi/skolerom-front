@@ -505,7 +505,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   public resetFilters = async () => {
     const filters = this.props.searchStore!.getFilters;
     this.props.searchStore!.resetFilters();
-    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.LANG, 'nn,en,fi,kv,nb');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.LANG, 'nn,en,fi,kv,nb,su,ru');
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GRADE, '');
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.SUBJECT, '');
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GREEPGOALSIDS, '');
@@ -599,7 +599,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     const { langFilters, langFiltersUsed } = this.state;
     const mylangFilters : Array<string> = langFiltersUsed;
     const buttonsClass = (mylangFilters.includes(item.id)) ? 'buttonLang active' : 'buttonLang';
-    if (item.id === 'en' || item.id === 'fi' || item.id === 'kv' || item.id === 'ru') {
+    if (item.id === 'en' || item.id === 'fi' || item.id === 'kv' || item.id === 'su' || item.id === 'ru' || item.id === 'uk') {
       return (
         <button
           value={item.id}
