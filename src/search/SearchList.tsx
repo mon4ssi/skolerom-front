@@ -573,7 +573,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     this.setState({
       langFilters : mylangFilters,
       langFiltersUsed : mylangFilters,
-      allButton : false
+      allButton : (mylangFilters.length === 0) ? true : false
     });
     if (mylangFilters.includes('en') || mylangFilters.includes('fi') || mylangFilters.includes('kv') || mylangFilters.includes('ru')) {
       this.setState({
