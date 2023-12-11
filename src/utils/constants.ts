@@ -82,14 +82,16 @@ export const WPLENGUAGES = [
     shortname: 'su',
     name: 'Soumi'
   },
-  /*{
+  {
     id: 'ru',
+    shortname: 'ru',
     name: 'Русский'
   },
   {
     id: 'uk',
+    shortname: 'uk',
     name: 'Українська'
-  }*/
+  }
 ];
 
 export const LANGUAGES = [

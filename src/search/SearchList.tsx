@@ -575,7 +575,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
       langFiltersUsed : mylangFilters,
       allButton : (mylangFilters.length === 0) ? true : false
     });
-    if (mylangFilters.includes('en') || mylangFilters.includes('fi') || mylangFilters.includes('kv') || mylangFilters.includes('ru')) {
+    if (mylangFilters.includes('en') || mylangFilters.includes('fi') || mylangFilters.includes('kv') || mylangFilters.includes('uk') || mylangFilters.includes('ru') || mylangFilters.includes('su')) {
       this.setState({
         filterModalLangsInside: true
       });
