@@ -497,7 +497,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
   public resetFilters = async () => {
     const filters = this.props.searchStore!.getFilters;
     this.props.searchStore!.resetFilters();
-    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.LANG, '');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.LANG, 'nn,en,fi,kv,nb');
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GRADE, '');
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.SUBJECT, '');
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GREEPGOALSIDS, '');

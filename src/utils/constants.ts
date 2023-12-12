@@ -52,38 +52,46 @@ export const LOCALES_MAPPING_FOR_BACKEND = {
   [Locales.NB]: 'nob',
   [Locales.NN]: 'nno',
   [Locales.FN]: 'fin',
-  [Locales.KV]: 'kv'
+  [Locales.KV]: 'kv',
+  [Locales.SU]: 'su'
 };
 
 export const WPLENGUAGES = [
   {
     id: 'en',
+    shortname: 'en',
     name: 'English'
   },
   {
     id: 'nn',
+    shortname: 'nn',
     name: 'Nynorsk'
   },
   {
     id: 'nb',
+    shortname: 'bm',
     name: 'Bokmål'
-  }
-  /*{
-    id: 'fi',
-    name: 'Suomi'
   },
   {
     id: 'kv',
+    shortname: 'kv',
     name: 'Kvensk'
   },
   {
+    id: 'su',
+    shortname: 'su',
+    name: 'Soumi'
+  },
+  {
     id: 'ru',
+    shortname: 'ru',
     name: 'Русский'
   },
   {
     id: 'uk',
+    shortname: 'uk',
     name: 'Українська'
-  }*/
+  }
 ];
 
 export const LANGUAGES = [
@@ -140,8 +148,13 @@ export const LANGUAGESC = [
 
 export const LANGUAGESD = [
   {
-    name: 'Soumi',
+    name: 'Kvensk',
     code: Locales.KV,
+    id: 5
+  },
+  {
+    name: 'Soumi',
+    code: Locales.SU,
     id: 4
   },
   {
