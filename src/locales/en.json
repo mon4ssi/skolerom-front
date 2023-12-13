@@ -893,7 +893,8 @@
     "visibility": "visibility",
     "language": "Languages",
     "languagesimple": "Language",
-    "languageall": "All Languages",
+    "languageall": "Selected Languages",
+    "resetall": "View all Languages",
     "downloading": "Downloading"
   },
   "activity_page": {
