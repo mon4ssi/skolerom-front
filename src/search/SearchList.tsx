@@ -505,7 +505,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   public resetFilters = async () => {
     const filters = this.props.searchStore!.getFilters;
     this.props.searchStore!.resetFilters();
-    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.LANG, 'nn,en,fi,kv,nb,su,ru');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.LANG, 'en,nn,nb,kv,fi,ru,uk');
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GRADE, '');
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.SUBJECT, '');
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GREEPGOALSIDS, '');
@@ -626,7 +626,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
           className={buttonsClass}
           onClick={this.changeItemFilterlang}
         >
-          {item.shortname}
+          {item.name}
         </button>
       );
     }
@@ -711,7 +711,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     return (
       <div className="listLenguagesComplete">
         <div className="allSpark">
-          {this.allLangButton()}
+          {intl.get('generals.languageall')}
         </div>
         <div className="listLenguajes" >
           {NewwpLenguajes.map(this.itemFilterlangFilter)}
@@ -849,11 +849,11 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
               {this.state.useSearch && <img src={closeicon} className="closeIcon" onClick={this.cleanSearchInput}/>}
             </div>
             <div className="SearchPage__header__top__right">
+              {this.modalFilterlang()}
               <a href="javascript:void(0)" className={classbtnText} onClick={this.openFiltersModalTp}>
                 <img src={filterIcon} />
                 {btnText}
               </a>
-              {this.modalFilterlang()}
             </div>
           </div>
           <div className="SearchPage__header__bottom">
@@ -862,8 +862,8 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
             </div>
             <div className="SearchPage__header__bottom__right">
               <button id="ButtonCloseTpInside" onClick={this.resetFilters}>
-                <img src={resetImg} />
-                <span>{intl.get('edit_teaching_path.modals.search.header.button')}</span>
+                <img src={langIcon} />
+                <span>{intl.get('generals.resetall')}</span>
               </button>
             </div>
           </div>

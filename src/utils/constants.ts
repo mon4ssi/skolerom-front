@@ -53,7 +53,7 @@ export const LOCALES_MAPPING_FOR_BACKEND = {
   [Locales.NN]: 'nno',
   [Locales.FN]: 'fin',
   [Locales.KV]: 'kv',
-  [Locales.SU]: 'su'
+  [Locales.SU]: 'fi'
 };
 
 export const WPLENGUAGES = [
@@ -78,8 +78,8 @@ export const WPLENGUAGES = [
     name: 'Kvensk'
   },
   {
-    id: 'su',
-    shortname: 'su',
+    id: 'fi',
+    shortname: 'fi',
     name: 'Soumi'
   },
   {

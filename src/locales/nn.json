@@ -893,7 +893,8 @@
     "visibility": "synlegheit",
     "language": "Språk",
     "languagesimple": "Språk",
-    "languageall": "Alle Språk",
+    "languageall": "Avgrens Språk",
+    "resetall": "Vis alle språk",
     "downloading": "Lastar ned"
   },
   "activity_page": {
