@@ -12,7 +12,7 @@
             justify-content: space-between;
             margin-bottom: 20px;
             &__left {
-                width: calc(100% - 580px);
+                width: calc(100% - 640px);
                 position: relative;
                 img {
                     position: absolute;
@@ -37,7 +37,7 @@
             &__right {
                 display: flex;
                 align-items: center;
-                width: 550px;
+                width: 600px;
                 justify-content: space-between;
                 position: relative;
                 .allSpark {
