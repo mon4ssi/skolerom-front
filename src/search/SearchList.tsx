@@ -264,9 +264,9 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
   public handleClickOutside = () => {
     if (this.state.filterModalLang && !this.state.useLang) {
-      /*this.setState({
+      this.setState({
         filterModalLang: false
-      });*/
+      });
     }
   }
   public componentWillUnmount() {
@@ -311,9 +311,15 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
       },
       () => {
         if (isLangs && isLangs.includes('en') || isLangs && isLangs.includes('fi') || isLangs && isLangs.includes('kv') || isLangs && isLangs.includes('ru')) {
-          this.setState({
-            filterModalLangsInside: true
-          });
+          if (isLangs && isLangs.includes('en') && isLangs && isLangs.includes('fi') && isLangs && isLangs.includes('kv') && isLangs && isLangs.includes('ru')) {
+            this.setState({
+              filterModalLangsInside: false
+            });
+          } else {
+            this.setState({
+              filterModalLangsInside: true
+            });
+          }
         } else {
           this.setState({
             filterModalLangsInside: false
@@ -644,7 +650,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     const { searchStore } = this.props;
     const NewwpLenguajes : Array<SimpleStringData> = this.state.langWpFilters;
     return (
-      <div className="modalFilterLenguagesContent absModalTinker">
+      <div className="modalFilterLenguagesContent absModalTinker" onMouseEnter={this.LangMouseEnter} onMouseLeave={this.LangMouseLeave}>
         {NewwpLenguajes.map(this.itemFilterlang)}
       </div>
     );
@@ -717,7 +723,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
           {NewwpLenguajes.map(this.itemFilterlangFilter)}
         </div>
         <div className="listLenguajesList" >
-          <a href="javascript:void(0)" className={classbtnlang} onClick={this.openFiltersModalLang}>
+          <a href="javascript:void(0)" className={classbtnlang} onClick={this.openFiltersModalLang} onMouseEnter={this.LangMouseEnter} onMouseLeave={this.LangMouseLeave}>
             <img src={langIcon} />
             {intl.get('generals.languagesimple')}
           </a>
