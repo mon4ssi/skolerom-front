@@ -508,6 +508,26 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     });
   }
 
+  public resetFiltersLangs  = async () => {
+    const filters = this.props.searchStore!.getFilters;
+    this.props.searchStore!.resetLangFilters();
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.LANG, 'en,nn,nb,kv,fi,ru,uk');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+    const idWpLangs: Array<string> = [];
+    WPLENGUAGES.forEach((wp) => {
+      idWpLangs.push(wp.id);
+    });
+    this.setState({
+      langFilters: idWpLangs,
+      langFiltersUsed: [],
+      langWpFilters: WPLENGUAGES,
+      useFilters: false,
+      filterModalLangsInside: false,
+      allButton : true,
+    });
+    this.featchFilters();
+  }
+
   public resetFilters = async () => {
     const filters = this.props.searchStore!.getFilters;
     this.props.searchStore!.resetFilters();
@@ -867,7 +887,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
               {this.renderTabs()}
             </div>
             <div className="SearchPage__header__bottom__right">
-              <button id="ButtonCloseTpInside" onClick={this.resetFilters}>
+              <button id="ButtonCloseTpInside" onClick={this.resetFiltersLangs}>
                 <img src={langIcon} />
                 <span>{intl.get('generals.resetall')}</span>
               </button>

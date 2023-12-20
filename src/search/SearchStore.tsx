@@ -53,6 +53,13 @@ export class SearchStore {
       searchQuery: ''
     };
   }
+  public resetLangFilters() {
+    this.myfilter = {
+      page: 1,
+      per_page: 24,
+      localeId: this.myfilterLang
+    };
+  }
   @action
   public validIfUsed() {
     // tslint:disable-next-line:max-line-length

@@ -63,14 +63,14 @@ export const WPLENGUAGES = [
     name: 'English'
   },
   {
-    id: 'nn',
-    shortname: 'nn',
-    name: 'Nynorsk'
-  },
-  {
     id: 'nb',
     shortname: 'bm',
     name: 'Bokmål'
+  },
+  {
+    id: 'nn',
+    shortname: 'nn',
+    name: 'Nynorsk'
   },
   {
     id: 'kv',
