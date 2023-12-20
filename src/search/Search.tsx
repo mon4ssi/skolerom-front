@@ -22,6 +22,12 @@ export interface SimpleStringData {
   name: string;
 }
 
+export interface SimpleStringShortData {
+  id: string;
+  name: string;
+  shortname: string;
+}
+
 export interface SimpleGoalData {
   id: string;
   name: string;

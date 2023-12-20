@@ -8,7 +8,8 @@ export enum Locales {
   NB = 'nb',
   NN = 'nn',
   FN = 'fi',
-  KV = 'kv'
+  KV = 'kv',
+  SU = 'su'
 }
 
 export enum BooleanFilter {

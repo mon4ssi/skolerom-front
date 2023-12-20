@@ -891,6 +891,9 @@
     "student_level": "Velg elevspor",
     "visibility": "synlighet",
     "language": "Språk",
+    "languagesimple": "Språk",
+    "languageall": "Avgrens Språk",
+    "resetall": "Vis alle språk",
     "downloading": "Laster ned"
   },
   "activity_page": {

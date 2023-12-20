@@ -12,7 +12,7 @@
             justify-content: space-between;
             margin-bottom: 20px;
             &__left {
-                width: calc(100% - 340px);
+                width: calc(100% - 640px);
                 position: relative;
                 img {
                     position: absolute;
@@ -37,9 +37,12 @@
             &__right {
                 display: flex;
                 align-items: center;
-                width: 350px;
-                justify-content: flex-end;
+                width: 600px;
+                justify-content: space-between;
                 position: relative;
+                .allSpark {
+                    margin-right: 10px;
+                }
                 .CreateButton {
                     background: #e7ecef;
                     padding: 5px 10px;
@@ -48,7 +51,6 @@
                     display: flex;
                     align-items: center;
                     margin-left: 10px;
-                    min-width: 160px;
                     justify-content: center;
                     font-weight: 300;
                     img {
@@ -56,9 +58,8 @@
                         margin-right: 10px;
                     }
                     &:hover {
-                        img {
-                            filter: brightness(0)invert(1);
-                        }
+                        background: white;
+                        color:  #0b2541;
                     }
                     &.active {
                         background: #0b2541;
@@ -68,10 +69,27 @@
                         }
                     }
                 }
+                .listLenguagesComplete {
+                    display: flex;
+                    align-items: center;
+                    .listLenguajesList {
+                        position: relative;
+                    }
+                    .listLenguajes {
+                        display: flex;
+                        position: relative;
+                        .CreateButton {
+                            min-width: 80px;
+                        }
+                    }
+                }
             }
         }
         &__bottom {
             position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             .renderTabs {
                 display: flex;
                 .renderTab {
@@ -91,6 +109,56 @@
                         color: #E2017B;
                     }
                 }
+            }
+            .listLenguajes {
+                padding-bottom: 8px;
+                button {
+                    background: transparent;
+                    padding: 0px;
+                    position: relative;
+                    padding-left: 22px;
+                    margin-left: 18px;
+                    font-size: 14px;
+                    cursor: pointer;
+                    &:before {
+                        content: '';
+                        width: 16px;
+                        height: 16px;
+                        position: absolute;
+                        border: solid 1px #0b2541;
+                        left: 0px;
+                        border-radius: 3px;
+                    }
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        width: 4px;
+                        height: 10px;
+                        border-bottom: solid 2px white;
+                        border-right: solid 2px white;
+                        transform: rotate(45deg);
+                        left: 6px;
+                        top: 1px;
+                        opacity: 0;
+                    }
+                    &.active {
+                        &:before {
+                            background: #0b2541;
+                        }
+                        &:after {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+            button#ButtonCloseTpInside img {
+                margin-right: 6px;
+                width: 20px;
+            }
+            button#ButtonCloseTpInside {
+                display: flex;
+                background: transparent;
+                padding-bottom: 7px;
             }
         }
     }
@@ -125,12 +193,9 @@
         min-width: 150px;
         box-sizing: border-box;
         &:hover, &.active {
-            background: #E7ECEF;
-            color: #E2017B;
-        }
-        &.active {
-            pointer-events: none;
-        }
+            background: black;
+            color: white;
+        }        
     }
 }
 @media (max-width: 801px) {

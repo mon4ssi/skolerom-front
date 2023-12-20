@@ -12,6 +12,7 @@ import gradeImg from 'assets/images/grade.svg';
 import tagsImg from 'assets/images/tags.svg';
 import cogsImg from 'assets/images/cogs.svg';
 import goalsImg from 'assets/images/goals.svg';
+import sharedicon from 'assets/images/shared.svg';
 import { UserType } from 'user/User';
 import { UserService } from 'user/UserService';
 
@@ -46,6 +47,11 @@ class ArticleContent extends Component<Props> {
         </a>
       </li>
     );
+  }
+  public copylink = () => {
+    const {
+        relatedArticles
+    } = this.props.item;
   }
   public relatedArticles = () => {
     const {
@@ -102,6 +108,18 @@ class ArticleContent extends Component<Props> {
     }
     return (
       <li>{title}</li>
+    );
+  }
+
+  public renderSharedarticle = () =>  {
+    const {
+      relatedAssignment
+  } = this.props.item;
+    return (
+      <a href="javascript:void(0)" onClick={this.copylink}>
+        <img src={sharedicon} />
+        <span>{intl.get('assignment preview.sharedicon')}</span>
+      </a>
     );
   }
   public renderListNumber = (item: SimpleNumberData) => (

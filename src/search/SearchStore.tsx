@@ -12,11 +12,11 @@ export class SearchStore {
   @observable public useFilters: boolean = false;
   @observable public dataitems: any;
   @observable public isFilters: boolean = false;
-  @observable public myfilterLang: string | null = this.storageInteractor.getCurrentLocale();
+  @observable public myfilterLang: string | null = null;
   @observable public myfilter: Filter = {
     page: 1,
     per_page: 24,
-    localeId: this.storageInteractor.getCurrentLocale(),
+    localeId: null,
     type: 1,
     grades: [],
     subjects: [],
@@ -51,6 +51,13 @@ export class SearchStore {
       sources: [],
       readingInSubjects: [],
       searchQuery: ''
+    };
+  }
+  public resetLangFilters() {
+    this.myfilter = {
+      page: 1,
+      per_page: 24,
+      localeId: this.myfilterLang
     };
   }
   @action

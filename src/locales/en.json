@@ -892,6 +892,9 @@
     "student_level": "Student level",
     "visibility": "visibility",
     "language": "Languages",
+    "languagesimple": "Language",
+    "languageall": "Selected Languages",
+    "resetall": "Show all Languages",
     "downloading": "Downloading"
   },
   "activity_page": {
