@@ -57,13 +57,21 @@ export class SearchStore {
     this.myfilter = {
       page: 1,
       per_page: 24,
-      localeId: this.myfilterLang
+      localeId: this.myfilterLang,
+      type: 1,
+      grades: [],
+      subjects: [],
+      coreElements: [],
+      topics: [],
+      goals: [],
+      sources: [],
+      readingInSubjects: [],
     };
   }
   @action
   public validIfUsed() {
     // tslint:disable-next-line:max-line-length
-    if (this.myfilter.grades!.length > 0 || this.myfilter.subjects!.length > 0 || this.myfilter.coreElements!.length > 0 || this.myfilter.topics!.length > 0 || this.myfilter.goals!.length > 0 || this.myfilter.sources!.length > 0 || this.myfilter.readingInSubjects!.length > 0) {
+    if (this.myfilter! && this.myfilter.grades!.length > 0 || this.myfilter! && this.myfilter.subjects!.length > 0 || this.myfilter! && this.myfilter.coreElements!.length > 0 || this.myfilter! && this.myfilter.topics!.length > 0 || this.myfilter! && this.myfilter.goals!.length > 0 || this.myfilter! && this.myfilter.sources!.length > 0 || this.myfilter! && this.myfilter.readingInSubjects!.length > 0) {
       this.useFilters = true;
     }
   }
