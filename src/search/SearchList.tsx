@@ -225,6 +225,9 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
 
   public featchFilters = async () => {
+    let NewwpLenguajes : Array<SimpleStringShortData> = [];
+    const isLangs = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.LANG);
+    const idWpLangs: Array<string> = [];
     this.setState({
       usedFiltereds: false
     });
@@ -232,6 +235,24 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     const dataSearch = await this.props.searchStore!.getDataSearch();
     this.props.searchStore!.paginationTotalPages = dataSearch.totalpage;
     this.props.searchStore!.getFilters = dataSearch.filters;
+    if (this.props.searchStore!.getFilters) {
+      if (this.props.searchStore!.getFilters!.locales) {
+        this.props.searchStore!.getFilters!.locales!.forEach((locale) => {
+          WPLENGUAGES.forEach((wp) => {
+            if (locale === wp.id) {
+              NewwpLenguajes.push(wp);
+            }
+          });
+        });
+      } else {
+        NewwpLenguajes = WPLENGUAGES;
+      }
+    } else {
+      NewwpLenguajes = WPLENGUAGES;
+    }
+    NewwpLenguajes.forEach((wp) => {
+      idWpLangs.push(wp.id);
+    });
     this.setState(
       {
         items: dataSearch.items,
@@ -243,7 +264,28 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
         mygoals: dataSearch.filters.goals!,
         mysource: dataSearch.filters.sources!,
         myreading: dataSearch.filters.readingInSubjects!,
+        langFilters: (isLangs) ? isLangs.split(',') : idWpLangs,
+        langFiltersUsed: ((isLangs && this.arraysSonIguales(isLangs!.split(','), idWpLangs))) ? [] : (isLangs) ? isLangs.split(',') : [],
+        allButton : ((isLangs && this.arraysSonIguales(isLangs!.split(','), idWpLangs))) ? true : (isLangs) ? false : true,
+        langWpFilters: NewwpLenguajes,
         usedFiltereds: true
+      },
+      () => {
+        if (isLangs && isLangs.includes('en') || isLangs && isLangs.includes('fi') || isLangs && isLangs.includes('kv') || isLangs && isLangs.includes('ru')) {
+          if (isLangs && isLangs.includes('en') && isLangs && isLangs.includes('fi') && isLangs && isLangs.includes('kv') && isLangs && isLangs.includes('ru')) {
+            this.setState({
+              filterModalLangsInside: false
+            });
+          } else {
+            this.setState({
+              filterModalLangsInside: true
+            });
+          }
+        } else {
+          this.setState({
+            filterModalLangsInside: false
+          });
+        }
       }
     );
   }
@@ -277,54 +319,13 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
   public async componentDidMount() {
     const { searchStore } = this.props;
-    let NewwpLenguajes : Array<SimpleStringShortData> = [];
     const isValue = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
-    const isLangs = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.LANG);
-    const idWpLangs: Array<string> = [];
-    /*if (searchStore!.getFilters) {
-      if (searchStore!.getFilters!.locales) {
-        searchStore!.getFilters!.locales!.forEach((locale) => {
-          WPLENGUAGES.forEach((wp) => {
-            if (locale === wp.id) {
-              NewwpLenguajes.push(wp);
-            }
-          });
-        });
-      } else {
-        NewwpLenguajes = WPLENGUAGES;
-      }
-    } else {
-      NewwpLenguajes = WPLENGUAGES;
-    }*/
-    NewwpLenguajes = WPLENGUAGES;
-    NewwpLenguajes.forEach((wp) => {
-      idWpLangs.push(wp.id);
-    });
     this.setState(
       {
         type : this.props.type,
-        langFilters: (isLangs) ? isLangs.split(',') : idWpLangs,
-        langFiltersUsed: ((isLangs && this.arraysSonIguales(isLangs!.split(','), idWpLangs))) ? [] : (isLangs) ? isLangs.split(',') : [],
-        allButton : ((isLangs && this.arraysSonIguales(isLangs!.split(','), idWpLangs))) ? true : (isLangs) ? false : true,
-        langWpFilters: NewwpLenguajes,
         searchQueryValue: (isValue !== undefined && isValue !== null) ? isValue : ''
       },
       () => {
-        if (isLangs && isLangs.includes('en') || isLangs && isLangs.includes('fi') || isLangs && isLangs.includes('kv') || isLangs && isLangs.includes('ru')) {
-          if (isLangs && isLangs.includes('en') && isLangs && isLangs.includes('fi') && isLangs && isLangs.includes('kv') && isLangs && isLangs.includes('ru')) {
-            this.setState({
-              filterModalLangsInside: false
-            });
-          } else {
-            this.setState({
-              filterModalLangsInside: true
-            });
-          }
-        } else {
-          this.setState({
-            filterModalLangsInside: false
-          });
-        }
         this.featchFilters();
         if (this.searchRef.current) {
           this.searchRef.current.focus();
