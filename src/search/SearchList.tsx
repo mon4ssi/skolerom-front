@@ -735,9 +735,12 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     );
   }
 
+  public preloadOnLang = () => (<SkeletonLoader className="SearchListItem__skeleton" />);
+
   public modalFilterlang = () => {
     const { searchStore } = this.props;
     const NewwpLenguajes : Array<SimpleStringShortData> = this.state.langWpFilters;
+    const ifNewWp = (NewwpLenguajes.length === 0) ? true : false;
     const classbtnlang = this.state.filterModalLangsInside ? 'CreateButton active' : 'CreateButton';
     return (
       <div className="listLenguagesComplete">
@@ -745,7 +748,8 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
           {intl.get('generals.languageall')}
         </div>
         <div className="listLenguajes" >
-          {NewwpLenguajes.map(this.itemFilterlangFilter)}
+          {ifNewWp && this.preloadOnLang()}
+          {!ifNewWp && NewwpLenguajes.map(this.itemFilterlangFilter)}
         </div>
         <div className="listLenguajesList" >
           <a href="javascript:void(0)" className={classbtnlang} onClick={this.openFiltersModalLang} onMouseEnter={this.LangMouseEnter} onMouseLeave={this.LangMouseLeave}>
