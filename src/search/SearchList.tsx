@@ -614,28 +614,32 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
       mylangFilters.push(value);
     }
     searchStore!.myfilterLang = String(mylangFilters);
-    this.setState({
-      langFilters : mylangFilters,
-      langFiltersUsed : mylangFilters,
-      allButton : (mylangFilters.length === 0) ? true : false
-    });
-    if (mylangFilters.includes('en') || mylangFilters.includes('fi') || mylangFilters.includes('kv') || mylangFilters.includes('uk') || mylangFilters.includes('ru') || mylangFilters.includes('su')) {
-      this.setState({
-        filterModalLangsInside: true
-      });
-    } else {
-      this.setState({
-        filterModalLangsInside: false
-      });
-    }
-    QueryStringHelper.set(
-      this.props.history,
-      QueryStringKeysSearch.LANG,
-      value ? String(mylangFilters) : ''
+    this.setState(
+      {
+        langFilters : mylangFilters,
+        langFiltersUsed : mylangFilters,
+        allButton : (mylangFilters.length === 0) ? true : false
+      },
+      () => {
+        if (mylangFilters.includes('en') || mylangFilters.includes('fi') || mylangFilters.includes('kv') || mylangFilters.includes('uk') || mylangFilters.includes('ru') || mylangFilters.includes('su')) {
+          this.setState({
+            filterModalLangsInside: true
+          });
+        } else {
+          this.setState({
+            filterModalLangsInside: false
+          });
+        }
+        QueryStringHelper.set(
+          this.props.history,
+          QueryStringKeysSearch.LANG,
+          value ? String(mylangFilters) : ''
+        );
+        QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+        this.featchFilters();
+        this.closeFiltersModalTp();
+      }
     );
-    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
-    this.featchFilters();
-    this.closeFiltersModalTp();
   }
 
   public itemFilterlang = (item: SimpleStringData) => {
@@ -748,7 +752,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     );
   }
 
-  public preloadOnLang = () => (<SkeletonLoader className="SearchListItem__skeleton" />);
+  public preloadOnLang = () => (<div />);
 
   public modalFilterlang = () => {
     const { searchStore } = this.props;
