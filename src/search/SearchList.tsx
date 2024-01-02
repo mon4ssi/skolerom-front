@@ -313,6 +313,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
   public componentWillUnmount() {
     document.removeEventListener('click', this.handleClickOutside, true);
+    document.removeEventListener('keyup', this.handleKeyboardControl);
     this.setState({
       useFilters : false
     });
@@ -333,6 +334,18 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
       }
     );
     document.addEventListener('click', this.handleClickOutside, true);
+    document.addEventListener('keyup', this.handleKeyboardControl);
+  }
+
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    const htmlPathArea = String(event.composedPath()[0]);
+    const htmlText = '[object HTMLTextAreaElement]';
+    const inputText = '[object HTMLInputElement]';
+    if ((event.key === 'Enter')) {
+      this.setState({
+        useLang: true
+      });
+    }
   }
 
   public closeFiltersModalTp = () =>  {

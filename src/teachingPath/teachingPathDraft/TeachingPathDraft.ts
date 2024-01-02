@@ -256,8 +256,8 @@ export class DraftTeachingPath extends TeachingPath {
     } else {
       const articlesid = await this.addArticlesIdsBySave();
       const mediaImgsWP: Array<Attachment> = await this.articleService.fetchCoverImages(articlesid) || [];
-      this._backgroundImage = mediaImgsWP[0].url_large;
-      this._featuredImage = mediaImgsWP[0].path;
+      this._backgroundImage = mediaImgsWP.length > 0 ? mediaImgsWP[0].url_large : '';
+      this._featuredImage = mediaImgsWP.length > 0 ? mediaImgsWP[0].path : '';
     }
   }
 
