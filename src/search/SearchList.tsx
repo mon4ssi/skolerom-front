@@ -525,27 +525,31 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   public resetFiltersLangs  = async () => {
     const filters = this.props.searchStore!.getFilters;
     this.props.searchStore!.resetLangFilters();
-    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.LANG, 'en,nn,nb,kv,fi,ru,uk');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.LANG, '');
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
     const idWpLangs: Array<string> = [];
     WPLENGUAGES.forEach((wp) => {
       idWpLangs.push(wp.id);
     });
-    this.setState({
-      langFilters: idWpLangs,
-      langFiltersUsed: [],
-      langWpFilters: WPLENGUAGES,
-      useFilters: false,
-      filterModalLangsInside: false,
-      allButton : true,
-    });
-    this.featchFilters();
+    this.setState(
+      {
+        langFilters: [],
+        langFiltersUsed: [],
+        langWpFilters: WPLENGUAGES,
+        useFilters: false,
+        filterModalLangsInside: false,
+        allButton : true,
+      },
+      () => {
+        this.featchFilters();
+      }
+    );
   }
 
   public resetFilters = async () => {
     const filters = this.props.searchStore!.getFilters;
     this.props.searchStore!.resetFilters();
-    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.LANG, 'en,nn,nb,kv,fi,ru,uk');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.LANG, '');
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GRADE, '');
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.SUBJECT, '');
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GREEPGOALSIDS, '');
@@ -744,9 +748,12 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     );
   }
 
+  public preloadOnLang = () => (<SkeletonLoader className="SearchListItem__skeleton" />);
+
   public modalFilterlang = () => {
     const { searchStore } = this.props;
     const NewwpLenguajes : Array<SimpleStringShortData> = this.state.langWpFilters;
+    const ifNewWp = (NewwpLenguajes.length === 0) ? true : false;
     const classbtnlang = this.state.filterModalLangsInside ? 'CreateButton active' : 'CreateButton';
     return (
       <div className="listLenguagesComplete">
@@ -754,7 +761,8 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
           {intl.get('generals.languageall')}
         </div>
         <div className="listLenguajes" >
-          {NewwpLenguajes.map(this.itemFilterlangFilter)}
+          {ifNewWp && this.preloadOnLang()}
+          {!ifNewWp && NewwpLenguajes.map(this.itemFilterlangFilter)}
         </div>
         <div className="listLenguajesList" >
           <a href="javascript:void(0)" className={classbtnlang} onClick={this.openFiltersModalLang} onMouseEnter={this.LangMouseEnter} onMouseLeave={this.LangMouseLeave}>
