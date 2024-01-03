@@ -308,14 +308,18 @@ export class MyClasses extends Component<Props>{
     </div>
   )
 
+  public emptyClasses = () => (<div className="emptyClass">{intl.get('distribution_page.emptytext')}</div>);
+
   public render() {
     const { store, readOnly } = this.props;
     const { filteredGroups, selectedGroups } = store!;
+    const isGroup = filteredGroups.length > 0 ? true : false;
 
     return (
       <div className="MyClasses flexBox dirColumn">
 
-        {this.renderClasses(readOnly ? selectedGroups : filteredGroups)}
+        {isGroup && this.renderClasses(readOnly ? selectedGroups : filteredGroups)}
+        {!isGroup && this.emptyClasses()}
 
       </div>
     );

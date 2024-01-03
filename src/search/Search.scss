@@ -78,6 +78,16 @@
                     .listLenguajes {
                         display: flex;
                         position: relative;
+                        min-width: 185px;
+                        .css-1y8mk30-SkeletonTheme {
+                            height: 40px;
+                            position: relative;
+                            top: -5px;
+                            margin: 0px;
+                        }
+                        .css-1y8mk30-SkeletonTheme span {
+                            height: 40px !important;
+                        }
                         .CreateButton {
                             min-width: 80px;
                         }
@@ -196,6 +206,10 @@
             background: black;
             color: white;
         }        
+        &:focus {
+            background: #dbdbdb !important;
+            color: #0b2541 !important;
+        }
     }
 }
 @media (max-width: 800px) {

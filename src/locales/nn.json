@@ -589,6 +589,7 @@
     "languages": "Språk"
   },
   "distribution_page": {
+    "emptytext": "Ingen tildelte grupper",
     "distribute_assignment": "Distribuer oppgåva",
     "distribute_teaching_path": "Distribuer læringsstien",
     "distribute_to_students": "Distribuer til elevar",

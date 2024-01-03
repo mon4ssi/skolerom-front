@@ -589,6 +589,7 @@
     "languages": "Languages"
   },
   "distribution_page": {
+    "emptytext": "No groups assigned",
     "distribute_assignment": "Distribute assignment",
     "distribute_teaching_path": "Distribute teaching path",
     "distribute_to_students": "Distribute to students",
