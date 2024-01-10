@@ -9,7 +9,9 @@ export enum Locales {
   NN = 'nn',
   FN = 'fi',
   KV = 'kv',
-  SU = 'su'
+  SU = 'su',
+  RU = 'ru',
+  UK = 'uk'
 }
 
 export enum BooleanFilter {
