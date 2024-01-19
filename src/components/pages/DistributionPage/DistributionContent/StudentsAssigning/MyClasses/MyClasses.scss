@@ -1,6 +1,8 @@
 .MyClasses {
   max-height: calc(100% - 245px);
-
+  .emptyClass {
+    padding: 0px 20px;
+  }
   .classesContainer {
     overflow: auto;
 

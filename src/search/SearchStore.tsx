@@ -57,7 +57,7 @@ export class SearchStore {
     this.myfilter = {
       page: 1,
       per_page: 24,
-      localeId: this.myfilterLang,
+      localeId: '',
       type: 1,
       grades: [],
       subjects: [],

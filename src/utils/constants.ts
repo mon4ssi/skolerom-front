@@ -53,7 +53,9 @@ export const LOCALES_MAPPING_FOR_BACKEND = {
   [Locales.NN]: 'nno',
   [Locales.FN]: 'fin',
   [Locales.KV]: 'kv',
-  [Locales.SU]: 'fi'
+  [Locales.SU]: 'fi',
+  [Locales.RU]: 'ru',
+  [Locales.UK]: 'uk'
 };
 
 export const WPLENGUAGES = [
@@ -147,6 +149,16 @@ export const LANGUAGESC = [
 ];
 
 export const LANGUAGESD = [
+  {
+    name: 'Українська',
+    code: Locales.UK,
+    id: 7
+  },
+  {
+    name: 'Русский',
+    code: Locales.RU,
+    id: 6
+  },
   {
     name: 'Kvensk',
     code: Locales.KV,

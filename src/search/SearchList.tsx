@@ -225,6 +225,9 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
 
   public featchFilters = async () => {
+    let NewwpLenguajes : Array<SimpleStringShortData> = [];
+    const isLangs = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.LANG);
+    const idWpLangs: Array<string> = [];
     this.setState({
       usedFiltereds: false
     });
@@ -232,6 +235,24 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     const dataSearch = await this.props.searchStore!.getDataSearch();
     this.props.searchStore!.paginationTotalPages = dataSearch.totalpage;
     this.props.searchStore!.getFilters = dataSearch.filters;
+    if (this.props.searchStore!.getFilters) {
+      if (this.props.searchStore!.getFilters!.locales) {
+        this.props.searchStore!.getFilters!.locales!.forEach((locale) => {
+          WPLENGUAGES.forEach((wp) => {
+            if (locale === wp.id) {
+              NewwpLenguajes.push(wp);
+            }
+          });
+        });
+      } else {
+        NewwpLenguajes = WPLENGUAGES;
+      }
+    } else {
+      NewwpLenguajes = WPLENGUAGES;
+    }
+    NewwpLenguajes.forEach((wp) => {
+      idWpLangs.push(wp.id);
+    });
     this.setState(
       {
         items: dataSearch.items,
@@ -243,7 +264,28 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
         mygoals: dataSearch.filters.goals!,
         mysource: dataSearch.filters.sources!,
         myreading: dataSearch.filters.readingInSubjects!,
+        langFilters: (isLangs) ? isLangs.split(',') : idWpLangs,
+        langFiltersUsed: ((isLangs && this.arraysSonIguales(isLangs!.split(','), idWpLangs))) ? [] : (isLangs) ? isLangs.split(',') : [],
+        allButton : ((isLangs && this.arraysSonIguales(isLangs!.split(','), idWpLangs))) ? true : (isLangs) ? false : true,
+        langWpFilters: NewwpLenguajes,
         usedFiltereds: true
+      },
+      () => {
+        if (isLangs && isLangs.includes('en') || isLangs && isLangs.includes('fi') || isLangs && isLangs.includes('kv') || isLangs && isLangs.includes('ru')) {
+          if (isLangs && isLangs.includes('en') && isLangs && isLangs.includes('fi') && isLangs && isLangs.includes('kv') && isLangs && isLangs.includes('ru')) {
+            this.setState({
+              filterModalLangsInside: false
+            });
+          } else {
+            this.setState({
+              filterModalLangsInside: true
+            });
+          }
+        } else {
+          this.setState({
+            filterModalLangsInside: false
+          });
+        }
       }
     );
   }
@@ -271,60 +313,20 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
   public componentWillUnmount() {
     document.removeEventListener('click', this.handleClickOutside, true);
+    document.removeEventListener('keyup', this.handleKeyboardControl);
     this.setState({
       useFilters : false
     });
   }
   public async componentDidMount() {
     const { searchStore } = this.props;
-    let NewwpLenguajes : Array<SimpleStringShortData> = [];
     const isValue = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);
-    const isLangs = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.LANG);
-    const idWpLangs: Array<string> = [];
-    /*if (searchStore!.getFilters) {
-      if (searchStore!.getFilters!.locales) {
-        searchStore!.getFilters!.locales!.forEach((locale) => {
-          WPLENGUAGES.forEach((wp) => {
-            if (locale === wp.id) {
-              NewwpLenguajes.push(wp);
-            }
-          });
-        });
-      } else {
-        NewwpLenguajes = WPLENGUAGES;
-      }
-    } else {
-      NewwpLenguajes = WPLENGUAGES;
-    }*/
-    NewwpLenguajes = WPLENGUAGES;
-    NewwpLenguajes.forEach((wp) => {
-      idWpLangs.push(wp.id);
-    });
     this.setState(
       {
         type : this.props.type,
-        langFilters: (isLangs) ? isLangs.split(',') : idWpLangs,
-        langFiltersUsed: ((isLangs && this.arraysSonIguales(isLangs!.split(','), idWpLangs))) ? [] : (isLangs) ? isLangs.split(',') : [],
-        allButton : ((isLangs && this.arraysSonIguales(isLangs!.split(','), idWpLangs))) ? true : (isLangs) ? false : true,
-        langWpFilters: NewwpLenguajes,
         searchQueryValue: (isValue !== undefined && isValue !== null) ? isValue : ''
       },
       () => {
-        if (isLangs && isLangs.includes('en') || isLangs && isLangs.includes('fi') || isLangs && isLangs.includes('kv') || isLangs && isLangs.includes('ru')) {
-          if (isLangs && isLangs.includes('en') && isLangs && isLangs.includes('fi') && isLangs && isLangs.includes('kv') && isLangs && isLangs.includes('ru')) {
-            this.setState({
-              filterModalLangsInside: false
-            });
-          } else {
-            this.setState({
-              filterModalLangsInside: true
-            });
-          }
-        } else {
-          this.setState({
-            filterModalLangsInside: false
-          });
-        }
         this.featchFilters();
         if (this.searchRef.current) {
           this.searchRef.current.focus();
@@ -332,6 +334,18 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
       }
     );
     document.addEventListener('click', this.handleClickOutside, true);
+    document.addEventListener('keyup', this.handleKeyboardControl);
+  }
+
+  public handleKeyboardControl = (event: KeyboardEvent) => {
+    const htmlPathArea = String(event.composedPath()[0]);
+    const htmlText = '[object HTMLTextAreaElement]';
+    const inputText = '[object HTMLInputElement]';
+    if ((event.key === 'Enter')) {
+      this.setState({
+        useLang: true
+      });
+    }
   }
 
   public closeFiltersModalTp = () =>  {
@@ -511,27 +525,31 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   public resetFiltersLangs  = async () => {
     const filters = this.props.searchStore!.getFilters;
     this.props.searchStore!.resetLangFilters();
-    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.LANG, 'en,nn,nb,kv,fi,ru,uk');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.LANG, '');
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
     const idWpLangs: Array<string> = [];
     WPLENGUAGES.forEach((wp) => {
       idWpLangs.push(wp.id);
     });
-    this.setState({
-      langFilters: idWpLangs,
-      langFiltersUsed: [],
-      langWpFilters: WPLENGUAGES,
-      useFilters: false,
-      filterModalLangsInside: false,
-      allButton : true,
-    });
-    this.featchFilters();
+    this.setState(
+      {
+        langFilters: [],
+        langFiltersUsed: [],
+        langWpFilters: WPLENGUAGES,
+        useFilters: false,
+        filterModalLangsInside: false,
+        allButton : true,
+      },
+      () => {
+        this.featchFilters();
+      }
+    );
   }
 
   public resetFilters = async () => {
     const filters = this.props.searchStore!.getFilters;
     this.props.searchStore!.resetFilters();
-    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.LANG, 'en,nn,nb,kv,fi,ru,uk');
+    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.LANG, '');
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GRADE, '');
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.SUBJECT, '');
     QueryStringHelper.set(this.props.history, QueryStringKeysSearch.GREEPGOALSIDS, '');
@@ -596,28 +614,32 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
       mylangFilters.push(value);
     }
     searchStore!.myfilterLang = String(mylangFilters);
-    this.setState({
-      langFilters : mylangFilters,
-      langFiltersUsed : mylangFilters,
-      allButton : (mylangFilters.length === 0) ? true : false
-    });
-    if (mylangFilters.includes('en') || mylangFilters.includes('fi') || mylangFilters.includes('kv') || mylangFilters.includes('uk') || mylangFilters.includes('ru') || mylangFilters.includes('su')) {
-      this.setState({
-        filterModalLangsInside: true
-      });
-    } else {
-      this.setState({
-        filterModalLangsInside: false
-      });
-    }
-    QueryStringHelper.set(
-      this.props.history,
-      QueryStringKeysSearch.LANG,
-      value ? String(mylangFilters) : ''
+    this.setState(
+      {
+        langFilters : mylangFilters,
+        langFiltersUsed : mylangFilters,
+        allButton : (mylangFilters.length === 0) ? true : false
+      },
+      () => {
+        if (mylangFilters.includes('en') || mylangFilters.includes('fi') || mylangFilters.includes('kv') || mylangFilters.includes('uk') || mylangFilters.includes('ru') || mylangFilters.includes('su')) {
+          this.setState({
+            filterModalLangsInside: true
+          });
+        } else {
+          this.setState({
+            filterModalLangsInside: false
+          });
+        }
+        QueryStringHelper.set(
+          this.props.history,
+          QueryStringKeysSearch.LANG,
+          value ? String(mylangFilters) : ''
+        );
+        QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
+        this.featchFilters();
+        this.closeFiltersModalTp();
+      }
     );
-    QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
-    this.featchFilters();
-    this.closeFiltersModalTp();
   }
 
   public itemFilterlang = (item: SimpleStringData) => {
@@ -730,9 +752,12 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     );
   }
 
+  public preloadOnLang = () => (<div />);
+
   public modalFilterlang = () => {
     const { searchStore } = this.props;
     const NewwpLenguajes : Array<SimpleStringShortData> = this.state.langWpFilters;
+    const ifNewWp = (NewwpLenguajes.length === 0) ? true : false;
     const classbtnlang = this.state.filterModalLangsInside ? 'CreateButton active' : 'CreateButton';
     return (
       <div className="listLenguagesComplete">
@@ -740,7 +765,8 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
           {intl.get('generals.languageall')}
         </div>
         <div className="listLenguajes" >
-          {NewwpLenguajes.map(this.itemFilterlangFilter)}
+          {ifNewWp && this.preloadOnLang()}
+          {!ifNewWp && NewwpLenguajes.map(this.itemFilterlangFilter)}
         </div>
         <div className="listLenguajesList" >
           <a href="javascript:void(0)" className={classbtnlang} onClick={this.openFiltersModalLang} onMouseEnter={this.LangMouseEnter} onMouseLeave={this.LangMouseLeave}>
