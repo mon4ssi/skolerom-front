@@ -98,7 +98,7 @@
         &__bottom {
             position: relative;
             display: flex;
-            align-items: center;
+            align-items: flex-end;
             justify-content: space-between;
             .renderTabs {
                 display: flex;
@@ -167,8 +167,17 @@
             }
             button#ButtonCloseTpInside {
                 display: flex;
-                background: transparent;
-                padding-bottom: 7px;
+                background: #e7ecef;
+                padding: 5px 10px;
+                border: 1px solid #939fa7;
+                color: #0b2541;
+                align-items: center;
+                position: relative;
+                top: -5px;
+                font-weight: 200;
+                border-radius: 20px;
+                height: 40px;
+                font-size: 1.0625rem;
             }
         }
     }
@@ -217,6 +226,9 @@
         width: 100%;
         overflow-x: scroll;
     }
+    .SearchPage__header__top {
+        margin-bottom: 10px !important;
+    }
     .contentListSearch .Inside.Inside--horizontal {
         min-height: auto;
         height: auto;
@@ -260,8 +272,15 @@
     }
     .SearchPage__header__bottom {
         flex-wrap: wrap;
+        flex-direction: column-reverse;
     }
     .SearchPage__header__bottom__right {
-        margin: 10px -5px;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .SearchPage__header__bottom button#ButtonCloseTpInside {
+        top: 0px;
+        width: 100%;
+        justify-content: center;
     }
 }
