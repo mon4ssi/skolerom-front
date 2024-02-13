@@ -235,4 +235,33 @@
     .contentListSearch .Inside .cardInfoItem__right .subjectItems {
         flex-wrap: wrap;
     }
+    .SearchPage__header__top__right {
+        flex-wrap: wrap;
+    }
+    .SearchPage__header__top__right .listLenguagesComplete {
+        flex-wrap: wrap;
+        width: 100%;
+        flex: none;
+        justify-content: space-between;
+    }
+    .SearchPage__header__top__right .allSpark {
+        font-size: 14px;
+    }
+    .SearchPage__header__top__right .listLenguagesComplete .listLenguajes .CreateButton {
+        margin-top: 0px;
+    }
+    .SearchPage__header__top__right .listLenguagesComplete .listLenguajesList {
+        flex: none;
+        width: 100%;
+        margin: 10px 0px;
+    }
+    .SearchPage__header__top__right .CreateButton {
+        width: 100% !important;
+    }
+    .SearchPage__header__bottom {
+        flex-wrap: wrap;
+    }
+    .SearchPage__header__bottom__right {
+        margin: 10px -5px;
+    }
 }
