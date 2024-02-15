@@ -259,8 +259,19 @@
         flex: none;
         justify-content: space-between;
     }
-    .SearchPage__header__top__right .allSpark {
+    .SearchPage__header__top__right .listLenguagesComplete .listLenguajes {
+        min-width: 50px;
+    }
+    .SearchPage__header__top__right .listLenguagesComplete .listLenguajes .CreateButton {
+        min-width: 50px;
         font-size: 14px;
+        margin-left: 5px;
+        border-radius: 10px;
+        padding: 0px 7px;
+    }
+    .SearchPage__header__top__right .allSpark {
+        font-size: 13px;
+        margin-right: 0px;
     }
     .SearchPage__header__top__right .listLenguagesComplete .listLenguajes .CreateButton {
         margin-top: 0px;
@@ -271,7 +282,10 @@
         margin: 10px 0px;
     }
     .SearchPage__header__top__right .CreateButton {
-        width: 100% !important;
+        width: 100%!important;
+        box-sizing: border-box;
+        min-width: 100px;
+        margin-bottom: 0px !important;
     }
     .SearchPage__header__bottom {
         flex-wrap: wrap;
