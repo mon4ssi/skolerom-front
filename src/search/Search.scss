@@ -98,7 +98,7 @@
         &__bottom {
             position: relative;
             display: flex;
-            align-items: center;
+            align-items: flex-end;
             justify-content: space-between;
             .renderTabs {
                 display: flex;
@@ -167,8 +167,17 @@
             }
             button#ButtonCloseTpInside {
                 display: flex;
-                background: transparent;
-                padding-bottom: 7px;
+                background: #e7ecef;
+                padding: 5px 10px;
+                border: 1px solid #939fa7;
+                color: #0b2541;
+                align-items: center;
+                position: relative;
+                top: -5px;
+                font-weight: 200;
+                border-radius: 20px;
+                height: 40px;
+                font-size: 1.0625rem;
             }
         }
     }
@@ -217,6 +226,12 @@
         width: 100%;
         overflow-x: scroll;
     }
+    .SearchPage__header__bottom__left {
+        width: 100%;
+    }
+    .SearchPage__header__top {
+        margin-bottom: 10px !important;
+    }
     .contentListSearch .Inside.Inside--horizontal {
         min-height: auto;
         height: auto;
@@ -234,5 +249,55 @@
     }
     .contentListSearch .Inside .cardInfoItem__right .subjectItems {
         flex-wrap: wrap;
+    }
+    .SearchPage__header__top__right {
+        flex-wrap: wrap;
+    }
+    .SearchPage__header__top__right .listLenguagesComplete {
+        flex-wrap: wrap;
+        width: 100%;
+        flex: none;
+        justify-content: space-between;
+    }
+    .SearchPage__header__top__right .listLenguagesComplete .listLenguajes {
+        min-width: 50px;
+    }
+    .SearchPage__header__top__right .listLenguagesComplete .listLenguajes .CreateButton {
+        min-width: 50px;
+        font-size: 14px;
+        margin-left: 5px;
+        border-radius: 10px;
+        padding: 0px 7px;
+    }
+    .SearchPage__header__top__right .allSpark {
+        font-size: 13px;
+        margin-right: 0px;
+    }
+    .SearchPage__header__top__right .listLenguagesComplete .listLenguajes .CreateButton {
+        margin-top: 0px;
+    }
+    .SearchPage__header__top__right .listLenguagesComplete .listLenguajesList {
+        flex: none;
+        width: 100%;
+        margin: 10px 0px;
+    }
+    .SearchPage__header__top__right .CreateButton {
+        width: 100%!important;
+        box-sizing: border-box;
+        min-width: 100px;
+        margin-bottom: 0px !important;
+    }
+    .SearchPage__header__bottom {
+        flex-wrap: wrap;
+        flex-direction: column-reverse;
+    }
+    .SearchPage__header__bottom__right {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .SearchPage__header__bottom button#ButtonCloseTpInside {
+        top: 0px;
+        width: 100%;
+        justify-content: center;
     }
 }
