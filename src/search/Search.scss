@@ -221,14 +221,17 @@
         }
     }
 }
-@media (max-width: 801px) {
+@media (max-width: 800px) {
     .SearchPage__header__bottom .renderTabs {
         width: 100%;
         overflow-x: scroll;
     }
+<<<<<<< HEAD
     .SearchPage__header__bottom__left {
         width: 100%;
     }
+=======
+>>>>>>> QA
     .SearchPage__header__top {
         margin-bottom: 10px !important;
     }
