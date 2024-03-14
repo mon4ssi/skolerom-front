@@ -114,7 +114,7 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
       if (this.context.contentType === AttachmentContentType.video) {
         await newAssignmentStore!.fetchQuestionAttachments(AttachmentContentType.video);
       }
-    } catch (e) {
+    } catch (e : any) {
       const KEY_SEPARATOR = 2;
       this.setState({ errMsg: e.message.split(': ')[KEY_SEPARATOR] });
     }

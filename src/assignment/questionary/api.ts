@@ -83,7 +83,7 @@ export class QuestionaryApi implements QuestionaryRepo {
     try {
       const response: AxiosResponse<QuestionaryResponseDTO> = await API.get(`api/student/assignments/${id}/answer/create`);
       return buildQuestionary(response.data, id);
-    } catch (error) {
+    } catch (error : any) {
       if (error.response && error.response.status === STATUS_FORBIDDEN) {
         Notification.create({
           type: NotificationTypes.ERROR,
@@ -162,7 +162,7 @@ export class QuestionaryApi implements QuestionaryRepo {
       );
 
       return response.data.updateAt;
-    } catch (error) {
+    } catch (error : any) {
       if (error.response.status === STATUS_CONFLICT) {
         throw new AlreadyEditingAssignmentError();
       }
@@ -176,7 +176,7 @@ export class QuestionaryApi implements QuestionaryRepo {
       await API.post(`api/student/assignments/${questionary.assignment.id}/answer/${questionary.id}`, buildQuestionaryRequestDTO(questionary)
       );
 
-    } catch (error) {
+    } catch (error : any) {
       Notification.create({
         type: NotificationTypes.ERROR,
         title: error.message
@@ -189,7 +189,7 @@ export class QuestionaryApi implements QuestionaryRepo {
       await API.post(`api/student/teaching-paths/${redirectData.teachingPath}/node/${redirectData.node}/assignments/${questionary.assignment.id}/answer/${questionary.id}`,
                      buildQuestionaryRequestDTO(questionary, redirectData)
       );
-    } catch (error) {
+    } catch (error : any) {
       Notification.create({
         type: NotificationTypes.ERROR,
         title: error.message

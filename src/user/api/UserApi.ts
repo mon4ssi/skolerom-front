@@ -42,7 +42,7 @@ export class UserApi implements UserRepo {
       const response = await API.post('/api/login/dataporten/authorize', { code }, { withCredentials: true });
       this.storageInteractor.setUserWithToken(response.data.access_token, response.data.user);
       return response.data.access_token;
-    } catch (error) {
+    } catch (error : any) {
       if (error.response.status === STATUS_NOT_FOUND || error.response.status === STATUS_SERVER_ERROR) {
         Notification.create({
           type: NotificationTypes.ERROR,
@@ -66,7 +66,7 @@ export class UserApi implements UserRepo {
       }
       this.storageInteractor.setUserWithToken(response.data.access_token, response.data.user);
       return response.data.access_token;
-    } catch (error) {
+    } catch (error : any) {
       Notification.create({
         type: NotificationTypes.ERROR,
         title: error.response.data.message

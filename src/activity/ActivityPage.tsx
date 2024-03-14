@@ -406,7 +406,7 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
     if (lettersNoEn(val)) {
       this.setState({ searchQueryValue: e.currentTarget.value });
       if (val.length > number2) {
-        if (e.key === 'Enter' || e.keyCode === ENTER_KEYCODE) {
+        if (e.key === 'Enter') {
           history.push(`/search/article?search=${val}`);
         }
       }

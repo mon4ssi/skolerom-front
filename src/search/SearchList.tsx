@@ -833,7 +833,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     const val = e.currentTarget.value;
     if (lettersNoEn(val)) {
       this.setState({ searchQueryValue: e.currentTarget.value });
-      if (e.key === 'Enter' || e.keyCode === number13) {
+      if (e.key === 'Enter') {
         QueryStringHelper.set(this.props.history, QueryStringKeysSearch.SEARCH, val);
         QueryStringHelper.set(this.props.history, QueryStringKeysSearch.PAGE, 1);
         this.props.searchStore!.myfilter.searchQuery = QueryStringHelper.getString(this.props.history, QueryStringKeysSearch.SEARCH);

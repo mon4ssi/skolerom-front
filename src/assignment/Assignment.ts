@@ -1404,7 +1404,7 @@ export interface ArticleRepo {
     source?: number;
     searchTitle?: string;
   }): Promise<Array<Article>>;
-  getArticlesByIds(ids: Array<number>): Promise<Array<Article>>;
+  getArticlesByIds(ids: Array<number | false>): Promise<Array<Article>>;
   fetchVideos(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchImages(postIds: Array<number>): Promise<Array<Attachment>>;
   fetchCoverImages(postIds: Array<number>): Promise<Array<Attachment>>;

@@ -65,7 +65,7 @@ export class AttachmentComponent extends Component<IProps, AttachmentComponentSt
         await this.props.onRemove(attachment.id);
       }
 
-    } catch (e) {
+    } catch (e : any) {
       console.error(e.message);
     } finally {
       this.setState({ isProcessing: false });

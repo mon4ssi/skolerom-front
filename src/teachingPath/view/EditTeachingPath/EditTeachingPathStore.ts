@@ -344,7 +344,7 @@ export class EditTeachingPathStore {
         if (articles.length < perPage) {
           this.isFetchedArticlesListFinished = true;
         }
-      } catch (e) {
+      } catch (e : any) {
         if (e.response.status === error400) {
           return;
         }

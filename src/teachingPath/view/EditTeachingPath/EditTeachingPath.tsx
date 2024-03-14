@@ -59,7 +59,7 @@ class EditTeachingPathComponent extends Component<Props & RouteComponentProps, S
           }
           await getTeachingPathForEditing(this.getParams(), localeid);
           editTeachingPathStore!.currentEntity!.setValueLocaleid(localeid);
-        } catch (error) {
+        } catch (error : any) {
           if (error.response && error.response.status === STATUS_FORBIDDEN) {
             history.push('/not-found');
           }

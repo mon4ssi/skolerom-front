@@ -228,7 +228,7 @@ export class AssignmentEvaluationStore {
         });
       }
       await this.evaluationService.publishEvaluation(this._currentAssignment!.id, this._currentEvaluation!.answerId, this.currentEvaluation!);
-    } catch (error) {
+    } catch (error : any) {
       if (error.response && error.response.status === STATUS_FORBIDDEN) {
         return Notification.create({
           type: NotificationTypes.ERROR,

@@ -150,7 +150,7 @@ class TagKeywordInputWrapper extends Component<Props, State> {
   }
 
   public handleKeyPressed = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.keyCode === ENTER_KEYCODE) {
+    if (e.key === 'Enter') {
       this.setState({ isAddingNewTag: true });
       this.props.currentTags.push(new Keyword(e.currentTarget.value.trim()));
       this.props.store!.allKeywords.push(new Keyword(e.currentTarget.value.trim()));
