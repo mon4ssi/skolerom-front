@@ -107,7 +107,7 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
         '/api/teacher/teaching-paths/create'
       );
       return buildNewTeachingPath(response.data);
-    } catch (error) {
+    } catch (error : any) {
       Notification.create({
         type: NotificationTypes.ERROR,
         title: error
@@ -122,7 +122,7 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
         `/api/teacher/teaching-paths/draft/${id}/create?localeId=${localeid}`
       );
       return buildNewTeachingPath(response.data);
-    } catch (error) {
+    } catch (error : any) {
       Notification.create({
         type: NotificationTypes.ERROR,
         title: error
@@ -185,7 +185,7 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
         })
       ;
       return response.data.updateAt;
-    } catch (error) {
+    } catch (error : any) {
       if (error.response.status === STATUS_CONFLICT) {
         throw new AlreadyEditingTeachingPathError();
       }
@@ -203,7 +203,7 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
           ...dto
         });
       return response.data.updateAt;
-    } catch (error) {
+    } catch (error : any) {
       if (error.response.status === STATUS_CONFLICT) {
         throw new AlreadyEditingTeachingPathError();
       }
@@ -222,7 +222,7 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
             assigIds: idsAssignmentsString,
           }
         })).data;
-    } catch (error) {
+    } catch (error : any) {
       Notification.create({
         type: NotificationTypes.ERROR,
         title: error.response.message
@@ -240,7 +240,7 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
           ...dto
         }
       );
-    } catch (error) {
+    } catch (error : any) {
       throw new Error(error.message);
     }
   }
@@ -248,7 +248,7 @@ export class DraftTeachingPathApi implements DraftTeachingPathRepo {
   public deleteTeachingPath = async (id: number): Promise<void> => {
     try {
       await API.delete(`api/teacher/teaching-paths/${id}`);
-    } catch (error) {
+    } catch (error : any) {
       if (error.response.status === NOT_FOUND_CODE) {
         Notification.create({
           type: NotificationTypes.ERROR,

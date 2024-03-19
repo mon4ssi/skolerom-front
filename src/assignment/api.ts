@@ -158,15 +158,15 @@ export interface StudentAssignmentResponseDTO {
 }
 
 export interface ArticleLevelRequestDTO {
-  wpId: number;
+  wpId?: number;
   childArticles?: Array<ArticleRequestDTO>;
 }
 
 export interface ArticleRequestDTO {
-  wpId: number;
+  wpId?: number;
   title: string;
   url?: string;
-  levels: Array<ArticleLevelRequestDTO>;
+  levels?: Array<ArticleLevelRequestDTO>;
 }
 
 export interface AssignmentRequestDTO {

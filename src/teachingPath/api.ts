@@ -265,7 +265,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         isTranslations: data.isTranslations,
         originalLocaleId: data.originalLocaleId
       });
-    } catch (error) {
+    } catch (error : any) {
       if (error.response.data.message === 'Teaching path not assigned to you') {
         Notification.create({
           type: NotificationTypes.ERROR,
@@ -325,7 +325,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         deadline: data.deadline,
         authorAvatar: data.authorPhoto
       });
-    } catch (error) {
+    } catch (error : any) {
       if (error.response.data.message === 'Teaching path not assigned to you') {
         Notification.create({
           type: NotificationTypes.ERROR,
@@ -364,7 +364,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         deadline: data.deadline,
         authorAvatar: data.authorPhoto
       });
-    } catch (error) {
+    } catch (error : any) {
       if (error.response.data.message === 'Teaching path not assigned to you') {
         Notification.create({
           type: NotificationTypes.ERROR,
@@ -443,7 +443,7 @@ export class TeachingPathApi implements TeachingPathRepo {
         url: `${url}`,
         featuredImage: data.image
       });
-    } catch (error) {
+    } catch (error : any) {
       if (error.response.status === STATUS_SERVER_ERROR || error.response.status === STATUS_BADREQUEST || error.response.status === STATUS_SERVERBADREQUEST) {
         if (error.response.data.message.code === CONDITIONALERROR) {
           Notification.create({

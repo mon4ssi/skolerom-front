@@ -446,7 +446,7 @@ export class DraftAssignment extends Assignment {
 
     try {
       await this.repo.saveDraftAssignment(this);
-    } catch (error) {
+    } catch (error : any) {
       if (error instanceof AlreadyEditingAssignmentError) {
         Notification.create({
           type: NotificationTypes.ERROR,
@@ -475,7 +475,7 @@ export class DraftAssignment extends Assignment {
             } else {
               this.setUpdatedAt(await this.repo.saveDraftAssignment(this));
             }
-          } catch (error) {
+          } catch (error : any) {
             if (error instanceof AlreadyEditingAssignmentError) {
               Notification.create({
                 type: NotificationTypes.ERROR,

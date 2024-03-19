@@ -1,4 +1,4 @@
-FROM node:12.18.3
+FROM node:16.20.2
 ARG BUILD_MODE
 
 WORKDIR /app
