@@ -1062,7 +1062,7 @@ export class PublishingActions extends Component<PublishingActionsProps, Publish
       'flexBox justifyCenter alignCenter w50',
       {
         active: !store!.currentEntity!.isPrivate && !this.state.isMyStateSchool && !this.state.isReview,
-        hidden: isTeacherTrial
+        hidden: !isTeacher
       }
     );
 
