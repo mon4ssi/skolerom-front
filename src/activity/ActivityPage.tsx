@@ -342,7 +342,7 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
     // const url = activityStore!.urliframe.toString();
     const urlteacher = `${process.env.REACT_APP_WP_URL}/wp-content/uploads/sites/2/mainapp/main_app_page.html?version=${this.state.mathversion}`;
     const urlstunded = `${process.env.REACT_APP_WP_URL}/wp-content/uploads/sites/2/mainapp/main_app_page.html?version=${this.state.mathversion}`;
-    const url = (role === 'TEACHER') ? urlteacher : urlstunded;
+    const url = (role === 'STUDENT') ? urlstunded : urlteacher;
     const anyclass = this.state.chargeIframe ? 'iframeContent' : 'iframeContent hidden';
     return (
       <div className={anyclass}>
