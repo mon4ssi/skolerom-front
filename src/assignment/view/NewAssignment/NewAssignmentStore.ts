@@ -383,7 +383,7 @@ export class NewAssignmentStore {
       this.setHighlightingItem(CreationElements.Title);
 
       return toJS(this.currentEntity);
-    } catch (error) {
+    } catch (error : any) {
       if (error.response && error.response.status === STATUS_FORBIDDEN) {
         return null;
       }

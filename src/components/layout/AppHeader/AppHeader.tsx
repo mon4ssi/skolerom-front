@@ -824,7 +824,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
     if (lettersNoEn(val)) {
       this.setState({ searchQueryValue: e.currentTarget.value });
       if (val.length > number2) {
-        if (e.key === 'Enter' || e.keyCode === number13) {
+        if (e.key === 'Enter') {
           // history.push(`/search/article?search=${val}`);
           const url: URL = new URL(window.location.href);
           const urlForEditing: string = `${url.origin}/search/article?search=${val}`;

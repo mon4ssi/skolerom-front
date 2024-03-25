@@ -348,7 +348,7 @@ export class TeachingPathEvaluationStore {
         });
       }
       await this.evaluationService.publishEvaluation(this.currentEntity!.id, this.currentEvaluation!.answerId, this.currentEvaluation!);
-    } catch (error) {
+    } catch (error : any) {
       if (error.response && error.response.status === STATUS_FORBIDDEN) {
         return Notification.create({
           type: NotificationTypes.ERROR,

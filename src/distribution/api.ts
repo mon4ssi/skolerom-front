@@ -97,7 +97,7 @@ export class DistributionApi implements DistributionRepo {
         `api/teacher/assignments/${distribution.id}/distribute`,
         buildDistributionRequestDTO(distribution)
       );
-    } catch (error) {
+    } catch (error : any) {
       Notification.create({
         type: NotificationTypes.ERROR,
         title: error.message
@@ -111,7 +111,7 @@ export class DistributionApi implements DistributionRepo {
         `/api/teacher/teaching-paths/${distribution.id}/distribute`,
         buildDistributionRequestDTO(distribution)
       );
-    } catch (error) {
+    } catch (error : any) {
       Notification.create({
         type: NotificationTypes.ERROR,
         title: error.message
@@ -127,7 +127,7 @@ export class DistributionApi implements DistributionRepo {
       );
 
       return '';
-    } catch (error) {
+    } catch (error : any) {
       switch (error.response.status) {
         case STATUS_FORBIDDEN:
           return intl.get('distribution_page.assignment_cannot_be_assigned');
@@ -146,7 +146,7 @@ export class DistributionApi implements DistributionRepo {
         { referral_token: referralToken }
       );
       return '';
-    } catch (error) {
+    } catch (error : any) {
       switch (error.response.status) {
         case STATUS_FORBIDDEN:
           return intl.get('distribution_page.teaching_path_cannot_be_assigned');

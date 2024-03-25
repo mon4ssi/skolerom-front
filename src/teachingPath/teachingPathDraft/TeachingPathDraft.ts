@@ -471,7 +471,7 @@ export class DraftTeachingPath extends TeachingPath {
             }
             this.addGoalsBySave();
             this.setUpdatedAt(await this.repo.saveTeachingPath(this, this.localeid));
-          } catch (error) {
+          } catch (error : any) {
             if (error instanceof AlreadyEditingTeachingPathError) {
               Notification.create({
                 type: NotificationTypes.ERROR,
@@ -502,7 +502,7 @@ export class DraftTeachingPath extends TeachingPath {
               return;
             }
             this.setUpdatedAt(await this.repo.saveTeachingPathLang(this, this.localeid, idlocaleid, newlocaleid));
-          } catch (error) {
+          } catch (error : any) {
             if (error instanceof AlreadyEditingTeachingPathError) {
               Notification.create({
                 type: NotificationTypes.ERROR,
@@ -534,7 +534,7 @@ export class DraftTeachingPath extends TeachingPath {
       } else {
         await this.repo.saveTeachingPath(this);
       }
-    } catch (error) {
+    } catch (error : any) {
       if (error instanceof AlreadyEditingTeachingPathError) {
         Notification.create({
           type: NotificationTypes.ERROR,

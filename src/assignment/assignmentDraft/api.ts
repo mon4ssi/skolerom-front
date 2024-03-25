@@ -116,7 +116,7 @@ export class DraftAssignmentApi implements DraftAssignmentRepo {
         buildDraftAssignmentDTO(draftAssignment)
       );
       return response.data.updateAt;
-    } catch (error) {
+    } catch (error : any) {
       if (error.response.status === STATUS_CONFLICT) {
         throw new AlreadyEditingAssignmentError();
       }
@@ -134,7 +134,7 @@ export class DraftAssignmentApi implements DraftAssignmentRepo {
             articleIds: idsString,
           }
         })).data;
-    } catch (error) {
+    } catch (error : any) {
       Notification.create({
         type: NotificationTypes.ERROR,
         title: error.response.message
@@ -148,7 +148,7 @@ export class DraftAssignmentApi implements DraftAssignmentRepo {
         `api/teacher/assignments/${draftAssignment.id}`,
         buildDraftAssignmentDTO(draftAssignment)
       );
-    } catch (error) {
+    } catch (error : any) {
       Notification.create({
         type: NotificationTypes.ERROR,
         title: error.response.message

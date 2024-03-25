@@ -122,7 +122,7 @@ export class ArticleService {
     return this.articleRepo.getArticles(params);
   }
 
-  public async getArticlesByIds(ids: Array<number>): Promise<Array<Article>> {
+  public async getArticlesByIds(ids: Array<number | false>): Promise<Array<Article>> {
     return this.articleRepo.getArticlesByIds(ids);
   }
 

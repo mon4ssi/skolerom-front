@@ -5,7 +5,7 @@ import { History } from 'history';
 
 export function set(history: History, key: string, value: string | number | Array<number>): void {
   const newQueryString = updateQueryString(history.location.search, key, value.toString());
-  history.push(`${history.location.pathname}${newQueryString}`, { ...history.location.state });
+  history.push(`${history.location.pathname}${newQueryString}`, { ...(history.location.state as Record<string, any>) });
 }
 
 export function remove(history: History, ...keys: Array<string>): void {
@@ -13,7 +13,7 @@ export function remove(history: History, ...keys: Array<string>): void {
     (acc, key) => updateQueryString(acc, key),
     history.location.search
   );
-  history.push(`${history.location.pathname}${newQueryString}`, { ...history.location.state });
+  history.push(`${history.location.pathname}${newQueryString}`, { ...(history.location.state as Record<string, any>) });
 }
 
 export function getString(history: History, key: string, defaultValue?: string): string | null | undefined {

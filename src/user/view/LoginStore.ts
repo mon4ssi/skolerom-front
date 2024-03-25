@@ -42,7 +42,7 @@ export class LoginStore {
   public async getFeideUrl() {
     try {
       this.url = await this.userService.loginWith(payload);
-    } catch (e) {
+    } catch (e : any) {
       throw Error(e);
     }
   }

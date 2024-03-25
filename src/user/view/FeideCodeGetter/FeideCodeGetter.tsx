@@ -15,7 +15,7 @@ class FeideCodeGetterWrapper extends Component<FeideCodeGetterWrapper> {
 
     try {
       this.props.loginStore!.getUserWithToken(code);
-    } catch (error) {
+    } catch (error : any) {
       if (this.props.loginStore!.needRedirect) {
         return this.props.history.replace('/login');
       }
