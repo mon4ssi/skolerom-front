@@ -831,6 +831,120 @@
     .body_ARTICLES .css-1y8mk30-SkeletonTheme {
         width: calc(33.33% - 20px);
     }
+    .previewModalInfoSearch {
+        &__content {
+            width: calc(100% - 50px);
+            .headerButtons {
+                flex-wrap: wrap;
+                .modalToggle {
+                    min-width: 90px;
+                    padding: 7px 10px;
+                }
+            }
+            .NewTitleHeader {
+                padding-top: 16px;
+                padding-bottom: 17px;
+                h2 {
+                    font-size: 25px;
+                }
+            }
+            .entityInfo {
+                flex-wrap: wrap;
+                height: auto;
+                padding: 10px 0px;
+                padding-top: 5px;
+                justify-content: flex-start;
+            }
+            .entityDescription {
+                padding: 10px 0px;
+            }
+            .summary {
+                padding: 10px;
+                .entityInfoBlock {
+                    max-width: 100%;
+                    width: 100%;
+                    box-sizing: border-box;
+                    margin: 0px;
+                    overflow: hidden;
+                    .title {
+                        max-width: calc(100% - 44px);
+                    }
+                }
+                .entityInfoBlockExpanded {
+                    width: 100%;
+                    max-width: 100%;
+                    box-sizing: border-box;
+                    margin: 0px;
+                    .title {
+                        max-width: calc(100% - 44px);
+                    }
+                }
+                .listItem {
+                    min-height: auto !important;
+                    max-width: calc(100% - 44px);
+                }
+                .flexContainerExpanded {
+                    .listItem {
+                        margin-left: 44px;
+                        margin-right: 0px;
+                        .goalData {
+                            display: block;
+                            .goalData__grade {
+                                font-weight: 700;
+                                margin-bottom: 5px;
+                                margin-right: 0px;
+                            }
+                            .goalData__subject {
+                                margin-right: 0px;
+                                margin-bottom: 5px;
+                                font-weight: 700;
+                                font-size: 14px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    } 
+    .contentListSearch {
+        .Inside .cardInfoItem__detail.active {
+            height: 910px;
+        }
+        .Inside .cardInfoItem__detail .cardTemplateArticle__header__bottom {
+            display: block;
+            .links {
+                margin-right: 0px;
+                ul {
+                    display: block;
+                    a {
+                        justify-content: center;
+                    }
+                }
+            }
+            .relateds {
+                margin-top: 10px;
+            }
+        }
+        .Inside .cardInfoItem__detail .cardTemplateArticle__body {
+            padding: 15px 20px;
+        }
+        .Inside .cardInfoItem__detail .cardTemplateArticle__body__top {
+            display: block;
+        }
+        .Inside .cardInfoItem__detail .cardTemplateArticle__body__goals ul .goalData {
+            display: block;
+            .goalData__grade {
+                font-weight: 700;
+                margin-bottom: 5px;
+            }
+            .goalData__subject {
+                margin-right: 0px;
+                font-weight: 700;
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
+        }
+    }
 }
 @media screen and (max-width: 870px) {
     .SearchPage__header__top__left {
