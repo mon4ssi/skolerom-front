@@ -353,6 +353,7 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
           onLoad={() => this.resize()}
           frameBorder="0"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          sandbox="allow-popups"
           allowFullScreen
         />
       </div>
