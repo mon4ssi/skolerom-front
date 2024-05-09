@@ -290,6 +290,7 @@
     .SearchPage__header__bottom {
         flex-wrap: wrap;
         flex-direction: column-reverse;
+        align-items: flex-start;
     }
     .SearchPage__header__bottom__right {
         width: 100%;
@@ -299,5 +300,8 @@
         top: 0px;
         width: 100%;
         justify-content: center;
+    }
+    .SearchPage__header__bottom .renderTabs .renderTab {
+        font-size: 13px;
     }
 }

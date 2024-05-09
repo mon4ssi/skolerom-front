@@ -344,6 +344,7 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
     const urlstunded = `${process.env.REACT_APP_WP_URL}/wp-content/uploads/sites/2/mainapp/main_app_page_two.html?version=${this.state.mathversion}`;
     const url = (role === UserType.Student) ? urlstunded : urlteacher;
     const anyclass = this.state.chargeIframe ? 'iframeContent' : 'iframeContent hidden';
+
     return (
       <div className={anyclass}>
         <iframe
@@ -429,6 +430,17 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
     this.setState({
       chargeIframe: true
     });
+    const iframe = this.iframeref.current;
+    if (iframe) {
+      const links = iframe.contentDocument!.getElementsByTagName('a');
+      for (let i = 0; i < links.length; i = i + 1) {
+        links[i].addEventListener('click', (event) => {
+          event.preventDefault();
+          const target = event.target as HTMLAnchorElement;
+          window.open(target.href, '_blank');
+        });
+      }
+    }
   }
 
   public renderNewButton = () => (
