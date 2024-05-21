@@ -12,7 +12,7 @@
             justify-content: space-between;
             margin-bottom: 20px;
             &__left {
-                width: calc(100% - 640px);
+                width: calc(100% - 750px);
                 position: relative;
                 img {
                     position: absolute;
@@ -37,7 +37,7 @@
             &__right {
                 display: flex;
                 align-items: center;
-                width: 600px;
+                width: 675px;
                 justify-content: space-between;
                 position: relative;
                 .allSpark {
@@ -221,13 +221,36 @@
         }
     }
 }
+<<<<<<< HEAD
 @media (max-width: 800px) {
+=======
+@media (max-width: 1200px) {
+    .SearchPage__header__top {
+        display: block;
+    }
+    .SearchPage__header__top__left {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .SearchPage__header__top__right {
+        width: 100%;
+        max-width: 675px;
+    }
+}
+@media (max-width: 875px) {
+>>>>>>> QA
     .SearchPage__header__bottom .renderTabs {
         width: 100%;
         overflow-x: scroll;
     }
+<<<<<<< HEAD
     .SearchPage__header__bottom__left {
         width: 100%;
+=======
+    button#ButtonCloseTpInside {
+        margin: 0px;
+        margin-bottom: 10px;
+>>>>>>> QA
     }
     .SearchPage__header__top {
         margin-bottom: 10px !important;
@@ -280,6 +303,7 @@
         flex: none;
         width: 100%;
         margin: 10px 0px;
+        margin-bottom: 0px;
     }
     .SearchPage__header__top__right .CreateButton {
         width: 100%!important;
