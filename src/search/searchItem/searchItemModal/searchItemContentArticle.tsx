@@ -135,6 +135,24 @@ class ArticleContent extends Component<Props> {
       <div className="goalData__name">{item.name}</div>
     </li>
   )
+  public renderTopics = () => {
+    const {
+      topics
+    } = this.props.item;
+    return (
+      <>
+        <h2>
+          <img src={cogsImg} />
+          {intl.get('new assignment.greep.subjects')}
+        </h2>
+        <div className="list">
+          <ul>
+            {topics.map(this.renderListString)}
+          </ul>
+        </div>
+      </>
+    );
+  }
   public render() {
     const {
         description,
@@ -146,6 +164,7 @@ class ArticleContent extends Component<Props> {
         lvlArticles
     } = this.props.item;
     const lengtArticles = (lvlArticles.length === 0) ? false : true;
+    const lengtTopics = (topics.length === 0) ? false : true;
     return (
       <div className="cardTemplateArticle">
         <div className="cardTemplateArticle__header">
@@ -197,15 +216,7 @@ class ArticleContent extends Component<Props> {
               </div>
             </div>
             <div className="cardTemplateArticle__body__item">
-              <h2>
-                <img src={cogsImg} />
-                {intl.get('new assignment.greep.subjects')}
-              </h2>
-              <div className="list">
-                <ul>
-                  {topics.map(this.renderListString)}
-                </ul>
-              </div>
+              {lengtTopics && this.renderTopics()}
             </div>
           </div>
           <div className="cardTemplateArticle__body__bottom">
