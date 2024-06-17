@@ -430,17 +430,6 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
     this.setState({
       chargeIframe: true
     });
-    const iframe = this.iframeref.current;
-    if (iframe) {
-      const links = iframe.contentDocument!.getElementsByTagName('a');
-      for (let i = 0; i < links.length; i = i + 1) {
-        links[i].addEventListener('click', (event) => {
-          event.preventDefault();
-          const target = event.target as HTMLAnchorElement;
-          window.open(target.href, '_blank');
-        });
-      }
-    }
   }
 
   public renderNewButton = () => (

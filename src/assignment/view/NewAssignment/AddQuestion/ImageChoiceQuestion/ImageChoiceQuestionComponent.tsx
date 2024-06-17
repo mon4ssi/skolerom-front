@@ -49,9 +49,10 @@ class ImageChoiceQuestion extends Component<Props> {
     const { question } = this.props;
     e.preventDefault();
     const value = e.currentTarget.value;
-    if (lettersNoEn(value)) {
+    question.setTitle(value);
+    /* if (lettersNoEn(value)) {
       question.setTitle(value);
-    }
+    } */
   }
 
   public async componentDidUpdate() {

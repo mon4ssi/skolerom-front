@@ -902,6 +902,10 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
             </div>
             <div className="SearchPage__header__top__right">
               {this.modalFilterlang()}
+              <button id="ButtonCloseTpInside" className="CreateButton" onClick={this.resetFiltersLangs}>
+                <img src={langIcon} />
+                <span>{intl.get('generals.resetall')}</span>
+              </button>
               <a href="javascript:void(0)" className={classbtnText} onClick={this.openFiltersModalTp}>
                 <img src={filterIcon} />
                 {btnText}
@@ -912,12 +916,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
             <div className="SearchPage__header__bottom__left">
               {this.renderTabs()}
             </div>
-            <div className="SearchPage__header__bottom__right">
-              <button id="ButtonCloseTpInside" onClick={this.resetFiltersLangs}>
-                <img src={langIcon} />
-                <span>{intl.get('generals.resetall')}</span>
-              </button>
-            </div>
+            <div className="SearchPage__header__bottom__right" />
           </div>
         </div>
         <div className={classInsideBody} ref={this.refBody}>

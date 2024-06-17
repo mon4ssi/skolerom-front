@@ -25,18 +25,20 @@ export class PublishingTitle extends Component<Props> {
     const { currentEntity } = this.props;
     e.preventDefault();
     const value = e.currentTarget.value;
-    if (lettersNoEn(value)) {
+    currentEntity!.setTitle(value);
+    /* if (lettersNoEn(value)) {
       currentEntity!.setTitle(value);
-    }
+    } */
   }
 
   public setTeachingPathDescription = (e: ChangeEvent<HTMLTextAreaElement>): void => {
     const { currentEntity } = this.props;
     e.preventDefault();
     const value = e.currentTarget.value;
-    if (lettersNoEn(value)) {
+    currentEntity!.setDescription(value);
+    /* if (lettersNoEn(value)) {
       currentEntity!.setDescription(value);
-    }
+    } */
   }
 
   public componentDidMount() {

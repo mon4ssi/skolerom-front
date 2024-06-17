@@ -59,9 +59,10 @@ class TextQuestionContent extends Component<TextQuestionProps, State> {
     const { question } = this.props;
     e.preventDefault();
     const value = e.currentTarget.value;
-    if (lettersNoEn(value)) {
+    question.setTitle(value);
+    /* if (lettersNoEn(value)) {
       question.setTitle(value);
-    }
+    } */
   }
 
   public onSortEnd = (data: SortEnd, event: SortEvent) => {

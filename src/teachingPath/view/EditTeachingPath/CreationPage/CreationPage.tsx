@@ -140,11 +140,14 @@ class NodeContent extends Component<NodeContentProps, NodeContentState> {
   public handleChangeTitle = (event: React.SyntheticEvent<HTMLTextAreaElement>) => {
     event.preventDefault();
     const value = event.currentTarget.value;
-    if (lettersNoEn(value)) {
+    this.props.node.setSelectedQuestion(value);
+    const valueLength = value.length;
+    this.handleChangeNumberOfTitleCols(valueLength);
+    /* if (lettersNoEn(value)) {
       this.props.node.setSelectedQuestion(value);
       const valueLength = value.length;
       this.handleChangeNumberOfTitleCols(valueLength);
-    }
+    } */
   }
 
   public dropInfoCard = () => {

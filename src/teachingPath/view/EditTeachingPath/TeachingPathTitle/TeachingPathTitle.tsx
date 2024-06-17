@@ -28,18 +28,20 @@ export class TeachingPathTitle extends Component<Props> {
     const { currentEntity: currentTeachingPath } = this.props.editTeachingPathStore!;
     event.preventDefault();
     const value = event.currentTarget.value;
-    if (lettersNoEn(value)) {
+    currentTeachingPath!.setTitle(value);
+    /* if (lettersNoEn(value)) {
       currentTeachingPath!.setTitle(value);
-    }
+    } */
   }
 
   public setDescription = (event: React.SyntheticEvent<HTMLTextAreaElement>) => {
     const { currentEntity: currentTeachingPath } = this.props.editTeachingPathStore!;
     event.preventDefault();
     const value = event.currentTarget.value;
-    if (lettersNoEn(value)) {
+    currentTeachingPath!.setDescription(value);
+    /* if (lettersNoEn(value)) {
       currentTeachingPath!.setDescription(value);
-    }
+    } */
   }
 
   public renderDescription = () => {
