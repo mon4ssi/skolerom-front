@@ -30,17 +30,19 @@ export class AssignmentTitle extends Component<Props> {
   public setAssignmentTitle = (e: ChangeEvent<HTMLTextAreaElement>): void => {
     e.preventDefault();
     const value = e.currentTarget.value;
-    if (value === '' || lettersNoEn(value)) {
+    this.props.assignment.setTitle(value);
+    /* if (value === '' || lettersNoEn(value)) {
       this.props.assignment.setTitle(value);
-    }
+    } */
   }
 
   public setAssignmentDescription = (e: ChangeEvent<HTMLTextAreaElement>): void => {
     e.preventDefault();
     const value = e.currentTarget.value;
-    if (value === '' || lettersNoEn(value)) {
+    this.props.assignment.setDescription(value);
+    /* if (value === '' || lettersNoEn(value)) {
       this.props.assignment.setDescription(value);
-    }
+    } */
   }
 
   public setHighlightedItem = () => {
