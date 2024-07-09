@@ -436,7 +436,7 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
           <div className="cardInfoItem">
             <div className={articleOpenCard} onClick={this.openArticle}>
               <div className="cardInfoItem__imagen">
-                <img src={myimg} />
+                <img src={myimg} alt={title} />
               </div>
               <div className="cardInfoItem__description">
                 <div className="title"><h2>{title}</h2></div>
@@ -454,7 +454,7 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
           <div className="cardInfoItem cardInfoItem--TP">
             <div className="cardInfoItem__card" onClick={this.openSideTP}>
               <div className="cardInfoItem__imagen">
-                <img src={myimg} />
+                <img src={myimg} alt={title} />
               </div>
               <div className="cardInfoItem__description">
                 <div className="title"><h2>{title}</h2></div>
@@ -473,7 +473,7 @@ class SearchItem extends Component<SearchProps & RouteComponentProps, SearchStat
           <div className="cardInfoItem cardInfoItem--relative">
             <div className="cardInfoItem--horizontal" onClick={this.openSideAssignment}>
               <div className="cardInfoItem__left">
-                <img src={myimg} />
+                <img src={myimg} alt={title} />
                 <h2>{title}</h2>
               </div>
               <div className="cardInfoItem__right">
