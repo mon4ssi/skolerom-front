@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="26.56px" height="26.56px" viewBox="0 0 26.56 26.56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>Ikon</title>
-    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Symbols" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
         <g id="Ikon---search" transform="translate(-9.220000, -9.220000)" stroke="#0B2541">
             <g id="Ikon" transform="translate(10.000000, 10.000000)">
-                <circle id="Oval" stroke-width="1.56" cx="12.5" cy="12.5" r="12.5"></circle>
-                <g id="Group" transform="translate(4.661609, 4.661846)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                <circle id="Oval" strokeWidth="1.56" cx="12.5" cy="12.5" r="12.5"></circle>
+                <g id="Group" transform="translate(4.661609, 4.661846)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5">
                     <circle id="Oval" transform="translate(6.378808, 6.378808) rotate(-23.025000) translate(-6.378808, -6.378808) " cx="6.37880811" cy="6.37880811" r="4.86387232"></circle>
                     <line x1="10.3383913" y1="10.3381544" x2="14.3383913" y2="14.3381544" id="Path"></line>
                 </g>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>button-play-1</title>
-    <g id="Activity" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Activity" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
         <g id="Dashboard-Teacher" transform="translate(-1069.000000, -616.000000)">
             <g id="Boks" transform="translate(230.000000, 164.000000)">
                 <g id="Bitmap" transform="translate(1.000000, 1.000000)">
                     <g id="button-play-1" transform="translate(838.000000, 451.000000)">
-                        <circle id="Oval" stroke="#0B2541" stroke-width="1.5" fill="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" cx="13" cy="12.9978333" r="12.1875"></circle>
+                        <circle id="Oval" stroke="#0B2541" strokeWidth="1.5" fill="#FFFFFF" strokeLinecap="round" strokeLinejoin="round" cx="13" cy="12.9978333" r="12.1875"></circle>
                         <path d="M9.74999977,16.9140833 C9.75057891,17.6088962 10.1571017,18.2392848 10.7897879,18.5264665 C11.4224742,18.8136482 12.1646125,18.7046467 12.688,18.2476667 L18.6875,13 L12.688,7.74908333 C12.1648979,7.2911098 11.4222388,7.18152096 10.7891527,7.46888414 C10.1560667,7.75624731 9.74964314,8.3874146 9.74999977,9.08266667 L9.74999977,16.9140833 Z" id="Shape" fill="#0B2541"></path>
                     </g>
                 </g>
