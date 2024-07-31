@@ -218,7 +218,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
 
     return loginStore!.currentUser ? (
       <li className="AppHeader__navigationItem" onClick={this.showUserModal}>
-        <a href="javascript:void(0)" className="AppHeader__navigationItemText" title={intl.get('header.title.My account')} />
+        <a href="#" className="AppHeader__navigationItemText" title={intl.get('header.title.My account')} />
         <img
           className="AppHeader__userLogo"
           src={loginStore!.currentUser.photo ? loginStore!.currentUser.photo : userPlaceholder}
@@ -446,14 +446,14 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
 
   private dropDownKeyboard = () => (
     <li className="AppHeader__dropdownItem">
-      <a href="javascript:void(0)" onClick={this.openKeyboardModal} title={intl.get('header.title.keyboard')} role="button">{intl.get('generals.keyboard')}</a>
+      <a href="#" onClick={this.openKeyboardModal} title={intl.get('header.title.keyboard')} role="button">{intl.get('generals.keyboard')}</a>
     </li>
   )
 
   private renderQuestionTab = () => (
     <li className="AppHeader__navigationItem tc1 fs17 fw500">
       <div className="AppHeader__navigationItemText">
-        <a href="javascript:void(0)" className="AppHeader__dropdown" title={intl.get('header.About')} role="button">
+        <a href="#" className="AppHeader__dropdown" title={intl.get('header.About')} role="button">
           {intl.get('header.About')}
         </a>
         <div className="AppHeader__submenuWrapper">
@@ -476,7 +476,7 @@ class AppHeader extends Component<HeaderProps, HeaderState> {
   private renderSimpleQuestionTab = () => (
     <li className="AppHeader__navigationItem helpNavigation">
       <div className="AppHeader__navigationItemText">
-        <a href="javascript:void(0)" className="AppHeader__dropdown" title={intl.get('header.title.Help')} role="button">
+        <a href="#" className="AppHeader__dropdown" title={intl.get('header.title.Help')} role="button">
           {intl.get('header.title.Help')}
         </a>
         <div className="AppHeader__submenuWrapper">

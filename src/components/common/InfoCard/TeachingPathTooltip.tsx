@@ -188,11 +188,11 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
       }
       if (isPosibleDeleteOrEdit) {
         return (
-          <li key={index} className={`fw500 flexBox fs15 editOrDeleteValue ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick} role="button">{item.text}</a></li>
+          <li key={index} className={`fw500 flexBox fs15 editOrDeleteValue ${item.disabled && 'disabled'}`}><a href="#" onClick={item.onClick} role="button">{item.text}</a></li>
         );
       }
       return (
-        <li key={index} className={`fw500 flexBox fs15 ${item.disabled && 'disabled'}`}><a href="javascript:void(0)" onClick={item.onClick} role="button">{item.text}</a></li>
+        <li key={index} className={`fw500 flexBox fs15 ${item.disabled && 'disabled'}`}><a href="#" onClick={item.onClick} role="button">{item.text}</a></li>
       );
     }
   )
@@ -208,17 +208,17 @@ class TeachingPathTooltipComponent extends Component<TooltipProps> {
     if (canEditOrDelete || window.location.pathname === '/teaching-paths/my') {
       return (
         <ul className="flexBox dirColumn">
-          <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={editTeachingPath}>{intl.get('teaching_paths_list.edit')}</a></li>
-          <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={viewTeachingPath}>{intl.get('teaching_paths_list.view')}</a></li>
-          <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={copyTeachingPath}>{intl.get('teaching_paths_list.copy')}</a></li>
-          <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={deleteTeachingPath}>{intl.get('teaching_paths_list.delete')}</a></li>
+          <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="#" onClick={editTeachingPath}>{intl.get('teaching_paths_list.edit')}</a></li>
+          <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="#" onClick={viewTeachingPath}>{intl.get('teaching_paths_list.view')}</a></li>
+          <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="#" onClick={copyTeachingPath}>{intl.get('teaching_paths_list.copy')}</a></li>
+          <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="#" onClick={deleteTeachingPath}>{intl.get('teaching_paths_list.delete')}</a></li>
         </ul>
       );
     }
     return (
       <ul className="flexBox dirColumn">
-        <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={viewTeachingPath}>{intl.get('teaching_paths_list.view')}</a></li>
-        <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="javascript:void(0)" onClick={copyTeachingPath}>{intl.get('teaching_paths_list.copy')}</a></li>
+        <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="#" onClick={viewTeachingPath}>{intl.get('teaching_paths_list.view')}</a></li>
+        <li className={'fw500 flexBox fs15 editOrDeleteValue'}><a href="#" onClick={copyTeachingPath}>{intl.get('teaching_paths_list.copy')}</a></li>
       </ul>
     );
   }

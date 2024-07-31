@@ -150,7 +150,7 @@ class TextQuestionContent extends Component<TextQuestionProps, State> {
             <img src={teaGuiBGImg} alt={newAssignmentStore!.getTitleButtonGuidance} />
             {newAssignmentStore!.getTitleButtonGuidance}
           </CreateButton>
-          <a href="javascript:void(0)" className="hiddenQuestionCheck" onClick={this.toggleHiddenQuestion}>
+          <a href="#" className="hiddenQuestionCheck" onClick={this.toggleHiddenQuestion}>
             <img src={this.state.hiddenQuestion ? checkActive : checkInactive} alt="checkbox" className="AssignmentArticlesToReading__checkbox"/>
             <div>
               {intl.get('assignments search.hidden_question')}

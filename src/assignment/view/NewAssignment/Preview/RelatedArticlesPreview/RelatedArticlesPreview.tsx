@@ -1857,7 +1857,7 @@ class RelatedArticlesPreviewComponent extends Component<Props, State> {
           <div className="defaultContentModal__content">
             <h3>{selectedArticle!.title}</h3>
             <p>{selectedArticle!.excerpt}</p>
-            <a href="javascript:void(0)" className="CreateButton" onClick={this.openArticleReading}>{intl.get('edit_teaching_path.modals.articles_read')}</a>
+            <a href="#" className="CreateButton" onClick={this.openArticleReading}>{intl.get('edit_teaching_path.modals.articles_read')}</a>
           </div>
           <div className="defaultContentModal__expand">
             <div className={`expandContent ${expand && 'active'}`} onClick={this.toggleData}>{textexpand}</div>

@@ -277,7 +277,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
         pathLink = pathLink.split('www.')[1];
       }
       return (
-        <a href="javascript:void(0)" onClick={this.targetRouteDomain} title={urldomain}>
+        <a href="#" onClick={this.targetRouteDomain} title={urldomain}>
           {pathLink}
         </a>
       );
@@ -366,7 +366,7 @@ class InfoCardComponent extends Component<Props & RouteComponentProps, State> {
             {description}
           </div>
           <div className="toggleReadDescription">
-            <a href="javascript:void(0)" className={ClassButton} onClick={this.toggleRead}>
+            <a href="#" className={ClassButton} onClick={this.toggleRead}>
               <img src={arrowLeftRounded} />
               <p>{textButton}</p>
             </a>

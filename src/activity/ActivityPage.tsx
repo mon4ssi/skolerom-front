@@ -388,13 +388,13 @@ class Activity extends Component<ActivityPageProps & RouteComponentProps, Activi
     <div className="insideModal">
       <ul>
         <li>
-          <a href="javascript:void(0)" onClick={this.createTeachingPath}>
+          <a href="#" onClick={this.createTeachingPath}>
             <img src={teachingPathImg} />
             {intl.get('teaching path')}
           </a>
         </li>
         <li>
-          <a href="javascript:void(0)" onClick={this.createAndGoToAssignment}>
+          <a href="#" onClick={this.createAndGoToAssignment}>
             <img src={assignmentsImg} />
             {intl.get('assignment')}
           </a>

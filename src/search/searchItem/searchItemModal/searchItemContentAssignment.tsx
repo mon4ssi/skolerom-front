@@ -195,7 +195,7 @@ class AssignmentContent extends Component<Props, State> {
   public renderTeacherGuidanceButtonList = (guidanceString: string) =>
   (
     <li>
-      <a href="javascript:void(0)" className="linkOpenSite LinkRollback" onClick={this.openInNewTabTeacherGuidance}>
+      <a href="#" className="linkOpenSite LinkRollback" onClick={this.openInNewTabTeacherGuidance}>
         {guidanceString}
       </a>
     </li>
@@ -339,7 +339,7 @@ class AssignmentContent extends Component<Props, State> {
     const contentReturn = (langid: number, code: string) => (
       <div>
         <a
-         href="javascript:void(0)"
+         href="#"
          // tslint:disable-next-line: jsx-no-lambda
          onClick={() => this.setViewButtonCopyByLenguaje(id, langid)}
          title={intl.get('preview.teaching_path.buttons.editbutton')}
@@ -354,7 +354,7 @@ class AssignmentContent extends Component<Props, State> {
        key={language.id}
       >
         <a
-         href="javascript:void(0)"
+         href="#"
          // tslint:disable-next-line: jsx-no-lambda
          onClick={() => this.setViewButtonCopyByLenguaje(id, language.id)}
          title={intl.get('preview.teaching_path.buttons.editbutton')}
@@ -369,7 +369,7 @@ class AssignmentContent extends Component<Props, State> {
           <button title={duplicateString} onClick={this.insidechangeEditFunctionTeacher}>{duplicateString}</button>
         </div>
         <div className={simpleClassView}>
-          <h2><a href="javascript:void(0)" onClick={this.insidechangeEditFunctionTeacher}>{duplicateString}</a></h2>
+          <h2><a href="#" onClick={this.insidechangeEditFunctionTeacher}>{duplicateString}</a></h2>
           <ul>
             {arrayLenguajes.map(renderLanguage)}
           </ul>
@@ -435,7 +435,7 @@ class AssignmentContent extends Component<Props, State> {
        key={language.id}
       >
         <a
-         href="javascript:void(0)"
+         href="#"
          // tslint:disable-next-line: jsx-no-lambda
          onClick={() => this.setViewButtonByLenguaje(language.id)}
         >
@@ -449,7 +449,7 @@ class AssignmentContent extends Component<Props, State> {
        key={language.id}
       >
         <a
-         href="javascript:void(0)"
+         href="#"
          // tslint:disable-next-line: jsx-no-lambda
          onClick={() => this.setPreViewButtonByLenguaje(language.id)}
         >
@@ -463,9 +463,9 @@ class AssignmentContent extends Component<Props, State> {
       <div className="modalContent">
         <ul>
           <li>
-            <a href="javascript:void(0)" className="linkOpenSite" onClick={this.insidePreviewchangeOpenFunction}>{viewText}</a>
+            <a href="#" className="linkOpenSite" onClick={this.insidePreviewchangeOpenFunction}>{viewText}</a>
             <div className={simpleClassPreview}>
-              <h2><a href="javascript:void(0)" onClick={this.insidePreviewchangeOpenFunction}>{viewText}</a></h2>
+              <h2><a href="#" onClick={this.insidePreviewchangeOpenFunction}>{viewText}</a></h2>
               <ul>
                 {arrayLenguajes.map(renderPreviewLanguage)}
               </ul>
@@ -596,7 +596,7 @@ class AssignmentContent extends Component<Props, State> {
           if (langid !== this.state.originalLocaleId) {
             return (
                 <a
-                 href="javascript:void(0)"
+                 href="#"
                  // tslint:disable-next-line: jsx-no-lambda
                  onClick={() => this.setViewButtonDeleteByLenguaje(id, langid)}
                 >
@@ -608,7 +608,7 @@ class AssignmentContent extends Component<Props, State> {
         return (
           <div>
             <a
-             href="javascript:void(0)"
+             href="#"
              // tslint:disable-next-line: jsx-no-lambda
              onClick={() => this.setViewButtonEditByLenguaje(id, langid)}
              title={intl.get('preview.teaching_path.buttons.editbutton')}
@@ -622,7 +622,7 @@ class AssignmentContent extends Component<Props, State> {
       return (
         <div>
           <a
-           href="javascript:void(0)"
+           href="#"
            // tslint:disable-next-line: jsx-no-lambda
            onClick={() => this.setViewButtonAddByLenguaje(id, langid)}
            title={intl.get('preview.teaching_path.buttons.add')}
@@ -647,7 +647,7 @@ class AssignmentContent extends Component<Props, State> {
           <button title={editText} onClick={this.insidechangeEditFunction}>{editText}</button>
         </div>
         <div className={simpleClassView}>
-          <h2><a href="javascript:void(0)" onClick={this.insidechangeEditFunction}>{editText}</a></h2>
+          <h2><a href="#" onClick={this.insidechangeEditFunction}>{editText}</a></h2>
           <ul>
             {arrayLenguajes.map(renderLanguage)}
           </ul>
@@ -695,7 +695,7 @@ class AssignmentContent extends Component<Props, State> {
             <div className="NewheaderPanel">
               <div className="headerButtons">
                 <div className="previewButtons">
-                  <a href="javascript:void(0)" className={openPreview} onClick={this.changeOpenpreview}>{intl.get('new assignment.Preview')}</a>
+                  <a href="#" className={openPreview} onClick={this.changeOpenpreview}>{intl.get('new assignment.Preview')}</a>
                   {this.state.modalPreview && typeUser === UserType.Teacher && isTranslate && this.contentInCM()}
                   {this.state.modalPreview && typeUser === UserType.Teacher && !isTranslate && this.contentIn()}
                   {this.state.modalPreview && typeUser === UserType.ContentManager && isTranslate && this.contentInCM()}
@@ -703,7 +703,7 @@ class AssignmentContent extends Component<Props, State> {
                   {this.state.modalPreview && typeUser === UserType.Student && this.contentIn()}
                 </div>
                 <div className="functionsButtons">
-                  <a href="javascript:void(0)" className={openFunction} onClick={this.changeOpenFunction}>{editText}</a>
+                  <a href="#" className={openFunction} onClick={this.changeOpenFunction}>{editText}</a>
                   {this.state.modalFunction && typeUser === UserType.Teacher && isTranslate && this.contentIntwoCMTeacher()}
                   {this.state.modalFunction && typeUser === UserType.Teacher && !isTranslate && this.contentIntwo()}
                   {this.state.modalFunction && typeUser === UserType.Student && this.contentIntwo()}

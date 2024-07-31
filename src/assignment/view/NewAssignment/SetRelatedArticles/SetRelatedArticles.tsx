@@ -149,7 +149,7 @@ export class SetRelatedArticles extends Component<Props, State> {
             <button className="CreateButton newAnswerButton" id="newAnswerRelatedButton" title={this.renderButtonTitle()} onClick={this.handleRelatedArticles}>
               {this.renderButtonTitle()}
             </button>
-            <a href="javascript:void(0)" className="hiddenRelatedCheck" onClick={this.toggleHiddenArticles}>
+            <a href="#" className="hiddenRelatedCheck" onClick={this.toggleHiddenArticles}>
               <img src={this.state.hiddenArticles ? checkActive : checkInactive} alt="checkbox" className="AssignmentArticlesToReading__checkbox"/>
               <div>
                 {intl.get('assignments search.hidden_related')}
