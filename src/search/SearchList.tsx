@@ -797,12 +797,15 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     );
   }
 
-  public renderTabs = () =>  (
-    <div className="renderTabs">
-      {(this.userService.getCurrentUser()!.type === UserType.Student) && this.tabNavigationLinksStudent.map(this.renderTabsInside)}
-      {!(this.userService.getCurrentUser()!.type === UserType.Student) && this.tabNavigationLinks.map(this.renderTabsInside)}
-    </div>
-  )
+  public renderTabs = () => {
+    const userType = this.userService.getCurrentUser()!.type;
+    const navigationTabs = (userType === UserType.Student) ? this.tabNavigationLinksStudent : this.tabNavigationLinks;
+    return (
+      <div className="renderTabs">
+        {navigationTabs.map(this.renderTabsInside)}
+      </div>
+    );
+  }
 
   public handleInputSearchQuery = async (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
