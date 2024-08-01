@@ -769,7 +769,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
           {!ifNewWp && NewwpLenguajes.map(this.itemFilterlangFilter)}
         </div>
         <div className="listLenguajesList" >
-          <a href="javascript:void(0)" className={classbtnlang} onClick={this.openFiltersModalLang} onMouseEnter={this.LangMouseEnter} onMouseLeave={this.LangMouseLeave}>
+          <a href="#" className={classbtnlang} onClick={this.openFiltersModalLang} onMouseEnter={this.LangMouseEnter} onMouseLeave={this.LangMouseLeave}>
             <img src={langIcon} />
             {intl.get('generals.languagesimple')}
           </a>
@@ -790,7 +790,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     const activeClass = (this.props.type === item.data) ?  'renderTab active' : 'renderTab';
     const icondem = (this.props.type === item.data) ? item.iconHover : item.icon;
     return (
-      <a href="javascript:void(0)" className={activeClass} onClick={() => this.changeView(item.url, item.data)}>
+      <a href="#" className={activeClass} onClick={() => this.changeView(item.url, item.data)}>
         <img src={icondem} />
         {intl.get(`sidebar.${item.name}`)}
       </a>
@@ -906,7 +906,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
                 <img src={langIcon} />
                 <span>{intl.get('generals.resetall')}</span>
               </button>
-              <a href="javascript:void(0)" className={classbtnText} onClick={this.openFiltersModalTp}>
+              <a href="#" className={classbtnText} onClick={this.openFiltersModalTp}>
                 <img src={filterIcon} />
                 {btnText}
               </a>
