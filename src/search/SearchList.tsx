@@ -790,7 +790,7 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
     const activeClass = (this.props.type === item.data) ?  'renderTab active' : 'renderTab';
     const icondem = (this.props.type === item.data) ? item.iconHover : item.icon;
     return (
-      <a href="#" className={activeClass} onClick={() => this.changeView(item.url, item.data)}>
+      <a href="#" className={activeClass} onClick={() => this.changeView(item.url, item.data)} key={item.name}>
         <img src={icondem} />
         {intl.get(`sidebar.${item.name}`)}
       </a>
