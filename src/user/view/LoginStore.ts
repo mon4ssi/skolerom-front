@@ -167,6 +167,11 @@ export class LoginStore {
 
   public async getMaintenance_data() {
     const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/maintenance/v1/status`);
+
+    if (!response || !response.data) {
+      return false;
+    }
+
     return response.data;
   }
 
