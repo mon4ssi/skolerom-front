@@ -177,11 +177,15 @@ export class LoginStore {
 
   public async getMenuData(locale: string) {
     const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/menu_list/v1/get`, {
-      params:
-      {
+      params: {
         lang: locale
       }
     });
+
+    if (!response || !response.data) {
+      return [];
+    }
+
     return response.data;
   }
   /*
