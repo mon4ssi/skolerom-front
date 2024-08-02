@@ -1,6 +1,6 @@
 <svg width="40" height="40" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="1" y="1" width="20" height="20" rx="10" fill="white" stroke="#E2017B" strokeWidth="1.125"/>
-<path d="M6 6.99997H16" stroke="#E2017B" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round"/>
-<path fillRule="evenodd" clipRule="evenodd" d="M12.2 6H9.8C9.3584 6 9 6.224 9 6.5V7H13V6.5C13 6.224 12.6416 6 12.2 6Z" stroke="#E2017B" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round"/>
-<path fillRule="evenodd" clipRule="evenodd" d="M14.3285 15.312C14.297 15.701 13.9818 16 13.6036 16H8.39685C8.01867 16 7.70352 15.701 7.672 15.312L7 7H15L14.3285 15.312Z" stroke="#E2017B" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round"/>
+<rect x="1" y="1" width="20" height="20" rx="10" fill="white" stroke="#AD005F" strokeWidth="1.125"/>
+<path d="M6 6.99997H16" stroke="#AD005F" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round"/>
+<path fillRule="evenodd" clipRule="evenodd" d="M12.2 6H9.8C9.3584 6 9 6.224 9 6.5V7H13V6.5C13 6.224 12.6416 6 12.2 6Z" stroke="#AD005F" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round"/>
+<path fillRule="evenodd" clipRule="evenodd" d="M14.3285 15.312C14.297 15.701 13.9818 16 13.6036 16H8.39685C8.01867 16 7.70352 15.701 7.672 15.312L7 7H15L14.3285 15.312Z" stroke="#AD005F" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round"/>
 </svg>

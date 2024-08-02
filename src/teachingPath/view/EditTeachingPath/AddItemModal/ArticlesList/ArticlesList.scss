@@ -20,7 +20,7 @@
     div {      
       font-size: 1rem;
       font-weight: 500;
-      color: #e2017b;
+      color: #AD005F;
       font-weight: 500;
       cursor: pointer;
       button {
@@ -28,7 +28,7 @@
         position: relative;
         &:before {
           content: '';
-          background: #e2017b;
+          background: #AD005F;
           position: absolute;
           width: 35px;
           height: 35px;
@@ -53,7 +53,7 @@
       p {
         margin: 0px;
         margin-right: 25px;
-        color: #e2017b;
+        color: #AD005F;
       }
       a {
         color: #0b2541;
@@ -153,7 +153,7 @@
     position: absolute;
     width: 31px;
     height: 31px;
-    background: #e2017b;
+    background: #AD005F;
     z-index: -1;
     border-radius: 50%;
     left: -2px;

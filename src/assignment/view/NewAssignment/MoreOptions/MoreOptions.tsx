@@ -86,7 +86,7 @@ class MoreOptionsWrapper extends Component<MoreOptionsWrapperProps> {
           </li>
           <li>
             <a href="#" onClick={this.delete} className="flexBox" role="button">
-              <span style={{ color: '#E2017B' }}>{intl.get('new assignment.Remove question')}</span>
+              <span style={{ color: '#AD005F' }}>{intl.get('new assignment.Remove question')}</span>
               <img src={deleteIcon} alt="Delete qustion"/>
             </a>
           </li>

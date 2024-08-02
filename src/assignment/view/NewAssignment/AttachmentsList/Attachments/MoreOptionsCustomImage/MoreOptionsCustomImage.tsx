@@ -53,7 +53,7 @@ class MoreOptionsCustomImageWrapper extends Component<MoreOptionsCustomImageWrap
           </li>
           <li>
             <a href="#" onClick={this.remove} className="flexBox" role="button">
-              <span style={{ color: '#E2017B' }}>{intl.get('new assignment.images_options.delete')}</span>
+              <span style={{ color: '#AD005F' }}>{intl.get('new assignment.images_options.delete')}</span>
               <img src={deleteIcon} alt="Delete qustion" />
             </a>
           </li>

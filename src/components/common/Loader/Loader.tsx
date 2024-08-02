@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 
-const DEFAULT_COLOR = '#E2017B';
+const DEFAULT_COLOR = '#AD005F';
 const DEFAULT_WIDTH = 6;
 const DEFAULT_HEIGHT = 35;
 const DEFAULT_RADIUS = 0;

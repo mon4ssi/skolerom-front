@@ -43,7 +43,7 @@
     .questions {
       font-size: 1rem;
       text-align: right;
-      color: #E2017B;
+      color: #AD005F;
       margin-right: 20px;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -51,7 +51,7 @@
     }
 
     .passedDeadline {
-      color: #E2017B;
+      color: #AD005F;
     }
 
     .deadline {
@@ -88,14 +88,14 @@
       }
 
       .notPassed {
-        color: #E2017B;
+        color: #AD005F;
       }
     }
     .evaluated-true {
       color: #2D9A46;
     }
     .evaluated-false {
-      color: #E2017B;
+      color: #AD005F;
     }
 
     .answer-status {
