@@ -1789,7 +1789,7 @@ export class ArticlesList extends Component<Props, State> {
       <div className="articlesListHeader flexBox spaceBetween" tabIndex={0}>
         <div className="articlesListHeader__left">
           <p className="active">{intl.get('edit_teaching_path.modals.articles')}</p>
-          {/* <a href="javascript:void(0)" onClick={this.redirectAssigment}>{intl.get('edit_teaching_path.modals.assignmetns')}</a> */}
+          {/* <a href="#" onClick={this.redirectAssigment}>{intl.get('edit_teaching_path.modals.assignmetns')}</a> */}
         </div>
         <div className="articlesListHeader__right">
           <button ref={this.refButton} onClick={this.closeModal} title={intl.get('generals.close')}>
@@ -2121,7 +2121,7 @@ export class ArticlesList extends Component<Props, State> {
         <div className="defaultContentModal__content">
           <h3>{selectedArticle!.title}</h3>
           <p>{selectedArticle!.excerpt}</p>
-          <a href="javascript:void(0)" className="CreateButton" onClick={this.openArticleReading}>{intl.get('edit_teaching_path.modals.articles_read')}</a>
+          <a href="#" className="CreateButton" onClick={this.openArticleReading}>{intl.get('edit_teaching_path.modals.articles_read')}</a>
         </div>
         <div className="defaultContentModal__expand">
           <div className={`expandContent ${expand && 'active'}`} onClick={this.toggleData}>{textexpand}</div>

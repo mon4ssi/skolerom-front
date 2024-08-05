@@ -29,7 +29,7 @@
           content: '';
           height: 6px;
           width: 6px;
-          background: #E2017B;
+          background: #AD005F;
           border-radius: 50%;
           display: block;
         }
@@ -38,7 +38,7 @@
           position: absolute;
           width: 0;
           height: 100%;
-          background: #E2017B;
+          background: #AD005F;
           left: 0;
         }
         &.used {
@@ -111,7 +111,7 @@
       }
       .overview {
         font-size: 0.9375rem;
-        color: #E2017B;
+        color: #AD005F;
         text-transform: uppercase;
         margin-bottom: 10px;
 
@@ -186,7 +186,7 @@
         span {
           margin-left: 10px;
           font-size: 0.9375rem;
-          color: #E2017B;
+          color: #AD005F;
         }
       }
     }

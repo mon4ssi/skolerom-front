@@ -33,7 +33,7 @@
     div {      
       font-size: 1rem;
       font-weight: 500;
-      color: #e2017b;
+      color: #AD005F;
       font-weight: 500;
       cursor: pointer;
       button {
@@ -47,7 +47,7 @@
           outline-offset: 3px;
         }
         &.selectedTab {
-          color: #e2017b;
+          color: #AD005F;
         }
       }
     }
@@ -57,7 +57,7 @@
       p {
         margin: 0px;
         margin-right: 25px;
-        color: #e2017b;
+        color: #AD005F;
       }
       a {
         color: #0b2541;
@@ -73,7 +73,7 @@
         margin-right: 0px !important;        
         &:before {
           content: '';
-          background: #e2017b;
+          background: #AD005F;
           position: absolute;
           width: 35px;
           height: 35px;
@@ -186,7 +186,7 @@
 
       .itemNumberOfQuestions {
         margin-left: 20px;
-        color: #E2017B;
+        color: #AD005F;
         font-size: 0.9375rem;
         width: max-content;
       }

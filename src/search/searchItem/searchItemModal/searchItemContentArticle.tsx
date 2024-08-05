@@ -116,7 +116,7 @@ class ArticleContent extends Component<Props> {
       relatedAssignment
   } = this.props.item;
     return (
-      <a href="javascript:void(0)" onClick={this.copylink}>
+      <a href="#" onClick={this.copylink}>
         <img src={sharedicon} />
         <span>{intl.get('assignment preview.sharedicon')}</span>
       </a>

@@ -1,6 +1,6 @@
 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M3.75 13.125C5.47583 13.125 6.875 14.5242 6.875 16.25C6.875 17.9758 5.47583 19.375 3.75 19.375C2.02417 19.375 0.625 17.9758 0.625 16.25C0.625 14.5242 2.02417 13.125 3.75 13.125Z" stroke="#0B2541" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M16.25 9.375C17.9758 9.375 19.375 10.7742 19.375 12.5C19.375 14.2258 17.9758 15.625 16.25 15.625C14.5242 15.625 13.125 14.2258 13.125 12.5C13.125 10.7742 14.5242 9.375 16.25 9.375Z" stroke="#0B2541" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M6.875 16.25V5.59917C6.875 4.52333 7.56333 3.56833 8.58333 3.2275L17.79 0.670833C18.455 0.486666 19.1442 0.876666 19.3283 1.5425C19.3583 1.65083 19.3733 1.7625 19.3733 1.875V12.5" stroke="#0B2541" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M6.875 7.26584L19.375 3.51584" stroke="#0B2541" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path fillRule="evenodd" clipRule="evenodd" d="M3.75 13.125C5.47583 13.125 6.875 14.5242 6.875 16.25C6.875 17.9758 5.47583 19.375 3.75 19.375C2.02417 19.375 0.625 17.9758 0.625 16.25C0.625 14.5242 2.02417 13.125 3.75 13.125Z" stroke="#0B2541" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+<path fillRule="evenodd" clipRule="evenodd" d="M16.25 9.375C17.9758 9.375 19.375 10.7742 19.375 12.5C19.375 14.2258 17.9758 15.625 16.25 15.625C14.5242 15.625 13.125 14.2258 13.125 12.5C13.125 10.7742 14.5242 9.375 16.25 9.375Z" stroke="#0B2541" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+<path d="M6.875 16.25V5.59917C6.875 4.52333 7.56333 3.56833 8.58333 3.2275L17.79 0.670833C18.455 0.486666 19.1442 0.876666 19.3283 1.5425C19.3583 1.65083 19.3733 1.7625 19.3733 1.875V12.5" stroke="#0B2541" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+<path d="M6.875 7.26584L19.375 3.51584" stroke="#0B2541" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
 </svg>

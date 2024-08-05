@@ -71,7 +71,7 @@ export class RelatedCard extends Component<Props> {
         onClick={handleClick}
         className={`relatedCard ${isChosen && 'isChosen'} ${!handleClick && 'withoutCursor'}`}
       >
-        <a href="javascript:void(0)">
+        <a href="#">
           <div className="relatedCard__blockMain">
             <img
               src={featuredImage}

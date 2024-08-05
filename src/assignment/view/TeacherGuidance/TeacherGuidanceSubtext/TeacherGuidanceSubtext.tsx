@@ -41,7 +41,7 @@ export const TeacherGuidanceSubtext = (props: Props) => {
       <div className={expandedparagraph}>
         {props.item.content.map(item => item.type === 'TEXT' && <div key={item.text!} dangerouslySetInnerHTML={{ __html: item.text! }} />)}
       </div>
-      <a href="javascript:void(0)" className={ClassButton} onClick={toggleRead}><img src={arrowLeftRounded} alt="arrowLeftRounded" /></a>
+      <a href="#" className={ClassButton} onClick={toggleRead}><img src={arrowLeftRounded} alt="arrowLeftRounded" /></a>
     </div>
   );
 };

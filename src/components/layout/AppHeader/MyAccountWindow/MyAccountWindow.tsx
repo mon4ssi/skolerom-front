@@ -82,7 +82,7 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
     && (
       <ul className="MyAccountWindow__list MyAccountWindow__list_separated">
         <li className="MyAccountWindow__item" onClick={this.goToLocaleScreen}>
-          <a href="javascript:void(0)" className="MyAccountWindow__itemText">
+          <a href="#" className="MyAccountWindow__itemText">
             {intl.get('header.Change Language')} (<span style={{ textTransform: 'uppercase' }}>{uiStore!.currentLocale})</span>
           </a>
         </li>
@@ -165,7 +165,7 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
       <ul className="MyAccountWindow__list">
         <li className="MyAccountWindow__item" onClick={this.logOut}>
           <img className="MyAccountWindow__itemImage" src={logOutIcon} alt={intl.get('header.Log out')} />
-          <a href="javascript:void(0)" className="MyAccountWindow__itemText">
+          <a href="#" className="MyAccountWindow__itemText">
             {intl.get('header.Log out')}
           </a>
         </li>
@@ -179,7 +179,7 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
         <ul className="MyAccountWindow__list">
           <li className="MyAccountWindow__item" onClick={this.props.onLogIn}>
             <img className="MyAccountWindow__itemImage" src={logOutIcon} alt={intl.get('header.Log out')} />
-            <a href="javascript:void(0)" className="MyAccountWindow__itemText">
+            <a href="#" className="MyAccountWindow__itemText">
               {intl.get('header.Log in')}
             </a>
           </li>
@@ -198,7 +198,7 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
           </div>
         </li>
 
-        <a href="javascript:void(0)" className="MyAccountWindow__closeButton" onClick={closeMyAccountWindow}><img src={closeIcon} alt="Close"  /></a>
+        <a href="#" className="MyAccountWindow__closeButton" onClick={closeMyAccountWindow}><img src={closeIcon} alt="Close"  /></a>
       </ul>
     );
   }
@@ -209,7 +209,7 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
     && (
       <ul className="MyAccountWindow__list MyAccountWindow__list_separated">
         <li className="MyAccountWindow__item"  onClick={this.goToFontsScreen}>
-          <a href="javascript:void(0)" className="MyAccountWindow__itemText">
+          <a href="#" className="MyAccountWindow__itemText">
             {intl.get('header.change_font_size')}
           </a>
         </li>
@@ -247,7 +247,7 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
         {this.renderChangeFontSize()}
         <ul className="MyAccountWindow__list MyAccountWindow__list_separated">
           <li className="MyAccountWindow__item">
-            <a href="javascript:void(0)" className="MyAccountWindow__itemText" onClick={this.props.openKeyboardModal} title={intl.get('header.title.keyboard')}>{intl.get('generals.keyboard')}</a>
+            <a href="#" className="MyAccountWindow__itemText" onClick={this.props.openKeyboardModal} title={intl.get('header.title.keyboard')}>{intl.get('generals.keyboard')}</a>
           </li>
         </ul>
         {this.renderLogOutButtonIfNeeded()}
@@ -275,7 +275,7 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
         key={language.description}
       >
         <a
-          href="javascript:void(0)"
+          href="#"
           className={classnames('MyAccountWindow__itemText', { MyAccountWindow__itemText_selected: uiStore!.currentLocale === language.shortName })}
         >
           {language.description} {uiStore!.currentLocale === language.shortName && `(${intl.get('header.selected')})`}
@@ -293,7 +293,7 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
               {intl.get('header.Change Language')}
             </div>
 
-            <a href="javascript:void(0)" onClick={closeMyAccountWindow} className="MyAccountWindow__closeButton"><img src={closeIcon} alt="Close" /></a>
+            <a href="#" onClick={closeMyAccountWindow} className="MyAccountWindow__closeButton"><img src={closeIcon} alt="Close" /></a>
           </li>
         </ul>
         <div id="aux4" className="hidden">Not name</div>
@@ -338,7 +338,7 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
         onClick={() => setCurrentFonts(fontstore.classname)}
       >
         <a
-          href="javascript:void(0)"
+          href="#"
           className={classnames('MyAccountWindow__itemText', { MyAccountWindow__itemText_selected: uiStore!.currentFont === fontstore.classname })}
         >
           {fontstore.name}
@@ -356,7 +356,7 @@ class MyAccountWindow extends Component<MyAccountWindowProps, IMyAccountWindowSt
               {intl.get('header.change_font_size')}
             </div>
 
-            <a href="javascript:void(0)" className="MyAccountWindow__closeButton" onClick={closeMyAccountWindow}><img src={closeIcon} alt="Close" /></a>
+            <a href="#" className="MyAccountWindow__closeButton" onClick={closeMyAccountWindow}><img src={closeIcon} alt="Close" /></a>
           </li>
         </ul>
         <div id="aux3" className="hidden">Not name</div>

@@ -117,7 +117,6 @@ export class LoginForm extends Component<LoginFormProps, State> {
                 placeholder={intl.get('login_page.Username')}
                 value={email}
                 onChange={this.handleChangeInput}
-                pattern="*"
                 aria-required="true"
                 aria-invalid="false"
               />
@@ -131,7 +130,6 @@ export class LoginForm extends Component<LoginFormProps, State> {
                 placeholder={intl.get('login_page.Password')}
                 value={password}
                 onChange={this.handleChangeInput}
-                pattern="*"
                 aria-required="true"
                 aria-invalid="false"
               />

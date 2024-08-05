@@ -84,7 +84,7 @@ class RenderOption extends Component<RenderOptionProps>{
     });
 
     return (
-      <a href="javascript:void(0)" className={`Option focusCurrentOption ${this.calculateIsRightStyle()} ${isStudentView && 'light'}`} onClick={this.setIsRight} ref={this.refInput}>
+      <a href="#" className={`Option focusCurrentOption ${this.calculateIsRightStyle()} ${isStudentView && 'light'}`} onClick={this.setIsRight} ref={this.refInput}>
         <div className={inputClassNames}>
           {option.title}
         </div>
