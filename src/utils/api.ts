@@ -22,9 +22,9 @@ const ARTICLE_API = axios.create({
   }
 });
 
-const logoutUserIfSessionCookieIsNotPresent = (session: StorageInteractor, token?: string | null) => {
+const logoutUserIfSessionCookieIsNotPresent = (session: StorageInteractor) => {
   if (storage.local.isDevelopment()) return;
-  if (!token || window.location.pathname === '/logout') return;
+  if (window.location.pathname === '/logout') return;
   if (document.cookie.split(SKOLEROM_SSO_AUTH_COOKIE).length > 1) return;
 
   session.logOut();
@@ -39,7 +39,7 @@ const onRequestFulfilled = (config: AxiosRequestConfig): AxiosRequestConfig | Pr
     const token = storageInteractor.getToken();
 
     if (token) {
-      logoutUserIfSessionCookieIsNotPresent(storageInteractor, token);
+      logoutUserIfSessionCookieIsNotPresent(storageInteractor);
 
       config.headers.Authorization = `Bearer ${token}`;
     }
