@@ -5,6 +5,8 @@ import { StorageInteractor, STORAGE_INTERACTOR_KEY } from 'utils/storageInteract
 import { STATUS_UNAUTHORIZED, LOCALES_MAPPING_FOR_BACKEND } from 'utils/constants';
 import { Locales } from './enums';
 
+const SKOLEROM_SSO_AUTH_COOKIE = 'sso-authcookie-skolerom';
+
 const API = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
   headers: {
@@ -19,22 +21,23 @@ const ARTICLE_API = axios.create({
   }
 });
 
+const logoutUserIfSessionCookieIsNotPresent = (session: StorageInteractor, token?: string | null) => {
+  if (!token || window.location.pathname === '/logout') return;
+  if (document.cookie.split(SKOLEROM_SSO_AUTH_COOKIE).length > 1) return;
+
+  session.logOut();
+
+  window.location.reload();
+};
+
 const onRequestFulfilled = (config: AxiosRequestConfig): AxiosRequestConfig | Promise<AxiosRequestConfig> => {
   if (!config.headers.Authorization) {
     const storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
-    const token = storageInteractor.getToken();
     const locale = storageInteractor.getCurrentLocale() as Locales;
+    const token = storageInteractor.getToken();
 
     if (token) {
-      const setCookie = document.cookie;
-      const pathName: string = window.location.pathname;
-
-      if (pathName !== '/logout') {
-        if (setCookie.split('sso-authcookie-skolerom').length <= 1) {
-          storageInteractor.logOut();
-          window.location.reload();
-        }
-      }
+      logoutUserIfSessionCookieIsNotPresent(storageInteractor, token);
 
       config.headers.Authorization = `Bearer ${token}`;
     }
