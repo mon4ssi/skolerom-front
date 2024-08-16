@@ -14,7 +14,7 @@ class WebStorage {
   }
 
   public string(key: string): string {
-    return this.getItem(key) ?? '';
+    return this.getItem(key) || '';
   }
 
   public setString(key: string, value: string): void {
@@ -22,7 +22,11 @@ class WebStorage {
   }
 
   public number(key: string): number {
-    return Number(this.getItem(key) ?? '');
+    const value = Number(this.getItem(key) || '');
+
+    if (isNaN(value)) return 0;
+
+    return value;
   }
 
   public setNumber(key: string, value: number): void {
