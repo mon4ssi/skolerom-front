@@ -50,15 +50,16 @@ API.interceptors.request.use(
   error => Promise.reject(error)
 );
 
-API.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  async (error) => {
-    if (error.response!.status === STATUS_UNAUTHORIZED) {
-      injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY).logOut();
-      window.location.href = '/login';
-    }
-    return Promise.reject(error);
+const onResponseFulfilled = (response: AxiosResponse) => response;
+
+const onResponseRejected = async (error: any) => {
+  if (error.response!.status === STATUS_UNAUTHORIZED) {
+    injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY).logOut();
+    window.location.href = '/login';
   }
-);
+  return Promise.reject(error);
+};
+
+API.interceptors.response.use(onResponseFulfilled, onResponseRejected);
 
 export { API, ARTICLE_API };
