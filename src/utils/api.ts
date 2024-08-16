@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { injector } from 'Injector';
+import { storage } from 'utils/storage';
 import { StorageInteractor, STORAGE_INTERACTOR_KEY } from 'utils/storageInteractor';
 import { STATUS_UNAUTHORIZED, LOCALES_MAPPING_FOR_BACKEND } from 'utils/constants';
 import { Locales } from './enums';
@@ -22,6 +23,7 @@ const ARTICLE_API = axios.create({
 });
 
 const logoutUserIfSessionCookieIsNotPresent = (session: StorageInteractor, token?: string | null) => {
+  if (storage.local.isDevelopment()) return;
   if (!token || window.location.pathname === '/logout') return;
   if (document.cookie.split(SKOLEROM_SSO_AUTH_COOKIE).length > 1) return;
 
