@@ -19,36 +19,37 @@ const ARTICLE_API = axios.create({
   }
 });
 
-API.interceptors.request.use(
-  (config: AxiosRequestConfig): AxiosRequestConfig | Promise<AxiosRequestConfig> => {
-    if (!config.headers.Authorization) {
-      const storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
-      const token = storageInteractor.getToken();
-      const locale = storageInteractor.getCurrentLocale() as Locales;
+const onRequestFulfilled = (config: AxiosRequestConfig): AxiosRequestConfig | Promise<AxiosRequestConfig> => {
+  if (!config.headers.Authorization) {
+    const storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
+    const token = storageInteractor.getToken();
+    const locale = storageInteractor.getCurrentLocale() as Locales;
 
-      if (token) {
-        const setCookie = document.cookie;
-        const pathName: string = window.location.pathname;
+    if (token) {
+      const setCookie = document.cookie;
+      const pathName: string = window.location.pathname;
 
-        if (pathName !== '/logout') {
-          if (setCookie.split('sso-authcookie-skolerom').length <= 1) {
-            storageInteractor.logOut();
-            window.location.reload();
-          }
+      if (pathName !== '/logout') {
+        if (setCookie.split('sso-authcookie-skolerom').length <= 1) {
+          storageInteractor.logOut();
+          window.location.reload();
         }
-
-        config.headers.Authorization = `Bearer ${token}`;
       }
 
-      if (LOCALES_MAPPING_FOR_BACKEND[locale]) {
-        config.headers['Accept-Language'] = LOCALES_MAPPING_FOR_BACKEND[locale];
-      }
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
-    return config;
-  },
-  error => Promise.reject(error)
-);
+    if (LOCALES_MAPPING_FOR_BACKEND[locale]) {
+      config.headers['Accept-Language'] = LOCALES_MAPPING_FOR_BACKEND[locale];
+    }
+  }
+
+  return config;
+};
+
+const onRequestRejected = (error: any) => Promise.reject(error);
+
+API.interceptors.request.use(onRequestFulfilled, onRequestRejected);
 
 const onResponseFulfilled = (response: AxiosResponse) => response;
 
