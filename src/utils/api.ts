@@ -49,17 +49,18 @@ const onRequestFulfilled = (config: AxiosRequestConfig): AxiosRequestConfig | Pr
 
 const onRequestRejected = (error: any) => Promise.reject(error);
 
-API.interceptors.request.use(onRequestFulfilled, onRequestRejected);
-
 const onResponseFulfilled = (response: AxiosResponse) => response;
 
 const onResponseRejected = async (error: any) => {
+
   if (error.response!.status === STATUS_UNAUTHORIZED) {
     injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY).logOut();
     window.location.href = '/login';
   }
   return Promise.reject(error);
 };
+
+API.interceptors.request.use(onRequestFulfilled, onRequestRejected);
 
 API.interceptors.response.use(onResponseFulfilled, onResponseRejected);
 
