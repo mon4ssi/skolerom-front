@@ -1,8 +1,8 @@
 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fillRule="evenodd" clipRule="evenodd" d="M3 2.5C3.82867 2.5 4.5 3.17133 4.5 4C4.5 4.82867 3.82867 5.5 3 5.5C2.17133 5.5 1.5 4.82867 1.5 4C1.5 3.17133 2.17133 2.5 3 2.5Z" stroke="#0B2541" strokeLinecap="round" strokeLinejoin="round"/>
-<path d="M3 6.5C1.61933 6.5 0.5 7.61933 0.5 9V10.5H1.5L2 14.5H4" stroke="#0B2541" strokeLinecap="round" strokeLinejoin="round"/>
-<path fillRule="evenodd" clipRule="evenodd" d="M13 2.5C13.8287 2.5 14.5 3.17133 14.5 4C14.5 4.82867 13.8287 5.5 13 5.5C12.1713 5.5 11.5 4.82867 11.5 4C11.5 3.17133 12.1713 2.5 13 2.5Z" stroke="#0B2541" strokeLinecap="round" strokeLinejoin="round"/>
-<path d="M13 6.5C14.3807 6.5 15.5 7.61933 15.5 9V10.5H14.5L14 14.5H12" stroke="#0B2541" strokeLinecap="round" strokeLinejoin="round"/>
-<path fillRule="evenodd" clipRule="evenodd" d="M8 0.5C9.10467 0.5 10 1.39533 10 2.5C10 3.60467 9.10467 4.5 8 4.5C6.89533 4.5 6 3.60467 6 2.5C6 1.39533 6.89533 0.5 8 0.5Z" stroke="#0B2541" strokeLinecap="round" strokeLinejoin="round"/>
-<path fillRule="evenodd" clipRule="evenodd" d="M11.5 9C11.5 7.06733 9.93267 5.5 8 5.5C6.06733 5.5 4.5 7.06733 4.5 9V10.5H6L6.5 15.5H9.5L10 10.5H11.5V9Z" stroke="#0B2541" strokeLinecap="round" strokeLinejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M3 2.5C3.82867 2.5 4.5 3.17133 4.5 4C4.5 4.82867 3.82867 5.5 3 5.5C2.17133 5.5 1.5 4.82867 1.5 4C1.5 3.17133 2.17133 2.5 3 2.5Z" stroke="#0B2541" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M3 6.5C1.61933 6.5 0.5 7.61933 0.5 9V10.5H1.5L2 14.5H4" stroke="#0B2541" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M13 2.5C13.8287 2.5 14.5 3.17133 14.5 4C14.5 4.82867 13.8287 5.5 13 5.5C12.1713 5.5 11.5 4.82867 11.5 4C11.5 3.17133 12.1713 2.5 13 2.5Z" stroke="#0B2541" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M13 6.5C14.3807 6.5 15.5 7.61933 15.5 9V10.5H14.5L14 14.5H12" stroke="#0B2541" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M8 0.5C9.10467 0.5 10 1.39533 10 2.5C10 3.60467 9.10467 4.5 8 4.5C6.89533 4.5 6 3.60467 6 2.5C6 1.39533 6.89533 0.5 8 0.5Z" stroke="#0B2541" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M11.5 9C11.5 7.06733 9.93267 5.5 8 5.5C6.06733 5.5 4.5 7.06733 4.5 9V10.5H6L6.5 15.5H9.5L10 10.5H11.5V9Z" stroke="#0B2541" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

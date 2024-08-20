@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="38px" height="38px" viewBox="0 0 38 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>app-window-link</title>
-    <g id="Symbols" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-        <g id="New-content-(ver-2)" transform="translate(-20.000000, -82.000000)" fill="#0B2541" fillRule="nonzero">
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="New-content-(ver-2)" transform="translate(-20.000000, -82.000000)" fill="#0B2541" fill-rule="nonzero">
             <g id="Add-link" transform="translate(1.000000, 70.000000)">
                 <g id="app-window-link" transform="translate(19.000000, 12.000000)">
                     <path d="M3.515,33.25 C1.57628222,33.25 0,31.6524167 0,29.6875 L0,3.5625 C0,1.59758333 1.57628222,0 3.515,0 L31.635,0 C33.5737178,0 35.15,1.59758333 35.15,3.5625 L35.15,13.0625 C35.15,13.718 34.6250933,14.25 33.9783333,14.25 C33.3315733,14.25 32.8066667,13.718 32.8066667,13.0625 L32.8066667,9.5 L2.34333333,9.5 L2.34333333,29.6875 C2.34333333,30.343 2.86824,30.875 3.515,30.875 L12.8883333,30.875 C13.5350933,30.875 14.06,31.407 14.06,32.0625 C14.06,32.718 13.5350933,33.25 12.8883333,33.25 L3.515,33.25 Z M32.8066667,7.125 L32.8066667,3.5625 C32.8066667,2.907 32.28176,2.375 31.635,2.375 L3.515,2.375 C2.86824,2.375 2.34333333,2.907 2.34333333,3.5625 L2.34333333,7.125 L32.8066667,7.125 Z" id="Shape"></path>
