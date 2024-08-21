@@ -1,9 +1,12 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { injector } from 'Injector';
+import { storage } from 'utils/storage';
 import { StorageInteractor, STORAGE_INTERACTOR_KEY } from 'utils/storageInteractor';
 import { STATUS_UNAUTHORIZED, LOCALES_MAPPING_FOR_BACKEND } from 'utils/constants';
 import { Locales } from './enums';
+
+const SKOLEROM_SSO_AUTH_COOKIE = 'sso-authcookie-skolerom';
 
 const API = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
@@ -19,46 +22,51 @@ const ARTICLE_API = axios.create({
   }
 });
 
-API.interceptors.request.use(
-  (config: AxiosRequestConfig): AxiosRequestConfig | Promise<AxiosRequestConfig> => {
-    if (!config.headers.Authorization) {
-      const storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
-      const token = storageInteractor.getToken();
-      const locale = storageInteractor.getCurrentLocale() as Locales;
+const logoutUserIfSessionCookieIsNotPresent = (session: StorageInteractor) => {
+  if (storage.local.isDevelopment()) return;
+  if (window.location.pathname === '/logout') return;
+  if (document.cookie.split(SKOLEROM_SSO_AUTH_COOKIE).length > 1) return;
 
-      if (token) {
-        const setCookie = document.cookie;
-        const pathName: string = window.location.pathname;
+  session.logOut();
 
-        if (pathName !== '/logout') {
-          if (setCookie.split('sso-authcookie-skolerom').length <= 1) {
-            storageInteractor.logOut();
-            window.location.reload();
-          }
-        }
+  window.location.reload();
+};
 
-        config.headers.Authorization = `Bearer ${token}`;
-      }
+const onRequestFulfilled = (config: AxiosRequestConfig): AxiosRequestConfig | Promise<AxiosRequestConfig> => {
+  if (!config.headers.Authorization) {
+    const storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
+    const locale = storageInteractor.getCurrentLocale() as Locales;
+    const token = storageInteractor.getToken();
 
-      if (LOCALES_MAPPING_FOR_BACKEND[locale]) {
-        config.headers['Accept-Language'] = LOCALES_MAPPING_FOR_BACKEND[locale];
-      }
+    if (token) {
+      logoutUserIfSessionCookieIsNotPresent(storageInteractor);
+
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
-    return config;
-  },
-  error => Promise.reject(error)
-);
-
-API.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  async (error) => {
-    if (error.response!.status === STATUS_UNAUTHORIZED) {
-      injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY).logOut();
-      window.location.href = '/login';
+    if (LOCALES_MAPPING_FOR_BACKEND[locale]) {
+      config.headers['Accept-Language'] = LOCALES_MAPPING_FOR_BACKEND[locale];
     }
-    return Promise.reject(error);
   }
-);
+
+  return config;
+};
+
+const onRequestRejected = (error: any) => Promise.reject(error);
+
+const onResponseFulfilled = (response: AxiosResponse) => response;
+
+const onResponseRejected = async (error: any) => {
+
+  if (error.response!.status === STATUS_UNAUTHORIZED) {
+    injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY).logOut();
+    window.location.href = '/login';
+  }
+  return Promise.reject(error);
+};
+
+API.interceptors.request.use(onRequestFulfilled, onRequestRejected);
+
+API.interceptors.response.use(onResponseFulfilled, onResponseRejected);
 
 export { API, ARTICLE_API };
