@@ -469,7 +469,7 @@ export class AssignmentListItem extends Component<AssignmentListItemProps, Assig
       <div className="AssignmentListItem__super">
         {/* <Link to={linkOptions}> */}
         <div onClick={this.onAssignmentClick}>
-          <a href="javascript:void(0)" className="AssignmentListItem">
+          <a href="#" className="AssignmentListItem">
             <div className="AssignmentListItem__block AssignmentListItem__blockMain">
               <img
                 className="AssignmentListItem__image"

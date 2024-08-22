@@ -159,7 +159,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
   public renderTeacherGuidanceButtonList = (guidanceString: string) =>
   (
     <li>
-      <a href="javascript:void(0)" className="linkOpenSite LinkRollback" onClick={this.openInNewTabTeacherGuidance}>
+      <a href="#" className="linkOpenSite LinkRollback" onClick={this.openInNewTabTeacherGuidance}>
         {guidanceString}
       </a>
     </li>
@@ -269,12 +269,12 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const contentReturn = (langid: number, code: string) => (
       <div>
         <a
-          href="javascript:void(0)"
+          href="#"
           // tslint:disable-next-line: jsx-no-lambda
           onClick={() => this.setViewButtonCopyByLenguaje(id, langid)}
           title={intl.get('preview.teaching_path.buttons.editbutton')}
         >
-            <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z" /></svg>
+            <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fillRule="evenodd"><path fillRule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z" /></svg>
         </a>
       </div>
     );
@@ -284,7 +284,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         key={language.id}
       >
         <a
-          href="javascript:void(0)"
+          href="#"
           // tslint:disable-next-line: jsx-no-lambda
           onClick={() => this.setViewButtonCopyByLenguaje(id, language.id)}
           title={intl.get('preview.teaching_path.buttons.editbutton')}
@@ -299,7 +299,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
           <button title={duplicateString} onClick={this.insidechangeEditFunctionTeacher}>{duplicateString}</button>
         </div>
         <div className={simpleClassView}>
-          <h2><a href="javascript:void(0)" onClick={this.insidechangeEditFunctionTeacher}>{duplicateString}</a></h2>
+          <h2><a href="#" onClick={this.insidechangeEditFunctionTeacher}>{duplicateString}</a></h2>
           <ul>
             {arrayLenguajes.map(renderLanguage)}
           </ul>
@@ -347,12 +347,12 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
     const contentReturn = (langid: number, code: string) => (
       <div>
         <a
-          href="javascript:void(0)"
+          href="#"
           // tslint:disable-next-line: jsx-no-lambda
           onClick={() => this.setViewButtonCopyByLenguajeDistribute(id, langid)}
           title={intl.get('preview.teaching_path.buttons.editbutton')}
         >
-            <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z" /></svg>
+            <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fillRule="evenodd"><path fillRule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z" /></svg>
         </a>
       </div>
     );
@@ -362,7 +362,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         key={language.id}
       >
         <a
-          href="javascript:void(0)"
+          href="#"
           // tslint:disable-next-line: jsx-no-lambda
           onClick={() => this.setViewButtonCopyByLenguajeDistribute(id, language.id)}
           title={intl.get('preview.teaching_path.buttons.editbutton')}
@@ -789,7 +789,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         key={language.id}
       >
         <a
-          href="javascript:void(0)"
+          href="#"
           // tslint:disable-next-line: jsx-no-lambda
           onClick={() => this.setViewButtonByLenguaje(language.id)}
         >
@@ -803,7 +803,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         key={language.id}
       >
         <a
-          href="javascript:void(0)"
+          href="#"
           // tslint:disable-next-line: jsx-no-lambda
           onClick={() => this.setPreViewButtonByLenguaje(language.id)}
         >
@@ -817,18 +817,18 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
       <div className="modalContent">
         <ul>
           <li>
-            <a href="javascript:void(0)" className="linkOpenSite" onClick={this.insidePreviewchangeOpenFunction}>{viewStudentText}</a>
+            <a href="#" className="linkOpenSite" onClick={this.insidePreviewchangeOpenFunction}>{viewStudentText}</a>
             <div className={simpleClassPreview}>
-              <h2><a href="javascript:void(0)" onClick={this.insidePreviewchangeOpenFunction}>{viewStudentText}</a></h2>
+              <h2><a href="#" onClick={this.insidePreviewchangeOpenFunction}>{viewStudentText}</a></h2>
               <ul>
                 {arrayLenguajes.map(renderPreviewLanguage)}
               </ul>
             </div>
           </li>
           <li>
-            <a href="javascript:void(0)" className="linkOpenSite" onClick={this.insidechangeOpenFunction}>{viewText}</a>
+            <a href="#" className="linkOpenSite" onClick={this.insidechangeOpenFunction}>{viewText}</a>
             <div className={simpleClassView}>
-              <h2><a href="javascript:void(0)" onClick={this.insidechangeOpenFunction}>{viewText}</a></h2>
+              <h2><a href="#" onClick={this.insidechangeOpenFunction}>{viewText}</a></h2>
               <ul>
                 {arrayLenguajes.map(renderLanguage)}
               </ul>
@@ -927,7 +927,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
           if (langid !== originalLocaleId) {
             return (
               <a
-                href="javascript:void(0)"
+                href="#"
                 // tslint:disable-next-line: jsx-no-lambda
                 onClick={() => this.setViewButtonDeleteByLenguaje(id, langid)}
               >
@@ -939,7 +939,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
         return (
           <div>
             <a
-              href="javascript:void(0)"
+              href="#"
               // tslint:disable-next-line: jsx-no-lambda
               onClick={() => this.setViewButtonEditByLenguaje(id, langid)}
               title={intl.get('preview.teaching_path.buttons.editbutton')}
@@ -953,12 +953,12 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
       return (
         <div>
           <a
-            href="javascript:void(0)"
+            href="#"
             // tslint:disable-next-line: jsx-no-lambda
             onClick={() => this.setViewButtonAddByLenguaje(id, langid)}
             title={intl.get('preview.teaching_path.buttons.add')}
           >
-            <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fill-rule="evenodd"><path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z" /></svg>
+            <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fillRule="evenodd"><path fillRule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z" /></svg>
           </a>
         </div>
       );
@@ -978,7 +978,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
           <button title={editText} onClick={this.insidechangeEditFunction}>{editText}</button>
         </div>
         <div className={simpleClassView}>
-          <h2><a href="javascript:void(0)" onClick={this.insidechangeEditFunction}>{editText}</a></h2>
+          <h2><a href="#" onClick={this.insidechangeEditFunction}>{editText}</a></h2>
           <ul>
             {arrayLenguajes.map(renderLanguage)}
           </ul>
@@ -1085,7 +1085,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
           <div className={'NewheaderPanel'}>
             <div className="headerButtons">
               <div className="previewButtons">
-                <a href="javascript:void(0)" className={openPreview} onClick={this.changeOpenpreview}>{intl.get('new assignment.Preview')}</a>
+                <a href="#" className={openPreview} onClick={this.changeOpenpreview}>{intl.get('new assignment.Preview')}</a>
                 {this.state.modalPreview && typeUser === UserType.Teacher && isTranslate && this.contentInCM()}
                 {this.state.modalPreview && typeUser === UserType.Teacher && !isTranslate && this.contentIn()}
                 {this.state.modalPreview && typeUser === UserType.ContentManager && isTranslate && this.contentInCM()}
@@ -1093,7 +1093,7 @@ class SideOutPanelPreviewTeachingPathComponent extends Component<Props & RouteCo
                 {this.state.modalPreview && typeUser === UserType.Student && this.contentIn()}
               </div>
               <div className="functionsButtons">
-                <a href="javascript:void(0)" className={openFunction} onClick={this.changeOpenFunction}>{editText}</a>
+                <a href="#" className={openFunction} onClick={this.changeOpenFunction}>{editText}</a>
                 {this.state.modalFunction && typeUser === UserType.Teacher && isTranslate && this.contentIntwoCMTeacher()}
                 {this.state.modalFunction && typeUser === UserType.Teacher && !isTranslate && this.contentIntwo()}
                 {this.state.modalFunction && typeUser === UserType.Student && this.contentIntwo()}

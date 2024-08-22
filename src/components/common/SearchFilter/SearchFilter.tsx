@@ -623,7 +623,7 @@ class SearchFilter extends Component<Props, State> {
     }
     return (
       <div className="SearchFilter__link TpButton">
-        <a href="javascript:void(0)" className={buttonClass} onClick={this.openFiltersModalTp} ref={this.TpButtonRef}>
+        <a href="#" className={buttonClass} onClick={this.openFiltersModalTp} ref={this.TpButtonRef}>
           <img src={imgFilter} /> {buttonTxt}
         </a>
       </div>
@@ -648,7 +648,7 @@ class SearchFilter extends Component<Props, State> {
     }
     return (
       <div className="SearchFilter__link">
-        <a href="javascript:void(0)" className={buttonClass} onClick={this.openFiltersModalAssignment}>
+        <a href="#" className={buttonClass} onClick={this.openFiltersModalAssignment}>
           <img src={imgFilter} /> {buttonTxt}
         </a>
       </div>
@@ -673,7 +673,7 @@ class SearchFilter extends Component<Props, State> {
     }
     return (
       <div className="SearchFilter__link">
-        <a href="javascript:void(0)" className={buttonClass} onClick={this.openFiltersAssignments}>
+        <a href="#" className={buttonClass} onClick={this.openFiltersAssignments}>
           <img src={imgFilter} /> {buttonTxt}
         </a>
       </div>

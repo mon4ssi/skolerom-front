@@ -31,7 +31,7 @@ interface SearchState {
 }
 @inject('searchStore')
 @observer
-class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchState> {
+class SearchMyListComponent extends Component<SearchProps & RouteComponentProps, SearchState> {
   private storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
   private scrollref = createRef<HTMLDivElement>();
   public state = {
@@ -276,4 +276,4 @@ class SearchMyList extends Component<SearchProps & RouteComponentProps, SearchSt
   }
 }
 
-export const SearchComponentList = withRouter(SearchMyList);
+export const SearchComponentList = withRouter(SearchMyListComponent);

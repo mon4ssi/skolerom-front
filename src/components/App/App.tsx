@@ -125,11 +125,11 @@ class LocalizedApp extends Component<Props> {
   )
 
   public maintenanceRender = async () => {
-    const mydata = await this.props.loginStore!.getMaintenance_data();
-    if (mydata.maintenance_mode) {
-      this.setState({ isDataText: mydata.maintenance_msg });
-      const MyStartTime = mydata.start_time;
-      const MyEndTime = mydata.end_time;
+    const wpData = await this.props.loginStore!.getMaintenance_data();
+    if (wpData && wpData.maintenance_mode) {
+      this.setState({ isDataText: wpData.maintenance_msg });
+      const MyStartTime = wpData.start_time;
+      const MyEndTime = wpData.end_time;
       const MyStartTimeValue = this.changeNewdate(MyStartTime);
       const MyEndTimeValue = this.changeNewdate(MyEndTime);
       const date = new Date();

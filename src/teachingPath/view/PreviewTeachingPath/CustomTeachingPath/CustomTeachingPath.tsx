@@ -239,14 +239,14 @@ export class CustomTeachingPathComponent extends Component<ComponentProps, State
       return (
         <div className={'articleTeachingPath'}>
           {this.chooseTitle()}
-          <a href="javascript:void(0)" className={'title'} ref={this.ref}>{questionaryTeachingPathStore!.currentNode!.selectQuestion}</a>
+          <a href="#" className={'title'} ref={this.ref}>{questionaryTeachingPathStore!.currentNode!.selectQuestion}</a>
         </div>
       );
     }
     return (
       <div className={'articleTeachingPath'}>
         {this.chooseTitle()}
-        <a href="javascript:void(0)" className={'title'} ref={this.ref}>{questionaryTeachingPathStore!.currentNode!.selectQuestion}</a>
+        <a href="#" className={'title'} ref={this.ref}>{questionaryTeachingPathStore!.currentNode!.selectQuestion}</a>
         <div className="cards">
           {(questionaryTeachingPathStore!.currentArticlesList.length > 0) && this.renderCardsArticles()}
           {(questionaryTeachingPathStore!.currentDomainList.length > 0) && this.renderCardsDomain()}

@@ -50,7 +50,7 @@
         min-height: fit-content;
 
         span {
-          color: #e2017b;
+          color: #AD005F;
           text-transform: uppercase;
         }
 
@@ -146,7 +146,7 @@
     div {      
       font-size: 1rem;
       font-weight: 500;
-      color: #e2017b;
+      color: #AD005F;
       font-weight: 500;
       cursor: pointer;
       &__right {
@@ -163,7 +163,7 @@
         position: relative;
         &:before {
           content: '';
-          background: #e2017b;
+          background: #AD005F;
           position: absolute;
           width: 35px;
           height: 35px;
@@ -188,7 +188,7 @@
       p {
         margin: 0px;
         margin-right: 25px;
-        color: #e2017b;
+        color: #AD005F;
       }
       a {
         color: #0b2541;

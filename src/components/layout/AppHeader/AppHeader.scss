@@ -66,10 +66,10 @@
     a {
       transition: 0.3s;
       &:hover {
-        color: #E2017B;   
+        color: #AD005F;   
       }
       &.permanActive {
-        color: #E2017B;   
+        color: #AD005F;   
       }
     }
     &.helpNavigation {
@@ -88,7 +88,7 @@
     min-width: 0;
     transition: 0.3s;
     &:hover {
-      color: #E2017B;   
+      color: #AD005F;   
     }
   }
   .closeHeaderTp {
@@ -417,7 +417,7 @@ li.AppHeader__dropdownItem__subItem:hover {
       font-weight: 400;
       &.BtnFinal {
         display: flex;
-        background: #e2017b;
+        background: #AD005F;
         border-radius: 20px;
         color: white;
         padding: 10px 20px;
@@ -493,7 +493,7 @@ li.AppHeader__dropdownItem__subItem:hover {
       font-weight: 400;
       &.BtnFinal {
         display: flex;
-        background: #e2017b;
+        background: #AD005F;
         border-radius: 20px;
         color: white;
         padding: 10px 20px;

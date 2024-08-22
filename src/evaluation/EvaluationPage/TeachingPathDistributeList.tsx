@@ -86,7 +86,7 @@ class TeachingPathDistributeList extends Component<ITeachingPathDistributeListPr
       <SkeletonLoader key={index} className="TeachingPathDistributeItemSkeleton" />
     ) : (
       <div className="TeachingPathItemDistribute" key={item.id}>
-        <a href="javascript:void(0)" onClick={() => this.onClickTeachingPath(item.id)} >
+        <a href="#" onClick={() => this.onClickTeachingPath(item.id)} >
           <div className="AssignmentDistribute">
             <div className="AssignmentDistribute__block AssignmentDistribute__blockTop">
               <div className="AssignmentDistribute__imageContainer">

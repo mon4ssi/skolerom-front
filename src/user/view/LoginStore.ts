@@ -167,16 +167,25 @@ export class LoginStore {
 
   public async getMaintenance_data() {
     const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/maintenance/v1/status`);
+
+    if (!response || !response.data) {
+      return false;
+    }
+
     return response.data;
   }
 
   public async getMenuData(locale: string) {
     const response = await API.get(`${process.env.REACT_APP_WP_URL}/wp-json/menu_list/v1/get`, {
-      params:
-      {
+      params: {
         lang: locale
       }
     });
+
+    if (!response || !response.data) {
+      return [];
+    }
+
     return response.data;
   }
   /*

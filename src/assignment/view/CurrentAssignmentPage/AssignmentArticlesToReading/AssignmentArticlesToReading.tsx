@@ -195,7 +195,7 @@ export class AssignmentArticlesToReading extends Component<Props, State> {
     return (
       <div className="AssignmentArticlesToReading">
         <div className="QuestionPreview__background AssignmentArticlesToReading__background" style={{ backgroundImage: `url(${background})` }} />
-        <a href="javascript:void(0)" className="AssignmentArticlesToReading__title" ref={this.subjectRef}>{intl.get('assignment preview.Assignment articles')}</a>
+        <a href="#" className="AssignmentArticlesToReading__title" ref={this.subjectRef}>{intl.get('assignment preview.Assignment articles')}</a>
         {this.renderContent()}
       </div>
     );
