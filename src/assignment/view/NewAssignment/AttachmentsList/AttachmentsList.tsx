@@ -31,6 +31,8 @@ import { injector } from 'Injector';
 import { CustomImage, CustomImageFormSimple } from './CustomImageFormSimple/CustomImageFormSimple';
 import { runInThisContext } from 'vm';
 import { Pagination } from 'components/common/Pagination/Pagination';
+import { STATUS_NOT_FOUND } from 'utils/constants';
+import { AxiosError } from 'axios';
 
 const const1 = 1;
 const const2 = 2;
@@ -246,6 +248,16 @@ class AttachmentsListComponent extends Component<AttachmentsListProps, State> {
         }
 
       } catch (e) {
+        const error = e as AxiosError;
+
+        if (error.response && error.response.status === STATUS_NOT_FOUND) {
+          Notification.create({
+            type: NotificationTypes.ERROR,
+            title: 'Attachment not found'
+          });
+          return;
+        }
+
         if (e instanceof QuestionImagesOverflowError) {
           Notification.create({
             type: NotificationTypes.ERROR,
