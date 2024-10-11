@@ -57,11 +57,13 @@ const onRequestRejected = (error: any) => Promise.reject(error);
 const onResponseFulfilled = (response: AxiosResponse) => response;
 
 const onResponseRejected = async (error: any) => {
+  const { response } = error;
 
-  if (error.response!.status === STATUS_UNAUTHORIZED) {
+  if (response && response.status === STATUS_UNAUTHORIZED) {
     injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY).logOut();
     window.location.href = '/login';
   }
+
   return Promise.reject(error);
 };
 
