@@ -1,141 +1,157 @@
 @import "style";
+
 .TeachingPathDistributeList {
-    display: flex;
-    flex-wrap: wrap;
-    flex-flow: row wrap;
-    width: auto;
-    overflow: auto;
-    margin-top: 10px;
-    justify-content: start;
-    padding-top: 5px;
-    transition: 0.3s;
-    .TeachingPathDistributeItemSkeleton {
-        width: 100%;
-        margin-right: 10px;
-        height: 60px;
-    }
-    .css-1y8mk30-SkeletonTheme {
-        width: 100%;
-        height: 60px;
-        margin-right: 15px;
-        margin-bottom: 20px;
-    }
-    .TeachingPathDistributeItem {
-        width: calc(100% / 7 - 40px);
-        margin-bottom: 20px;
-        margin-right: 40px;
-        height: auto;
-        min-height: auto;
-        .InfoCard {
-            width: 100%;
-            min-height: auto;
-            height: 100%;
-            .cardTitle {
-                p{
-                    margin-bottom: 0px;
-                }
-            }
+  display: flex;
+  flex-wrap: wrap;
+  flex-flow: row wrap;
+  width: auto;
+  overflow: auto;
+  margin-top: 10px;
+  justify-content: flex-start;
+  padding-top: 5px;
+  transition: 0.3s;
+
+  .TeachingPathDistributeItemSkeleton {
+    width: 100%;
+    margin-right: 10px;
+    height: 60px;
+  }
+
+  .css-1y8mk30-SkeletonTheme {
+    width: 100%;
+    height: 60px;
+    margin-right: 15px;
+    margin-bottom: 20px;
+  }
+
+  .TeachingPathDistributeItem {
+    width: calc(100% / 7 - 40px);
+    margin-bottom: 20px;
+    margin-right: 40px;
+    height: auto;
+    min-height: auto;
+
+    .InfoCard {
+      width: 100%;
+      min-height: auto;
+      height: 100%;
+
+      .cardTitle {
+        p {
+          margin-bottom: 0px;
         }
+      }
     }
+  }
 }
 
 .TeachingPathDistributeListNotFlex {
-    .css-1y8mk30-SkeletonTheme {
-        width: 100% !important;
-        height: 60px !important;
-        margin-right: 0px;
-        margin-bottom: 10px;
-        span { height: 60px !important; }
+  .css-1y8mk30-SkeletonTheme {
+    width: 100% !important;
+    height: 60px !important;
+    margin-right: 0px;
+    margin-bottom: 10px;
+
+    span {
+      height: 60px !important;
     }
+  }
 }
 
 
 @media screen and (max-width: 2350px) {
-    .TeachingPathDistributeList {
-        .TeachingPathDistributeItem {
-            width: calc(100% / 7 - 20px);
-            margin-right: 20px;
-        }
+  .TeachingPathDistributeList {
+    .TeachingPathDistributeItem {
+      width: calc(100% / 7 - 20px);
+      margin-right: 20px;
     }
+  }
 }
+
 @media screen and (max-width: 2150px) {
-    .TeachingPathDistributeList {
-        .TeachingPathDistributeItem {
-            width: calc(100% / 6 - 20px);
-            margin-right: 20px;
-        }
+  .TeachingPathDistributeList {
+    .TeachingPathDistributeItem {
+      width: calc(100% / 6 - 20px);
+      margin-right: 20px;
     }
+  }
 }
+
 @media screen and (max-width: 2000px) {
-    .TeachingPathDistributeList {
-        .TeachingPathDistributeItem {
-            width: calc(100% / 6 - 10px);
-            margin-right: 10px;
-        }
+  .TeachingPathDistributeList {
+    .TeachingPathDistributeItem {
+      width: calc(100% / 6 - 10px);
+      margin-right: 10px;
     }
+  }
 }
+
 @media screen and (max-width: 1800px) {
-    .TeachingPathDistributeList {
-        .TeachingPathDistributeItem {
-            width: calc(100% / 5 - 20px);
-            margin-right: 20px;
-        }
+  .TeachingPathDistributeList {
+    .TeachingPathDistributeItem {
+      width: calc(100% / 5 - 20px);
+      margin-right: 20px;
     }
+  }
 }
+
 @media screen and (max-width: 1500px) {
-    .TeachingPathDistributeList {
-        .TeachingPathDistributeItem {
-            width: calc(100% / 4 - 20px);
-            margin-right: 20px;
-        }
+  .TeachingPathDistributeList {
+    .TeachingPathDistributeItem {
+      width: calc(100% / 4 - 20px);
+      margin-right: 20px;
     }
+  }
 }
+
 @media screen and (max-width: 1250px) {
-    .TeachingPathDistributeList {
-        .TeachingPathDistributeItem {
-            width: calc(100% / 3 - 20px);
-            margin-right: 20px;
-        }
+  .TeachingPathDistributeList {
+    .TeachingPathDistributeItem {
+      width: calc(100% / 3 - 20px);
+      margin-right: 20px;
     }
+  }
 }
+
 @media screen and (max-width: 1000px) {
-    .TeachingPathDistributeList {
-        .TeachingPathDistributeItem {
-            width: calc(100% / 3 - 10px);
-            margin-right: 10px;
-        }
+  .TeachingPathDistributeList {
+    .TeachingPathDistributeItem {
+      width: calc(100% / 3 - 10px);
+      margin-right: 10px;
     }
+  }
 }
 
 @media screen and (max-width: 750px) {
-    .TeachingPathDistributeList {
-        .TeachingPathDistributeItem {
-            width: calc(100% / 2 - 20px);
-            margin-right: 20px;
-        }
+  .TeachingPathDistributeList {
+    .TeachingPathDistributeItem {
+      width: calc(100% / 2 - 20px);
+      margin-right: 20px;
     }
+  }
 }
 
 @media screen and (max-width: 600px) {
-    .TeachingPathDistributeList {
-        .TeachingPathDistributeItem {
-            width: calc(100% / 2 - 10px);
-            margin-right: 10px;
-        }
+  .TeachingPathDistributeList {
+    .TeachingPathDistributeItem {
+      width: calc(100% / 2 - 10px);
+      margin-right: 10px;
     }
+  }
 }
 
 
 @media screen and (max-width: 500px) {
-    .TeachingPathDistributeList {
-        .TeachingPathDistributeItem {
-            width: 100%;
-            margin-right: 0px;
-            .InfoCard {
-                .cardImage {
-                    height: auto;
-                }
-            }
+  .TeachingPathDistributeList {
+    .TeachingPathDistributeItem {
+      width: 100%;
+      margin-right: 0px;
+
+      .InfoCard {
+        .cardImage {
+          height: auto;
         }
+      }
     }
+  }
 }

@@ -1,6 +1,6 @@
 import { injector } from 'Injector';
 import { STORAGE_INTERACTOR_KEY, StorageInteractor } from 'utils/storageInteractor';
-import { API, ARTICLE_API } from 'utils/api';
+import { API } from 'utils/api';
 import {
   Article,
   ArticleRepo,

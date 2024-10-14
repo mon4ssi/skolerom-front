@@ -15,6 +15,13 @@ const API = axios.create({
   }
 });
 
+const WORDPRESS_API = axios.create({
+  baseURL: process.env.REACT_APP_WP_URL,
+  headers: {
+    'content-type': 'application/json'
+  }
+});
+
 const ARTICLE_API = axios.create({
   baseURL: process.env.REACT_ARTICLE_APP_BASE_URL,
   headers: {
@@ -57,11 +64,13 @@ const onRequestRejected = (error: any) => Promise.reject(error);
 const onResponseFulfilled = (response: AxiosResponse) => response;
 
 const onResponseRejected = async (error: any) => {
+  const { response } = error;
 
-  if (error.response!.status === STATUS_UNAUTHORIZED) {
+  if (response && response.status === STATUS_UNAUTHORIZED) {
     injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY).logOut();
     window.location.href = '/login';
   }
+
   return Promise.reject(error);
 };
 
@@ -69,4 +78,4 @@ API.interceptors.request.use(onRequestFulfilled, onRequestRejected);
 
 API.interceptors.response.use(onResponseFulfilled, onResponseRejected);
 
-export { API, ARTICLE_API };
+export { API, ARTICLE_API, WORDPRESS_API };

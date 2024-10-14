@@ -4,24 +4,28 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+
   .gradesChildrenItems {
     margin-top: 15px;
   }
+
   .cardList {
     display: flex;
-    flex-wrap: wrap;    
+    flex-wrap: wrap;
     flex-flow: row wrap;
     width: auto;
     overflow: auto;
     margin-top: 10px;
-    justify-content: start;
+    justify-content: flex-start;
     padding-top: 5px;
     transition: 0.3s;
     padding-left: 5px;
     min-height: calc(100% - 271px);
+
     &.onlyOneLine {
       padding-bottom: 90px;
     }
+
     .InfoCard {
       width: calc(100% / 7 - 30px);
       margin-bottom: 20px;
@@ -29,21 +33,26 @@
       height: auto;
       min-height: auto;
       max-height: 350px;
+
       &:hover {
         box-shadow: 0 8px 10px #00000061;
       }
+
       .cardTitle {
         padding-right: 28px;
       }
+
       .cardDescription {
         @include text-shrink-multiline(3);
         margin-top: 10px;
       }
+
       .grades {
         height: 25px;
       }
     }
   }
+
   .noResults.emptyTeachingPaths {
     display: flex;
     width: 100%;
@@ -52,13 +61,16 @@
     font-size: 1.5rem;
     font-weight: 300;
   }
+
   &.moveListBySearchFilter {
     transition: 0.3s;
+
     &.active {
       width: calc(100% - 290px);
       margin-left: 290px;
+
       .InfoCard {
-        width: calc(100%/ 7 - 10px);
+        width: calc(100% / 7 - 10px);
         margin-right: 10px;
       }
     }
@@ -69,19 +81,23 @@
   height: 60px;
   box-shadow: 0px 3px 4px #00000033;
 }
+
 .css-1y8mk30-SkeletonTheme {
   width: 100%;
   height: 60px;
   margin-right: 20px;
+
   span {
     width: 100% !important;
     height: 60px !important;
-    &.skeletonAssignmentItem  {
+
+    &.skeletonAssignmentItem {
       height: 60px !important;
     }
   }
 }
-.addItemModal  {
+
+.addItemModal {
   .css-1y8mk30-SkeletonTheme {
     height: 80px;
   }
@@ -93,7 +109,7 @@
     margin-right: 10px;
   }
   .teachingPathsList.moveListBySearchFilter.active .InfoCard {
-    width: calc(100%/ 6 - 20px);
+    width: calc(100% / 6 - 20px);
     margin-right: 20px;
   }
 }
@@ -104,7 +120,7 @@
     margin-right: 20px;
   }
   .teachingPathsList.moveListBySearchFilter.active .InfoCard {
-    width: calc(100%/ 5 - 20px);
+    width: calc(100% / 5 - 20px);
     margin-right: 20px;
   }
 }
@@ -115,7 +131,7 @@
     margin-right: 10px;
   }
   .teachingPathsList.moveListBySearchFilter.active .InfoCard {
-    width: calc(100%/ 5 - 10px);
+    width: calc(100% / 5 - 10px);
     margin-right: 10px;
   }
 }
@@ -126,7 +142,7 @@
     margin-right: 20px;
   }
   .teachingPathsList.moveListBySearchFilter.active .InfoCard {
-    width: calc(100%/ 4 - 20px);
+    width: calc(100% / 4 - 20px);
     margin-right: 20px;
   }
 }
@@ -200,9 +216,11 @@
 @media screen and (max-width: 575px) {
   .teachingPathsList {
     height: auto;
+
     .cardList {
       flex-flow: nowrap;
       width: calc(100% + 19px);
+
       .InfoCard {
         width: calc(100% - 50px);
         min-height: auto;
@@ -210,15 +228,17 @@
         margin-right: 10px;
         margin-bottom: 5px;
         height: auto;
+
         .cardImage {
           height: auto;
         }
+
         &:hover {
           box-shadow: none;
         }
       }
     }
-  } 
+  }
   .teachingPathsList.moveListBySearchFilter.active .cardList .InfoCard {
     width: calc(100% - 50px);
   }
@@ -228,6 +248,7 @@
   height: 250px !important;
   width: calc(25% - 20px);
   margin-bottom: 20px;
+
   span {
     height: 250px !important;
   }
