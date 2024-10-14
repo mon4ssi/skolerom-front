@@ -1,6 +1,7 @@
-image: node:14.19.3
+image: node:16.20.2
 
-# Workflow Configuration
+options:
+  size: 2x
 
 pipelines:
   branches:
