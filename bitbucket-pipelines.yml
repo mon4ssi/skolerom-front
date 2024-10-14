@@ -1,4 +1,4 @@
-image: node:16.20.2
+image: node:14.19.3
 
 options:
   size: 2x
