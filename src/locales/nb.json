@@ -662,11 +662,11 @@
     "errortype_404": "Nettadressen er ugyldig eller kunne ikke analyseres",
     "complete": {
       "title": "Læringsstien er fullført!",
-      "description": "Bruk navigasjonen i bunnen av siden til å gå gjennom hvert steg. Kom tilbake hit og trykk «Registrer og send inn» for å sende besvarelsen til læreren din.",
+      "description": "Bruk navigasjonen i toppen av siden til å gå gjennom hvert steg. Kom tilbake hit og trykk «Registrer og send inn» for å sende besvarelsen til læreren din.",
       "button": "Registrer og send inn",
       "delete_all_answers": "Slett alle besvarelser",
       "title_preview": "Læringsstien er fullført!",
-      "description_preview": "Bruk navigasjonen i bunnen av siden til å gå gjennom hvert steg. Kom tilbake hit og trykk «Registrer og send inn» for å sende besvarelsen til læreren din.",
+      "description_preview": "Bruk navigasjonen i toppen av siden til å gå gjennom hvert steg. Kom tilbake hit og trykk «Registrer og send inn» for å sende besvarelsen til læreren din.",
       "button_preview": "Registrer og send inn"
     },
     "submitted": "Besvarelsen din er levert!",
