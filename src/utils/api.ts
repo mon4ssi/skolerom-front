@@ -15,6 +15,13 @@ const API = axios.create({
   }
 });
 
+const WORDPRESS_API = axios.create({
+  baseURL: process.env.REACT_APP_WP_URL,
+  headers: {
+    'content-type': 'application/json'
+  }
+});
+
 const ARTICLE_API = axios.create({
   baseURL: process.env.REACT_ARTICLE_APP_BASE_URL,
   headers: {
@@ -71,4 +78,4 @@ API.interceptors.request.use(onRequestFulfilled, onRequestRejected);
 
 API.interceptors.response.use(onResponseFulfilled, onResponseRejected);
 
-export { API, ARTICLE_API };
+export { API, ARTICLE_API, WORDPRESS_API };
