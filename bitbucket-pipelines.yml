@@ -1,4 +1,4 @@
-image: node:14.19.3
+image: node:16.20
 
 options:
   size: 2x
@@ -11,7 +11,7 @@ pipelines:
           caches:
             - node
           script:
-            - npm install   
+            - npm install
             - CI=false npm run build:beta
           artifacts:
             - build/**
