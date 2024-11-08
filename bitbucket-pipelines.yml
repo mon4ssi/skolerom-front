@@ -11,10 +11,8 @@ pipelines:
           caches:
             - node
           script:
-            - curl -fsSL https://bun.sh/install | bash
-            - export PATH="~/.bun/bin/:$PATH"
-            - bun install
-            - CI=false bun run build:beta
+            - npm install
+            - CI=false npm run build:beta
           artifacts:
             - build/**
 #        - step:
