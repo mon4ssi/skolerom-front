@@ -27,7 +27,7 @@ interface SideBarLink {
   name: string;
 }
 
-const UI_URL = process.env.REACT_APP_BASE_URL as string;
+const UI_URL = process.env.REACT_APP_UI_URL as string;
 
 const teacherSidebarLinks: Array<SideBarLink> = [
   {
