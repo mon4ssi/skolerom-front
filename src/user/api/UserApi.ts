@@ -19,6 +19,7 @@ export interface UserDTO {
   isSuperCM: boolean;
   teacherTrial: boolean;
   isTestAccount?: boolean;
+  signature?: string;
 }
 
 export interface StudentDTO {

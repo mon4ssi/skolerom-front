@@ -15,6 +15,7 @@ export const buildUser = (dto: UserDTO & StudentDTO): User => {
         isSuperCM: dto.isSuperCM,
         teacherTrial: dto.teacherTrial,
         isTestAccount: dto.isTestAccount!,
+        signature: dto.signature,
       });
     case UserType.Student:
       return new Student({
@@ -25,6 +26,7 @@ export const buildUser = (dto: UserDTO & StudentDTO): User => {
         isSuperCM: dto.isSuperCM,
         teacherTrial: dto.teacherTrial,
         isTestAccount: dto.isTestAccount!,
+        signature: dto.signature,
       });
     case UserType.ContentManager:
       return new ContentManager({
@@ -36,6 +38,7 @@ export const buildUser = (dto: UserDTO & StudentDTO): User => {
         isSuperCM: dto.isSuperCM,
         teacherTrial: dto.teacherTrial,
         isTestAccount: dto.isTestAccount!,
+        signature: dto.signature,
       });
     default:
       throw new TypeError(`Unknown user: ${dto.role}`);
