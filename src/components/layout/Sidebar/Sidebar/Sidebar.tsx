@@ -111,6 +111,12 @@ const teacherTrialSidebarLinks: Array<SideBarLink> = [
     icon: assignmentsImg,
     name: 'Assignments'
   },
+  {
+    url: `${UI_URL}/login`,
+    path: '/articles',
+    icon: evaluationIcon,
+    name: 'Articles'
+  },
   /* {
     url: '/evaluation',
     path: '/evaluation',
@@ -150,6 +156,12 @@ const studentSidebarLinks: Array<SideBarLink> = [
     icon: assignmentsImg,
     name: 'Assignments'
   },
+  {
+    url: `${UI_URL}/login`,
+    path: '/articles',
+    icon: evaluationIcon,
+    name: 'Articles'
+  },
 ];
 
 const contentManagerSidebar: Array<SideBarLink> = [
@@ -176,7 +188,13 @@ const contentManagerSidebar: Array<SideBarLink> = [
     path: '/assignments',
     icon: assignmentsImg,
     name: 'Assignments'
-  }
+  },
+  {
+    url: `${UI_URL}/login`,
+    path: '/articles',
+    icon: evaluationIcon,
+    name: 'Articles'
+  },
 ];
 const PATHLENGTH = 4;
 
