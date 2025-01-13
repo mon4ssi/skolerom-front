@@ -21,130 +21,159 @@ import searchIcon from 'assets/images/search_circle_icon.svg';
 import './Sidebar.scss';
 
 interface SideBarLink {
+  url: string;
+  path: string;
   icon: string;
   name: string;
-  url: string;
 }
 
-const teacherSidebarLinks = [
+const teacherSidebarLinks: Array<SideBarLink> = [
   {
+    url: '/activity',
+    path: '/activity',
     icon: activityIcon,
-    name: 'Activity',
-    url: '/activity'
+    name: 'Activity'
   },
   {
+    url: '/search',
+    path: '/search',
     icon: searchIcon,
-    name: 'Search',
-    url: '/search'
+    name: 'Search'
   },
   {
+    url: '/teaching-paths',
+    path: '/teaching-paths',
     icon: teachingPathImg,
-    name: 'Teaching Paths',
-    url: '/teaching-paths'
+    name: 'Teaching Paths'
   },
   {
+    url: '/assignments',
+    path: '/assignments',
     icon: assignmentsImg,
-    name: 'Assignments',
-    url: '/assignments'
+    name: 'Assignments'
   },
   {
+    url: '/evaluation',
+    path: '/evaluation',
     icon: evaluationIcon,
-    name: 'Evaluation',
-    url: '/evaluation'
+    name: 'Evaluation'
   },
   {
+    url: '/students',
+    path: '/students',
     icon: studentsImg,
-    name: 'Students',
-    url: '/students'
+    name: 'Students'
+  },
+  {
+    url: '/articles',
+    path: '/articles',
+    icon: evaluationIcon,
+    name: 'Articles'
   },
   /*  {
+      url: '/favorites'
+      path: '/favorites'
       icon: favoritesIcon,
       name: 'Favorites',
-      url: '/favorites'
     },*/
   /*  {
+      url: '/forum'
+      path: '/forum'
       icon: forumIcon,
       name: 'Forum',
-      url: '/forum'
     }*/
 ];
 
-const teacherTrialSidebarLinks = [
+const teacherTrialSidebarLinks: Array<SideBarLink> = [
   {
+    url: '/activity',
+    path: '/activity',
     icon: activityIcon,
-    name: 'Activity',
-    url: '/activity'
+    name: 'Activity'
   },
   {
+    url: '/search',
+    path: '/search',
     icon: searchIcon,
-    name: 'Search',
-    url: '/search'
+    name: 'Search'
   },
   {
+    url: '/teaching-paths',
+    path: '/teaching-paths',
     icon: teachingPathImg,
-    name: 'Teaching Paths',
-    url: '/teaching-paths'
+    name: 'Teaching Paths'
   },
   {
+    url: '/assignments',
+    path: '/assignments',
     icon: assignmentsImg,
-    name: 'Assignments',
-    url: '/assignments'
+    name: 'Assignments'
   },
   /* {
+    url: '/evaluation',
+    path: '/evaluation',
     icon: evaluationIcon,
     name: 'Evaluation',
-    url: '/evaluation'
   },
   {
+    url: '/students',
+    path: '/students',
     icon: studentsImg,
     name: 'Students',
-    url: '/students'
   }, */
 ];
 
-const studentSidebarLinks = [
+const studentSidebarLinks: Array<SideBarLink> = [
   {
+    url: '/activity',
+    path: '/activity',
     icon: activityIcon,
-    name: 'Activity',
-    url: '/activity'
+    name: 'Activity'
   },
   {
+    url: '/search',
+    path: '/search',
     icon: searchIcon,
-    name: 'Search',
-    url: '/search'
+    name: 'Search'
   },
   {
+    url: '/teaching-paths',
+    path: '/teaching-paths',
     icon: teachingPathImg,
-    name: 'Teaching Paths',
-    url: '/teaching-paths'
+    name: 'Teaching Paths'
   },
   {
+    url: '/assignments',
+    path: '/assignments',
     icon: assignmentsImg,
-    name: 'Assignments',
-    url: '/assignments'
+    name: 'Assignments'
   },
 ];
 
-const contentManagerSidebar = [
+const contentManagerSidebar: Array<SideBarLink> = [
   {
+    url: '/activity',
+    path: '/activity',
     icon: activityIcon,
-    name: 'Activity',
-    url: '/activity'
+    name: 'Activity'
   },
   {
+    url: '/search',
+    path: '/search',
     icon: searchIcon,
-    name: 'Search',
-    url: '/search'
+    name: 'Search'
   },
   {
+    url: '/teaching-paths',
+    path: '/teaching-paths',
     icon: teachingPathImg,
-    name: 'Teaching Paths',
-    url: '/teaching-paths'
+    name: 'Teaching Paths'
   },
   {
+    url: '/assignments',
+    path: '/assignments',
     icon: assignmentsImg,
-    name: 'Assignments',
-    url: '/assignments'
+    name: 'Assignments'
   }
 ];
 const PATHLENGTH = 4;
@@ -163,13 +192,19 @@ interface Props extends RouteComponentProps {
 class Sidebar extends Component<Props> {
 
   private handleClickLink = (link: SideBarLink) => (event: MouseEvent) => {
-    const { uiStore } = this.props;
-    if (link.url.includes(uiStore!.currentActiveTab)) {
+    const { loginStore, uiStore } = this.props;
+
+    const reload = (path: string) => {
+      window.location.href = `${window.location.origin}${path}`;
+    };
+
+    if (link.path.includes(uiStore!.currentActiveTab)) {
       event.preventDefault();
-      window.location.href = `${window.location.origin}${link.url}`;
-    } else {
-      uiStore!.setCurrentActiveTab(link.url.split('/')[1]);
+      reload(link.path);
+      return;
     }
+
+    uiStore!.setCurrentActiveTab(link.path.split('/')[1]);
 
     this.props.uiStore!.hideSidebar();
   }
@@ -178,7 +213,7 @@ class Sidebar extends Component<Props> {
     <NavLink
       key={link.name}
       className="Sidebar__listItem"
-      to={link.url}
+      to={link.path}
       activeClassName="Sidebar__listItem_active"
       onClick={this.handleClickLink(link)}
       aria-label={intl.get(`sidebar.${link.name}`)}
