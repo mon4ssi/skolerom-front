@@ -237,6 +237,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     }
     const customStyles = {
       option: () => ({
+        width: '320px',
         fontSize: '14px',
         padding: '5px',
         borderBottom: '1px solid #e7ecef',
@@ -271,7 +272,6 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     };
     return (
       <Select
-        width="320px"
         components={{ NoOptionsMessage }}
         styles={customStyles}
         options={options}
@@ -357,6 +357,7 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     }
     const customStyles = {
       option: () => ({
+        width: '320px',
         fontSize: '14px',
         padding: '5px',
         borderBottom: '1px solid #e7ecef',
@@ -391,7 +392,6 @@ class SearchFilters extends Component<SearchProps & RouteComponentProps, SearchS
     };
     return (
       <Select
-        width="320px"
         components={{ NoOptionsMessage }}
         styles={customStyles}
         options={options}

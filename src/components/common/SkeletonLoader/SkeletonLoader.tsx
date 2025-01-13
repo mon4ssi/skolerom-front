@@ -23,7 +23,7 @@ export class SkeletonLoader extends Component<Props> {
     } = this.props;
 
     return (
-      <SkeletonTheme color={color} highlightColor={highlightColor}>
+      <SkeletonTheme baseColor={color} highlightColor={highlightColor}>
         <Skeleton
           className={className}
           duration={duration}
