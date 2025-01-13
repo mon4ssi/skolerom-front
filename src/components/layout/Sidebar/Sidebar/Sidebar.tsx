@@ -27,6 +27,8 @@ interface SideBarLink {
   name: string;
 }
 
+const UI_URL = process.env.REACT_APP_BASE_URL as string;
+
 const teacherSidebarLinks: Array<SideBarLink> = [
   {
     url: '/activity',
@@ -65,7 +67,7 @@ const teacherSidebarLinks: Array<SideBarLink> = [
     name: 'Students'
   },
   {
-    url: '/articles',
+    url: `${UI_URL}/login`,
     path: '/articles',
     icon: evaluationIcon,
     name: 'Articles'
@@ -198,9 +200,22 @@ class Sidebar extends Component<Props> {
       window.location.href = `${window.location.origin}${path}`;
     };
 
+    const redirect = (url: string) => {
+      window.location.href = url;
+    };
+
     if (link.path.includes(uiStore!.currentActiveTab)) {
       event.preventDefault();
       reload(link.path);
+      return;
+    }
+
+    if (link.url.includes('http')) {
+      event.preventDefault();
+      const user = loginStore!.currentUser;
+      const params = new URLSearchParams({ redirect: link.path, userId: user!.signature || '' });
+      const target = `${link.url}?${params.toString()}`;
+      redirect(target);
       return;
     }
 
