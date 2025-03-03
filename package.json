@@ -6,7 +6,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "build:local": "env-cmd -f devops/.env.local npm run build",
-    "build:dev": "env-cmd -f devops/.env.development bun run build",
+    "build:dev": "env-cmd -f devops/.env.development npm run build",
     "build:development": "env-cmd -f devops/.env.development npm run build",
     "build:staging": "env-cmd -f devops/.env.staging npm run build",
     "build:production": "env-cmd -f devops/.env.production npm run build",
