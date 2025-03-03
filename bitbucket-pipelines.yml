@@ -8,7 +8,7 @@ pipelines:
     dev:
       - step:
           name: Build and Test
-          image: node:18.20
+          image: node:16.20
           caches:
             - node
           script:
