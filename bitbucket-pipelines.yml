@@ -17,7 +17,7 @@ pipelines:
             - curl -fsSL https://bun.sh/install | bash
             - export PATH="~/.bun/bin/:$PATH"
             - bun install
-            - CI=false bun run build
+            - CI=false bun run build:dev
           artifacts:
             - build/**
       - step:
