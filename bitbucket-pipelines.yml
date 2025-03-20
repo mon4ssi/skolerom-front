@@ -64,3 +64,34 @@ pipelines:
                 AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
                 AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
                 DISTRIBUTION_ID: $AWS_CLOUDFRONT_DISTRIBUTION_ID
+
+    main:
+      - step:
+          name: Build and Test
+          image: node:16.20
+          caches:
+            - node
+          script:
+            - npm install --legacy-peer-deps
+            - npm run build:staging
+          artifacts:
+            - build/**
+      - step:
+          name: Deploy to Production
+          deployment: Production
+          clone:
+            enabled: false
+          script:
+            - pipe: atlassian/aws-s3-deploy:2.0.1
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+                S3_BUCKET: $AWS_S3_BUCKET
+                LOCAL_PATH: 'build'
+            - pipe: atlassian/aws-cloudfront-invalidate:0.10.1
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+                DISTRIBUTION_ID: $AWS_CLOUDFRONT_DISTRIBUTION_ID
