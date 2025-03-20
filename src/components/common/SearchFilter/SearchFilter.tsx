@@ -989,6 +989,7 @@ class SearchFilter extends Component<Props, State> {
     const options = this.renderValueOptions(customCoreList!.sort(sortByAlphabet));
     const customStyles = {
       option: () => ({
+        width: '320px',
         fontSize: '14px',
         padding: '5px',
         borderBottom: '1px solid #e7ecef',
@@ -1037,7 +1038,6 @@ class SearchFilter extends Component<Props, State> {
     };
     return (
       <Select
-        width="320px"
         components={{ NoOptionsMessage }}
         styles={customStyles}
         options={options}
@@ -1055,6 +1055,7 @@ class SearchFilter extends Component<Props, State> {
     const options = customCoreTPList!;
     const customStyles = {
       option: () => ({
+        width: '320px',
         fontSize: '14px',
         padding: '5px',
         borderBottom: '1px solid #e7ecef',
@@ -1105,7 +1106,6 @@ class SearchFilter extends Component<Props, State> {
     };
     return (
       <Select
-        width="320px"
         components={{ NoOptionsMessage }}
         styles={customStyles}
         options={options}
@@ -1123,6 +1123,7 @@ class SearchFilter extends Component<Props, State> {
     const options = customCoreTPList!;
     const customStyles = {
       option: () => ({
+        width: '320px',
         fontSize: '14px',
         padding: '5px',
         borderBottom: '1px solid #e7ecef',
@@ -1173,7 +1174,6 @@ class SearchFilter extends Component<Props, State> {
     };
     return (
       <Select
-        width="320px"
         components={{ NoOptionsMessage }}
         styles={customStyles}
         options={options}
@@ -1255,6 +1255,7 @@ class SearchFilter extends Component<Props, State> {
     const options = this.renderValueOptions(customGoalsList!.sort(sortByAlphabet));
     const customStyles = {
       option: () => ({
+        width: '320px',
         fontSize: '14px',
         padding: '5px',
         borderBottom: '1px solid #e7ecef',
@@ -1303,7 +1304,6 @@ class SearchFilter extends Component<Props, State> {
     };
     return (
       <Select
-        width="320px"
         components={{ NoOptionsMessage }}
         styles={customStyles}
         options={options}
@@ -1321,6 +1321,7 @@ class SearchFilter extends Component<Props, State> {
     const options = customGoalsTPList!;
     const customStyles = {
       option: () => ({
+        width: '320px',
         fontSize: '14px',
         padding: '5px',
         borderBottom: '1px solid #e7ecef',
@@ -1369,7 +1370,6 @@ class SearchFilter extends Component<Props, State> {
     };
     return (
       <Select
-        width="320px"
         components={{ NoOptionsMessage }}
         styles={customStyles}
         options={options}
