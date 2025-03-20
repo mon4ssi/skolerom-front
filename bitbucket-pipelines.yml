@@ -10,7 +10,9 @@ pipelines:
           caches:
             - node
           script:
+            - echo "Installing dependencies..."
             - npm install --legacy-peer-deps
+            - echo "Building..."
             - CI=false npm run build:dev
           artifacts:
             - build/**
@@ -41,7 +43,9 @@ pipelines:
           caches:
             - node
           script:
+            - echo "Installing dependencies..."
             - npm install --legacy-peer-deps
+            - echo "Building..."
             - npm run build:staging
           artifacts:
             - build/**
@@ -72,7 +76,9 @@ pipelines:
           caches:
             - node
           script:
+            - echo "Installing dependencies..."
             - npm install --legacy-peer-deps
+            - echo "Building..."
             - npm run build:staging
           artifacts:
             - build/**
