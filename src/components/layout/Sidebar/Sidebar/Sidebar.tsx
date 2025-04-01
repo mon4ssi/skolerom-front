@@ -95,7 +95,7 @@ const teacherSidebarLinks: Array<SideBarLink> = [
   sidebarLink.assignments,
   sidebarLink.evaluation,
   sidebarLink.students,
-  sidebarLink.sharingArticles,
+  // sidebarLink.sharingArticles, TODO: Enable when sharing articles is ready
   // sidebarLink.favorites,
   // sidebarLink.forum,
 ];
@@ -107,7 +107,7 @@ const teacherTrialSidebarLinks: Array<SideBarLink> = [
   sidebarLink.assignments,
   // sidebarLink.evaluation,
   // sidebarLink.students,
-  sidebarLink.sharingArticles,
+  // sidebarLink.sharingArticles, TODO: Enable when sharing articles is ready
 ];
 
 const studentSidebarLinks: Array<SideBarLink> = [
@@ -115,7 +115,7 @@ const studentSidebarLinks: Array<SideBarLink> = [
   sidebarLink.search,
   sidebarLink.teachingPaths,
   sidebarLink.assignments,
-  sidebarLink.sharingArticles,
+  // sidebarLink.sharingArticles, TODO: Enable when sharing articles is ready
 ];
 
 const contentManagerSidebar: Array<SideBarLink> = [
@@ -123,7 +123,7 @@ const contentManagerSidebar: Array<SideBarLink> = [
   sidebarLink.search,
   sidebarLink.teachingPaths,
   sidebarLink.assignments,
-  sidebarLink.sharingArticles,
+  // sidebarLink.sharingArticles, TODO: Enable when sharing articles is ready
 ];
 const PATHLENGTH = 4;
 
