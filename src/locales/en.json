@@ -180,6 +180,8 @@
       "Activity": "Go to activity overview",
       "Teaching Paths": "Go to teaching paths",
       "Assignments": "Go to assignments",
+      "Articles": "Go to articles",
+      "Search": "Go to search",
       "Students": "Go to students overview",
       "Evaluation": "Go to evaluation overview"
     },
@@ -187,6 +189,8 @@
       "Activity": "Go to activity overview",
       "Teaching Paths": "Go to teaching paths",
       "Assignments": "Go to assignments",
+      "Articles": "Go to articles",
+      "Search": "Go to search",
       "Students": "Go to students overview",
       "Evaluation": "Go to evaluation overview"
     }
