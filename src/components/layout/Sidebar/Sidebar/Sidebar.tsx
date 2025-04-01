@@ -16,6 +16,8 @@ import teachingPathImg from 'assets/images/teaching-path.svg';
 import toggleSidebarIcon from 'assets/images/icon-sidebar.svg';
 import studentsImg from 'assets/images/students-circle.svg';
 import evaluationIcon from 'assets/images/evaluation-menu-icon.svg';
+import favoritesIcon from 'assets/images/favorites.svg';
+import forumIcon from 'assets/images/forum.svg';
 import searchIcon from 'assets/images/search_circle_icon.svg';
 
 import './Sidebar.scss';
@@ -29,172 +31,99 @@ interface SideBarLink {
 
 const UI_URL = process.env.REACT_APP_UI_URL as string;
 
-const teacherSidebarLinks: Array<SideBarLink> = [
-  {
+const sidebarLink = {
+  activity: {
     url: '/activity',
     path: '/activity',
     icon: activityIcon,
     name: 'Activity'
   },
-  {
+  search: {
     url: '/search',
     path: '/search',
     icon: searchIcon,
     name: 'Search'
   },
-  {
+  teachingPaths: {
     url: '/teaching-paths',
     path: '/teaching-paths',
     icon: teachingPathImg,
     name: 'Teaching Paths'
   },
-  {
+  assignments: {
     url: '/assignments',
     path: '/assignments',
     icon: assignmentsImg,
     name: 'Assignments'
   },
-  {
+  evaluation: {
     url: '/evaluation',
     path: '/evaluation',
     icon: evaluationIcon,
     name: 'Evaluation'
   },
-  {
+  students: {
     url: '/students',
     path: '/students',
     icon: studentsImg,
     name: 'Students'
   },
-  {
+  sharingArticles: {
     url: `${UI_URL}/login`,
     path: '/sharing/articles',
     icon: evaluationIcon,
     name: 'Articles'
   },
-  /*  {
-      url: '/favorites'
-      path: '/favorites'
-      icon: favoritesIcon,
-      name: 'Favorites',
-    },*/
-  /*  {
-      url: '/forum'
-      path: '/forum'
-      icon: forumIcon,
-      name: 'Forum',
-    }*/
+  favorites: {
+    url: '/favorites',
+    path: '/favorites',
+    icon: favoritesIcon,
+    name: 'Favorites',
+  },
+  forum: {
+    url: '/forum',
+    path: '/forum',
+    icon: forumIcon,
+    name: 'Forum',
+  },
+};
+
+const teacherSidebarLinks: Array<SideBarLink> = [
+  sidebarLink.activity,
+  sidebarLink.search,
+  sidebarLink.teachingPaths,
+  sidebarLink.assignments,
+  sidebarLink.evaluation,
+  sidebarLink.students,
+  sidebarLink.sharingArticles,
+  // sidebarLink.favorites,
+  // sidebarLink.forum,
 ];
 
 const teacherTrialSidebarLinks: Array<SideBarLink> = [
-  {
-    url: '/activity',
-    path: '/activity',
-    icon: activityIcon,
-    name: 'Activity'
-  },
-  {
-    url: '/search',
-    path: '/search',
-    icon: searchIcon,
-    name: 'Search'
-  },
-  {
-    url: '/teaching-paths',
-    path: '/teaching-paths',
-    icon: teachingPathImg,
-    name: 'Teaching Paths'
-  },
-  {
-    url: '/assignments',
-    path: '/assignments',
-    icon: assignmentsImg,
-    name: 'Assignments'
-  },
-  {
-    url: `${UI_URL}/login`,
-    path: '/sharing/articles',
-    icon: evaluationIcon,
-    name: 'Sharing Articles'
-  },
-  /* {
-    url: '/evaluation',
-    path: '/evaluation',
-    icon: evaluationIcon,
-    name: 'Evaluation',
-  },
-  {
-    url: '/students',
-    path: '/students',
-    icon: studentsImg,
-    name: 'Students',
-  }, */
+  sidebarLink.activity,
+  sidebarLink.search,
+  sidebarLink.teachingPaths,
+  sidebarLink.assignments,
+  // sidebarLink.evaluation,
+  // sidebarLink.students,
+  sidebarLink.sharingArticles,
 ];
 
 const studentSidebarLinks: Array<SideBarLink> = [
-  {
-    url: '/activity',
-    path: '/activity',
-    icon: activityIcon,
-    name: 'Activity'
-  },
-  {
-    url: '/search',
-    path: '/search',
-    icon: searchIcon,
-    name: 'Search'
-  },
-  {
-    url: '/teaching-paths',
-    path: '/teaching-paths',
-    icon: teachingPathImg,
-    name: 'Teaching Paths'
-  },
-  {
-    url: '/assignments',
-    path: '/assignments',
-    icon: assignmentsImg,
-    name: 'Assignments'
-  },
-  {
-    url: `${UI_URL}/login`,
-    path: '/sharing/articles',
-    icon: evaluationIcon,
-    name: 'Sharing Articles'
-  },
+  sidebarLink.activity,
+  sidebarLink.search,
+  sidebarLink.teachingPaths,
+  sidebarLink.assignments,
+  sidebarLink.sharingArticles,
 ];
 
 const contentManagerSidebar: Array<SideBarLink> = [
-  {
-    url: '/activity',
-    path: '/activity',
-    icon: activityIcon,
-    name: 'Activity'
-  },
-  {
-    url: '/search',
-    path: '/search',
-    icon: searchIcon,
-    name: 'Search'
-  },
-  {
-    url: '/teaching-paths',
-    path: '/teaching-paths',
-    icon: teachingPathImg,
-    name: 'Teaching Paths'
-  },
-  {
-    url: '/assignments',
-    path: '/assignments',
-    icon: assignmentsImg,
-    name: 'Assignments'
-  },
-  {
-    url: `${UI_URL}/login`,
-    path: '/sharing/articles',
-    icon: evaluationIcon,
-    name: 'Sharing Articles'
-  },
+  sidebarLink.activity,
+  sidebarLink.search,
+  sidebarLink.teachingPaths,
+  sidebarLink.assignments,
+  sidebarLink.sharingArticles,
 ];
 const PATHLENGTH = 4;
 
