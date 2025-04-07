@@ -79,7 +79,7 @@ pipelines:
             - echo "Installing dependencies..."
             - npm install --legacy-peer-deps
             - echo "Building..."
-            - CI=false npm run build:staging
+            - CI=false npm run build:production
           artifacts:
             - build/**
       - step:
