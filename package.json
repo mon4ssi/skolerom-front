@@ -9,7 +9,7 @@
     "build:dev": "env-cmd -f devops/.env.development npm run build",
     "build:development": "env-cmd -f devops/.env.development npm run build",
     "build:staging": "env-cmd -f devops/.env.staging npm run build",
-    "build:production": "env-cmd -f devops/.env.beta npm run build",
+    "build:production": "env-cmd -f devops/.env.production npm run build",
     "build:sand": "env-cmd -f devops/.env.sand npm run build",
     "build:kfbeta": "env-cmd -f devops/.env.kf_beta_mainapp npm run build",
     "build:kfprod": "env-cmd -f devops/.env.kf_prod_mainapp npm run build",
