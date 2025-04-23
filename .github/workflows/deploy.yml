@@ -25,16 +25,16 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm install --legacy-peer-deps
+        run: yarn install --prefer-offline
 
       - name: Build Project
         run: |
           if [[ "${{ github.ref_name }}" == "dev" ]]; then
-            CI=false npm run build:dev
+            CI=false yarn build:dev
           elif [[ "${{ github.ref_name }}" == "staging" ]]; then
-            CI=false npm run build:staging
+            CI=false yarn build:staging
           elif [[ "${{ github.ref_name }}" == "main" ]]; then
-            CI=false npm run build:production
+            CI=false yarn build:production
           fi
 
       - name: Export Artifact Path
