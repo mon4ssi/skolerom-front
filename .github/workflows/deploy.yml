@@ -22,6 +22,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16.20'
+          cache: 'npm'
 
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
@@ -29,11 +30,11 @@ jobs:
       - name: Build Project
         run: |
           if [[ "${{ github.ref_name }}" == "dev" ]]; then
-            npm run build:dev
+            CI=false npm run build:dev
           elif [[ "${{ github.ref_name }}" == "staging" ]]; then
-            npm run build:staging
+            CI=false npm run build:staging
           elif [[ "${{ github.ref_name }}" == "main" ]]; then
-            npm run build:production
+            CI=false npm run build:production
           fi
 
       - name: Export Artifact Path
