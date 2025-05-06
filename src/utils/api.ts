@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 import { injector } from 'Injector';
 import { storage } from 'utils/storage';
@@ -39,8 +39,8 @@ const logoutUserIfSessionCookieIsNotPresent = (session: StorageInteractor) => {
   window.location.reload();
 };
 
-const onRequestFulfilled = (config: AxiosRequestConfig): AxiosRequestConfig | Promise<AxiosRequestConfig> => {
-  if (!config.headers.Authorization) {
+const onRequestFulfilled = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig> => {
+  if (config.headers && !config.headers.Authorization) {
     const storageInteractor = injector.get<StorageInteractor>(STORAGE_INTERACTOR_KEY);
     const locale = storageInteractor.getCurrentLocale() as Locales;
     const token = storageInteractor.getToken();
