@@ -18,7 +18,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const HtmlWebpackInjector = require('html-webpack-injector');
-const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
+// WatchMissingNodeModulesPlugin is no longer available in react-dev-utils v12.0.1
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const paths = require('./paths');
@@ -26,7 +26,8 @@ const modules = require('./modules');
 const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
-const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
+// typescriptFormatter is no longer available in react-dev-utils v12.0.1
+// const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const eslint = require('eslint');
 
 const postcssNormalize = require('postcss-normalize');
@@ -599,8 +600,9 @@ module.exports = function(webpackEnv) {
       // to restart the development server for Webpack to discover it. This plugin
       // makes the discovery automatic so you don't have to restart.
       // See https://github.com/facebook/create-react-app/issues/186
-      isEnvDevelopment &&
-        new WatchMissingNodeModulesPlugin(paths.appNodeModules),
+      // WatchMissingNodeModulesPlugin is no longer available in react-dev-utils v12.0.1
+      // isEnvDevelopment &&
+      //   new WatchMissingNodeModulesPlugin(paths.appNodeModules),
       isEnvProduction &&
         new MiniCssExtractPlugin({
           // Options similar to the same options in webpackOptions.output
@@ -657,31 +659,38 @@ module.exports = function(webpackEnv) {
           ],
         }),
       // TypeScript type checking
+      // Updated ForkTsCheckerWebpackPlugin configuration to match the new API schema in react-dev-utils v12.0.1
       useTypeScript &&
         new ForkTsCheckerWebpackPlugin({
-          typescript: resolve.sync('typescript', {
-            basedir: paths.appNodeModules,
-          }),
           async: isEnvDevelopment,
-          useTypescriptIncrementalApi: true,
-          checkSyntacticErrors: true,
-          resolveModuleNameModule: process.versions.pnp
-            ? `${__dirname}/pnpTs.js`
-            : undefined,
-          resolveTypeReferenceDirectiveModule: process.versions.pnp
-            ? `${__dirname}/pnpTs.js`
-            : undefined,
-          tsconfig: paths.appTsConfig,
-          reportFiles: [
-            '**',
-            '!**/__tests__/**',
-            '!**/?(*.)(spec|test).*',
-            '!**/src/setupProxy.*',
-            '!**/src/setupTests.*',
-          ],
-          silent: true,
-          // The formatter is invoked directly in WebpackDevServerUtils during development
-          formatter: isEnvProduction ? typescriptFormatter : undefined,
+          typescript: {
+            typescriptPath: resolve.sync('typescript', {
+              basedir: paths.appNodeModules,
+            }),
+            configFile: paths.appTsConfig,
+            context: paths.appPath,
+            diagnosticOptions: {
+              syntactic: true,
+            },
+            mode: 'write-references',
+          },
+          issue: {
+            include: [
+              { file: '**/*.{ts,tsx}' },
+              { file: '**/?(*.)(spec|test).{ts,tsx}' },
+            ],
+            exclude: [
+              { file: '**/node_modules/**/*' },
+              { file: '**/__tests__/**/*' },
+              { file: '**/?(*.)(spec|test).*' },
+              { file: '**/src/setupProxy.*' },
+              { file: '**/src/setupTests.*' },
+            ],
+          },
+          logger: {
+            infrastructure: 'silent',
+          },
+          formatter: 'basic',
         }),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
